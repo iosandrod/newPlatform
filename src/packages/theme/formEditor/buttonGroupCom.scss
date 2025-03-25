@@ -1,0 +1,5 @@
+@use '../base.scss' as *;
+@include b(buttonGroupCom) {
+  margin-right: 3px;
+  height: 100% !important;
+}

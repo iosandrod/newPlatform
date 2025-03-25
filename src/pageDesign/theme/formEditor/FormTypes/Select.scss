@@ -1,0 +1,21 @@
+@use 'sass:math';
+@use 'sass:map';
+@use '@DESIGN/theme/base.scss' as *;
+@include b(FormTypesSelect_mobile) {
+  .el-select {
+    width: 100%;
+    .el-input__suffix {
+      display: none;
+    }
+    .el-input.is-focus .el-input__wrapper,
+    .el-input__wrapper {
+      box-shadow: none !important;
+    }
+  }
+  .van-field__body {
+    align-items: flex-start;
+  }
+}
+@include b(FormTypesSelect_pc) {
+  width: 100%;
+}

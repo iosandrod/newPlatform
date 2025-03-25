@@ -1,0 +1,6 @@
+@use '../base.scss' as *;
+@include b(GridLayout) {
+  @include e(area) {
+    //outline: 1px dashed #ddd;
+  }
+}

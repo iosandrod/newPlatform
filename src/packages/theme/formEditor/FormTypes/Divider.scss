@@ -1,0 +1,9 @@
+@use 'sass:math';
+        @use 'sass:map';
+        @use '@ER/theme/base.scss' as *;
+@include b(FormTypesDivider_pc) {
+  //width: 100% !important;
+  .el-divider__text {
+    //background: none;
+  }
+}

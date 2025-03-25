@@ -1,0 +1,71 @@
+@use '../base.scss' as *;
+@include b(ConfigTypeComponent) {
+  @include e(content) {
+    display: flex;
+    width: 100%;
+    li {
+      flex: 1;
+      border: 1px solid #DDDDDD;
+      border-radius: 4px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      .ER-icon {
+        //color: $primary-color;
+        path.secondary {
+          fill: #CCCCCC;
+        }
+      }
+      &:hover {
+        border-color: $primary-color;
+        .ER-icon {
+          color: $primary-color;
+          path.secondary {
+            fill: #BAE3FF;
+          }
+        }
+      }
+      @include when(Selected) {
+        .ER-icon {
+          color: $primary-color;
+          //path.1{}
+          //path.primary {}
+          path.secondary {
+            fill: #BAE3FF;
+          }
+        }
+        border-color: $primary-color;
+      }
+      @include when(Disabled) {
+        background: #F2F2F2;
+        cursor: not-allowed;
+        .ER-icon {
+          color: #666;
+        }
+        //.ER-icon {
+        //  color: $primary-color;
+        //}
+        //border-color: $primary-color;
+      }
+    }
+    li:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+  .el-form-item__label {
+    padding-right: 0;
+  }
+  @include e(label) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  @include e(slot) {
+    width: 100%;
+    &>*{
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+}

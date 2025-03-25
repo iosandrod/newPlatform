@@ -1,0 +1,55 @@
+@use '../base.scss' as *;
+@include b(ConfigData1) {
+ 
+  @include e(icon) {
+    font-size: 16px;
+    &:hover {
+      color: $primary-color;
+    }
+  }
+  @include e(operate) {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  @include e(tableThead) {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    thead {
+      height: 44px;
+      background: #F5F7FA;
+      th {
+        font-size: 14px;
+        font-weight: inherit;
+        color: #333333;
+      }
+    }
+  }
+  @include e(table) {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    td {
+      padding: 10px;
+      vertical-align: baseline;
+    }
+    tr td:first-child {
+      text-align: center;
+    }
+    .el-checkbox__label {
+      display: none;
+    }
+  }
+  @include e(button) {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    button {
+      border: 1px dashed #409EFF;
+      width: 100%;
+    }
+  }
+}

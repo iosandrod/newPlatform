@@ -1,0 +1,107 @@
+@use '../base.scss' as *;
+@include b(Config) {
+  //overflow-y: hidden;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+  //border-left: 1px solid #ccc;
+  //padding: 16px;
+  .el-form-item__label {
+    color: #333333;
+    font-weight: 400;
+    font-size: 14px;
+  }
+  .subhead {
+    font-size: 12px;
+    color: #666;
+    margin-top: -10px;
+  }
+  &>form {
+    height: calc(100% - 40px);
+  }
+  .el-tabs {
+    .el-tabs__header {
+      background:none;
+      padding: 16px 0;
+    }
+    &,.el-tabs__header,.el-tabs__item{
+      border: none !important;
+    }
+    .el-tabs__nav-prev,.el-tabs__nav-next{
+      display: none;
+    }
+    .el-tabs__nav-wrap {
+      padding: 0;
+      margin: 0;
+    }
+    .el-tabs__nav {
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      padding: 2px;
+      background: #F2F2F2;
+      &>* {
+        flex: 1;
+      }
+      .el-tabs__item {
+        border-radius: 4px;
+        line-height: 36px;
+        height: 36px;
+        margin: 0;
+        color: #666666;
+        text-align: center;
+      }
+    }
+  }
+  .el-tabs__content,.el-tab-pane {
+    //height: calc(100vh - 160px);
+    padding: 0;
+  }
+  @include e(breadcrumb) {
+    height: 40px;
+    overflow: hidden;
+    //line-height: 40px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    //display: flex;
+    box-sizing: border-box;
+    padding: 12px 12px;
+    .el-breadcrumb__inner {
+      line-height: 18px;
+      font-size: 12px;
+    }
+    //.el-breadcrumb__item {
+    //  padding-bottom: 10px;
+    //}
+    .el-breadcrumb__inner {
+      cursor: pointer !important;
+    }
+    &>span:not(:last-child) {
+      span {
+        color: #666666;
+      }
+    }
+    &>span:last-child {
+      span {
+        color: #303133 !important;
+      }
+    }
+  }
+  @include e(wrap) {
+    padding: 12px;
+    //&>.el-tabs__header {
+    //  display: none;
+    //}
+    //height: 100%;
+    //li{
+    //  padding: 10px 0;
+    //  border-bottom: 1px solid #ccc;
+    //  h6 {
+    //    font-size: 14px;
+    //    margin: 4px 0 16px 0;
+    //    font-weight: 400;
+    //  }
+    //}
+  }
+}

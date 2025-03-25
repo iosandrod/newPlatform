@@ -1,0 +1,8 @@
+@use '../base.scss' as *;
+@include b(InlineLayout) {
+  //padding: 10px 0;
+  position: relative;
+  &>div {
+    display: flex;
+  }
+}

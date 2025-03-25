@@ -1,0 +1,12 @@
+@use '../base.scss' as *;
+@include b(TableLayout) {
+  padding: 20px !important;
+  table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+  @include e(area) {
+    outline: 1px  #ddd;
+  }
+}

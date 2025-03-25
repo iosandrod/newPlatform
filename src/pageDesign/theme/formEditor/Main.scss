@@ -1,0 +1,148 @@
+@use '../base.scss' as *;
+@include b(Main) {
+  height: 100vh;
+  .el-container {
+    height: 100%;
+  }
+  //@include e(icon) {
+  //  color: $primary-color;
+  //  cursor: pointer;
+  //}
+  @include e(operation) {
+    height: 40px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 3;
+    .ER-icon {
+      &:hover {
+        color: $primary-color;
+        background: #ECF6FF;
+      }
+      border-radius: 4px;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  @include e(container) {
+    position: relative;
+    overflow: hidden;
+  }
+  @include e(arrowLeft) {
+    left: 0;
+    transform: perspective(10px) rotateY(9deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 0px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 0 6px 6px 0;
+  }
+  @include e(arrowRight) {
+    right: 0;
+    transform: perspective(10px) rotateY(-9deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: -2px 0px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 6px 0 0 6px;
+  }
+  @include e([arrowLeft, arrowRight]) {
+    position: absolute;
+    top: 48%;
+    height: 32px;
+    width: 16px;
+    z-index: 2;
+    background: #FFFFFF;
+    transition: .3s;
+    &:hover {
+      color: $primary-color;
+    }
+    svg {
+      transition: .3s;
+    }
+    @include when(close) {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  @include e(previewDialog) {
+    .el-dialog__header {
+      display: flex;
+      justify-content: center;
+      height: 40px;
+      box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+      margin-right: 0;
+      position: relative;
+      z-index: 2;
+      padding: 0;
+      align-items: center;
+      .el-dialog__headerbtn {
+        top: 0;
+        height: 40px;
+        width: 40px;
+      }
+    }
+    .el-dialog__body {
+      padding-top: 0;
+      height: calc(100% - 70px);
+    }
+  }
+  @include e(previewDialogWrap) {
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+    margin: 10px 40px;
+    @include when(mobilePreview) {
+      width: 400px;
+      margin: 0 auto;
+    }
+  }
+}
+.drag-line-top,.drag-line-bottom,.drag-line-left,.drag-line-right {
+  position: relative;
+  &::after {
+    content: ' ';
+    position: absolute;
+    display: block;
+    background: #F56C6C;
+  }
+}
+.drag-line-top{
+  &::after {
+    left: 0;
+    width: 100%;
+    height: 2px;
+    top: 0;
+  }
+}
+.drag-line-bottom{
+  &::after {
+    left: 0;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+  }
+}
+.drag-line-left{
+  &::after {
+    width: 2px;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+}
+.drag-line-right{
+  &::after {
+    width: 2px;
+    height: 100%;
+    right: 0;
+    top: 0;
+  }
+}
+.ER-handle {
+  cursor: move;
+}

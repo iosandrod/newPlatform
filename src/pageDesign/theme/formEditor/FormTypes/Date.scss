@@ -1,0 +1,7 @@
+@use 'sass:math';
+        @use 'sass:map';
+        @use '@DESIGN/theme/base.scss' as *;
+
+@include b(FormTypesDate_pc) {
+  width: 100% !important;
+}

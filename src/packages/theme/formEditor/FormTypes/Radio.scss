@@ -1,0 +1,12 @@
+@use 'sass:math';
+        @use 'sass:map';
+        @use '@ER/theme/base.scss' as *;
+@include b(FormTypesRadio) {
+  @include e(blockLayout) {
+    flex-direction: column;
+    align-items: start;
+    .el-radio {
+      margin-right: 0;
+    }
+  }
+}

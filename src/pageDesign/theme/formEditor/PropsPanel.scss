@@ -1,0 +1,31 @@
+@use '../base.scss' as *;
+@include b(PropsPanel) {
+  @include e(collapseWrap) {
+    width: 100%;
+    .el-row {
+      margin-bottom: 0 !important;
+    }
+  }
+  @include e(collapseWrap-left) {
+    .el-form-item {
+      display: flex;
+      align-items: baseline;
+      .el-form-item__label {
+        padding-right: 4px;
+      }
+    }
+  }
+  @include e(collapseSubSelect) {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    .el-tooltip__trigger {
+      font-size: 12px;
+      color: $primary-color;
+    }
+  }
+  .el-rate {
+    height: auto;
+    flex-wrap: wrap;
+  }
+}

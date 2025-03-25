@@ -1,0 +1,68 @@
+@use '../base.scss' as *;
+@include b(tabCom) {
+  .el-tabs__active-bar{
+    display: none;
+  }
+  .el-tabs__nav-wrap:after{
+    display: none;
+  }
+  .el-tabs__nav:last-child{
+    margin-right: 0!important;
+  }
+  .el-tabs__item{
+    padding: 0;
+    height: 100%;
+  }
+  .el-tabs__item.is-active{
+    color: unset !important;
+  }
+  .el-tabs__nav-prev{
+    height: 100% !important;
+    display: flex;
+    align-items: center;
+  }
+  .el-tabs__nav-next{
+    height: 100% !important;
+    display: flex;
+    align-items: center;
+  }
+  .el-tabs__item:hover{
+    color: unset !important;
+    cursor: default;
+  }
+  .el-tabs__content{
+    // display: none;
+  }
+  .el-tabs__header{
+    margin: 0;
+  }
+  .el-tabs__nav-next, .el-tabs__nav-prev{
+    height: auto;
+    line-height: auto;
+  }
+  .el-tabs__nav-prev{
+    line-height: auto;
+  }
+  .el-tabs__header{
+    height: 100%;
+  }
+  .el-tabs__nav-wrap{
+    height: 100%;
+  }
+  .el-tabs__nav-scroll{
+    height: 100%;
+  }
+  .el-tabs__nav{
+    height: 100%;
+  }
+  .is-active{
+    color: none !important;
+  }
+  .el-tabs__item is-top is-active{
+    color: none !important;
+  }
+  .el-tabs__item {
+    background: none !important;
+  }
+}
+  

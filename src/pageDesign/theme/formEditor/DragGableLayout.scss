@@ -1,0 +1,20 @@
+@use '../base.scss' as *;
+@include b(DragGableLayout) {
+  //background: #F2F8FF !important;
+  height: 100%;
+  @include e(edit) {
+    //padding: 10px;
+    //outline: 1px dashed #ddd;
+    .el-row {
+      padding: 10px;
+    }
+  }
+  @include e(dropHere) {
+    display: flex;
+    background: #F2F8FF !important;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 60px;
+  }
+}

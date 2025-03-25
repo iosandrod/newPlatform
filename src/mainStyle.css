@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@keyframes slowFade {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  .slow-fade {
+    animation: slowFade 3s ease-in-out;
+  }
+.list {
+    border: 2px dashed #ccc;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.list-item {
+    padding: 10px;
+    margin: 5px 0;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: grab;
+}
+.no-select {
+    user-select: none; /* 适用于大多数现代浏览器 */
+    -webkit-user-select: none; /* 适用于 Webkit (Chrome, Safari) */
+    -moz-user-select: none; /* 适用于 Firefox */
+    -ms-user-select: none; /* 适用于旧版 IE/Edge */
+  }
+  .slow-appear {
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    transition-delay: 1s; /* 1 秒后才开始动画 */
+  }
+  
+  .slow-appear.show {
+    opacity: 1;
+  }
+
+
+  .move {
+    transition: transform 0.5s ease-in-out;
+  }

@@ -1,0 +1,8 @@
+@use 'sass:math';
+        @use 'sass:map';
+        @use '@DESIGN/theme/base.scss' as *;
+@include b(FormTypesHtml_mobile) {
+  @include e(popup) {
+    //position: absolute;
+  }
+}

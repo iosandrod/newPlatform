@@ -1,0 +1,14 @@
+@use 'sass:math';
+        @use 'sass:map';
+        @use '@DESIGN/theme/base.scss' as *;
+@include b(FormTypesOther_pc) {
+  width: 100% !important;
+  margin-top: 10px;
+}
+@include b(FormTypesOther_mobile) {
+  width: 100% !important;
+  .van-cell {
+    box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+  }
+}

@@ -1,0 +1,1620 @@
+<a-config-provider :getPopupContainer="getPopupContainer">
+    <ThemeProvider is-root v-bind="themeConfig" :apply-style="false">
+      <stepin-view
+        system-name="Stepin"
+        logo-src="@/assets/vite.svg"
+        :class="`${contentClass}`"
+        :user="user"
+        :navMode="navigation"
+        :useTabs="useTabs"
+        :themeList="themeList"
+        v-model:show-setting="showSetting"
+        v-model:theme="theme"
+        @themeSelect="configTheme"
+      >
+      </stepin-view>
+    </ThemeProvider>
+  </a-config-provider>
+  <login-modal :unless="['/login']" />
+
+
+
+  import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAccountStore, useMenuStore, useSettingStore, storeToRefs } from '@/store';
+import avatar from '@/assets/avatar.png';
+import { PageFooter, HeaderActions } from '@/components/layout';
+import Setting from './components/setting';
+import { LoginModal } from '@/pages/login';
+import { configTheme, themeList } from '@/theme';
+import { ThemeProvider } from 'stepin';
+import { computed } from 'vue';
+
+const { logout, profile } = useAccountStore();
+
+// 获取个人信息
+profile().then((response) => {
+  const { account } = response;
+  user.name = account.username;
+  // user.avatar = account.avatar;
+});
+
+const showSetting = ref(false);
+const router = useRouter();
+
+useMenuStore().getMenuList();
+
+const { navigation, useTabs, theme, contentClass } = storeToRefs(useSettingStore());
+const themeConfig = computed(() => themeList.find((item) => item.key === theme.value)?.config ?? {});
+
+const user = reactive({
+  name: 'admin',
+  avatar: avatar,
+  menuList: [
+    { title: '个人中心', key: 'personal', icon: 'UserOutlined', onClick: () => router.push('/profile') },
+    { title: '设置', key: 'setting', icon: 'SettingOutlined', onClick: () => (showSetting.value = true) },
+    { type: 'divider' },
+    {
+      title: '退出登录',
+      key: 'logout',
+      icon: 'LogoutOutlined',
+      onClick: () => logout().then(() => router.push('/login')),
+    },
+  ],
+});
+
+function getPopupContainer() {
+  return document.querySelector('.stepin-layout');
+}
+
+
+
+ "dayjs": "^1.11.7",
+    "element-plus": "^2.2.28",
+    "everright-filter": "^1.1.1", 
+    "jss": "^10.9.2",
+    "jss-preset-default": "^10.9.2",
+    "lodash": "^4.17.21",
+    "nanoid": "^4.0.0",
+    "nzh": "^1.0.8",
+    "signature_pad": "^4.1.4",
+    "vant": "^4.0.8",
+    "vite-svg-loader": "^4.0.0",
+    "vuedraggable": "^4.1.0"
+     "@vant/area-data": "^1.4.0",
+    "@vant/touch-emulator": "^1.4.0",
+    "@vue/shared": "^3.2.45",
+    "@vuelidate/core": "^2.0.0",
+    "@vuelidate/validators": "^2.0.0",
+    "async": "^3.2.4",
+    "axios": "^1.2.2",
+    "canvas": "^2.11.2"
+
+
+    class ControlInsertion {
+    sortable:any
+    constructor(sortable) {
+      this.sortable = sortable;
+    }
+    dragStart(e) {
+      // 处理拖拽开始逻辑
+    }
+
+    drop(e) {
+      if (!prevEl || !e.activeSortable) {
+        return false;
+      }
+      const isBlock = _.get(e, 'activeSortable.options.dataSource', false) === 'block';
+      const { dragEl, target } = e;
+      const oldEl = getDragElement(dragEl);
+      const newElement = ER.wrapElement(_.cloneDeep(oldEl), inserRowIndex !== '', true, isBlock);
+
+      if (!isBlock && oldEl.context) {
+        oldEl.context.delete();
+      }
+
+      if (inserRowIndex !== '') {
+        let store = [];
+        if (prevSortable.options.parent.type === 'subform') {
+          store = prevSortable.options.parent.list[0];
+        } else {
+          store = Array.isArray(prevSortable.options.parent)
+            ? prevSortable.options.parent
+            : prevSortable.options.parent.list;
+        }
+        store.splice(inserRowIndex, 0, newElement);
+        utils.addContext(store[inserRowIndex], prevSortable.options.parent);
+      }
+
+      if (inserColIndex !== '') {
+        const { list } = prevSortable.el.__draggable_component__;
+        list.splice(inserColIndex, 0, newElement);
+        //@ts-ignore
+        utils.addContext(newElement, prevSortable.options.parent[sortableUtils.index(prevSortable.el.parentNode)]);
+      }
+
+      if (inserColIndex !== '' || inserRowIndex !== '') {
+        utils.deepTraversal(newElement, (node) => {
+          if (utils.checkIsField(node)) {
+            ER.addField(node);
+          }
+        });
+        nextTick(() => {
+          ER.setSelection(newElement);
+        });
+      }
+      this.resetStates();
+    }
+
+    dragOver(e) {
+      e.cancel();
+      this.resetStates();
+      const {
+        activeSortable: {
+          constructor: {
+            utils: SortableUtils
+          },
+          options: {
+            dataSource
+          },
+          el: {
+            __draggable_component__: {
+              list
+            }
+          } 
+        }, 
+        activeSortable,
+        target,
+        originalEvent,
+        dragEl,
+        sortable
+      } = e;
+
+      if (sortable.options.dataSource === 'block' || target.dataset.layoutType === 'grid') {
+        return false;
+      }
+
+      const dragNode = getDragElement(dragEl);
+      const targetNode = getDragElement(target);
+      if ((!utils.checkIsField(dragNode) || dragNode.type === 'subform') && utils.checkIsInSubform(targetNode)) {
+        return false;
+      }
+      if (target.dataset.layoutType === 'subform' && (!utils.checkIsField(dragNode) || dragNode.type === 'subform')) {
+        return false;
+      }
+
+      originalEvent.stopPropagation && originalEvent.stopPropagation();
+      //@ts-ignore
+      let newTarget = SortableUtils.closest(target, this.sortable.options.draggable, sortable.el);
+      if (dragEl.contains(newTarget)) {
+        return false;
+      }
+
+      if (/^(grid-col|tabs-col|td|collapse-col|root|inline|subform)$/.test(target.dataset.layoutType)) {
+        newTarget = target;
+        const state = newTarget.__draggable_component__ || newTarget.children[0].__draggable_component__;
+        if (!state.list.length) {
+          prevEl = target.dataset.layoutType === 'root' ? target : (newTarget.__draggable_component__ ? newTarget.children[0] : newTarget.parentNode);
+          prevSortable = state._sortable;
+          inserRowIndex = 0;
+          setBorder(prevEl, 'drag-line-top');
+        } else {
+          if (/^(root|grid-col)$/.test(target.dataset.layoutType)) {
+            prevEl = lastChild(sortable.el);
+            if (prevEl === dragEl.parentNode.parentNode && list.length === 1) {
+              prevEl = '';
+              return false;
+            }
+            setBorder(prevEl, 'drag-line-bottom');
+            inserRowIndex = sortable.el.children.length;
+            prevSortable = state._sortable;
+          }
+          if (target.dataset.layoutType === 'inline' && !disableBothSides(ER)) {
+
+            prevEl = lastChild(sortable.el);
+            if (prevEl.contains(dragEl) && list.length === 1) {
+              prevEl = '';
+              return false;
+            }
+            inserColIndex = sortable.el.children.length;
+            prevSortable = state._sortable;
+            setBorder(prevEl, 'drag-line-right');
+          }
+        }
+      } else {
+        this.setStates(newTarget, e, ER);
+      }
+    }
+
+    resetStates() {
+      prevEl = null;
+      prevSortable = null;
+      inserRowIndex = '';
+      inserColIndex = '';
+    }
+
+    setStates(newTarget, e, ER) {
+      // 处理插入状态的逻辑
+    }
+  }
+  return Object.assign(ControlInsertion, {
+    pluginName: 'ControlInsertion',
+    initializeByDefault: true
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+  function ControlInsertion (sortable) {
+  }
+  ControlInsertion.prototype = {
+    dragStart (e) {
+    },
+    drop (e) {
+      if (!prevEl || !e.activeSortable) {
+        return false
+      }
+      const isBlock = _.get(e, 'activeSortable.options.dataSource', false) === 'block'
+      const {
+        dragEl,
+        target
+      } = e
+      const oldEl = getDragElement(dragEl)
+      const newElement = ER.wrapElement(_.cloneDeep(oldEl), inserRowIndex !== '', true, isBlock)
+      if (!isBlock) {
+        if (oldEl.context) {
+          oldEl.context.delete()
+          // utils.deepTraversal(oldEl, (node) => {
+          //   if (utils.checkIsField(node) && node.type !== 'subform') {
+          //     ER.delField(node)
+          //   }
+          // })
+        }
+      }
+      if (inserRowIndex !== '') {
+        let store = []
+        if (prevSortable.options.parent.type === 'subform') {
+          store = prevSortable.options.parent.list[0]
+        } else {
+          store = Array.isArray(prevSortable.options.parent) ? prevSortable.options.parent : prevSortable.options.parent.list
+        }
+        store.splice(inserRowIndex, 0, newElement)
+        utils.addContext(store[inserRowIndex], prevSortable.options.parent)
+      }
+      if (inserColIndex !== '') {
+        const {
+          el: {
+            __draggable_component__: {
+              list
+            }
+          },
+          el,
+          constructor: {
+            utils: sortableUtils
+          }
+        } = prevSortable
+        list.splice(inserColIndex, 0, newElement)
+        utils.addContext(newElement, prevSortable.options.parent[sortableUtils.index(prevSortable.el.parentNode)])
+      }
+      if (inserColIndex !== '' || inserRowIndex !== '') {
+        utils.deepTraversal(newElement, (node) => {
+          if (utils.checkIsField(node)) {
+            ER.addField(node)
+          }
+        })
+        nextTick(() => {
+          ER.setSelection(newElement)
+        })
+      }
+      resetStates()
+    },
+    dragOver (e) {
+      // e.originalEvent && e.originalEvent.stopPropagation()
+      e.cancel()
+      resetStates()
+      const {
+        activeSortable: {
+          constructor: {
+            utils: SortableUtils
+          },
+          options: {
+            dataSource
+          },
+          el: {
+            __draggable_component__: {
+              list
+            }
+          }
+        },
+        activeSortable,
+        target,
+        originalEvent,
+        dragEl,
+        sortable: {
+          el,
+          el: {
+            __draggable_component__: {
+              list: targetList
+            }
+          }
+        },
+        sortable
+      } = e
+      if (sortable.options.dataSource === 'block') {
+        return false
+      }
+      if (target.dataset.layoutType === 'grid') {
+        return false
+      }
+      const dragNode = getDragElement(dragEl)
+      const targetNode = getDragElement(target)
+      if ((!utils.checkIsField(dragNode) || dragNode.type === 'subform') && utils.checkIsInSubform(targetNode)) {
+        return false
+      }
+      if (target.dataset.layoutType === 'subform') {
+        // console.log(utils)
+        if (!utils.checkIsField(dragNode) || dragNode.type === 'subform') {
+          return false
+        }
+      }
+      originalEvent.stopPropagation && originalEvent.stopPropagation()
+      const direction = ''
+      const targetContainer = el.parentNode
+      const targetOnlyOne = targetList.length === 1
+      let newTarget = SortableUtils.closest(target, this.options.draggable, sortable.el)
+      if (dragEl.contains(newTarget)) {
+        return false
+      }
+      if (/^(grid-col|tabs-col|td|collapse-col|root|inline|subform)$/.test(target.dataset.layoutType)) {
+        newTarget = target
+        const state = (newTarget.__draggable_component__ || newTarget.children[0].__draggable_component__)
+        if (!state.list.length) {
+          prevEl = target.dataset.layoutType === 'root' ? target : newTarget.__draggable_component__ ? newTarget.children[0] : newTarget.parentNode
+          prevSortable = state._sortable
+          inserRowIndex = 0
+          setBorder(prevEl, 'drag-line-top')
+        } else {
+          if (/^(root|grid-col)$/.test(target.dataset.layoutType)) {
+            const rows = el.children
+            prevEl = lastChild(el)
+            if (prevEl === dragEl.parentNode.parentNode && list.length === 1) {
+              prevEl = ''
+              return false
+            }
+            setBorder(prevEl, 'drag-line-bottom')
+            inserRowIndex = rows.length
+            prevSortable = state._sortable
+          }
+          if (target.dataset.layoutType === 'inline') {
+            if (disableBothSides(ER)) return false
+            const cols = el.children
+            prevEl = lastChild(el)
+            if (prevEl.contains(dragEl) && list.length === 1) {
+              prevEl = ''
+              return false
+            }
+            inserColIndex = cols.length
+            prevSortable = state._sortable
+            setBorder(prevEl, 'drag-line-right')
+          }
+        }
+      } else {
+        setStates(newTarget, e, ER)
+      }
+    }
+  }
+  return Object.assign(ControlInsertion, {
+    pluginName: 'ControlInsertion',
+    initializeByDefault: true
+  })
+
+
+
+  import { defineComponent, ref, unref, inject, PropType } from 'vue';
+import { ElButton } from 'element-plus';
+import { Button as VanButton } from 'vant';
+import hooks from '@ER/hooks';
+
+export default defineComponent({
+  name: 'ErCompleteButton',
+  props: {
+    handle: Object as PropType<{ validate: () => Promise<void> }>,
+    mode: {
+      type: String as PropType<'edit' | 'preview'>,
+      default: 'edit',
+    },
+  },
+  setup(props) {
+    const ER = inject('Everright') as any;
+    const ns = hooks.useNamespace('CompleteButton');
+    const { state, isPc } = hooks.useTarget();
+    const element = ref<string | null>(null);
+
+    const handleClick = async () => {
+      if (props.mode === 'preview') return;
+      try {
+        await Promise.resolve(unref(props.handle)?.validate());
+        ER.fireEvent('submit', ER.getData());
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    const dataset = process.env.NODE_ENV === 'test' ? { 'data-test': 'er-complete-button' } : {};
+
+    return () => (
+      <div {...dataset}>
+        {isPc.value ? (
+          <div style="text-align: center;">
+            <ElButton
+              onClick={handleClick}
+              type="primary"
+              style={{ backgroundColor: state.value.config[state.value.platform].completeButton.backgroundColor }}
+            >
+              <span style={{ color: state.value.config[state.value.platform].completeButton.color }}>
+                {state.value.config[state.value.platform].completeButton.text}
+              </span>
+            </ElButton>
+          </div>
+        ) : (
+          <VanButton
+            onClick={handleClick}
+            round
+            block
+            type="primary"
+            style={{ backgroundColor: state.value.config[state.value.platform].completeButton.backgroundColor }}
+          >
+            <span style={{ color: state.value.config[state.value.platform].completeButton.color }}>
+              {state.value.config[state.value.platform].completeButton.text}
+            </span>
+          </VanButton>
+        )}
+      </div>
+    );
+  },
+});
+
+
+ // const handleAction = (type) => {
+    //   const index = type !== 5 && props.parent.indexOf(props.data);
+    //   switch (type) {
+    //     case 1:
+    //       if (ER.props.delHandle(props.data) === false) return false;
+    //       props.data.context.delete();
+    //       utils.deepTraversal(props.data, (node) => {
+    //         if (utils.checkIsField(node)) {
+    //           ER.delField(node);
+    //         }
+    //       });
+    //       if (/^(radio|checkbox|select)$/.test(props.data.type)) {
+    //         delete state.data[props.data.options.dataKey];
+    //       }
+    //       if (props.parent.length > 0) {
+    //         if (index === props.parent.length) {
+    //           setSelection(props.parent[index - 1]);
+    //         } else {
+    //           setSelection(props.parent[index]);
+    //         }
+    //       } else {
+    //         setSelection('root');
+    //       }
+    //       break;
+    //     case 2:
+    //       if (ER.props.copyHandle(props.data) === false) return false;
+    //       props.data.context.copy();
+    //       const copyData = props.parent[index + 1];
+    //       setSelection(copyData);
+    //       utils.deepTraversal(copyData, (node) => {
+    //         ER.addFieldData(node, true);
+    //         if (utils.checkIsField(node)) {
+    //           ER.addField(node);
+    //         }
+    //       });
+    //       break;
+    //     case 3:
+    //       //@ts-ignore
+    //       _.last(props.data.context.columns[0]).context.insert('bottom');
+    //       break;
+    //     case 4:
+    //       //@ts-ignore
+    //       _.last(props.data.context.columns)[0].context.insert('right');
+    //       break;
+    //     case 5:
+    //       let parent = props.data.context.parent;
+    //       if (/^(inline|tr)$/.test(parent.type)) {
+    //         parent = parent.context.parent;
+    //       }
+    //       setSelection(Array.isArray(parent) ? 'root' : parent);
+    //       break;
+    //     case 6:
+    //       props.data.context.appendCol();
+    //       break;
+    //   }
+    // };
+
+
+
+    // export const addContext = (node, parent?: any, fn?: any) => {
+//   let arr = []
+//   const isArray = Array.isArray(parent)
+//   if (isArray) {
+//     arr = parent
+//   } else {
+//     arr = parent.columns || parent.list || parent.rows
+//   }
+//   fn && fn(node) 
+//   const context = {
+//     get props() {
+//       return (isPc) => computed(() => {
+//         const {
+//           options
+//         } = node
+//         const result: any = {
+//           disabled: options.disabled,
+//           placeholder: options.placeholder,
+//           clearable: options.clearable,
+//           required: options.required
+//         }
+//         if (isPc) {
+//           // result.style = {
+//           //   width: options.width + options.widthType
+//           // }
+//         } else {
+//           result.label = node.label
+//         }
+//         switch (node.type) {
+//           case 'input':
+//             if (options.isShowWordLimit) {
+//               result.maxlength = options.max
+//               result['show-word-limit'] = options.isShowWordLimit
+//             }
+//             if (isPc) {
+//               result.showPassword = options.showPassword
+//               result.prepend = options.prepend
+//               result.append = options.append
+//             } else {
+//               if (options.showPassword) {
+//                 result.type = 'password'
+//               }
+//               if (options.renderType === 4) {
+//                 result.type = 'tel'
+//               }
+//             }
+//             break
+//           case 'textarea':
+//             result.type = 'textarea'
+//             result.rows = options.rows
+//             break
+//           case 'number':
+//             if (isPc) {
+//               result.controls = options.controls
+//               if (options.controls) {
+//                 result['controls-position'] = options.controlsPosition ? 'right' : ''
+//               }
+//             }
+//             if (options.isShowWordLimit) {
+//               result.min = options.min
+//               result.max = options.max
+//             }
+//             result.step = options.step
+//             result.precision = options.precision
+//             break
+//           case 'radio':
+//           case 'checkbox':
+//             break
+//           case 'select':
+//             break
+//           case 'time':
+//             result.format = options.format
+//             if (isPc) {
+//               result.valueFormat = options.valueFormat
+//             }
+//             break
+//           case 'date':
+//             result.placeholder = options.placeholder
+//             result.startPlaceholder = options.startPlaceholder
+//             result.endPlaceholder = options.endPlaceholder
+//             result.format = options.format
+//             result.type = options.type
+//             if (isPc) {
+//               result.disabledDate = (time) => {
+//                 const {
+//                   startTime,
+//                   endTime,
+//                   weeks,
+//                   isShowWeeksLimit
+//                 } = options
+//                 const startDate = dayjs.unix(startTime)
+//                 const endDate = dayjs.unix(endTime)
+//                 const currentDate = dayjs(time)
+//                 const result = currentDate.isBefore(startDate) || currentDate.isAfter(endDate)
+//                 return result
+//               }
+//             } else {
+//               const {
+//                 startTime,
+//                 endTime,
+//                 weeks,
+//                 isShowWeeksLimit
+//               } = options
+//               switch (options.type) {
+//                 case 'date':
+//                 case 'datetime':
+//                   if (startTime) {
+//                     result.minDate = dayjs.unix(startTime).toDate()
+//                   } else {
+//                     result.minDate = dayjs.unix(0).toDate()
+//                   }
+//                   if (endTime) {
+//                     result.maxDate = dayjs.unix(endTime).toDate()
+//                   } else {
+//                     result.maxDate = dayjs().add(20, 'year').toDate()
+//                   }
+//                   break
+//                 case 'dates':
+//                   if (options.defaultValue) {
+//                     result.defaultDate = options.defaultValue.map(e => dayjs.unix(e).toDate())
+//                   } else {
+//                     result.defaultDate = null
+//                   }
+//                   if (startTime) {
+//                     result.minDate = dayjs.unix(startTime).toDate()
+//                   } else {
+//                     result.minDate = dayjs().subtract(1, 'year').toDate()
+//                   }
+//                   if (endTime) {
+//                     result.maxDate = dayjs.unix(endTime).toDate()
+//                   } else {
+//                     result.maxDate = dayjs().add(1, 'year').toDate()
+//                   }
+//                   break
+//                 case 'daterange':
+//                   if (options.defaultValue) {
+//                     result.defaultDate = options.defaultValue.map(e => dayjs.unix(e).toDate())
+//                   } else {
+//                     result.defaultDate = null
+//                   }
+//                   if (startTime) {
+//                     result.minDate = dayjs.unix(startTime).toDate()
+//                   } else {
+//                     result.minDate = dayjs().subtract(1, 'year').toDate()
+//                   }
+//                   if (endTime) {
+//                     result.maxDate = dayjs.unix(endTime).toDate()
+//                   } else {
+//                     result.maxDate = dayjs().add(1, 'year').toDate()
+//                   }
+//                   break
+//               }
+//             }
+//             break
+//           case 'cascader':
+//             result.props = {
+//               multiple: options.multiple,
+//               checkStrictly: options.checkStrictly
+//             }
+//             result.options = options.options
+//             break
+//           case 'slider':
+//             result.step = options.step
+//             result.min = options.min
+//             result.max = options.max
+//             break
+//           case 'divider':
+//             result.contentPosition = options.contentPosition
+//             break
+//           case 'uploadfile':
+//             result.multiple = options.multiple
+//             result.action = options.action
+//             result.limit = options.limit
+//             result.size = options.size
+//             result.accept = options.accept
+//             break
+//         }
+//         return result
+//       })
+//     },
+//     get row() {
+//       let result: any = ''
+//       if (isArray || node.type === 'tr') {
+//         result = arr.indexOf(node)
+//       } else {
+//         result = parent.context.row
+//       }
+//       return result
+//     },
+//     get col() {
+//       let result: any = ''
+//       if (isArray) {
+//         result = 0
+//       } else {
+//         if (parent.type === 'grid' || parent.type === 'tr' || parent.type === 'td' || parent.type === 'col' || parent.type === 'tabsCol' || parent.type === 'collapseCol') {
+//           result = arr.indexOf(node)
+//         } else {
+//           result = parent.context.col
+//         }
+//       }
+//       return result
+//     },
+//     get root() {
+//       let result = {}
+//       switch (node.type) {
+//         case 'grid':
+//         case 'table':
+//           result = node
+//           break
+//         default:
+//           result = parent.context.root
+//       }
+//       return result
+//     },
+//     state: node,
+//     parent,
+//     get parents() {
+//       const result = []
+//       let cursor = node
+//       while (cursor) {
+//         result.unshift(cursor)
+//         if (cursor.context.parent && !_.isArray(cursor.context.parent)) {
+//           cursor = cursor.context.parent
+//         } else {
+//           cursor = ''
+//         }
+//       }
+//       return result
+//     },
+//     copy() {
+//       const index = arr.indexOf(node)
+//       const newNode = reactive(_.cloneDeep(toRaw(node)))
+//       delete newNode.context
+//       newNode.id = nanoid()
+//       newNode.key = `${newNode.type}_${newNode.id}`
+//       addContext(newNode, parent, (node) => {
+//         node.id = nanoid()
+//         node.key = `${node.type}_${node.id}-copy`
+//       })
+//       arr.splice(index + 1, 0, newNode)
+//     },
+//     delete() {
+//       if (utils.checkIsInSubform(node) && node.type === 'inline') {
+//         arr[0].splice(arr[0].indexOf(node), 1)
+//       } else {
+//         arr.splice(arr.indexOf(node), 1)
+//       }
+//     },
+//     appendCol() {
+//       const newNode = wrapElement({
+//         options: {
+//           span: 6,
+//           offset: 0,
+//           pull: 0,
+//           push: 0
+//         },
+//         type: 'col',
+//         list: [
+//         ]
+//       })
+//       node.columns.push(newNode)
+//       addContext(newNode, node)
+//     },
+//     get columns() {
+//       const result = []
+//       switch (node.type) {
+//         case 'table':
+//           node.rows.forEach((item0, index0) => {
+//             item0.columns.forEach((item1, index1) => {
+//               if (!index0) {
+//                 result.push([])
+//               }
+//               result[index1].push(item1)
+//             })
+//           })
+//           break
+//         default:
+//       }
+//       return result
+//     },
+//     get isDisableMargeLeft() {
+//       const {
+//         context: {
+//           root,
+//           col,
+//           row
+//         }
+//       } = node
+//       const nodes = root.rows[row].columns
+//       let result = col <= 0
+//       if (!result) {
+//         let onOff = true
+//         findNode(node, 'before', 'colspan', (nodes) => {
+//           onOff = result = !nodes.every(e => e.options.rowspan === node.options.rowspan) || nodes.every(e => e.options.isMerged)
+//         })
+//         result = onOff
+//       }
+//       return result
+//     },
+//     get isDisableMargeRight() {
+//       const {
+//         context: {
+//           root,
+//           col,
+//           row
+//         }
+//       } = node
+//       const nodes = root.rows[row].columns
+//       let result = col >= nodes.length - 1
+//       if (!result) {
+//         let onOff = true
+//         findNode(node, 'after', 'colspan', (nodes) => {
+//           onOff = result = !nodes.every(e => e.options.rowspan === node.options.rowspan) || nodes.every(e => e.options.isMerged)
+//         })
+//         result = onOff
+//       }
+//       return result
+//     },
+//     get isDisableMargeRow() {
+//       const nodes = getNodes(node, 'colspan')
+//       return this.isDisableDelRow || nodes.length === node.options.colspan
+//     },
+//     get isDisableMargeColumn() {
+//       const nodes = getNodes(node, 'rowspan')
+//       return this.isDisableDelColumn || nodes.length === node.options.rowspan
+//     },
+//     get isDisableMargeBottom() {
+//       const {
+//         context: {
+//           root,
+//           col,
+//           row
+//         }
+//       } = node
+//       const columns = root.context.columns
+//       let result = row >= columns[col].length - 1
+//       if (!result) {
+//         let onOff = true
+//         findNode(node, 'after', 'rowspan', (nodes) => {
+//           onOff = result = !nodes.every(e => e.options.colspan === node.options.colspan) || nodes.every(e => e.options.isMerged)
+//         })
+//         result = onOff
+//       }
+//       return result
+//     },
+//     get isDisableMargeTop() {
+//       const {
+//         context: {
+//           root,
+//           col,
+//           row
+//         }
+//       } = node
+//       const columns = root.context.columns
+//       let result = row <= 0
+//       if (!result) {
+//         let onOff = true
+//         findNode(node, 'before', 'rowspan', (nodes) => {
+//           onOff = result = !nodes.every(e => e.options.colspan === node.options.colspan) || nodes.every(e => e.options.isMerged)
+//         })
+//         result = onOff
+//       }
+//       return result
+//     },
+//     get isDisableSplitColumn() {
+//       return node.options.colspan === 1
+//     },
+//     get isDisableSplitRow() {
+//       return node.options.rowspan === 1
+//     },
+//     get isDisableDelRow() {
+//       const nodes = getNodes(node, 'colspan')
+//       const rowspanNodes = getNodes(node, 'rowspan')
+//       return (rowspanNodes.length === 1 || rowspanNodes.filter(e => !e.options.isMerged).length === 1) || !nodes.every(e => e.options.rowspan === node.options.rowspan)
+//     },
+//     get isDisableDelColumn() {
+//       const nodes = getNodes(node, 'rowspan')
+//       const colspanNodes = getNodes(node, 'colspan')
+//       return (colspanNodes.length === 1 || colspanNodes.filter(e => !e.options.isMerged).length === 1) || !nodes.every(e => e.options.colspan === node.options.colspan)
+//     },
+//     merge(type) {
+//       const {
+//         context: {
+//           root,
+//           col,
+//           row
+//         }
+//       } = node
+//       switch (type) {
+//         case 'left':
+//           findNode(node, 'before', 'colspan', (nodes, callBack) => {
+//             callBack()
+//           })
+//           break
+//         case 'right':
+//           findNode(node, 'after', 'colspan', (nodes, callBack) => {
+//             callBack()
+//           })
+//           break
+//         case 'top':
+//           findNode(node, 'before', 'rowspan', (nodes, callBack) => {
+//             callBack()
+//           })
+//           break
+//         case 'bottom':
+//           findNode(node, 'after', 'rowspan', (nodes, callBack) => {
+//             callBack()
+//           })
+//           break
+//         case 'row':
+//           while (root.rows[row].columns.length > root.rows[row].columns[0].options.colspan) {
+//             findNode(root.rows[row].columns[0], 'after', 'colspan', (nodes, callBack) => {
+//               callBack()
+//             })
+//           }
+//           break
+//         case 'column':
+//           while (root.context.columns[col].length > root.context.columns[col][0].options.rowspan) {
+//             findNode(root.context.columns[col][0], 'after', 'rowspan', (nodes, callBack) => {
+//               callBack()
+//             })
+//           }
+//           break
+//         default:
+//       }
+//     },
+//     insert(type) {
+//       const {
+//         context: {
+//           root,
+//           col,
+//           row
+//         }
+//       } = node
+//       switch (type) {
+//         case 'left':
+//           appendNodes(node, 'before', 'colspan')
+//           // root.rows.forEach(e => {
+//           //   addContext(e, root, false)
+//           // })
+//           break
+//         case 'right':
+//           appendNodes(node, 'after', 'colspan')
+//           break
+//         case 'top':
+//           appendNodes(node, 'before', 'rowspan')
+//           break
+//         case 'bottom':
+//           appendNodes(node, 'after', 'rowspan')
+//           break
+//       }
+//     },
+//     split(type) {
+//       const {
+//         context: {
+//           root,
+//           col,
+//           row
+//         }
+//       } = node
+//       const nodes = getNodes(node, type === 'column' ? 'colspan' : 'rowspan')
+//       switch (type) {
+//         case 'column':
+//           //  zheliyoudu  没有考虑底层
+//           nodes.slice(col, col + node.options.colspan).forEach(e => {
+//             e.options.colspan = 1
+//             e.options.isMerged = false
+//             if (e.options.rowspan > 1) {
+//               const nodes = getNodes(e, 'rowspan')
+//               nodes.slice(row + 1, row + e.options.rowspan).forEach((e) => {
+//                 e.options.colspan = 1
+//               })
+//             }
+//           })
+//           break
+//         case 'row':
+//           nodes.slice(row, row + node.options.rowspan).forEach(e => {
+//             e.options.rowspan = 1
+//             e.options.isMerged = false
+//             if (e.options.colspan > 1) {
+//               const nodes = getNodes(e, 'colspan')
+//               nodes.slice(col + 1, col + e.options.colspan).forEach((e) => {
+//                 e.options.rowspan = 1
+//               })
+//             }
+//           })
+//           break
+//       }
+//     },
+//     del(type) {
+//       const {
+//         context: {
+//           root,
+//           col,
+//           row
+//         }
+//       } = node
+//       const nodes = getNodes(node, type === 'column' ? 'colspan' : 'rowspan')//
+//       switch (type) {
+//         case 'column':
+//           root.rows.forEach(e => {
+//             e.columns.splice(col, node.options.colspan)
+//             addContext(e, root)
+//           })
+//           break
+//         case 'row':
+//           root.rows.splice(row, node.options.rowspan)
+//           root.rows.forEach(e => {
+//             addContext(e, root)
+//           })
+//           break
+//       }
+//     }
+//   }
+
+//   Object.defineProperty(node, 'context', {
+//     value: context,
+//     writable: false,
+//     enumerable: false,
+//     configurable: true
+//   })
+//   let nodes = []
+//   if (node.type === 'subform') {
+//     nodes = node.list[0]
+//   } else {
+//     nodes = node.columns || node.list || node.rows || []
+//   }
+//   nodes.forEach(e => {
+//     addContext(e, node, fn)
+//   })
+// }
+
+
+ return <el-aside class={[ns.b()]} width={ER.props.configPanelWidth}>
+        <el-breadcrumb
+          class={[ns.e('breadcrumb')]}
+          separator-icon={() => (
+            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+              <path
+                fill="currentColor"
+                d="M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z"
+              />
+            </svg>
+          )}
+          {...utils.addTestId('configPanel:breadcrumb')}
+        >
+          {bars.value.map((item, index) => (
+            <el-breadcrumb-item
+              key={index}
+              onClick={() => {
+                if (index !== bars.value.length - 1 && item.node.value !== 'placeholder') {
+                  handleBreadcrumbClick(item.node);
+                }
+              }}
+            >
+              {item.node.value === 'placeholder' ? '...' : item.label}
+            </el-breadcrumb-item>
+          ))}
+        </el-breadcrumb>
+
+        <el-form ref="form" model={target} rules={rules} label-width="120px" label-position="top">
+          <el-scrollbar>
+            <div class={[ns.e('wrap')]}>
+              {isSelectAnyElement && <PanelsConfigComponentsPropsPanel key={target.id} />}
+              {isSelectRoot && <GlobalConfigPanel />}
+            </div>
+          </el-scrollbar>
+        </el-form>
+      </el-aside>
+
+
+<<<<<<< HEAD
+       // case 'subform':
+          //   if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
+          //     node = (<LayoutSubformLayout key={element.id} data={element} parent={props.data}></LayoutSubformLayout>)
+          //   }
+          //   break
+
+
+
+
+          // let form = this.form
+        // let items = form.items
+        // let curIndex = items.findIndex((item) => item === this)
+        // if (curIndex === -1) {
+        //     curIndex = items.length//
+        // }
+        // let preItems = items.slice(0, curIndex)
+        // let preSpans = preItems.map((item) => item.getSpan())
+        // let preSpan = preSpans.reduce((a, b) => a + b, 0)//
+        // let rowIndex = Math.ceil((preSpan + this.getSpan()) / 24)
+        // let rows = form.getLayoutRows()//
+        // let length = rows.length
+        // let tr: TableRow = null
+        // if (length < rowIndex) {
+        //     tr = this.createTrRow()
+        //     form.addTrRow(tr)
+        // } else {
+        //     tr = rows.slice(-1).pop()
+        // }
+        // return tr
+=======
+      // drop(e) {
+    //   if (!prevEl || !e.activeSortable) {
+    //     return false
+    //   }
+    //   const isBlock = _.get(e, 'activeSortable.options.dataSource', false) === 'block'
+    //   const {
+    //     dragEl,
+    //     target
+    //   } = e
+    //   const oldEl = getDragElement(dragEl)
+    //   const newElement = ER.wrapElement(_.cloneDeep(oldEl), inserRowIndex !== '', true, isBlock)
+    //   if (!isBlock) {
+    //     if (oldEl.context) {
+    //       oldEl.context.delete()
+    //     }
+    //   }
+    //   if (inserRowIndex !== '') {
+    //     let store = []
+    //     if (prevSortable.options.parent.type === 'subform') {
+    //       store = prevSortable.options.parent.list[0]
+    //     } else {
+    //       store = Array.isArray(prevSortable.options.parent) ? prevSortable.options.parent : prevSortable.options.parent.list
+    //     }
+    //     store.splice(inserRowIndex, 0, newElement)
+    //     utils.addContext(store[inserRowIndex], prevSortable.options.parent)
+    //   }
+    //   if (inserColIndex !== '') {
+    //     const {
+    //       el: {
+    //         __draggable_component__: {
+    //           list
+    //         }
+    //       },
+    //       el,
+    //       constructor: {
+    //         utils: sortableUtils
+    //       }
+    //     } = prevSortable
+    //     list.splice(inserColIndex, 0, newElement)
+    //     utils.addContext(newElement, prevSortable.options.parent[sortableUtils.index(prevSortable.el.parentNode)])
+    //   }
+    //   if (inserColIndex !== '' || inserRowIndex !== '') {
+    //     utils.deepTraversal(newElement, (node) => {
+    //       if (utils.checkIsField(node)) {
+    //         ER.addField(node)
+    //       }
+    //     })
+    //     nextTick(() => {
+    //       ER.setSelection(newElement)
+    //     })
+    //   }
+    //   resetStates()
+    // }
+>>>>>>> refs/remotes/origin/main
+
+
+// const addValidate = (result, node, isPc, t, state, ExtraParams) => {
+//   const {
+//     options
+//   } = node
+//   if (isPc) {
+//     result.prop = node.context && node.context.parents.map((e, index) => {
+//       let result = ''
+//       if (!index) {
+//         result = e.context.parent.indexOf(e)
+//       } else {
+//         const parent = e.context.parent
+//         let nodes = []
+//         if (parent.type === 'subform') {
+//           const {
+//             x,
+//             y
+//           } = findPosition(e, parent)
+//           result += `list.${y}.${x}`
+//         } else {
+//           if (parent.columns) {
+//             nodes = parent.columns
+//             result += 'columns.'
+//           } else if (parent.list) {
+//             nodes = parent.list
+//             result += 'list.'
+//           } else if (parent.rows) {
+//             nodes = parent.rows
+//             result += 'rows.'
+//           }
+//           result += nodes.indexOf(e)
+//         }
+//       }
+//       return result
+//     }).join('.') + '.options.defaultValue'
+//   }
+
+//   const obj: any = {
+//   }
+//   const validator = (...arg0) => new Promise((...arg1: any) => {
+//     const resolve = () => {
+//       arg1[0]()
+//     }
+//     const reject = isPc
+//       ? arg1[1]
+//       : (message) => {
+//         obj.message = message
+//         arg1[0](false)
+//       }
+//     let value = isPc ? arg0[1] : arg0[0]
+//     if (/^(signature|radio|checkbox|select|html)$/.test(node.type)) {
+//       value = options.defaultValue
+//     }
+//     const newValue = options.isShowTrim ? value.trim() : value
+//     if (node.type === 'subform') {
+//       const allFields = utils.findSubFormAllFields(node)
+//       if (result.required) {
+//         if (allFields.length) {
+//           if (allFields.some(e => utils.isEmpty(e.options.isShowTrim ? e.options.defaultValue.trim() : e.options.defaultValue))) {
+//             reject(t('er.validateMsg.required'))
+//           }
+//         } else {
+//           reject(t('er.validateMsg.required'))
+//         }
+//       } else {
+//         resolve()
+//       }
+//     } else {
+//       let isRequired = result.required
+//       if (state.mode === 'preview' && utils.checkIsInSubform(node)) {
+//         const parent = node?.context?.parent?.context?.parent
+//         if (parent) {
+//           const {
+//             readOnly,
+//             required
+//           } = getLogicStateByField(parent, state.fieldsLogicState)
+//           const parentProps: any = useProps(state, parent, isPc, false, false, t, ExtraParams).value
+//           if (required !== undefined) {
+//             isRequired = parentProps.required
+//           }
+//         }
+//       }
+//       if (isRequired && node.type !== 'subform' && utils.isEmpty(newValue)) {
+//         reject(t('er.validateMsg.required'))
+//         return
+//       }
+//       if (/^(select|checkbox|radio)$/.test(node.type)) {
+//         if ((_.isArray(node.options.defaultValue) ? node.options.defaultValue : [node.options.defaultValue]).includes('other')) {
+//           const key = node.key + '_other'
+//           if (!state.othersFiles[key]) {
+//             reject(t('er.validateMsg.placeholder3'))
+//             return false
+//           }
+//         }
+//       }
+//     }
+//     switch (node.type) {
+//       case 'input':
+//         switch (options.renderType) {
+//           case 1:
+//             if (!!newValue && options.isShowWordLimit && newValue.length < options.min) {
+//               reject(t('er.validateMsg.limitWord', { min: options.min }))
+//             } else {
+//               resolve()
+//             }
+//             break
+//           case 2:
+//             if (!!newValue && !/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/.test(newValue)) {
+//               reject(t('er.validateMsg.email'))//
+//             } else {
+//               resolve()
+//             }
+//             break
+//           case 3:
+//             if (!!newValue && !/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(newValue)) {
+//               reject(t('er.validateMsg.IdNumber'))
+//             } else {
+//               resolve()
+//             }
+//             break
+//           case 4:
+//             if (!!newValue && !/^(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(newValue)) {
+//               reject(t('er.validateMsg.phone'))
+//             } else {
+//               resolve()
+//             }
+//             break
+//           case 5:
+//             if (!!newValue && !/^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(newValue)) {
+//               reject(t('er.validateMsg.http'))
+//             } else {
+//               resolve()
+//             }
+//             break
+//         }
+//         break
+//       case 'textarea':
+//         if (!!newValue && options.isShowWordLimit && newValue.length < options.min) {
+//           reject(t('er.validateMsg.limitWord', { min: options.min }))
+//         } else {
+//           resolve()
+//         }
+//         break
+//       default:
+//         resolve()
+//         break
+//     }
+//   })
+//   if (isPc) {
+//     obj.required = options.required
+//     obj.asyncValidator = validator
+//   } else {
+//     obj.validator = validator
+//   }
+//   result.rules = [obj]
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+<template>
+    <div class="container">
+        <h2 class="title">拖拽排序示例</h2>
+        <draggable v-model="items" group="list" @start="onStart" @end="onEnd" @change="onChange" item-key="id"
+            class="list">
+            <template #item="{ element }">
+                <div class="list-item">{{ element.name }}</div>
+            </template>
+        </draggable> 
+    </div>
+</template>
+
+<script>
+import draggable from "@ER/vueDraggable/vuedraggable";
+
+export default {
+    components: { draggable },
+    data() {
+        return {
+            items: [
+                { id: 1, name: "苹果 🍎" },
+                { id: 2, name: "香蕉 🍌" },
+                { id: 3, name: "橙子 🍊" },
+                { id: 4, name: "葡萄 🍇" }
+            ]
+        };
+    },
+    methods: {
+        onStart(evt) {
+            console.log("开始拖拽:", evt);
+        },
+        onEnd(evt) {
+            console.log("拖拽结束:", evt);
+        },
+        onChange(evt) {
+            console.log("列表已更新:", this.items);
+        }
+    }
+};
+</script>
+
+<style>
+.container {
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+}
+
+.title {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.list {
+    border: 2px dashed #ccc;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.list-item {
+    padding: 10px;
+    margin: 5px 0;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: grab;
+}
+</style>
+
+
+
+
+
+
+
+
+//在代码演示中，我们展示了如何在表格中渲染自定义的 Vue 组件。具体包括：
+//- **性别列**：通过 `ArcoDesignVue.Tag` 组件来渲染性别信息，并根据性别值动态改变标签颜色。
+//- **评论列**：通过 `ArcoDesignVue.Comment` 组件来渲染评论信息，并包含点赞、收藏、回复等操作按钮。
+
+const app = createApp({
+  template: `
+    <vue-list-table :options="option" :records="records" ref="tableRef" />
+  `,
+  data() {
+    return {
+      tableRef: ref(null),
+      option: {
+        records: [
+          { gender: '男', name: '张三', age: 20, city: '北京' },
+          { gender: '女', name: '李四', age: 21, city: '上海' },
+          { gender: '男', name: '王五', age: 22, city: '广州' },
+          { gender: '女', name: '赵六', age: 23, city: '深圳' },
+          { gender: '男', name: '孙七', age: 24, city: '成都' },
+          { gender: '女', name: '周八', age: 25, city: '重庆' },
+          { gender: '男', name: '吴九', age: 26, city: '西安' }
+        ],
+        columns: [
+          {
+            field: 'name',
+            title: '姓名',
+            width: 200,
+             headerCustomLayout: args => {
+              const { table, row, col, rect, value } = args;
+              const { height, width } = rect ?? table.getCellRect(col, row);
+
+              const container = new VTable.CustomLayout.Group({
+                height,
+                width,
+                display: 'flex',
+                alignItems: 'center',
+                vue: {
+                  element: h(ArcoDesignVue.Tag, { color: 'green' }, value),
+                  container: table.headerDomContainer
+                }
+              });
+              return {
+                rootContainer: container,
+                renderDefault: false
+              };
+            },
+            customLayout: args => {
+              const { table, row, col, rect, value } = args;
+              const { height, width } = rect ?? table.getCellRect(col, row);
+
+              const container = new VTable.CustomLayout.Group({
+                height,
+                width,
+                display: 'flex',
+                alignItems: 'center',
+                vue: {
+                  element: h('div', { color: value === '女' ? 'magenta' : 'arcoblue' }, value),
+                  container: table.bodyDomContainer
+                }
+              });
+
+              return {
+                rootContainer: container,
+                renderDefault: false
+              };
+            }
+          },
+          { field: 'age', title: '年龄', width: 150 },
+          { field: 'city', title: '城市', width: 200 },
+          {
+            field: 'gender',
+            title: '性别',
+            width: 100,
+            headerCustomLayout: args => {
+              const { table, row, col, rect, value } = args;
+              const { height, width } = rect ?? table.getCellRect(col, row);
+
+              const container = new VTable.CustomLayout.Group({
+                height,
+                width,
+                display: 'flex',
+                alignItems: 'center',
+                vue: {
+                  element: h(ArcoDesignVue.Tag, { color: 'green' }, value),
+                  container: table.headerDomContainer
+                }
+              });
+              return {
+                rootContainer: container,
+                renderDefault: false
+              };
+            },
+            customLayout: args => {
+              const { table, row, col, rect, value } = args;
+              const { height, width } = rect ?? table.getCellRect(col, row);
+
+              const container = new VTable.CustomLayout.Group({
+                height,
+                width,
+                display: 'flex',
+                alignItems: 'center',
+                vue: {
+                  element: h('div', { color: value === '女' ? 'magenta' : 'arcoblue' }, value),
+                  container: table.bodyDomContainer
+                }
+              });
+
+              return {
+                rootContainer: container,
+                renderDefault: false
+              };
+            }
+          },
+          {
+            field: 'comment',
+            title: '评论',
+            width: 300,
+            customLayout: args => {
+              const { table, row, col, rect, value } = args;
+              const { height, width } = rect ?? table.getCellRect(col, row);
+
+              const container = new VTable.CustomLayout.Group({
+                height,
+                width,
+                display: 'flex',
+                alignItems: 'center',
+                vue: {
+                  element: h(
+                    ArcoDesignVue.Comment,
+                    { author: 'Socrates', content: value, datetime: '1 hour' },
+                    {
+                      actions: () => [
+                        h('span', { key: 'heart', style: { cursor: 'pointer' } }, [h('span', 'Like')]),
+                        h('span', { key: 'star', style: { cursor: 'pointer' } }, [h('span', 'Collect')]),
+                        h('span', { key: 'reply', style: { cursor: 'pointer' } }, [h('span', 'Reply')])
+                      ],
+                      avatar: () => [
+                        h(
+                          ArcoDesignVue.Avatar,
+                          {},
+                          {
+                            default: () => [
+                              h('img', {
+                                alt: 'avatar',
+                                src: 'https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/3ee5f13fb09879ecb5185e440cef6eb9.png~tplv-uwbnlip3yd-webp.webp'
+                              })
+                            ]
+                          }
+                        )
+                      ]
+                    }
+                  ),
+                  container: table.bodyDomContainer
+                }
+              });
+
+              return {
+                rootContainer: container,
+                renderDefault: false
+              };
+            }
+          }
+        ],
+        defaultHeaderRowHeight: 40,
+        defaultRowHeight: 80,
+        customConfig: {
+          createReactContainer: true
+        }
+      }
+    };
+  }
+});
+
+
+
