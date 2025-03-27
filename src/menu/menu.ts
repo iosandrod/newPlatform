@@ -12,7 +12,7 @@ export class Menu extends Base {
     init() {
         super.init()
         const config = this.config
-        const children = config.children || []//
+        const children = config.items || []//
         this.setMenuItems(children)
     }
     setMenuItems(items) {

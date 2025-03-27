@@ -30,7 +30,7 @@ export default defineComponent({
     })
     const registerRootDiv = (el) => {
       // tableIns.registerRef('root', el) //注册实例//
-      tableIns.registerRef('tableIns', el) //注册实例//
+      tableIns.registerRef('root', el) //注册实例//
     } //
     onMounted(() => {
       tableIns.render() //
@@ -52,10 +52,13 @@ export default defineComponent({
           //添加行
           let data = tableIns.getData()
           data[0].email1 = data[0].email1 + '2' ////
-          nextTick(() => {
-            tableIns.loadData() //
-          })
+          data[1].email1 = data[1].email1 + '2' //////
         },
+        children: [
+          {
+            label: '按钮2-1', //
+          },
+        ],
       },
     ]
     watchEffect(() => {
@@ -63,16 +66,28 @@ export default defineComponent({
     })
     watchEffect(() => {
       tableIns.loadData() //
-      console.log('加载了数据')
     })
     return () => {
       let com = null
-      com = <ListTable options={tableIns.getOptions()} ref={registerRootDiv}></ListTable>
-      // com = <div style={{ width: '100%', height: '100%' }} ref={registerRootDiv}></div>
+      // com = <ListTable options={tableIns.getOptions()} ref={registerRootDiv}></ListTable>
+      com = (
+        <div
+          style={{ width: '100%', height: '100%' }}
+          ref={registerRootDiv}
+        ></div>
+      )
       let outCom = (
-        <div style={{ width: '100%', height: '500px' }} class="h-full w-full">
+        <div style={{ transform: '', width: '100%', height: '100%' }}>
           <buttonGroupCom items={buttons}></buttonGroupCom>
-          {com}
+          <div
+            style={{
+              transform: 'translate(0,200px)',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            {com}
+          </div>
         </div>
       )
       return outCom //

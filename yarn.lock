@@ -7115,6 +7115,7 @@ stream-source@0.3:
   integrity sha512-ZuEDP9sgjiAwUVoDModftG0JtYiLUV8K4ljYD1VyUMRWtbVf92474o4kuuul43iZ8t/hRuiDAx1dIJSvirrK/g==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.npmmirror.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -7169,6 +7170,7 @@ stringify-entities@^4.0.0:
     character-entities-legacy "^3.0.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.npmmirror.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -7870,6 +7872,13 @@ vxe-pc-ui@^4.4.19:
   version "4.4.25"
   resolved "https://registry.npmmirror.com/vxe-pc-ui/-/vxe-pc-ui-4.4.25.tgz#23bd95f60d62f9b30baa36299854bef4777254ff"
   integrity sha512-FTSaXgqJUa/G2fBJjrSwZiySi9tkJHaWOjcf40xg6qJAv/cB6IQtv5mID57zBYhwDu/nqtzu4rxzPY8HFLXtsg==
+  dependencies:
+    "@vxe-ui/core" "^4.0.38"
+
+vxe-pc-ui@^4.4.26:
+  version "4.4.26"
+  resolved "https://registry.npmmirror.com/vxe-pc-ui/-/vxe-pc-ui-4.4.26.tgz#26b14e3deeab6a8e9f8b744e0373f25070eaa68d"
+  integrity sha512-fonjb+jMb5kXirmRKrLXWbcQb1FmVxVQZZLJ8WMZK/TOd5vGhz9Qk0n4TYh8qXQE4zcTMfe9dmaYbGS6BjCoNQ==
   dependencies:
     "@vxe-ui/core" "^4.0.38"
 

@@ -20,7 +20,7 @@ export class Form extends Base {
     t: any
     state: any
     isShow: boolean = true
-    isDesign = false//
+    isDesign = true//
     data: any = {}//
     config: any = {}
     curFormItem?: FormItem

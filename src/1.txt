@@ -1618,3 +1618,50 @@ const app = createApp({
 
 
 
+
+
+ com = (
+                  <dropdownCom
+                    class={ns.b()}
+                    ref={(e) => btn.registerRef('dropdown', e)}
+                    items={btn.buttons.map((item) => {
+                      return { button: item }
+                    })}
+                    v-slots={{
+                      default: (item) => {
+                        return (
+                          <ElButton
+                            onClick={() => runBtnFn(btn)}
+                            style={{ height: '100%' }}
+                          >
+                            {btn.getLabel()}
+                          </ElButton>
+                        )
+                      },
+                      dropdown: (item) => {
+                        let mc = (
+                          <MenuCom
+                            class={btnG.b()}
+                            items={btn.buttons.map((item) => {
+                              return { button: item } //
+                            })}
+                            v-slots={{
+                              itemTitle: (item) => {
+                                let _btn = item.config.button
+                                return (
+                                  <ElButton
+                                    onClick={() => runBtnFn(_btn)}
+                                    style={{ height: '100%' }}
+                                  >
+                                    {_btn.getLabel()}
+                                  </ElButton>
+                                )
+                              },
+                            }}
+                          ></MenuCom>
+                        )
+                        return mc
+                      },
+                    }}
+                  ></dropdownCom>
+                )
