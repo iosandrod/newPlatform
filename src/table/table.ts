@@ -266,9 +266,9 @@ export class Table extends Base {
     const event: PointerEvent = config.event
     let x = event.x
     let y = event.y
-    let contextmenu:BMenu = this.getRef('contextmenu')
+    let contextmenu: BMenu = this.getRef('contextmenu')
     contextmenu.open(event) //
-  }
+  } //
   getColumns() {
     const columns = this.columns
     let _cols = columns.map((col) => {
