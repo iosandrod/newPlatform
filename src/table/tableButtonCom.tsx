@@ -12,7 +12,7 @@ export default defineComponent({
     const tableIns: Table = inject('tableIns')
     const buttons = [
       {
-        label: '添加列',
+        label: '改变依赖项',
         fn: async () => {
           //添加列
           let t = tableIns.clickOpt
@@ -42,13 +42,13 @@ export default defineComponent({
         },
       },
       {
-        label: '可选择',
+        label: '改变前值', //
         fn: async () => {
-          let data = tableIns.getData()
+          let data = tableIns.getData() //
           data[0].email1 = data[0].email1 + '2' ////
-          data[1].email1 = data[1].email1 + '2' //////
+          data[1].email1 = data[1].email1 + '2' ////
         },
-      },
+      }, //
     ] //
     return () => {
       return <div>{<buttonGroupCom items={buttons}></buttonGroupCom>}</div>

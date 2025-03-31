@@ -3,6 +3,7 @@ import { Table } from './table'
 import { ColumnDefine, ListTableConstructorOptions } from '@visactor/vtable'
 import { VTable } from '@visactor/vue-vtable'
 import { h } from 'vue'
+import { InputEditor } from '@/table/editor/string'//
 
 export class Column extends Base {
   table: Table
@@ -14,7 +15,7 @@ export class Column extends Base {
     this.config = config
     this.init()
   } //
-  getFormitem() {}
+  getFormitem() { }
   init(): void {
     super.init() //
     this.setColumns()
@@ -36,10 +37,16 @@ export class Column extends Base {
   getFormat() {
     let field = this.getField() //
     let _table = this.table
+    let config = this.config
+    let fieldFormat = config.fieldFormat
+
     let formatFn = (record, row, col, table) => {
       let value = record[field] //
-      if (_table.clickOpt == 1) {
-        return 'test' //
+      if (typeof fieldFormat == 'function') {
+        try {
+          value = fieldFormat({ row: record, col: this, table: _table })
+        } catch (error) {//
+        }
       }
       return value
     }
@@ -55,6 +62,10 @@ export class Column extends Base {
       _columns = null
     }
     let _this = this
+    let edit = null
+    if (this.getField() == 'id') {
+      edit = new InputEditor()
+    }
     let obj: ColumnDefine = {
       ...config,
       field: this.getField(),
@@ -71,6 +82,7 @@ export class Column extends Base {
           }
         }, //
       },
+      editor: edit,////
       columns: _columns, //
     }
     return obj //
