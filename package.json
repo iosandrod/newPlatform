@@ -19,6 +19,7 @@
     "@vant/touch-emulator": "^1.4.0",
     "@visactor/vtable": "^1.17.3",
     "@visactor/vtable-editors": "^1.17.3",
+    "@visactor/vtable-export": "^1.17.4",
     "@visactor/vue-vtable": "^1.17.3",
     "@vue/shared": "^3.5.13",
     "@vuelidate/core": "^2.0.3",

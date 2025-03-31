@@ -89,7 +89,7 @@ const Contextmenu = defineComponent({
     const currentOptions = ref(null)
     const show = (evt: MouseEvent | ShowOptions, options?: ShowOptions) => {
       // console.log(evt instanceof Event, 'evt') //
-      const targetOptions = evt instanceof Event ? evt : options //
+      const targetOptions: any = evt instanceof Event ? evt : options //
       if (evt instanceof Event) {
         //@ts-ignore
         evt.top = evt.y
@@ -102,7 +102,7 @@ const Contextmenu = defineComponent({
         top: targetOptions?.top || 0,
         left: targetOptions?.left || 0,
       }
-
+ 
       if (evt instanceof Event) {
         evt.preventDefault()
         targetPosition.top = targetOptions?.top ?? evt.pageY

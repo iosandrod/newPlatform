@@ -3,7 +3,7 @@ import { Table } from './table'
 import { ColumnDefine, ListTableConstructorOptions } from '@visactor/vtable'
 import { VTable } from '@visactor/vue-vtable'
 import { h } from 'vue'
-import { InputEditor } from '@/table/editor/string'//
+import { InputEditor } from '@/table/editor/string' //
 
 export class Column extends Base {
   table: Table
@@ -15,7 +15,7 @@ export class Column extends Base {
     this.config = config
     this.init()
   } //
-  getFormitem() { }
+  getFormitem() {}
   init(): void {
     super.init() //
     this.setColumns()
@@ -45,7 +45,8 @@ export class Column extends Base {
       if (typeof fieldFormat == 'function') {
         try {
           value = fieldFormat({ row: record, col: this, table: _table })
-        } catch (error) {//
+        } catch (error) {
+          //
         }
       }
       return value
@@ -64,7 +65,7 @@ export class Column extends Base {
     let _this = this
     let edit = null
     if (this.getField() == 'id') {
-      edit = new InputEditor()
+      edit = new InputEditor(() => this) ////
     }
     let obj: ColumnDefine = {
       ...config,
@@ -82,7 +83,7 @@ export class Column extends Base {
           }
         }, //
       },
-      editor: edit,////
+      editor: edit, ////
       columns: _columns, //
     }
     return obj //
@@ -112,5 +113,9 @@ export class Column extends Base {
       width = defaultWidth
     }
     return width
+  }
+  updateBindValue(config) {
+    let value = config.value //值
+    let row = config.row //行
   }
 }

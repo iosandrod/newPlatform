@@ -42,7 +42,7 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any;[key: string]: any }) {
+  updateBindData(updateConfig: { value: any; [key: string]: any }) {
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -57,15 +57,15 @@ export class FormItem extends Base {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() { }
-  async onValueChange() { }
+  getItemChange() {}
+  async onValueChange() {}
   getForm() {
     return this.form //
   }
   getSpan() {
     let options = this.config
     let span = options.span
-    let form = this.form//
+    let form = this.form //
     let _span = form.getItemSpan()
     if (span == null) {
       span = _span
@@ -101,7 +101,7 @@ export class FormItem extends Base {
   async getSelectOptions() {
     const config = this.config
   }
-  getSubForm(id: string) { }
+  getSubForm(id: string) {}
   getData() {
     let form = this.form
     let data = form.data
