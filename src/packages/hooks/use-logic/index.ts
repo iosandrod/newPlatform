@@ -324,7 +324,6 @@ const listenEvent = (state) => {
       })
       //@ts-ignore
       watch(() => targetFields.map(e => e.options.defaultValue), (values) => {
-        // console.log(operator(values.map((value, index) => validator(rule.if.conditions[index], value, targetFields[index]))))
         switch (type) {
           case 'visible':
             operatingVisible(operator(values.map((value, index) => validator(rule.if.conditions[index], value, targetFields[index]))), rule, state.fields, state.fieldsLogicState)
@@ -344,7 +343,7 @@ const listenEvent = (state) => {
   }
 }
 export const useLogic = (state) => {
-  watch(() => state.logic, () => {
-    listenEvent(state)
-  })
+  // watch(() => state.logic, () => {
+  //   listenEvent(state)
+  // })
 }

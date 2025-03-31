@@ -1665,3 +1665,33 @@ const app = createApp({
                     }}
                   ></dropdownCom>
                 )
+
+
+
+                 // com = (
+                //   <dropdownCom
+                //     v-slots={{
+                //       default: (config) => {
+                //         const dropdown = config.dropdown
+                //         let _com1 = (
+                //           <div
+                //             onClick={() => {
+                //               dropdown.showDropdown()
+                //             }}
+                //             onMouseleave={() => {}}
+                //             class="v-contextmenu"
+                //             style={{ width: '100px', position: 'relative' }}
+                //           >
+                //             <ContextmenuItem>{btn.getLabel()}</ContextmenuItem>
+                //           </div>
+                //         )
+                //         return _com1
+                //       },
+
+                //       dropdown: () => {
+                //         let menu = <Contextmenu></Contextmenu>
+                //         return menu
+                //       },
+                //     }} //
+                //   ></dropdownCom>
+                // )

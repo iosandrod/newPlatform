@@ -10,6 +10,12 @@ import dropdownCom from '@/menu/dropdownCom'
 import fieldCom from '@/menu/fieldCom'
 import menuCom from '@/menu/menuCom'
 import { ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
+import testCom from '../home/Simple'
+import { ContextmenuItem } from '@/contextM'
+import ContextmenuCom from '@/contextM/components/ContextmenuCom'
+import formCom from '@ER/formCom'
+import FConfigPanel from '@ER/formEditor/components/Panels/Config/components/fConfigPanel'
+import { Simple } from '../home/index copy'
 export default defineComponent({
   components: {
     erFormEditor,
@@ -21,6 +27,12 @@ export default defineComponent({
     dropdownCom,
     fieldCom,
     menuCom,
+    testCom,
+    ContextmenuItem,
+    ContextmenuCom,
+    formCom,
+    FConfigPanel,
+    Simple,
   },
   setup(props) {
     const formConfig = {
@@ -60,13 +72,27 @@ export default defineComponent({
             label: '按钮5-111',
           },
         ],
+        items: [
+          {
+            label: '按钮5-222',
+          },
+          {
+            label: '按钮5-333',
+            items: [
+              {
+                label: '按钮5-444',
+                disabled: true,
+              }, //
+            ],
+          },
+        ],
       },
     ]
     return () => {
-      let com = <buttonGroupCom items={btns.slice(0, 5)}></buttonGroupCom>
+      let com = <buttonGroupCom items={btns}></buttonGroupCom>
       // com = <erFormEditor isDesign={true} {...formConfig}></erFormEditor>
       // com = <d></d>
-      // com = <tableCom {...tableConfig}></tableCom>
+      com = <tableCom {...tableConfig}></tableCom>
       // com = <menuCom mode="horizontal" items={btns} v-slots={{
       //   itemTitle: (item) => {
       //     return <div>123</div>
@@ -75,26 +101,11 @@ export default defineComponent({
       //     return <div>123456</div>
       //   }
       // }}></menuCom>
-      com = (
-        <ElMenu style={{}} mode="horizontal">
-          <ElSubMenu 
-            index="2"
-            v-slots={{
-              title: () => <span>待审核</span>,
-              default: () => {
-                let arr = [
-                  <ElMenuItem index="1">处理中</ElMenuItem>,
-                  <ElMenuItem index="2-1">选项1</ElMenuItem>,
-                  <ElMenuItem index="2-2">选项2</ElMenuItem>,
-                  <ElMenuItem index="2-3">选项3</ElMenuItem>,
-                ]
-                return arr
-              },
-            }}
-          ></ElSubMenu>
-        </ElMenu>
-      )
+      // com = <d></d>
+      // com = <testCom></testCom>
+      // com=<ContextmenuItem>testCom</ContextmenuItem>
       // let com1 = <d></d>
+      // com = <ContextmenuCom items={btns}></ContextmenuCom>
       let com1 = <buttonGroupCom items={btns}></buttonGroupCom>
       // com = (
       //   <dropdownCom
@@ -116,15 +127,31 @@ export default defineComponent({
       //     }}
       //   ></dropdownCom>
       // )
+      // com = (
+      //   <formCom
+      //     itemSpan={24}
+      //     items={[
+      //       {
+      //         field: 'email',
+      //         label: '邮箱',
+      //         required: true,
+      //       },
+      //       {
+      //         field: 'password',
+      //         label: '密码',
+      //         required: true,
+      //         password: true,
+      //       },
+      //     ]}
+      //   ></formCom>
+      // )
+      // com = <FConfigPanel></FConfigPanel>
+      // com = <erFormEditor isDesign={true}  ></erFormEditor>
+      // com=<d></d>
       let _com = (
         <div
           style={{
-            marginTop: '100px',
-            marginLeft: '100px',
-            // height: '700px',
-            // width: '700px',
-            // overflow: '',
-            // transform: 'translate(10px, 400px)',
+            padding: '100px',
           }}
         >
           {/* <erFormEditor isDesign={true} {...formConfig}></erFormEditor> */}
@@ -132,7 +159,8 @@ export default defineComponent({
           {}
           {/* <tabCom>  </tabCom> */}
           {com}
-          {com1}
+          {/* {com1} */}
+          {}
         </div>
       )
       return _com

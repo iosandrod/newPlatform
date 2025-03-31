@@ -84,7 +84,6 @@ export default defineComponent({
                 drag: (item) => {
                   let config = item.config
                   let list = config.children || config.list || [] //
-                  console.log(config,'testList')//
                   let com1 = (
                     <dragGableWrap
                       class={[ns.e('dragContent')]}

@@ -6,7 +6,7 @@ export class itemGroup extends Base {
   items: Button[] = []
   _class: any
   isDesign = false
-  constructor(config, _class = Button) {
+  constructor(config, _class: any = Button) {
     super()
     this.config = config
     this._class = _class
@@ -38,6 +38,5 @@ export class itemGroup extends Base {
       }),
     }
     return obj
-    // let buttons=this.buttons
   }
 }

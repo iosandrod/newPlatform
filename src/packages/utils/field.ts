@@ -2,17 +2,16 @@ import _ from 'lodash'
 import { nanoid } from './nanoid'
 const fieldsRe = /^(input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform)$/
 //
-class LayoutNode {
-
-}
+class LayoutNode {}
 const deepTraversal = (node, fn) => {
   fn(node)
-  const nodes = node.type === 'subform' ? node.list[0] : (node.list || node.rows || node.columns || node.children || [])
-  nodes.forEach(e => {
+  const nodes = node.list || node.rows || node.columns || node.children || []
+  nodes.forEach((e) => {
     deepTraversal(e, fn)
   })
 }
-const wrapElement = (element, fn?: any) => {//
+const wrapElement = (element, fn?: any) => {
+  console.log('wrapElement', element) //
   const result = element
   deepTraversal(result, (node) => {
     if (Array.isArray(node)) return false
@@ -27,15 +26,15 @@ const wrapElement = (element, fn?: any) => {//
     }
     if (/^(grid|tabs|collapse|table|divider)$/.test(node.type)) {
       node.style = {
-        width: '100%'
+        width: '100%',
       }
     }
     if (checkIsField(node)) {
       node.style = {
         width: {
           pc: '100%',
-          mobile: '100%'
-        }
+          mobile: '100%',
+        },
       }
     }
     if (/^(tabs)$/.test(node.type)) {
@@ -65,11 +64,23 @@ const renderFieldData = (type) => {
     type,
     label: '',
     list: [],
-    style: {}
+    style: {},
   }
   return result
 }
-const excludes = ['grid', 'col', 'table', 'tr', 'td', 'tabs', 'tabsCol', 'collapse', 'collapseCol', 'divider', 'inline']
+const excludes = [
+  'grid',
+  'col',
+  'table',
+  'tr',
+  'td',
+  'tabs',
+  'tabsCol',
+  'collapse',
+  'collapseCol',
+  'divider',
+  'inline',
+]
 const flatNodes = (nodes, excludes, fn?: any, excludesFn?: any) => {
   return nodes.reduce((res, node, currentIndex) => {
     //不是field的node
@@ -79,7 +90,8 @@ const flatNodes = (nodes, excludes, fn?: any, excludesFn?: any) => {
     } else {
       excludesFn && excludesFn(nodes, node, currentIndex)
     }
-    const children = node.type === 'subform' ? node.list[0] : (node.list || node.rows || node.columns || node.children || [])
+    const children =
+      node.list || node.rows || node.columns || node.children || []
     res = res.concat(flatNodes(children, excludes, fn, excludesFn))
     return res
   }, [])
@@ -99,7 +111,7 @@ const disassemblyData1 = (data) => {
     config: data.config,
     fields: processField(data.list),
     data: data.data,
-    logic: data.logic
+    logic: data.logic,
   }
   return result
 }
@@ -109,7 +121,7 @@ const combinationData1 = (data) => {
     config: data.config,
     data: data.data,
     fields: data.fields,
-    logic: data.logic
+    logic: data.logic,
   }
   const fn = (nodes, node, currentIndex) => {
     const cur = _.find(data.fields, { id: node })
@@ -127,9 +139,6 @@ const combinationData2 = (list, fields) => {
   const fn = (nodes, node, currentIndex) => {
     const cur = _.find(fields, { id: node })
     if (!_.isEmpty(cur)) {
-      if (cur.type === 'subform') {
-        flatNodes(cur.list[0], excludes, fn)
-      }
       nodes[currentIndex] = cur
     }
   }
@@ -149,12 +158,12 @@ const repairLayout = (layout, fields) => {
       if (!node.columns.length) {
         temporary.unshift({
           nodes,
-          currentIndex
+          currentIndex,
         })
       }
     }
   })
-  temporary.forEach(e => {
+  temporary.forEach((e) => {
     e.nodes.splice(e.currentIndex, 1)
   })
 }
@@ -164,17 +173,25 @@ const disassemblyData2 = (list) => {
   })
 }
 const checkIslineChildren = (node) => node.context.parent.type === 'inline'
-const checkIsField = (node) => fieldsRe.test(node.type)
+const checkIsField = (node) => {
+  let type = node.type
+  let res = fieldsRe.test(type)
+  return res //
+}
 const calculateAverage = (count, total = 100) => {
   const base = Number((total / count).toFixed(2))
   const result = []
   for (let i = 0; i < count; i++) {
-    // result.push(base + (i < rest ? 1 : 0))
     result.push(base)
   }
   return result
 }
-const syncWidthByPlatform = (node, platform, syncFullplatform = false, value) => {
+const syncWidthByPlatform = (
+  node,
+  platform,
+  syncFullplatform = false,
+  value,
+) => {
   const isArray = _.isArray(node)
   if (!isArray) {
     if (_.isObject(node.style.width)) {
@@ -187,13 +204,19 @@ const syncWidthByPlatform = (node, platform, syncFullplatform = false, value) =>
       node.style.width = value + '%'
     }
   }
-  const otherNodes = isArray ? node : node.context.parent.columns.filter(e => e !== node)
-  const averageWidths = calculateAverage(otherNodes.length, isArray ? 100 : 100 - value)
+  const otherNodes = isArray
+    ? node
+    : node.context.parent.columns.filter((e) => e !== node)
+  const averageWidths = calculateAverage(
+    otherNodes.length,
+    isArray ? 100 : 100 - value,
+  )
   otherNodes.forEach((node, index) => {
     const isFieldWidth = _.isObject(node.style.width)
     if (isFieldWidth) {
       if (syncFullplatform) {
-        node.style.width.pc = node.style.width.mobile = averageWidths[index] + '%'
+        node.style.width.pc = node.style.width.mobile =
+          averageWidths[index] + '%'
       } else {
         node.style.width[platform] = averageWidths[index] + '%'
       }
@@ -202,9 +225,14 @@ const syncWidthByPlatform = (node, platform, syncFullplatform = false, value) =>
     }
   })
 }
-const transferLabelPath = (node) => `er.fields.${node.type === 'input' ? `${node.type}.${node.options.renderType - 1}` : `${node.type}`}`
+const transferLabelPath = (node) =>
+  `er.fields.${
+    node.type === 'input'
+      ? `${node.type}.${node.options.renderType - 1}`
+      : `${node.type}`
+  }`
 const fieldLabel = (t, node) => {
-  // console.log(node,'testNode')// 
+  // console.log(node,'testNode')//
   let value = transferLabelPath(node)
   return t(transferLabelPath(node))
 }
@@ -230,23 +258,24 @@ const checkIsInSubform = (node) => {
   }
   return result
 }
-const getSubFormValues = (subform) => subform.list.map(e => {
-  const cur = {}
-  const children = []
-  e.forEach(e => {
-    e.columns.forEach(e => {
-      children.push(e)
+const getSubFormValues = (subform) =>
+  subform.list.map((e) => {
+    const cur = {}
+    const children = []
+    e.forEach((e) => {
+      e.columns.forEach((e) => {
+        children.push(e)
+      })
     })
+    children.forEach((e) => {
+      cur[e.key] = e.options.defaultValue
+    })
+    return cur
   })
-  children.forEach(e => {
-    cur[e.key] = e.options.defaultValue
-  })
-  return cur
-})
 const findSubFormAllFields = (subform) => {
   const result = []
-  subform.list.forEach(e => {
-    e.forEach(e => {
+  subform.list.forEach((e) => {
+    e.forEach((e) => {
       result.push(...e.columns)
     })
   })
@@ -273,5 +302,5 @@ export {
   checkIsInSubform,
   getSubFormValues,
   findSubFormAllFields,
-  processField
+  processField,
 }

@@ -15,8 +15,13 @@ import 'vxe-pc-ui/styles/all.scss'
 import 'default-passive-events' //
 import VxeTable from 'vxe-table'
 import VxeUIAll from 'vxe-pc-ui'
+import context from '@/contextM'
+import '@/contextM/themes/default/index.scss'
+import { erFormEditor } from '@ER/formEditor'
 Locale.use('en-US', enUS)
 app.use(Vant)
+app.component('erForm', erFormEditor) //
+app.use(context) //
 app.use(VxeTable)
 app.use(VxeUIAll)
 app.use(router)

@@ -6,17 +6,17 @@ export const globalConfig = {
     completeButton: {
       text: '提交',
       color: '',
-      backgroundColor: ''
-    }
+      backgroundColor: '',
+    },
   },
   mobile: {
     labelPosition: 'left',
     completeButton: {
       text: '提交',
       color: '',
-      backgroundColor: ''
-    }
-  }
+      backgroundColor: '',
+    },
+  },
 }
 export const fieldsConfig = [
   {
@@ -38,8 +38,8 @@ export const fieldsConfig = [
           placeholder: '',
           labelWidth: 100,
           isShowLabel: true,
-          required: false
-        }
+          required: false,
+        },
       },
       {
         type: 'input',
@@ -56,8 +56,8 @@ export const fieldsConfig = [
           placeholder: '',
           labelWidth: 100,
           isShowLabel: true,
-          required: false
-        }
+          required: false,
+        },
       },
       {
         type: 'input',
@@ -74,8 +74,8 @@ export const fieldsConfig = [
           placeholder: '',
           labelWidth: 100,
           isShowLabel: true,
-          required: false
-        }
+          required: false,
+        },
       },
       {
         type: 'region',
@@ -90,8 +90,8 @@ export const fieldsConfig = [
           labelWidth: 100,
           defaultValue: '',
           selectType: 3,
-          filterable: true
-        }
+          filterable: true,
+        },
       },
       {
         type: 'input',
@@ -108,10 +108,10 @@ export const fieldsConfig = [
           placeholder: '',
           labelWidth: 100,
           isShowLabel: true,
-          required: false
-        }
-      }
-    ]
+          required: false,
+        },
+      },
+    ],
   },
   {
     name: '基础字段',
@@ -135,8 +135,8 @@ export const fieldsConfig = [
           isShowLabel: true,
           required: false,
           min: null,
-          max: null
-        }
+          max: null,
+        },
       },
       {
         type: 'textarea',
@@ -155,8 +155,8 @@ export const fieldsConfig = [
           isShowLabel: true,
           required: false,
           min: null,
-          max: null
-        }
+          max: null,
+        },
       },
       {
         type: 'number',
@@ -177,8 +177,8 @@ export const fieldsConfig = [
           isShowLabel: true,
           required: false,
           minlength: null,
-          maxlength: null
-        }
+          maxlength: null,
+        },
       },
       {
         type: 'radio',
@@ -193,8 +193,8 @@ export const fieldsConfig = [
           labelWidth: 100,
           isShowLabel: true,
           disabled: false,
-          required: false
-        }
+          required: false,
+        },
       },
       {
         type: 'checkbox',
@@ -209,8 +209,8 @@ export const fieldsConfig = [
           labelWidth: 100,
           isShowLabel: true,
           required: false,
-          disabled: false
-        }
+          disabled: false,
+        },
       },
       {
         type: 'select',
@@ -228,8 +228,8 @@ export const fieldsConfig = [
           isShowLabel: true,
           disabled: false,
           clearable: true,
-          required: false
-        }
+          required: false,
+        },
       },
       {
         type: 'time',
@@ -246,8 +246,8 @@ export const fieldsConfig = [
           labelWidth: 100,
           isShowLabel: true,
           required: false,
-          disabled: false
-        }
+          disabled: false,
+        },
       },
       {
         type: 'date',
@@ -267,8 +267,8 @@ export const fieldsConfig = [
           isShowLabel: true,
           type: 'date',
           required: false,
-          disabled: false
-        }
+          disabled: false,
+        },
       },
       {
         type: 'rate',
@@ -282,8 +282,8 @@ export const fieldsConfig = [
           defaultValue: 0,
           labelWidth: 100,
           isShowLabel: true,
-          disabled: false
-        }
+          disabled: false,
+        },
       },
       // {
       //   type: 'color',
@@ -315,8 +315,8 @@ export const fieldsConfig = [
           defaultValue: true,
           labelWidth: 100,
           isShowLabel: true,
-          disabled: false
-        }
+          disabled: false,
+        },
       },
       {
         type: 'slider',
@@ -333,8 +333,8 @@ export const fieldsConfig = [
           labelWidth: 100,
           isShowLabel: true,
           required: false,
-          disabled: false
-        }
+          disabled: false,
+        },
       },
       {
         type: 'html',
@@ -350,8 +350,8 @@ export const fieldsConfig = [
           labelWidth: 100,
           isShowLabel: true,
           required: false,
-          disabled: false
-        }
+          disabled: false,
+        },
       },
       {
         type: 'cascader',
@@ -369,8 +369,8 @@ export const fieldsConfig = [
           isShowLabel: true,
           required: false,
           disabled: false,
-          clearable: true
-        }
+          clearable: true,
+        },
       },
       {
         type: 'uploadfile',
@@ -388,8 +388,8 @@ export const fieldsConfig = [
           size: 5,
           accept: '.png,.jpg',
           disabled: false,
-          required: false
-        }
+          required: false,
+        },
       },
       {
         type: 'signature',
@@ -404,10 +404,10 @@ export const fieldsConfig = [
           defaultValue: '',
           penColor: 'rgb(0, 0, 0)',
           action: '',
-          disabled: false
-        }
-      }
-    ]
+          disabled: false,
+        },
+      },
+    ],
   },
   {
     name: '容器',
@@ -425,11 +425,10 @@ export const fieldsConfig = [
               span: 6,
               offset: 0,
               pull: 0,
-              push: 0
+              push: 0,
             },
             type: 'col',
-            list: [
-            ]
+            list: [],
           },
           {
             id: '',
@@ -437,11 +436,10 @@ export const fieldsConfig = [
               span: 6,
               offset: 0,
               pull: 0,
-              push: 0
+              push: 0,
             },
             type: 'col',
-            list: [
-            ]
+            list: [],
           },
           {
             id: '',
@@ -449,18 +447,17 @@ export const fieldsConfig = [
               span: 6,
               offset: 0,
               pull: 0,
-              push: 0
+              push: 0,
             },
             type: 'col',
-            list: [
-            ]
-          }
+            list: [],
+          },
         ],
         options: {
           gutter: 0,
           justify: 'space-around',
-          align: 'top'
-        }
+          align: 'top',
+        },
       },
       {
         type: 'table',
@@ -476,67 +473,66 @@ export const fieldsConfig = [
                 options: {
                   colspan: 1,
                   rowspan: 1,
-                  isMerged: false
+                  isMerged: false,
                 },
                 list: [],
-                style: {}
+                style: {},
               },
-              {
-                type: 'td',
-                options: {
-                  colspan: 1,
-                  rowspan: 1,
-                  isMerged: false
-                },
-                list: [],
-                style: {}
-              }
-            ]
+              // {
+              //   type: 'td',
+              //   options: {
+              //     colspan: 1,
+              //     rowspan: 1,
+              //     isMerged: false
+              //   },
+              //   list: [],
+              //   style: {}
+              // }
+            ],
           },
-          {
-            type: 'tr',
-            columns: [
-              {
-                type: 'td',
-                options: {
-                  colspan: 1,
-                  rowspan: 1,
-                  isMerged: false
-                },
-                list: [],
-                style: {}
-              },
-              {
-                type: 'td',
-                options: {
-                  colspan: 1,
-                  rowspan: 1,
-                  isMerged: false
-                },
-                list: [],
-                style: {}
-              }
-            ]
-          }
+          // {
+          //   type: 'tr',
+          //   columns: [
+          //     {
+          //       type: 'td',
+          //       options: {
+          //         colspan: 1,
+          //         rowspan: 1,
+          //         isMerged: false
+          //       },
+          //       list: [],
+          //       style: {}
+          //     },
+          //     {
+          //       type: 'td',
+          //       options: {
+          //         colspan: 1,
+          //         rowspan: 1,
+          //         isMerged: false
+          //       },
+          //       list: [],
+          //       style: {}
+          //     }
+          //   ]
+          // } 
         ],
         options: {
           width: 100,
-          widthType: '%'
-        }
+          widthType: '%',
+        },
       },
       {
         type: 'tabs',
         label: '标签页',
         icon: 'label',
         id: '',
-        columns: [
-        ],
+        columns: [],
         options: {
           type: '',
           tabPosition: 'top',
           align: 'top',
-          hidden: false
-        }
+          hidden: false,
+        },
       },
       {
         type: 'collapse',
@@ -546,8 +542,8 @@ export const fieldsConfig = [
         columns: [],
         options: {
           defaultValue: [],
-          accordion: false
-        }
+          accordion: false,
+        },
       },
       {
         type: 'divider',
@@ -561,8 +557,8 @@ export const fieldsConfig = [
           defaultValue: 'divider',
           labelWidth: 100,
           labelHidden: true,
-          required: false
-        }
+          required: false,
+        },
       },
       // {
       //   type: 'subform',
@@ -579,6 +575,6 @@ export const fieldsConfig = [
       //     disabled: false
       //   }
       // }
-    ]
-  }
+    ],
+  },
 ]

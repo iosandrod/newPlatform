@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent, watch } from 'vue'
 import { ElTabPane, ElTabs, tabPaneProps, tabsProps } from 'element-plus'
 import { Tab } from './tab'
 import { erFormEditor } from '@ER/formEditor'
@@ -13,16 +13,50 @@ export default defineComponent({
     },
     items: {
       type: Array,
-      default: () => [],
+      default: (): any[] => [],
+    },
+    isDesign: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
-    erFormEditor,
+    // erFormEditor,
     DragGable,
     TransitionGroup,
   },
   setup(props, { emit, slots, attrs }) {
     const tabIns = new Tab(props)
+    watch(
+      () => [props.items as any, props.items?.length],
+      ([newValue, length], [oldValue, oldLength]) => {
+        //引用相同
+        if (tabIns.config.items == newValue) {
+          let addItems = newValue.filter((el) => {
+            return !oldValue.includes(el)
+          })
+          if (addItems.length > 0) {
+            tabIns.addItem(addItems)
+          }
+          let removeItems = oldValue.filter((el) => {
+            return !newValue.includes(el)
+          })
+          if (removeItems.length > 0) {
+            tabIns.delItem(removeItems)
+          }
+        }
+      }, 
+    )
+    watch(
+      //
+      () => props.isDesign,
+      (newValue) => {
+        tabIns.setIsDesign(newValue)
+      },
+      {
+        immediate: true,
+      },
+    )
     const ns = tabIns.hooks.useNamespace('tabCom')
     const register = (el) => {
       if (el) {
@@ -114,7 +148,7 @@ export default defineComponent({
                         return <div></div>
                       },
                     }
-                    let com = null 
+                    let com = null
                     com = (
                       <div>
                         <ElTabPane v-slots={_slots}></ElTabPane>

@@ -24,13 +24,19 @@ function getParentAutoScrollElement(el, includeSelf) {
   let gotSelf = false
   do {
     // we don't need to get elem css if it isn't even overflowing in the first place (performance)
-    if (elem.clientWidth < elem.scrollWidth || elem.clientHeight < elem.scrollHeight) {
+    if (
+      elem.clientWidth < elem.scrollWidth ||
+      elem.clientHeight < elem.scrollHeight
+    ) {
       const elemCSS = css(elem)
       if (
-        elem.clientWidth < elem.scrollWidth && (elemCSS.overflowX === 'auto' || elemCSS.overflowX === 'scroll') ||
-        elem.clientHeight < elem.scrollHeight && (elemCSS.overflowY === 'auto' || elemCSS.overflowY === 'scroll')
+        (elem.clientWidth < elem.scrollWidth &&
+          (elemCSS.overflowX === 'auto' || elemCSS.overflowX === 'scroll')) ||
+        (elem.clientHeight < elem.scrollHeight &&
+          (elemCSS.overflowY === 'auto' || elemCSS.overflowY === 'scroll'))
       ) {
-        if (!elem.getBoundingClientRect || elem === document.body) return getWindowScrollingElement()
+        if (!elem.getBoundingClientRect || elem === document.body)
+          return getWindowScrollingElement()
 
         if (gotSelf || includeSelf) return elem
         gotSelf = true
@@ -38,7 +44,7 @@ function getParentAutoScrollElement(el, includeSelf) {
     }
     /* jshint boss:true */
     // eslint-disable-next-line
-  } while (elem = elem.parentNode)
+  } while ((elem = elem.parentNode))
 
   return getWindowScrollingElement()
 }
@@ -53,7 +59,7 @@ const getOffset = (el, key) => {
 
   return offset
 }
-function matches(/** HTMLElement */el, /** String */selector) {
+function matches(/** HTMLElement */ el, /** String */ selector) {
   if (!selector) return
 
   selector[0] === '>' && (selector = selector.substring(1))
@@ -99,19 +105,23 @@ function css(el, prop?: any, val?: any) {
 function lastChild(el, selector?: any) {
   let last = el.lastElementChild
   // eslint-disable-next-line
-  while (last && (css(last, 'display') === 'none' || selector && !matches(last, selector))) {
+  while (
+    last &&
+    (css(last, 'display') === 'none' || (selector && !matches(last, selector)))
+  ) {
     last = last.previousElementSibling
   }
   return last || null
 }
-const disableBothSides = (ER) => ER.props.layoutType === 1 && ER.state.platform === 'mobile'
+const disableBothSides = (ER) =>
+  ER.props.layoutType === 1 && ER.state.platform === 'mobile'
 const getDirection1 = (target, originalEvent) => {
   let direction: any = ''
   const Y = getOffset(target, 'offsetTop')
   const scrollEl = getParentAutoScrollElement(target, true)
   const clientY = originalEvent.clientY + scrollEl.scrollTop
   const h = target.offsetHeight
-  if (clientY > Y && clientY < Y + (h / 2)) {
+  if (clientY > Y && clientY < Y + h / 2) {
     direction = 5
   } else {
     direction = 6
@@ -154,7 +164,7 @@ const getDirection0 = (target, originalEvent) => {
 }
 const clearBorder = (el) => {
   const classNames = ['top', 'bottom', 'left', 'right']
-  classNames.forEach(e => {
+  classNames.forEach((e) => {
     el.classList.remove(`drag-line-${e}`)
   })
 }
@@ -169,17 +179,11 @@ const getDragElement = (node) => {
 const setStates = (newTarget, ev, ER) => {
   const {
     activeSortable: {
-      constructor: {
-        utils
-      },
-      options: {
-        dataSource
-      },
+      constructor: { utils },
+      options: { dataSource },
       el: {
-        __draggable_component__: {
-          list
-        }
-      }
+        __draggable_component__: { list },
+      },
     },
     activeSortable,
     target,
@@ -191,15 +195,17 @@ const setStates = (newTarget, ev, ER) => {
         __draggable_component__: {
           //list是横向的东西
           //columns是纵向的
-          list: targetList//获取到sort的dom的list变量
-        }
-      }
+          list: targetList, //获取到sort的dom的list变量
+        },
+      },
     },
-    sortable
+    sortable,
   } = ev
   let _targetList = ev.sortable.el.__draggable_component__
   const targetContainer = el.parentNode
-  const direction = disableBothSides(ER) ? getDirection1(newTarget, originalEvent) : getDirection0(newTarget, originalEvent)
+  const direction = disableBothSides(ER)
+    ? getDirection1(newTarget, originalEvent)
+    : getDirection0(newTarget, originalEvent)
   const cols = newTarget.parentNode.children
   const colIndex = utils.index(newTarget)
   const rows = targetContainer.parentNode.children
@@ -210,17 +216,23 @@ const setStates = (newTarget, ev, ER) => {
     }
   }
   if (/^(1)$/.test(direction)) {
-    if (ER.state.store.length > 0 && (/^(root)$/.test(el.dataset.layoutType))) {
+    if (ER.state.store.length > 0 && /^(root)$/.test(el.dataset.layoutType)) {
       return false
     }
   }
   switch (direction) {
     case 1:
-      if ((list.length === 1 && rows[rowIndex - 1] && rows[rowIndex - 1].contains(dragEl)) || !sortable.el.parentNode.parentNode.__draggable_component__) {
+      if (
+        (list.length === 1 &&
+          rows[rowIndex - 1] &&
+          rows[rowIndex - 1].contains(dragEl)) ||
+        !sortable.el.parentNode.parentNode.__draggable_component__
+      ) {
         prevEl = ''
         return false
       }
-      prevSortable = (sortable.el.parentNode.parentNode.__draggable_component__)._sortable
+      prevSortable =
+        sortable.el.parentNode.parentNode.__draggable_component__._sortable
       prevEl = targetContainer
       inserRowIndex = utils.index(prevEl)
       setBorder(prevEl, 'drag-line-top')
@@ -244,7 +256,8 @@ const setStates = (newTarget, ev, ER) => {
       if (sortable.el.dataset.layoutType === 'root') {
         return false
       }
-      prevSortable = (sortable.el.parentNode.parentNode.__draggable_component__)._sortable
+      prevSortable =
+        sortable.el.parentNode.parentNode.__draggable_component__._sortable
       if (rowIndex === rows.length - 1) {
         prevEl = targetContainer
         setBorder(prevEl, 'drag-line-bottom')
@@ -310,33 +323,38 @@ const resetStates = () => {
 }
 function ControlInsertionPlugin(ER) {
   class ControlInsertionPlugin {
-    dragStart(e) {
-    }
+    dragStart(e) {}
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       if (!prevEl || !e.activeSortable) {
         return false
       }
       // 判断当前拖拽的元素是否是 'block' 类型
-      const isBlock = _.get(e, 'activeSortable.options.dataSource', false) === 'block'
+      const isBlock =
+        _.get(e, 'activeSortable.options.dataSource', false) === 'block'
       // 从事件对象中获取拖拽的元素 (dragEl) 和目标元素 (target)
-      const { dragEl, target } = e
+      const { dragEl, target } = e //
       // 获取拖拽元素的真实DOM结构
       const oldEl = getDragElement(dragEl)
       // 克隆并包装拖拽的元素，以便插入到新位置
       // console.log(oldEl, 'testOld')//
-      const newElement = ER.wrapElement(_.cloneDeep(oldEl), inserRowIndex !== '', true, isBlock)
+      const newElement = ER.wrapElement(
+        _.cloneDeep(oldEl),
+        inserRowIndex !== '',
+        true,
+        isBlock,
+      )
       // 如果不是 'block' 类型的元素，并且原始元素有 context，则删除该 context
       if (!isBlock) {
         if (oldEl.context) {
           let _context = oldEl.context
           let flatNode = _context.getFlattenNodes()
-          let ids = flatNode.map(node => node.id)
+          let ids = flatNode.map((node) => node.id)
           let next = Array.isArray(prevSortable.options.parent)
             ? prevSortable.options.parent
-            : [prevSortable.options.parent]//is Array
-          let _ids = next.map(node => node.id)
-          if (_ids.some(id => ids.includes(id))) {
+            : [prevSortable.options.parent] //is Array
+          let _ids = next.map((node) => node.id)
+          if (_ids.some((id) => ids.includes(id))) {
             resetStates()
             return
           }
@@ -357,17 +375,20 @@ function ControlInsertionPlugin(ER) {
         // 在指定的索引位置插入新元素
         store.splice(inserRowIndex, 0, newElement)
         // 关联新元素的上下文信息
-        utils.addContext({ node: store[inserRowIndex], parent: prevSortable.options.parent })
+        utils.addContext({
+          node: store[inserRowIndex],
+          parent: prevSortable.options.parent,
+        })
       }
 
       // 处理列插入逻辑
       if (inserColIndex !== '') {
         const {
           el: {
-            __draggable_component__: { list }
+            __draggable_component__: { list },
           },
           el,
-          constructor: { utils: sortableUtils }
+          constructor: { utils: sortableUtils },
         } = prevSortable
 
         // 在指定的索引位置插入新元素
@@ -376,7 +397,10 @@ function ControlInsertionPlugin(ER) {
         // 关联新元素的上下文信息
         utils.addContext({
           node: newElement,
-          parent: prevSortable.options.parent[sortableUtils.index(prevSortable.el.parentNode)]
+          parent:
+            prevSortable.options.parent[
+              sortableUtils.index(prevSortable.el.parentNode)
+            ],
         })
       }
 
@@ -401,17 +425,11 @@ function ControlInsertionPlugin(ER) {
       resetStates()
       const {
         activeSortable: {
-          constructor: {
-            utils: SortableUtils
-          },
-          options: {
-            dataSource
-          },
+          constructor: { utils: SortableUtils },
+          options: { dataSource },
           el: {
-            __draggable_component__: {
-              list
-            }
-          }
+            __draggable_component__: { list },
+          },
         },
         activeSortable,
         target,
@@ -420,12 +438,10 @@ function ControlInsertionPlugin(ER) {
         sortable: {
           el,
           el: {
-            __draggable_component__: {
-              list: targetList
-            }
-          }
+            __draggable_component__: { list: targetList },
+          },
         },
-        sortable
+        sortable,
       } = e
       // console.log(dataSource, 'testDataSource')//
       if (sortable.options.dataSource === 'block') {
@@ -436,28 +452,46 @@ function ControlInsertionPlugin(ER) {
       }
       const dragNode = getDragElement(dragEl)
       const targetNode = getDragElement(target)
-      if ((!utils.checkIsField(dragNode) || dragNode.type === 'subform') && utils.checkIsInSubform(targetNode)) {
+      if (
+        (!utils.checkIsField(dragNode) || dragNode.type === 'subform') &&
+        utils.checkIsInSubform(targetNode)
+      ) {
         return false
       }
       if (target.dataset.layoutType === 'subform') {
         if (!utils.checkIsField(dragNode) || dragNode.type === 'subform') {
           return false
         }
-      }//
+      } //
       originalEvent.stopPropagation && originalEvent.stopPropagation()
       const direction = ''
       const targetContainer = el.parentNode
       const targetOnlyOne = targetList.length === 1
       //@ts-ignore
-      let newTarget = SortableUtils.closest(target, this.options.draggable, sortable.el)
+      let newTarget = SortableUtils.closest(
+        target,
+        this.options.draggable,
+        sortable.el,
+      )
       if (dragEl.contains(newTarget)) {
         return false
       }
-      if (/^(grid-col|tabs-col|td|collapse-col|root|inline|subform)$/.test(target.dataset.layoutType)) {
+      if (
+        /^(grid-col|tabs-col|td|collapse-col|root|inline|subform)$/.test(
+          target.dataset.layoutType,
+        )
+      ) {
         newTarget = target
-        const state = (newTarget.__draggable_component__ || newTarget.children[0].__draggable_component__)
+        const state =
+          newTarget.__draggable_component__ ||
+          newTarget.children[0].__draggable_component__
         if (!state.list.length) {
-          prevEl = target.dataset.layoutType === 'root' ? target : newTarget.__draggable_component__ ? newTarget.children[0] : newTarget.parentNode
+          prevEl =
+            target.dataset.layoutType === 'root'
+              ? target
+              : newTarget.__draggable_component__
+              ? newTarget.children[0]
+              : newTarget.parentNode
           prevSortable = state._sortable
           inserRowIndex = 0
           setBorder(prevEl, 'drag-line-top')
@@ -490,11 +524,11 @@ function ControlInsertionPlugin(ER) {
         setStates(newTarget, e, ER)
       }
     }
-  }//
+  } //
   const name = ER.formIns.getPluginName()
   return Object.assign(ControlInsertionPlugin, {
     pluginName: name, //
-    initializeByDefault: true
+    initializeByDefault: true,
   })
 }
 export default ControlInsertionPlugin

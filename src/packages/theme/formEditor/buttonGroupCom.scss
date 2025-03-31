@@ -4,8 +4,8 @@
   height: 100% !important;
   --el-menu-item-height: 100%;
   --el-menu-horizontal-height: 20px;
-  --van-tabbar-height: 25px;
-  --van-submit-bar-height: 25px;
+  --van-tabbar-height: 30px;
+  --van-submit-bar-height: 30px;
   .el-sub-menu__title {
   }
   .el-dropdown {
@@ -21,7 +21,7 @@
 }
 @include b(buttonMenuCom) {
   .el-menu-item {
-    height: 25px;
+    height: 30px;
   }
   .el-menu-item:hover{
     background: none !important;

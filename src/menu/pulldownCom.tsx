@@ -224,9 +224,6 @@ export default defineComponent({
      * 隐藏下拉面板
      */
     const hidePanel = () => {
-      if (1 == 1) {
-        return
-      }
       reactData.visiblePanel = false
       dispatchEvent('visible-change', { visible: false }, null)
       emit('update:modelValue', false)

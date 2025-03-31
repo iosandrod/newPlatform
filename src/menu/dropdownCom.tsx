@@ -48,9 +48,9 @@ export default defineComponent({
           destroyOnClose={true}
           modelValue={drop.getModelValue()} //
           v-slots={{ 
-            default: () => slots.default(drop),
+            default: () => slots.default({dropdown:drop}),
             dropdown: () => {
-              let com = slots?.dropdown(drop) || null
+              let com = slots?.dropdown({dropdown:drop}) || null
               return com //
             },
           }} //

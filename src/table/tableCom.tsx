@@ -1,4 +1,11 @@
-import { defineComponent, onMounted, provide, watchEffect } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  provide,
+  watch,
+  watchEffect,
+} from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { Table } from './table'
@@ -6,12 +13,16 @@ import { tableV2Props } from 'element-plus'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { nextTick } from 'vue'
 import { generatePersons } from './tableData'
+import ContextmenuCom from '@/contextM/components/ContextmenuCom'
+import TableButtonCom from './tableButtonCom'
+import TableMenuCom from './tableMenuCom'
 // new ListTable()
 //核心表格组件
 export default defineComponent({
   name: 'TableEditor',
   components: {
     buttonGroupCom,
+    ContextmenuCom,
   },
   props: {
     ...tableV2Props,
@@ -35,55 +46,80 @@ export default defineComponent({
     onMounted(() => {
       tableIns.render() //
     }) //
-    const buttons = [
-      {
-        label: '按钮1',
-        fn: async () => {
-          //添加行
-          // console.log('执行到这里')//
-          tableIns.addRows({
-            rows: generatePersons(100),
-          })
-        },
-      },
-      {
-        label: '按钮2',
-        fn: async () => {
-          //添加行
-          let data = tableIns.getData()
-          data[0].email1 = data[0].email1 + '2' ////
-          data[1].email1 = data[1].email1 + '2' //////
-        },
-        children: [
-          {
-            label: '按钮2-1', //
-          },
-        ],
-      },
-    ]
+    onUnmounted(() => {
+      tableIns.onUnmounted()
+    })
+   
     watchEffect(() => {
       tableIns.loadColumns()
     })
     watchEffect(() => {
       tableIns.loadData() //
     })
+    watch(
+      () => {
+        return tableIns.templateProps.columns
+      },
+      (e) => {
+        let ins = tableIns.getInstance()
+        if (ins == null) {
+          return
+        }
+        ins.updateColumns(e)
+      },
+    )
+    // watch(
+    //   () => {
+    //     return tableIns.templateProps.data
+    //   },
+    //   (e) => {
+    //     let ins = tableIns.getInstance()
+    //     if (ins == null) {
+    //       return
+    //     }
+    //     ins.setRecords(e) //
+    //   },
+    // )
+    watch(
+      () => {
+        let tableData = { ...tableIns.tableData }
+        return tableData //
+      },
+      (e) => {
+        tableIns.updateCanvas() //
+      },
+    )
+    watch(
+      () => {
+        return tableIns.tableConfig
+      },
+      (e) => {
+        tableIns.updateOptions(e)
+      },
+      {
+        deep: true,
+      },
+    )
+    provide('tableIns', tableIns)
     return () => {
       let com = null
-      // com = <ListTable options={tableIns.getOptions()} ref={registerRootDiv}></ListTable>
       com = (
         <div
           style={{ width: '100%', height: '100%' }}
           ref={registerRootDiv}
         ></div>
       )
+      const menuCom = <TableMenuCom></TableMenuCom>
+      let btnCom = <TableButtonCom></TableButtonCom>
       let outCom = (
-        <div style={{ transform: '', width: '100%', height: '100%' }}>
-          <buttonGroupCom items={buttons}></buttonGroupCom>
+        <div style={{}}>
+          {menuCom}
+          {btnCom}
           <div
             style={{
-              transform: 'translate(0,200px)',
-              width: '100%',
-              height: '100%',
+              // transform: 'translate(0,200px)',
+              width: '500px',
+              height: '500px',
             }}
           >
             {com}

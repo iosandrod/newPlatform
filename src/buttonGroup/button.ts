@@ -16,7 +16,7 @@ export class Button extends Base {
   init() {
     super.init()
     let config = this.config
-    let buttons = config.children || [] //
+    let buttons = config.items || config.children || [] //
     if (buttons.length > 0) {
       this.setSubButtons(buttons) //
     }
@@ -43,44 +43,19 @@ export class Button extends Base {
     }
   }
   getSubData() {
-    // let obj1:any={}
-    // if(this.buttons.length>0){
-    //   obj1.children=this.buttons.map((b)=>{
-    //     return b.getSubData()
-    //   })
-    //   obj1.button=this
-    // } 
-    // return obj1
-    return [
-      {
-        button: {
-          label: 'ff',
-          getLabel: function () {
-            return this.getLabel()
-          },
-        },
-        children: [
-          {
-            label: 'ff',
-            getLabel: function () {
-              return this.getLabel()
-            },
-          },
-          {
-            label: 'ff',
-            getLabel: function () {
-              return this.getLabel()
-            },
-          },
-          {
-            label: 'ff',
-            getLabel: function () {
-              return this.getLabel()
-            },
-          },
-        ],
-      },
-    ]
+    let buttons = this.buttons
+    return buttons.map((item) => {
+      let obj = {
+        button: item,
+        items: item.getSubData(),
+      }
+      return obj
+    })
+  }
+  getDisabled() {
+    let config = this.config
+    let disabled = Boolean(config.disabled === true)
+    return disabled
   }
   hiddenDropdown() {
     let _this = this.getParent() // //

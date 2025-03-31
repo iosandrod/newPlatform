@@ -55,3 +55,20 @@
 .btnGClass{
   top: inherit            !important; 
 }
+ul, ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.is-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.formEditor .el-main{
+  padding: 0px   !important;
+}
+.el-main{
+  --el-main-padding: 0px !important;
+}

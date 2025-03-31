@@ -25,13 +25,13 @@ import {
   defineExpose,
 } from 'vue';
 import fieldMenu from '@/menu/fieldCom';
-import CanvesPanel from '@ER/formEditor/components/Panels/Canves';
+import CanvesPanel from '@ER/formEditor/components/Panels/Canves';//
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel';
 import DeviceSwitch from '@ER/formEditor/components/DeviceSwitch.vue';
 import ErFormPreview from './preview';
 import Icon from '@ER/icon';
 import hooks from '@ER/hooks';
-import utils from '@ER/utils';
+import utils from '@ER/utils'; 
 import _ from 'lodash';
 import defaultProps from './defaultProps';
 import generatorData from './generatorData';
@@ -94,6 +94,16 @@ export default defineComponent({
       type: Object,
     },
     ...defaultProps,
+    isDesign: {
+      type: Boolean,
+      default: true
+    },
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+       }
+    },
   },
   emits: ['listener'],
   setup(props: any, { attrs, slots, emit, expose }) {
@@ -101,10 +111,9 @@ export default defineComponent({
     const form = ref('');
     const previewPlatform = ref('pc');
     const previewLoading = ref(true);
-
+    //
     let formIns: Form = props.formIns as any;
-    // debugger//
-    if (formIns == null) {
+    if (formIns == null) { 
       formIns = new Form(props);
     } else {
     }
@@ -124,7 +133,7 @@ export default defineComponent({
         config: props.globalConfig,
         previewVisible: false,
         widthScaleLock: false,
-        data: {},
+        data: props.data,
         validateStates: [],
         fields: [],
         Namespace: 'formEditor',
@@ -133,7 +142,7 @@ export default defineComponent({
         fieldsLogicState: new Map(),
       });
       formIns.setState(state);
-    }
+    }//
     const isFoldFields = computed({
       get: () => {
         return formIns.isDesign;
@@ -153,7 +162,7 @@ export default defineComponent({
     //@ts-ignore 
     state.validator = (target, fn) => {
 
-    };
+    };//
     const { t, lang } = hooks.useI18n(props);
     formIns.lang = lang
     formIns.t = t
@@ -165,6 +174,9 @@ export default defineComponent({
       set: (val) => {
         formIns.isShow = val
       },
+    })
+    watch(() => props.data, (val) => {
+      formIns.setData(val);//
     })
     const isShowConfig = computed({
       get: () => {
@@ -180,8 +192,10 @@ export default defineComponent({
     const delField = formIns.delField.bind(formIns);
     const addFieldData = formIns.addFieldData.bind(formIns);
     /* 
-     
     */
+  //  setTimeout(() => {
+  //     console.log(formIns,'testIns')//
+  //  }, 2000);
     const wrapElement = formIns.wrapElement.bind(formIns);
     // setTimeout(() => {
     //   setData2(JSON.parse(JSON.stringify(testData1))); //
@@ -335,7 +349,7 @@ export default defineComponent({
             <ElContainer>
               {isFoldFields.value && <fieldCom></fieldCom>}
               <ElContainer class='container'>
-                <ElHeader class='operation' style='display: flex;flex-derection: row;justify-content: space-between;'>
+              {isFoldFields.value&&  <ElHeader class='operation' style='display: flex;flex-derection: row;justify-content: space-between;'>
                   <div>
                     <Icon class='icon' icon='save' onClick={() => handleOperation(4)} />
                     {props.isShowClear && <Icon class='icon' icon='clear0' onClick={() => handleOperation(2)} />}
@@ -372,7 +386,7 @@ export default defineComponent({
                     )}
                     <Icon class='icon' icon='preview' onClick={() => handleOperation(3)} />
                   </div>
-                </ElHeader>
+                </ElHeader>}
 
                 {isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}
               </ElContainer>

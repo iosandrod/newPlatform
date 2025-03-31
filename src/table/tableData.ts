@@ -200,7 +200,7 @@ export const tableConfig: ListTableConstructorOptions = {
       tel: '18940606582',
       sex: 'boy',
       work: 'back-end engineer',
-      city: 'beijing',
+      city: 'beijing',  
     },
     {
       id: 2,

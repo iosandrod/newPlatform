@@ -12,13 +12,16 @@ import { Button } from './button'
 import MenuCom from '@/menu/menuCom'
 import dropdownCom from '@/menu/dropdownCom'
 import { VxeTable } from 'vxe-table'
-
+import { Contextmenu, ContextmenuItem } from '@/contextM'
+import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 export default defineComponent({
   name: 'buttonGroupCom',
   components: {
     dropdownCom,
     tabCom,
     MenuCom,
+    ContextmenuItem,
+    ContextmenuCom,
   },
   directives: {
     ClickOutside,
@@ -47,68 +50,89 @@ export default defineComponent({
     return () => {
       let com = (
         <tabCom
+          class={`${ns.b()}`} //
+          isDesign={group.isDesign}
           {...group.getTabProps()}
-          height={25}
+          height={27}
           v-slots={{
             item: (el: Button) => {
               let btn = el.config.button
               let com = (
-                <ElButton
+                <div
+                  class="v-contextmenu"
+                  style={{ width: '100px', position: 'relative', zIndex: 0 }}
                   onClick={() => {
                     runBtnFn(btn)
                   }}
-                  class={ns.b()}
                 >
-                  {btn.getLabel()}
-                </ElButton>
+                  <ContextmenuItem>{btn?.getLabel()}</ContextmenuItem>
+                </div>
               )
+              let com1 = null
               if (btn.buttons.length > 0) {
-                // console.log('render 1312312')//
-                // let btnD = [btn.getSubData()] //
-                // let btnD = [{ button: btn }] //
-                // com = (
-                //   <MenuCom
-                //     popperClass="btnGClass"
-                //     mode="horizontal"
-                //     popperOffset={0}
-                //     items={btnD} //
-                //     v-slots={
-                //       {
-                //         // subItemTitle: (item) => {
-                //         //   // const btn = item.config.button
-                //         //   // return <ElButton>{btn.getLabel()}</ElButton> //
-                //         // },
-                //         // itemTitle: (item) => {
-                //         //   // const btn = item.config.button
-                //         //   // return <ElButton>{btn.getLabel()}</ElButton>
-                //         // },
-                //       }
-                //     }
-                //   ></MenuCom> //
-                // )
                 com = (
-                  <div>
-                    <ElMenu style={{}} mode="horizontal">
-                      <ElSubMenu
-                        index="2"
-                        v-slots={{
-                          title: () => <span>待审核</span>,
-                          default: () => {
-                            let arr = [
-                              <ElMenuItem index="1">处理中</ElMenuItem>,
-                              <ElMenuItem index="2-1">选项1</ElMenuItem>,
-                              <ElMenuItem index="2-2">选项2</ElMenuItem>,
-                              <ElMenuItem index="2-3">选项3</ElMenuItem>,
-                            ]
-                            return arr
-                          },
-                        }}
-                      ></ElSubMenu>
-                    </ElMenu>
-                  </div>
+                  <dropdownCom
+                    ref={(el) => btn.registerRef('dropdown', el)}
+                    v-slots={{
+                      default: (config) => {
+                        const dropdown = config.dropdown
+                        let _com1 = (
+                          <div
+                            onClick={() => {
+                              dropdown.showDropdown() //
+                            }}
+                            onMouseleave={() => {}}
+                            class="v-contextmenu"
+                            style={{ width: '100px', position: 'relative' }}
+                          >
+                            <ContextmenuItem>{btn?.getLabel()}</ContextmenuItem>
+                          </div>
+                        )
+                        return _com1
+                      },
+
+                      dropdown: () => {
+                        let _items: Button = btn.getSubData()
+                        let menu = (
+                          <ContextmenuCom
+                            ref={(el) => btn.registerRef('contextmenu', el)}
+                            isTeleport={false}
+                            items={_items} //
+                            alwaysShow={true}
+                            v-slots={{
+                              itemSlot: (item) => {
+                                const btn = item.button
+                                let disabled = btn.getDisabled()
+                                return (
+                                  <div
+                                    class={[{ 'is-disabled': disabled }]}
+                                    style={{ width: '100%' }}
+                                    onClick={() => runBtnFn(btn)}
+                                  >
+                                    {btn.getLabel()}
+                                  </div>
+                                ) //
+                              },
+                              subItemSlot: (item) => {
+                                //
+                                const btn = item.button
+                                return <div class={{}}>{btn.getLabel()}</div>
+                              },
+                            }}
+                          ></ContextmenuCom>
+                        )
+                        return menu
+                      },
+                    }} //
+                  ></dropdownCom>
                 )
-              }
-              return com
+              } //
+              return (
+                <div>
+                  {com}
+                  {/* {com1} */}
+                </div>
+              )
             },
           }}
         ></tabCom>

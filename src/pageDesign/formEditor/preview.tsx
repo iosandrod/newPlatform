@@ -37,7 +37,7 @@ export default defineComponent({
       othersFiles: {},
     });
     const ns = hooks.useNamespace('Main', state.Namespace);
-    hooks.useLogic(state);
+    // hooks.useLogic(state);
     const getData = () => {
       const result = {};
       state.fields.forEach((e) => {
