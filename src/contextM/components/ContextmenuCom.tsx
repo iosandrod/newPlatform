@@ -53,10 +53,21 @@ export const itemCom = defineComponent({
             {{
               default: () => {
                 let _slot = slots.itemSlot
+                let _com: any = null
                 if (_slot) {
-                  return _slot({ button: item.config.button })
-                } //
-                return <div>{item.getLabel()}</div>
+                  _com = _slot({ button: item.config.button })
+                } else {
+                  _com = <div>{item.getLabel()}</div>
+                }
+                return (
+                  <div
+                    onClick={() => {
+                      item.onClick()
+                    }}
+                  >
+                    {_com}
+                  </div>
+                )
               },
             }}
           </ContextmenuItem>

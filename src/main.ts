@@ -18,6 +18,8 @@ import VxeUIAll from 'vxe-pc-ui'
 import context from '@/contextM'
 import '@/contextM/themes/default/index.scss'
 import { erFormEditor } from '@ER/formEditor'
+import { registerEdit } from '@/table/registerEdit'
+registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)
 app.component('erForm', erFormEditor) //
