@@ -22,6 +22,8 @@ import tableInput from './tableInput'
 import { ListTable } from '@visactor/vtable'
 import { Column } from '../column'
 export class InputEditor extends BaseEditor {
+  row?: any
+  column?: Column
   app: any
   private editorType: string = 'Input'
   private editorConfig?: EditorConfig
@@ -47,6 +49,8 @@ export class InputEditor extends BaseEditor {
     const table = column.table
     let select = table.getCurrentSelectRow()
     let _row = select[0]
+    this.column = column
+    this.row = _row
     let app = createApp(tableInput, {
       column: column, //这是个函数
       row: _row,
@@ -96,7 +100,22 @@ export class InputEditor extends BaseEditor {
     if (this.container?.contains(this.element!)) {
       this.container.removeChild(this.element!)
     }
+    let column = this.column
+    let value = column.cacheValue
+    if (column.isChangeValue == true) {
+      let oldValue = this.row[column.getField()] //
+      if (value != oldValue) {
+        column.updateBindValue({
+          value: value,
+          row: this.row, //
+        })
+      }
+    }
+    column.cacheValue = undefined
+    column.isChangeValue = false //
     this.element = undefined //
+    this.column = null //
+    this.row = null //
   }
   adjustPosition(rect: DOMRect): void {
     if (this.element) {

@@ -6,7 +6,9 @@ import { h } from 'vue'
 import { InputEditor } from '@/table/editor/string' //
 
 export class Column extends Base {
+  isChangeValue = false
   table: Table
+  cacheValue?: any
   config: any
   columns: Column[] = []
   constructor(config: any, table?: any) {
@@ -117,5 +119,20 @@ export class Column extends Base {
   updateBindValue(config) {
     let value = config.value //值
     let row = config.row //行
+    let field = this.getField()
+    row[field] = value //
+  }
+  getBindConfig() {
+    let editType = this.getEditType()
+    let config = this.config
+    return {
+      ...config,
+      type: editType,
+    }
+  }
+  getEditType() {
+    let config = this.config
+    let editType = config.editType || 'string'
+    return editType
   }
 }
