@@ -1,9 +1,19 @@
 import { Base } from '@/base/base'
 import { Table } from './table'
 import { ColumnDefine, ListTableConstructorOptions } from '@visactor/vtable'
-import { VTable } from '@visactor/vue-vtable'
+import * as VTable from '@visactor/vtable'
 import { h } from 'vue'
 import { InputEditor } from '@/table/editor/string' //
+const VGroup = VTable.VGroup
+const VText = VTable.VText
+const VImage = VTable.VImage
+const VTag = VTable.VTag
+import {
+  ICustomLayout,
+  ICustomLayoutObj,
+  ICustomRenderElement,
+  ICustomRenderObj,
+} from '@visactor/vtable/es/ts-types'
 
 export class Column extends Base {
   isChangeValue = false
@@ -73,8 +83,56 @@ export class Column extends Base {
       ...config,
       field: this.getField(),
       width: this.getColumnWidth(),
-      customRender: null,
-      customLayout: null,
+      // customRender: (args) => {
+      //   let el: ICustomRenderElement = VTable.VText({
+      //     onClick: () => {},
+      //   })
+      //   let renderObj: ICustomRenderObj = {
+      //     elements: [el], //
+      //     expectedHeight: 0,
+      //     expectedWidth: 0,
+      //   }
+      //   return renderObj
+      // },
+      customRender(args) {
+        if (args.row === 0 || args.col === 0) return null
+        const { width, height } = args.rect //
+        const { table, row, col } = args
+        const elements = []
+        let top = 30
+        const left = 15
+        let maxWidth = 0
+        elements.push({
+          type: 'rect',
+          fill: '#a23be1',
+          x: left + 20,
+          y: top - 20,
+          width: 300,
+          height: 28,
+        })
+        elements.push({
+          type: 'text',
+          fill: 'white',
+          fontSize: 20,
+          fontWeight: 500,
+          textBaseline: 'middle',
+          text:
+            col === 1
+              ? row === 1
+                ? 'important & urgency'
+                : 'not important but urgency'
+              : row === 1
+              ? 'important but not urgency'
+              : 'not important & not urgency',
+          x: left + 50,
+          y: top - 5,
+        })
+        return {
+          elements,
+          expectedHeight: top + 20,
+          expectedWidth: maxWidth + 20,
+        }
+      },
       fieldFormat: _this.getFormat(),
       style: {
         bgColor: (config) => {

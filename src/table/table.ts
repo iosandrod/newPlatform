@@ -4,6 +4,7 @@ import { Column } from './column'
 import { ListTable, ListTableConstructorOptions } from '@visactor/vtable'
 import { VTable } from '@visactor/vue-vtable'
 import { method } from 'lodash'
+import { exportVTableToExcel } from '@visactor/vtable-export'
 import _ from 'lodash'
 import { BaseTableConstructorOptions } from '@visactor/vtable/es/ts-types/base-table'
 import { BMenu } from '@/buttonGroup/bMenu'
@@ -51,7 +52,7 @@ export class Table extends Base {
       .filter((item) => item != null)
     return data
   }
-  
+
   cacheMethod: {
     [key: string]: { before?: Array<any>; after?: Array<any> }
   } = {}
@@ -121,6 +122,9 @@ export class Table extends Base {
         },
       },
       editCellTrigger: 'click',
+      customConfig: {
+        createReactContainer: true, //
+      },
       //头部的
     }) //
     table.on('contextmenu_cell', (config) => {
@@ -537,3 +541,4 @@ export class Table extends Base {
     })
   }
 }
+//
