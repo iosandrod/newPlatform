@@ -1695,3 +1695,19 @@ const app = createApp({
                 //     }} //
                 //   ></dropdownCom>
                 // )
+
+
+
+                // if (this.permission.loadData == false) {
+    //   //@ts-ignore
+    //   if (this.permission.loadDataTime != null) {
+    //     return
+    //   }
+    //   //@ts-ignore
+    //   this.permission.loadDataTime = setTimeout(() => {
+    //     this.permission.loadDataTime = null
+    //     this.permission.loadData = true
+    //     this.loadData()
+    //   }, 1000);
+    //   return //
+    // }

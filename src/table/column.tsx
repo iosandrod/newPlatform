@@ -8,12 +8,7 @@ const VGroup = VTable.VGroup
 const VText = VTable.VText
 const VImage = VTable.VImage
 const VTag = VTable.VTag
-import {
-  ICustomLayout,
-  ICustomLayoutObj,
-  ICustomRenderElement,
-  ICustomRenderObj,
-} from '@visactor/vtable/es/ts-types'
+import { ICustomLayout, ICustomLayoutObj, ICustomRenderElement, ICustomRenderObj } from '@visactor/vtable/es/ts-types'
 
 export class Column extends Base {
   isChangeValue = false
@@ -46,21 +41,43 @@ export class Column extends Base {
     let column = new Column(col, table)
     columns.push(column) //
   }
+  getSelectOptions() {
+    let config = this.config
+    let options = config.options
+    if (Array.isArray(options)) {
+      return options
+    }
+    let bindField = config.bindField
+    if (bindField != null) {
+      let system = this.system
+      let selectOptions = system.selectOptions
+      let arr = selectOptions[bindField] || []
+      return arr
+    }
+    return []
+  }
   getFormat() {
     let field = this.getField() //
     let _table = this.table
     let config = this.config
-    let fieldFormat = config.fieldFormat
-
+    let fieldFormat = config.fieldFormat //
     let formatFn = (record, row, col, table) => {
       let value = record[field] //
+      let type = this.getType()
+      if (type == 'select') {
+        let options = this.getSelectOptions()
+        let _label = options.find((item) => item.value == value)
+        if (_label) {
+          value = _label.label //
+        }
+      }
       if (typeof fieldFormat == 'function') {
         try {
           value = fieldFormat({ row: record, col: this, table: _table })
         } catch (error) {
           //
         }
-      }
+      } //
       return value
     }
     return formatFn
@@ -83,56 +100,7 @@ export class Column extends Base {
       ...config,
       field: this.getField(),
       width: this.getColumnWidth(),
-      // customRender: (args) => {
-      //   let el: ICustomRenderElement = VTable.VText({
-      //     onClick: () => {},
-      //   })
-      //   let renderObj: ICustomRenderObj = {
-      //     elements: [el], //
-      //     expectedHeight: 0,
-      //     expectedWidth: 0,
-      //   }
-      //   return renderObj
-      // },
-      customRender(args) {
-        if (args.row === 0 || args.col === 0) return null
-        const { width, height } = args.rect //
-        const { table, row, col } = args
-        const elements = []
-        let top = 30
-        const left = 15
-        let maxWidth = 0
-        elements.push({
-          type: 'rect',
-          fill: '#a23be1',
-          x: left + 20,
-          y: top - 20,
-          width: 300,
-          height: 28,
-        })
-        elements.push({
-          type: 'text',
-          fill: 'white',
-          fontSize: 20,
-          fontWeight: 500,
-          textBaseline: 'middle',
-          text:
-            col === 1
-              ? row === 1
-                ? 'important & urgency'
-                : 'not important but urgency'
-              : row === 1
-              ? 'important but not urgency'
-              : 'not important & not urgency',
-          x: left + 50,
-          y: top - 5,
-        })
-        return {
-          elements,
-          expectedHeight: top + 20,
-          expectedWidth: maxWidth + 20,
-        }
-      },
+      type: this.getType(), //
       fieldFormat: _this.getFormat(),
       style: {
         bgColor: (config) => {
@@ -147,6 +115,11 @@ export class Column extends Base {
       columns: _columns, //
     }
     return obj //
+  }
+  getType() {
+    let config = this.config
+    let type = config.type
+    return type
   }
   getIsShow() {
     let config = this.config

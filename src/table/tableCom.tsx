@@ -1,11 +1,4 @@
-import {
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  provide,
-  watch,
-  watchEffect,
-} from 'vue'
+import { defineComponent, onMounted, onUnmounted, provide, watch, watchEffect } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { Table } from './table'
@@ -49,10 +42,10 @@ export default defineComponent({
     onUnmounted(() => {
       tableIns.onUnmounted()
     })
-   
+
     watchEffect(() => {
       tableIns.loadColumns()
-    })
+    }) //
     watchEffect(() => {
       tableIns.loadData() //
     })
@@ -66,7 +59,7 @@ export default defineComponent({
           return
         }
         ins.updateColumns(e)
-      },
+      }
     )
     // watch(
     //   () => {
@@ -80,15 +73,15 @@ export default defineComponent({
     //     ins.setRecords(e) //
     //   },
     // )
-    watch(
-      () => {
-        let tableData = { ...tableIns.tableData }
-        return tableData //
-      },
-      (e) => {
-        tableIns.updateCanvas() //
-      },
-    )
+    // watch(
+    //   () => {
+    //     let tableData = { ...tableIns.tableData }
+    //     return tableData //
+    //   },
+    //   (e) => {
+    //     tableIns.updateCanvas() //
+    //   }
+    // )
     watch(
       () => {
         return tableIns.tableConfig
@@ -98,17 +91,12 @@ export default defineComponent({
       },
       {
         deep: true,
-      },
+      }
     )
     provide('tableIns', tableIns)
     return () => {
       let com = null
-      com = (
-        <div
-          style={{ width: '100%', height: '100%' }}
-          ref={registerRootDiv}
-        ></div>
-      )
+      com = <div style={{ width: '100%', height: '100%' }} ref={registerRootDiv}></div>
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
       let outCom = (
