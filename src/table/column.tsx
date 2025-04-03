@@ -36,7 +36,7 @@ export class Column extends Base {
     for (const col of _columns) {
       this.addColumn(col)
     }
-  }
+  } //
   addColumn(col: any) {
     let table = this.table
     let columns = this.columns

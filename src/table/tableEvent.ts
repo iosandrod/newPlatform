@@ -28,7 +28,7 @@ export const click_cell = (table: Table) => {
       if (originData == null) {
       } else {
         _this.tableData.curRow = originData //
-      }
+      }//
     },
   })
 }
@@ -72,7 +72,7 @@ export const sort_click = (table: Table) => {
     callback: (config) => {
       //   console.log(config, 'testConfig') //
       let { field, order } = config //
-      let obj:SortState = {
+      let obj: SortState = {
         field,
         // order: 'desc', //
         orderFn: () => {

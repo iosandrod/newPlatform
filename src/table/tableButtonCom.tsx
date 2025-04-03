@@ -30,7 +30,6 @@ export default defineComponent({
           //添加行
           // console.log('执行到这里')//
           tableIns.addRows({
-            //
             rows: generatePersons(1000), //
           })
         },

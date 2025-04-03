@@ -21,9 +21,9 @@ export class Table extends Base {
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
   clickOpt = 1
-  permission: { [key: string]: boolean } = shallowRef({
+  permission: { [key: string]: boolean } = {
     loadData: true,
-  }) as any
+  }
   isDesign = false //
   columns: Column[] = []
   columnsMap: { [key: string]: Column } = {}
@@ -101,7 +101,7 @@ export class Table extends Base {
       }
     }) //
   }
-  getTableName() { }
+  getTableName() {}
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance()
     if (instance != null) {
@@ -110,7 +110,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   render() {
     const rootDiv = this.getRef('root')
     let _instance = this.instance
@@ -171,7 +171,7 @@ export class Table extends Base {
     this.instance = instance ////
     this.initEventListener() //
     this.loadColumns()
-    // this.loadData()
+    this.loadData()
     nextTick(() => {
       let record = this.instance.records[0]
       if (record == null) {
@@ -288,7 +288,7 @@ export class Table extends Base {
     contextmenu_cell(this) //
     sort_click(this)
   }
-  setCurTableSelect() { }
+  setCurTableSelect() {}
   openContextMenu(config) {
     // console.log(config, 'testConfig') //
     const event: PointerEvent = config.event
@@ -355,10 +355,12 @@ export class Table extends Base {
       console.log('加载列出错了')
     }
   }
-  loadData(loadConfig?: any) {//
-
+  loadData(loadConfig?: any) {
+    if (this.permission.loadData == false) {
+      return //
+    }
     let data = this.getShowData() //
-    let _data1 = data//
+    let _data1 = data
     let instance = this.getInstance() //
     if (instance == null) {
       return
@@ -394,7 +396,7 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   runAfter(config?: any) {
     //
     if (config == null) {
@@ -423,7 +425,7 @@ export class Table extends Base {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -431,7 +433,7 @@ export class Table extends Base {
     }
     return instance
   }
-  setMergeConfig(config?: any) { }
+  setMergeConfig(config?: any) {}
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -481,7 +483,7 @@ export class Table extends Base {
       return
     }
     let columns = this.columns
-    columns.forEach((item) => { })
+    columns.forEach((item) => {})
     instance.release()
     this.instance = null //
   }
