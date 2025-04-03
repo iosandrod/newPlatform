@@ -2,6 +2,7 @@ import { defineComponent, inject } from 'vue'
 import { Table } from './table'
 import { generatePersons } from './tableData'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
+import { nextTick } from 'vue'//
 
 export default defineComponent({
   name: 'tableButtonCom',
@@ -44,9 +45,13 @@ export default defineComponent({
       {
         label: '改变前值', //
         fn: async () => {
-          let data = tableIns.getData() //
-          data[0].email1 = data[0].email1 + '2' ////
-          data[1].email1 = data[1].email1 + '2' ////
+          let data = tableIns.getData() //、、
+          data[0].id = data[0].id + '2' ////
+          data[1].id = data[1].id + '2' ////
+          // nextTick(() => {
+          //   data[0].email1 = data[0].email1 + '2' ////
+          //   data[1].email1 = data[1].email1 + '2' ////
+          // })
         },
       }, //
     ] //
