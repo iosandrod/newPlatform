@@ -2,15 +2,17 @@ import { Base } from '@/base/base'
 import { Table } from './table'
 import { ColumnDefine, ListTableConstructorOptions } from '@visactor/vtable'
 import * as VTable from '@visactor/vtable'
-import { h } from 'vue'
+import { h, isProxy, shallowRef, watch, watchEffect } from 'vue'
 import { InputEditor } from '@/table/editor/string' //
 const VGroup = VTable.VGroup
 const VText = VTable.VText
 const VImage = VTable.VImage
 const VTag = VTable.VTag
 import { ICustomLayout, ICustomLayoutObj, ICustomRenderElement, ICustomRenderObj } from '@visactor/vtable/es/ts-types'
+import { nextTick } from 'vue' //
 
 export class Column extends Base {
+  effectPool = shallowRef({})
   isChangeValue = false
   table: Table
   cacheValue?: any
@@ -41,43 +43,41 @@ export class Column extends Base {
     let column = new Column(col, table)
     columns.push(column) //
   }
-  getSelectOptions() {
-    let config = this.config
-    let options = config.options
-    if (Array.isArray(options)) {
-      return options
-    }
-    let bindField = config.bindField
-    if (bindField != null) {
-      let system = this.system
-      let selectOptions = system.selectOptions
-      let arr = selectOptions[bindField] || []
-      return arr
-    }
-    return []
+  unmountedAllWatch() {
+    let effectPool = this.effectPool
+    Object.entries(effectPool).forEach(([key, value]) => {
+      value() //
+    })
+    this.effectPool = shallowRef({}) //
   }
   getFormat() {
     let field = this.getField() //
     let _table = this.table
     let config = this.config
-    let fieldFormat = config.fieldFormat //
+    let fieldFormat = config.fieldFormat
     let formatFn = (record, row, col, table) => {
       let value = record[field] //
-      let type = this.getType()
-      if (type == 'select') {
-        let options = this.getSelectOptions()
-        let _label = options.find((item) => item.value == value)
-        if (_label) {
-          value = _label.label //
-        }
-      }
+      record['_cacheRow'] = row
       if (typeof fieldFormat == 'function') {
         try {
+          let _index = record._index
+          if (this.effectPool[_index] == null) {
+            this.effectPool[`${_index}`] = watch(
+              () => {
+                value = fieldFormat({ row: record, col: this, table: _table })
+                return value //
+              },
+              () => {
+                //
+                _table.updateIndexArr.add(_index) //
+              }
+            )
+          } //
           value = fieldFormat({ row: record, col: this, table: _table })
         } catch (error) {
           //
         }
-      } //
+      }
       return value
     }
     return formatFn
@@ -100,7 +100,57 @@ export class Column extends Base {
       ...config,
       field: this.getField(),
       width: this.getColumnWidth(),
-      type: this.getType(), //
+      showSort: true,
+      // customRender: (args) => {
+      //   let el: ICustomRenderElement = VTable.VText({
+      //     onClick: () => {},
+      //   })
+      //   let renderObj: ICustomRenderObj = {
+      //     elements: [el], //
+      //     expectedHeight: 0,
+      //     expectedWidth: 0,
+      //   }
+      //   return renderObj
+      // },
+      // customRender(args) {
+      //   if (args.row === 0 || args.col === 0) return null
+      //   const { width, height } = args.rect //
+      //   const { table, row, col } = args
+      //   const elements = []
+      //   let top = 30
+      //   const left = 15
+      //   let maxWidth = 0 //
+      //   elements.push({
+      //     type: 'rect',
+      //     fill: '#a23be1',
+      //     x: left + 20,
+      //     y: top - 20,
+      //     width: 300,
+      //     height: 28,
+      //   })
+      //   elements.push({
+      //     type: 'text',
+      //     fill: 'white',
+      //     fontSize: 20,
+      //     fontWeight: 500,
+      //     textBaseline: 'middle',
+      //     text:
+      //       col === 1
+      //         ? row === 1
+      //           ? 'important & urgency'
+      //           : 'not important but urgency'
+      //         : row === 1
+      //         ? 'important but not urgency'
+      //         : 'not important & not urgency',
+      //     x: left + 50,
+      //     y: top - 5,
+      //   })
+      //   return {
+      //     elements,
+      //     expectedHeight: top + 20,
+      //     expectedWidth: maxWidth + 20,
+      //   }
+      // },
       fieldFormat: _this.getFormat(),
       style: {
         bgColor: (config) => {
@@ -115,11 +165,6 @@ export class Column extends Base {
       columns: _columns, //
     }
     return obj //
-  }
-  getType() {
-    let config = this.config
-    let type = config.type
-    return type
   }
   getIsShow() {
     let config = this.config

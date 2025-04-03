@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, onUnmounted, provide, watch, watchEffect } from 'vue'
+import { defineComponent, onMounted, onUnmounted, provide, toRaw, watch, watchEffect } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { Table } from './table'
@@ -48,6 +48,42 @@ export default defineComponent({
     }) //
     watchEffect(() => {
       tableIns.loadData() //
+    })
+    setTimeout(() => {
+      // setInterval(() => {
+      //   let data = tableIns.getData()//
+      //   data[0].id = data[0].id + 1
+      // }, 100)//
+    }, 1000) //
+    let obj1 = {}
+    let timeout = null
+    watchEffect(() => {
+      let s = tableIns.updateIndexArr.size
+      if (timeout == null) {
+        let _s = tableIns.updateIndexArr.size
+        if (_s == 0) {
+          return //
+        }
+        timeout = setTimeout(() => {
+          let _arr = []
+          let _iArr = []
+          let records = tableIns.getInstance().records
+          for (const k of tableIns.updateIndexArr.keys()) {
+            //@ts-ignore
+            let record = tableIns.dataMap[k]
+            let index = records.indexOf(record)
+            if (index != -1) {
+              _arr.push(record)
+              _iArr.push(index)
+            }
+          }
+          timeout = null
+          tableIns.updateIndexArr.clear() //
+          if (_arr.length != 0) {
+            tableIns.getInstance().updateRecords(_arr, _iArr) //
+          }
+        }, 10)
+      }
     })
     watch(
       () => {

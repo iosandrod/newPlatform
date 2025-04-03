@@ -8,8 +8,18 @@ import { exportVTableToExcel } from '@visactor/vtable-export'
 import _ from 'lodash'
 import { BaseTableConstructorOptions } from '@visactor/vtable/es/ts-types/base-table'
 import { BMenu } from '@/buttonGroup/bMenu'
+import {
+  click_cell,
+  contextmenu_cell,
+  scroll,
+  selected_cell,
+  sort_click,
+} from './tableEvent'
 export class Table extends Base {
-  filterConfig = {}
+  //   dataMap = shallowRef({})
+  dataMap = {}
+  updateIndexArr = new Set() //
+  effectPool = shallowRef({})
   clickOpt = 1
   permission: { [key: string]: boolean } = shallowRef({
     loadData: true,
@@ -18,12 +28,12 @@ export class Table extends Base {
   columns: Column[] = []
   columnsMap: { [key: string]: Column } = {}
   config: any
-  scrollConfig = {
+  scrollConfig = shallowRef({
     rowStart: 0,
     rowEnd: 0,
     colStart: 0,
-    colEnd: 0, //
-  } //
+    colEnd: 0,
+  })
   eventManager: {
     [key: string]: Array<{
       callback?: Function
@@ -79,8 +89,17 @@ export class Table extends Base {
     let config = this.config
     let columns = config.columns || []
     let data = config.data || []
-    this.tableData.data = data
+    this.setData(data)
     this.setColumns(columns) //
+  }
+  setData(data) {
+    this.tableData.data = data
+    data.forEach((e) => {
+      if (e['_index'] == null) {
+        e._index = this.uuid()
+        this.dataMap[e._index] = e
+      }
+    }) //
   }
   getTableName() { }
   updateOptions(opt: BaseTableConstructorOptions) {
@@ -101,6 +120,9 @@ export class Table extends Base {
     }
     let _this = this
     let table = new ListTable({
+      sortState: [],
+      defaultRowHeight: 30,
+      defaultHeaderRowHeight: 30, //
       container: rootDiv,
       select: {
         highlightMode: 'row',
@@ -131,11 +153,15 @@ export class Table extends Base {
     table.on('contextmenu_cell', (config) => {
       this.emit('contextmenu_cell', config)
     })
+    table.on('sort_click', (config) => {
+      this.emit('sort_click', config)
+      return true //
+    })
     table.on('selected_cell', (config) => {
       this.emit('selected_cell', config)
     }) //
     table.on('scroll', (config) => {
-      this.emit('scroll', config) //
+      this.emit('scroll', config) ////
     })
     table.on('click_cell', (config) => {
       this.emit('click_cell', config) ////
@@ -256,46 +282,11 @@ export class Table extends Base {
     }
   }
   initEventListener() {
-    let _this = this
-    this.registerEvent({
-      name: 'scroll',
-      keyName: 'scroll',
-      timeout: 100,
-      callback: (config) => {
-        let table = _this.getInstance()
-        let range = table.getBodyVisibleCellRange() //
-        console.log(range, 'tsetRange')//
-        const headerheight = table.columnHeaderLevelCount
-        range.rowStart = range.rowStart - headerheight
-        range.rowEnd = range.rowEnd - headerheight //
-        _.merge(this.scrollConfig, range) //
-      },
-    })
-    this.registerEvent({
-      name: 'click_cell',
-      keyName: 'click_cell',
-      callback: (config) => {
-        let originData = config.originData //
-        if (originData == null) {
-        } else {
-          _this.tableData.curRow = originData //
-        }
-      },
-    })
-    this.registerEvent({
-      name: 'selected_cell',
-      keyName: 'selected_cell',
-      callback: (config) => {
-        this.selectCache = config
-      },
-    })
-    this.registerEvent({
-      name: 'contextmenu_cell',
-      keyName: 'contextmenu_cell',
-      callback: (config) => {
-        this.openContextMenu(config)
-      },
-    })
+    scroll(this)
+    click_cell(this)
+    selected_cell(this)
+    contextmenu_cell(this) //
+    sort_click(this)
   }
   setCurTableSelect() { }
   openContextMenu(config) {
@@ -324,7 +315,7 @@ export class Table extends Base {
     } as ListTableConstructorOptions //
   }
   getShowData() {
-    let data = this.getData() //
+    let data = this.getData().map((row) => row) ////
     return data //
   }
   getShowColumns() {
@@ -356,6 +347,7 @@ export class Table extends Base {
   }
   loadColumns() {
     try {
+      console.log('loadColumns') //
       let columns = this.getColumns()
       this.templateProps.columns = columns //
     } catch (error) {
@@ -370,16 +362,15 @@ export class Table extends Base {
     let instance = this.getInstance() //
     if (instance == null) {
       return
-    } ////
-    instance.setRecords(_data1) ////
-    nextTick(() => {//
+    } //
+    nextTick(() => {
+      instance.setRecords(_data1) //
       this.runAfter({
         methodName: 'loadData',
         config: loadConfig,
         data: data,
       }) //
     })
-    this.permission.loadData = false//
     try {
     } catch (error) {
       console.error(error) //
@@ -454,6 +445,13 @@ export class Table extends Base {
         return
       }
     }
+    _arr.forEach((item) => {
+      let _index = item._index
+      if (_index == null) {
+        item._index = this.uuid()
+        this.dataMap[item._index] = item //
+      } //
+    })
     for (const row of _arr) {
       this.addRow(row)
     }
@@ -482,6 +480,8 @@ export class Table extends Base {
     if (instance == null) {
       return
     }
+    let columns = this.columns
+    columns.forEach((item) => { })
     instance.release()
     this.instance = null //
   }
