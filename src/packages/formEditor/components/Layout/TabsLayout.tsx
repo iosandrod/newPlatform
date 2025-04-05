@@ -1,4 +1,4 @@
-import { defineComponent, resolveComponent, watch, useAttrs, defineAsyncComponent, inject } from 'vue'
+import { defineComponent, resolveComponent, watch, useAttrs, inject } from 'vue'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable from './DragGable'
 import hooks from '@ER/hooks'

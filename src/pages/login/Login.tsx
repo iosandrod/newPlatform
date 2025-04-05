@@ -16,8 +16,10 @@ import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import formCom from '@ER/formCom'
 import FConfigPanel from '@ER/formEditor/components/Panels/Config/components/fConfigPanel'
 import { Simple } from '../home/index copy'
+import pageCom from '@ER/pageCom'
 export default defineComponent({
   components: {
+    pageCom, //
     erFormEditor,
     buttonCom,
     tabCom,
@@ -92,7 +94,7 @@ export default defineComponent({
       let com = <buttonGroupCom items={btns}></buttonGroupCom>
       // com = <erFormEditor isDesign={true} {...formConfig}></erFormEditor>
       // com = <d></d>
-      com = <tableCom {...tableConfig}></tableCom>
+      com = <tableCom {...tableConfig}></tableCom> //
       // com = <menuCom mode="horizontal" items={btns} v-slots={{
       //   itemTitle: (item) => {
       //     return <div>123</div>
@@ -146,8 +148,9 @@ export default defineComponent({
       //   ></formCom>
       // )
       // com = <FConfigPanel></FConfigPanel>
-      // com = <erFormEditor isDesign={true}  ></erFormEditor>
+      com = <erFormEditor isDesign={true}></erFormEditor>
       // com=<d></d>
+      com = <pageCom></pageCom>//
       let _com = (
         <div
           style={{

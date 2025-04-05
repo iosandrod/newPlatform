@@ -4,7 +4,6 @@ import {
   watch,
   useAttrs,
   useSlots,
-  defineAsyncComponent,
   unref,
   nextTick,
   ref,
@@ -25,12 +24,13 @@ import LayoutInlineLayout from './InlineLayout'
 import LayoutSubformLayout from './SubformLayout'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import ControlInsertionPlugin from './ControlInsertionPlugin'
+import { typeMap } from '../FormTypes'
 const dragGableWrap = defineComponent({
   inheritAttrs: false,
   name: 'customDragGable',
   customOptions: {},
   components: {
-    DragGable,
+    DragGable, //
   },
   setup(props) {
     const { isEditModel } = hooks.useTarget()
@@ -86,7 +86,7 @@ export default defineComponent({
     const { state, isEditModel, isPc, setSelection } = hooks.useTarget()
     const handleMove = (e) => {
       return true
-    }
+    } //
     const formIns: any = inject('formIns')
     //@ts-ignore
     const id = formIns.id
@@ -113,22 +113,25 @@ export default defineComponent({
         findComponent(type, element) {
           let info = componentMap[type + element]
           if (!info) {
-            info = componentMap[type + element] = defineAsyncComponent(() => {
-              let el = null
-              let el1
-              try {
-                el = import(
-                  `../${type}/${_.startCase(element)}/${state.platform}.vue`
-                )
-                el1 = import(
-                  `../${type}/${_.startCase(element)}/${state.platform}.tsx`
-                )
-              } catch (error) {
-                console.log('加载部分组件出错') //
-              }
-              return el1 || el //
-            }) //
+            componentMap[type + element] = typeMap[element][state.platform]
+            //  defineAsyncComponent(() => {
+            //   let el = null
+            //   let el1
+            //   try {
+            //     el = import(
+            //       `../${type}/${_.startCase(element)}/${state.platform}.vue`
+            //     )
+            //     el1 = import(
+            //       `../${type}/${_.startCase(element)}/${state.platform}.tsx`
+            //     )
+            //   } catch (error) {
+            //     console.log('加载部分组件出错') //
+            //   }
+            //   return el1 || el //
+            // }) //
+            info = componentMap[type + element] //
           }
+          console.log(info, 'info')//
           return info
         },
       }
@@ -141,6 +144,7 @@ export default defineComponent({
         //   return <div>1233</div>
         // }
         let node = ''
+        // console.log(element,'testEl')//
         switch (element.type) {
           case 'grid':
             node = (
@@ -219,7 +223,7 @@ export default defineComponent({
               //   '发生错误在dragable', //
               // ) //
               // throw error //
-              console.error('没有找到formitem') //
+              console.error('没有找到formitem') ////
             }
             // setTimeout(() => {
             //   console.log(formIns, 'testIns') //
@@ -244,9 +248,9 @@ export default defineComponent({
                 params['data-field-id'] = `${element.id}`
               }
               if (unref(isPc)) {
+                //@ts-ignore
                 const formitem = typeProps?.formitem //
                 const prop = formitem?.getField()
-                // console.log(typeProps.value,'testProps')
                 node = (
                   //@ts-ignore
                   <Selection
@@ -261,12 +265,14 @@ export default defineComponent({
                       //@ts-ignore
                       <el-form-item {...typeProps} prop={prop}>
                         <TypeComponent
+                          key={element.id}
                           data={element}
                           params={typeProps}
                         ></TypeComponent>
                       </el-form-item>
                     ) : (
                       <TypeComponent
+                        key={element.id}
                         data={element}
                         params={typeProps}
                       ></TypeComponent>
@@ -285,6 +291,7 @@ export default defineComponent({
                     {...params}
                   >
                     <TypeComponent
+                      key={element.id}
                       data={element}
                       params={typeProps}
                     ></TypeComponent>

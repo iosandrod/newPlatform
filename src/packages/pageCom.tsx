@@ -28,17 +28,16 @@ import fieldMenu from '@/menu/fieldCom';
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves';//
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel';
 import DeviceSwitch from '@ER/formEditor/components/DeviceSwitch.vue';
-import ErFormPreview from './preview';
 import Icon from '@ER/icon';
 import hooks from '@ER/hooks';
 import utils from '@ER/utils'; 
 import _ from 'lodash';
-import defaultProps from './defaultProps';
-import generatorData from './generatorData';
-import { staticData, testData1 } from './testData';
-import { validate } from 'uuid';
+import defaultProps from '@ER/formEditor/defaultProps';
+import generatorData from '@ER/formEditor/generatorData';
+import { validate } from 'uuid';  
 import { Form } from '@ER/form';
 import fieldCom from '@/menu/fieldCom';
+import { PageDesign } from './pageDesign';
 export default defineComponent({
   directives: {
     vClickOutside,
@@ -112,9 +111,9 @@ export default defineComponent({
     const previewPlatform = ref('pc');
     const previewLoading = ref(true);
     //
-    let formIns: Form = props.formIns as any;
+    let formIns: PageDesign = props.formIns as any;//
     if (formIns == null) { 
-      formIns = new Form(props);
+      formIns = new PageDesign(props);//
     } else {
     }
     provide('formIns', formIns);
@@ -190,29 +189,21 @@ export default defineComponent({
     setSelection(state.config);
     const addField = formIns.addField.bind(formIns);
     const delField = formIns.delField.bind(formIns);
-    const addFieldData = formIns.addFieldData.bind(formIns);
-    /* 
-    */
-  //  setTimeout(() => {
-  //     console.log(formIns,'testIns')//
-  //  }, 2000);
+    const addFieldData = formIns.addFieldData.bind(formIns);//
     const wrapElement = formIns.wrapElement.bind(formIns);
-    // setTimeout(() => {
-    //   setData2(JSON.parse(JSON.stringify(testData1))); //
-    // }, 100); 
     const syncLayout = formIns.syncLayout.bind(formIns);
     const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(formIns);
     const switchPlatform = formIns.switchPlatform.bind(formIns);
-    const canvesScrollRef = ref('');
+    const canvesScrollRef = ref('');//
     const fireEvent = (type, data) => {
       emit('listener', {
-        type,
+        type,//
         data,
       });
     };
-    const getData2 = formIns.getLayoutData.bind(formIns);
+    // const getData2 = formIns.getLayoutData.bind(formIns);
     const setData2 = formIns.setLayoutData.bind(formIns);
-    const clearData = formIns.clearData.bind(formIns);
+    // const clearData = formIns.clearData.bind(formIns);//
     const getData = formIns.getLayoutData.bind(formIns)
     const setData = setData2;
     expose({
@@ -264,7 +255,7 @@ export default defineComponent({
       }
     };
     watch(
-      () => state.fields.map((e) => e.id),
+      () =>{return  state.fields.map((e) => e.id)},
       (newV, old) => {
         const deleteFields = old.filter((item) => !newV.includes(item));
         const addFields = newV.filter((item) => !old.includes(item));
@@ -335,9 +326,7 @@ export default defineComponent({
           ),
           default: () => (
             <ElScrollbar>
-              <div class={{ previewDialogWrap: true, mobilePreview: previewPlatform.value === 'mobile' }}>
-                <ErFormPreview {...props} formIns={formIns} ref={setPreviewRef} />
-              </div>
+              
             </ElScrollbar>
           ),
         }}
@@ -387,7 +376,6 @@ export default defineComponent({
                     <Icon class='icon' icon='preview' onClick={() => handleOperation(3)} />
                   </div>
                 </ElHeader>}
-
                 {isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}
               </ElContainer>
               {isFoldConfig.value && <ConfigPanel />}

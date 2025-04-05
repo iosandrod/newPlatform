@@ -66,6 +66,7 @@ export default defineComponent({
     const registerMenu = (el) => {
       formIns.registerRef('fieldMenu', el) //
     }
+    const fieldsConfig = formIns.getDesignFieldConfig() //
     return () => {
       let com = (
         <ElAside class={[ns.b()]} width={ER.props.fieldsPanelWidth}>
