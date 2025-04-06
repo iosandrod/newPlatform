@@ -1,5 +1,5 @@
-import locale from '@DESIGN/formEditor/locale'
-import utils from '@DESIGN/utils'
+import locale from '@ER/formEditor/locale'
+import utils from '@ER/utils'
 export default function (node, isWrap = true, lang = 'zh-cn', isCreateLabel = true, eachBack) {
   const newNode = isWrap
     ? {

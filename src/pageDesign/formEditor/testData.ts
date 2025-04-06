@@ -1910,6 +1910,7 @@ export const testData1 = {
       "type": "Sform",//
       "label": "单行文本",
       "icon": "input",
+      field: "email",
       "key": "input_NvExu6Re6uRIVMgxnnWgB",
       "id": "NvExu6Re6uRIVMgxnnWgB",
       "options": {
@@ -1936,6 +1937,7 @@ export const testData1 = {
     {
       "type": "input",
       "label": "单行文本",
+      field: "name",
       "icon": "input",
       "key": "input_r6hNllBugy4l9IijZ6akr",
       "id": "r6hNllBugy4l9IijZ6akr",
@@ -1961,6 +1963,7 @@ export const testData1 = {
       }
     },
     {
+      field: 'password',
       "type": "input",
       "label": "单行文本",
       "icon": "input",

@@ -1,16 +1,4 @@
-import {
-  defineComponent,
-  resolveComponent,
-  watch,
-  useAttrs,
-  useSlots,
-  defineAsyncComponent,
-  unref,
-  nextTick,
-  ref,
-  inject,
-  reactive,
-} from 'vue'
+import { defineComponent, resolveComponent, watch, useAttrs, useSlots, defineAsyncComponent, unref, nextTick, ref, inject, reactive } from 'vue'
 import { isHTMLTag } from '@vue/shared'
 // import DragGable from 'vuedraggable'
 import DragGable from '@ER/vueDraggable/vuedraggable'
@@ -25,13 +13,14 @@ import LayoutInlineLayout from './InlineLayout'
 import LayoutSubformLayout from './SubformLayout'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import ControlInsertionPlugin from './ControlInsertionPlugin'
+import { VxeForm } from 'vxe-pc-ui'
 const dragGableWrap = defineComponent({
   inheritAttrs: false,
   name: 'customDragGable',
   customOptions: {},
   components: {
     DragGable,
-  },
+  }, //
   setup(props) {
     const { isEditModel } = hooks.useTarget()
     return () => {
@@ -40,9 +29,7 @@ const dragGableWrap = defineComponent({
       if (unref(isEditModel)) {
         node = <dragGable {...attrs}>{useSlots()}</dragGable>
       } else {
-        const tag = isHTMLTag(attrs.tag)
-          ? attrs.tag
-          : resolveComponent(attrs.tag)
+        const tag = isHTMLTag(attrs.tag) ? attrs.tag : resolveComponent(attrs.tag)
         const { item } = useSlots()
         node = (
           <tag {...attrs.componentData}>
@@ -107,7 +94,7 @@ export default defineComponent({
         () => state.platform,
         () => {
           componentMap = {}
-        },
+        }
       )
       return {
         findComponent(type, element) {
@@ -117,12 +104,8 @@ export default defineComponent({
               let el = null
               let el1
               try {
-                el = import(
-                  `../${type}/${_.startCase(element)}/${state.platform}.vue`
-                )
-                el1 = import(
-                  `../${type}/${_.startCase(element)}/${state.platform}.tsx`
-                )
+                el = import(`../${type}/${_.startCase(element)}/${state.platform}.vue`)
+                el1 = import(`../${type}/${_.startCase(element)}/${state.platform}.tsx`)
               } catch (error) {
                 console.log('加载部分组件出错') //
               }
@@ -143,66 +126,23 @@ export default defineComponent({
         let node = ''
         switch (element.type) {
           case 'grid':
-            node = (
-              <LayoutGridLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutGridLayout>
-            )
+            node = <LayoutGridLayout key={element.id} data={element} parent={props.data}></LayoutGridLayout>
             break
           case 'table':
-            node = (
-              <LayoutTableLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTableLayout>
-            )
+            node = <LayoutTableLayout key={element.id} data={element} parent={props.data}></LayoutTableLayout>
             break
           case 'tabs':
-            node = (
-              <LayoutTabsLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTabsLayout>
-            )
+            node = <LayoutTabsLayout key={element.id} data={element} parent={props.data}></LayoutTabsLayout>
             break
           case 'collapse':
-            node = (
-              <LayoutCollapseLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutCollapseLayout>
-            )
+            node = <LayoutCollapseLayout key={element.id} data={element} parent={props.data}></LayoutCollapseLayout>
             break
           case 'inline':
-            node = (
-              <LayoutInlineLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutInlineLayout>
-            )
+            node = <LayoutInlineLayout key={element.id} data={element} parent={props.data}></LayoutInlineLayout>
             break
           case 'subform':
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
-              node = (
-                <LayoutSubformLayout
-                  key={element.id}
-                  data={element}
-                  parent={props.data}
-                ></LayoutSubformLayout>
-              )
+            if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
+              node = <LayoutSubformLayout key={element.id} data={element} parent={props.data}></LayoutSubformLayout>
             }
             break
           default:
@@ -211,29 +151,11 @@ export default defineComponent({
             try {
               typeProps = formitem.getFormItemProps(element) || {} //
             } catch (error) {
-              // console.log(formIns, 'testIns') //
-              // console.log(
-              //   formIns.items.map((item) => {
-              //     return item.getField()
-              //   }),
-              //   '发生错误在dragable', //
-              // ) //
-              // throw error //
               console.error('没有找到formitem') //
-            }
-            // setTimeout(() => {
-            //   console.log(formIns, 'testIns') //
-            // }, 1000)
+            } //
             const rules = formitem?.getValidateRoles() || [] //
             let TypeComponent = ''
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
+            if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
               TypeComponent = load.findComponent('FormTypes', element.type)
               const params = {
                 data: element,
@@ -249,45 +171,22 @@ export default defineComponent({
                 // console.log(typeProps.value,'testProps')
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
                     {element.type !== 'divider' ? (
                       //@ts-ignore
                       <el-form-item {...typeProps} prop={prop}>
-                        <TypeComponent
-                          data={element}
-                          params={typeProps}
-                        ></TypeComponent>
+                        <TypeComponent data={element} params={typeProps}></TypeComponent>
                       </el-form-item>
                     ) : (
-                      <TypeComponent
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
+                      <TypeComponent data={element} params={typeProps}></TypeComponent>
                     )}
                   </Selection>
                 )
               } else {
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    <TypeComponent
-                      data={element}
-                      params={typeProps}
-                    ></TypeComponent>
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
+                    <TypeComponent data={element} params={typeProps}></TypeComponent>
                   </Selection>
                 )
               }

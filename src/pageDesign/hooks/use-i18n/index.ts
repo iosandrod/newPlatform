@@ -1,6 +1,6 @@
 import { computed, inject } from 'vue'
-import locale from '@DESIGN/formEditor/locale/index'
-import utils from '@DESIGN/utils'
+import locale from '@ER/formEditor/locale/index'
+import utils from '@ER/utils'
 import { get, template, isEmpty } from 'lodash'
 
 // const transferData = (lang, path, options = {}) => {

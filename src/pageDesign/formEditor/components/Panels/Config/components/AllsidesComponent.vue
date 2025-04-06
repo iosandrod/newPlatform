@@ -1,6 +1,6 @@
 <script>
-import utils from '@DESIGN/utils'
-import hooks from '@DESIGN/hooks'
+import utils from '@ER/utils'
+import hooks from '@ER/hooks'
 import { isReactive } from 'vue'
 export default {
   name: 'ConfigAllsides',

@@ -2,63 +2,63 @@ import { computed, inject, isRef } from 'vue'
 import { showToast } from 'vant'
 import dayjs from 'dayjs'
 import _ from 'lodash'
-import Region from '@DESIGN/region/Region'
+import Region from '@ER/region/Region'
 import { areaList } from '@vant/area-data'
 import { useI18n } from '../use-i18n'
-import utils from '@DESIGN/utils'
-import { Form } from '@DESIGN/form'
-import { FormItem } from '@DESIGN/formitem'
-import { StateType } from '@DESIGN/formEditor/formType'
-class FormProps {
-  label?: string
-  disabled?: boolean
-  placeholder?: string
-  clearable?: boolean
-  required?: boolean
-  labelWidth?: string
-  maxlength?: number
-  showWordLimit?: boolean
-  showPassword?: boolean
-  prepend?: string
+import utils from '@ER/utils'
+import { Form } from '@ER/form'
+import { FormItem } from '@ER/formitem'
+import { StateType } from '@ER/formEditor/formType'
+export class FormProps {
+  label?: string;
+  disabled?: boolean;
+  placeholder?: string;
+  clearable?: boolean;
+  required?: boolean;
+  labelWidth?: string;
+  maxlength?: number;
+  showWordLimit?: boolean;
+  showPassword?: boolean;
+  prepend?: string;
   model?: any
-  append?: string
-  type?: string
-  rows?: number
-  controls?: boolean
-  controlsPosition?: string
-  min?: number
-  max?: number
-  step?: number
-  precision?: number
-  options?: any[]
-  multiple?: boolean
-  filterable?: boolean
-  format?: string
-  valueFormat?: string
-  rangeSeparator?: string
-  startPlaceholder?: string
-  disabledDate?: (time: Date) => boolean
-  minDate?: Date
-  maxDate?: Date
-  defaultDate?: Date | Date[]
-  contentPosition?: string
-  allowHalf?: boolean
-  count?: number
-  action?: string
-  maxSize?: number
-  config?: any
-  limit?: number
+  append?: string;
+  type?: string;
+  rows?: number;
+  controls?: boolean;
+  controlsPosition?: string;
+  min?: number;
+  max?: number;
+  step?: number;
+  precision?: number;
+  options?: any[];
+  multiple?: boolean;
+  filterable?: boolean;
+  format?: string;
+  valueFormat?: string;
+  rangeSeparator?: string;
+  startPlaceholder?: string;
+  disabledDate?: (time: Date) => boolean;
+  minDate?: Date;
+  maxDate?: Date;
+  defaultDate?: Date | Date[];
+  contentPosition?: string;
+  allowHalf?: boolean;
+  count?: number;
+  action?: string;
+  maxSize?: number;
+  config?: any;
+  limit?: number;
   size?: any
-  maxCount?: number
-  accept?: string
-  areaList?: any
-  columnsNum?: number
+  maxCount?: number;
+  accept?: string;
+  areaList?: any;
+  columnsNum?: number;
   labelPosition?: string
-  labelAlign?: string //
+  labelAlign?: string//
   formitem: FormItem
   //@ts-ignore
   constructor(init?: Partial<FormField>) {
-    Object.assign(this, init)
+    Object.assign(this, init);
   }
 }
 
@@ -70,7 +70,8 @@ const findPosition = (node, parent) => {
       return { x, y }
     }
   }
-  return { x: -1, y: -1 } 
+
+  return { x: -1, y: -1 }
 }
 
 const getLogicStateByField = (field, fieldsLogicState) => {
@@ -80,19 +81,11 @@ const getLogicStateByField = (field, fieldsLogicState) => {
   let readOnly = _.get(fieldState, 'readOnly', undefined)
   return {
     required,
-    readOnly,
+    readOnly
   }
 }
 
-export const useProps = (
-  state: StateType,
-  data,
-  isPc = true,
-  isRoot = false,
-  specialHandling?: any,
-  t?: any,
-  ExtraParams?: any,
-) => {
+export const useProps = (state: StateType, data, isPc = true, isRoot = false, specialHandling?: any, t?: any, ExtraParams?: any) => {
   if (!t) {
     t = useI18n().t
   }
@@ -101,17 +94,15 @@ export const useProps = (
   }
   //这个form不是这个form//
   const formIns: Form = inject('formIns', {}) as any
-  // console.log(formIns,'testFormIns')
-  // console.log(state,data, 'testState')
   return computed(() => {
     let node = isRoot ? data.config : data
     let result = new FormProps({})
-    const item = formIns.items.find((item) => item.id === data.id) //
+    const item = formIns.items.find(item => item.id === data.id)//
     result.formitem = item
     const platform = isPc ? 'pc' : 'mobile'
     if (isRoot) {
-      if (isPc) {
-        result.model = data.store // is Array
+      if (isPc) { 
+        result.model = data.store// is Array
         result.size = node.pc.size
         result.labelPosition = node[platform].labelPosition
       } else {
@@ -122,20 +113,22 @@ export const useProps = (
     if (isRef(data)) {
       node = data.value
     }
-    const { options } = node
+    const {
+      options
+    } = node
     let result1 = {
       label: options.isShowLabel ? node.label : '',
       disabled: options.disabled,
       placeholder: options.placeholder,
       clearable: options.clearable,
-      required: options.required,
+      required: options.required
     }
-    Object.assign(result, result1) //
+    Object.assign(result, result1)//
     if (state.mode === 'preview') {
-      const { readOnly, required } = getLogicStateByField(
-        node,
-        state.fieldsLogicState,
-      )
+      const {
+        readOnly,
+        required
+      } = getLogicStateByField(node, state.fieldsLogicState)
       if (readOnly === undefined) {
         result.disabled = options.disabled
       } else {
@@ -147,15 +140,11 @@ export const useProps = (
         result.required = result.disabled ? false : required === 1
       }
     }
-    // console.log(ExtraParams, 'testParams')//
-    const formitem: FormItem = ExtraParams.formitem
     //@ts-ignore
     result.prop = 'email'
     // addValidate(result, node, isPc, t, state, ExtraParams)
     if (isPc) {
-      result.labelWidth = options.isShowLabel
-        ? options.labelWidth + 'px'
-        : 'auto'
+      result.labelWidth = options.isShowLabel ? options.labelWidth + 'px' : 'auto'
     }
     switch (node.type) {
       case 'input':
@@ -188,9 +177,7 @@ export const useProps = (
         if (isPc) {
           result.controls = options.controls
           if (options.controls) {
-            result['controls-position'] = options.controlsPosition
-              ? 'right'
-              : ''
+            result['controls-position'] = options.controlsPosition ? 'right' : ''
           }
         } else {
           // result.inputWidth = '100px'
@@ -235,19 +222,26 @@ export const useProps = (
             result.startPlaceholder = options.placeholder
           }
           result.disabledDate = (time) => {
-            const { startTime, endTime, isShowWeeksLimit } = options
+            const {
+              startTime,
+              endTime,
+              isShowWeeksLimit
+            } = options
             const startDate = dayjs.unix(startTime)
             const endDate = dayjs.unix(endTime)
             const currentDate = dayjs(time)
             let result = false
             if (options.isShowWordLimit) {
-              result =
-                currentDate.isBefore(startDate) || currentDate.isAfter(endDate)
+              result = currentDate.isBefore(startDate) || currentDate.isAfter(endDate)
             }
             return result
           }
         } else {
-          const { startTime, endTime, isShowWeeksLimit } = options
+          const {
+            startTime,
+            endTime,
+            isShowWeeksLimit
+          } = options
           switch (options.type) {
             case 'date':
             case 'datetime':
@@ -266,7 +260,7 @@ export const useProps = (
               if (_.isEmpty(options.defaultValue)) {
                 result.defaultDate = null
               } else {
-                options.defaultValue.map((e) => dayjs.unix(e).toDate())
+                options.defaultValue.map(e => dayjs.unix(e).toDate())
               }
               if (startTime && options.isShowWordLimit) {
                 result.minDate = dayjs.unix(startTime).toDate()
@@ -281,9 +275,7 @@ export const useProps = (
               break
             case 'daterange':
               if (options.defaultValue) {
-                result.defaultDate = options.defaultValue.map((e) =>
-                  dayjs.unix(e).toDate(),
-                )
+                result.defaultDate = options.defaultValue.map(e => dayjs.unix(e).toDate())
               } else {
                 result.defaultDate = null
               }
@@ -306,7 +298,7 @@ export const useProps = (
         //@ts-ignore
         result.props = {
           multiple: options.multiple,
-          checkStrictly: options.checkStrictly,
+          checkStrictly: options.checkStrictly
         }
         // result.options = options.options
         break
@@ -332,7 +324,7 @@ export const useProps = (
         result.action = options.action
         result.maxSize = options.size * 1024 * 1024
         result.config = {
-          placeholder: options.placeholder,
+          placeholder: options.placeholder
         }
         if (!isPc) {
           result.config.toolbar = {
@@ -346,8 +338,8 @@ export const useProps = (
               'strikethrough',
               'link',
               'undo',
-              'redo',
-            ],
+              'redo'
+            ]
           }
           result.config.formattingOptions = [
             'fontFamily',
@@ -365,7 +357,7 @@ export const useProps = (
             'indent',
             '|',
             'insertTable',
-            'removeFormat',
+            'removeFormat'
           ]
         }
         break
@@ -389,12 +381,12 @@ export const useProps = (
         if (isPc) {
           const region = new Region(areaList, {
             isFilter: false,
-            selectType: options.selectType,
+            selectType: options.selectType
           })
           result.options = region.getAll()
-          //@ts-ignore
+          //@ts-ignore 
           result.props = {
-            emitPath: false,
+            emitPath: false
           }
           result.filterable = options.filterable
         } else {

@@ -1,9 +1,9 @@
 <script>
 import PanelsConfigComponentsTypeComponent from './TypeComponent.vue'
 import { reactive, ref, onUpdated, onMounted } from 'vue'
-import utils from '@DESIGN/utils'
-import hooks from '@DESIGN/hooks'
-import Icon from '@DESIGN/icon'
+import utils from '@ER/utils'
+import hooks from '@ER/hooks'
+import Icon from '@ER/icon'
 import _ from 'lodash'
 export default {
   name: 'ConfigBorder',

@@ -1,15 +1,19 @@
 import { defineComponent, inject, ref, resolveComponent, unref } from 'vue';
-import LayoutDragGable from '@DESIGN/formEditor/components/Layout/DragGable';
-import LayoutInlineLayout from '@DESIGN/formEditor/components/Layout/InlineLayout';
-import CompleteButton from '@DESIGN/formEditor/components/CompleteButton';
-import hooks from '@DESIGN/hooks/index';
+import LayoutDragGable from '@ER/formEditor/components/Layout/DragGable';
+import LayoutInlineLayout from '@ER/formEditor/components/Layout/InlineLayout';
+import CompleteButton from '@ER/formEditor/components/CompleteButton';
+import hooks from '@ER/hooks/index';
 import _ from 'lodash';
 import { ElMain } from 'element-plus';
-import { Form } from '@DESIGN/form';
+import { Form } from '@ER/form';
+import formBarBread from '@/bread/formBarBread';
 export default defineComponent({
   name: 'Canves',
   inheritAttrs: false,
   customOptions: {},
+  components: {
+    formBarBread,
+  },
   setup() {
     const ER: any = inject('Everright');
     const ns = hooks.useNamespace('Canves');
@@ -41,17 +45,21 @@ export default defineComponent({
           isRoot
         ></LayoutDragGable>
       );
-      // const model = formIns.data;
-      // const rules = formIns.getValidateRules();
-      // console.log(model, rules, 'test123123'); ////
+      let bar = null
+      if (formIns.getShowFormBar()) {
+        bar = <div>
+          <formBarBread></formBarBread>
+        </div>
+      }
       return (
         <div>
+          {bar}
           <TagComponent
             ref={setFormRef}
             onClick={unref(isEditModel) && handleClick}
             {...typeProps.value}
             model={formIns.data}
-            // rules={formIns.getValidateRules()}
+            rules={formIns.getValidateRules()}
           >
             {Layout}
           </TagComponent>

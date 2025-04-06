@@ -1,6 +1,6 @@
 @use 'sass:math';
         @use 'sass:map';
-        @use '@DESIGN/theme/base.scss' as *;
+        @use '@ER/theme/base.scss' as *;
 @include b(FormTypesSlider_mobile) {
   @include e(customButton) {
     width: 26px;

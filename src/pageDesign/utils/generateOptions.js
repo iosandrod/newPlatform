@@ -1,5 +1,5 @@
 import { nanoid } from './nanoid'
-import { globalConfig } from '@DESIGN/formEditor/componentsConfig'
+import { globalConfig } from '@ER/formEditor/componentsConfig'
 import _ from 'lodash'
 export const generateOptions = (len) => {
   const result = []

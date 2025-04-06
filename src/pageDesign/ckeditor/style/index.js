@@ -1,2 +1,2 @@
-import '@DESIGN/theme/icon.scss'
-import '@DESIGN/theme/ckeditor/index.scss'
+import '@ER/theme/icon.scss'
+import '@ER/theme/ckeditor/index.scss'

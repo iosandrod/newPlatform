@@ -1,8 +1,8 @@
 import { computed, defineComponent, resolveComponent, unref, ref, watch, reactive, defineExpose, nextTick, h } from 'vue'
-import utils from '@DESIGN/utils'
-import hooks from '@DESIGN/hooks'
-import Icon from '@DESIGN/icon'
-import { dragGableWrap } from '@DESIGN/formEditor/components/Layout/DragGable'
+import utils from '@ER/utils'
+import hooks from '@ER/hooks'
+import Icon from '@ER/icon'
+import { dragGableWrap } from '@ER/formEditor/components/Layout/DragGable'
 import _ from 'lodash'
 import nzhcn from 'nzh/cn'
 export default defineComponent({

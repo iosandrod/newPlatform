@@ -1,5 +1,5 @@
 import { defineComponent, inject, PropType, ref, unref } from 'vue';
-import hooks from '@DESIGN/hooks';
+import hooks from '@ER/hooks';
 import { ElButton } from 'element-plus';
 import { Button as VanButton } from 'vant';
 export default defineComponent({

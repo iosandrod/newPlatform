@@ -1,13 +1,14 @@
-import { defineComponent } from 'vue';
+import { defineComponent, inject } from 'vue';
 import { defineProps, ref, reactive, computed, provide, getCurrentInstance, watch, nextTick, onMounted } from 'vue';
-import CanvesPanel from '@DESIGN/formEditor/components/Panels/Canves/index';
-import hooks from '@DESIGN/hooks';
-import utils from '@DESIGN/utils';
+import CanvesPanel from '@ER/formEditor/components/Panels/Canves/index';
+import hooks from '@ER/hooks';
+import utils from '@ER/utils';
 import _ from 'lodash';
 import defaultProps from './defaultProps';
 import { ElMessage } from 'element-plus';
 import { showNotify } from 'vant';
 import { defineExpose } from 'vue';
+import { Form } from '@ER/form';
 export default defineComponent({
   name: 'Everright-form-preview',
   props: {
@@ -16,144 +17,209 @@ export default defineComponent({
     }
   },
   setup(props: any, { emit, expose, slots }) {
-    const layout = {
-      pc: [],
-      mobile: [],
-    };
     const form = ref('');
-    const state = reactive({
-      store: [],
-      selection: {},
-      platform: utils.isPc() ? 'pc' : 'mobile',
-      mode: 'preview',
-      config: {},
-      Namespace: 'formEditor',
-      validateStates: [],
-      data: {},
-      fields: [],
-      logic: {},
-      fieldsLogicState: new Map(),
-      remoteValues: new Map(),
-      othersFiles: {},
-    });
-    const ns = hooks.useNamespace('Main', state.Namespace);
-    // hooks.useLogic(state);
-    const getData = () => {
-      const result = {};
-      state.fields.forEach((e) => {
-        if (e.type === 'subform') {
-          result[e.key] = utils.getSubFormValues(e);
-        } else {
-          try {
-            if (!utils.checkIsInSubform(e)) {
-              result[e.key] = e.options.defaultValue;
-            }
-          } catch (e) { }
-        }
+    const previewPlatform = ref('pc');
+    const previewLoading = ref(true);
+
+    let formIns: Form = props.formIns as any;
+    // debugger//
+    if (formIns == null) {
+      formIns = new Form(props);
+    } else {
+    }
+    provide('formIns', formIns);
+    let layout = formIns.layout;
+    let _state = formIns.state
+    let state = _state
+    if (_state == null) {
+      state = reactive({
+        validate: null as any,
+        store: [],
+        selected: {},
+        mode: 'edit',
+        platform: 'pc',
+        children: [],
+        //@ts-ignore
+        config: props.globalConfig,
+        previewVisible: false,
+        widthScaleLock: false,
+        data: {},
+        validateStates: [],
+        fields: [],
+        Namespace: 'formEditor',
+        logic: {},
+        othersFiles: {},
+        fieldsLogicState: new Map(),
       });
-      return _.cloneDeep(_.merge(result, state.othersFiles));
+      formIns.setState(state);
+    }
+    const isFoldFields = computed({
+      get: () => {
+        return formIns.isDesign;
+      },
+      set: (val) => {
+        formIns.setCurrentDesign(val);
+      },
+    });
+    const isFoldConfig = computed({
+      get: () => {
+        return formIns.isDesign;
+      },
+      set: (val) => {
+        formIns.setCurrentDesign(val);
+      },
+    });
+    //@ts-ignore 
+    state.validator = (target, fn) => {
+
     };
+    const { t, lang } = hooks.useI18n(props);
+    formIns.lang = lang
+    formIns.t = t
+    const EReditorPreviewRef = ref<any>('');
+    const isShow = computed({
+      get: () => {
+        return formIns.isShow
+      },
+      set: (val) => {
+        formIns.isShow = val
+      },
+    })
+    const isShowConfig = computed({
+      get: () => {
+        return formIns.isShowConfig
+      },
+      set: (val) => {
+        formIns.isShowConfig = val
+      },
+    });
+    let setSelection = formIns.setSelection.bind(formIns);//
+    setSelection(state.config);
+    const addField = formIns.addField.bind(formIns);
+    const delField = formIns.delField.bind(formIns);
+    const addFieldData = formIns.addFieldData.bind(formIns);
+    /* 
+     
+    */
+    const wrapElement = formIns.wrapElement.bind(formIns);
+    // setTimeout(() => {
+    //   setData2(JSON.parse(JSON.stringify(testData1))); //
+    // }, 100); 
+    const syncLayout = formIns.syncLayout.bind(formIns);
+    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(formIns);
+    const switchPlatform = formIns.switchPlatform.bind(formIns);
+    const canvesScrollRef = ref('');
     const fireEvent = (type, data) => {
       emit('listener', {
         type,
         data,
       });
     };
-    const setValue = (field, value) => {
-      if (field.type === 'time' && !field.options.valueFormat) {
-        field.options.valueFormat = 'HH:mm:ss';
-      }
-      field.options.defaultValue = value;
-    };
-    provide('Everright', {
-      state,
-      getData,
-      props,
-      fireEvent,
-      setValue,
-      form,
-    });
-    // onMounted(() => {
-    //   let formIns = props.formIns
-    //   if (formIns != null) {
-    //     let config = formIns.getFormConfig()
-    //     setData2(config)//
-    //   }
-    // })
-    const setOhters = (value) => {
-      _.toPairs(value)
-        .filter(([key]) => key.indexOf('_other') !== -1)
-        .forEach(([key, val]) => {
-          state.othersFiles[key] = val;
-        });
-    };
-    const setData2 = (data, value?: any) => {
-      const newData = _.cloneDeep(data);//
-      layout.pc = newData.layout.pc;
-      layout.mobile = newData.layout.mobile;
-      state.store = newData.list;
-      state.fields = newData.fields;
-      const curLayout = _.cloneDeep(newData.layout[state.platform]);
-      utils.combinationData2(curLayout, state.fields);
-      state.store = curLayout;
-      state.config = newData.config;
-      state.data = newData.data;
-      state.logic = newData.logic;
-      state.store.forEach((e) => {
-        utils.addContext({ node: e, parent: state.store, fn: false });//
-      });
-      if (!_.isEmpty(value)) {
-        setOhters(value);
-        state.fields.forEach((e) => {
-          if (e.type === 'time' && !e.options.valueFormat) {
-            e.options.valueFormat = 'HH:mm:ss';
-          }
-          if (value[e.key]) {
-            e.options.defaultValue = value[e.key];
-          }
-        });
-      }
-    };
-    const setData1 = async (data, value) => {
-      if (_.isEmpty(data)) return false;
-      const newData = utils.combinationData1(_.cloneDeep(data));
-      state.store = newData.list;
-      state.config = newData.config;
-      state.data = newData.data;
-      state.fields = newData.fields;
-      state.logic = newData.logic;
-      state.store.forEach((e) => {
-        utils.addContext({ node: e, parent: state.store });
-      });
-      const subforms = _.cloneDeep(state.fields.filter((e) => e.type === 'subform'));
-      if (!_.isEmpty(value)) {
-        setOhters(value);
-        for (const key in value) {
-          state.remoteValues.set(key, value[key]);
-        }
-        state.fields.forEach((field) => {
-          if (field.type !== 'subform') {
-            try {
-              if (!utils.checkIsInSubform(field)) {
-                setValue(field, value[field.key]);
-              }
-            } catch (e) { }
-          }
-        });
-      }
-    };
-    const setData = (data) => {
-      let setFn = props.layoutType === 1 ? setData1 : setData2
-      setFn(data)//
-    };
+    const getData2 = formIns.getLayoutData.bind(formIns);
+    const setData2 = formIns.setLayoutData.bind(formIns);
+    const clearData = formIns.clearData.bind(formIns);
+    const getData = formIns.getLayoutData.bind(formIns)
+    const setData = setData2;
     expose({
+      form,
       switchPlatform(platform) {
-        state.platform = platform;
+        switchPlatform(platform);
       },
       setData,
       getData,
-      form,
     });
+    const handleOperation = (type, val?: any) => {
+      switch (type) {
+        case 1:
+          break;
+        case 2:
+          // state.store = []
+          layout.pc = [];
+          layout.mobile = [];
+          state.fields.splice(0);
+          state.store.splice(0);
+          state.data = {};
+          setSelection('root');
+          break;
+        case 3:
+          state.previewVisible = true;
+          previewLoading.value = true;
+          nextTick(() => {
+            EReditorPreviewRef.value.setData(getData());
+            nextTick(() => {
+              previewLoading.value = false;
+            });
+          });
+          break;
+        case 4:
+          fireEvent('save', getData());
+          break;
+        case 7: 
+          previewLoading.value = true;
+          previewPlatform.value = val;
+
+          EReditorPreviewRef.value.switchPlatform(val);
+          EReditorPreviewRef.value.setData(getData());
+          nextTick(() => {
+            nextTick(() => {
+              previewLoading.value = false;
+            });
+          });
+          break;
+      }
+    };
+    watch(
+      () => state.fields.map((e) => e.id),
+      (newV, old) => {
+        const deleteFields = old.filter((item) => !newV.includes(item));
+        const addFields = newV.filter((item) => !old.includes(item));
+        for (const delField of deleteFields) {
+          //
+          formIns.delFormItem(delField);
+        }
+        for (const addField of addFields) {
+          let field = state.fields.find((e) => e.id === addField);
+          formIns.addFormItem(field); //
+        }
+      }
+    );
+    watch(
+      () => state.selected,
+      (newVal) => {
+        fireEvent('changeParams', _.cloneDeep(newVal));
+      },
+      {
+        deep: true,
+        immediate: true,
+      }
+    );
+    const onClickOutside = () => { };
+    watch(
+      () => {
+        return state.store;
+      },
+      (newValue) => { },
+      {
+        deep: true,
+      }
+    );
+    const eve = {
+      formIns: formIns,
+      state,
+      setSelection,
+      props,
+      wrapElement,
+      delField,
+      addField, //
+      switchPlatform,
+      addFieldData,
+      canvesScrollRef,
+      fireEvent,
+      getData,
+      form,
+    }; //
+    provide('Everright', eve);
+    expose(formIns);//
     return () => {
       if (state.store.length === 0) return null
       return <CanvesPanel ></CanvesPanel>;

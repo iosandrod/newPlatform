@@ -1,6 +1,6 @@
 <script>
-import utils from '@DESIGN/utils'
-import hooks from '@DESIGN/hooks'
+import utils from '@ER/utils'
+import hooks from '@ER/hooks'
 export default {
   name: 'ConfigCheckboxComponent',
   customOptions: {}

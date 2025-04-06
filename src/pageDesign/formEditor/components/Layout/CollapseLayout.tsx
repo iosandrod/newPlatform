@@ -1,8 +1,8 @@
 import { defineComponent, resolveComponent, watch, useAttrs, defineAsyncComponent, inject } from 'vue'
-import Selection from '@DESIGN/formEditor/components/Selection/selectElement'
+import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable from './DragGable'
-import hooks from '@DESIGN/hooks'
-import { FormEditorContext } from '@DESIGN/type'
+import hooks from '@ER/hooks'
+import { FormEditorContext } from '@ER/type'
 export default defineComponent({ 
   name: 'CollapseLayout',
   inheritAttrs: false,

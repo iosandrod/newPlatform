@@ -16,7 +16,7 @@ export interface OnStartParams {
   endEdit: () => void
 }
 import { createApp } from 'vue' //
-import {} from 'element-plus' //
+import { } from 'element-plus' //
 import { VxeInput } from 'vxe-pc-ui'
 import tableInput from './tableInput'
 import { ListTable } from '@visactor/vtable'
@@ -128,7 +128,7 @@ export class InputEditor extends BaseEditor {
     }
   }
 
-  endEditing(): void {}
+  endEditing(): void { }
 
   isEditorElement(target: EventTarget | null): boolean {
     return target === this.element

@@ -1,21 +1,10 @@
-import {
-  withModifiers,
-  resolveComponent,
-  ref,
-  useSlots,
-  onMounted,
-  useAttrs,
-  unref,
-  onBeforeUnmount,
-  inject,
-  computed,
-} from 'vue';
-import { isHTMLTag } from '@vue/shared';
-import hooks from '@DESIGN/hooks';
-import utils from '@DESIGN/utils';
-import _ from 'lodash';
-import Icon from '@DESIGN/icon';
-import { Form } from '@DESIGN/form';
+import { withModifiers, resolveComponent, ref, useSlots, onMounted, useAttrs, unref, onBeforeUnmount, inject, computed } from 'vue'
+import { isHTMLTag } from '@vue/shared'
+import hooks from '@ER/hooks'
+import utils from '@ER/utils'
+import _ from 'lodash'
+import Icon from '@ER/icon'
+import { Form } from '@ER/form'
 export default {
   name: 'SelectElement',
   inheritAttrs: false,
@@ -68,163 +57,166 @@ export default {
     },
   },
   setup(props) {
-    const ER: any = inject('Everright');
-    const { t } = hooks.useI18n();
-    const ns = hooks.useNamespace('selectElement');
-    const isHover = ref(false);
-    const isInlineChildren = utils.checkIslineChildren(props.data);
-    const { target, setSelection, state, isEditModel, isSelectRoot, isPc } = hooks.useTarget();
-    const id = hooks.useCss(props.data, state.platform);
-    const visible = ref(false);
-    const slots = useSlots();
-    const isWarning = ref(false);
-    const isField = utils.checkIsField(props.data);
-    let type = props.data.type;
+    const ER: any = inject('Everright')
+    const { t } = hooks.useI18n()
+    const ns = hooks.useNamespace('selectElement')
+    const isHover = ref(false)
+    const isInlineChildren = utils.checkIslineChildren(props.data)
+    const { target, setSelection, state, isEditModel, isSelectRoot, isPc } = hooks.useTarget()
+    const id = hooks.useCss(props.data, state.platform)
+    const visible = ref(false)
+    const slots = useSlots()
+    const isWarning = ref(false)
+    const isField = utils.checkIsField(props.data)
+    let type = props.data.type
     const handleClick = (e) => {
-      setSelection(props.data);
-    };
+      setSelection(props.data)
+    }
     if (props.data.type && isField) {
       state.validateStates.push({
         data: props.data,
         isWarning,
-      });
+      })
     }
     onBeforeUnmount(() => {
-      const index = _.findIndex(state.validateStates, { data: { id: props.data.id } });
+      const index = _.findIndex(state.validateStates, {
+        data: { id: props.data.id },
+      })
       if (index !== -1) {
-        state.validateStates.splice(index, 1);
+        state.validateStates.splice(index, 1)
       }
-    });
+    })
     const handleCommand = (command) => {
-      const [fn, param] = command.split(' ');
-      props.data.context[fn](param);
-    };
-    const isShowCell = ref(false);
+      const [fn, param] = command.split(' ')
+      props.data.context[fn](param)
+    }
+    const isShowCell = ref(false)
     const renderTableCellOperator = () => {
       const slots = {
         dropdown: () => {
           let node = (
             <el-dropdown-menu>
-              <el-dropdown-item command='insert left'>{t('er.selection.insertLeft')}</el-dropdown-item>
-              <el-dropdown-item command='insert right'>{t('er.selection.insertRight')}</el-dropdown-item>
-              <el-dropdown-item command='insert top'>{t('er.selection.insertTop')}</el-dropdown-item>
-              <el-dropdown-item command='insert bottom'>{t('er.selection.insertBottom')}</el-dropdown-item>
-              <el-dropdown-item command='merge left' disabled={props.data.context.isDisableMargeLeft} divided>
+              <el-dropdown-item command="insert left">{t('er.selection.insertLeft')}</el-dropdown-item>
+              <el-dropdown-item command="insert right">{t('er.selection.insertRight')}</el-dropdown-item>
+              <el-dropdown-item command="insert top">{t('er.selection.insertTop')}</el-dropdown-item>
+              <el-dropdown-item command="insert bottom">{t('er.selection.insertBottom')}</el-dropdown-item>
+              <el-dropdown-item command="merge left" disabled={props.data.context.isDisableMargeLeft} divided>
                 {t('er.selection.mergeLeft')}
               </el-dropdown-item>
-              <el-dropdown-item command='merge right' disabled={props.data.context.isDisableMargeRight}>
+              <el-dropdown-item command="merge right" disabled={props.data.context.isDisableMargeRight}>
                 {t('er.selection.mergeRight')}
               </el-dropdown-item>
-              <el-dropdown-item command='merge row' disabled={props.data.context.isDisableMargeRow}>
+              <el-dropdown-item command="merge row" disabled={props.data.context.isDisableMargeRow}>
                 {t('er.selection.mergeRow')}
               </el-dropdown-item>
-              <el-dropdown-item command='merge top' disabled={props.data.context.isDisableMargeTop} divided>
+              <el-dropdown-item command="merge top" disabled={props.data.context.isDisableMargeTop} divided>
                 {t('er.selection.mergeTop')}
               </el-dropdown-item>
-              <el-dropdown-item command='merge bottom' disabled={props.data.context.isDisableMargeBottom}>
+              <el-dropdown-item command="merge bottom" disabled={props.data.context.isDisableMargeBottom}>
                 {t('er.selection.mergeBottom')}
               </el-dropdown-item>
-              <el-dropdown-item command='merge column' disabled={props.data.context.isDisableMargeColumn}>
+              <el-dropdown-item command="merge column" disabled={props.data.context.isDisableMargeColumn}>
                 {t('er.selection.mergeColumn')}
               </el-dropdown-item>
-              <el-dropdown-item command='del row' divided disabled={props.data.context.isDisableDelRow}>
+              <el-dropdown-item command="del row" divided disabled={props.data.context.isDisableDelRow}>
                 {t('er.selection.delRow')}
               </el-dropdown-item>
-              <el-dropdown-item command='del column' disabled={props.data.context.isDisableDelColumn}>
+              <el-dropdown-item command="del column" disabled={props.data.context.isDisableDelColumn}>
                 {t('er.selection.delColumn')}
               </el-dropdown-item>
-              <el-dropdown-item command='split column' disabled={props.data.context.isDisableSplitColumn} divided>
+              <el-dropdown-item command="split column" disabled={props.data.context.isDisableSplitColumn} divided>
                 {t('er.selection.splitColumn')}
               </el-dropdown-item>
-              <el-dropdown-item command='split row' disabled={props.data.context.isDisableSplitRow}>
+              <el-dropdown-item command="split row" disabled={props.data.context.isDisableSplitRow}>
                 {t('er.selection.splitRow')}
               </el-dropdown-item>
             </el-dropdown-menu>
-          );
+          )
           if (!isShowCell.value) {
-            node = '';
+            node = ''
           }
-          return node;
+          return node
         },
-      };
+      }
       return (
         <el-dropdown
-          trigger='hover'
+          trigger="hover"
           onCommand={handleCommand}
           onVisible-change={(val) => {
-            isShowCell.value = val;
+            isShowCell.value = val
             if (!val) {
-              isHover.value = false;
+              isHover.value = false
             }
           }}
           v-slots={slots}
         >
-          <Icon class={[ns.e('tableOperator')]} icon='tableOperation'></Icon>
+          <Icon class={[ns.e('tableOperator')]} icon="tableOperation"></Icon>
         </el-dropdown>
-      );
-    };
-    const formIns: Form = inject('formIns'); //
+      )
+    }
+    const formIns: Form = inject('formIns') //
     const actionStrategies = {
       delete: () => {
-        if (ER.props.delHandle(props.data) === false) return false;
-        props.data.context.delete();
+        if (ER.props.delHandle(props.data) === false) return false
+        props.data.context.delete()
         utils.deepTraversal(props.data, (node) => {
           if (utils.checkIsField(node)) {
-            ER.delField(node);
+            ER.delField(node)
           }
-        });
+        })
         if (/^(radio|checkbox|select)$/.test(props.data.type)) {
-          delete state.data[props.data.options.dataKey];
+          delete state.data[props.data.options.dataKey]
         }
         if (props.parent.length > 0) {
-          const index = props.parent.indexOf(props.data);
-          setSelection(index === props.parent.length ? props.parent[index - 1] : props.parent[index]);
+          const index = props.parent.indexOf(props.data)
+          setSelection(index === props.parent.length ? props.parent[index - 1] : props.parent[index])
         } else {
-          setSelection('root');
+          setSelection('root')
         }
       },
       copy: () => {
-        if (ER.props.copyHandle(props.data) === false) return false;
-        props.data.context.copy();
-        const index = props.parent.indexOf(props.data);
-        const copyData = props.parent[index + 1];
-        setSelection(copyData);
+        if (ER.props.copyHandle(props.data) === false) return false
+        props.data.context.copy()
+        const index = props.parent.indexOf(props.data)
+        const copyData = props.parent[index + 1]
+        setSelection(copyData)
         utils.deepTraversal(copyData, (node) => {
-          ER.addFieldData(node, true);
+          ER.addFieldData(node, true)
           if (utils.checkIsField(node)) {
-            ER.addField(node);
+            ER.addField(node)
           }
-        });
+        })
       },
       tableInsertRow: () => {
+        // console.log(props.data.context.columns, 'props.data.context.columns');
         //@ts-ignore
-        _.last(props.data.context.columns[0]).context.insert('bottom');
+        _.last(props.data.context.columns[0]).context.insert('bottom')
       },
       tableInsertCol: () => {
         //@ts-ignore
-        _.last(props.data.context.columns)[0].context.insert('right');
+        _.last(props.data.context.columns)[0].context.insert('right')
       },
 
       top: () => {
-        let parent = props.data.context.parent;
+        let parent = props.data.context.parent
         if (/^(inline|tr)$/.test(parent.type)) {
-          parent = parent.context.parent;
+          parent = parent.context.parent
         }
-        setSelection(Array.isArray(parent) ? 'root' : parent);
+        setSelection(Array.isArray(parent) ? 'root' : parent)
       },
 
       plus: () => {
-        props.data.context.appendCol();
+        props.data.context.appendCol()
       },
       enterForm: () => {
-        let id = props.data.id;
-        let subForm = formIns.getSubForm(id);
+        let id = props.data.id
+        let subForm = formIns.getSubForm(id)
         if (subForm != null) {
-          formIns.nextForm = subForm; //
+          formIns.nextForm = subForm //
         }
         // const _form=formIns.
       },
-    };
+    }
     const handleAction = (type) => {
       const iconActionMap = {
         1: 'delete', // 删除
@@ -235,104 +227,100 @@ export default {
         6: 'plus', // 添加列
         7: 'enterForm',
         widthScale: 'dragWidth', // 调整宽度（特殊情况，无 action 数字）
-      };
-      let actionString = iconActionMap[type];
-      actionStrategies[actionString]?.();
-    };
+      }
+      let actionString = iconActionMap[type]
+      actionStrategies[actionString]?.()
+    }
 
-    const elementRef = ref();
-    const widthScaleElement = ref();
-    const isScale = ref(false);
-    const isShowWidthScale = computed(() => props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value));
+    const elementRef = ref()
+    const widthScaleElement = ref()
+    const isScale = ref(false)
+    const isShowWidthScale = computed(() => props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value))
     onMounted(() => {
-      if (!unref(isEditModel)) return false;
-      const hoverEl = elementRef.value.$el || elementRef.value;
-      const widthScaleEl = widthScaleElement.value;
+      if (!unref(isEditModel)) return false
+      const hoverEl = elementRef.value.$el || elementRef.value
+      const widthScaleEl = widthScaleElement.value
       hoverEl.addEventListener('mouseover', (e) => {
         if (!state.widthScaleLock) {
-          isHover.value = true;
+          isHover.value = true
         }
-        e.stopPropagation();
-      });
+        e.stopPropagation()
+      })
       hoverEl.addEventListener('mouseout', (e) => {
-        if (isShowCell.value) return false;
-        isHover.value = false;
-        e.stopPropagation();
-      });
+        if (isShowCell.value) return false
+        isHover.value = false
+        e.stopPropagation()
+      })
+      //显示宽度更改按钮
       if (isShowWidthScale.value) {
         // if (!hoverEl.offsetParent) return false
         widthScaleEl.addEventListener('mousedown', (e) => {
-          e.preventDefault();
-          const columnWidth = hoverEl.offsetParent.offsetWidth / 24;
-          state.widthScaleLock = isScale.value = true;
-          const oldX = e.clientX;
-          const oldWidth = hoverEl.offsetWidth;
+          // e.preventDefault();
+          let offsetParent = hoverEl.offsetParent
+          let offsetParentWidth = offsetParent.offsetWidth //
+          // const columnWidth = hoverEl.offsetParent.offsetWidth / 24
+          let columnWidth = offsetParentWidth / 24
+          // console.log(
+          //   columnWidth,
+          //   'columnWidth',
+          //   offsetParentWidth,
+          //   offsetParent,
+          //   hoverEl,
+          // ) //
+          state.widthScaleLock = isScale.value = true
+          const oldX = e.clientX
+          const oldWidth = hoverEl.offsetWidth
           const onMouseMove = (e) => {
             if (!isInlineChildren) {
-              let offset = Math.ceil(
-                (oldWidth + Math.round((e.clientX - oldX) / columnWidth) * columnWidth) / columnWidth
-              );
+              let offset = Math.ceil((oldWidth + Math.round((e.clientX - oldX) / columnWidth) * columnWidth) / columnWidth)
               if (offset >= 24) {
-                offset = 24;
+                offset = 24
               }
               if (offset <= 6) {
-                offset = 6;
+                offset = 6
               }
-              props.data.options.span = offset;
+              props.data.options.span = offset
             } else {
-              // const isFieldWidth = _.isObject(props.data.style.width)
-              const curNewWidth = oldWidth + e.clientX - oldX;
-              let curWidth = Math.round((curNewWidth / hoverEl.parentNode.offsetWidth) * 100);
+              const curNewWidth = oldWidth + e.clientX - oldX
+              // console.log(curNewWidth, 'curNewWidth')//
+              let curWidth = Math.round((curNewWidth / hoverEl.parentNode.offsetWidth) * 100) //百分比
+              console.log(curWidth, 'curWidth') //
               if (curWidth <= 25) {
-                curWidth = 25;
+                curWidth = 25
               }
-              utils.syncWidthByPlatform(props.data, state.platform, false, curWidth);
+              utils.syncWidthByPlatform(props.data, state.platform, false, curWidth)
             }
-          };
+          }
+
           const onMouseUp = () => {
-            document.removeEventListener('mouseup', onMouseUp);
-            document.removeEventListener('mousemove', onMouseMove);
-            state.widthScaleLock = isScale.value = false;
-          };
-          document.addEventListener('mouseup', onMouseUp);
-          document.addEventListener('mousemove', onMouseMove);
-        });
+            document.removeEventListener('mouseup', onMouseUp)
+            document.removeEventListener('mousemove', onMouseMove)
+            state.widthScaleLock = isScale.value = false
+          }
+          document.addEventListener('mouseup', onMouseUp)
+          document.addEventListener('mousemove', onMouseMove)
+        })
       }
-    });
-    const TagComponent = isHTMLTag(props.tag) ? props.tag : resolveComponent(props.tag);
+    })
+    const TagComponent = isHTMLTag(props.tag) ? props.tag : resolveComponent(props.tag)
     const Selected = computed(() => {
-      return target.value.id === props.data.id && ns.is('Selected');
-    });
-    const maskNode = <div class={[ns.e('mask')]}></div>;
-    const isShowCopy = computed(() =>
-      isInlineChildren ? props.hasCopy && props.data.context.parent.columns.length < ER.props.inlineMax : props.hasCopy
-    );
+      return target.value.id === props.data.id && ns.is('Selected')
+    })
+    const maskNode = <div class={[ns.e('mask')]}></div>
+    const isShowCopy = computed(() => (isInlineChildren ? props.hasCopy && props.data.context.parent.columns.length < ER.props.inlineMax : props.hasCopy))
     return () => {
       return (
         <TagComponent
           class={id.value}
           {...useAttrs()}
           // @ts-ignore
-          class={[
-            ns.b(),
-            unref(isEditModel) && ER.props.dragMode === 'full' && props.hasDrag && 'ER-handle',
-            !isField && ns.e('borderless'),
-            unref(isEditModel) && ns.e('editor'),
-            unref(isEditModel) && Selected.value,
-            unref(isEditModel) && isHover.value && ns.e('hover'),
-            unref(isEditModel) && isScale.value && ns.e('isScale'),
-            unref(isEditModel) && isWarning.value && ns.is('Warning'),
-          ]}
+          class={[ns.b(), unref(isEditModel) && ER.props.dragMode === 'full' && props.hasDrag && 'ER-handle', !isField && ns.e('borderless'), unref(isEditModel) && ns.e('editor'), unref(isEditModel) && Selected.value, unref(isEditModel) && isHover.value && ns.e('hover'), unref(isEditModel) && isScale.value && ns.e('isScale'), unref(isEditModel) && isWarning.value && ns.is('Warning')]}
           ref={elementRef}
           onClick={unref(isEditModel) && withModifiers(handleClick, ['stop'])}
         >
           {slots.default()}
           {!isPc.value && <span></span>}
-          {ER.props.dragMode === 'icon' && unref(isEditModel) && (
-            <div class={[ns.e('topLeft')]}>
-              {props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon='Rank'></Icon>}
-            </div>
-          )}
+          {ER.props.dragMode === 'icon' && unref(isEditModel) && <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>}
           {unref(isEditModel) && (
             <div class={[ns.e('bottomRight')]}>
               {}
@@ -340,22 +328,22 @@ export default {
                 class={['handle', ns.e('selectParent')]}
                 onClick={withModifiers(
                   (e) => {
-                    handleAction(5);
+                    handleAction(5)
                   },
                   ['stop']
                 )}
-                icon='top'
+                icon="top"
               ></Icon>
               {props.hasDel && (
                 <Icon
                   class={[ns.e('copy')]}
                   onClick={withModifiers(
                     (e) => {
-                      handleAction(1);
+                      handleAction(1)
                     },
                     ['stop']
                   )}
-                  icon='delete'
+                  icon="delete"
                 ></Icon>
               )}
               {props.data.type == 'Sform' && (
@@ -363,11 +351,11 @@ export default {
                   class={[ns.e('copy')]}
                   onClick={withModifiers(
                     (e) => {
-                      handleAction(7);
+                      handleAction(7)
                     },
                     ['stop']
                   )}
-                  icon='config'
+                  icon="config"
                 ></Icon>
               )}
               {props.hasInserColumn && (
@@ -375,11 +363,11 @@ export default {
                   class={[ns.e('charulieIcon')]}
                   onClick={withModifiers(
                     (e) => {
-                      handleAction(4);
+                      handleAction(4)
                     },
                     ['stop']
                   )}
-                  icon='tableInsertCol'
+                  icon="tableInsertCol"
                 ></Icon>
               )}
               {props.hasInserRow && (
@@ -387,11 +375,11 @@ export default {
                   class={[ns.e('charuhangIcon')]}
                   onClick={withModifiers(
                     (e) => {
-                      handleAction(3);
+                      handleAction(3)
                     },
                     ['stop']
                   )}
-                  icon='tableInsertRow'
+                  icon="tableInsertRow"
                 ></Icon>
               )}
               {props.hasAddCol && (
@@ -399,11 +387,11 @@ export default {
                   class={[ns.e('addCol')]}
                   onClick={withModifiers(
                     (e) => {
-                      handleAction(6);
+                      handleAction(6)
                     },
                     ['stop']
                   )}
-                  icon='plus'
+                  icon="plus"
                 ></Icon>
               )}
               {isShowCopy.value && (
@@ -411,16 +399,16 @@ export default {
                   class={[ns.e('copyIcon')]}
                   onClick={withModifiers(
                     (e) => {
-                      handleAction(2);
+                      handleAction(2)
                     },
                     ['stop']
                   )}
-                  icon='copy'
+                  icon="copy"
                 ></Icon>
               )}
               {isShowWidthScale.value && (
                 <div ref={widthScaleElement}>
-                  <Icon class={[ns.e('widthScale')]} icon='dragWidth'></Icon>
+                  <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
                 </div>
               )}
               {props.hasTableCellOperator && renderTableCellOperator()}
@@ -429,10 +417,10 @@ export default {
 
           {unref(isEditModel) && props.hasMask && maskNode}
         </TagComponent>
-      );
-    };
+      )
+    }
   },
-};
+}
 /*
    {
             unref(isEditModel) && (

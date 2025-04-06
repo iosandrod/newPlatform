@@ -1,7 +1,7 @@
 <script>
-import utils from '@DESIGN/utils'
-import hooks from '@DESIGN/hooks'
-import Icon from '@DESIGN/icon'
+import utils from '@ER/utils'
+import hooks from '@ER/hooks'
+import Icon from '@ER/icon'
 export default {
   name: 'ConfigCollapseComponent',
   customOptions: {}

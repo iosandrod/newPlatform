@@ -5,13 +5,13 @@ import {
   inject,
   onBeforeUnmount
 } from 'vue'
-import Selection from '@DESIGN/formEditor/components/Selection/selectElement'
+import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable from './DragGable'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 import _ from 'lodash'
-import utils from '@DESIGN/utils'
-import Icon from '@DESIGN/icon'
-import { FormEditorContext } from '@DESIGN/type'
+import utils from '@ER/utils'
+import Icon from '@ER/icon'
+import { FormEditorContext } from '@ER/type'
 export default defineComponent({
   name: 'SubformLayout',
   inheritAttrs: false,

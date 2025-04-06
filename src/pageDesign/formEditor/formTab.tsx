@@ -1,6 +1,6 @@
 import { ElBreadcrumb } from 'element-plus';
 import { inject, defineComponent } from 'vue';
-import hooks from '@DESIGN/hooks';
+import hooks from '@ER/hooks';
 export default defineComponent({
   props: {},
   setup(props) {

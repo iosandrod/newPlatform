@@ -30,7 +30,11 @@ export class Column extends Base {
     this.setColumns()
   }
   setColumns() {
-    this.columns.splice(0) //
+    let oldCols = this.columns.splice(0) //
+    oldCols.forEach((col) => {
+      //
+      col.unmountedAllWatch() //
+    })
     const config = this.config
     let _columns = config.columns || [] //
     for (const col of _columns) {

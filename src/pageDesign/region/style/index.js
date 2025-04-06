@@ -1,3 +1,3 @@
-// import '@DESIGN/theme/base.scss'
-import '@DESIGN/theme/icon.scss'
-import '@DESIGN/theme/region/index.scss'
+// import '@ER/theme/base.scss'
+import '@ER/theme/icon.scss'
+import '@ER/theme/region/index.scss'

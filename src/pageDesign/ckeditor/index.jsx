@@ -5,11 +5,11 @@
 
 /* global window, console */
 import { ElMessage } from 'element-plus'
-import CKEDITOR from '@DESIGN/external/ckeditor5/build/ckeditor.js'
+import CKEDITOR from '@ER/external/ckeditor5/build/ckeditor.js'
 import { h, markRaw, defineComponent, onMounted, defineEmits, ref, onBeforeUnmount, watch } from 'vue'
 import { debounce } from 'lodash'
 import './style/index.js'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 const SAMPLE_READ_ONLY_LOCK_ID = 'Integration Sample'
 const INPUT_EVENT_DEBOUNCE_WAIT = 300
 const ns = hooks.useNamespace('Main', 'ckeditor')

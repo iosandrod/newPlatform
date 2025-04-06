@@ -1,8 +1,8 @@
 <script>
 import _ from 'lodash'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 import { ref, inject, nextTick, reactive, computed, watch, onMounted, provide, onBeforeUnmount } from 'vue'
-import utils from '@DESIGN/utils'
+import utils from '@ER/utils'
 export default {
   name: 'ConfigSubformDefaultValueComponent',
   inheritAttrs: false,

@@ -1,43 +1,52 @@
-import { fieldsConfig, globalConfig } from './componentsConfig'
+import {
+  createFieldConfig,
+  createGlobalConfig,
+  fieldsConfig,
+  globalConfig,
+} from './componentsConfig'
 export default {
+  items: {
+    type: Array,
+    default: () => [],
+  },
   fieldsConfig: {
     type: Array,
-    default: () => fieldsConfig
+    default: () => createFieldConfig(),
   },
   globalConfig: {
     type: Object,
-    default: () => globalConfig
+    default: () => createGlobalConfig(), //
   },
   lang: {
     type: String,
-    default: 'zh-cn'
+    default: 'zh-cn',
   },
   layoutType: {
     type: Number,
-    default: 2
+    default: 2,
   },
   fileUploadURI: {
-    type: String
+    type: String,
   },
   configPanelWidth: {
     type: String,
-    default: '320px'
+    default: '320px',
   },
   isShowCompleteButton: {
     type: Boolean,
-    default: true
+    default: true,
   },
   checkPropsBySelected: {
     type: Function,
-    default: () => {}
+    default: () => {},
   },
   quickImages: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   quickImageLimit: {
     type: Number,
-    default: 5
+    default: 5,
   },
   quickColors: {
     type: Array,
@@ -50,7 +59,7 @@ export default {
       'rgba(254, 241, 241, 1)',
       'rgba(236, 246, 255, 1)',
       'rgba(235, 242, 244, 1)',
-      'rgba(240, 249, 236, 1)'
-    ]
-  }
+      'rgba(240, 249, 236, 1)',
+    ],
+  },
 }

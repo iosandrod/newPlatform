@@ -1,6 +1,6 @@
 <script>
 import { ref, computed } from 'vue'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 import svg from './svg'
 import _ from 'lodash'
 export default {

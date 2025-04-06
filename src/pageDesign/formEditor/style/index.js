@@ -1,4 +1,4 @@
-// import '@DESIGN/theme/base.scss'
-import '@DESIGN/theme/icon.scss'
+// import '@ER/theme/base.scss'
+import '@ER/theme/icon.scss'
 import 'everright-filter/dist/style.css'
-import '@DESIGN/theme/formEditor/index.scss'
+import '@ER/theme/formEditor/index.scss'

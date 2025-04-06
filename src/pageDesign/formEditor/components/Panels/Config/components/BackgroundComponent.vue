@@ -1,8 +1,8 @@
 <script>
 import { reactive, ref, onMounted, inject, watch, computed, nextTick } from 'vue'
 import { ElMessage } from 'element-plus'
-import utils from '@DESIGN/utils'
-import hooks from '@DESIGN/hooks'
+import utils from '@ER/utils'
+import hooks from '@ER/hooks'
 export default {
   name: 'ConfigBackground',
   inheritAttrs: false,

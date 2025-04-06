@@ -1,5 +1,5 @@
 export const isEmpty = (v) => (v === '' || v === null || v === undefined || (Array.isArray(v) && !v.length))
-import { globalConfig } from '@DESIGN/formEditor/componentsConfig'
+import { globalConfig } from '@ER/formEditor/componentsConfig'
 import _ from 'lodash'
 import { nanoid } from 'nanoid'
 export const generateOptions = (len) => {

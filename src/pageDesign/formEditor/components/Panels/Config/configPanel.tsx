@@ -1,9 +1,27 @@
-import utils from '@DESIGN/utils';
-import hooks from '@DESIGN/hooks/index';
-import { ref, computed, reactive, watch, onMounted, inject, h, defineComponent } from 'vue';
-import _ from 'lodash';
-import PanelsConfigComponentsPropsPanel from '@DESIGN/formEditor/components/Panels/Config/components/PropsPanel.vue';
-import GlobalConfigPanel from './components/GlobalConfigPanel.vue'; //
+import utils from '@ER/utils'
+import hooks from '@ER/hooks/index'
+import {
+  ref,
+  computed,
+  reactive,
+  watch,
+  onMounted,
+  inject,
+  h,
+  defineComponent,
+} from 'vue'
+import _ from 'lodash'
+import PanelsConfigComponentsPropsPanel from '@ER/formEditor/components/Panels/Config/components/PropsPanel.vue'
+import GlobalConfigPanel from './components/GlobalConfigPanel.vue' //
+import formBarBread from '@/bread/formBarBread'
+import fConfigPanel from './components/fConfigPanel'
+import {
+  ElAside,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElForm,
+  ElScrollbar,
+} from 'element-plus'
 export default defineComponent({
   name: 'Config',
   inheritAttrs: false,
@@ -14,8 +32,10 @@ export default defineComponent({
     },
   },
   components: {
+    fConfigPanel,
     PanelsConfigComponentsPropsPanel,
     GlobalConfigPanel,
+    formBarBread,
   },
   setup(props, { emit, expose, slots }) {
     const {
@@ -31,46 +51,46 @@ export default defineComponent({
       isSelectTabs,
       isSelectCollapse,
       isSelectTable,
-    } = hooks.useTarget();
-    const ER: any = inject('Everright');
-    const { t } = hooks.useI18n();
-    const activeName0 = ref('props');
+    } = hooks.useTarget()
+    const ER: any = inject('Everright')
+    const { t } = hooks.useI18n()
+    const activeName0 = ref('props')
     const isShow = computed(() => {
-      return !_.isEmpty(state.selected) && state.selected.type !== 'grid';
-    });
-    const ns = hooks.useNamespace('Config');
-    const form = ref();
+      return !_.isEmpty(state.selected) && state.selected.type !== 'grid'
+    })
+    const ns = hooks.useNamespace('Config')
+    const form = ref()
     const handleChangePanel = (panel) => {
       // activeName0.value = panel
-    };
+    }
     const validator = (rule, value, callback) => {
-      const newValue = value.trim();
+      const newValue = value.trim()
       const fn = (type) => {
         switch (type) {
           case 0:
-            callback(new Error(t('er.validateMsg.required')));
-            break;
+            callback(new Error(t('er.validateMsg.required')))
+            break
           case 1:
-            callback();
-            break;
+            callback()
+            break
           case 2:
-            callback(new Error(t('er.validateMsg.idUnique')));
-            break;
-        }
-      };
-      if (props.mode === 'editor') {
-        state.validator(target.value, fn);
-      } else {
-        if (utils.isNull(newValue)) {
-          fn(0);
-        } else {
-          fn(1);
+            callback(new Error(t('er.validateMsg.idUnique')))
+            break
         }
       }
-    };
+      if (props.mode === 'editor') {
+        state.validator(target.value, fn)
+      } else {
+        if (utils.isNull(newValue)) {
+          fn(0)
+        } else {
+          fn(1)
+        }
+      }
+    }
     onMounted(() => {
       // form.value.validate()
-    });
+    })
     const rules = reactive({
       key: [
         {
@@ -79,101 +99,113 @@ export default defineComponent({
           validator,
         },
       ],
-    });
+    })
     const bars = computed(() => {
-      let nodes = ['root'];
-      let result = [];
+      let nodes = ['root']
+      let result = []
       if (!isSelectRoot.value) {
-        nodes = nodes.concat(target.value.context.parents.filter((e) => !/^(inline|tr)$/.test(e.type)));
+        nodes = nodes.concat(
+          target.value.context.parents.filter(
+            (e) => !/^(inline|tr)$/.test(e.type),
+          ),
+        )
       }
       if (nodes.length > 4) {
-        result.push(nodes[0]);
+        result.push(nodes[0])
         result.push({
           value: 'placeholder',
-        });
-        result.push(nodes[nodes.length - 2]);
-        result.push(nodes[nodes.length - 1]);
+        })
+        result.push(nodes[nodes.length - 2])
+        result.push(nodes[nodes.length - 1])
       } else {
-        result = nodes;
+        result = nodes
       }
       return result.map((node) => {
         const result = {
           // eslint-disable-next-line
           node: node,
           label: '',
-        };
+        }
         if (node === 'root') {
-          result.label = t('er.panels.config');
+          result.label = t('er.panels.config')
         } else if (node.value !== 'placeholder') {
           if (/^(col|collapseCol|tabsCol|td)$/.test(node.type)) {
-            result.label = t(`er.layout.${node.type}`);
+            result.label = t(`er.layout.${node.type}`)
           } else {
-            result.label = utils.fieldLabel(t, node);
+            result.label = utils.fieldLabel(t, node)
           }
         }
-        return result;
-      });
-    });
+        return result
+      })
+    })
     const handleBreadcrumbClick = (item) => {
       if (item !== 'root') {
-        setSelection(item);
+        setSelection(item)
       } else {
-        setSelection('root');
+        setSelection('root')
       }
-    };
+    }
     watch(
       target,
       () => {
         if (isSelectRoot.value) {
-          activeName0.value = 'root';
+          activeName0.value = 'root'
         } else {
-          activeName0.value = 'props';
+          activeName0.value = 'props'
         }
       },
       {
         immediate: true,
-      }
-    );
+      },
+    )
     return () => {
-      // return <div>12333</div>
       return (
-        <el-aside class={[ns.b()]} width={ER.props.configPanelWidth}>
-          <el-breadcrumb
+        <ElAside class={[ns.b()]} width={ER.props.configPanelWidth}>
+          <ElBreadcrumb
             class={[ns.e('breadcrumb')]}
             separator-icon={() => (
-              <svg viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'>
+              <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
                 <path
-                  fill='currentColor'
-                  d='M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z'
+                  fill="currentColor"
+                  d="M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z"
                 />
               </svg>
             )}
             {...utils.addTestId('configPanel:breadcrumb')}
           >
             {bars.value.map((item, index) => (
-              <el-breadcrumb-item
+              <ElBreadcrumbItem
                 key={index}
                 onClick={() => {
-                  if (index !== bars.value.length - 1 && item.node.value !== 'placeholder') {
-                    handleBreadcrumbClick(item.node);
+                  if (
+                    index !== bars.value.length - 1 &&
+                    item.node.value !== 'placeholder'
+                  ) {
+                    handleBreadcrumbClick(item.node)
                   }
                 }}
               >
                 {item.node.value === 'placeholder' ? '...' : item.label}
-              </el-breadcrumb-item>
+              </ElBreadcrumbItem>
             ))}
-          </el-breadcrumb>
-
-          <el-form ref='form' model={target} rules={rules} label-width='120px' label-position='top'>
-            <el-scrollbar>
+          </ElBreadcrumb>
+          <ElForm
+            ref="form"
+            model={target}
+            rules={rules}
+            label-width="120px"
+            label-position="top"
+          >
+            <ElScrollbar>
               <div class={[ns.e('wrap')]}>
                 {isSelectAnyElement.value && <PanelsConfigComponentsPropsPanel key={target.value.id} />}
                 {isSelectRoot.value && <GlobalConfigPanel />}
+                <fConfigPanel></fConfigPanel>
               </div>
-            </el-scrollbar>
-          </el-form>
-        </el-aside>
-      );
-    };
+            </ElScrollbar>
+          </ElForm>
+        </ElAside>
+      )
+    }
   },
-});
+})

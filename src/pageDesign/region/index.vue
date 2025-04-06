@@ -1,7 +1,7 @@
 <script>
 import { defineProps, ref, reactive, computed, provide, getCurrentInstance, watch, nextTick, onMounted, isReactive, readonly, toRefs, unref } from 'vue'
 import { ClickOutside as vClickOutside } from 'element-plus'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 import _ from 'lodash'
 // import regionData from './data/regionData'
 import { areaList } from '@vant/area-data'

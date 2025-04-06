@@ -1,6 +1,6 @@
 <script>
 import { ref, inject, nextTick, reactive, computed, watch, onMounted } from 'vue'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 import {
   generateIfFilterOptionsData,
   generateIfFilterConditionsData,
@@ -10,7 +10,7 @@ import {
 } from './generateFilterdata.js'
 import _ from 'lodash'
 import { EverrightFilter } from 'everright-filter'
-import Icon from '@DESIGN/icon'
+import Icon from '@ER/icon'
 export default {
   name: 'ConfigLogicComponent'
 }

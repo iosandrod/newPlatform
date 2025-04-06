@@ -1,7 +1,7 @@
 import { defineComponent, resolveComponent, watch, useAttrs, defineAsyncComponent, inject } from 'vue'
-import Selection from '@DESIGN/formEditor/components/Selection/selectElement'
+import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable from './DragGable'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 export default defineComponent({
   name: 'TabsLayout',
   inheritAttrs: false,
@@ -23,11 +23,14 @@ export default defineComponent({
     }
     return () => {
       return (
+        //@ts-ignore
         <Selection {...useAttrs()} data={props.data} parent={props.parent} hasCopy hasDel hasDrag hasWidthScale>
           <el-tabs class={[ns.b()]} vModel={props.data.options.defaultValue} type={props.data.options.type} tabPosition={props.data.options.tabPosition}>
             {
               props.data.columns.map((element, index0) => {
+                //@ts-ignore
                 return (
+                  //@ts-ignore
                   <Selection
                     class={[ns.e('area')]}
                     tag='el-tab-pane' label={element.label} name={element.id} data={element} parent={props.data}

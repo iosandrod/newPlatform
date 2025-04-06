@@ -1,6 +1,6 @@
 <script>
 import { ref } from 'vue'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 export default {
   name: 'er-icon'
 }

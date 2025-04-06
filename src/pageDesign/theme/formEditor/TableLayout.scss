@@ -1,6 +1,6 @@
 @use '../base.scss' as *;
 @include b(TableLayout) {
-  padding: 20px !important;
+  // padding: 20px !important;
   table {
     width: 100%;
     table-layout: fixed;

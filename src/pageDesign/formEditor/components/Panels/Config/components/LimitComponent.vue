@@ -1,6 +1,6 @@
 <script>
 import dayjs from 'dayjs'
-import hooks from '@DESIGN/hooks'
+import hooks from '@ER/hooks'
 import { watch } from 'vue'
 export default {
   name: 'ConfigLimitComponent',

@@ -80,15 +80,18 @@ export type FieldOptions = {
 };
 
 export type Field = {
+    password?: boolean
+    updateBefore?: any
     span?: number
     type: string;
     label: string;
-    icon: string;
-    key: string;
-    id: string;
+    labelWidth?: number;
+    icon?: string;
+    key?: string;
+    id?: string;
     field?: string
-    options: FieldOptions;
-    style: {
+    options?: FieldOptions;
+    style?: {
         width: {
             pc: string;
             mobile: string;

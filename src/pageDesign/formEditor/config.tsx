@@ -1,9 +1,9 @@
 import { defineComponent, } from "vue";
 import defaultProps from "./defaultProps";
 import { defineProps, ref, reactive, computed, provide, getCurrentInstance, watch, nextTick, onMounted } from 'vue'
-import ConfigPanel from '@DESIGN/formEditor/components/Panels/Config/index.vue'
-import hooks from '@DESIGN/hooks'
-import utils from '@DESIGN/utils'
+import ConfigPanel from '@ER/formEditor/components/Panels/Config/index.vue'
+import hooks from '@ER/hooks'
+import utils from '@ER/utils'
 import _ from 'lodash'
 import { globalConfig } from './componentsConfig'
 export default defineComponent({

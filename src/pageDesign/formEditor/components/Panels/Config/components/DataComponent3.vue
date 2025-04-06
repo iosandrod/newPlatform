@@ -1,9 +1,9 @@
 <script>
-import utils from '@DESIGN/utils'
-import hooks from '@DESIGN/hooks'
+import utils from '@ER/utils'
+import hooks from '@ER/hooks'
 import { computed, defineComponent, resolveComponent, ref, unref, watch } from 'vue'
-import { dragGableWrap } from '@DESIGN/formEditor/components/Layout/DragGable'
-import Icon from '@DESIGN/icon'
+import { dragGableWrap } from '@ER/formEditor/components/Layout/DragGable'
+import Icon from '@ER/icon'
 import _ from 'lodash'
 export default {
   name: 'ConfigData3'

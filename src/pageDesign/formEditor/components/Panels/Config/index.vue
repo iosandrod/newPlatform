@@ -1,10 +1,10 @@
 <script>
-import utils from '@DESIGN/utils'
-import hooks from '@DESIGN/hooks'
+import utils from '@ER/utils'
+import hooks from '@ER/hooks'
 import { ref, computed, reactive, watch, onMounted, inject, h } from 'vue'
 import _ from 'lodash'
-import Icon from '@DESIGN/icon'
-import PanelsConfigComponentsPropsPanel from '@DESIGN/formEditor/components/Panels/Config/components/PropsPanel.vue'
+import Icon from '@ER/icon'
+import PanelsConfigComponentsPropsPanel from '@ER/formEditor/components/Panels/Config/components/PropsPanel.vue'
 import GlobalConfigPanel from './components/GlobalConfigPanel.vue'
 export default {
   name: 'Config',

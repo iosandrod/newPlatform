@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import utils from '@DESIGN/utils'
-import locale from '@DESIGN/formEditor/locale'
+import utils from '@ER/utils'
+import locale from '@ER/formEditor/locale'
 const generateIfFilterOptionsData = (activeTab, fields) => {
   const result = {
     options: [

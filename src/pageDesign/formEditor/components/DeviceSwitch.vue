@@ -1,7 +1,7 @@
 <script>
 import { ref, inject } from 'vue'
-import hooks from '@DESIGN/hooks'
-import Icon from '@DESIGN/icon'
+import hooks from '@ER/hooks'
+import Icon from '@ER/icon'
 export default {
   name: 'er-DeviceSwitch'
 }

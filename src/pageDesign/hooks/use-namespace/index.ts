@@ -12,12 +12,12 @@ const _bem = (
   }
   if (modifier) {
     cls += `--${modifier}`
-  } 
+  }
   return cls
 }
 const statePrefix = 'is-'
-export const useNamespace = (block, Namespace?:any) => {
-  const defaultNamespace = Namespace || inject<any>('Everright').state.Namespace
+export const useNamespace = (block, Namespace?: any) => {
+  const defaultNamespace = Namespace || inject<any>('Everright',{})?.state?.Namespace||'formEditor'
   const namespace = `Everright-${defaultNamespace}`
   const b = (blockSuffix = '') =>
     _bem(namespace, block, blockSuffix, '', '')

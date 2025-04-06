@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js'
-import utils from '@DESIGN/utils'
+import utils from '@ER/utils'
 dayjs.extend(customParseFormat)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isSameOrBefore)
@@ -324,7 +324,6 @@ const listenEvent = (state) => {
       })
       //@ts-ignore
       watch(() => targetFields.map(e => e.options.defaultValue), (values) => {
-        // console.log(operator(values.map((value, index) => validator(rule.if.conditions[index], value, targetFields[index]))))
         switch (type) {
           case 'visible':
             operatingVisible(operator(values.map((value, index) => validator(rule.if.conditions[index], value, targetFields[index]))), rule, state.fields, state.fieldsLogicState)
@@ -344,7 +343,7 @@ const listenEvent = (state) => {
   }
 }
 export const useLogic = (state) => {
-  watch(() => state.logic, () => {
-    listenEvent(state)
-  })
+  // watch(() => state.logic, () => {
+  //   listenEvent(state)
+  // })
 }

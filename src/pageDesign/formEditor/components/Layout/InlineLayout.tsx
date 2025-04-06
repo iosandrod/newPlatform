@@ -1,9 +1,9 @@
 import { defineComponent, resolveComponent, watch, useAttrs, defineAsyncComponent, unref, nextTick, inject } from 'vue'
-import Selection from '@DESIGN/formEditor/components/Selection/selectElement'
+import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable, { dragGableWrap } from './DragGable'
-import hooks from '@DESIGN/hooks'
-import utils from '@DESIGN/utils'
-import { FormEditorContext } from '@DESIGN/type'
+import hooks from '@ER/hooks'
+import utils from '@ER/utils'
+import { FormEditorContext } from '@ER/type'
 export default defineComponent({
   name: 'InlineLayout',
   props: {

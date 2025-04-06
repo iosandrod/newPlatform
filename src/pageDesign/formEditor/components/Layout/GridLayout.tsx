@@ -1,6 +1,6 @@
 import { defineComponent, resolveComponent, watch, useAttrs, unref, inject } from 'vue'
-import hooks from '@DESIGN/hooks'
-import Selection from '@DESIGN/formEditor/components/Selection/selectElement'
+import hooks from '@ER/hooks'
+import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable, { dragGableWrap } from './DragGable'
 export default defineComponent({
   name: 'GridLayout',
