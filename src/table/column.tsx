@@ -8,12 +8,7 @@ const VGroup = VTable.VGroup
 const VText = VTable.VText
 const VImage = VTable.VImage
 const VTag = VTable.VTag
-import {
-  ICustomLayout,
-  ICustomLayoutObj,
-  ICustomRenderElement,
-  ICustomRenderObj,
-} from '@visactor/vtable/es/ts-types'
+import { ICustomLayout, ICustomLayoutObj, ICustomRenderElement, ICustomRenderObj } from '@visactor/vtable/es/ts-types'
 import { nextTick } from 'vue' //
 
 export class Column extends Base {
@@ -41,7 +36,7 @@ export class Column extends Base {
     for (const col of _columns) {
       this.addColumn(col)
     }
-  }
+  } //
   addColumn(col: any) {
     let table = this.table
     let columns = this.columns
@@ -75,7 +70,7 @@ export class Column extends Base {
               () => {
                 //
                 _table.updateIndexArr.add(_index) //
-              },
+              }
             )
           } //
           value = fieldFormat({ row: record, col: this, table: _table })

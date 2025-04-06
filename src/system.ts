@@ -1,7 +1,9 @@
 import { reactive } from "vue";
 import { Client } from "./service/client";
 export class System {
-    login() {
+    systemConfig = {}
+    selectOptions = {}
+    async login() {
 
     }
 }
