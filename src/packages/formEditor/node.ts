@@ -1,5 +1,7 @@
 import { Base } from '@/base/base'
+import { Form } from '@ER/form'
 import { Context } from '@ER/utils/Context'
+import utils from '@ER/utils'
 let reg = /^(input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform)$/
 const excludes = [
   'grid',
@@ -14,13 +16,46 @@ const excludes = [
   'divider',
   'inline',
 ]
+type ContextNode = {
+  form: Form
+}
+//@ts-ignore
 export class Node extends Base {
+  form: Form
+  context: Context
   type: string
-  context: Context //
   list?: Node[]
   rows?: Node[]
   columns?: Node[]
   children?: Node[]
+  constructor(config, form) {
+    super()
+    Object.entries(config).forEach(([key, value]) => {
+      this[key] = value
+    })
+    //@ts-ignore
+    Object.defineProperties(this, 'form', {
+      value: form,
+      writable: false,
+      enumerable: false,
+      configurable: true,
+    })
+    this.setNodes()
+    this.addContext()
+  }
+  setNodes() {
+    let children = this.getChildren()
+    for (const [key, value] of Object.entries(children)) {
+      if (value instanceof Node) {
+      } else {
+        children[key] = new Node(value, this.form) //
+      }
+    }
+  }
+  addContext() {
+    let children = this.getChildren()
+    children.forEach((e) => {})
+  }
   getFlatChildren() {
     let arr: any[] = []
     let items = this.getChildren() //
@@ -57,4 +92,46 @@ export class Node extends Base {
     })
     return arr
   }
+  getNodeProps() {
+    let obj = {
+      type: this.type,
+      data: this.getData(),
+    }
+  }
+  getData() {
+    let type = this.getType()
+    if (type == 'inline') {
+    }
+  }
+  getList() {}
+  getTab() {
+    return
+  }
+  getHandle() {
+    return '.ER-handle'
+  }
+  getClass() {} //
+  getGroup() {}
+  getPlugins() {}
+  getPluginName() {}
+  syncWidthByPlatform() {}
+  wrapElement() {}
+  deepTraversal() {}
+  renderFieldData() {}
+  getAllFields() {}
+  disassemblyData1() {}
+  combinationData1() {}
+  disassemblyData2() {}
+  combinationData2() {}
+  checkIslineChildren() {}
+  pickfields() {}
+  fieldLabel() {}
+  transferData() {}
+  transferLabelPath() {}
+  isNull() {}
+  repairLayout() {}
+  checkIsInSubform() {}
+  getSubFormValues() {}
+  findSubFormAllFields() {}
+  processField() {}
 }

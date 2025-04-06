@@ -45,8 +45,7 @@ export default defineComponent({
       }, //
       ([items, len], [oldItems, oldLen]) => {
         if (items != oldLen) {
-          //
-          fIns.setItems(items) //
+          fIns.setItems(items) ////
         } else {
           //@ts-ignore
           let additems = items.filter((item) => !oldItems.includes(item)) //

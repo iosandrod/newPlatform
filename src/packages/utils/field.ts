@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { nanoid } from './nanoid'
-const fieldsRe = /^(input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform)$/
+const fieldsRe = /^(input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform|entity)$/
 //
 class LayoutNode {}
 const deepTraversal = (node, fn) => {
@@ -11,7 +11,6 @@ const deepTraversal = (node, fn) => {
   })
 }
 const wrapElement = (element, fn?: any) => {
-  console.log('wrapElement', element) //
   const result = element
   deepTraversal(result, (node) => {
     if (Array.isArray(node)) return false
@@ -137,7 +136,7 @@ const combinationData1 = (data) => {
 }
 const combinationData2 = (list, fields) => {
   const fn = (nodes, node, currentIndex) => {
-    const cur = _.find(fields, { id: node })
+    const cur = fields.find(item => item.id === node);
     if (!_.isEmpty(cur)) {
       nodes[currentIndex] = cur
     }

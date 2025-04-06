@@ -5,7 +5,7 @@ import erFormPreview from './preview.jsx'
 import erFormConfig from './config.jsx' 
 import erGeneratorData from './generatorData.js'
 import * as erComponentsConfig from './componentsConfig.js'
-import utils from '@ER/utils'
+import utils from '@ER/utils/index.js'
 /*
 * er-form-editor
 * er-form-preview 

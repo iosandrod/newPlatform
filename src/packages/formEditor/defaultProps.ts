@@ -11,7 +11,6 @@ export default {
   },
   fieldsConfig: {
     type: Array,
-    default: () => createFieldConfig(),
   },
   globalConfig: {
     type: Object,

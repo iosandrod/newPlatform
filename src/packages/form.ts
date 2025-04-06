@@ -8,13 +8,35 @@ import { Field, Layout, Table, TableRow } from './layoutType'
 import { Base } from '@/base/base'
 import { FormInstance, FormRules } from 'element-plus'
 import hooks from '@ER/hooks'
-import { createGlobalConfig, fieldsConfig } from './formEditor/componentsConfig'
+import {
+  createFieldConfig,
+  createGlobalConfig,
+  fieldsConfig,
+} from './formEditor/componentsConfig'
 import _ from 'lodash'
 import utils from '@ER/utils'
 import generatorData from './formEditor/generatorData'
+import { Node } from './formEditor/node'
 //转换数据
 //
-
+let prevEl: any = ''
+let prevSortable: any = ''
+let inserRowIndex: any = ''
+// let prevRows = ''
+let inserColIndex = ''
+const layoutType = [
+  'grid',
+  'col',
+  'table',
+  'tr',
+  'td',
+  'tabs',
+  'tabsCol',
+  'collapse',
+  'collapseCol',
+  'divider',
+  'inline',
+]
 export class Form extends Base {
   lang: any = {}
   t: any
@@ -165,6 +187,12 @@ export class Form extends Base {
   }
   setCurrentDesign(status: boolean = true) {
     this.isDesign = status //
+    // let d = this.getData()
+  }
+  runTestMethod(){
+    // let d=this.getData()
+    let d=this.getLayoutData()//
+    console.log(d)
   }
   init() {
     super.init()
@@ -178,9 +206,13 @@ export class Form extends Base {
       this.setData(_data) //
     }
     this.setItems(items) //
+    nextTick(() => {
+      // this.setLayoutData(JSON.parse(JSON.stringify(testData1))) //
+    })
   } //
-  setState(state) {
-    // this.state = state
+  setState(state) {}
+  getDesignFieldConfig() {
+    return createFieldConfig()
   }
   initState() {
     let state = {
@@ -502,7 +534,14 @@ export class Form extends Base {
       fn && fn(copyData)
     }
   }
-
+  setNodes(config: { lists: any[] }) {
+    const lists = config.lists
+    const _nodes = lists.map((e) => {
+      let _node = new Node(e, this)
+      return _node
+    })
+    this.state.store = _nodes //
+  }
   setLayoutData(data) {
     const state = this.state
     if (data == null) {
@@ -768,6 +807,308 @@ export class Form extends Base {
       isSelectTable: createTypeChecker(['table']),
       isSelectSubform: createTypeChecker(['subform']),
       checkTypeBySelected,
+    }
+  }
+  getWindowScrollingElement() {
+    const scrollingElement = document.scrollingElement
+    if (scrollingElement) {
+      return scrollingElement
+    } else {
+      return document.documentElement
+    }
+  }
+  getParentAutoScrollElement(el, includeSelf) {
+    // skip to window
+    if (!el || !el.getBoundingClientRect)
+      return this.getWindowScrollingElement()
+    let elem = el
+    let gotSelf = false
+    do {
+      // we don't need to get elem css if it isn't even overflowing in the first place (performance)
+      if (
+        elem.clientWidth < elem.scrollWidth ||
+        elem.clientHeight < elem.scrollHeight
+      ) {
+        const elemCSS = this.css(elem)
+        if (
+          (elem.clientWidth < elem.scrollWidth &&
+            (elemCSS.overflowX === 'auto' || elemCSS.overflowX === 'scroll')) ||
+          (elem.clientHeight < elem.scrollHeight &&
+            (elemCSS.overflowY === 'auto' || elemCSS.overflowY === 'scroll'))
+        ) {
+          if (!elem.getBoundingClientRect || elem === document.body)
+            return this.getWindowScrollingElement()
+
+          if (gotSelf || includeSelf) return elem
+          gotSelf = true
+        }
+      }
+      /* jshint boss:true */
+      // eslint-disable-next-line
+    } while ((elem = elem.parentNode))
+
+    return this.getWindowScrollingElement()
+  }
+  css(el, prop?: any, val?: any) {
+    const style = el && el.style
+
+    if (style) {
+      // eslint-disable-next-line
+      if (val === void 0) {
+        if (document.defaultView && document.defaultView.getComputedStyle) {
+          val = document.defaultView.getComputedStyle(el, '')
+        } else if (el.currentStyle) {
+          val = el.currentStyle
+        }
+        // eslint-disable-next-line
+        return prop === void 0 ? val : val[prop]
+      } else {
+        if (!(prop in style) && prop.indexOf('webkit') === -1) {
+          prop = '-webkit-' + prop
+        }
+
+        style[prop] = val + (typeof val === 'string' ? '' : 'px')
+      }
+    }
+  }
+  disableBothSides(ER) {
+    //
+    return ER.props.layoutType === 1 && ER.state.platform === 'mobile'
+  }
+  getDirection1(target, originalEvent) {
+    let direction: any = ''
+    const Y = this.getOffset(target, 'offsetTop')
+    const scrollEl = this.getParentAutoScrollElement(target, true)
+    const clientY = originalEvent.clientY + scrollEl.scrollTop
+    const h = target.offsetHeight
+    if (clientY > Y && clientY < Y + h / 2) {
+      direction = 5
+    } else {
+      direction = 6
+    }
+    return direction
+  }
+  getOffset = (el, key) => {
+    let offset = 0
+    let parent = el
+
+    while (parent) {
+      offset += parent[key]
+      parent = parent.offsetParent
+    }
+
+    return offset
+  }
+  lastChild(el, selector?: any) {
+    let last = el.lastElementChild
+    // eslint-disable-next-line
+    while (
+      last &&
+      (this.css(last, 'display') === 'none' ||
+        (selector && !this.matches(last, selector)))
+    ) {
+      last = last.previousElementSibling
+    }
+    return last || null
+  }
+  matches(/** HTMLElement */ el, /** String */ selector) {
+    if (!selector) return
+
+    selector[0] === '>' && (selector = selector.substring(1))
+
+    if (el) {
+      try {
+        if (el.matches) {
+          return el.matches(selector)
+        } else if (el.msMatchesSelector) {
+          return el.msMatchesSelector(selector)
+        } else if (el.webkitMatchesSelector) {
+          return el.webkitMatchesSelector(selector)
+        }
+      } catch (_) {
+        return false
+      }
+    }
+
+    return false
+  }
+  getDirection0(target, originalEvent) {
+    let direction: any = ''
+    const X = this.getOffset(target, 'offsetLeft')
+    const Y = this.getOffset(target, 'offsetTop')
+    const scrollEl = this.getParentAutoScrollElement(target, true)
+    const clientX = originalEvent.clientX
+    const clientY = originalEvent.clientY + scrollEl.scrollTop
+    const w = target.offsetWidth
+    const h = target.offsetHeight
+    const x1 = X
+    const y1 = -Y
+    const x2 = x1 + w
+    const y2 = y1 - h
+    const x0 = (x1 + x2) / 2
+    const y0 = (y1 + y2) / 2
+    const k = (y2 - y1) / (x2 - x1)
+    const x = clientX
+    const y = -clientY
+    const K = (y - y0) / (x - x0)
+    if (k < K && K < -k) {
+      if (x > x0) {
+        direction = 2
+      } else {
+        direction = 4
+      }
+    } else {
+      if (y > y0) {
+        direction = 1
+      } else {
+        direction = 3
+      }
+    }
+    return direction
+  }
+  clearBorder(el) {
+    const classNames = ['top', 'bottom', 'left', 'right']
+    classNames.forEach((e) => {
+      el.classList.remove(`drag-line-${e}`)
+    })
+  }
+  setBorder(el, className) {
+    this.clearBorder(el)
+    el.classList.add(className)
+  }
+  setStates(newTarget, ev, ER) {
+    const {
+      activeSortable: {
+        constructor: { utils },
+        options: { dataSource },
+        el: {
+          __draggable_component__: { list },
+        },
+      },
+      activeSortable,
+      target,
+      originalEvent,
+      dragEl,
+      sortable: {
+        el,
+        el: {
+          __draggable_component__: {
+            //list是横向的东西
+            //columns是纵向的
+            list: targetList, //获取到sort的dom的list变量
+          },
+        },
+      },
+      sortable,
+    } = ev
+    let _targetList = ev.sortable.el.__draggable_component__
+    const targetContainer = el.parentNode
+    const direction = this.disableBothSides(ER)
+      ? this.getDirection1(newTarget, originalEvent)
+      : this.getDirection0(newTarget, originalEvent)
+    const cols = newTarget.parentNode.children
+    const colIndex = utils.index(newTarget)
+    const rows = targetContainer.parentNode.children
+    const rowIndex = utils.index(targetContainer)
+    if (/^(2|4)$/.test(direction)) {
+      if (targetList.length === ER.props.inlineMax && !el.contains(dragEl)) {
+        return false
+      }
+    }
+    if (/^(1)$/.test(direction)) {
+      if (ER.state.store.length > 0 && /^(root)$/.test(el.dataset.layoutType)) {
+        return false
+      }
+    }
+    switch (direction) {
+      case 1:
+        if (
+          (list.length === 1 &&
+            rows[rowIndex - 1] &&
+            rows[rowIndex - 1].contains(dragEl)) ||
+          !sortable.el.parentNode.parentNode.__draggable_component__
+        ) {
+          prevEl = ''
+          return false
+        }
+        prevSortable =
+          sortable.el.parentNode.parentNode.__draggable_component__._sortable
+        prevEl = targetContainer
+        inserRowIndex = utils.index(prevEl)
+        this.setBorder(prevEl, 'drag-line-top')
+        break
+      case 2:
+        if (cols[utils.index(target) + 1] !== dragEl) {
+          if (colIndex === targetList.length - 1) {
+            prevEl = newTarget
+            prevSortable = sortable
+            inserColIndex = utils.index(prevEl) + 1
+            this.setBorder(prevEl, 'drag-line-right')
+          } else {
+            prevSortable = sortable
+            prevEl = cols[colIndex + 1]
+            inserColIndex = utils.index(prevEl)
+            this.setBorder(prevEl, 'drag-line-left')
+          }
+        }
+        break
+      case 3:
+        if (sortable.el.dataset.layoutType === 'root') {
+          return false
+        }
+        prevSortable =
+          sortable.el.parentNode.parentNode.__draggable_component__._sortable
+        if (rowIndex === rows.length - 1) {
+          prevEl = targetContainer
+          this.setBorder(prevEl, 'drag-line-bottom')
+        } else {
+          prevEl = rows[rowIndex + 1]
+          if (list.length === 1 && rows[rowIndex + 1].contains(dragEl)) {
+            prevEl = ''
+            return false
+          }
+          this.setBorder(prevEl, 'drag-line-top')
+        }
+        inserRowIndex = utils.index(targetContainer) + 1
+        break
+      case 4:
+        if (cols[utils.index(target) - 1] !== dragEl) {
+          prevEl = newTarget
+          prevSortable = sortable
+          inserColIndex = utils.index(prevEl)
+          this.setBorder(prevEl, 'drag-line-left')
+        }
+        break
+      case 5:
+        if (targetList.length === ER.props.inlineMax && !el.contains(dragEl)) {
+          return false
+        }
+        if (cols[utils.index(target) - 1] !== dragEl) {
+          prevEl = newTarget
+          prevSortable = sortable
+          inserColIndex = utils.index(prevEl)
+          this.setBorder(prevEl, 'drag-line-top')
+        }
+        break
+      case 6:
+        // console.log('下')
+        if (targetList.length === ER.props.inlineMax && !el.contains(dragEl)) {
+          return false
+        }
+        if (cols[utils.index(target) + 1] !== dragEl) {
+          if (colIndex === targetList.length - 1) {
+            prevEl = newTarget
+            prevSortable = sortable
+            inserColIndex = utils.index(prevEl) + 1
+            this.setBorder(prevEl, 'drag-line-bottom')
+          } else {
+            prevSortable = sortable
+            prevEl = cols[colIndex + 1]
+            inserColIndex = utils.index(prevEl)
+            this.setBorder(prevEl, 'drag-line-top')
+          }
+        }
+        break
     }
   }
 }

@@ -282,8 +282,8 @@ export class Table extends Base {
     }
   }
   initEventListener() {
-    scroll(this)
-    click_cell(this)
+    scroll(this) //
+    click_cell(this) //
     selected_cell(this)
     contextmenu_cell(this) //
     sort_click(this)
