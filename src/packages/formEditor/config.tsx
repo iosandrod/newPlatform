@@ -1,5 +1,5 @@
-import { defineComponent, } from "vue";
-import defaultProps from "./defaultProps";
+import { defineComponent, inject } from 'vue'
+import defaultProps from './defaultProps'
 import { defineProps, ref, reactive, computed, provide, getCurrentInstance, watch, nextTick, onMounted } from 'vue'
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/index.vue'
 import hooks from '@ER/hooks'
@@ -11,20 +11,21 @@ export default defineComponent({
   props: {
     field: {
       type: [Object, String],
-      required: true 
+      required: true,
     },
     fields: {
-      type: Array, 
-      default: () => ([])
+      type: Array,
+      default: () => [],
     },
-    ...defaultProps
+    ...defaultProps,
   },
   emits: ['listener'],
   setup(props: any, { emit, expose, slots }) {
     const layout = {
       pc: [],
-      mobile: []
+      mobile: [],
     }
+    let formIns = inject('formIns') //
     const state = reactive({
       store: [],
       selected: {},
@@ -35,7 +36,7 @@ export default defineComponent({
       data: {},
       mode: 'config',
       fields: props.fields,
-      logic: {}
+      logic: {},
     })
     const element = ref('')
     const ns = hooks.useNamespace('Main', state.Namespace)
@@ -59,7 +60,7 @@ export default defineComponent({
     const fireEvent = (type, data) => {
       emit('listener', {
         type,
-        data
+        data,
       })
     }
     provide('Everright', {
@@ -68,32 +69,38 @@ export default defineComponent({
       props,
       setSelection,
       switchPlatform,
-      fireEvent
+      fireEvent,
     })
-    watch(() => props.field, (newVal) => {
-      if (newVal !== 'root') {
-        state.store[0] = newVal
-        utils.addContext({node:newVal,parent: state.store})
+    watch(
+      () => props.field,
+      (newVal) => {
+        if (newVal !== 'root') {
+          state.store[0] = newVal
+          utils.addContext({ node: newVal, parent: state.store, form: formIns })
+        }
+        setSelection(newVal)
+      },
+      {
+        immediate: true,
       }
-      setSelection(newVal)
-    }, {
-      immediate: true
-    })
+    )
     expose({
       switchPlatform(platform) {
         state.platform = platform
+      },
+    })
+    watch(
+      () => state.selected,
+      (newVal) => {
+        fireEvent('changeParams', _.cloneDeep(newVal))
+      },
+      {
+        deep: true,
+        immediate: true,
       }
-    })
-    watch(() => state.selected, (newVal) => {
-      fireEvent('changeParams', _.cloneDeep(newVal))
-    }, {
-      deep: true,
-      immediate: true
-    })
+    )
     return () => {
-      return (
-        <ConfigPanel mode="config"></ConfigPanel>
-      )
+      return <ConfigPanel mode="config"></ConfigPanel>
     }
-  }
+  },
 })

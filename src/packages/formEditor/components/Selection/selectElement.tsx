@@ -157,52 +157,22 @@ export default {
     const formIns: Form = inject('formIns') //
     const actionStrategies = {
       delete: () => {
-        if (ER.props.delHandle(props.data) === false) return false
-        props.data.context.delete()
-        utils.deepTraversal(props.data, (node) => {
-          if (utils.checkIsField(node)) {
-            ER.delField(node)
-          }
-        })
-        if (/^(radio|checkbox|select)$/.test(props.data.type)) {
-          delete state.data[props.data.options.dataKey]
-        }
-        if (props.parent.length > 0) {
-          const index = props.parent.indexOf(props.data)
-          setSelection(index === props.parent.length ? props.parent[index - 1] : props.parent[index])
-        } else {
-          setSelection('root')
-        }
+        formIns.deleteNode(props)
       },
       copy: () => {
-        if (ER.props.copyHandle(props.data) === false) return false
-        props.data.context.copy()
-        const index = props.parent.indexOf(props.data)
-        const copyData = props.parent[index + 1]
-        setSelection(copyData)
-        utils.deepTraversal(copyData, (node) => {
-          ER.addFieldData(node, true)
-          if (utils.checkIsField(node)) {
-            ER.addField(node)
-          }
-        })
+        formIns.copyNode(props) //
       },
       tableInsertRow: () => {
-        // console.log(props.data.context.columns, 'props.data.context.columns');
         //@ts-ignore
-        _.last(props.data.context.columns[0]).context.insert('bottom')
+        formIns.tableInsertRow(props)
       },
       tableInsertCol: () => {
         //@ts-ignore
-        _.last(props.data.context.columns)[0].context.insert('right')
+        formIns.tableInsertCol(props)
       },
 
       top: () => {
-        let parent = props.data.context.parent
-        if (/^(inline|tr)$/.test(parent.type)) {
-          parent = parent.context.parent
-        }
-        setSelection(Array.isArray(parent) ? 'root' : parent)
+        formIns.topNode(props) //
       },
 
       plus: () => {

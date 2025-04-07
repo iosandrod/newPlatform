@@ -28,18 +28,13 @@ export default defineComponent({
       //添加一个layout
       const newElement = reactive(ER.wrapElement(_.cloneDeep(element)))
       state.store.push(newElement)
-      utils.addContext({ node: newElement, parent: state.store })
+      utils.addContext({ node: newElement, parent: state.store, form: formIns })
       nextTick(() => {})
     }
     const slots = {
       item: ({ element }) => {
         return (
-          <li
-            class={[
-              ER.props.checkFieldsForNewBadge(element) ? ns.is('new') : '',
-            ]}
-            onClick={() => addStore(element)}
-          >
+          <li class={[ER.props.checkFieldsForNewBadge(element) ? ns.is('new') : '']} onClick={() => addStore(element)}>
             <Icon class={[ns.e('icon')]} icon={element.icon}></Icon>
             <span>{utils.fieldLabel(t, element)}</span>
           </li>

@@ -323,7 +323,7 @@ const resetStates = () => {
 }
 function ControlInsertionPlugin(ER) {
   class ControlInsertionPlugin {
-    dragStart(e) {}
+    dragStart(e) { }
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       if (!prevEl || !e.activeSortable) {
@@ -378,6 +378,7 @@ function ControlInsertionPlugin(ER) {
         utils.addContext({
           node: store[inserRowIndex],
           parent: prevSortable.options.parent,
+          form: ER.formIns//
         })
       }
 
@@ -399,11 +400,11 @@ function ControlInsertionPlugin(ER) {
           node: newElement,
           parent:
             prevSortable.options.parent[
-              sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
             ],
+          form: ER.formIns
         })
       }
-
       // 如果有行插入或列插入操作，则遍历新元素，并检查是否需要额外的字段处理
       if (inserColIndex !== '' || inserRowIndex !== '') {
         // console.log(ER, 'testERRR')//
@@ -467,10 +468,13 @@ function ControlInsertionPlugin(ER) {
       const direction = ''
       const targetContainer = el.parentNode
       const targetOnlyOne = targetList.length === 1
+      // debugger//
+      const options = sortable.options
       //@ts-ignore
       let newTarget = SortableUtils.closest(
         target,
-        this.options.draggable,
+        // this.options.draggable,
+        options.draggable,
         sortable.el,
       )
       if (dragEl.contains(newTarget)) {
@@ -490,8 +494,8 @@ function ControlInsertionPlugin(ER) {
             target.dataset.layoutType === 'root'
               ? target
               : newTarget.__draggable_component__
-              ? newTarget.children[0]
-              : newTarget.parentNode
+                ? newTarget.children[0]
+                : newTarget.parentNode
           prevSortable = state._sortable
           inserRowIndex = 0
           setBorder(prevEl, 'drag-line-top')

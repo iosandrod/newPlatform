@@ -4,13 +4,16 @@ import _ from 'lodash'
 import { nanoid } from 'nanoid'
 import utils from '@ER/utils'
 import { wrapElement } from './field'
+import { Form } from '@ER/form'
 export type ContextNode = any
 export type ContextOptions = {
   node: any
   parent
   fn?: any
+  form?: any
 }
 export class Context {
+  form: Form
   node: ContextNode
   parent: ContextNode | ContextNode[]
   arr: ContextNode[]
@@ -279,7 +282,7 @@ export class Context {
         result = node
         break
       default:
-        result = parent.context.root
+        result = parent?.context?.root//
     }
     return result
   }
@@ -314,6 +317,7 @@ export class Context {
     arr.splice(index + 1, 0, newNode)
   }
   addContext(node, parent?: any, fn?: any) {
+
     if (typeof node != 'object') {
       return
     }
@@ -916,7 +920,7 @@ export class Context {
   del(type) {
     let node = this.node
 
-    const {
+    const {//
       context: { root, col, row },
     } = node
     const nodes = this.getNodes(node, type === 'column' ? 'colspan' : 'rowspan') //
@@ -934,5 +938,8 @@ export class Context {
         })
         break
     }
+  }
+  getShowIcon() {
+    // const form=this
   }
 }

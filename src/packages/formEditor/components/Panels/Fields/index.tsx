@@ -7,7 +7,7 @@ import Icon from '@ER/icon'
 import ControlInsertionPlugin from '../../Layout/ControlInsertionPlugin'
 import { nanoid } from 'nanoid'
 import { ElAside } from 'element-plus'
-import {menuProps} from 'element-plus'
+import { menuProps } from 'element-plus'
 
 export default defineComponent({
   name: 'Fields',
@@ -19,29 +19,21 @@ export default defineComponent({
   props: {
     type: {
       type: Number,
-      default: 1
+      default: 1,
     },
-    visible: {}
+    visible: {},
   },
   setup(props) {
     const ER: any = inject('Everright')
     const ns = hooks.useNamespace('Fields')
-    const {
-      t
-    } = hooks.useI18n()
-    const {
-      state,
-      setSelection
-    } = hooks.useTarget()
+    const { t } = hooks.useI18n()
+    const { state, setSelection } = hooks.useTarget()
     const addStore = (element) => {
-      //添加一个layout
       const newElement = reactive(ER.wrapElement(_.cloneDeep(element)))
       state.store.push(newElement)
-      utils.addContext({ node: newElement, parent: state.store })
-      nextTick(() => {
-        
-      })
-    }
+      utils.addContext({ node: newElement, parent: state.store, form: formIns })
+      nextTick(() => {})
+    } //
     const slots = {
       item: ({ element }) => {
         return (
@@ -50,7 +42,7 @@ export default defineComponent({
             <span>{utils.fieldLabel(t, element)}</span>
           </li>
         )
-      }
+      },
     }
     const handleClone = (element) => {
       // return wrapElement(element)
@@ -67,14 +59,13 @@ export default defineComponent({
       dataSource: 'block',
       direction: 'horizontal',
       scroll: false,
-      plugins: [ControlInsertionPlugin(ER)]
+      plugins: [ControlInsertionPlugin(ER)],
     }
     return () => {
       return (
         <ElAside class={[ns.b()]} width={ER.props.fieldsPanelWidth}>
           <el-scrollbar>
-            <el-menu
-              default-openeds={ER.props.fieldsPanelDefaultOpeneds}>
+            <el-menu default-openeds={ER.props.fieldsPanelDefaultOpeneds}>
               {ER.props.fieldsConfig.map((element, index) => {
                 return (
                   <el-sub-menu
@@ -84,27 +75,10 @@ export default defineComponent({
                         return t(`er.fields.${element.id}`)
                       },
                       default() {
-                        return (
-                          <dragGableWrap
-                            class={[ns.e('dragContent')]}
-                            list={element.list}
-                            clone={handleClone}
-                            tag="ul"
-                            sort={false}
-                            move={handleMove}
-                            {...dragOptions}
-                            group={
-                              { name: `er-Canves-${id}`, pull: 'clone', put: false }
-                            }
-                            item-key="null"
-                            v-slots={slots}
-                          >
-                          </dragGableWrap>
-                        )
-                      }
+                        return <dragGableWrap class={[ns.e('dragContent')]} list={element.list} clone={handleClone} tag="ul" sort={false} move={handleMove} {...dragOptions} group={{ name: `er-Canves-${id}`, pull: 'clone', put: false }} item-key="null" v-slots={slots}></dragGableWrap>
+                      },
                     }}
-                  >
-                  </el-sub-menu>
+                  ></el-sub-menu>
                 )
               })}
             </el-menu>
@@ -112,6 +86,5 @@ export default defineComponent({
         </ElAside>
       )
     }
-  }
-}
-)
+  },
+})

@@ -1,15 +1,4 @@
-import {
-  defineComponent,
-  resolveComponent,
-  watch,
-  useAttrs,
-  useSlots,
-  unref,
-  nextTick,
-  ref,
-  inject,
-  reactive,
-} from 'vue'
+import { defineComponent, resolveComponent, watch, useAttrs, useSlots, unref, nextTick, ref, inject, reactive } from 'vue'
 import { isHTMLTag } from '@vue/shared'
 // import DragGable from 'vuedraggable'
 import DragGable from '@ER/vueDraggable/vuedraggable'
@@ -25,6 +14,7 @@ import LayoutSubformLayout from './SubformLayout'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import ControlInsertionPlugin from './ControlInsertionPlugin'
 import { typeMap } from '../FormTypes'
+import { Form } from '@ER/form'
 const dragGableWrap = defineComponent({
   inheritAttrs: false,
   name: 'customDragGable',
@@ -40,9 +30,7 @@ const dragGableWrap = defineComponent({
       if (unref(isEditModel)) {
         node = <dragGable {...attrs}>{useSlots()}</dragGable>
       } else {
-        const tag = isHTMLTag(attrs.tag)
-          ? attrs.tag
-          : resolveComponent(attrs.tag)
+        const tag = isHTMLTag(attrs.tag) ? attrs.tag : resolveComponent(attrs.tag)
         const { item } = useSlots()
         node = (
           <tag {...attrs.componentData}>
@@ -87,7 +75,7 @@ export default defineComponent({
     const handleMove = (e) => {
       return true
     } //
-    const formIns: any = inject('formIns')
+    const formIns: Form = inject('formIns')
     //@ts-ignore
     const id = formIns.id
     let pluginName = formIns.getPluginName()
@@ -97,6 +85,12 @@ export default defineComponent({
         name: `er-Canves-${id}`,
       },
       parent: props.parent,
+      // onDrop: (evt, originalEvent) => {
+      //   console.log('drop') //
+      // },
+      // onDrop: (e) => {
+      //   formIns._onDrop(e)
+      // },
       plugins: [ControlInsertionPlugin(ER)],
       // ControlInsertion: true,
       [pluginName]: true,
@@ -107,7 +101,7 @@ export default defineComponent({
         () => state.platform,
         () => {
           componentMap = {}
-        },
+        }
       )
       return {
         findComponent(type, element) {
@@ -131,7 +125,7 @@ export default defineComponent({
             // }) //
             info = componentMap[type + element] //
           }
-          console.log(info, 'info')//
+          console.log(info, 'info') //
           return info
         },
       }
@@ -147,66 +141,23 @@ export default defineComponent({
         // console.log(element,'testEl')//
         switch (element.type) {
           case 'grid':
-            node = (
-              <LayoutGridLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutGridLayout>
-            )
+            node = <LayoutGridLayout key={element.id} data={element} parent={props.data}></LayoutGridLayout>
             break
           case 'table':
-            node = (
-              <LayoutTableLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTableLayout>
-            )
+            node = <LayoutTableLayout key={element.id} data={element} parent={props.data}></LayoutTableLayout>
             break
           case 'tabs':
-            node = (
-              <LayoutTabsLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTabsLayout>
-            )
+            node = <LayoutTabsLayout key={element.id} data={element} parent={props.data}></LayoutTabsLayout>
             break
           case 'collapse':
-            node = (
-              <LayoutCollapseLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutCollapseLayout>
-            )
+            node = <LayoutCollapseLayout key={element.id} data={element} parent={props.data}></LayoutCollapseLayout>
             break
           case 'inline':
-            node = (
-              <LayoutInlineLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutInlineLayout>
-            )
+            node = <LayoutInlineLayout key={element.id} data={element} parent={props.data}></LayoutInlineLayout>
             break
           case 'subform':
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
-              node = (
-                <LayoutSubformLayout
-                  key={element.id}
-                  data={element}
-                  parent={props.data}
-                ></LayoutSubformLayout>
-              )
+            if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
+              node = <LayoutSubformLayout key={element.id} data={element} parent={props.data}></LayoutSubformLayout>
             }
             break
           default:
@@ -230,14 +181,7 @@ export default defineComponent({
             // }, 1000)
             const rules = formitem?.getValidateRoles() || [] //
             let TypeComponent = ''
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
+            if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
               TypeComponent = load.findComponent('FormTypes', element.type)
               const params = {
                 data: element,
@@ -253,48 +197,22 @@ export default defineComponent({
                 const prop = formitem?.getField()
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
                     {element.type !== 'divider' ? (
                       //@ts-ignore
                       <el-form-item {...typeProps} prop={prop}>
-                        <TypeComponent
-                          key={element.id}
-                          data={element}
-                          params={typeProps}
-                        ></TypeComponent>
+                        <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>
                       </el-form-item>
                     ) : (
-                      <TypeComponent
-                        key={element.id}
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
+                      <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>
                     )}
                   </Selection>
                 )
               } else {
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    <TypeComponent
-                      key={element.id}
-                      data={element}
-                      params={typeProps}
-                    ></TypeComponent>
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
+                    <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>
                   </Selection>
                 )
               }

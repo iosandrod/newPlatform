@@ -38,8 +38,10 @@ const layoutType = [
   'inline',
 ]
 export class Form extends Base {
+  formIns?: any
   lang: any = {}
   t: any
+  form?: any
   state: any
   isShow: boolean = true
   isDesign = true //
@@ -100,9 +102,14 @@ export class Form extends Base {
   _pcLayout: any = null
   _mobileLayout: any = null
   mobileLayout: any[] = []
+  props?: any
   constructor(config) {
     super()
     this.config = config
+    //@ts-ignore
+    this.props = config
+    //@ts-ignore
+    this.formIns = this
     this.init()
   } //
   getButtons() {
@@ -132,6 +139,224 @@ export class Form extends Base {
       this.setLayoutData(obj) //
       //   nextTick(() => {
       //   })
+    }
+  }
+  getDragElement(node) {
+    return node.__draggable_context?.element
+  }
+
+  resetStates() {
+    if (prevEl) {
+      this.clearBorder(prevEl)
+    }
+    prevEl = prevSortable = inserColIndex = inserRowIndex = ''
+  }
+  // setBorder  (el, className) {
+  //   this.clearBorder(el)
+  //   el.classList.add(className)
+  // }
+  _onDrop(e) {
+    let ER = this
+    if (!prevEl || !e.activeSortable) {
+      return false
+    }
+    // 判断当前拖拽的元素是否是 'block' 类型
+    const isBlock =
+      _.get(e, 'activeSortable.options.dataSource', false) === 'block'
+    // 从事件对象中获取拖拽的元素 (dragEl) 和目标元素 (target)
+    const { dragEl, target } = e //
+    // 获取拖拽元素的真实DOM结构
+    const oldEl = this.getDragElement(dragEl)
+    // 克隆并包装拖拽的元素，以便插入到新位置
+    // console.log(oldEl, 'testOld')//
+    const newElement = ER.wrapElement(
+      _.cloneDeep(oldEl),
+      inserRowIndex !== '',
+      true,
+      isBlock,
+    )
+    // 如果不是 'block' 类型的元素，并且原始元素有 context，则删除该 context
+    if (!isBlock) {
+      if (oldEl.context) {
+        let _context = oldEl.context
+        let flatNode = _context.getFlattenNodes()
+        let ids = flatNode.map((node) => node.id)
+        let next = Array.isArray(prevSortable.options.parent)
+          ? prevSortable.options.parent
+          : [prevSortable.options.parent] //is Array
+        let _ids = next.map((node) => node.id)
+        if (_ids.some((id) => ids.includes(id))) {
+          this.resetStates()
+          return
+        }
+        oldEl.context.delete()
+      }
+    }
+
+    if (inserRowIndex !== '') {
+      let store = []
+      // 判断是否是 'subform' 类型的父级元素，并获取正确的存储数组
+      if (prevSortable.options.parent.type === 'subform') {
+        store = prevSortable.options.parent.list[0]
+      } else {
+        store = Array.isArray(prevSortable.options.parent)
+          ? prevSortable.options.parent
+          : prevSortable.options.parent.list
+      }
+      // 在指定的索引位置插入新元素
+      store.splice(inserRowIndex, 0, newElement)
+      // 关联新元素的上下文信息
+      utils.addContext({
+        node: store[inserRowIndex],
+        parent: prevSortable.options.parent,
+        form: ER.formIns//
+      })
+    }
+
+    // 处理列插入逻辑
+    if (inserColIndex !== '') {
+      const {
+        el: {
+          __draggable_component__: { list },
+        },
+        el,
+        constructor: { utils: sortableUtils },
+      } = prevSortable
+
+      // 在指定的索引位置插入新元素
+      list.splice(inserColIndex, 0, newElement)
+
+      // 关联新元素的上下文信息
+      utils.addContext({
+        node: newElement,
+        parent:
+          prevSortable.options.parent[
+          sortableUtils.index(prevSortable.el.parentNode)
+          ],
+        form: ER.formIns
+      })
+    }
+    // 如果有行插入或列插入操作，则遍历新元素，并检查是否需要额外的字段处理
+    if (inserColIndex !== '' || inserRowIndex !== '') {
+      // console.log(ER, 'testERRR')//
+      utils.deepTraversal(newElement, (node) => {
+        if (utils.checkIsField(node)) {
+          ER.addField(node) // 添加字段到表单
+        }
+      })
+      // 在下一次DOM更新后，选中新的元素
+      nextTick(() => {
+        ER.setSelection(newElement)
+      })
+    }
+    // 重置拖拽状态
+    this.resetStates()
+  }
+  _dragOver(e) {
+    // debugger//
+    let ER = this
+    e.cancel()
+    this.resetStates()
+    const {
+      activeSortable: {
+        constructor: { utils: SortableUtils },
+        options: { dataSource },
+        el: {
+          __draggable_component__: { list },
+        },
+      },
+      activeSortable,
+      target,
+      originalEvent,
+      dragEl,
+      sortable: {
+        el,
+        el: {
+          __draggable_component__: { list: targetList },
+        },
+      },
+      sortable,
+    } = e
+    // console.log(dataSource, 'testDataSource')//
+    if (sortable.options.dataSource === 'block') {
+      return false
+    }
+    if (target.dataset.layoutType === 'grid') {
+      return false
+    }
+    const dragNode = this.getDragElement(dragEl)
+    const targetNode = this.getDragElement(target)
+    if (
+      (!utils.checkIsField(dragNode) || dragNode.type === 'subform') &&
+      utils.checkIsInSubform(targetNode)
+    ) {
+      return false
+    }
+    if (target.dataset.layoutType === 'subform') {
+      if (!utils.checkIsField(dragNode) || dragNode.type === 'subform') {
+        return false
+      }
+    } //
+    originalEvent.stopPropagation && originalEvent.stopPropagation()
+    const direction = ''
+    const targetContainer = el.parentNode
+    const targetOnlyOne = targetList.length === 1
+    const options = sortable.options
+    //@ts-ignore
+    let newTarget = SortableUtils.closest(
+      target,
+      options.draggable,//@ts-ignore
+      sortable.el,
+    )
+    if (dragEl.contains(newTarget)) {
+      return false
+    }
+    if (
+      /^(grid-col|tabs-col|td|collapse-col|root|inline|subform)$/.test(
+        target.dataset.layoutType,
+      )
+    ) {
+      newTarget = target
+      const state =
+        newTarget.__draggable_component__ ||
+        newTarget.children[0].__draggable_component__
+      if (!state.list.length) {
+        prevEl =
+          target.dataset.layoutType === 'root'
+            ? target
+            : newTarget.__draggable_component__
+              ? newTarget.children[0]
+              : newTarget.parentNode
+        prevSortable = state._sortable
+        inserRowIndex = 0
+        this.setBorder(prevEl, 'drag-line-top')
+      } else {
+        if (/^(root|grid-col)$/.test(target.dataset.layoutType)) {
+          const rows = el.children
+          prevEl = this.lastChild(el)
+          if (prevEl === dragEl.parentNode.parentNode && list.length === 1) {
+            prevEl = ''
+            return false
+          }
+          this.setBorder(prevEl, 'drag-line-bottom')
+          inserRowIndex = rows.length
+          prevSortable = state._sortable
+        }
+        if (target.dataset.layoutType === 'inline') {
+          if (this.disableBothSides(ER)) return false
+          const cols = el.children
+          prevEl = this.lastChild(el)
+          if (prevEl.contains(dragEl) && list.length === 1) {
+            prevEl = ''
+            return false
+          }
+          inserColIndex = cols.length
+          prevSortable = state._sortable
+          this.setBorder(prevEl, 'drag-line-right')
+        }
+      }
+    } else {
+      this.setStates(newTarget, e, ER)
     }
   }
   setPcLayout(layout) {
@@ -189,9 +414,9 @@ export class Form extends Base {
     this.isDesign = status //
     // let d = this.getData()
   }
-  runTestMethod(){
+  runTestMethod() {
     // let d=this.getData()
-    let d=this.getLayoutData()//
+    let d = this.getLayoutData()//
     console.log(d)
   }
   init() {
@@ -210,7 +435,7 @@ export class Form extends Base {
       // this.setLayoutData(JSON.parse(JSON.stringify(testData1))) //
     })
   } //
-  setState(state) {}
+  setState(state) { }
   getDesignFieldConfig() {
     return createFieldConfig()
   }
@@ -291,7 +516,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() {}
+  closeCurSubForm() { }
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -433,7 +658,7 @@ export class Form extends Base {
     pcLayout.columns[0].id = id2
     pcLayout.columns[0].key = `table_${id2}` //
   }
-  initMobileLayout() {}
+  initMobileLayout() { }
   addFormItem(config: Field) {
     let _item = new FormItem(config, this)
     this.items.push(_item) //
@@ -481,7 +706,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) {}
+  setEditData(data) { }
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -565,9 +790,9 @@ export class Form extends Base {
     state.logic = newData.logic || state.logic //
     this.setSelection(state.config)
     state.store.forEach((e) => {
-      utils.addContext({ node: e, parent: state.store })
+      utils.addContext({ node: e, parent: state.store, form: this })//
     })
-    nextTick(() => {
+    nextTick(() => {//
       this.isShow = true
     })
   }
@@ -1110,6 +1335,54 @@ export class Form extends Base {
         }
         break
     }
+  }
+  deleteNode(props) {
+    let ER = this
+    let state = ER.state
+    if (ER.props.delHandle(props.data) === false) return false
+    props.data.context.delete()
+    utils.deepTraversal(props.data, (node) => {
+      if (utils.checkIsField(node)) {
+        ER.delField(node)
+      }
+    })
+    if (/^(radio|checkbox|select)$/.test(props.data.type)) {
+      delete state.data[props.data.options.dataKey]
+    }
+    if (props.parent.length > 0) {
+      const index = props.parent.indexOf(props.data)
+      this.setSelection(index === props.parent.length ? props.parent[index - 1] : props.parent[index])
+    } else {
+      this.setSelection('root')
+    }
+  }
+  copyNode(props) {
+    let ER = this
+    if (ER.props.copyHandle(props.data) === false) return false
+    props.data.context.copy()
+    const index = props.parent.indexOf(props.data)
+    const copyData = props.parent[index + 1]
+    this.setSelection(copyData)
+    utils.deepTraversal(copyData, (node) => {
+      ER.addFieldData(node, true)
+      if (utils.checkIsField(node)) {
+        ER.addField(node)
+      }
+    })
+  }
+  tableInsertRow(props) {
+    //@ts-ignore
+    _.last(props.data.context.columns[0]).context.insert('bottom')
+  }
+  tableInsertCol(props) {
+    _.last(props.data.context.columns)[0].context.insert('right')
+  }
+  topNode(props) {
+    let parent = props.data.context.parent
+    if (/^(inline|tr)$/.test(parent.type)) {
+      parent = parent.context.parent
+    }
+    this.setSelection(Array.isArray(parent) ? 'root' : parent)
   }
 }
 //使用默认布局

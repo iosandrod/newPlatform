@@ -26,7 +26,7 @@ export const useHistory = (source) => {
             if (source.sector && source.sector.id === node.id) {
               source.sector = node
             }
-          }
+          },
         })
       })
       nextTick(() => {

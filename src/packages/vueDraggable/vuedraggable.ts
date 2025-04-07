@@ -21,7 +21,6 @@ function manage(evtName) {
     }
   };
 }
-
 function manageAndEmit(evtName) {
   const delegateCallBack = manage.call(this, evtName);
   return (evtData, originalElement) => {
@@ -29,7 +28,6 @@ function manageAndEmit(evtName) {
     emit.call(this, evtName, evtData);
   };
 }
-
 let draggingElement = null;
 
 const props = {
@@ -141,17 +139,27 @@ const draggableComponent = defineComponent({
         Sortable.mount(_plugin)//
         // class Plugin {
         //   dragOver(e) {
-        //     console.log('test1111')
+        //     console.log('test1111', e)
         //   }
         // }
         // //@ts-ignore 
-        // Plugin.pluginName = Math.random().toString().slice(1, 10)
-        // Sortable.mount(Plugin)// 
+        // Plugin.pluginName = '11111111'
+        // if (dName.length > 0) {
+        //   //@ts-ignore
+        //   Plugin.pluginName = Math.random().toString()
+        // }
+        // Sortable.mount(Plugin)// //
         let _names = _plugin.map(plugin => plugin.pluginName)
         dName.push(..._names)////
       }
     }
-    this._sortable = new Sortable(targetDomElement, sortableOptions);
+    let opt: Sortable.Options = {
+      // onMove: (evt) => {
+      //   console.log(evt, 'evt')
+      // }
+    }
+    this._sortable = new Sortable(targetDomElement, { ...sortableOptions, ...opt });
+
     this.targetDomElement = targetDomElement;
     //把这个插件绑定到dom上//
     targetDomElement.__draggable_component__ = this;
