@@ -150,7 +150,7 @@ export default defineComponent({
       // com = <FConfigPanel></FConfigPanel>
       com = <erFormEditor isDesign={true}></erFormEditor>
       // com=<d></d>
-      com = <pageCom></pageCom>//
+      com = <pageCom></pageCom> //
       let _com = (
         <div
           style={{

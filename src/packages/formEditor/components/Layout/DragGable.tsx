@@ -107,7 +107,11 @@ export default defineComponent({
         findComponent(type, element) {
           let info = componentMap[type + element]
           if (!info) {
-            componentMap[type + element] = typeMap[element][state.platform]
+            componentMap[type + element] = typeMap[element.toLowerCase()]?.[state.platform]
+            if (!componentMap[type + element]) {
+              console.log(Object.keys(typeMap), 'typeMap') //
+              console.error(element, '找不到组件') //
+            }
             //  defineAsyncComponent(() => {
             //   let el = null
             //   let el1
@@ -125,7 +129,6 @@ export default defineComponent({
             // }) //
             info = componentMap[type + element] //
           }
-          console.log(info, 'info') //
           return info
         },
       }
@@ -161,8 +164,9 @@ export default defineComponent({
             }
             break
           default:
+            // debugger //
             let formitem = formIns.items.find((item) => item.id === element.id)
-            let typeProps = {}
+            let typeProps = {} //
             try {
               typeProps = formitem.getFormItemProps(element) || {} //
             } catch (error) {
@@ -174,7 +178,9 @@ export default defineComponent({
               //   '发生错误在dragable', //
               // ) //
               // throw error //
-              console.error('没有找到formitem') ////
+              setTimeout(() => {
+                console.error('没有找到formitem', formIns) //////
+              }, 100)
             }
             // setTimeout(() => {
             //   console.log(formIns, 'testIns') //

@@ -93,7 +93,6 @@ export default defineComponent({
       formIns = new Form(props)
     } else {
     }
-    provide('formIns', formIns)
     let layout = formIns.layout
     let _state = formIns.state
     let state = _state
@@ -155,6 +154,7 @@ export default defineComponent({
         formIns.setData(val) //
       }
     )
+    provide('formIns', formIns)
     const isShowConfig = computed({
       get: () => {
         return formIns.isShowConfig
@@ -241,8 +241,8 @@ export default defineComponent({
       }
     }
     watch(
-      () => state.fields.map((e) => e.id),
-      (newV, old) => {
+      () => state.fields.map((e) => e.id), //
+      (newV = [], old = []) => {
         const deleteFields = old.filter((item) => !newV.includes(item))
         const addFields = newV.filter((item) => !old.includes(item))
         for (const delField of deleteFields) {
@@ -253,6 +253,9 @@ export default defineComponent({
           let field = state.fields.find((e) => e.id === addField)
           formIns.addFormItem(field) //
         }
+      },
+      {
+        immediate: true,
       }
     )
     watch(

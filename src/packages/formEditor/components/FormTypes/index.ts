@@ -17,14 +17,14 @@ import radioPc from './Radio/pc'
 import radioMobile from './Radio/mobile'
 import selectPc from './Select/pc'
 import selectMobile from './Select/mobile'
-import sformPc from './Sform/pc'
-import sformMobile from './Sform/mobile'
 import stablePc from './Stable/pc'
 import stableMobile from './Stable/mobile'
 import entityPc from './Entity/pc'
 import entityMobile from './Entity/mobile'
 import dividerPc from './Divider/pc.vue'
 import dividerMobile from './Divider/mobile.vue'//
+import sformPc from './Sform/pc'
+import sformMobile from './Sform/mobile'
 export const typeMap = {
   input: {
     pc: inputPc,

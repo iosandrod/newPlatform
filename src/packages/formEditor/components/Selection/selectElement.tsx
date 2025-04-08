@@ -70,7 +70,7 @@ export default {
     const isField = utils.checkIsField(props.data)
     let type = props.data.type
     const handleClick = (e) => {
-      setSelection(props.data)
+      formIns.setSelection(props.data) //
     }
     if (props.data.type && isField) {
       state.validateStates.push({
@@ -179,12 +179,7 @@ export default {
         props.data.context.appendCol()
       },
       enterForm: () => {
-        let id = props.data.id
-        let subForm = formIns.getSubForm(id)
-        if (subForm != null) {
-          formIns.nextForm = subForm //
-        }
-        // const _form=formIns.
+        formIns.enterForm(props)
       },
     }
     const handleAction = (type) => {
@@ -206,6 +201,11 @@ export default {
     const widthScaleElement = ref()
     const isScale = ref(false)
     const isShowWidthScale = computed(() => props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value))
+    const isShowHeightScale = computed(() => {
+      let value = props.hasHeightScale && !(ER.props.layoutType === 1 && !isPc.value)
+      return true
+    })
+    const heightScaleElement = ref()
     onMounted(() => {
       if (!unref(isEditModel)) return false
       const hoverEl = elementRef.value.$el || elementRef.value
@@ -230,13 +230,6 @@ export default {
           let offsetParentWidth = offsetParent.offsetWidth //
           // const columnWidth = hoverEl.offsetParent.offsetWidth / 24
           let columnWidth = offsetParentWidth / 24
-          // console.log(
-          //   columnWidth,
-          //   'columnWidth',
-          //   offsetParentWidth,
-          //   offsetParent,
-          //   hoverEl,
-          // ) //
           state.widthScaleLock = isScale.value = true
           const oldX = e.clientX
           const oldWidth = hoverEl.offsetWidth
@@ -293,7 +286,6 @@ export default {
           {ER.props.dragMode === 'icon' && unref(isEditModel) && <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>}
           {unref(isEditModel) && (
             <div class={[ns.e('bottomRight')]}>
-              {}
               <Icon
                 class={['handle', ns.e('selectParent')]}
                 onClick={withModifiers(
@@ -378,6 +370,11 @@ export default {
               )}
               {isShowWidthScale.value && (
                 <div ref={widthScaleElement}>
+                  <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
+                </div>
+              )}
+              {isShowHeightScale.value && (
+                <div ref={heightScaleElement}>
                   <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
                 </div>
               )}

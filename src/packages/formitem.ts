@@ -42,7 +42,7 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any; [key: string]: any }) {
+  updateBindData(updateConfig: { value: any;[key: string]: any }) {
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -57,8 +57,8 @@ export class FormItem extends Base {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() {}
-  async onValueChange() {}
+  getItemChange() { }
+  async onValueChange() { }
   getForm() {
     return this.form //
   }
@@ -91,7 +91,12 @@ export class FormItem extends Base {
     let config = this.config
     let options = config.options
     if (type == 'Sform') {
-      let formConfig = options?.formConfig || {}
+      let formConfig = options?.formConfig || { items: [] }//
+      const pProps = { ...this.form.props }
+      Object.entries(pProps).forEach(([key, value]) => {
+        if (formConfig[key]) return
+        formConfig[key] = value
+      })
       let _form = new Form(formConfig)
       _form.parent = this.form //
       this.subForm = _form //
@@ -101,7 +106,7 @@ export class FormItem extends Base {
   async getSelectOptions() {
     const config = this.config
   }
-  getSubForm(id: string) {}
+  getSubForm(id: string) { }
   getData() {
     let form = this.form
     let data = form.data
@@ -304,7 +309,7 @@ export class FormItem extends Base {
   //     }
   //     return labelWidth
   // }
-  getFormItemProps(data, specialHandling, isRoot = false) {
+  getFormItemProps(data, specialHandling?: any, isRoot = false) {
     let form = this.form
     let t = form.t
     const formIns: Form = form
@@ -317,9 +322,9 @@ export class FormItem extends Base {
     result.formitem = item
     const platform = isPc ? 'pc' : 'mobile'
     if (isRoot) {
-      if (isPc) {
+      if (isPc) {//
         result.model = data.store // is Array
-        result.size = node.pc.size
+        result.size = node.pc.size//
         result.labelPosition = node[platform].labelPosition
       } else {
         result.labelAlign = node[platform].labelPosition
