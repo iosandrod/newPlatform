@@ -118,7 +118,6 @@ export class Form extends Base {
     return buttons
   }
   setItems(items, setLayout = true) {
-    // debugger//
     this.items.splice(0) //
     for (const item of items) {
       this.addFormItem(item) //
@@ -253,7 +252,6 @@ export class Form extends Base {
     this.resetStates()
   }
   _dragOver(e) {
-    // debugger//
     let ER = this
     e.cancel()
     this.resetStates()
@@ -417,7 +415,6 @@ export class Form extends Base {
   runTestMethod() {
     // let d=this.getData()
     let d = this.getLayoutData()//
-    console.log(d)
   }
   init() {
     super.init()
@@ -431,16 +428,16 @@ export class Form extends Base {
       this.setData(_data) //
     }
     this.setItems(items) //
-    nextTick(() => {
-      // this.setLayoutData(JSON.parse(JSON.stringify(testData1))) //
+    nextTick(() => {//
+      this.setLayoutData(JSON.parse(JSON.stringify(testData1))) //
     })
   } //
-  checkIslineChildren(node) { 
-    return  node.context.parent.type === 'inline'
+  setState(state) {
+    this.state = state//
   }
-  setState(state) { }
   getDesignFieldConfig() {
-    return createFieldConfig()
+    let value = createFieldConfig()
+    return value
   }
   initState() {
     let state = {
@@ -668,7 +665,7 @@ export class Form extends Base {
     return _item
   }
   delFormItem(id) {
-    if (id == 'string') {
+    if (typeof id == 'string') {//
       let index = this.items.findIndex((item) => item.id === id)
       if (index !== -1) {
         this.items.splice(index, 1)
@@ -803,6 +800,9 @@ export class Form extends Base {
     let state = this.state
     if (node == null) {
       node = 'root' //
+    }
+    if (state == null) {
+      return
     }
     let result = ''
     if (node === 'root') {
@@ -1386,6 +1386,14 @@ export class Form extends Base {
       parent = parent.context.parent
     }
     this.setSelection(Array.isArray(parent) ? 'root' : parent)
+  }
+  enterForm(props) {
+    let formIns = this
+    let id = props.data.id
+    let subForm = formIns.getSubForm(id)
+    if (subForm != null) {
+      formIns.nextForm = subForm //
+    }
   }
 }
 //使用默认布局

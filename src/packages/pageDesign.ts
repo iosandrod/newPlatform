@@ -3,6 +3,7 @@ import { Form } from './form'
 import { createPageDesignFieldConfig } from './pageDesignConfig'
 import { FormItem } from './formitem'
 import { Field } from './layoutType'
+import { PageDesignItem } from './pageItem'
 
 export class PageDesign extends Form {
   //
@@ -35,7 +36,8 @@ export class PageDesign extends Form {
     }
   }
   addFormItem(config): any {
-    let _item = new PageDesignItem(config, this)
+    let _item = new PageDesignItem(config, this)//
+    //@ts-ignore
     this.items.push(_item)
     return _item //
   }
@@ -46,16 +48,10 @@ export class PageDesign extends Form {
     let mainTableIns = {}
     let detailTableIns = {} //
   }
-  initPcLayout(): void {}
-  initMobileLayout(): void {}
+  initPcLayout(): void { }
+  initMobileLayout(): void { }
   getValidateRules() {
     return []
   }
 }
 
-export class PageDesignItem extends FormItem {
-  //@ts-ignore
-  constructor(config, d) {
-    super(config, d) //
-  }
-} //

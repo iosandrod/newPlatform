@@ -421,7 +421,7 @@ function ControlInsertionPlugin(ER) {
       // 重置拖拽状态
       resetStates()
     }
-    dragOver(e) {
+    dragOver(e) {//
       e.cancel()
       resetStates()
       const {
@@ -459,13 +459,8 @@ function ControlInsertionPlugin(ER) {
       ) {
         return false
       }
-      if (target.dataset.layoutType === 'subform') {
-        if (!utils.checkIsField(dragNode) || dragNode.type === 'subform') {
-          return false
-        }
-      } //
       originalEvent.stopPropagation && originalEvent.stopPropagation()
-      const direction = ''
+      const direction = ''//
       const targetContainer = el.parentNode
       const targetOnlyOne = targetList.length === 1
       // debugger//
