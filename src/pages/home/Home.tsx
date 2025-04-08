@@ -3,7 +3,6 @@ import erForm from '@ER/formCom';
 import erFormEditor from '@ER/formEditor/formEditor';
 import tableEditor from '@/table/tableCom';
 import { formConfig } from '@ER/formEditor/testData';
-import pageDesign from '@DESIGN/formEditor/pageDesign'; //
 import menuCom from '@/menu/menuCom';
 import fieldCom from '@/menu/fieldCom';
 import { fieldsConfig } from '@ER/formEditor/componentsConfig';
@@ -12,7 +11,6 @@ export default defineComponent({
     erForm,
     erFormEditor,
     tableEditor,
-    pageDesign,
     menuCom,
     fieldCom,
   },
@@ -28,7 +26,7 @@ export default defineComponent({
       // return <menuCom></menuCom>
       // return <erForm formConfig={formConfig}></erForm>;
       // return <fieldCom></fieldCom>
-      return <erFormEditor mode={'preview'}></erFormEditor>;
+      return <erFormEditor ></erFormEditor>;
     };
   },
 });

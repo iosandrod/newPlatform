@@ -435,6 +435,9 @@ export class Form extends Base {
       // this.setLayoutData(JSON.parse(JSON.stringify(testData1))) //
     })
   } //
+  checkIslineChildren(node) { 
+    return  node.context.parent.type === 'inline'
+  }
   setState(state) { }
   getDesignFieldConfig() {
     return createFieldConfig()

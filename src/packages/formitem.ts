@@ -304,7 +304,7 @@ export class FormItem extends Base {
   //     }
   //     return labelWidth
   // }
-  getFormItemProps(data, specialHandling, isRoot = false) {
+  getFormItemProps(data, specialHandling?: any, isRoot = false) {
     let form = this.form
     let t = form.t
     const formIns: Form = form

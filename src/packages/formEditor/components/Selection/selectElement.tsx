@@ -1,4 +1,15 @@
-import { withModifiers, resolveComponent, ref, useSlots, onMounted, useAttrs, unref, onBeforeUnmount, inject, computed } from 'vue'
+import {
+  withModifiers,
+  resolveComponent,
+  ref,
+  useSlots,
+  onMounted,
+  useAttrs,
+  unref,
+  onBeforeUnmount,
+  inject,
+  computed,
+} from 'vue'
 import { isHTMLTag } from '@vue/shared'
 import hooks from '@ER/hooks'
 import utils from '@ER/utils'
@@ -58,20 +69,21 @@ export default {
   },
   setup(props) {
     const ER: any = inject('Everright')
+    const formIns: Form = inject('formIns') //
     const { t } = hooks.useI18n()
     const ns = hooks.useNamespace('selectElement')
     const isHover = ref(false)
-    const isInlineChildren = utils.checkIslineChildren(props.data)
-    const { target, setSelection, state, isEditModel, isSelectRoot, isPc } = hooks.useTarget()
+    const isInlineChildren = formIns.checkIslineChildren(props.data)
+    const { target, state, isEditModel, isSelectRoot, isPc } = hooks.useTarget()
     const id = hooks.useCss(props.data, state.platform)
-    const visible = ref(false)
+    const visible = ref(false) 
     const slots = useSlots()
     const isWarning = ref(false)
     const isField = utils.checkIsField(props.data)
     let type = props.data.type
     const handleClick = (e) => {
-      setSelection(props.data)
-    }
+      formIns.setSelection(props.data)
+    } //
     if (props.data.type && isField) {
       state.validateStates.push({
         data: props.data,
@@ -96,38 +108,80 @@ export default {
         dropdown: () => {
           let node = (
             <el-dropdown-menu>
-              <el-dropdown-item command="insert left">{t('er.selection.insertLeft')}</el-dropdown-item>
-              <el-dropdown-item command="insert right">{t('er.selection.insertRight')}</el-dropdown-item>
-              <el-dropdown-item command="insert top">{t('er.selection.insertTop')}</el-dropdown-item>
-              <el-dropdown-item command="insert bottom">{t('er.selection.insertBottom')}</el-dropdown-item>
-              <el-dropdown-item command="merge left" disabled={props.data.context.isDisableMargeLeft} divided>
+              <el-dropdown-item command="insert left">
+                {t('er.selection.insertLeft')}
+              </el-dropdown-item>
+              <el-dropdown-item command="insert right">
+                {t('er.selection.insertRight')}
+              </el-dropdown-item>
+              <el-dropdown-item command="insert top">
+                {t('er.selection.insertTop')}
+              </el-dropdown-item>
+              <el-dropdown-item command="insert bottom">
+                {t('er.selection.insertBottom')}
+              </el-dropdown-item>
+              <el-dropdown-item
+                command="merge left"
+                disabled={props.data.context.isDisableMargeLeft}
+                divided
+              >
                 {t('er.selection.mergeLeft')}
               </el-dropdown-item>
-              <el-dropdown-item command="merge right" disabled={props.data.context.isDisableMargeRight}>
+              <el-dropdown-item
+                command="merge right"
+                disabled={props.data.context.isDisableMargeRight}
+              >
                 {t('er.selection.mergeRight')}
               </el-dropdown-item>
-              <el-dropdown-item command="merge row" disabled={props.data.context.isDisableMargeRow}>
+              <el-dropdown-item
+                command="merge row"
+                disabled={props.data.context.isDisableMargeRow}
+              >
                 {t('er.selection.mergeRow')}
               </el-dropdown-item>
-              <el-dropdown-item command="merge top" disabled={props.data.context.isDisableMargeTop} divided>
+              <el-dropdown-item
+                command="merge top"
+                disabled={props.data.context.isDisableMargeTop}
+                divided
+              >
                 {t('er.selection.mergeTop')}
               </el-dropdown-item>
-              <el-dropdown-item command="merge bottom" disabled={props.data.context.isDisableMargeBottom}>
+              <el-dropdown-item
+                command="merge bottom"
+                disabled={props.data.context.isDisableMargeBottom}
+              >
                 {t('er.selection.mergeBottom')}
               </el-dropdown-item>
-              <el-dropdown-item command="merge column" disabled={props.data.context.isDisableMargeColumn}>
+              <el-dropdown-item
+                command="merge column"
+                disabled={props.data.context.isDisableMargeColumn}
+              >
                 {t('er.selection.mergeColumn')}
               </el-dropdown-item>
-              <el-dropdown-item command="del row" divided disabled={props.data.context.isDisableDelRow}>
+              <el-dropdown-item
+                command="del row"
+                divided
+                disabled={props.data.context.isDisableDelRow}
+              >
                 {t('er.selection.delRow')}
               </el-dropdown-item>
-              <el-dropdown-item command="del column" disabled={props.data.context.isDisableDelColumn}>
+              <el-dropdown-item
+                command="del column"
+                disabled={props.data.context.isDisableDelColumn}
+              >
                 {t('er.selection.delColumn')}
               </el-dropdown-item>
-              <el-dropdown-item command="split column" disabled={props.data.context.isDisableSplitColumn} divided>
+              <el-dropdown-item
+                command="split column"
+                disabled={props.data.context.isDisableSplitColumn}
+                divided
+              >
                 {t('er.selection.splitColumn')}
               </el-dropdown-item>
-              <el-dropdown-item command="split row" disabled={props.data.context.isDisableSplitRow}>
+              <el-dropdown-item
+                command="split row"
+                disabled={props.data.context.isDisableSplitRow}
+              >
                 {t('er.selection.splitRow')}
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -154,7 +208,6 @@ export default {
         </el-dropdown>
       )
     }
-    const formIns: Form = inject('formIns') //
     const actionStrategies = {
       delete: () => {
         formIns.deleteNode(props)
@@ -205,7 +258,9 @@ export default {
     const elementRef = ref()
     const widthScaleElement = ref()
     const isScale = ref(false)
-    const isShowWidthScale = computed(() => props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value))
+    const isShowWidthScale = computed(
+      () => props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value),
+    )
     onMounted(() => {
       if (!unref(isEditModel)) return false
       const hoverEl = elementRef.value.$el || elementRef.value
@@ -242,7 +297,11 @@ export default {
           const oldWidth = hoverEl.offsetWidth
           const onMouseMove = (e) => {
             if (!isInlineChildren) {
-              let offset = Math.ceil((oldWidth + Math.round((e.clientX - oldX) / columnWidth) * columnWidth) / columnWidth)
+              let offset = Math.ceil(
+                (oldWidth +
+                  Math.round((e.clientX - oldX) / columnWidth) * columnWidth) /
+                  columnWidth,
+              )
               if (offset >= 24) {
                 offset = 24
               }
@@ -253,12 +312,19 @@ export default {
             } else {
               const curNewWidth = oldWidth + e.clientX - oldX
               // console.log(curNewWidth, 'curNewWidth')//
-              let curWidth = Math.round((curNewWidth / hoverEl.parentNode.offsetWidth) * 100) //百分比
+              let curWidth = Math.round(
+                (curNewWidth / hoverEl.parentNode.offsetWidth) * 100,
+              ) //百分比
               console.log(curWidth, 'curWidth') //
               if (curWidth <= 25) {
                 curWidth = 25
               }
-              utils.syncWidthByPlatform(props.data, state.platform, false, curWidth)
+              utils.syncWidthByPlatform(
+                props.data,
+                state.platform,
+                false,
+                curWidth,
+              )
             }
           }
 
@@ -272,25 +338,53 @@ export default {
         })
       }
     })
-    const TagComponent = isHTMLTag(props.tag) ? props.tag : resolveComponent(props.tag)
+    const TagComponent = isHTMLTag(props.tag)
+      ? props.tag
+      : resolveComponent(props.tag)
     const Selected = computed(() => {
       return target.value.id === props.data.id && ns.is('Selected')
     })
     const maskNode = <div class={[ns.e('mask')]}></div>
-    const isShowCopy = computed(() => (isInlineChildren ? props.hasCopy && props.data.context.parent.columns.length < ER.props.inlineMax : props.hasCopy))
+    const isShowCopy = computed(() =>
+      isInlineChildren
+        ? props.hasCopy &&
+          props.data.context.parent.columns.length < ER.props.inlineMax
+        : props.hasCopy,
+    )
     return () => {
       return (
         <TagComponent
           class={id.value}
           {...useAttrs()}
           // @ts-ignore
-          class={[ns.b(), unref(isEditModel) && ER.props.dragMode === 'full' && props.hasDrag && 'ER-handle', !isField && ns.e('borderless'), unref(isEditModel) && ns.e('editor'), unref(isEditModel) && Selected.value, unref(isEditModel) && isHover.value && ns.e('hover'), unref(isEditModel) && isScale.value && ns.e('isScale'), unref(isEditModel) && isWarning.value && ns.is('Warning')]}
+          class={[
+            ns.b(),
+            unref(isEditModel) &&
+              ER.props.dragMode === 'full' &&
+              props.hasDrag &&
+              'ER-handle',
+            !isField && ns.e('borderless'),
+            unref(isEditModel) && ns.e('editor'),
+            unref(isEditModel) && Selected.value,
+            unref(isEditModel) && isHover.value && ns.e('hover'),
+            unref(isEditModel) && isScale.value && ns.e('isScale'),
+            unref(isEditModel) && isWarning.value && ns.is('Warning'),
+          ]}
           ref={elementRef}
           onClick={unref(isEditModel) && withModifiers(handleClick, ['stop'])}
         >
           {slots.default()}
           {!isPc.value && <span></span>}
-          {ER.props.dragMode === 'icon' && unref(isEditModel) && <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>}
+          {ER.props.dragMode === 'icon' && unref(isEditModel) && (
+            <div class={[ns.e('topLeft')]}>
+              {props.hasDrag && (
+                <Icon
+                  class={['ER-handle', ns.e('dragIcon')]}
+                  icon="Rank"
+                ></Icon>
+              )}
+            </div>
+          )}
           {unref(isEditModel) && (
             <div class={[ns.e('bottomRight')]}>
               {}
@@ -300,7 +394,7 @@ export default {
                   (e) => {
                     handleAction(5)
                   },
-                  ['stop']
+                  ['stop'],
                 )}
                 icon="top"
               ></Icon>
@@ -311,7 +405,7 @@ export default {
                     (e) => {
                       handleAction(1)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="delete"
                 ></Icon>
@@ -323,7 +417,7 @@ export default {
                     (e) => {
                       handleAction(7)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="config"
                 ></Icon>
@@ -335,7 +429,7 @@ export default {
                     (e) => {
                       handleAction(4)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="tableInsertCol"
                 ></Icon>
@@ -347,7 +441,7 @@ export default {
                     (e) => {
                       handleAction(3)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="tableInsertRow"
                 ></Icon>
@@ -359,7 +453,7 @@ export default {
                     (e) => {
                       handleAction(6)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="plus"
                 ></Icon>
@@ -371,7 +465,7 @@ export default {
                     (e) => {
                       handleAction(2)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="copy"
                 ></Icon>
