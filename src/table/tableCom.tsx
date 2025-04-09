@@ -1,4 +1,12 @@
-import { defineComponent, onMounted, onUnmounted, provide, toRaw, watch, watchEffect } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  provide,
+  toRaw,
+  watch,
+  watchEffect,
+} from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { Table } from './table'
@@ -50,13 +58,7 @@ export default defineComponent({
     })
     watchEffect(() => {
       tableIns.loadData() //
-    })
-    setTimeout(() => {
-      // setInterval(() => {
-      //   let data = tableIns.getData()//
-      //   data[0].id = data[0].id + 1
-      // }, 100)//
-    }, 1000) //
+    }) //
     let obj1 = {}
     let timeout = null
     watchEffect(() => {
@@ -97,7 +99,7 @@ export default defineComponent({
           return
         }
         ins.updateColumns(e)
-      }
+      },
     )
     // watch(
     //   () => {
@@ -118,7 +120,7 @@ export default defineComponent({
       },
       (e) => {
         tableIns.updateCanvas() //
-      }
+      },
     )
     watch(
       () => {
@@ -129,25 +131,36 @@ export default defineComponent({
       },
       {
         deep: true,
-      }
+      },
     )
     provide('tableIns', tableIns)
     return () => {
       let com = null
-      com = <div style={{ width: '100%', height: '100%', background: 'red' }} ref={registerRootDiv}></div>
+      com = (
+        <div
+          style={{ width: '100%', height: '100%' }}
+          ref={registerRootDiv}
+        ></div>
+      )
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
       // com = <div style={{ width: '100%', height: '100%', background: 'red' }}></div>
       let outCom = (
-        <div style={{ width: '100%', height: '100px', display: 'flex', flexDirection: 'column' }}>
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           {menuCom}
           {btnCom}
           <div
             style={{
               flex: 1,
-              // transform: 'translate(0,200px)',
               width: '100%', //
-            }}
+            }} //
           >
             {com}
           </div>

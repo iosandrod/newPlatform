@@ -5,17 +5,19 @@ import { Context } from './Context'
 export const addContext = (config) => {
   // console.log(config, 'testConfig')//
   if (config.form == null) {
+    //
     // debugger//
   }
-  const { node, parent, fn } = config//
+  const { node, parent, fn } = config //
   if (node == null) {
-    throw new Error('没有节点')//
+    throw new Error('没有节点') //
+    return
   }
   let _context = new Context({
     node: node,
     parent: parent,
     fn: fn,
-    form: config.formIns,
+    form: config.form || config.formIns, //
   })
-  return _context//
+  return _context //
 }

@@ -114,10 +114,10 @@ export class Table extends Base {
   render() {
     const rootDiv = this.getRef('root')
     const rect = rootDiv.getBoundingClientRect()
-    console.log(rect, 'testRect')//
-    if (1 == 1) {
-      return
-    }
+    const { width, height } = rect
+    // if (1 == 1) {
+    //   return
+    // }
     // console.log(rect, 'testct')//
     let _instance = this.instance
     if (_instance != null) {
@@ -533,7 +533,7 @@ export class Table extends Base {
   }
   delCurRow() {
     let curRow = this.tableData.curRow
-    let showData = this.getShowData() //
+    let showData = this.getData() //
     let index = showData.indexOf(curRow) //
     if (index == -1) {
       return

@@ -17,6 +17,10 @@ import _ from 'lodash'
 import utils from '@ER/utils'
 import generatorData from './formEditor/generatorData'
 import { Node } from './formEditor/node'
+import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
+import Sortable from 'sortablejs'
+import { uniqueId } from 'xe-utils'
+import {} from 'vxe-table'
 //转换数据
 //
 let prevEl: any = ''
@@ -37,7 +41,7 @@ const layoutType = [
   'divider',
   'inline',
 ]
-const pName = []//
+const pName = [] //
 export class Form extends Base {
   formIns?: any
   lang: any = {}
@@ -246,7 +250,7 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-          sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
           ],
         form: ER.formIns,
       })
@@ -339,8 +343,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-              ? newTarget.children[0]
-              : newTarget.parentNode
+            ? newTarget.children[0]
+            : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -405,7 +409,7 @@ export class Form extends Base {
     })
   }
   getPluginName() {
-    let id = this.id
+    let id = this.id.slice(0, 4) //
     let plugin = `ControlInsertion_${id}`
     return plugin
   }
@@ -432,6 +436,8 @@ export class Form extends Base {
     // let d=this.getData()
     let d = this.getLayoutData() //
     console.log(d, 'testThis') ////
+    // let plugin = ControlInsertionPlugin(this)
+    // Sortable.mount(plugin) //
   }
   init() {
     super.init()
@@ -538,7 +544,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() { }
+  closeCurSubForm() {}
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -680,7 +686,7 @@ export class Form extends Base {
     pcLayout.columns[0].id = id2
     pcLayout.columns[0].key = `table_${id2}` //
   }
-  initMobileLayout() { }
+  initMobileLayout() {}
   addFormItem(config: Field) {
     let id = config.id
     let oldItems = this.items
@@ -735,7 +741,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) { }
+  setEditData(data) {}
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -808,7 +814,7 @@ export class Form extends Base {
     let layout = this.layout
     layout.pc = newData.layout.pc
     layout.mobile = newData.layout.mobile
-    // this.isShow = false
+    this.isShow = false
     state.store = newData.list
     state.fields = newData.fields
     const curLayout = _.cloneDeep(newData.layout[state.platform])
@@ -819,11 +825,17 @@ export class Form extends Base {
     state.logic = newData.logic || state.logic //
     this.setSelection(state.config)
     state.store.forEach((e) => {
-      utils.addContext({ node: e, parent: state.store, form: this }) //
-    })
+      utils.addContext({
+        node: e,
+        parent: state.store,
+        form: this,
+        formIns: this,
+      }) //
+    }) //
+    console.log(state.store, 'state.store')
     nextTick(() => {
       //
-      // this.isShow = true
+      this.isShow = true
     })
   }
   setSelection(node) {
@@ -1438,7 +1450,7 @@ export class Form extends Base {
   }
   checkIslineChildren(node) {
     if (node.context == null) {
-      this.resetContext()//
+      this.resetContext() //
     }
     return node.context.parent.type === 'inline'
   }

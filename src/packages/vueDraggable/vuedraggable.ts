@@ -1,6 +1,6 @@
-import Sortable from 'sortablejs'
+import Sortable from '@/sortablejs/Sortable'
 import { insertNodeAt, removeNode } from './util/htmlHelper'
-import { console } from './util/console'
+import { console } from './util/console' 
 import {
   getComponentAttributes,
   createSortableOption,
@@ -145,25 +145,8 @@ const draggableComponent = defineComponent({
     }
     //@ts-ignore
     // Sortable.eventCanceled = true
-    let s = new Sortable(targetDomElement, {
-      ...sortableOptions,
-      dragoverBubble: false,//
-      // sort:false,
-      // disabled: true,
-      onStart(evt) {
-        //@ts-ignore
-      },
-      // onChange(evt) {
-      //   //@ts-ignore
-      //   console.log(evt,'12313123')
-      //   evt.preventDefault();
-      //   evt.stopPropagation();//
-      // },
-      onMove(evt, a, b) {
-        // console.log(evt, a, b) //
-        //@ts-ignore
-      },
-    }) //
+    let s = new Sortable(targetDomElement, sortableOptions) //
+    // console.log(sortableOptions,'testOptions')//
     // setTimeout(() => {
     //   s.options.disabled = false//
     // }, 100);

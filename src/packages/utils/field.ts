@@ -28,8 +28,8 @@ const wrapElement = (element, fn?: any) => {
         width: '100%',
       }
     }
-    if (/^(inline)$/.test(node.type)) {
-
+    if (/^(entity)$/.test(node.type)) {
+      node.style.height='200px'//
     }
     if (checkIsField(node)) {
       node.style = {

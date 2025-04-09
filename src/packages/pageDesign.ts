@@ -16,7 +16,7 @@ export class PageDesign extends Form {
   init(): void {
     super.init()
     nextTick(() => {
-      // this.setLayoutData(JSON.parse(JSON.stringify(entityData)))//
+      this.setLayoutData(JSON.parse(JSON.stringify(entityData)))//
     })
   }
   setItems(items: any, setLayout?: boolean): void {
@@ -53,8 +53,8 @@ export class PageDesign extends Form {
     let mainTableIns = {}
     let detailTableIns = {} //
   }
-  initPcLayout(): void { }
-  initMobileLayout(): void { }
+  // initPcLayout(): void { }
+  // initMobileLayout(): void { }
   getValidateRules() {
     return []
   }

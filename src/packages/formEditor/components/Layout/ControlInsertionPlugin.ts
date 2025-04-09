@@ -310,7 +310,7 @@ const setStates = (newTarget, ev, ER) => {
       }
       break
   }
-}
+}//
 const getNodes = (node) => {
   const nodes = node.columns || node.list || node.rows || []
   return Array.isArray(node) ? node : nodes
@@ -323,8 +323,9 @@ const resetStates = () => {
 }
 function ControlInsertionPlugin(ER) {
   class ControlInsertionPlugin {
-    dragStart(e) { }
+    dragStart(e) {}
     drop(e) {
+      // debugger//
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       if (!prevEl || !e.activeSortable) {
         return false
@@ -360,25 +361,23 @@ function ControlInsertionPlugin(ER) {
           }
           oldEl.context.delete()
         }
-      }
-
+      } 
       if (inserRowIndex !== '') {
         let store = []
-        // 判断是否是 'subform' 类型的父级元素，并获取正确的存储数组
-        if (prevSortable.options.parent.type === 'subform') {
-          store = prevSortable.options.parent.list[0]
-        } else {
-          store = Array.isArray(prevSortable.options.parent)
-            ? prevSortable.options.parent
-            : prevSortable.options.parent.list
-        }
+        store = Array.isArray(prevSortable.options.parent)
+          ? prevSortable.options.parent
+          : prevSortable.options.parent.list
         // 在指定的索引位置插入新元素
         store.splice(inserRowIndex, 0, newElement)
         // 关联新元素的上下文信息
+        let _node = store[inserRowIndex]
+        // if (_node == null) {
+        //   return //
+        // }
         utils.addContext({
           node: store[inserRowIndex],
           parent: prevSortable.options.parent,
-          form: ER.formIns//
+          form: ER.formIns, //
         })
       }
 
@@ -400,11 +399,12 @@ function ControlInsertionPlugin(ER) {
           node: newElement,
           parent:
             prevSortable.options.parent[
-            sortableUtils.index(prevSortable.el.parentNode)
+              sortableUtils.index(prevSortable.el.parentNode)
             ],
-          form: ER.formIns
+          form: ER.formIns,
         })
       }
+      console.log(inserColIndex, 'estsfjsdlfjsdlsdf') //
       // 如果有行插入或列插入操作，则遍历新元素，并检查是否需要额外的字段处理
       if (inserColIndex !== '' || inserRowIndex !== '') {
         // console.log(ER, 'testERRR')//
@@ -421,7 +421,8 @@ function ControlInsertionPlugin(ER) {
       // 重置拖拽状态
       resetStates()
     }
-    dragOver(e) {//
+    dragOver(e) {
+      //
       e.cancel()
       resetStates()
       const {
@@ -461,7 +462,7 @@ function ControlInsertionPlugin(ER) {
         return false
       }
       originalEvent.stopPropagation && originalEvent.stopPropagation()
-      const direction = ''//
+      const direction = '' //
       const targetContainer = el.parentNode
       const targetOnlyOne = targetList.length === 1
       // debugger//
@@ -490,8 +491,8 @@ function ControlInsertionPlugin(ER) {
             target.dataset.layoutType === 'root'
               ? target
               : newTarget.__draggable_component__
-                ? newTarget.children[0]
-                : newTarget.parentNode
+              ? newTarget.children[0]
+              : newTarget.parentNode
           prevSortable = state._sortable
           inserRowIndex = 0
           setBorder(prevEl, 'drag-line-top')
@@ -527,7 +528,8 @@ function ControlInsertionPlugin(ER) {
   }
   const name = ER.formIns.getPluginName()
   // console.log(name, ER, 'testName')////
-  return Object.assign(ControlInsertionPlugin, {//
+  return Object.assign(ControlInsertionPlugin, {
+    //
     pluginName: name, //
     initializeByDefault: true,
   })

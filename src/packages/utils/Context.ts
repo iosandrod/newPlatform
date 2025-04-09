@@ -329,19 +329,17 @@ export class Context {
     }) //
     return context
   }
-  delete() {
+  delete() { 
     //删除节点
     const arr = this.arr
-    const node = this.node
+    const node = this.node//
     if (node.type === 'inline') {
-      //
       arr.splice(arr.indexOf(node), 1)
     } else {
-      //
       arr.splice(arr.indexOf(node), 1)
     }
-    let nextNode = this.getFlattenNodes()
-    let _arr = [this.node, ...nextNode]
+    // let nextNode = this.getFlattenNodes()
+    // let _arr = [this.node, ...nextNode]
   }
   appendCol() {
     const parent = this.parent
