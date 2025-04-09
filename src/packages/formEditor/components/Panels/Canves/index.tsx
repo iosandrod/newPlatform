@@ -26,12 +26,7 @@ export default defineComponent({
     let formIns: Form = inject('formIns')
     const setFormRef = (ref: any) => {
       ER.form = ref
-      if (ref == null) {
-        formIns.unregisterRef('form')
-      } else {
-        //
-        formIns.registerRef('form', ref)
-      }
+      formIns.registerRef('form', ref) //
     }
     const renderContent = () => {
       const TagComponent: any = resolveComponent(unref(isPc) ? 'el-form' : 'van-form')

@@ -149,6 +149,7 @@ const draggableComponent = defineComponent({
       ...sortableOptions,
       dragoverBubble: false,//
       // sort:false,
+      // disabled: true,
       onStart(evt) {
         //@ts-ignore
       },
@@ -163,6 +164,9 @@ const draggableComponent = defineComponent({
         //@ts-ignore
       },
     }) //
+    // setTimeout(() => {
+    //   s.options.disabled = false//
+    // }, 100);
     //@ts-ignore
     // s.eventCanceled=true
     this._sortable = s

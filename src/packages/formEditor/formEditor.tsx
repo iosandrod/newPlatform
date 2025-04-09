@@ -80,7 +80,7 @@ export default defineComponent({
       default: () => {
         return {}
       },
-    },
+    }, //
   },
   emits: ['listener'],
   setup(props: any, { attrs, slots, emit, expose }) {
@@ -277,23 +277,23 @@ export default defineComponent({
     }
     return () => {
       let nextForm = formIns.nextForm //
-      let dialogCom = (
-        <ElDialog destroyOnClose fullscreen class="previewDialog" v-model={state.previewVisible} onClosed={() => (previewPlatform.value = 'pc')}>
-          {{
-            header: () => <DeviceSwitch modelValue={previewPlatform.value} onUpdate:modelValue={(val) => handleOperation(7, val)} />,
-            default: () => (
-              <ElScrollbar>
-                <div class={{ previewDialogWrap: true, mobilePreview: previewPlatform.value === 'mobile' }}>
-                  <ErFormPreview {...props} formIns={formIns} ref={setPreviewRef} />
-                </div>
-              </ElScrollbar>
-            ),
-          }}
-        </ElDialog>
-      )
+      // let dialogCom = (
+      //   <ElDialog destroyOnClose fullscreen class="previewDialog" v-model={state.previewVisible} onClosed={() => (previewPlatform.value = 'pc')}>
+      //     {{
+      //       header: () => <DeviceSwitch modelValue={previewPlatform.value} onUpdate:modelValue={(val) => handleOperation(7, val)} />,
+      //       default: () => (
+      //         <ElScrollbar>
+      //           <div class={{ previewDialogWrap: true, mobilePreview: previewPlatform.value === 'mobile' }}>
+      //             <ErFormPreview {...props} formIns={formIns} ref={setPreviewRef} />
+      //           </div>
+      //         </ElScrollbar>
+      //       ),
+      //     }}
+      //   </ElDialog>
+      // )
       let com = (
         <div class="h-full w-full">
-          {dialogCom}
+          {/* {dialogCom} */}
           <ElContainer class="container" direction="vertical">
             <ElContainer>
               {isFoldFields.value && <fieldCom></fieldCom>}

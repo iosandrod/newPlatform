@@ -101,7 +101,7 @@ export class Table extends Base {
       }
     }) //
   }
-  getTableName() {}
+  getTableName() { }
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance()
     if (instance != null) {
@@ -110,9 +110,15 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() {}
+  getListTableOption() { }
   render() {
     const rootDiv = this.getRef('root')
+    const rect = rootDiv.getBoundingClientRect()
+    console.log(rect, 'testRect')//
+    if (1 == 1) {
+      return
+    }
+    // console.log(rect, 'testct')//
     let _instance = this.instance
     if (_instance != null) {
       //
@@ -286,9 +292,9 @@ export class Table extends Base {
     click_cell(this) //
     selected_cell(this)
     contextmenu_cell(this) //
-    sort_click(this)
+    sort_click(this)//
   }
-  setCurTableSelect() {}
+  setCurTableSelect() { }
   openContextMenu(config) {
     // console.log(config, 'testConfig') //
     const event: PointerEvent = config.event
@@ -396,7 +402,7 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) {}
+  async runBefore(config?: any) { }
   runAfter(config?: any) {
     //
     if (config == null) {
@@ -425,7 +431,7 @@ export class Table extends Base {
       return null
     }
   }
-  registerHooks(hConfig?: any) {}
+  registerHooks(hConfig?: any) { }
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -433,7 +439,7 @@ export class Table extends Base {
     }
     return instance
   }
-  setMergeConfig(config?: any) {}
+  setMergeConfig(config?: any) { }
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -483,7 +489,7 @@ export class Table extends Base {
       return
     }
     let columns = this.columns
-    columns.forEach((item) => {})
+    columns.forEach((item) => { })
     instance.release()
     this.instance = null //
   }

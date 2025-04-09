@@ -1992,3 +1992,263 @@ export const testData1 = {
     }
   ]
 }
+
+export const entityData = {
+  "layout": {
+    "pc": [
+      {
+        "type": "inline",
+        "columns": [
+          "2Hz_88s0BVOVr9HoOoI3a"
+        ],
+        "style": {},
+        "id": "tOl0nRItNpHC1sWguSGHn",
+        "key": "inline_tOl0nRItNpHC1sWguSGHn"
+      },
+      {
+        "type": "inline",
+        "columns": [
+          {
+            "type": "tabs",
+            "label": "标签页",
+            "icon": "label",
+            "id": "ClTBS39cRJcNKeqYDLi84",
+            "columns": [
+              {
+                "id": "LlwsiXoMgVQCpRNXFTK0T",
+                "type": "tabsCol",
+                "label": "Tab 1",
+                "list": [
+                  {
+                    "type": "inline",
+                    "columns": [
+                      "qOOKKQf7tIQHpmEsDVZQm"
+                    ],
+                    "style": {},
+                    "id": "dH8YcpOAaqqf5SjT6oDqG",
+                    "key": "inline_dH8YcpOAaqqf5SjT6oDqG"
+                  }
+                ],
+                "style": {},
+                "options": {},
+                "key": "tabsCol_LlwsiXoMgVQCpRNXFTK0T"
+              },
+              {
+                "id": "f2GBlLqG63Nnk3denLeAe",
+                "type": "tabsCol",
+                "label": "Tab 2",
+                "list": [
+                  {
+                    "type": "inline",
+                    "columns": [
+                      "ajK_arECmlSyIvbDObxC6"
+                    ],
+                    "style": {},
+                    "id": "DCWZ6slhaQI0Cofacr_yH",
+                    "key": "inline_DCWZ6slhaQI0Cofacr_yH"
+                  }
+                ],
+                "style": {},
+                "options": {},
+                "key": "tabsCol_f2GBlLqG63Nnk3denLeAe"
+              },
+              {
+                "id": "8--mKpheTje2pZiy9wxlA",
+                "type": "tabsCol",
+                "label": "Tab 3",
+                "list": [
+                  {
+                    "type": "inline",
+                    "columns": [
+                      "vxz7_UfuMb3f3uIqy36vg"
+                    ],
+                    "style": {},
+                    "id": "JnPpc4Teb07r02kDMfB5G",
+                    "key": "inline_JnPpc4Teb07r02kDMfB5G"
+                  }
+                ],
+                "style": {},
+                "options": {},
+                "key": "tabsCol_8--mKpheTje2pZiy9wxlA"
+              }
+            ],
+            "options": {
+              "type": "",
+              "tabPosition": "top",
+              "align": "top",
+              "hidden": false,
+              "defaultValue": "8--mKpheTje2pZiy9wxlA"
+            },
+            "style": {
+              "width": "100%",
+              "height": "376px"
+            },
+            "key": "tabs_ClTBS39cRJcNKeqYDLi84"
+          }
+        ],
+        "style": {},
+        "id": "pjWHToGmOUKrEbYUt9FzT",
+        "key": "inline_pjWHToGmOUKrEbYUt9FzT"
+      }
+    ],
+    "mobile": [
+      {
+        "type": "inline",
+        "columns": [
+          "2Hz_88s0BVOVr9HoOoI3a"
+        ]
+      },
+      {
+        "type": "inline",
+        "columns": [
+          "qOOKKQf7tIQHpmEsDVZQm"
+        ]
+      },
+      {
+        "type": "inline",
+        "columns": [
+          "ajK_arECmlSyIvbDObxC6"
+        ]
+      },
+      {
+        "type": "inline",
+        "columns": [
+          "vxz7_UfuMb3f3uIqy36vg"
+        ]
+      }
+    ]
+  },
+  "data": {},
+  "config": {
+    "isSync": true,
+    "pc": {
+      "size": "default",
+      "labelPosition": "left",
+      "completeButton": {
+        "text": "提交",
+        "color": "",
+        "backgroundColor": ""
+      }
+    },
+    "mobile": {
+      "labelPosition": "left",
+      "completeButton": {
+        "text": "提交",
+        "color": "",
+        "backgroundColor": ""
+      }
+    }
+  },
+  "fields": [
+    {
+      "type": "entity",
+      "label": "",
+      "icon": "input",
+      "key": "entity_2Hz_88s0BVOVr9HoOoI3a",
+      "id": "2Hz_88s0BVOVr9HoOoI3a",
+      "options": {
+        "clearable": true,
+        "isShowWordLimit": false,
+        "renderType": 1,
+        "disabled": false,
+        "showPassword": false,
+        "defaultValue": "",
+        "placeholder": "",
+        "labelWidth": 100,
+        "isShowLabel": true,
+        "required": false,
+        "min": null,
+        "max": null
+      },
+      "style": {
+        "width": {
+          "pc": "100%",
+          "mobile": "100%"
+        },
+        "height": "320px"
+      }
+    },
+    {
+      "type": "entity",
+      "label": "",
+      "icon": "input",
+      "key": "entity_qOOKKQf7tIQHpmEsDVZQm",
+      "id": "qOOKKQf7tIQHpmEsDVZQm",
+      "options": {
+        "clearable": true,
+        "isShowWordLimit": false,
+        "renderType": 1,
+        "disabled": false,
+        "showPassword": false,
+        "defaultValue": "",
+        "placeholder": "",
+        "labelWidth": 100,
+        "isShowLabel": true,
+        "required": false,
+        "min": null,
+        "max": null
+      },
+      "style": {
+        "width": {
+          "pc": "100%",
+          "mobile": "100%"
+        }
+      }
+    },
+    {
+      "type": "entity",
+      "label": "",
+      "icon": "input",
+      "key": "entity_ajK_arECmlSyIvbDObxC6",
+      "id": "ajK_arECmlSyIvbDObxC6",
+      "options": {
+        "clearable": true,
+        "isShowWordLimit": false,
+        "renderType": 1,
+        "disabled": false,
+        "showPassword": false,
+        "defaultValue": "",
+        "placeholder": "",
+        "labelWidth": 100,
+        "isShowLabel": true,
+        "required": false,
+        "min": null,
+        "max": null
+      },
+      "style": {
+        "width": {
+          "pc": "100%",
+          "mobile": "100%"
+        }
+      }
+    },
+    {
+      "type": "entity",
+      "label": "",
+      "icon": "input",
+      "key": "entity_vxz7_UfuMb3f3uIqy36vg",
+      "id": "vxz7_UfuMb3f3uIqy36vg",
+      "options": {
+        "clearable": true,
+        "isShowWordLimit": false,
+        "renderType": 1,
+        "disabled": false,
+        "showPassword": false,
+        "defaultValue": "",
+        "placeholder": "",
+        "labelWidth": 100,
+        "isShowLabel": true,
+        "required": false,
+        "min": null,
+        "max": null
+      },
+      "style": {
+        "width": {
+          "pc": "100%",
+          "mobile": "100%"
+        }
+      }
+    }
+  ],
+  "logic": {}
+}

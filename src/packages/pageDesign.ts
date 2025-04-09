@@ -4,15 +4,20 @@ import { createPageDesignFieldConfig } from './pageDesignConfig'
 import { FormItem } from './formitem'
 import { Field } from './layoutType'
 import { PageDesignItem } from './pageItem'
+import { nextTick } from 'vue'
+import { entityData } from './formEditor/testData'
 
 export class PageDesign extends Form {
-  //
+  pageType = 'pageDesign'//
   constructor(config) {
     super(config) //
     this.init()
   }
   init(): void {
     super.init()
+    nextTick(() => {
+      // this.setLayoutData(JSON.parse(JSON.stringify(entityData)))//
+    })
   }
   setItems(items: any, setLayout?: boolean): void {
     this.items.splice(0)//
@@ -31,7 +36,7 @@ export class PageDesign extends Form {
         fields,
         layout,
         list: [], //
-      } 
+      }
       this.setLayoutData(obj)
     }
   }
@@ -48,8 +53,8 @@ export class PageDesign extends Form {
     let mainTableIns = {}
     let detailTableIns = {} //
   }
-  initPcLayout(): void {}
-  initMobileLayout(): void {}
+  initPcLayout(): void { }
+  initMobileLayout(): void { }
   getValidateRules() {
     return []
   }

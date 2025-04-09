@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { nanoid } from './nanoid'
 const fieldsRe = /^(input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform|entity)$/
 //
-class LayoutNode {}
+class LayoutNode { }
 const deepTraversal = (node, fn) => {
   fn(node)
   const nodes = node.list || node.rows || node.columns || node.children || []
@@ -27,6 +27,9 @@ const wrapElement = (element, fn?: any) => {
       node.style = {
         width: '100%',
       }
+    }
+    if (/^(inline)$/.test(node.type)) {
+
     }
     if (checkIsField(node)) {
       node.style = {
@@ -225,10 +228,9 @@ const syncWidthByPlatform = (
   })
 }
 const transferLabelPath = (node) =>
-  `er.fields.${
-    node.type === 'input'
-      ? `${node.type}.${node.options.renderType - 1}`
-      : `${node.type}`
+  `er.fields.${node.type === 'input'
+    ? `${node.type}.${node.options.renderType - 1}`
+    : `${node.type}`
   }`
 const fieldLabel = (t, node) => {
   // console.log(node,'testNode')//

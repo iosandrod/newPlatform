@@ -8,7 +8,7 @@ export default defineComponent({
   customOptions: {},
   props: {
     data: Object,
-    parent: Array
+    parent: Array,
   },
   setup(props) {
     const ns = hooks.useNamespace('TabsLayout')
@@ -19,34 +19,25 @@ export default defineComponent({
     let formIns: any = inject('formIns')
     let pluginName = formIns.getPluginName()
     let opt = {
-      [pluginName]: true
+      [pluginName]: true,
     }
     return () => {
       return (
         //@ts-ignore
         <Selection {...useAttrs()} data={props.data} parent={props.parent} hasCopy hasDel hasDrag hasWidthScale>
-          <el-tabs class={[ns.b()]} vModel={props.data.options.defaultValue} type={props.data.options.type} tabPosition={props.data.options.tabPosition}>
-            {
-              props.data.columns.map((element, index0) => {
+          <el-tabs class={[ns.b(), 'h-full']} vModel={props.data.options.defaultValue} type={props.data.options.type} tabPosition={props.data.options.tabPosition}>
+            {props.data.columns.map((element, index0) => {
+              //@ts-ignore
+              return (
                 //@ts-ignore
-                return (
-                  //@ts-ignore
-                  <Selection
-                    class={[ns.e('area')]}
-                    tag='el-tab-pane' label={element.label} name={element.id} data={element} parent={props.data}
-                  >
-                    <LayoutDragGable
-                      data-layout-type={'tabs-col'}
-                      data={element.list}
-                      {...opt}
-                      parent={element} />
-                  </Selection>
-                )
-              })
-            }
+                <Selection class={[ns.e('area'), 'h-full']} tag="el-tab-pane" label={element.label} name={element.id} data={element} parent={props.data}>
+                  <LayoutDragGable class="h-full" data-layout-type={'tabs-col'} data={element.list} {...opt} parent={element} />
+                </Selection>
+              )
+            })}
           </el-tabs>
         </Selection>
       )
     }
-  }
+  },
 })

@@ -29,16 +29,6 @@ const fConfigItemMap = {
         label: '绑定字段',
         type: 'input',
       },
-      // {
-      //   field: 'd',
-      //   label: 'd',
-      //   type: 'input',
-      // },
-      // {
-      //   field: 'd111',
-      //   label: 'd111', //
-      //   type: 'input',
-      // },
     ],
   },
   select: {
@@ -87,13 +77,7 @@ export default defineComponent({
               },
             ]}
           ></ButtonGroupCom> */}
-          {
-            <formCom
-              data={selected.value}
-              itemSpan={24}
-              items={items.value}
-            ></formCom>
-          }
+          {<formCom data={selected.value} itemSpan={24} items={items.value}></formCom>}
         </div>
       )
     }

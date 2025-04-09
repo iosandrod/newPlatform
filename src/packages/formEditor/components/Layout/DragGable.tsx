@@ -1,15 +1,4 @@
-import {
-  defineComponent,
-  resolveComponent,
-  watch,
-  useAttrs,
-  useSlots,
-  unref,
-  nextTick,
-  ref,
-  inject,
-  reactive,
-} from 'vue'
+import { defineComponent, resolveComponent, watch, useAttrs, useSlots, unref, nextTick, ref, inject, reactive } from 'vue'
 import { isHTMLTag } from '@vue/shared'
 // import DragGable from 'vuedraggable'
 import DragGable from '@ER/vueDraggable/vuedraggable'
@@ -38,12 +27,12 @@ const dragGableWrap = defineComponent({
   setup(props) {
     const { isEditModel } = hooks.useTarget()
     const formIns: Form = inject('formIns')
-    const _plugin=ControlInsertionPlugin(formIns)
-    let pName=formIns.getPluginName()
-    if(!dName.includes(pName)){
-      Sortable.mount([_plugin])////
-      dName.push(pName)////  
-    }
+    const _plugin = ControlInsertionPlugin(formIns)
+    // let pName = formIns.getPluginName() //
+    // if (!dName.includes(pName)) {
+    //   Sortable.mount([_plugin]) //////
+    //   dName.push(pName) ////
+    // }
     return () => {
       const attrs: any = useAttrs()
       let node = ''
@@ -51,17 +40,17 @@ const dragGableWrap = defineComponent({
         node = (
           <dragGable
             ondragover={(e) => {
-              e.preventDefault()//
+              e.preventDefault() //
               e.stopPropagation()
             }}
             ondrop={(e) => {
-              e.preventDefault()//
-              e.stopPropagation()//
+              e.preventDefault() //
+              e.stopPropagation() //
             }}
             ondragenter={(e) => {
-              e.preventDefault()//
+              e.preventDefault() //
               e.stopPropagation()
-              console.log('enter')//
+              console.log('enter') //
             }}
             {...attrs} //
           >
@@ -69,9 +58,7 @@ const dragGableWrap = defineComponent({
           </dragGable>
         )
       } else {
-        const tag = isHTMLTag(attrs.tag)
-          ? attrs.tag
-          : resolveComponent(attrs.tag)
+        const tag = isHTMLTag(attrs.tag) ? attrs.tag : resolveComponent(attrs.tag)
         const { item } = useSlots()
         node = (
           <tag {...attrs.componentData}>
@@ -141,23 +128,20 @@ export default defineComponent({
       [pluginName]: true,
     }
     try {
-    } catch (error) {
-      
-    }
+    } catch (error) {}
     const loadComponent = () => {
       let componentMap = {}
       watch(
         () => state.platform,
         () => {
           componentMap = {}
-        },
+        }
       )
       return {
         findComponent(type, element) {
           let info = componentMap[type + element]
           if (!info) {
-            componentMap[type + element] =
-              typeMap[element.toLowerCase()]?.[state.platform]
+            componentMap[type + element] = typeMap[element.toLowerCase()]?.[state.platform]
             if (!componentMap[type + element]) {
               console.log(Object.keys(typeMap), 'typeMap') //
               console.error(element, '找不到组件') //
@@ -194,66 +178,23 @@ export default defineComponent({
         // console.log(element,'testEl')//
         switch (element.type) {
           case 'grid':
-            node = (
-              <LayoutGridLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutGridLayout>
-            )
+            node = <LayoutGridLayout key={element.id} data={element} parent={props.data}></LayoutGridLayout>
             break
           case 'table':
-            node = (
-              <LayoutTableLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTableLayout>
-            )
+            node = <LayoutTableLayout key={element.id} data={element} parent={props.data}></LayoutTableLayout>
             break
           case 'tabs':
-            node = (
-              <LayoutTabsLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTabsLayout>
-            )
+            node = <LayoutTabsLayout key={element.id} data={element} parent={props.data}></LayoutTabsLayout>
             break
           case 'collapse':
-            node = (
-              <LayoutCollapseLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutCollapseLayout>
-            )
+            node = <LayoutCollapseLayout key={element.id} data={element} parent={props.data}></LayoutCollapseLayout>
             break
           case 'inline':
-            node = (
-              <LayoutInlineLayout
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutInlineLayout>
-            )
+            node = <LayoutInlineLayout key={element.id} data={element} parent={props.data}></LayoutInlineLayout>
             break
           case 'subform':
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
-              node = (
-                <LayoutSubformLayout
-                  key={element.id}
-                  data={element}
-                  parent={props.data}
-                ></LayoutSubformLayout>
-              )
+            if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
+              node = <LayoutSubformLayout key={element.id} data={element} parent={props.data}></LayoutSubformLayout>
             }
             break
           default:
@@ -268,14 +209,7 @@ export default defineComponent({
             }
             const rules = formitem?.getValidateRoles() || [] //
             let TypeComponent = ''
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
+            if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
               TypeComponent = load.findComponent('FormTypes', element.type)
               const params = {
                 data: element,
@@ -289,50 +223,33 @@ export default defineComponent({
                 //@ts-ignore
                 const formitem = typeProps?.formitem //
                 const prop = formitem?.getField()
+                let innerCom = null
+                //@ts-ignore
+                if (formIns.pageType == 'pageDesign') {
+                  innerCom = <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>
+                } else {
+                  innerCom = (
+                    <el-form-item {...typeProps} prop={prop}>
+                      <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>
+                    </el-form-item>
+                  )
+                }
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
                     {element.type !== 'divider' ? (
                       //@ts-ignore
-                      <el-form-item {...typeProps} prop={prop}>
-                        <TypeComponent
-                          key={element.id}
-                          data={element}
-                          params={typeProps}
-                        ></TypeComponent>
-                      </el-form-item>
+                      innerCom
                     ) : (
-                      <TypeComponent
-                        key={element.id}
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
+                      <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>
                     )}
                   </Selection>
                 )
               } else {
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    <TypeComponent
-                      key={element.id}
-                      data={element}
-                      params={typeProps}
-                    ></TypeComponent>
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
+                    <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>
                   </Selection>
                 )
               }
@@ -352,6 +269,7 @@ export default defineComponent({
       },
     }
     return () => {
+      //
       return (
         <dragGableWrap
           list={props.data} //isArray

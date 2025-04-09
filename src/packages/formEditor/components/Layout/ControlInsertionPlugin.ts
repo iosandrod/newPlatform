@@ -323,7 +323,7 @@ const resetStates = () => {
 }
 function ControlInsertionPlugin(ER) {
   class ControlInsertionPlugin {
-    dragStart(e) { } 
+    dragStart(e) { }
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       if (!prevEl || !e.activeSortable) {
@@ -424,7 +424,7 @@ function ControlInsertionPlugin(ER) {
     dragOver(e) {//
       e.cancel()
       resetStates()
-        const {
+      const {
         activeSortable: {
           constructor: { utils: SortableUtils },
           options: { dataSource },
@@ -524,10 +524,10 @@ function ControlInsertionPlugin(ER) {
         setStates(newTarget, e, ER)
       }
     }
-  } 
+  }
   const name = ER.formIns.getPluginName()
-  console.log('form的插件挂在了')
-  return Object.assign(ControlInsertionPlugin, {
+  // console.log(name, ER, 'testName')////
+  return Object.assign(ControlInsertionPlugin, {//
     pluginName: name, //
     initializeByDefault: true,
   })

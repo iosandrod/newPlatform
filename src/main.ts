@@ -19,10 +19,12 @@ import context from '@/contextM'
 import '@/contextM/themes/default/index.scss'
 import { erFormEditor } from '@ER/formEditor'
 import { registerEdit } from '@/table/registerEdit'
+import tableCom from './table/tableCom'
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)
 app.component('erForm', erFormEditor) //
+app.component('erTable', tableCom)
 app.use(context) //
 app.use(VxeTable)
 app.use(VxeUIAll)

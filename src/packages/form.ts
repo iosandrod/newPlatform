@@ -37,7 +37,7 @@ const layoutType = [
   'divider',
   'inline',
 ]
-const pName=[]//
+const pName = []//
 export class Form extends Base {
   formIns?: any
   lang: any = {}
@@ -246,7 +246,7 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-            sortableUtils.index(prevSortable.el.parentNode)
+          sortableUtils.index(prevSortable.el.parentNode)
           ],
         form: ER.formIns,
       })
@@ -339,8 +339,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-            ? newTarget.children[0]
-            : newTarget.parentNode
+              ? newTarget.children[0]
+              : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -431,7 +431,7 @@ export class Form extends Base {
   runTestMethod() {
     // let d=this.getData()
     let d = this.getLayoutData() //
-    console.log(this, 'testThis') //
+    console.log(d, 'testThis') ////
   }
   init() {
     super.init()
@@ -538,7 +538,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() {}
+  closeCurSubForm() { }
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -680,7 +680,7 @@ export class Form extends Base {
     pcLayout.columns[0].id = id2
     pcLayout.columns[0].key = `table_${id2}` //
   }
-  initMobileLayout() {}
+  initMobileLayout() { }
   addFormItem(config: Field) {
     let id = config.id
     let oldItems = this.items
@@ -735,7 +735,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) {}
+  setEditData(data) { }
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -808,7 +808,7 @@ export class Form extends Base {
     let layout = this.layout
     layout.pc = newData.layout.pc
     layout.mobile = newData.layout.mobile
-    this.isShow = false
+    // this.isShow = false
     state.store = newData.list
     state.fields = newData.fields
     const curLayout = _.cloneDeep(newData.layout[state.platform])
@@ -823,7 +823,7 @@ export class Form extends Base {
     })
     nextTick(() => {
       //
-      this.isShow = true
+      // this.isShow = true
     })
   }
   setSelection(node) {
@@ -1429,15 +1429,15 @@ export class Form extends Base {
       formIns.nextForm = subForm //
     }
   }
-  resetContext(){
+  resetContext() {
     // let platform = this.state.platform
-    let state=this.state
+    let state = this.state
     state.store.forEach((e) => {
       utils.addContext({ node: e, parent: state.store })
     })
   }
   checkIslineChildren(node) {
-    if(node.context==null){
+    if (node.context == null) {
       this.resetContext()//
     }
     return node.context.parent.type === 'inline'

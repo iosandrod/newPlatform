@@ -72,3 +72,12 @@ ul, ol {
 .el-main{
   --el-main-padding: 0px !important;
 }
+.ER-element{
+  height: 100%;
+}
+.h-full{
+  height: 100%;
+}
+.el-form-item{
+  height: 100%;
+}
