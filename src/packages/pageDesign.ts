@@ -15,11 +15,11 @@ export class PageDesign extends Form {
     super.init()
   }
   setItems(items: any, setLayout?: boolean): void {
-    this.items.splice(0)
+    this.items.splice(0)//
     for (const item of items) {
       this.addFormItem(item)
     }
-    if (setLayout == true) {
+    if (setLayout == true) {//
       let pcLayout = this.getPcLayout()
       let mobileLayout = this.getMobileLayout()
       let layout = {
@@ -31,12 +31,12 @@ export class PageDesign extends Form {
         fields,
         layout,
         list: [], //
-      } //
+      } 
       this.setLayoutData(obj)
     }
   }
   addFormItem(config): any {
-    let _item = new PageDesignItem(config, this)//
+    let _item = new PageDesignItem(config, this) //
     //@ts-ignore
     this.items.push(_item)
     return _item //
@@ -48,10 +48,9 @@ export class PageDesign extends Form {
     let mainTableIns = {}
     let detailTableIns = {} //
   }
-  initPcLayout(): void { }
-  initMobileLayout(): void { }
+  initPcLayout(): void {}
+  initMobileLayout(): void {}
   getValidateRules() {
     return []
   }
 }
-

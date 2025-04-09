@@ -24,6 +24,7 @@ export class Context {
     this.node = config.node
     this.parent = config.parent
     let parent = this.parent
+    this.form = config.form //
     if (Array.isArray(this.parent)) {
       this.arr = this.parent
     } else {
@@ -282,7 +283,7 @@ export class Context {
         result = node
         break
       default:
-        result = parent?.context?.root//
+        result = parent?.context?.root //
     }
     return result
   }
@@ -317,7 +318,6 @@ export class Context {
     arr.splice(index + 1, 0, newNode)
   }
   addContext(node, parent?: any, fn?: any) {
-
     if (typeof node != 'object') {
       return
     }
@@ -325,6 +325,7 @@ export class Context {
     let context = new Context({
       node,
       parent,
+      form: this.form, //
     }) //
     return context
   }
@@ -920,7 +921,8 @@ export class Context {
   del(type) {
     let node = this.node
 
-    const {//
+    const {
+      //
       context: { root, col, row },
     } = node
     const nodes = this.getNodes(node, type === 'column' ? 'colspan' : 'rowspan') //
@@ -941,5 +943,24 @@ export class Context {
   }
   getShowIcon() {
     // const form=this
+  }
+  getLayoutProps() {
+    let obj = {}
+    let type = this.state.type
+    if (type == 'table') {
+      let _obj = {
+        hasWidthScale: true,
+        hasCopy: true,
+        hasDel: true,
+        hasDrag: true,
+        hasInserColumn: true,
+        hasInserRow: true,
+      }
+      Object.assign(obj, _obj) //
+    }
+    return obj //
+  }
+  getNodeStyle(){
+    
   }
 }

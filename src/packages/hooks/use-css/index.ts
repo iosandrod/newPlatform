@@ -4,24 +4,23 @@ import jss from 'jss'
 import preset from 'jss-preset-default'
 jss.setup({
   ...preset(),
-  insertionPoint: document.getElementById('Everright-formEditor-point')
+  insertionPoint: document.getElementById('Everright-formEditor-point'),
 })
-const sheet = jss.createStyleSheet({
-}, {
-  classNamePrefix: 'ER-'
-}).attach()
-const isShowKeys = [
-  'padding',
-  'margin',
-  'border',
-  'background'
-]
+const sheet = jss
+  .createStyleSheet(
+    {},
+    {
+      classNamePrefix: 'ER-',
+    },
+  )
+  .attach()
+const isShowKeys = ['padding', 'margin', 'border', 'background']
 const renderTableBorder = (style) => {
   let result = {}
   const value = {
     width: style.borderWidth,
     style: 'solid',
-    color: style.borderColor
+    color: style.borderColor,
   }
   switch (style.borderType) {
     case 0:
@@ -31,9 +30,9 @@ const renderTableBorder = (style) => {
         '&>table': {
           border: value,
           '& td': {
-            border: value
-          }
-        }
+            border: value,
+          },
+        },
       }
       break
     case 2:
@@ -42,87 +41,87 @@ const renderTableBorder = (style) => {
           border: value,
           '& td': {
             border: {
-              style: 'none'
-            }
-          }
-        }
+              style: 'none',
+            },
+          },
+        },
       }
       break
     case 3:
       result = {
         '&>table': {
           border: {
-            style: 'none'
+            style: 'none',
           },
           '& td:not(`:last-child`)': {
-            borderRight: value
+            borderRight: value,
           },
           '& tr:not(:last-child)': {
             '& td': {
-              borderBottom: value
-            }
-          }
-        }
+              borderBottom: value,
+            },
+          },
+        },
       }
       break
     case 4:
       result = {
         '&>table': {
           border: {
-            style: 'none'
+            style: 'none',
           },
           borderLeft: value,
           '& td': {
             border: {
-              style: 'none'
-            }
-          }
-        }
+              style: 'none',
+            },
+          },
+        },
       }
       break
     case 5:
       result = {
         '&>table': {
           border: {
-            style: 'none'
+            style: 'none',
           },
           borderRight: value,
           '& td': {
             border: {
-              style: 'none'
-            }
-          }
-        }
+              style: 'none',
+            },
+          },
+        },
       }
       break
     case 6:
       result = {
         '&>table': {
           border: {
-            style: 'none'
+            style: 'none',
           },
           borderTop: value,
           '& td': {
             border: {
-              style: 'none'
-            }
-          }
-        }
+              style: 'none',
+            },
+          },
+        },
       }
       break
     case 7:
       result = {
         '&>table': {
           border: {
-            style: 'none'
+            style: 'none',
           },
           borderBottom: value,
           '& td': {
             border: {
-              style: 'none'
-            }
-          }
-        }
+              style: 'none',
+            },
+          },
+        },
       }
       break
   }
@@ -136,7 +135,7 @@ const renderStyleSheets = (node, uid, platform) => {
         Object.assign(style, renderTableBorder(node.style))
       }
     } else {
-      if (!(style[`isShow${_.upperFirst(key)}`])) {
+      if (!style[`isShow${_.upperFirst(key)}`]) {
         delete style[key]
         if (key === 'border') {
           delete style.borderRadius
@@ -156,17 +155,20 @@ const renderStyleSheets = (node, uid, platform) => {
 }
 export const useCss = (node, platform) => {
   const id = ref('')
-  const {
-    uid
-  } = getCurrentInstance()
+  const { uid } = getCurrentInstance()
   if (node.style) {
-    watch(node.style, (newValue) => {
-      if (!_.isEmpty(newValue)) {
-        id.value = renderStyleSheets(node, uid, platform)
-      }
-    }, {
-      immediate: true
-    })
+    watch(
+      node.style,
+      (newValue) => {
+        if (!_.isEmpty(newValue)) {
+          id.value = renderStyleSheets(node, uid, platform)
+        }
+      },
+      {
+        //
+        immediate: true,
+      },
+    )
   }
   return id
 }

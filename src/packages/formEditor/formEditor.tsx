@@ -187,9 +187,7 @@ export default defineComponent({
         data,
       })
     }
-    const getData2 = formIns.getLayoutData.bind(formIns)
     const setData2 = formIns.setLayoutData.bind(formIns)
-    const clearData = formIns.clearData.bind(formIns)
     const getData = formIns.getLayoutData.bind(formIns)
     const setData = setData2
     expose({
@@ -216,12 +214,6 @@ export default defineComponent({
         case 3:
           state.previewVisible = true
           previewLoading.value = true
-          // setTimeout(() => {
-          //   EReditorPreviewRef.value.setData(getData());
-          //   nextTick(() => {
-          //     previewLoading.value = false;
-          //   });
-          // }, 500);
           break
         case 4:
           fireEvent('save', getData())

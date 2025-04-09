@@ -37,12 +37,29 @@ const layoutType = [
   'divider',
   'inline',
 ]
+const pName=[]//
 export class Form extends Base {
   formIns?: any
   lang: any = {}
   t: any
   form?: any
-  state: any
+  state: {
+    validate: any
+    store: any[]
+    selected: any
+    mode: any
+    platform: any
+    children: any[]
+    config: any
+    previewVisible: any
+    widthScaleLock: any
+    data: any
+    validateStates: any[]
+    fields: any[]
+    Namespace: any
+    logic: any
+    [key: string]: any
+  }
   isShow: boolean = true
   isDesign = true //
   data: any = {} //
@@ -135,9 +152,8 @@ export class Form extends Base {
         layout,
         list: [], //
       }
+      console.log(obj, 'testObj') //
       this.setLayoutData(obj) //
-      //   nextTick(() => {
-      //   })
     }
   }
   getDragElement(node) {
@@ -208,7 +224,7 @@ export class Form extends Base {
       utils.addContext({
         node: store[inserRowIndex],
         parent: prevSortable.options.parent,
-        form: ER.formIns//
+        form: ER.formIns, //
       })
     }
 
@@ -230,9 +246,9 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-          sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
           ],
-        form: ER.formIns
+        form: ER.formIns,
       })
     }
     // 如果有行插入或列插入操作，则遍历新元素，并检查是否需要额外的字段处理
@@ -303,7 +319,7 @@ export class Form extends Base {
     //@ts-ignore
     let newTarget = SortableUtils.closest(
       target,
-      options.draggable,//@ts-ignore
+      options.draggable, //@ts-ignore
       sortable.el,
     )
     if (dragEl.contains(newTarget)) {
@@ -323,8 +339,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-              ? newTarget.children[0]
-              : newTarget.parentNode
+            ? newTarget.children[0]
+            : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -414,7 +430,8 @@ export class Form extends Base {
   }
   runTestMethod() {
     // let d=this.getData()
-    let d = this.getLayoutData()//
+    let d = this.getLayoutData() //
+    console.log(this, 'testThis') //
   }
   init() {
     super.init()
@@ -427,13 +444,15 @@ export class Form extends Base {
     if (_data) {
       this.setData(_data) //
     }
-    this.setItems(items) //
-    nextTick(() => {//
-      this.setLayoutData(JSON.parse(JSON.stringify(testData1))) //
+    // console.log('items',items,'test')//
+    this.setItems(items, true) ////
+    nextTick(() => {
+      //
+      // this.setLayoutData(JSON.parse(JSON.stringify(testData1))) //
     })
   } //
   setState(state) {
-    this.state = state//
+    this.state = state //
   }
   getDesignFieldConfig() {
     let value = createFieldConfig()
@@ -466,6 +485,9 @@ export class Form extends Base {
     let items = this.items
     let _items = items.map((item) => item.getOptionField())
     return _items
+  }
+  getDropMenuItems(node) {
+    let arr = []
   }
   getBarsValue() {
     let parent = this.parent
@@ -516,7 +538,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() { }
+  closeCurSubForm() {}
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -658,14 +680,21 @@ export class Form extends Base {
     pcLayout.columns[0].id = id2
     pcLayout.columns[0].key = `table_${id2}` //
   }
-  initMobileLayout() { }
+  initMobileLayout() {}
   addFormItem(config: Field) {
+    let id = config.id
+    let oldItems = this.items
+    let index = oldItems.findIndex((item) => item.id === id)
+    if (index !== -1) {
+      return
+    } //
     let _item = new FormItem(config, this)
     this.items.push(_item) //
     return _item
   }
   delFormItem(id) {
-    if (typeof id == 'string') {//
+    if (typeof id == 'string') {
+      //
       let index = this.items.findIndex((item) => item.id === id)
       if (index !== -1) {
         this.items.splice(index, 1)
@@ -706,7 +735,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) { }
+  setEditData(data) {}
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -774,7 +803,7 @@ export class Form extends Base {
     }
     if (state == null) {
       return
-    }
+    } //
     let newData = data
     let layout = this.layout
     layout.pc = newData.layout.pc
@@ -790,9 +819,10 @@ export class Form extends Base {
     state.logic = newData.logic || state.logic //
     this.setSelection(state.config)
     state.store.forEach((e) => {
-      utils.addContext({ node: e, parent: state.store, form: this })//
+      utils.addContext({ node: e, parent: state.store, form: this }) //
     })
-    nextTick(() => {//
+    nextTick(() => {
+      //
       this.isShow = true
     })
   }
@@ -1354,7 +1384,11 @@ export class Form extends Base {
     }
     if (props.parent.length > 0) {
       const index = props.parent.indexOf(props.data)
-      this.setSelection(index === props.parent.length ? props.parent[index - 1] : props.parent[index])
+      this.setSelection(
+        index === props.parent.length
+          ? props.parent[index - 1]
+          : props.parent[index],
+      )
     } else {
       this.setSelection('root')
     }
@@ -1394,6 +1428,68 @@ export class Form extends Base {
     if (subForm != null) {
       formIns.nextForm = subForm //
     }
+  }
+  resetContext(){
+    // let platform = this.state.platform
+    let state=this.state
+    state.store.forEach((e) => {
+      utils.addContext({ node: e, parent: state.store })
+    })
+  }
+  checkIslineChildren(node) {
+    if(node.context==null){
+      this.resetContext()//
+    }
+    return node.context.parent.type === 'inline'
+  }
+  syncWidthByPlatform(node, platform, syncFullplatform = false, value) {
+    const isArray = _.isArray(node)
+    if (!isArray) {
+      if (_.isObject(node.style.width)) {
+        if (syncFullplatform) {
+          node.style.width.pc = node.style.width.mobile = value + '%'
+        } else {
+          node.style.width[platform] = value + '%'
+        }
+      } else {
+        node.style.width = value + '%'
+      }
+    }
+    // const otherNodes = isArray
+    //   ? node
+    //   : node.context.parent.columns.filter((e) => e !== node)
+    // const averageWidths = this.calculateAverage(
+    //   otherNodes.length,
+    //   isArray ? 100 : 100 - value,
+    // )
+    // otherNodes.forEach((node, index) => {
+    //   const isFieldWidth = _.isObject(node.style.width)
+    //   if (isFieldWidth) {
+    //     if (syncFullplatform) {
+    //       node.style.width.pc = node.style.width.mobile =
+    //         averageWidths[index] + '%'
+    //     } else {
+    //       node.style.width[platform] = averageWidths[index] + '%'
+    //     }
+    //   } else {
+    //     node.style.width = averageWidths[index] + '%'
+    //   }
+    // })
+  }
+  calculateAverage(count, total = 100) {
+    const base = Number((total / count).toFixed(2))
+    const result = []
+    for (let i = 0; i < count; i++) {
+      result.push(base)
+    }
+    return result
+  }
+  syncHeightByPlatform(node, platform, syncFullplatform = false, value) {
+    node.style.height = value
+    const otherNodes = node.context.parent.columns.filter((e) => e !== node)
+    otherNodes.forEach((node, index) => {
+      node.style.height = value //
+    })
   }
 }
 //使用默认布局

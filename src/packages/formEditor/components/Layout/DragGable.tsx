@@ -26,6 +26,8 @@ import Selection from '@ER/formEditor/components/Selection/selectElement'
 import ControlInsertionPlugin from './ControlInsertionPlugin'
 import { typeMap } from '../FormTypes'
 import { Form } from '@ER/form'
+import { dName } from '@ER/vueDraggable/vuedraggable'
+import Sortable from 'sortablejs'
 const dragGableWrap = defineComponent({
   inheritAttrs: false,
   name: 'customDragGable',
@@ -35,11 +37,37 @@ const dragGableWrap = defineComponent({
   },
   setup(props) {
     const { isEditModel } = hooks.useTarget()
+    const formIns: Form = inject('formIns')
+    const _plugin=ControlInsertionPlugin(formIns)
+    let pName=formIns.getPluginName()
+    if(!dName.includes(pName)){
+      Sortable.mount([_plugin])////
+      dName.push(pName)////  
+    }
     return () => {
       const attrs: any = useAttrs()
       let node = ''
       if (unref(isEditModel)) {
-        node = <dragGable {...attrs}>{useSlots()}</dragGable>
+        node = (
+          <dragGable
+            ondragover={(e) => {
+              e.preventDefault()//
+              e.stopPropagation()
+            }}
+            ondrop={(e) => {
+              e.preventDefault()//
+              e.stopPropagation()//
+            }}
+            ondragenter={(e) => {
+              e.preventDefault()//
+              e.stopPropagation()
+              console.log('enter')//
+            }}
+            {...attrs} //
+          >
+            {useSlots()}
+          </dragGable>
+        )
       } else {
         const tag = isHTMLTag(attrs.tag)
           ? attrs.tag
@@ -104,9 +132,17 @@ export default defineComponent({
       // onDrop: (e) => {
       //   formIns._onDrop(e)
       // },
-      plugins: [ControlInsertionPlugin(ER)],
+
+      ondragover: (e) => {
+        ////
+      },
+      plugins: [ControlInsertionPlugin(ER)], //
       // ControlInsertion: true,
       [pluginName]: true,
+    }
+    try {
+    } catch (error) {
+      
     }
     const loadComponent = () => {
       let componentMap = {}
@@ -120,7 +156,8 @@ export default defineComponent({
         findComponent(type, element) {
           let info = componentMap[type + element]
           if (!info) {
-            componentMap[type + element] = typeMap[element.toLowerCase()]?.[state.platform]
+            componentMap[type + element] =
+              typeMap[element.toLowerCase()]?.[state.platform]
             if (!componentMap[type + element]) {
               console.log(Object.keys(typeMap), 'typeMap') //
               console.error(element, '找不到组件') //
@@ -220,27 +257,15 @@ export default defineComponent({
             }
             break
           default:
-            // debugger //
             let formitem = formIns.items.find((item) => item.id === element.id)
             let typeProps = {} //
             try {
               typeProps = formitem?.getFormItemProps(element) || {} //
             } catch (error) {
-              // console.log(formIns, 'testIns') //
-              // console.log(
-              //   formIns.items.map((item) => {
-              //     return item.getField()
-              //   }),
-              //   '发生错误在dragable', //
-              // ) //
-              // throw error //
               setTimeout(() => {
                 console.error('没有找到formitem', formIns) //////
               }, 100)
             }
-            // setTimeout(() => {
-            //   console.log(formIns, 'testIns') //
-            // }, 1000)
             const rules = formitem?.getValidateRoles() || [] //
             let TypeComponent = ''
             if (

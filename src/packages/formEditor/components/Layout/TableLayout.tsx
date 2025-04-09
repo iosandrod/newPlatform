@@ -9,26 +9,28 @@ export default defineComponent({
   customOptions: {},
   props: {
     data: Object,
-    parent: Array
+    parent: Array,
   },
-  setup (props) {
-    const ns = hooks.useNamespace('TableLayout') 
-    const {
-      isEditModel
-    } = hooks.useTarget()
+  setup(props) {
+    const ns = hooks.useNamespace('TableLayout')
+    const { isEditModel } = hooks.useTarget()
+    let node = props.data //
     return () => {
+      let selectProps = node.context.getLayoutProps()
+      console.log(selectProps,'testProps')//
       const handleMousedown = (e, node) => {
         if (!isTrTag(e.target.tagName)) return false
-        let curCell:any = ''
+        let curCell: any = ''
         if (e.target.offsetWidth - e.offsetX < 10) {
-          curCell = e.target 
+          curCell = e.target
           curCell.initClientX = e.clientX
           curCell.initWidth = curCell.offsetWidth
         }
         document.ondragstart = document.onselectstart = () => false
         document.onmousemove = (e) => {
           if (curCell.initWidth + (e.clientX - curCell.initClientX) > 0) {
-            node.style.width = curCell.initWidth + (e.clientX - curCell.initClientX)
+            node.style.width =
+              curCell.initWidth + (e.clientX - curCell.initClientX)
           }
         }
         document.onmouseup = function () {
@@ -44,46 +46,60 @@ export default defineComponent({
         }
       }
       return (
-        <Selection class={ns.b()} {...useAttrs()} hasWidthScale hasCopy hasDel hasDrag hasInserColumn hasInserRow data={props.data} parent={props.parent}>
+        <Selection
+          class={ns.b()}
+          {...useAttrs()}
+          hasWidthScale
+          hasCopy
+          hasDel
+          hasDrag
+          hasInserColumn
+          hasInserRow
+          data={props.data}
+          parent={props.parent}
+        >
           <table>
             <tbody>
-            {
-              props.data.rows.map((element, index0) => {
+              {props.data.rows.map((element, index0) => {
                 return (
                   <tr key={element.id}>
-                    {
-                      element.columns.map((element1, index1) => {
-                        const node = !element1.options.isMerged && (
-                          <Selection
-                            tag="td"
-                            class={[ns.e('area')]}
-                            key={element1.id}
-                            data={element1}
-                            parent={element}
-                            hasTableCellOperator
-                            colspan={element1.options.colspan}
-                            rowspan={element1.options.rowspan}
-                            onMousedown={(e) => !index0 && unref(isEditModel) && handleMousedown(e, element1)}
-                            onMousemove={!index0 && unref(isEditModel) && handleMousemove}
-                            width={element1.style && element1.style.width}
-                          >
-                            <LayoutDragGable
-                              data-layout-type={'td'}
-                              data={element1.list}
-                              parent={element1}/>
-                          </Selection>
-                        )
-                        return node
-                      })
-                    }
+                    {element.columns.map((element1, index1) => {
+                      const node = !element1.options.isMerged && (
+                        <Selection
+                          tag="td"
+                          class={[ns.e('area')]}
+                          key={element1.id}
+                          data={element1}
+                          parent={element}
+                          hasTableCellOperator
+                          colspan={element1.options.colspan}
+                          rowspan={element1.options.rowspan}
+                          onMousedown={(e) =>
+                            !index0 &&
+                            unref(isEditModel) &&
+                            handleMousedown(e, element1)
+                          }
+                          onMousemove={
+                            !index0 && unref(isEditModel) && handleMousemove
+                          }
+                          width={element1.style && element1.style.width}
+                        >
+                          <LayoutDragGable
+                            data-layout-type={'td'}
+                            data={element1.list}
+                            parent={element1}
+                          />
+                        </Selection>
+                      )
+                      return node
+                    })}
                   </tr>
                 )
-              })
-            }
+              })}
             </tbody>
           </table>
         </Selection>
       )
     }
-  }
+  },
 })

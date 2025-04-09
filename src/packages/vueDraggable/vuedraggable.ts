@@ -1,79 +1,79 @@
-import Sortable from "sortablejs";
-import { insertNodeAt, removeNode } from "./util/htmlHelper";
-import { console } from "./util/console";
+import Sortable from 'sortablejs'
+import { insertNodeAt, removeNode } from './util/htmlHelper'
+import { console } from './util/console'
 import {
   getComponentAttributes,
   createSortableOption,
-  getValidSortableEntries
-} from "./core/componentBuilderHelper";
-import { computeComponentStructure } from "./core/renderHelper";
-import { events } from "./core/sortableEvents";
-import { h, defineComponent, nextTick, useAttrs } from "vue";
+  getValidSortableEntries,
+} from './core/componentBuilderHelper'
+import { computeComponentStructure } from './core/renderHelper'
+import { events } from './core/sortableEvents'
+import { h, defineComponent, nextTick, useAttrs } from 'vue'
 
 function emit(evtName, evtData) {
-  nextTick(() => this.$emit(evtName.toLowerCase(), evtData));
+  nextTick(() => this.$emit(evtName.toLowerCase(), evtData))
 }
-let dName = []
+export const dName = []
 function manage(evtName) {
   return (evtData, originalElement) => {
     if (this.realList !== null) {
-      return this[`onDrag${evtName}`](evtData, originalElement);
+      return this[`onDrag${evtName}`](evtData, originalElement)
     }
-  };
+  }
 }
 function manageAndEmit(evtName) {
-  const delegateCallBack = manage.call(this, evtName);
+  const delegateCallBack = manage.call(this, evtName)
   return (evtData, originalElement) => {
-    delegateCallBack.call(this, evtData, originalElement);
-    emit.call(this, evtName, evtData);
-  };
+    delegateCallBack.call(this, evtData, originalElement)
+    emit.call(this, evtName, evtData)
+  }
 }
-let draggingElement = null;
+let draggingElement = null
 
 const props = {
   list: {
     type: Array,
     required: false,
-    default: null
+    default: null,
   },
   modelValue: {
     type: Array,
     required: false,
-    default: null
+    default: null,
   },
   itemKey: {
     type: [String, Function],
-    required: true
+    required: true,
   },
   clone: {
     type: Function,
-    default: original => {
-      return original;
-    }
+    default: (original) => {
+      return original
+    },
   },
   tag: {
     type: String,
-    default: "div"
+    default: 'div',
   },
   move: {
     type: Function,
-    default: null
+    default: null,
   },
   componentData: {
     type: Object,
     required: false,
-    default: null
-  }
-};
+    default: null,
+  },
+}
 
 const emits = [
-  "update:modelValue",
-  "change",
-  ...[...events.manageAndEmit, ...events.emit].map(evt => evt.toLowerCase())
-];
+  'update:modelValue',
+  'change',
+  ...[...events.manageAndEmit, ...events.emit].map((evt) => evt.toLowerCase()),
+]
 
 const draggableComponent = defineComponent({
-  name: "draggable",
+  name: 'draggable',
 
   inheritAttrs: false,
 
@@ -83,261 +83,267 @@ const draggableComponent = defineComponent({
 
   data() {
     return {
-      error: false
-    };
+      error: false,
+    }
   },
 
   render() {
     try {
-      this.error = false;
-      const { $slots, $attrs, tag, componentData, realList, getKey } = this;
+      this.error = false
+      const { $slots, $attrs, tag, componentData, realList, getKey } = this
       const componentStructure = computeComponentStructure({
         $slots,
         tag,
         realList,
-        getKey
-      });
-      this.componentStructure = componentStructure;
-      const attributes = getComponentAttributes({ $attrs, componentData });
-      return componentStructure.render(h, attributes);
+        getKey,
+      })
+      this.componentStructure = componentStructure
+      const attributes = getComponentAttributes({ $attrs, componentData })
+      return componentStructure.render(h, attributes)
     } catch (err) {
-      this.error = true;
-      return h("pre", { style: { color: "red" } }, err.stack);
+      this.error = true
+      return h('pre', { style: { color: 'red' } }, err.stack)
     }
   },
 
   created() {
     if (this.list !== null && this.modelValue !== null) {
       console.error(
-        "modelValue and list props are mutually exclusive! Please set one or another."
-      );
+        'modelValue and list props are mutually exclusive! Please set one or another.',
+      )
     }
   },
 
   mounted() {
     if (this.error) {
-      return;
+      return
     }
 
-    const { $attrs, $el, componentStructure } = this;
-    componentStructure.updated();
+    const { $attrs, $el, componentStructure } = this
+    componentStructure.updated()
 
     const sortableOptions = createSortableOption({
       $attrs,
       callBackBuilder: {
-        manageAndEmit: event => manageAndEmit.call(this, event),
-        emit: event => emit.bind(this, event),
-        manage: event => manage.call(this, event)
-      }
-    });
-    const targetDomElement = $el.nodeType === 1 ? $el : $el.parentElement;
+        manageAndEmit: (event) => manageAndEmit.call(this, event),
+        emit: (event) => emit.bind(this, event),
+        manage: (event) => manage.call(this, event),
+      },
+    })
+    const targetDomElement = $el.nodeType === 1 ? $el : $el.parentElement
     // let plugin=Sortable.plugins
     const plugins = this.$attrs.plugins
     if (plugins) {
       if (Array.isArray(plugins)) {
-        let _plugin = plugins.filter(plugin => !dName.includes(plugin.pluginName))//
-        Sortable.mount(_plugin)//
-        // class Plugin {
-        //   dragOver(e) {
-        //     console.log('test1111', e)
-        //   }
-        // }
-        // //@ts-ignore 
-        // Plugin.pluginName = '11111111'
-        // if (dName.length > 0) {
-        //   //@ts-ignore
-        //   Plugin.pluginName = Math.random().toString()
-        // }
-        // Sortable.mount(Plugin)// //
-        let _names = _plugin.map(plugin => plugin.pluginName)
-        dName.push(..._names)////
+        let _plugin = plugins.filter(
+          (plugin) => !dName.includes(plugin.pluginName),
+        ) //
+        Sortable.mount(_plugin) //
+        let _names = _plugin.map((plugin) => plugin.pluginName)
+        dName.push(..._names) ////
       }
     }
-    let opt: Sortable.Options = {
-      // onMove: (evt) => {
-      //   console.log(evt, 'evt')
-      // }
-    }
-    this._sortable = new Sortable(targetDomElement, { ...sortableOptions, ...opt });
-
-    this.targetDomElement = targetDomElement;
+    //@ts-ignore
+    // Sortable.eventCanceled = true
+    let s = new Sortable(targetDomElement, {
+      ...sortableOptions,
+      dragoverBubble: false,//
+      // sort:false,
+      onStart(evt) {
+        //@ts-ignore
+      },
+      // onChange(evt) {
+      //   //@ts-ignore
+      //   console.log(evt,'12313123')
+      //   evt.preventDefault();
+      //   evt.stopPropagation();//
+      // },
+      onMove(evt, a, b) {
+        // console.log(evt, a, b) //
+        //@ts-ignore
+      },
+    }) //
+    //@ts-ignore
+    // s.eventCanceled=true
+    this._sortable = s
+    this.targetDomElement = targetDomElement
     //把这个插件绑定到dom上//
-    targetDomElement.__draggable_component__ = this;
+    targetDomElement.__draggable_component__ = this
   },
 
   updated() {
-    this.componentStructure.updated();
+    this.componentStructure.updated()
   },
 
   beforeUnmount() {
-    if (this._sortable !== undefined) this._sortable.destroy();
+    if (this._sortable !== undefined) this._sortable.destroy()
   },
 
   computed: {
     realList() {
-      const { list } = this;
-      return list ? list : this.modelValue;
+      const { list } = this
+      return list ? list : this.modelValue
     },
 
     getKey() {
-      const { itemKey } = this;
-      if (typeof itemKey === "function") {
-        return itemKey;
+      const { itemKey } = this
+      if (typeof itemKey === 'function') {
+        return itemKey
       }
-      return element => element[itemKey];
-    }
+      return (element) => element[itemKey]
+    },
   },
 
   watch: {
     $attrs: {
       handler(newOptionValue) {
-        const { _sortable } = this;
-        if (!_sortable) return;
+        const { _sortable } = this
+        if (!_sortable) return
         getValidSortableEntries(newOptionValue).forEach(([key, value]) => {
-          _sortable.option(key, value);
-        });
+          _sortable.option(key, value)
+        })
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   methods: {
     getUnderlyingVm(domElement) {
-      return this.componentStructure.getUnderlyingVm(domElement) || null;
+      return this.componentStructure.getUnderlyingVm(domElement) || null
     },
 
     getUnderlyingPotencialDraggableComponent(htmElement) {
       //TODO check case where you need to see component children
-      return htmElement.__draggable_component__;
+      return htmElement.__draggable_component__
     },
 
     emitChanges(evt) {
-      nextTick(() => this.$emit("change", evt));
+      nextTick(() => this.$emit('change', evt))
     },
 
     alterList(onList) {
       if (this.list) {
-        onList(this.list);
-        return;
+        onList(this.list)
+        return
       }
-      const newList = [...this.modelValue];
-      onList(newList);
-      this.$emit("update:modelValue", newList);
+      const newList = [...this.modelValue]
+      onList(newList)
+      this.$emit('update:modelValue', newList)
     },
 
     spliceList() {
-      const spliceList = list => list.splice(...arguments);
-      this.alterList(spliceList);
+      const spliceList = (list) => list.splice(...arguments)
+      this.alterList(spliceList)
     },
 
     updatePosition(oldIndex, newIndex) {
-      const updatePosition = list =>
-        list.splice(newIndex, 0, list.splice(oldIndex, 1)[0]);
-      this.alterList(updatePosition);
+      const updatePosition = (list) =>
+        list.splice(newIndex, 0, list.splice(oldIndex, 1)[0])
+      this.alterList(updatePosition)
     },
 
     getRelatedContextFromMoveEvent({ to, related }) {
-      const component = this.getUnderlyingPotencialDraggableComponent(to);
+      const component = this.getUnderlyingPotencialDraggableComponent(to)
       if (!component) {
-        return { component };
+        return { component }
       }
-      const list = component.realList;
-      const context = { list, component };
+      const list = component.realList
+      const context = { list, component }
       if (to !== related && list) {
-        const destination = component.getUnderlyingVm(related) || {};
-        return { ...destination, ...context };
+        const destination = component.getUnderlyingVm(related) || {}
+        return { ...destination, ...context }
       }
-      return context;
+      return context
     },
 
     getVmIndexFromDomIndex(domIndex) {
       return this.componentStructure.getVmIndexFromDomIndex(
         domIndex,
-        this.targetDomElement
-      );
+        this.targetDomElement,
+      )
     },
 
     onDragStart(evt) {
-      this.context = this.getUnderlyingVm(evt.item);
-      evt.item._underlying_vm_ = this.clone(this.context.element);
-      draggingElement = evt.item;
+      this.context = this.getUnderlyingVm(evt.item)
+      evt.item._underlying_vm_ = this.clone(this.context.element)
+      draggingElement = evt.item
     },
 
     onDragAdd(evt) {
-      const element = evt.item._underlying_vm_;
+      const element = evt.item._underlying_vm_
       if (element === undefined) {
-        return;
+        return
       }
-      removeNode(evt.item);
-      const newIndex = this.getVmIndexFromDomIndex(evt.newIndex);
-      this.spliceList(newIndex, 0, element);
-      const added = { element, newIndex };
-      this.emitChanges({ added });
+      removeNode(evt.item)
+      const newIndex = this.getVmIndexFromDomIndex(evt.newIndex)
+      this.spliceList(newIndex, 0, element)
+      const added = { element, newIndex }
+      this.emitChanges({ added })
     },
 
     onDragRemove(evt) {
-      insertNodeAt(this.$el, evt.item, evt.oldIndex);
-      if (evt.pullMode === "clone") {
-        removeNode(evt.clone);
-        return;
+      insertNodeAt(this.$el, evt.item, evt.oldIndex)
+      if (evt.pullMode === 'clone') {
+        removeNode(evt.clone)
+        return
       }
-      const { index: oldIndex, element } = this.context;
-      this.spliceList(oldIndex, 1);
-      const removed = { element, oldIndex };
-      this.emitChanges({ removed });
+      const { index: oldIndex, element } = this.context
+      this.spliceList(oldIndex, 1)
+      const removed = { element, oldIndex }
+      this.emitChanges({ removed })
     },
 
     onDragUpdate(evt) {
-      removeNode(evt.item);
-      insertNodeAt(evt.from, evt.item, evt.oldIndex);
-      const oldIndex = this.context.index;
-      const newIndex = this.getVmIndexFromDomIndex(evt.newIndex);
-      this.updatePosition(oldIndex, newIndex);
-      const moved = { element: this.context.element, oldIndex, newIndex };
-      this.emitChanges({ moved });
+      removeNode(evt.item)
+      insertNodeAt(evt.from, evt.item, evt.oldIndex)
+      const oldIndex = this.context.index
+      const newIndex = this.getVmIndexFromDomIndex(evt.newIndex)
+      this.updatePosition(oldIndex, newIndex)
+      const moved = { element: this.context.element, oldIndex, newIndex }
+      this.emitChanges({ moved })
     },
 
     computeFutureIndex(relatedContext, evt) {
       if (!relatedContext.element) {
-        return 0;
+        return 0
       }
       const domChildren = [...evt.to.children].filter(
-        el => el.style["display"] !== "none"
-      );
-      const currentDomIndex = domChildren.indexOf(evt.related);
+        (el) => el.style['display'] !== 'none',
+      )
+      const currentDomIndex = domChildren.indexOf(evt.related)
       const currentIndex = relatedContext.component.getVmIndexFromDomIndex(
-        currentDomIndex
-      );
-      const draggedInList = domChildren.indexOf(draggingElement) !== -1;
+        currentDomIndex,
+      )
+      const draggedInList = domChildren.indexOf(draggingElement) !== -1
       return draggedInList || !evt.willInsertAfter
         ? currentIndex
-        : currentIndex + 1;
+        : currentIndex + 1
     },
 
     onDragMove(evt, originalEvent) {
-      const { move, realList } = this;
+      const { move, realList } = this
       if (!move || !realList) {
-        return true;
+        return true
       }
 
-      const relatedContext = this.getRelatedContextFromMoveEvent(evt);
-      const futureIndex = this.computeFutureIndex(relatedContext, evt);
+      const relatedContext = this.getRelatedContextFromMoveEvent(evt)
+      const futureIndex = this.computeFutureIndex(relatedContext, evt)
       const draggedContext = {
         ...this.context,
-        futureIndex
-      };
+        futureIndex,
+      } //
       const sendEvent = {
         ...evt,
         relatedContext,
-        draggedContext
-      };
-      return move(sendEvent, originalEvent);
+        draggedContext,
+      }
+      return move(sendEvent, originalEvent)
     },
 
     onDragEnd() {
-      draggingElement = null;
-    }
-  }
-});
+      draggingElement = null
+    },
+  },
+})
 
-export default draggableComponent;
+export default draggableComponent

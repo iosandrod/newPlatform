@@ -129,26 +129,26 @@ export default defineComponent({
       //     }}
       //   ></dropdownCom>
       // )
-      // com = (
-      //   <formCom
-      //     itemSpan={24}
-      //     items={[
-      //       {
-      //         field: 'email',
-      //         label: '邮箱',
-      //         required: true,
-      //       },
-      //       {
-      //         field: 'password',
-      //         label: '密码',
-      //         required: true,
-      //         password: true,
-      //       },
-      //     ]}
-      //   ></formCom>
-      // )
+      com = (
+        <formCom
+          itemSpan={24}
+          items={[
+            {
+              field: 'email',
+              label: '邮箱',
+              required: true,
+            },
+            {
+              field: 'password',
+              label: '密码',
+              required: true,
+              password: true,
+            },
+          ]} //
+        ></formCom>//
+      )
       // com = <FConfigPanel></FConfigPanel>
-      com = <erFormEditor isDesign={true}></erFormEditor>
+      // com = <erFormEditor isDesign={true}></erFormEditor>
       // com=<d></d>
       com = <pageCom></pageCom> //
       let _com = (

@@ -29,8 +29,7 @@ export default defineComponent({
       default: () => [],
     },
   },
-  setup(props, { slots }) {
-    //子表单
+  setup(props, { slots }) {//
     let fIns = new Form(props)
     fIns.setCurrentDesign(false) //
     onMounted(() => {
@@ -44,7 +43,7 @@ export default defineComponent({
         return arr
       }, //
       ([items, len], [oldItems, oldLen]) => {
-        if (items != oldLen) {
+        if (items != oldItems) {//
           fIns.setItems(items) ////
         } else {
           //@ts-ignore
@@ -63,8 +62,11 @@ export default defineComponent({
           }
         }
       },
+      { //
+        // immediate: true,//
+      }
     )
-    provide('formIns', fIns)
+    // provide('formIns', fIns)
     onUnmounted(() => {
       fIns.onUnmounted() //
     }) //

@@ -76,7 +76,7 @@ export default {
     const isInlineChildren = formIns.checkIslineChildren(props.data)
     const { target, state, isEditModel, isSelectRoot, isPc } = hooks.useTarget()
     const id = hooks.useCss(props.data, state.platform)
-    const visible = ref(false) 
+    const visible = ref(false)
     const slots = useSlots()
     const isWarning = ref(false)
     const isField = utils.checkIsField(props.data)
@@ -253,9 +253,12 @@ export default {
     const elementRef = ref()
     const widthScaleElement = ref()
     const isScale = ref(false)
-    const isShowWidthScale = computed(() => props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value))
+    const isShowWidthScale = computed(
+      () => props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value),
+    )
     const isShowHeightScale = computed(() => {
-      let value = props.hasHeightScale && !(ER.props.layoutType === 1 && !isPc.value)
+      let value =
+        props.hasHeightScale && !(ER.props.layoutType === 1 && !isPc.value)
       return true
     })
     const heightScaleElement = ref()
@@ -276,12 +279,9 @@ export default {
       })
       //显示宽度更改按钮
       if (isShowWidthScale.value) {
-        // if (!hoverEl.offsetParent) return false
         widthScaleEl.addEventListener('mousedown', (e) => {
-          // e.preventDefault();
           let offsetParent = hoverEl.offsetParent
           let offsetParentWidth = offsetParent.offsetWidth //
-          // const columnWidth = hoverEl.offsetParent.offsetWidth / 24
           let columnWidth = offsetParentWidth / 24
           state.widthScaleLock = isScale.value = true
           const oldX = e.clientX
@@ -302,15 +302,13 @@ export default {
               props.data.options.span = offset
             } else {
               const curNewWidth = oldWidth + e.clientX - oldX
-              // console.log(curNewWidth, 'curNewWidth')//
               let curWidth = Math.round(
                 (curNewWidth / hoverEl.parentNode.offsetWidth) * 100,
               ) //百分比
-              console.log(curWidth, 'curWidth') //
               if (curWidth <= 25) {
                 curWidth = 25
               }
-              utils.syncWidthByPlatform(
+              formIns.syncWidthByPlatform(
                 props.data,
                 state.platform,
                 false,
@@ -323,6 +321,50 @@ export default {
             document.removeEventListener('mouseup', onMouseUp)
             document.removeEventListener('mousemove', onMouseMove)
             state.widthScaleLock = isScale.value = false
+          }
+          document.addEventListener('mouseup', onMouseUp)
+          document.addEventListener('mousemove', onMouseMove)
+        })
+      }
+    })
+    onMounted(() => {
+      if (!unref(isEditModel)) return false
+      const heightScaleEl = heightScaleElement.value
+      const hoverEl = elementRef.value.$el || elementRef.value
+      //显示宽度更改按钮
+      if (isShowWidthScale.value) {
+        heightScaleEl.addEventListener('mousedown', (e) => {
+          let offsetParent = hoverEl.offsetParent
+          let offsetParentWidth = offsetParent.offsetWidth //
+          let columnWidth = offsetParentWidth / 24
+          state.heightScaleLock = isScale.value = true
+          const oldY = e.clientY
+          const oldHeight = hoverEl.offsetHeight
+          let _newHeight=null
+          const onMouseMove = (e) => {
+            const isRootEl =
+              formIns.state.store.findIndex(
+                (e) => e.id === props.data.context.parent.id,
+              ) !== -1
+            if (!isRootEl) {
+              return //
+            }
+            let newY = e.clientY
+            let subHeight = newY - oldY
+            // console.log(subHeight, 'subHeight')//
+            hoverEl.style.height = oldHeight + subHeight + 'px'//
+            _newHeight = oldHeight + subHeight+'px'
+            // props.data.style.height=oldHeight + subHeight + 'px'//
+          }
+
+          const onMouseUp = () => {
+            document.removeEventListener('mouseup', onMouseUp)
+            document.removeEventListener('mousemove', onMouseMove)
+            state.heightScaleLock = isScale.value = false
+            if(_newHeight!=null){
+              hoverEl.style.height = null
+              formIns.syncHeightByPlatform(props.data, state.platform, false, _newHeight)
+            }
           }
           document.addEventListener('mouseup', onMouseUp)
           document.addEventListener('mousemove', onMouseMove)
@@ -453,7 +495,7 @@ export default {
                   class={[ns.e('copyIcon')]}
                   onClick={withModifiers(
                     (e) => {
-                      handleAction(2)
+                      handleAction(2) //
                     },
                     ['stop'],
                   )}
@@ -467,7 +509,7 @@ export default {
               )}
               {isShowHeightScale.value && (
                 <div ref={heightScaleElement}>
-                  <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
+                  <Icon class={[ns.e('widthScale')]} icon="dragHeight"></Icon>
                 </div>
               )}
               {props.hasTableCellOperator && renderTableCellOperator()}
