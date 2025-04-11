@@ -42,7 +42,8 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any;[key: string]: any }) {
+  updateBindData(updateConfig: { value: any; [key: string]: any }) {
+    // debugger //
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -50,15 +51,19 @@ export class FormItem extends Base {
       if (typeof updateBefore == 'function') {
         updateBefore(value)
       }
+      let oldValue = this.getBindValue()
       let data = this.getData()
+      if (oldValue == value) {
+        return //
+      }
       _.set(data, field, value) //
       //   data[field] = value //
     } catch (error) {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() { }
-  async onValueChange() { }
+  getItemChange() {}
+  async onValueChange() {}
   getForm() {
     return this.form //
   }
@@ -91,7 +96,7 @@ export class FormItem extends Base {
     let config = this.config
     let options = config.options
     if (type == 'Sform') {
-      let formConfig = options?.formConfig || { items: [] }//
+      let formConfig = options?.formConfig || { items: [] } //
       const pProps = { ...this.form.props }
       Object.entries(pProps).forEach(([key, value]) => {
         if (formConfig[key]) return
@@ -106,10 +111,11 @@ export class FormItem extends Base {
   async getSelectOptions() {
     const config = this.config
   }
-  getSubForm(id: string) { }
+  getSubForm(id: string) {}
   getData() {
+    //
     let form = this.form
-    let data = form.data
+    let data = form.config?.data //
     return data //
   }
   getTdColumn(): TableCell[] {
@@ -264,8 +270,10 @@ export class FormItem extends Base {
     return obj
   }
   getBindValue(getConfig?: any) {
-    let form = this.form
-    let data = form.data
+    // let form = this.form
+    // debugger //
+    let data = this.getData() //
+    console.log(data, 'testData1') //
     let field = this.getField()
     let value = _.get(data, field) //
     if (getConfig) {
@@ -322,9 +330,10 @@ export class FormItem extends Base {
     result.formitem = item
     const platform = isPc ? 'pc' : 'mobile'
     if (isRoot) {
-      if (isPc) {//
+      if (isPc) {
+        //
         result.model = data.store // is Array
-        result.size = node.pc.size//
+        result.size = node.pc.size //
         result.labelPosition = node[platform].labelPosition
       } else {
         result.labelAlign = node[platform].labelPosition

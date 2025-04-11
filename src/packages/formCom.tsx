@@ -28,6 +28,10 @@ export default defineComponent({
       type: Array,
       default: () => [],
     },
+    data: {
+      type: Object,//
+      default: () => {},
+    }
   },
   setup(props, { slots }) {//
     let fIns = new Form(props)

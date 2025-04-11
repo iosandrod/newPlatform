@@ -1,6 +1,7 @@
 import { SortState } from '@visactor/vtable/es/ts-types'
 import { Table } from './table'
 import _ from 'lodash'
+import { nextTick } from 'vue' //
 export const scroll = (table: Table) => {
   let _this = table
   table.registerEvent({
@@ -28,7 +29,7 @@ export const click_cell = (table: Table) => {
       if (originData == null) {
       } else {
         _this.tableData.curRow = originData //
-      }//
+      } //
     },
   })
 }
@@ -70,17 +71,33 @@ export const sort_click = (table: Table) => {
     name: 'sort_click',
     keyName: 'sort_click',
     callback: (config) => {
-      //   console.log(config, 'testConfig') //
-      let { field, order } = config //
-      let obj: SortState = {
-        field,
-        // order: 'desc', //
-        orderFn: () => {
-          return -1
-        },
-      }
-      //@ts-ignore
-      _this.getInstance().updateSortState(obj) //
+      nextTick(() => {
+        let instance = _this.getInstance()
+        let sortState: SortState[] = instance.sortState as any //
+        if (!Array.isArray(sortState)) {
+          sortState = [] //
+        }
+        let columns = _this.getFlatColumns() //
+        let _sortState = sortState.map((row) => {
+          let obj = { field: row.field, order: row.order, type: null }
+          let field = obj.field
+          let tColType = columns
+            .find((col) => {
+              return col.getField() == field
+            })
+            ?.getColType()
+          if (tColType == null) {
+            return null
+          }
+          obj.type = tColType //
+          return obj
+        })
+        // console.log(
+        //   _sortState.map((row) => row.field),
+        //   '_sortState',
+        // ) ////
+        _this.setSortState(_sortState) //
+      })
     },
   })
 }

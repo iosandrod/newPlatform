@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import { erFormEditor } from '@ER/formEditor'
 import buttonCom from '@/buttonGroup/buttonCom'
 import tabCom from '@/buttonGroup/tabCom'
@@ -90,7 +90,26 @@ export default defineComponent({
         ],
       },
     ]
+    const formConfig1 = {
+      items: [
+        {
+          field: 'height',
+          label: '邮箱',
+          required: true,
+        },
+        {
+          field: 'width',
+          label: '密码',
+          required: true,
+        },
+      ],
+    }
+    let _data = reactive({
+      height: 300,
+      width: 300,
+    })
     return () => {
+      let com0 = <formCom data={_data} {...formConfig1}></formCom>
       let com = <buttonGroupCom items={btns}></buttonGroupCom>
       // com = <erFormEditor isDesign={true} {...formConfig}></erFormEditor>
       // com = <d></d>
@@ -145,22 +164,25 @@ export default defineComponent({
               password: true,
             },
           ]} //
-        ></formCom>//
+        ></formCom> //
       )
       // com = <FConfigPanel></FConfigPanel>
       // com = <erFormEditor isDesign={true}></erFormEditor>
       // com=<d></d>
+
       com = <pageCom></pageCom> //
-      com =<div style={{height:'300px'}}>
-       <tableCom {...tableConfig}></tableCom> 
-        
-      </div>
+      com = (
+        <div style={{ height: `${_data.height}px`, width: `100%` }}>
+          <tableCom {...tableConfig}></tableCom>
+        </div>
+      ) //
       let _com = (
         <div
           style={{
             padding: '100px',
           }}
         >
+          {com0}
           {/* <erFormEditor isDesign={true} {...formConfig}></erFormEditor> */}
           {/* <buttonCom></buttonCom> */}
           {}

@@ -8,7 +8,12 @@ const VGroup = VTable.VGroup
 const VText = VTable.VText
 const VImage = VTable.VImage
 const VTag = VTable.VTag
-import { ICustomLayout, ICustomLayoutObj, ICustomRenderElement, ICustomRenderObj } from '@visactor/vtable/es/ts-types'
+import {
+  ICustomLayout,
+  ICustomLayoutObj,
+  ICustomRenderElement,
+  ICustomRenderObj,
+} from '@visactor/vtable/es/ts-types'
 import { nextTick } from 'vue' //
 
 export class Column extends Base {
@@ -25,6 +30,20 @@ export class Column extends Base {
     this.init()
   } //
   getFormitem() {}
+  createSort() {
+    let field = this.getField()
+    let sort = null
+    let type = this.getColType()
+    return {
+      field,
+      sort,
+      type,
+    }
+  }
+  getSubColumns() {
+    let columns = this.columns
+    return [this, ...columns.map((col) => col.getSubColumns()).flat()] //
+  }
   init(): void {
     super.init() //
     this.setColumns()
@@ -70,7 +89,7 @@ export class Column extends Base {
               () => {
                 //
                 _table.updateIndexArr.add(_index) //
-              }
+              },
             )
           } //
           value = fieldFormat({ row: record, col: this, table: _table })
@@ -101,56 +120,9 @@ export class Column extends Base {
       field: this.getField(),
       width: this.getColumnWidth(),
       showSort: true,
-      // customRender: (args) => {
-      //   let el: ICustomRenderElement = VTable.VText({
-      //     onClick: () => {},
-      //   })
-      //   let renderObj: ICustomRenderObj = {
-      //     elements: [el], //
-      //     expectedHeight: 0,
-      //     expectedWidth: 0,
-      //   }
-      //   return renderObj
-      // },
-      // customRender(args) {
-      //   if (args.row === 0 || args.col === 0) return null
-      //   const { width, height } = args.rect //
-      //   const { table, row, col } = args
-      //   const elements = []
-      //   let top = 30
-      //   const left = 15
-      //   let maxWidth = 0 //
-      //   elements.push({
-      //     type: 'rect',
-      //     fill: '#a23be1',
-      //     x: left + 20,
-      //     y: top - 20,
-      //     width: 300,
-      //     height: 28,
-      //   })
-      //   elements.push({
-      //     type: 'text',
-      //     fill: 'white',
-      //     fontSize: 20,
-      //     fontWeight: 500,
-      //     textBaseline: 'middle',
-      //     text:
-      //       col === 1
-      //         ? row === 1
-      //           ? 'important & urgency'
-      //           : 'not important but urgency'
-      //         : row === 1
-      //         ? 'important but not urgency'
-      //         : 'not important & not urgency',
-      //     x: left + 50,
-      //     y: top - 5,
-      //   })
-      //   return {
-      //     elements,
-      //     expectedHeight: top + 20,
-      //     expectedWidth: maxWidth + 20,
-      //   }
-      // },
+      sort: () => {
+        return 0
+      },
       fieldFormat: _this.getFormat(),
       style: {
         bgColor: (config) => {
@@ -210,5 +182,13 @@ export class Column extends Base {
     let config = this.config
     let editType = config.editType || 'string'
     return editType
+  }
+  getColType() {
+    let config = this.config
+    let type = config.type
+    if (type == null) {
+      type = 'string'
+    } //
+    return type
   }
 }

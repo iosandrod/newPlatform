@@ -3,9 +3,11 @@ import {
   onMounted,
   onUnmounted,
   provide,
+  ref,
   toRaw,
   watch,
   watchEffect,
+  withDirectives,
 } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
@@ -17,6 +19,7 @@ import { generatePersons } from './tableData'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import TableButtonCom from './tableButtonCom'
 import TableMenuCom from './tableMenuCom'
+import {useResizeObserver} from '@vueuse/core'
 // new ListTable()
 //核心表格组件
 export default defineComponent({
@@ -40,7 +43,13 @@ export default defineComponent({
     onMounted(() => {
       tableIns.onMounted() //
     })
+    // let _refDiv = ref(null)
+    // useResizeObserver(_refDiv, (entries) => {
+    //   const entry = entries[0]
+    //   const { width: w, height: h } = entry.contentRect
+    // })
     const registerRootDiv = (el) => {
+      // _refDiv.value = el
       // tableIns.registerRef('root', el) //注册实例//
       tableIns.registerRef('root', el) //注册实例//
     } //
@@ -136,15 +145,22 @@ export default defineComponent({
     provide('tableIns', tableIns)
     return () => {
       let com = null
-      com = (
+      com = withDirectives(
         <div
           style={{ width: '100%', height: '100%' }}
           ref={registerRootDiv}
-        ></div>
+        ></div>,
+        [
+          [
+            {
+              mounted(el) {},
+              unmounted(el) {},
+            },
+          ],
+        ],
       )
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
-      // com = <div style={{ width: '100%', height: '100%', background: 'red' }}></div>
       let outCom = (
         <div
           style={{
@@ -160,6 +176,7 @@ export default defineComponent({
             style={{
               flex: 1,
               width: '100%', //
+              overflow: 'hidden',
             }} //
           >
             {com}

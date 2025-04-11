@@ -1,11 +1,20 @@
 import { Base } from '@ER/base'
-import { nextTick, computed, customRef, h, shallowRef, triggerRef } from 'vue'
+import {
+  nextTick,
+  computed,
+  customRef,
+  h,
+  shallowRef,
+  triggerRef,
+  toRaw,
+} from 'vue'
 import { Column } from './column'
 import { ListTable, ListTableConstructorOptions } from '@visactor/vtable'
 import { VTable } from '@visactor/vue-vtable'
 import { method } from 'lodash'
 import { exportVTableToExcel } from '@visactor/vtable-export'
 import _ from 'lodash'
+import * as equal from '@/packages/utils/equal'
 import { BaseTableConstructorOptions } from '@visactor/vtable/es/ts-types/base-table'
 import { BMenu } from '@/buttonGroup/bMenu'
 import {
@@ -15,6 +24,8 @@ import {
   selected_cell,
   sort_click,
 } from './tableEvent'
+import { SortState } from 'element-plus'
+import { combineAdjacentEqualElements } from '@ER/utils'
 export class Table extends Base {
   //   dataMap = shallowRef({})
   dataMap = {}
@@ -76,6 +87,7 @@ export class Table extends Base {
       disableDragSelect: true,
     },
   }
+  sortCache: SortState[] = []
   selectCache: any = {}
   templateProps: any = {}
   hooksManager: { [key: string]: Array<any> } = {}
@@ -91,6 +103,7 @@ export class Table extends Base {
     let data = config.data || []
     this.setData(data)
     this.setColumns(columns) //
+    this.initSortState()
   }
   setData(data) {
     this.tableData.data = data
@@ -101,16 +114,16 @@ export class Table extends Base {
       }
     }) //
   }
-  getTableName() { }
+  getTableName() {}
   updateOptions(opt: BaseTableConstructorOptions) {
-    let instance = this.getInstance()
+    let instance = this.getInstance() //
     if (instance != null) {
       const oldOptions = instance.options
       _.merge(oldOptions, opt) //
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   render() {
     const rootDiv = this.getRef('root')
     const rect = rootDiv.getBoundingClientRect()
@@ -126,6 +139,7 @@ export class Table extends Base {
     }
     let _this = this
     let table = new ListTable({
+      multipleSort: true,
       sortState: [],
       defaultRowHeight: 30,
       defaultHeaderRowHeight: 30, //
@@ -187,6 +201,20 @@ export class Table extends Base {
       this.scrollToRow({ row: record })
       this.updateCanvas() //
     })
+  }
+  setSortState(config) {
+    console.log(config, 'setState123132') //
+    if (!Array.isArray(config)) {
+      return
+    }
+    // let sortCache = this.sortCache
+    this.sortCache = config //
+  }
+  initSortState() {
+    let columns = this.getColumns().map((col) => {
+      return col.createSort()
+    })
+    // this.sortCache = columns
   }
   emit(name, ...args) {
     let eventManager = this.eventManager
@@ -292,9 +320,9 @@ export class Table extends Base {
     click_cell(this) //
     selected_cell(this)
     contextmenu_cell(this) //
-    sort_click(this)//
+    sort_click(this) //
   }
-  setCurTableSelect() { }
+  setCurTableSelect() {}
   openContextMenu(config) {
     // console.log(config, 'testConfig') //
     const event: PointerEvent = config.event
@@ -304,11 +332,19 @@ export class Table extends Base {
     contextmenu.open(event) //
   }
   getColumns() {
-    const columns = this.columns
+    const columns = this.columns //
     let _cols = columns.map((col) => {
-      return col.getColumnProps()
+      return col //
     })
     return _cols //
+  }
+  getFlatColumns() {
+    const columns = this.columns
+      .map((col) => {
+        return col.getSubColumns()
+      })
+      .flat() //
+    return columns
   }
   getOptions() {
     let tempalteProps = this.templateProps
@@ -325,11 +361,14 @@ export class Table extends Base {
     return data //
   }
   getShowColumns() {
-    let columns = this.columns
+    let columns = this.getColumns()
     let _cols = columns.filter((col) => {
       return col.getIsShow()
     })
-    return _cols
+    let _col1 = _cols.map((col) => {
+      return col.getColumnProps()
+    })
+    return _col1 //
   }
   getData() {
     let tableData = this.tableData
@@ -353,8 +392,7 @@ export class Table extends Base {
   }
   loadColumns() {
     try {
-      console.log('loadColumns') //
-      let columns = this.getColumns()
+      let columns = this.getShowColumns()
       this.templateProps.columns = columns //
     } catch (error) {
       //
@@ -366,13 +404,43 @@ export class Table extends Base {
       return //
     }
     let data = this.getShowData() //
-    let _data1 = data
+    let _data = data
     let instance = this.getInstance() //
     if (instance == null) {
       return
-    } //
+    }
+    let sortState = this.sortCache
+    let _data1 = toRaw(_data)
+    let _sortState = toRaw(sortState)
+    const sortconfig = _sortState //自定义的排序配置
+    //@ts-ignore
+    const _sortConfig = sortconfig?.sort((s1, s2) => {
+      //@ts-ignore
+      // return s1.order - s2.order
+      return 0 //
+    })
+    let _data3 = _sortConfig
+      ?.reduce((res, item, i) => {
+        const field = item.field
+        const type = item.type
+        let order = item.order
+        // debugger//
+        const colType: string = 'number' //类型//
+        const _data4 = combineAdjacentEqualElements(
+          res, //
+          field,
+          i,
+          // colType,
+          // type,
+          type,
+          order,
+        )
+        return _data4
+      }, _data1)
+      .flat(sortconfig?.length)
+    // console.log(_data3, 'testData3') ///
     nextTick(() => {
-      instance.setRecords(_data1) //
+      instance.setRecords(_data3) ////
       this.runAfter({
         methodName: 'loadData',
         config: loadConfig,
@@ -402,7 +470,7 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   runAfter(config?: any) {
     //
     if (config == null) {
@@ -431,7 +499,7 @@ export class Table extends Base {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -439,7 +507,7 @@ export class Table extends Base {
     }
     return instance
   }
-  setMergeConfig(config?: any) { }
+  setMergeConfig(config?: any) {}
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -489,7 +557,7 @@ export class Table extends Base {
       return
     }
     let columns = this.columns
-    columns.forEach((item) => { })
+    columns.forEach((item) => {})
     instance.release()
     this.instance = null //
   }
