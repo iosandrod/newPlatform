@@ -12,7 +12,7 @@ export class PageDesign extends Form {
   constructor(config) {
     super(config) //
     this.init()
-  }
+  }//
   init(): void {
     super.init()
     nextTick(() => {
@@ -57,5 +57,13 @@ export class PageDesign extends Form {
   // initMobileLayout(): void { }
   getValidateRules() {
     return []
+  }
+  async getTableData() {//
+  }//
+  async createTableData() {
+
+  }
+  async updateTableData() {
+
   }
 }

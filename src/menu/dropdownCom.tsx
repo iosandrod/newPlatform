@@ -23,9 +23,7 @@ export default defineComponent({
       type: [String, Function] as PropType<VxePulldownPropTypes.ClassName>,
       default: getConfig().pulldown.className,
     },
-    popupClassName: [String, Function] as PropType<
-      VxePulldownPropTypes.PopupClassName
-    >,
+    popupClassName: [String, Function] as PropType<VxePulldownPropTypes.PopupClassName>,
     showPopupShadow: Boolean as PropType<VxePulldownPropTypes.ShowPopupShadow>,
     destroyOnClose: {
       type: Boolean as PropType<VxePulldownPropTypes.DestroyOnClose>,
@@ -34,6 +32,9 @@ export default defineComponent({
     transfer: {
       type: Boolean as PropType<VxePulldownPropTypes.Transfer>,
       default: null,
+    },
+    hiddenBefore: {
+      type: Function,
     },
   },
   setup(props, { slots, emit, attrs, expose }) {
@@ -47,10 +48,13 @@ export default defineComponent({
           ref={(e) => drop.registerRef('dropdown', e)}
           destroyOnClose={true}
           modelValue={drop.getModelValue()} //
-          v-slots={{ 
-            default: () => slots.default({dropdown:drop}),
+          v-slots={{
+            default: () => {
+              let com = slots.default({ dropdown: drop })
+              return com
+            },
             dropdown: () => {
-              let com = slots?.dropdown({dropdown:drop}) || null
+              let com = slots?.dropdown({ dropdown: drop }) || null
               return com //
             },
           }} //

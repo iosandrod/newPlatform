@@ -12,3 +12,8 @@ export function registerEdit() {//
     VTable.register.editor('list-editor', list_editor);
     VTable.register.editor('textArea-editor', textArea_editor);
 }
+
+
+export function registerFilter() {
+    // VTable.register.icon('filter')
+}

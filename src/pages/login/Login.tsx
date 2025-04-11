@@ -179,7 +179,7 @@ export default defineComponent({
       let _com = (
         <div
           style={{
-            padding: '100px',
+            padding: '100px', //
           }}
         >
           {com0}

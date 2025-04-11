@@ -6,7 +6,7 @@ import _ from 'lodash'
 import { tableConfig } from '@/table/tableData'
 export default defineComponent({
   name: 'entityPc', //
-  props: ['data', 'params'],
+  props: ['data', 'params'], //
   setup(props, attrs) {
     const formIns: PageDesign = inject('formIns') //
     const formitem: PageDesignItem = props.params.formitem

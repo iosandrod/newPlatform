@@ -9,7 +9,7 @@ import {
   toRaw,
 } from 'vue'
 import { Column } from './column'
-import { ListTable, ListTableConstructorOptions } from '@visactor/vtable'
+import { ListTable, ListTableConstructorOptions, } from '@visactor/vtable'
 import { VTable } from '@visactor/vue-vtable'
 import { method } from 'lodash'
 import { exportVTableToExcel } from '@visactor/vtable-export'
@@ -20,14 +20,22 @@ import { BMenu } from '@/buttonGroup/bMenu'
 import {
   click_cell,
   contextmenu_cell,
+  icon_click,
   scroll,
   selected_cell,
   sort_click,
 } from './tableEvent'
 import { SortState } from 'element-plus'
 import { combineAdjacentEqualElements } from '@ER/utils'
+import { VxeInputEvents, VxeInputProps } from 'vxe-table'
+import { VxeInputEventProps } from 'vxe-pc-ui'
+import { Dropdown } from '@/menu/dropdown'
 export class Table extends Base {
-  //   dataMap = shallowRef({})
+  globalConfig = {
+    value: '',//
+    show: false//
+  }
+  columnFilterConfig: any = {}//
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -104,6 +112,14 @@ export class Table extends Base {
     this.setData(data)
     this.setColumns(columns) //
     this.initSortState()
+    this.initGlobalSearch()
+  }
+  initGlobalSearch() {
+    let config = this.config
+    let show = config.showGlobalSearch
+    if (show == true) {
+      this.globalConfig.show = true//
+    }
   }
   setData(data) {
     this.tableData.data = data
@@ -112,9 +128,16 @@ export class Table extends Base {
         e._index = this.uuid()
         this.dataMap[e._index] = e
       }
+      if (e['_shtml'] == null) {
+        let _v = Object.entries(e).reduce((res, [k, v]) => {
+          res += `${v}  ^^^`
+          return res
+        }, '')
+        e['_shtml'] = _v
+      }
     }) //
   }
-  getTableName() {}
+  getTableName() { }
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
@@ -123,15 +146,11 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() {}
+  getListTableOption() { }
   render() {
     const rootDiv = this.getRef('root')
     const rect = rootDiv.getBoundingClientRect()
     const { width, height } = rect
-    // if (1 == 1) {
-    //   return
-    // }
-    // console.log(rect, 'testct')//
     let _instance = this.instance
     if (_instance != null) {
       //
@@ -170,25 +189,42 @@ export class Table extends Base {
       },
       //头部的
     }) //
-    table.on('contextmenu_cell', (config) => {
-      this.emit('contextmenu_cell', config)
+    const emitEventArr = [
+      'icon_click',//
+      'contextmenu_cell',
+      'sort_click',
+      'selected_cell',
+      'scroll',
+      'click_cell'
+    ]
+    emitEventArr.forEach(item => {
+      //@ts-ignore//
+      table.on(item, (config) => {
+        this.emit(item, config)
+      })
     })
-    table.on('sort_click', (config) => {
-      this.emit('sort_click', config)
-      return true //
-    })
-    table.on('selected_cell', (config) => {
-      this.emit('selected_cell', config)
-    }) //
-    table.on('scroll', (config) => {
-      this.emit('scroll', config) ////
-    })
-    table.on('click_cell', (config) => {
-      this.emit('click_cell', config) ////
-    })
+    // table.on('contextmenu_cell', (config) => {
+    //   this.emit('contextmenu_cell', config)
+    // })
+    // table.on('sort_click', (config) => {
+    //   this.emit('sort_click', config)
+    //   return true //
+    // })
+    // table.on('selected_cell', (config) => {
+    //   this.emit('selected_cell', config)
+    // }) //
+    // table.on('scroll', (config) => {
+    //   this.emit('scroll', config) ////
+    // })
+    // table.on('click_cell', (config) => {
+    //   this.emit('click_cell', config) ////
+    // })
     const instance = shallowRef(table)
     //@ts-ignore
     this.instance = instance ////
+    // const serchCom=new SearchComponent({
+
+    // })
     this.initEventListener() //
     this.loadColumns()
     this.loadData()
@@ -321,10 +357,11 @@ export class Table extends Base {
     selected_cell(this)
     contextmenu_cell(this) //
     sort_click(this) //
+    icon_click(this)//
   }
-  setCurTableSelect() {}
-  openContextMenu(config) {
-    // console.log(config, 'testConfig') //
+  setCurTableSelect() { }
+  openContextMenu(config) {//
+    console.log(config, 'test_config')//
     const event: PointerEvent = config.event
     let x = event.x
     let y = event.y
@@ -412,11 +449,21 @@ export class Table extends Base {
     let sortState = this.sortCache
     let _data1 = toRaw(_data)
     let _sortState = toRaw(sortState)
+    let globalValue = this.globalConfig.value
+    if (globalValue.length > 0) {//
+      _data1 = _data1.filter(v => {
+        let _shtml = v['_shtml']//
+        let reg = new RegExp(globalValue, 'g')//
+        if (reg.test(_shtml)) {
+          return true
+        }
+        return false
+      })
+    }
     const sortconfig = _sortState //自定义的排序配置
     //@ts-ignore
     const _sortConfig = sortconfig?.sort((s1, s2) => {
       //@ts-ignore
-      // return s1.order - s2.order
       return 0 //
     })
     let _data3 = _sortConfig
@@ -470,7 +517,7 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) {}
+  async runBefore(config?: any) { }
   runAfter(config?: any) {
     //
     if (config == null) {
@@ -499,7 +546,7 @@ export class Table extends Base {
       return null
     }
   }
-  registerHooks(hConfig?: any) {}
+  registerHooks(hConfig?: any) { }
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -507,7 +554,7 @@ export class Table extends Base {
     }
     return instance
   }
-  setMergeConfig(config?: any) {}
+  setMergeConfig(config?: any) { }
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -527,6 +574,13 @@ export class Table extends Base {
         item._index = this.uuid()
         this.dataMap[item._index] = item //
       } //
+      if (item['_shtml'] == null) {
+        let _v = Object.entries(item).reduce((res, [k, v]) => {
+          res += `${v}  ^^^`
+          return res
+        }, '')
+        item['_shtml'] = _v//
+      }
     })
     for (const row of _arr) {
       this.addRow(row)
@@ -557,7 +611,7 @@ export class Table extends Base {
       return
     }
     let columns = this.columns
-    columns.forEach((item) => {})
+    columns.forEach((item) => { })
     instance.release()
     this.instance = null //
   }
@@ -595,6 +649,50 @@ export class Table extends Base {
     let arr = obj[type]
     arr.push(fn) //
   }
+  getGlobalSearchProps(): any {
+    let _this = this
+    let changeFn = _.debounce((config: any) => {
+      let value = config.value
+      _this.updateGlobalSerach(value)
+    }, 200)//
+    let obj: VxeInputEventProps & VxeInputProps = {
+      onChange: changeFn,
+    }
+    return obj//
+  }
+  updateGlobalSerach(value: any) {
+    console.log(value, 'isChageValue')//
+    if (value == this.globalConfig.value) {
+      return
+    }
+    this.globalConfig.value = value
+  }
+  showGlobalSearch(status = true) {
+    if (status) {
+      this.globalConfig.show = true //
+    } else {
+      this.globalConfig.show = false
+    }
+  }
+  openColumnFilter(config) {
+    let event = config.event
+    let client = event.client
+    let x = client.x
+    let y = client.y
+    this.columnFilterConfig.x = x
+    this.columnFilterConfig.y = y//
+    const pulldownMenu: Dropdown = this.getRef('columnDropdown')
+    if (pulldownMenu == null) {
+      return
+    }
+    this.permission.canCloseColumnFilter = false
+    setTimeout(() => {
+      this.permission.canCloseColumnFilter = true
+    }, 400);
+    nextTick(() => {
+      pulldownMenu.showDropdown()//
+    })
+  }//
   addRow(row: any) {
     let data = this.getData()
     data.push(row) //

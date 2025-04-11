@@ -1,14 +1,4 @@
-import {
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  provide,
-  ref,
-  toRaw,
-  watch,
-  watchEffect,
-  withDirectives,
-} from 'vue'
+import { defineComponent, onMounted, onUnmounted, provide, ref, toRaw, vShow, watch, watchEffect, withDirectives } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { Table } from './table'
@@ -19,7 +9,8 @@ import { generatePersons } from './tableData'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import TableButtonCom from './tableButtonCom'
 import TableMenuCom from './tableMenuCom'
-import {useResizeObserver} from '@vueuse/core'
+import { useResizeObserver } from '@vueuse/core'
+import TableFitlerCom from './tableFitlerCom'
 // new ListTable()
 //核心表格组件
 export default defineComponent({
@@ -27,14 +18,31 @@ export default defineComponent({
   components: {
     buttonGroupCom,
     ContextmenuCom,
+    TableFitlerCom,
   },
   props: {
     ...tableV2Props,
+    showHeaderButton: {
+      type: Boolean,
+      default: true,
+    },
     width: {
       type: Number,
     },
     height: {
       type: Number,
+    },
+    showColumnFilterTable: {
+      type: Boolean,
+      default: true,
+    },
+    showGlobalSearch: {
+      type: Boolean,
+      default: false, //
+    },
+    showCheckBoxColumn: {
+      type: Boolean,
+      default: false, //
     },
   },
   setup(props, { slots, attrs, emit }) {
@@ -108,20 +116,8 @@ export default defineComponent({
           return
         }
         ins.updateColumns(e)
-      },
+      }
     )
-    // watch(
-    //   () => {
-    //     return tableIns.templateProps.data
-    //   },
-    //   (e) => {
-    //     let ins = tableIns.getInstance()
-    //     if (ins == null) {
-    //       return
-    //     }
-    //     ins.setRecords(e) //
-    //   },
-    // )
     watch(
       () => {
         let tableData = { ...tableIns.tableData }
@@ -129,7 +125,7 @@ export default defineComponent({
       },
       (e) => {
         tableIns.updateCanvas() //
-      },
+      }
     )
     watch(
       () => {
@@ -140,27 +136,47 @@ export default defineComponent({
       },
       {
         deep: true,
-      },
+      }
     )
     provide('tableIns', tableIns)
+    const inputProps = tableIns.getGlobalSearchProps()
     return () => {
       let com = null
-      com = withDirectives(
-        <div
-          style={{ width: '100%', height: '100%' }}
-          ref={registerRootDiv}
-        ></div>,
+      com = withDirectives(<div style={{ width: '100%', height: '100%' }} ref={registerRootDiv}></div>, [
         [
-          [
-            {
-              mounted(el) {},
-              unmounted(el) {},
-            },
-          ],
+          {
+            mounted(el) {},
+            unmounted(el) {},
+          },
         ],
-      )
+      ])
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
+      if (props.showHeaderButton == false) {
+        btnCom = null
+      }
+      let filterTCom = null
+      if (props.showColumnFilterTable) {
+        filterTCom = <TableFitlerCom tableIns={tableIns}></TableFitlerCom>
+      }
+      // const inputProps = tableIns.getGlobalSearchProps()
+      const globalSearchInput = withDirectives(
+        <div
+          style={{
+            zIndex: 100,
+            width: '100%',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            //  position: 'absolute',
+            left: '0px',
+            top: '0px',
+          }}
+        >
+          <vxe-input modelValue={tableIns.globalConfig.value} {...inputProps}></vxe-input>
+        </div>,
+        [[vShow, tableIns.globalConfig.show]]
+      )
       let outCom = (
         <div
           style={{
@@ -168,8 +184,10 @@ export default defineComponent({
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
+            position: 'relative',
           }}
         >
+          {filterTCom}
           {menuCom}
           {btnCom}
           <div
@@ -177,8 +195,10 @@ export default defineComponent({
               flex: 1,
               width: '100%', //
               overflow: 'hidden',
+              position: 'relative',
             }} //
           >
+            {globalSearchInput}
             {com}
           </div>
         </div>

@@ -18,7 +18,20 @@ export const scroll = (table: Table) => {
     },
   })
 }
-
+export const icon_click = (table: Table) => {
+  let _this = table
+  table.registerEvent({
+    name: 'icon_click',
+    keyName: 'icon_click',
+    callback: (config) => {
+      // console.log(config, 'is click icon')///
+      let name = config.name
+      if (name == 'filter') {//
+        _this.openColumnFilter(config)//
+      }
+    },
+  })
+}
 export const click_cell = (table: Table) => {
   let _this = table
   table.registerEvent({

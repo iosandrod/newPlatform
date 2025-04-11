@@ -2,7 +2,7 @@ import { defineComponent, inject } from 'vue'
 import { Table } from './table'
 import { generatePersons } from './tableData'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
-import { nextTick } from 'vue'//
+import { nextTick } from 'vue' //
 
 export default defineComponent({
   name: 'tableButtonCom',
@@ -40,6 +40,12 @@ export default defineComponent({
           //添加行
           // console.log('执行到这里')//
           tableIns.delCurRow()
+        },
+      },
+      {
+        label: '显示全局查询',
+        fn: async () => {
+          tableIns.showGlobalSearch(!tableIns.globalConfig.show) //
         },
       },
       {

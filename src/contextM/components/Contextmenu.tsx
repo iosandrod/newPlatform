@@ -1,24 +1,7 @@
-import {
-  computed,
-  defineComponent,
-  watch,
-  ref,
-  reactive,
-  onBeforeUnmount,
-  provide,
-  Teleport,
-  nextTick,
-  withDirectives,
-  vShow,
-} from 'vue'
+import { computed, defineComponent, watch, ref, reactive, onBeforeUnmount, provide, Teleport, nextTick, withDirectives, vShow } from 'vue'
 import type { PropType } from 'vue'
 
-import type {
-  TriggerEventType,
-  ReferenceOptions,
-  ShowOptions,
-  AddReferenceOptions,
-} from '../types'
+import type { TriggerEventType, ReferenceOptions, ShowOptions, AddReferenceOptions } from '../types'
 
 import { CLASSES } from '../constants'
 
@@ -74,6 +57,9 @@ const Contextmenu = defineComponent({
 
     const visible = ref(props.modelValue || false)
     const toggle = (value: boolean) => {
+      // if (1 == 1 && value == false) {
+      //   return
+      // }
       visible.value = value
       emit('update:modelValue', value)
     }
@@ -85,7 +71,6 @@ const Contextmenu = defineComponent({
       }
       return obj
     })
-
     const currentOptions = ref(null)
     const show = (evt: MouseEvent | ShowOptions, options?: ShowOptions) => {
       // console.log(evt instanceof Event, 'evt') //
@@ -96,13 +81,12 @@ const Contextmenu = defineComponent({
         //@ts-ignore
         evt.left = evt.x
       }
-      const autoAdjustPlacement =
-        targetOptions?.autoAdjustPlacement || props.autoAdjustPlacement
+      const autoAdjustPlacement = targetOptions?.autoAdjustPlacement || props.autoAdjustPlacement
       const targetPosition = {
         top: targetOptions?.top || 0,
         left: targetOptions?.left || 0,
       }
- 
+
       if (evt instanceof Event) {
         evt.preventDefault()
         targetPosition.top = targetOptions?.top ?? evt.pageY
@@ -120,10 +104,7 @@ const Contextmenu = defineComponent({
           const width = el.clientWidth
           const height = el.clientHeight
 
-          if (
-            height + targetPosition.top >=
-            window.innerHeight + window.scrollY
-          ) {
+          if (height + targetPosition.top >= window.innerHeight + window.scrollY) {
             const targetTop = targetPosition.top - height
 
             if (targetTop > window.scrollY) {
@@ -131,10 +112,7 @@ const Contextmenu = defineComponent({
             }
           }
 
-          if (
-            width + targetPosition.left >=
-            window.innerWidth + window.scrollX
-          ) {
+          if (width + targetPosition.left >= window.innerWidth + window.scrollX) {
             const targetWidth = targetPosition.left - width
 
             if (targetWidth > window.scrollX) {
@@ -158,15 +136,11 @@ const Contextmenu = defineComponent({
     //
     const references = reactive(new Map<Element, ReferenceOptions>())
     const currentReference = ref<Element>()
-    const currentReferenceOptions = computed(
-      () => currentReference.value && references.get(currentReference.value),
-    )
+    const currentReferenceOptions = computed(() => currentReference.value && references.get(currentReference.value))
     const addReference = (el: Element, options?: AddReferenceOptions) => {
       const triggers = (() => {
         if (options?.trigger) {
-          return Array.isArray(options.trigger)
-            ? options.trigger
-            : [options.trigger]
+          return Array.isArray(options.trigger) ? options.trigger : [options.trigger]
         }
         return DEFAULT_REFERENCE_OPTIONS.trigger
       })()
@@ -206,11 +180,7 @@ const Contextmenu = defineComponent({
       )
         return
 
-      const notOutside =
-        contextmenuRef.value.contains(evt.target as Node) ||
-        (currentReferenceOptions.value &&
-          currentReferenceOptions.value.triggers.includes('click') &&
-          currentReference.value.contains(evt.target as Node))
+      const notOutside = contextmenuRef.value.contains(evt.target as Node) || (currentReferenceOptions.value && currentReferenceOptions.value.triggers.includes('click') && currentReference.value.contains(evt.target as Node))
       if (!notOutside) {
         toggle(false)
       }
@@ -254,7 +224,7 @@ const Contextmenu = defineComponent({
       return visible.value || props.alwaysShow
     })
     const renderC = () => {
-      return withDirectives(
+      let com = withDirectives(
         <div
           class={CLASSES.contextmenu}
           ref={contextmenuRef}
@@ -274,9 +244,16 @@ const Contextmenu = defineComponent({
             })}
           </ul>
         </div>,
-        [[vShow, _show.value]],
+        [[vShow, _show.value]]
       )
-    }
+      let com1 = null
+      if (props.teleport && props.isTeleport) {
+        com1 = <Teleport to={props.teleport}>{com}</Teleport>
+      } else {
+        com1 = com
+      } //
+      return com1
+    } //
     // return {
     //   visible,
     //   style,
