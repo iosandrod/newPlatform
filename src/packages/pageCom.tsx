@@ -95,7 +95,7 @@ export default defineComponent({
     ...defaultProps,
     isDesign: {
       type: Boolean,
-      default: true
+      default: true//
     },
     data: {
       type: Object,
@@ -106,7 +106,6 @@ export default defineComponent({
   },
   emits: ['listener'],
   setup(props: any, { attrs, slots, emit, expose }) {
-
     const form = ref('');
     const previewPlatform = ref('pc');
     const previewLoading = ref(true);
@@ -142,6 +141,7 @@ export default defineComponent({
       });
       formIns.setState(state);
     }//
+    formIns.setCurrentDesign(props.isDesign)////
     const isFoldFields = computed({
       get: () => {
         return formIns.isDesign;
@@ -310,30 +310,30 @@ export default defineComponent({
     }
     return () => {
       let nextForm = formIns.nextForm; //
-      let dialogCom = <ElDialog
-        destroyOnClose
-        fullscreen
-        class='previewDialog'
-        v-model={state.previewVisible}
-        onClosed={() => (previewPlatform.value = 'pc')}
-      >
-        {{
-          header: () => (
-            <DeviceSwitch
-              modelValue={previewPlatform.value}
-              onUpdate:modelValue={(val) => handleOperation(7, val)}
-            />
-          ),
-          default: () => (
-            <ElScrollbar>
+      // let dialogCom = <ElDialog
+      //   destroyOnClose
+      //   fullscreen
+      //   class='previewDialog'
+      //   v-model={state.previewVisible}
+      //   onClosed={() => (previewPlatform.value = 'pc')}
+      // >
+      //   {{
+      //     header: () => (
+      //       <DeviceSwitch
+      //         modelValue={previewPlatform.value}
+      //         onUpdate:modelValue={(val) => handleOperation(7, val)}
+      //       />
+      //     ),
+      //     default: () => (
+      //       <ElScrollbar>
               
-            </ElScrollbar>
-          ),
-        }}
-      </ElDialog>
+      //       </ElScrollbar>
+      //     ),
+      //   }}
+      // </ElDialog>
       let com = (
         <div class='h-full w-full'>
-          {dialogCom}
+          {/* {dialogCom} */}
           <ElContainer class='container' direction='vertical'>
             <ElContainer>
               {isFoldFields.value && <fieldCom></fieldCom>}

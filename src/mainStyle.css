@@ -56,7 +56,7 @@
   top: inherit            !important; 
 }
 ul, ol {
-  list-style: none;
+  list-style: none !important;
   padding: 0;
   margin: 0;
 }
@@ -80,4 +80,44 @@ ul, ol {
 }
 .el-form-item{
   /* height: 100%; */
+}
+li::marker {
+  display: none !important;
+}
+li {
+  list-style-type: none;
+}
+
+.flex{
+  display: flex;
+}
+.flex-col{
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row{
+  display: flex;
+  flex-direction: row;
+}
+.justify-center{
+  justify-content: center;
+}
+.justify-between{
+  justify-content: space-between;
+}
+.justify-end{
+  justify-content: flex-end;
+}
+.justify-start{
+  justify-content: flex-start;
+}
+.align-center{
+  align-items: center;
+}
+.align-end{
+  align-items: flex-end;
+}
+.align-start{
+  align-items: flex-start;
 }

@@ -8,23 +8,24 @@ import { nextTick } from 'vue'
 import { entityData } from './formEditor/testData'
 
 export class PageDesign extends Form {
-  pageType = 'pageDesign'//
+  pageType = 'pageDesign' //
   constructor(config) {
     super(config) //
     this.init()
-  }//
+  } //
   init(): void {
     super.init()
     nextTick(() => {
-      this.setLayoutData(JSON.parse(JSON.stringify(entityData)))//
+      this.setLayoutData(JSON.parse(JSON.stringify(entityData))) //
     })
   }
   setItems(items: any, setLayout?: boolean): void {
-    this.items.splice(0)//
+    this.items.splice(0) //
     for (const item of items) {
       this.addFormItem(item)
     }
-    if (setLayout == true) {//
+    if (setLayout == true) {
+      //
       let pcLayout = this.getPcLayout()
       let mobileLayout = this.getMobileLayout()
       let layout = {
@@ -49,21 +50,17 @@ export class PageDesign extends Form {
   getDesignFieldConfig() {
     return createPageDesignFieldConfig() //
   }
-  setDefaultTemplatePage() {
-    let mainTableIns = {}
-    let detailTableIns = {} //
+  //设置默认模板
+  initDefaultTemplatePage() {
+    let mainTable = {}
+    let detailTable = {} //
   }
-  // initPcLayout(): void { }
-  // initMobileLayout(): void { }
   getValidateRules() {
     return []
   }
-  async getTableData() {//
-  }//
-  async createTableData() {
-
-  }
-  async updateTableData() {
-
-  }
+  async getTableData() {
+    //
+  } //
+  async createTableData() {}
+  async updateTableData() {}
 }

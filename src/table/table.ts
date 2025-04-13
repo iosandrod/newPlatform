@@ -8,8 +8,12 @@ import {
   triggerRef,
   toRaw,
 } from 'vue'
-import { Column } from './column'
-import { ListTable, ListTableConstructorOptions, } from '@visactor/vtable'
+import { CheckboxColumn, Column } from './column'
+import {
+  ColumnDefine,
+  ListTable,
+  ListTableConstructorOptions,
+} from '@visactor/vtable'
 import { VTable } from '@visactor/vue-vtable'
 import { method } from 'lodash'
 import { exportVTableToExcel } from '@visactor/vtable-export'
@@ -18,6 +22,9 @@ import * as equal from '@/packages/utils/equal'
 import { BaseTableConstructorOptions } from '@visactor/vtable/es/ts-types/base-table'
 import { BMenu } from '@/buttonGroup/bMenu'
 import {
+  //
+  checkbox_state_change,
+  checkboxChange,
   click_cell,
   contextmenu_cell,
   icon_click,
@@ -31,17 +38,38 @@ import { VxeInputEvents, VxeInputProps } from 'vxe-table'
 import { VxeInputEventProps } from 'vxe-pc-ui'
 import { Dropdown } from '@/menu/dropdown'
 export class Table extends Base {
+  isCheckAll = false
+  currentFilterColumn: Column
+  updateTimeout?: any
+  checkboxColumn: Column //
   globalConfig = {
-    value: '',//
-    show: false//
+    value: '', //
+    show: false, //
   }
-  columnFilterConfig: any = {}//
+  timeout: {
+    [key: string]: any
+  } = {}
+  columnFilterConfig: {
+    x: number
+    y: number
+    width: number
+    filterConfig: Array<{
+      field: string
+      indexArr: Array<any> //
+    }>
+  } = {
+    x: 0,
+    y: 0,
+    width: 0,
+    filterConfig: [],
+  }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
   clickOpt = 1
   permission: { [key: string]: boolean } = {
     loadData: true,
+    canChangecheckbox: true, //
   }
   isDesign = false //
   columns: Column[] = []
@@ -112,17 +140,23 @@ export class Table extends Base {
     this.setData(data)
     this.setColumns(columns) //
     this.initSortState()
+    this.initCheckboxColumn()
     this.initGlobalSearch()
+  }
+  initCheckboxColumn() {
+    let _col = new CheckboxColumn({ field: 'checkboxField' }, this) //
+    this.checkboxColumn = _col
   }
   initGlobalSearch() {
     let config = this.config
     let show = config.showGlobalSearch
     if (show == true) {
-      this.globalConfig.show = true//
+      this.globalConfig.show = true ////
     }
   }
   setData(data) {
     this.tableData.data = data
+    this.isCheckAll = false //
     data.forEach((e) => {
       if (e['_index'] == null) {
         e._index = this.uuid()
@@ -130,6 +164,7 @@ export class Table extends Base {
       }
       if (e['_shtml'] == null) {
         let _v = Object.entries(e).reduce((res, [k, v]) => {
+          if (k === '_index') return res //
           res += `${v}  ^^^`
           return res
         }, '')
@@ -137,7 +172,7 @@ export class Table extends Base {
       }
     }) //
   }
-  getTableName() { }
+  getTableName() {}
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
@@ -146,7 +181,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   render() {
     const rootDiv = this.getRef('root')
     const rect = rootDiv.getBoundingClientRect()
@@ -157,6 +192,24 @@ export class Table extends Base {
       return
     }
     let _this = this
+    let showRowSeriesNumber = this.config.showRowSeriesNumber
+    let _sConfig: ColumnDefine = null
+    if (showRowSeriesNumber) {
+      _sConfig = {
+        style: (config) => {
+          const table = config.table
+          let record = table.getRecordByCell(config.col, config.row)
+          let obj = {}
+          if (record == _this.tableData.curRow) {
+            //@ts-ignore
+            obj.bgColor = 'RGB(200, 190, 230)'
+          }
+          return obj
+        },
+        disableColumnResize: true, //
+        width: 60, //
+      } as ColumnDefine
+    }
     let table = new ListTable({
       multipleSort: true,
       sortState: [],
@@ -171,54 +224,29 @@ export class Table extends Base {
         outsideClickDeselect: false, //
         blankAreaClickDeselect: false, //
       },
-      rowSeriesNumber: {
-        style: (config) => {
-          const table = config.table
-          let record = table.getRecordByCell(config.col, config.row)
-          let obj = {}
-          if (record == _this.tableData.curRow) {
-            //@ts-ignore
-            obj.bgColor = 'RGB(200, 190, 230)'
-          }
-          return obj
-        },
-      },
+      rowSeriesNumber: _sConfig as any, //
       editCellTrigger: 'click',
       customConfig: {
         createReactContainer: true, //
       },
       //头部的
     }) //
+    table.on('drag_select_end', (config) => {})
     const emitEventArr = [
-      'icon_click',//
+      'icon_click', //
       'contextmenu_cell',
       'sort_click',
       'selected_cell',
       'scroll',
-      'click_cell'
+      'click_cell',
+      'checkbox_state_change',
     ]
-    emitEventArr.forEach(item => {
+    emitEventArr.forEach((item) => {
       //@ts-ignore//
       table.on(item, (config) => {
         this.emit(item, config)
       })
     })
-    // table.on('contextmenu_cell', (config) => {
-    //   this.emit('contextmenu_cell', config)
-    // })
-    // table.on('sort_click', (config) => {
-    //   this.emit('sort_click', config)
-    //   return true //
-    // })
-    // table.on('selected_cell', (config) => {
-    //   this.emit('selected_cell', config)
-    // }) //
-    // table.on('scroll', (config) => {
-    //   this.emit('scroll', config) ////
-    // })
-    // table.on('click_cell', (config) => {
-    //   this.emit('click_cell', config) ////
-    // })
     const instance = shallowRef(table)
     //@ts-ignore
     this.instance = instance ////
@@ -239,11 +267,9 @@ export class Table extends Base {
     })
   }
   setSortState(config) {
-    console.log(config, 'setState123132') //
     if (!Array.isArray(config)) {
       return
     }
-    // let sortCache = this.sortCache
     this.sortCache = config //
   }
   initSortState() {
@@ -277,7 +303,7 @@ export class Table extends Base {
               cConfig._timeout = null
               //@ts-ignore
               cConfig._args = null //
-              console.error(error)
+              console.error(error, `error,错误事件:${name}`)
             }
           }, timeout) //
         } else {
@@ -288,6 +314,11 @@ export class Table extends Base {
         //
         callback(...args)
       }
+    }
+    const config = this.config
+    let event = config[name]
+    if (typeof event == 'function') {
+      event(...args) //
     }
   }
   copyCurrentCell() {
@@ -357,11 +388,15 @@ export class Table extends Base {
     selected_cell(this)
     contextmenu_cell(this) //
     sort_click(this) //
-    icon_click(this)//
+    icon_click(this) //
+    checkbox_state_change(this)
+    checkboxChange(this) //
   }
-  setCurTableSelect() { }
-  openContextMenu(config) {//
-    console.log(config, 'test_config')//
+
+  setCurTableSelect() {}
+  openContextMenu(config) {
+    //
+    console.log(config, 'test_config') //
     const event: PointerEvent = config.event
     let x = event.x
     let y = event.y
@@ -375,7 +410,7 @@ export class Table extends Base {
     })
     return _cols //
   }
-  getFlatColumns() {
+  getFlatColumns(): Column[] {
     const columns = this.columns
       .map((col) => {
         return col.getSubColumns()
@@ -405,7 +440,12 @@ export class Table extends Base {
     let _col1 = _cols.map((col) => {
       return col.getColumnProps()
     })
-    return _col1 //
+    let _show = this.config.showCheckboxColumn
+    if (_show) {
+      let cCol = this.checkboxColumn
+      _col1.unshift(cCol.getColumnProps())
+    }
+    return _col1 ////
   }
   getData() {
     let tableData = this.tableData
@@ -450,10 +490,10 @@ export class Table extends Base {
     let _data1 = toRaw(_data)
     let _sortState = toRaw(sortState)
     let globalValue = this.globalConfig.value
-    if (globalValue.length > 0) {//
-      _data1 = _data1.filter(v => {
-        let _shtml = v['_shtml']//
-        let reg = new RegExp(globalValue, 'g')//
+    if (globalValue.length > 0) {
+      _data1 = _data1.filter((v) => {
+        let _shtml = v['_shtml'] //
+        let reg = new RegExp(globalValue, 'g') //
         if (reg.test(_shtml)) {
           return true
         }
@@ -485,9 +525,43 @@ export class Table extends Base {
         return _data4
       }, _data1)
       .flat(sortconfig?.length)
-    // console.log(_data3, 'testData3') ///
+    let _filterConfig = toRaw(this.columnFilterConfig.filterConfig)
+    if (_filterConfig.length > 0) {
+      let allIndex = _filterConfig.map((item) => {
+        // let indexArr = item.indexArr
+        // return indexArr
+        return item
+      })
+      allIndex.forEach((item) => {
+        if (item.indexArr?.length > 0) {
+          //
+          let field = item.field
+          let indexArr = item.indexArr
+          _data3 = _data3.filter((v) => {
+            let _value = v[field]
+            if (indexArr.find((v) => v == _value)) {
+              return true
+            }
+            return false
+          }) //
+        }
+      }) //
+      //   .flat()
+      //   .filter((item, index, _arr) => {
+      //     return _arr.indexOf(item) === index
+      //   })
+      // _data3 = _data3.filter((item, index) => {
+      //   let _index = item._index
+      //   if (allIndex.indexOf(_index) !== -1) {
+      //     return true
+      //   }
+      //   return false
+      // })
+    }
     nextTick(() => {
-      instance.setRecords(_data3) ////
+      this.tableData.showData = _data3 //
+      instance.setRecords(_data3) //////
+      // console.log('setskfjslfjsdlfsdlkfjsdlkfjsdlfjsdlfd 性能有问题') //
       this.runAfter({
         methodName: 'loadData',
         config: loadConfig,
@@ -517,7 +591,7 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   runAfter(config?: any) {
     //
     if (config == null) {
@@ -546,7 +620,7 @@ export class Table extends Base {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -554,7 +628,7 @@ export class Table extends Base {
     }
     return instance
   }
-  setMergeConfig(config?: any) { }
+  setMergeConfig(config?: any) {}
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -579,7 +653,7 @@ export class Table extends Base {
           res += `${v}  ^^^`
           return res
         }, '')
-        item['_shtml'] = _v//
+        item['_shtml'] = _v //
       }
     })
     for (const row of _arr) {
@@ -611,14 +685,20 @@ export class Table extends Base {
       return
     }
     let columns = this.columns
-    columns.forEach((item) => { })
+    columns.forEach((item) => {})
     instance.release()
     this.instance = null //
   }
   updateCanvas() {
-    let instance = this.getInstance()
-    let records = instance.records
-    instance.setRecords(records) //
+    if (this.updateTimeout) {
+      return
+    } //
+    this.updateTimeout = setTimeout(() => {
+      let instance = this.getInstance()
+      let records = instance.records //
+      instance.setRecords(records) //
+      this.updateTimeout = null ////
+    }, 30)
   }
   addAfterMethod(config) {
     config.type = 'after'
@@ -654,14 +734,14 @@ export class Table extends Base {
     let changeFn = _.debounce((config: any) => {
       let value = config.value
       _this.updateGlobalSerach(value)
-    }, 200)//
+    }, 200) //
     let obj: VxeInputEventProps & VxeInputProps = {
       onChange: changeFn,
     }
-    return obj//
+    return obj //
   }
   updateGlobalSerach(value: any) {
-    console.log(value, 'isChageValue')//
+    console.log(value, 'isChageValue') //
     if (value == this.globalConfig.value) {
       return
     }
@@ -675,24 +755,59 @@ export class Table extends Base {
     }
   }
   openColumnFilter(config) {
+    let col = config.col
+    let row = config.row
+    let ins = this.getInstance()
+    let field: string = ins.getBodyField(col, row) as any
+    let tColumn = this.getFlatColumns().find((col) => col.getField() == field)
+    let width = tColumn.getColumnWidth()
+    this.columnFilterConfig.width = width + 60 //
     let event = config.event
     let client = event.client
     let x = client.x
     let y = client.y
+    let oldColumnFilter = this.currentFilterColumn
+    this.currentFilterColumn = tColumn //
     this.columnFilterConfig.x = x
-    this.columnFilterConfig.y = y//
+    this.columnFilterConfig.y = y //
     const pulldownMenu: Dropdown = this.getRef('columnDropdown')
     if (pulldownMenu == null) {
       return
     }
     this.permission.canCloseColumnFilter = false
-    setTimeout(() => {
+    if (this.timeout['closeColumnFilter']) {
+      clearTimeout(this.timeout['closeColumnFilter'])
+      this.timeout['closeColumnFilter'] = null
+    } //
+    this.timeout['closeColumnFilter'] = setTimeout(() => {
       this.permission.canCloseColumnFilter = true
-    }, 400);
+    }, 200)
     nextTick(() => {
-      pulldownMenu.showDropdown()//
+      pulldownMenu.showDropdown() //
+      nextTick(() => {
+        const filterTable: Table = this.getRef('columnFilterTable')
+        let _config = [tColumn].map((col) => {
+          return col.config
+        })
+        let _data = this.getInstance().records //
+        if (oldColumnFilter != null && oldColumnFilter === tColumn) {
+          return //
+        }
+        let _data1 = [
+          ..._data.map((row) => {
+            let obj = {
+              [field]: row[field], //
+              _value: row[field],
+            }
+            return obj //
+          }),
+        ]
+        _config = _.cloneDeep(_config) //
+        filterTable.setColumns(_config) ////
+        filterTable.setData(_data1) //
+      })
     })
-  }//
+  } //
   addRow(row: any) {
     let data = this.getData()
     data.push(row) //
@@ -715,6 +830,93 @@ export class Table extends Base {
       }
       this.setCurRow(_row) //
     })
+  }
+  updateCheckboxAll(e) {
+    let _this = this ////
+    _this.isCheckAll = e
+    this.updateCheckboxField(this.getShowRecords(), _this.isCheckAll) //
+  }
+  getShowRecords() {
+    //
+    let instance = this.getInstance()
+    let records = instance.records //
+    return records
+  }
+  updateCheckboxField(rows, status = null) {
+    if (!Array.isArray(rows)) {
+      return
+    } //
+    rows.forEach((row) => {
+      if (row == null) {
+        return //
+      }
+      if (status != null) {
+        row.checkboxField = status
+      } else {
+        row.checkboxField = !row.checkboxField //
+      }
+    }) //
+    let resRow = this.getShowRecords()
+    if (
+      resRow.every((item) => {
+        return item.checkboxField
+      })
+    ) {
+      this.isCheckAll = true
+    } else {
+      this.isCheckAll = false //
+    }
+    let allCheck = this.getData().filter((item) => item.checkboxField)
+    this.emit('checkboxChange', {
+      allRows: allCheck,
+      table: this,
+      rows: rows, //
+    })
+  }
+  updateFilterConfig(config) {
+    let oldFilterConfig = this.columnFilterConfig.filterConfig
+    let currentFilterColumn = this.currentFilterColumn
+    if (currentFilterColumn == null) {
+      return
+    }
+    let field = currentFilterColumn.getField()
+    let _config = oldFilterConfig.find((item) => item.field == field)
+    if (_config == null) {
+      let _obj = {
+        field: field,
+        indexArr: [],
+      }
+      oldFilterConfig.push(_obj)
+      _config = _obj
+    }
+    _config.indexArr = [] //
+    let allCheck = config.allRows //
+    allCheck.forEach((item) => {
+      _config.indexArr.push(item._value) //
+    })
+    _config.indexArr = _config.indexArr.filter((item, index) => {
+      return _config.indexArr.indexOf(item) === index //
+    }) //去重
+    // console.log(oldFilterConfig, 'test_config') ////
+    this.columnFilterConfig.filterConfig = [...oldFilterConfig] //
+  }
+  resetFilterColumn(all = false) {
+    let currentFilterColumn = this.currentFilterColumn
+    if (currentFilterColumn == null) {
+      return
+    }
+    let field = currentFilterColumn.getField()
+    let oldFilterConfig = this.columnFilterConfig.filterConfig
+    let _config = oldFilterConfig.find((item) => item.field == field)
+    if (_config == null) {
+      return
+    }
+    _config.indexArr = [] //
+    this.columnFilterConfig.filterConfig = [...oldFilterConfig] ////
+    console.log(_config, 'test_config') //
+    if (all == true) {
+      this.columnFilterConfig.filterConfig = [] //
+    }
   }
 }
 //

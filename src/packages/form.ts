@@ -18,7 +18,7 @@ import utils from '@ER/utils'
 import generatorData from './formEditor/generatorData'
 import { Node } from './formEditor/node'
 import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
-import Sortable from 'sortablejs'
+import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
 import {} from 'vxe-table'
 //转换数据
@@ -43,6 +43,7 @@ const layoutType = [
 ]
 const pName = [] //
 export class Form extends Base {
+  cachePlugin: any
   formIns?: any
   lang: any = {}
   t: any
@@ -737,6 +738,7 @@ export class Form extends Base {
   }
   onUnmounted() {
     super.onUnmounted() //
+    this.unmountedPlugin() //
   }
   setData(data) {
     this.data = data
@@ -998,6 +1000,12 @@ export class Form extends Base {
       utils.disassemblyData2(addFields)
       copyData.push(...addFields)
       return copyData
+    }
+  }
+  unmountedPlugin() {
+    let cachePlugin = this.cachePlugin
+    if (cachePlugin) {
+      Sortable.unmounted(cachePlugin.pluginName)
     }
   }
   getData() {

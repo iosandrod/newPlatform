@@ -21,9 +21,11 @@ import { erFormEditor } from '@ER/formEditor'
 import { registerEdit } from '@/table/registerEdit'
 import tableCom from './table/tableCom'
 import dropdownCom from './menu/dropdownCom'
+import buttonCom from './buttonGroup/buttonCom'
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)
+app.component('erButton',buttonCom)
 app.component('erForm', erFormEditor) //
 app.component('erTable', tableCom)//
 app.component('erDropdown', dropdownCom)

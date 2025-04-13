@@ -34,6 +34,7 @@ export default defineComponent({
     return () => (
       <div style={{ width: '100%', height: '100%' }}>
         <VxeInput
+          style={{ width: '100%', height: '100%' }}//
           ref={insRef}
           onChange={(v) => {
             updateValue(v)

@@ -1,4 +1,15 @@
-import { defineComponent, onMounted, onUnmounted, provide, ref, toRaw, vShow, watch, watchEffect, withDirectives } from 'vue'
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  provide,
+  ref,
+  toRaw,
+  vShow,
+  watch,
+  watchEffect,
+  withDirectives,
+} from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { Table } from './table'
@@ -10,7 +21,7 @@ import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import TableButtonCom from './tableButtonCom'
 import TableMenuCom from './tableMenuCom'
 import { useResizeObserver } from '@vueuse/core'
-import TableFitlerCom from './tableFitlerCom'
+import TableFitlerCom from './tableFilterCom'
 // new ListTable()
 //核心表格组件
 export default defineComponent({
@@ -44,9 +55,21 @@ export default defineComponent({
       type: Boolean,
       default: false, //
     },
+    showRowSeriesNumber: {
+      type: Boolean,
+      default: true,
+    },
+    showCheckboxColumn: {
+      type: Boolean,
+      default: true,
+    },
+    checkboxChange: {
+      type: Function,
+    },
   },
-  setup(props, { slots, attrs, emit }) {
+  setup(props, { slots, attrs, emit, expose }) {
     const tableIns = new Table(props)
+    expose(tableIns) //
     provide('tableIns', tableIns)
     onMounted(() => {
       tableIns.onMounted() //
@@ -86,6 +109,7 @@ export default defineComponent({
           return //
         }
         timeout = setTimeout(() => {
+          //
           let _arr = []
           let _iArr = []
           let records = tableIns.getInstance().records
@@ -116,7 +140,7 @@ export default defineComponent({
           return
         }
         ins.updateColumns(e)
-      }
+      },
     )
     watch(
       () => {
@@ -125,7 +149,7 @@ export default defineComponent({
       },
       (e) => {
         tableIns.updateCanvas() //
-      }
+      },
     )
     watch(
       () => {
@@ -136,20 +160,26 @@ export default defineComponent({
       },
       {
         deep: true,
-      }
+      },
     )
     provide('tableIns', tableIns)
     const inputProps = tableIns.getGlobalSearchProps()
     return () => {
       let com = null
-      com = withDirectives(<div style={{ width: '100%', height: '100%' }} ref={registerRootDiv}></div>, [
+      com = withDirectives(
+        <div
+          style={{ width: '100%', height: '100%' }}
+          ref={registerRootDiv}
+        ></div>,
         [
-          {
-            mounted(el) {},
-            unmounted(el) {},
-          },
+          [
+            {
+              mounted(el) {},
+              unmounted(el) {},
+            },
+          ],
         ],
-      ])
+      )
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
       if (props.showHeaderButton == false) {
@@ -173,9 +203,12 @@ export default defineComponent({
             top: '0px',
           }}
         >
-          <vxe-input modelValue={tableIns.globalConfig.value} {...inputProps}></vxe-input>
+          <vxe-input
+            modelValue={tableIns.globalConfig.value}
+            {...inputProps}
+          ></vxe-input>
         </div>,
-        [[vShow, tableIns.globalConfig.show]]
+        [[vShow, tableIns.globalConfig.show]],
       )
       let outCom = (
         <div

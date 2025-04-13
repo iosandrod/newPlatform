@@ -6,7 +6,7 @@ export class Button extends Base {
   group: any
   parent: Button
   buttons: Button[] = []
-  constructor(config, group, p?: any) {
+  constructor(config, group?, p?: any) {
     super()
     this.config = config
     this.group = group

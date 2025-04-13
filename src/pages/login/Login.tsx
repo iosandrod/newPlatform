@@ -19,9 +19,9 @@ import { Simple } from '../home/index copy'
 import pageCom from '@ER/pageCom'
 export default defineComponent({
   components: {
+    buttonCom, //
     pageCom, //
     erFormEditor,
-    buttonCom,
     tabCom,
     buttonGroupCom,
     d, //
@@ -109,7 +109,8 @@ export default defineComponent({
       width: 300,
     })
     return () => {
-      let com0 = <formCom data={_data} {...formConfig1}></formCom>
+      // let com0 = <formCom data={_data} {...formConfig1}></formCom>
+      let com0 = null
       let com = <buttonGroupCom items={btns}></buttonGroupCom>
       // com = <erFormEditor isDesign={true} {...formConfig}></erFormEditor>
       // com = <d></d>
@@ -170,18 +171,20 @@ export default defineComponent({
       // com = <erFormEditor isDesign={true}></erFormEditor>
       // com=<d></d>
 
-      com = <pageCom></pageCom> //
-      com = (
-        <div style={{ height: `${_data.height}px`, width: `100%` }}>
-          <tableCom {...tableConfig}></tableCom>
-        </div>
-      ) //
+      com = <pageCom isDesign={false}></pageCom> //
+      // com = (
+      //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
+      //     <tableCom {...tableConfig}></tableCom>
+      //   </div>
+      // ) //
+      let com2 = <buttonCom></buttonCom>
       let _com = (
         <div
           style={{
             padding: '100px', //
           }}
         >
+          {com2}
           {com0}
           {/* <erFormEditor isDesign={true} {...formConfig}></erFormEditor> */}
           {/* <buttonCom></buttonCom> */}

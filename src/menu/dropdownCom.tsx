@@ -27,7 +27,8 @@ export default defineComponent({
     showPopupShadow: Boolean as PropType<VxePulldownPropTypes.ShowPopupShadow>,
     destroyOnClose: {
       type: Boolean as PropType<VxePulldownPropTypes.DestroyOnClose>,
-      default: getConfig().pulldown.destroyOnClose,
+      // default: getConfig().pulldown.destroyOnClose,
+      default : true//
     },
     transfer: {
       type: Boolean as PropType<VxePulldownPropTypes.Transfer>,
@@ -46,7 +47,7 @@ export default defineComponent({
           {...props}
           transfer={true}
           ref={(e) => drop.registerRef('dropdown', e)}
-          destroyOnClose={true}
+          destroyOnClose={props.destroyOnClose}
           modelValue={drop.getModelValue()} //
           v-slots={{
             default: () => {

@@ -41,7 +41,6 @@ export class InputEditor extends BaseEditor {
     el.style.width = '100%'
     el.style.height = '100%'
     el.style.position = 'absolute'
-    el.style.padding = '4px'
     el.style.boxSizing = 'border-box'
     el.style.backgroundColor = '#FFFFFF' //
     let colFn: any = this.editorConfig

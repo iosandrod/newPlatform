@@ -310,7 +310,7 @@ const setStates = (newTarget, ev, ER) => {
       }
       break
   }
-}//
+} //
 const getNodes = (node) => {
   const nodes = node.columns || node.list || node.rows || []
   return Array.isArray(node) ? node : nodes
@@ -322,6 +322,9 @@ const resetStates = () => {
   prevEl = prevSortable = inserColIndex = inserRowIndex = ''
 }
 function ControlInsertionPlugin(ER) {
+  if (ER.cachePlugin != null) {
+    return ER.cachePlugin
+  } //
   class ControlInsertionPlugin {
     dragStart(e) {}
     drop(e) {
@@ -361,7 +364,7 @@ function ControlInsertionPlugin(ER) {
           }
           oldEl.context.delete()
         }
-      } 
+      }
       if (inserRowIndex !== '') {
         let store = []
         store = Array.isArray(prevSortable.options.parent)
@@ -528,10 +531,12 @@ function ControlInsertionPlugin(ER) {
   }
   const name = ER.formIns.getPluginName()
   // console.log(name, ER, 'testName')////
-  return Object.assign(ControlInsertionPlugin, {
-    //
+  let _obj = Object.assign(ControlInsertionPlugin, {
     pluginName: name, //
     initializeByDefault: true,
   })
+  let _formIns = ER
+  _formIns.cachePlugin = _obj
+  return _obj
 }
 export default ControlInsertionPlugin

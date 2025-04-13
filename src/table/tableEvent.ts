@@ -2,6 +2,8 @@ import { SortState } from '@visactor/vtable/es/ts-types'
 import { Table } from './table'
 import _ from 'lodash'
 import { nextTick } from 'vue' //
+import { RangeType } from '@visactor/vtable/es/vrender'
+import { CellRange } from '@visactor/vtable-export/es/util/type'
 export const scroll = (table: Table) => {
   let _this = table
   table.registerEvent({
@@ -10,7 +12,11 @@ export const scroll = (table: Table) => {
     timeout: 100,
     callback: (config) => {
       let table = _this.getInstance() //
+      if (table == null) {
+        return //
+      }
       let range = table.getBodyVisibleCellRange()
+      if (range == null) return //
       const headerheight = table.columnHeaderLevelCount
       range.rowStart = range.rowStart - headerheight
       range.rowEnd = range.rowEnd - headerheight
@@ -26,8 +32,9 @@ export const icon_click = (table: Table) => {
     callback: (config) => {
       // console.log(config, 'is click icon')///
       let name = config.name
-      if (name == 'filter') {//
-        _this.openColumnFilter(config)//
+      if (name == 'filter') {
+        //
+        _this.openColumnFilter(config) //
       }
     },
   })
@@ -38,9 +45,16 @@ export const click_cell = (table: Table) => {
     name: 'click_cell',
     keyName: 'click_cell',
     callback: (config) => {
+      let field = config.field
       let originData = config.originData //
+      if (field == 'checkboxField') {
+        // originData.checkboxField = !originData.checkboxField //
+      } //
       if (originData == null) {
       } else {
+        if (originData == _this.tableData.curRow) {
+          _this.updateCanvas() //
+        }
         _this.tableData.curRow = originData //
       } //
     },
@@ -63,17 +77,33 @@ export const selected_cell = (table: Table) => {
   table.registerEvent({
     name: 'selected_cell',
     keyName: 'selected_cell',
-    /*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * @description callback function for selected_cell event
-     * @param {Object} config selected cell info
-     * @property {number} config.rowIndex row index of the selected cell
-     * @property {number} config.colIndex column index of the selected cell
-     * @property {Object} config.originData data of the selected cell
-     */
-    /******  c7bab0cf-2004-46d1-b998-305d6ee7ad02  *******/
     callback: (config) => {
-      _this.selectCache = config
+      console.log('select _cells') //
+      let ranges: CellRange[] = config.ranges
+      let ins = table.getInstance()
+      let lastR = ranges.slice(-1)[0]
+      let start = lastR.start //
+      let end = lastR.end
+      _this.selectCache = config //
+      if (start.col == end.col) {
+        let field = ins.getBodyField(start.col, start.row)
+        let rArr = []
+        if (field == 'checkboxField') {
+          for (let i = start.row; i <= end.row; i++) {
+            let record = ins.getRecordByCell(start.col, i) //
+            // record.checkboxField = !record.checkboxField
+            rArr.push(record)
+          }
+          table.updateCheckboxField(rArr)
+          //@ts-ignore
+          table.permission.canChangecheckbox = false
+          setTimeout(() => {
+            //@ts-ignore
+            table.permission.canChangecheckbox = true
+          }, 0)
+          table.updateCanvas() //
+        }
+      }
     },
   })
 }
@@ -112,5 +142,35 @@ export const sort_click = (table: Table) => {
         _this.setSortState(_sortState) //
       })
     },
+  })
+}
+
+export const checkbox_state_change = (table: Table) => {
+  const _this = table
+  table.registerEvent({
+    name: 'checkbox_state_change',
+    keyName: 'checkbox_state_change',
+    callback: (config) => {
+      nextTick(() => {
+        let originData = config.originData //
+        if (originData == null) {
+          //点击了上面的全选按钮
+          return //
+        } //
+        if (table.permission.canChangecheckbox == false) {
+          return //
+        }
+        table.updateCheckboxField([originData]) ////
+      })
+    },
+  })
+}
+
+export const checkboxChange = (table: Table) => {
+  const _this = table
+  table.registerEvent({
+    name: 'checkboxChange',
+    keyName: 'checkboxChange',
+    callback: (config) => {},
   })
 }
