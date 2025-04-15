@@ -52,8 +52,17 @@ export class PageDesign extends Form {
   }
   //设置默认模板
   initDefaultTemplatePage() {
-    let mainTable = {}
-    let detailTable = {} //
+    //用户表
+    let mainTable = {
+      tableName: 'users',
+    } //
+    let detailTable = {
+      tableName: 'roles',
+    }
+    let obj = {
+      mainTable,
+      detailTable,
+    }
   }
   getValidateRules() {
     return []

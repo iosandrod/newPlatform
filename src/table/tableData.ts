@@ -110,9 +110,6 @@ export const generatePersons = (count) => {
     return arr
 }
 export const tableConfig: ListTableConstructorOptions = {
-    //
-    // height: 500,
-    // width: 500,
     columns: [
         {
             field: 'id',
@@ -124,7 +121,6 @@ export const tableConfig: ListTableConstructorOptions = {
                 let email = row.id
                 return `${email}`
             },
-
         },
         {
             field: 'email1',
@@ -186,7 +182,6 @@ export const tableConfig: ListTableConstructorOptions = {
             width: 150,
         },
     ],
-    // data: generatePersons(1000),////
     data: [
         {
             id: 1,

@@ -10,10 +10,16 @@ export default defineComponent({
   setup(props, attrs) {
     const formIns: PageDesign = inject('formIns') //
     const formitem: PageDesignItem = props.params.formitem
-    const conifg = formitem.config
+    const config = formitem.config //
     const _tableConfig = _.cloneDeep(tableConfig)
+    _
+    const pageDesign: PageDesign = inject('pageDesign')
+    
+    const registerTable = (ins) => {
+      pageDesign.registerRef('table', ins)
+    } //
     return () => {
-      let com = <erTable {..._tableConfig}></erTable>
+      let com = <erTable ref={registerTable} {..._tableConfig}></erTable>
       return com
     } //
   },

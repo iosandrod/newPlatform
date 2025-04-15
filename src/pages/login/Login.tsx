@@ -171,7 +171,7 @@ export default defineComponent({
       // com = <erFormEditor isDesign={true}></erFormEditor>
       // com=<d></d>
 
-      com = <pageCom isDesign={false}></pageCom> //
+      com = <pageCom isDesign={false}></pageCom> ////
       // com = (
       //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
       //     <tableCom {...tableConfig}></tableCom>

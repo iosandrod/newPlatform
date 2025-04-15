@@ -305,6 +305,7 @@ export default defineComponent({
       form,
     }; //
     provide('Everright', eve);
+    provide('pageDesign', formIns);////
     const setPreviewRef=(ref: any) => {
       EReditorPreviewRef.value = ref
     }
