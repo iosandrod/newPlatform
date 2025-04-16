@@ -52,7 +52,7 @@ export default defineComponent({
         label: '改变前值', //
         fn: async () => {
           let data = tableIns.getData() //、、
-          data[0].hobbies = data[0].hobbies + '2' ////
+          data[1].hobbies = data[1].hobbies + '2' ////
           // data[0].id = data[0].id + '2' ////
           // data[1].id = data[1].id + '2' ////
           // nextTick(() => {

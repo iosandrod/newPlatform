@@ -46,9 +46,6 @@ export default defineComponent({
       return obj
     })
     let _hiddenBefore = async () => {
-      // if(1==1){
-      //   return false
-      // }
       return new Promise((resolve) => {
         setTimeout(() => {
           if (tableIns.permission.canCloseColumnFilter) {
@@ -85,7 +82,11 @@ export default defineComponent({
                       showColumnFilterTable={false}
                       showRowSeriesNumber={false} //
                       checkboxChange={(config) => {
-                        tableIns.updateFilterConfig(config)
+                        tableIns.updateFilterConfig(config) ////
+                        let _table=config.table
+                        setTimeout(() => {
+                          console.log(_table, 'testTable')//
+                        }, 100);
                       }}
                     ></erTable>
                   </div>

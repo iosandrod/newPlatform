@@ -100,7 +100,6 @@ export class Column extends Base {
     } //
     let formatFn = (record, row, col, table) => {
       let value = record[field] //
-      record['_cacheRow'] = row
       if (typeof fieldFormat == 'function') {
         try {
           let _index = record._index
@@ -345,7 +344,6 @@ export class CheckboxColumn extends Column {
       checkbox1.render()
       checkboxGroup.appendChild(checkbox1)
       checkbox1.addEventListener('checkbox_state_change', (e) => {
-        //
         const target = e.target ////
         let attributes = target.attribute //
         let checked = attributes.checked

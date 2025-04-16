@@ -99,36 +99,14 @@ export default defineComponent({
     watchEffect(() => {
       tableIns.loadData() //
     }) //
-    let obj1 = {}
-    let timeout = null
     watchEffect(() => {
       let s = tableIns.updateIndexArr.size
-      if (timeout == null) {
-        let _s = tableIns.updateIndexArr.size
-        if (_s == 0) {
-          return //
-        }
-        timeout = setTimeout(() => {
-          //
-          let _arr = []
-          let _iArr = []
-          let records = tableIns.getInstance().records
-          for (const k of tableIns.updateIndexArr.keys()) {
-            //@ts-ignore
-            let record = tableIns.dataMap[k]
-            let index = records.indexOf(record)
-            if (index != -1) {
-              _arr.push(record)
-              _iArr.push(index)
-            }
-          }
-          timeout = null
-          tableIns.updateIndexArr.clear() //
-          if (_arr.length != 0) {
-            tableIns.getInstance().updateRecords(_arr, _iArr) //
-          }
-        }, 10)
+      if(s==0){
+        return 
       }
+      nextTick(() => {
+        tableIns.updateColumns()
+      })
     })
     watch(
       () => {

@@ -1,7 +1,12 @@
 import { nanoid } from 'nanoid'
 import { reactive, shallowRef, toRaw } from 'vue'
 import hooks from '@ER/hooks'
-import { system, System } from '@/system'
+import {
+  // system,
+  System,
+} from '@/system'
+import pool from 'workerpool'
+export const workerPool = pool.pool()
 export class Base {
   hooks: typeof hooks = shallowRef(hooks) as any
   id: string
@@ -11,9 +16,18 @@ export class Base {
   uuid() {
     return nanoid()
   }
+  async runPoolFn(fn, ...args) {
+    if (typeof fn !== 'function') {
+      return
+    }
+    return await workerPool.exec(fn, args)
+  }
+  getWorkerPool() {
+    return workerPool
+  }
   constructor() {
     this.id = this.uuid()
-    this.system = system
+    // this.system = system
     return reactive(this) //
   }
   init() {}

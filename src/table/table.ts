@@ -32,11 +32,25 @@ import {
   selected_cell,
   sort_click,
 } from './tableEvent'
+import workerpool from 'workerpool'
 import { SortState } from 'element-plus'
 import { combineAdjacentEqualElements } from '@ER/utils'
 import { VxeInputEvents, VxeInputProps } from 'vxe-table'
 import { VxeInputEventProps } from 'vxe-pc-ui'
 import { Dropdown } from '@/menu/dropdown'
+import { useTimeout } from '@ER/utils/decoration'
+import { calculate } from './calculate'
+//@ts-ignore
+// import WorkerURL from './calculate?url&worker'
+// const pool = workerpool.pool(WorkerURL, {
+//   maxWorkers: 10,
+//   workerOpts: {
+//     // type: 'module', //
+//     type: import.meta.env.PROD ? undefined : 'module',
+//     // By default, Vite uses a module worker in dev mode, which can cause your application to fail. Therefore, we need to use a module worker in dev mode and a classic worker in prod mode.
+//   },
+// }) //
+// const tablePool = pool.pool()
 export class Table extends Base {
   isCheckAll = false
   currentFilterColumn: Column
@@ -155,8 +169,6 @@ export class Table extends Base {
     }
   }
   setData(data) {
-    this.tableData.data = data
-    this.isCheckAll = false //
     data.forEach((e) => {
       if (e['_index'] == null) {
         e._index = this.uuid()
@@ -170,7 +182,8 @@ export class Table extends Base {
         }, '')
         e['_shtml'] = _v
       }
-    }) //
+    }) ////
+    this.tableData.data = data
   }
   getTableName() {}
   updateOptions(opt: BaseTableConstructorOptions) {
@@ -207,7 +220,7 @@ export class Table extends Base {
           return obj
         },
         disableColumnResize: true, //
-        width: 60, //
+        width: 120, ////
       } as ColumnDefine
     }
     let table = new ListTable({
@@ -265,6 +278,30 @@ export class Table extends Base {
       this.scrollToRow({ row: record })
       this.updateCanvas() //
     })
+  }
+  @useTimeout({
+    number: 100, //
+    key: 'updateColumns',
+  })
+  updateColumns() {
+    //
+    let tableIns = this
+    let _arr = []
+    let _iArr = []
+    let records = tableIns.getInstance().records
+    for (const k of tableIns.updateIndexArr.keys()) {
+      //@ts-ignore
+      let record = tableIns.dataMap[k]
+      let index = records.indexOf(record)
+      if (index != -1) {
+        _arr.push(record)
+        _iArr.push(index)
+      }
+    }
+    tableIns.updateIndexArr.clear() //
+    if (_arr.length != 0) {
+      tableIns.getInstance().updateRecords(_arr, _iArr) //
+    }
   }
   setSortState(config) {
     if (!Array.isArray(config)) {
@@ -481,15 +518,69 @@ export class Table extends Base {
       return //
     }
     let data = this.getShowData() //
+    let sortState = this.sortCache
     let _data = data
+    let _data1 = toRaw(_data)
+    let _sortState = toRaw(sortState)
+    let globalValue = this.globalConfig.value
+    let _filterConfig = toRaw(this.columnFilterConfig.filterConfig)
     let instance = this.getInstance() //
     if (instance == null) {
       return
     }
-    let sortState = this.sortCache
-    let _data1 = toRaw(_data)
-    let _sortState = toRaw(sortState)
-    let globalValue = this.globalConfig.value
+    // nextTick(async () => {
+    //   let now = Date.now().toString()
+    //   console.time(now)
+    //   if (globalValue.length > 0) {
+    //     _data1 = _data1.filter((v) => {
+    //       let _shtml = v['_shtml'] //
+    //       let reg = new RegExp(globalValue, 'g') //
+    //       if (reg.test(_shtml)) {
+    //         return true
+    //       }
+    //       return false
+    //     })
+    //   }
+    //   const sortconfig = _sortState //自定义的排序配置
+    //   //@ts-ignore
+    //   const _sortConfig = sortconfig?.sort((s1, s2) => {
+    //     //@ts-ignore
+    //     return 0 //
+    //   })
+    //   let _data3 = _data1 //
+    //   if (_filterConfig.length > 0) {
+    //     for (const { field, indexArr } of _filterConfig) {
+    //       if (indexArr?.length > 0) {
+    //         const indexSet = new Set(indexArr)
+    //         _data3 = _data3.filter((item) => indexSet.has(item[field]))
+    //       }
+    //     }
+    //   }
+    //   _data3 = _sortConfig//
+    //     ?.reduce((res, item, i) => {
+    //       const field = item.field
+    //       const type = item.type
+    //       let order = item.order
+    //       // debugger//
+    //       const colType: string = 'number' //类型//
+    //       const _data4 = combineAdjacentEqualElements(
+    //         res, //
+    //         field,
+    //         i,
+    //         // colType,
+    //         // type,
+    //         type,
+    //         order,
+    //       )
+    //       return _data4
+    //     }, _data1)
+    //     .flat(sortconfig?.length)
+
+    //   console.timeEnd(now) //
+    //   this.updateCanvas({
+    //     data: _data3, //
+    //   })
+    // })
     if (globalValue.length > 0) {
       _data1 = _data1.filter((v) => {
         let _shtml = v['_shtml'] //
@@ -525,53 +616,21 @@ export class Table extends Base {
         return _data4
       }, _data1)
       .flat(sortconfig?.length)
-    let _filterConfig = toRaw(this.columnFilterConfig.filterConfig)
+
     if (_filterConfig.length > 0) {
-      let allIndex = _filterConfig.map((item) => {
-        // let indexArr = item.indexArr
-        // return indexArr
-        return item
-      })
-      allIndex.forEach((item) => {
-        if (item.indexArr?.length > 0) {
-          //
-          let field = item.field
-          let indexArr = item.indexArr
-          _data3 = _data3.filter((v) => {
-            let _value = v[field]
-            if (indexArr.find((v) => v == _value)) {
-              return true
-            }
-            return false
-          }) //
+      for (const { field, indexArr } of _filterConfig) {
+        if (indexArr?.length > 0) {
+          const indexSet = new Set(indexArr)
+          _data3 = _data3.filter((item) => indexSet.has(item[field]))
         }
-      }) //
-      //   .flat()
-      //   .filter((item, index, _arr) => {
-      //     return _arr.indexOf(item) === index
-      //   })
-      // _data3 = _data3.filter((item, index) => {
-      //   let _index = item._index
-      //   if (allIndex.indexOf(_index) !== -1) {
-      //     return true
-      //   }
-      //   return false
-      // })
+      }
     }
+    this.templateProps.data = _data3
+    //@ts-ignore
     nextTick(() => {
-      this.tableData.showData = _data3 //
-      instance.setRecords(_data3) //////
-      // console.log('setskfjslfjsdlfsdlkfjsdlkfjsdlfjsdlfd 性能有问题') //
-      this.runAfter({
-        methodName: 'loadData',
-        config: loadConfig,
-        data: data,
-      }) //
+      //
+      this.updateCanvas() ////
     })
-    try {
-    } catch (error) {
-      console.error(error) //
-    }
   }
   scrollToRow(sConfig) {
     if (sConfig == null) {
@@ -593,7 +652,6 @@ export class Table extends Base {
   }
   async runBefore(config?: any) {}
   runAfter(config?: any) {
-    //
     if (config == null) {
       return
     }
@@ -602,7 +660,7 @@ export class Table extends Base {
     let method = cacheMethod[methodName] || {}
     let after = method.after || []
     for (const fn of after) {
-      fn(config)
+      fn(config) //
     }
     // cacheMethod[methodName].after = []
     if (cacheMethod?.[methodName]?.after != null) {
@@ -689,16 +747,15 @@ export class Table extends Base {
     instance.release()
     this.instance = null //
   }
+  @useTimeout({ number: 50, key: 'updateTimeout' })
   updateCanvas() {
-    if (this.updateTimeout) {
+    let data = this.templateProps.data //
+    let instance = this.getInstance() //
+    if (instance == null) {
       return
-    } //
-    this.updateTimeout = setTimeout(() => {
-      let instance = this.getInstance()
-      let records = instance.records //
-      instance.setRecords(records) //
-      this.updateTimeout = null ////
-    }, 30)
+    }
+    let records = data || instance.records //
+    instance.setRecords(records) ////
   }
   addAfterMethod(config) {
     config.type = 'after'
@@ -802,6 +859,7 @@ export class Table extends Base {
             return obj //
           }),
         ]
+        console.log(_data1, '_data1') //
         _config = _.cloneDeep(_config) //
         filterTable.setColumns(_config) ////
         filterTable.setData(_data1) //
@@ -897,7 +955,6 @@ export class Table extends Base {
     _config.indexArr = _config.indexArr.filter((item, index) => {
       return _config.indexArr.indexOf(item) === index //
     }) //去重
-    // console.log(oldFilterConfig, 'test_config') ////
     this.columnFilterConfig.filterConfig = [...oldFilterConfig] //
   }
   resetFilterColumn(all = false) {

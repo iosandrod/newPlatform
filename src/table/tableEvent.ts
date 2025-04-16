@@ -89,7 +89,14 @@ export const selected_cell = (table: Table) => {
         let field = ins.getBodyField(start.col, start.row)
         let rArr = []
         if (field == 'checkboxField') {
-          for (let i = start.row; i <= end.row; i++) {
+          let _start = start.row
+          let _end = end.row
+          if (_start > _end) {
+            _start = end.row
+            _end = start.row
+          }
+          for (let i = _start; i <= _end; i++) {
+            //
             let record = ins.getRecordByCell(start.col, i) //
             // record.checkboxField = !record.checkboxField
             rArr.push(record)

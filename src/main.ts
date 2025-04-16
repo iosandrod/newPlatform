@@ -1,4 +1,4 @@
-import { createApp } from 'vue'//
+import { createApp } from 'vue' //
 import App from './App.vue'
 import router from '@/router'
 import elementPlus from 'element-plus'
@@ -22,12 +22,16 @@ import { registerEdit } from '@/table/registerEdit'
 import tableCom from './table/tableCom'
 import dropdownCom from './menu/dropdownCom'
 import buttonCom from './buttonGroup/buttonCom'
+import { Base } from '@ER/base' //w
+import { system } from './system'
+Base.prototype.system = system //
+// import '@/table/calculate'
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)
-app.component('erButton',buttonCom)
+app.component('erButton', buttonCom)
 app.component('erForm', erFormEditor) //
-app.component('erTable', tableCom)//
+app.component('erTable', tableCom) //
 app.component('erDropdown', dropdownCom)
 app.use(context) //
 app.use(VxeTable)

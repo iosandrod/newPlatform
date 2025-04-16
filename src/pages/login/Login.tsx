@@ -177,7 +177,7 @@ export default defineComponent({
       //     <tableCom {...tableConfig}></tableCom>
       //   </div>
       // ) //
-      let com2 = <buttonCom></buttonCom>
+      let com2 = <buttonCom></buttonCom>//
       let _com = (
         <div
           style={{
