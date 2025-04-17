@@ -18,7 +18,7 @@ export class Tab extends Base {
     super.init()
     let config = this.config
     let items = config.items || []
-    this.setTabItems(items) //
+    this.setItems(items) //
   }
   getPluginName() {
     let id = this.id
@@ -43,7 +43,8 @@ export class Tab extends Base {
       this.tabitems.splice(_index, 1)
     }
   }
-  setTabItems(tabitems) {
+  setItems(tabitems) {
+    //
     this.tabitems.splice(0)
     for (const tabitem of tabitems) {
       this.addItem(tabitem)

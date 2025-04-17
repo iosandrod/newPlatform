@@ -24,12 +24,14 @@ import dropdownCom from './menu/dropdownCom'
 import buttonCom from './buttonGroup/buttonCom'
 import { Base } from '@ER/base' //w
 import { system } from './system'
+import buttonGroupCom from './buttonGroup/buttonGroupCom'
 Base.prototype.system = system //
 // import '@/table/calculate'
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)
 app.component('erButton', buttonCom)
+app.component('erButtonGroup', buttonGroupCom)
 app.component('erForm', erFormEditor) //
 app.component('erTable', tableCom) //
 app.component('erDropdown', dropdownCom)

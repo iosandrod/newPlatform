@@ -60,6 +60,7 @@ export class Table extends Base {
     value: '', //
     show: false, //
   }
+  templateProps={}
   timeout: {
     [key: string]: any
   } = {}
@@ -138,8 +139,7 @@ export class Table extends Base {
     },
   }
   sortCache: SortState[] = []
-  selectCache: any = {}
-  templateProps: any = {}
+  selectCache: any = {}//
   hooksManager: { [key: string]: Array<any> } = {}
   constructor(config) {
     super()
@@ -456,9 +456,9 @@ export class Table extends Base {
     return columns
   }
   getOptions() {
-    let tempalteProps = this.templateProps
+    let templateProps = this.templateProps
     return {
-      ...tempalteProps,
+      ...templateProps,
       select: {
         highlightMode: 'row',
         disableDragSelect: true,

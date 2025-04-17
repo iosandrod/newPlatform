@@ -45,7 +45,7 @@ export default defineComponent({
             tabIns.delItem(removeItems)
           }
         }
-      }, 
+      },
     )
     watch(
       //

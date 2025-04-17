@@ -13,8 +13,17 @@ export class Base {
   refPool: any = shallowRef({}) as any
   _refPool: any = shallowRef({}) as any
   system: System
+  cacheTemplateProps: any = {} ////
   uuid() {
     return nanoid()
+  }
+  async clearCacheValue(key) {
+    let cacheTemplateProps = this.cacheTemplateProps
+    if (key == null) {
+      Object.keys(cacheTemplateProps).forEach((key) => {
+        delete cacheTemplateProps[key] //  
+      })
+    }
   }
   async runPoolFn(fn, ...args) {
     if (typeof fn !== 'function') {
