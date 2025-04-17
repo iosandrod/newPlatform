@@ -19,7 +19,7 @@
     .ER-icon {
       &:hover {
         color: $primary-color;
-        background: #ECF6FF;
+        background: #ecf6ff;
       }
       border-radius: 4px;
       width: 24px;
@@ -57,13 +57,13 @@
     height: 32px;
     width: 16px;
     z-index: 2;
-    background: #FFFFFF;
-    transition: .3s;
+    background: #ffffff;
+    transition: 0.3s;
     &:hover {
       color: $primary-color;
     }
     svg {
-      transition: .3s;
+      transition: 0.3s;
     }
     @include when(close) {
       svg {
@@ -102,16 +102,19 @@
     }
   }
 }
-.drag-line-top,.drag-line-bottom,.drag-line-left,.drag-line-right {
+.drag-line-top,
+.drag-line-bottom,
+.drag-line-left,
+.drag-line-right {
   position: relative;
   &::after {
     content: ' ';
     position: absolute;
     display: block;
-    background: #F56C6C;
+    background: #f56c6c;
   }
 }
-.drag-line-top{
+.drag-line-top {
   &::after {
     left: 0;
     width: 100%;
@@ -119,7 +122,7 @@
     top: 0;
   }
 }
-.drag-line-bottom{
+.drag-line-bottom {
   &::after {
     left: 0;
     width: 100%;
@@ -127,7 +130,7 @@
     bottom: 0;
   }
 }
-.drag-line-left{
+.drag-line-left {
   &::after {
     width: 2px;
     height: 100%;
@@ -135,7 +138,7 @@
     left: 0;
   }
 }
-.drag-line-right{
+.drag-line-right {
   &::after {
     width: 2px;
     height: 100%;

@@ -138,3 +138,6 @@ li {
 .bg-red{
   background-color: rgb(100, 100, 100);
 }
+.bg-white{
+  background-color: #fff;
+}

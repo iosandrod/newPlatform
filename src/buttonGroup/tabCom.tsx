@@ -30,20 +30,27 @@ export default defineComponent({
     watch(
       () => [props.items as any, props.items?.length],
       ([newValue, length], [oldValue, oldLength]) => {
-        //引用相同
+        //引用相同//
         if (tabIns.config.items == newValue) {
+          // let s = newValue[0] === oldValue[0] //
           let addItems = newValue.filter((el) => {
             return !oldValue.includes(el)
           })
           if (addItems.length > 0) {
-            tabIns.addItem(addItems)
+            addItems.forEach((el) => {
+              tabIns.addItem(el)
+            })
           }
           let removeItems = oldValue.filter((el) => {
             return !newValue.includes(el)
           })
           if (removeItems.length > 0) {
-            tabIns.delItem(removeItems)
+            removeItems.forEach((el) => {
+              tabIns.delItem(el)
+            })
           }
+        } else {
+          tabIns.setItems(newValue) //
         }
       },
     )
@@ -115,6 +122,13 @@ export default defineComponent({
                             </div>
                           )
                         }
+                        let _itemCom = null
+                        if (item != null) {
+                          _itemCom = item(el)
+                        } else {
+                          let label = <div>{el.getLabel()}</div>
+                          _itemCom = label //
+                        }
                         let dragCom = (
                           <div
                             key={el.id}
@@ -138,7 +152,7 @@ export default defineComponent({
                             >
                               {dCom}
                               {mCom}
-                              {item(el)}
+                              {_itemCom}
                             </div>
                           </div>
                         )

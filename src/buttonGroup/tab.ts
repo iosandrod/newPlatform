@@ -1,5 +1,6 @@
 import { Base } from '@/base/base'
 import { TabItem } from './tabitem'
+import { toRaw } from 'vue'
 
 export class Tab extends Base {
   scrollLeft = 0
@@ -37,7 +38,7 @@ export class Tab extends Base {
       this.tabitems.splice(index, 1)
     }
     let _index = this.tabitems.findIndex((item1) => {
-      return item1.config == item
+      return toRaw(item1.config) == toRaw(item)
     })
     if (_index != -1) {
       this.tabitems.splice(_index, 1)

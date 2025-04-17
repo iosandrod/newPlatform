@@ -28,7 +28,16 @@ export class System extends Base {
     return _items
   }
   _getCacheValue(key) {}
-  getTabItems() {}
+  getTabItems() {
+    return [
+      {
+        label: '首页',
+      },
+      {
+        label: '表格',//
+      },
+    ] //
+  }
 }
 
 export const system = reactive(new System()) //

@@ -15,12 +15,14 @@ export default defineComponent({
     tableEditor,
     menuCom,
     fieldCom, //
+    tabCom,
   },
   setup() {
     const systemIns = system //
     const registerMenu = (el) => {
       systemIns.registerRef('leftMenu', el) //
     }
+    const ns = systemIns.hooks.useNamespace('Home')
     const fn = async () => {
       let menuData = await systemIns.getMenuData()
       let menuData1 = await systemIns.getMenuData() //
@@ -63,14 +65,30 @@ export default defineComponent({
           }}
         ></menuCom>
       )
-      let tableTab = <tabCom items={systemIns.getTabItems()}></tabCom>
+      let tableTab = (
+        <tabCom
+          height={30}
+          items={systemIns.getTabItems()}
+          v-slots={{
+            item: (item) => {
+              return (
+                <div class="home-tab-item">
+                  <div class="home-tab-item-label">{item.getLabel()}</div>
+                </div>
+              ) //
+            },
+          }}
+        ></tabCom>
+      )
       return (
         <div
-          class=""
+          class={ns.b()}
           style={{ display: 'flex', width: '100vw', height: '100vh' }}
         >
           <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
-          <div class="flex flex-col flex-1 h-full bg-red">{tableTab}</div>
+          <div class="flex flex-col flex-1 h-full bg-red">
+            <div class="w-full bg-white tab-line">{tableTab}</div>
+          </div>
         </div>
       )
     }
