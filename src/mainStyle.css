@@ -141,3 +141,7 @@ li {
 .bg-white{
   background-color: #fff;
 }
+
+.overflow-hidden{
+  overflow: hidden;
+}

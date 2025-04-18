@@ -143,6 +143,7 @@ export default defineComponent({
     optionKey: Boolean as PropType<VxeSelectPropTypes.OptionKey>,
   },
   emits: [
+    'input',
     'update:modelValue',
     'change',
     'clear',
@@ -151,7 +152,7 @@ export default defineComponent({
     'click',
     'scroll',
     'visible-change',
-  ] as VxeSelectEmits,
+  ] as any,
   setup(props, context) {
     const { slots, emit } = context
 
@@ -920,7 +921,11 @@ export default defineComponent({
         evnt,
       )
     }
-
+    const inputChangeEvent = (evnt: Event) => {
+      //@ts-ignore
+      dispatchEvent('input', {}, evnt)
+    }
+   
     const blurEvent = (evnt: FocusEvent) => {
       reactData.isActivated = false
       dispatchEvent('blur', {}, evnt)
@@ -1361,7 +1366,8 @@ export default defineComponent({
       focus() {
         const $input = refInput.value
         reactData.isActivated = true
-        $input.blur()
+        // $input.blur()
+        $input.focus()//
         return nextTick()
       },
       blur() {
@@ -1601,7 +1607,7 @@ export default defineComponent({
               ref: refInput,
               clearable: props.clearable,
               placeholder: inpPlaceholder,
-              readonly: true,
+              readonly: false, //
               disabled: isDisabled,
               type: 'text',
               prefixIcon: props.prefixIcon,
@@ -1614,6 +1620,7 @@ export default defineComponent({
               modelValue: selectLabel,
               onClear: clearEvent,
               onClick: clickEvent,
+              onChange: inputChangeEvent,
               onFocus: focusEvent,
               onBlur: blurEvent,
               onSuffixClick: suffixClickEvent,

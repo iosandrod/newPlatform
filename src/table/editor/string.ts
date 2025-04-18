@@ -88,9 +88,7 @@ export class InputEditor extends BaseEditor {
     return this.column.cacheValue //
   }
   //@ts-ignore
-  exit?: () => void = () => {
-    console.log('exit') //
-  }
+  exit?: () => void = () => {}
   onStart(config: OnStartParams): void {
     const { value, referencePosition, container, endEdit, table } = config
     const row = table
@@ -124,13 +122,12 @@ export class InputEditor extends BaseEditor {
         })
       }
     } //
-    column.cacheValue = undefined
+    column.cacheValue = undefined //
     column.isChangeValue = false //
     this.element = undefined //
-    this.column = null //
-    let _row = this.row
+    this.column = null ////
     this.row = null //
-  }
+  } //
   adjustPosition(rect: DOMRect): void {
     if (this.element) {
       Object.assign(this.element.style, {

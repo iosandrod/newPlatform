@@ -1,4 +1,4 @@
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { erFormEditor } from '@ER/formEditor'
 import buttonCom from '@/buttonGroup/buttonCom'
 import tabCom from '@/buttonGroup/tabCom'
@@ -60,15 +60,7 @@ export default defineComponent({
       {
         label: '按钮1',
       },
-      {
-        label: '按钮2',
-      },
-      {
-        label: '按钮3',
-      },
-      {
-        label: '按钮4',
-      },
+      
       {
         label: '按钮5',
         children: [
@@ -110,6 +102,10 @@ export default defineComponent({
       height: 300,
       width: 300,
     })
+    let _data1 = reactive({
+      value: '',
+    })
+    let _reg1=ref('')
     return () => {
       // let com0 = <formCom data={_data} {...formConfig1}></formCom>
       let com0 = null
@@ -179,8 +175,24 @@ export default defineComponent({
           <tableCom {...tableConfig}></tableCom>
         </div>
       ) //
-      let com2 = <buttonCom></buttonCom> //
-      com = <SelectCom></SelectCom>
+      let com2 = <buttonCom onClick={() => {
+        let _reg11:any = _reg1.value
+        _reg11.focus()//
+      }}></buttonCom> //
+      // com = (
+      //   <SelectCom
+      //     ref={_reg1}
+      //     modelValue={_data1.value}
+      //     onChange={(value) => {
+      //       let _value = value.value
+      //       _data1.value = _value //
+      //     }} //
+      //     options={[
+      //       { label: '123', value: 'abc' },
+      //       { label: '456', value: 'feg' },
+      //     ]}
+      //   ></SelectCom>
+      // )
       let _com = (
         <div
           style={{

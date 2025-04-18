@@ -15,6 +15,8 @@ import {
   nextTick,
   watch,
   onMounted,
+  useAttrs,
+  getCurrentInstance,
 } from 'vue'
 import XEUtils from 'xe-utils'
 import {
@@ -70,10 +72,23 @@ import type {
 import Select from './select'
 export default defineComponent({
   name: 'SelectCom',
+  //   emits: [
+  //     'update:modelValue',
+  //     'change',
+  //     'clear',
+  //     'blur',
+  //     'focus',
+  //     'click',
+  //     'scroll',
+  //     'visible-change',
+  //   ] as VxeSelectEmits,
   props: {
-    modelValue: [String, Number, Boolean, Array] as PropType<
-      VxeSelectPropTypes.ModelValue
-    >,
+    modelValue: {
+      type: [String, Number, Boolean, Array] as PropType<
+        VxeSelectPropTypes.ModelValue
+      >,
+      default: null,
+    },
     defaultConfig: Object as PropType<VxeSelectPropTypes.DefaultConfig>,
     clearable: Boolean as PropType<VxeSelectPropTypes.Clearable>,
     placeholder: String as PropType<VxeSelectPropTypes.Placeholder>,
@@ -134,16 +149,52 @@ export default defineComponent({
       default: () => getConfig().select.optionId,
     },
     // 已废弃，被 option-config.useKey 替换
-    optionKey: Boolean as PropType<VxeSelectPropTypes.OptionKey>,
+    optionKey: Boolean,
+    onChange: Function,
+    onOpen: Function,
+    onClose: Function,
+    onFocus: Function,
+    onBlur: Function,
+    onClear: Function,
+    onScroll: Function,
+    onVisibleChange: Function, //
   },
   setup(props, { slots, emit, attrs, expose }) {
     let _select = new _Select(props)
+    //@ts-ignore
     expose(_select)
     const registerRef = (ref) => {
       _select.registerRef('select', ref) ////
     } //
+    let _onChange = (value) => {
+      _select.onChange(value)
+    }
+    let _onInput = (value) => {
+      let $event = value.$event
+      let _value = $event.value
+      _select.searchChange(_value)
+    }
+    let _onVisibleChange = (value) => {
+      let visible = value.visible
+      _select.onVisibleChange(visible) //
+    }
     return () => {
-      let _com = <Select ref={registerRef} {...props}></Select>
+      //
+      let _com = (
+        <div class="h-full w-full overflow-hidden">
+          <Select
+            style={{ width: '100%', height: '100%' }} //
+            ref={registerRef}
+            {...props}
+            modelValue={_select.getModelValue()}
+            options={_select.getOptions()}
+            onChange={_onChange}
+            onInput={_onInput}
+            onVisibleChange={_onVisibleChange}
+            v-slots={slots} //
+          ></Select>
+        </div>
+      ) //
       return _com //
     }
   },

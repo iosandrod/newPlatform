@@ -89,6 +89,14 @@ export class Column extends Base {
         return true
       }
     }
+    // debugger //
+    if (type == 'select') {
+      let isAniVisible = input?.getSelectPanelVisible() //
+      if (isAniVisible == true) {
+        //
+        return true
+      }
+    }
     return false ////
   }
   hiddenEditor() {
@@ -125,9 +133,17 @@ export class Column extends Base {
     if (typeof fieldFormat !== 'function') {
       //
       fieldFormat = (config) => {
+        let type = this.getEditType()
         let row = config.row
         let field = config.field
-        return row[field] //
+        let value = row[field] //
+        if (type == 'select') {
+          let options = this.getSelectOptions()
+          let value = config.row[field]
+          let _label = options.find((item) => item.value == value)?.label
+          return _label || value //
+        } ////
+        return value
       }
     } //
     let formatFn = (record, row, col, table) => {
@@ -312,85 +328,4 @@ export class Column extends Base {
     } //
     return type
   }
-}
-
-export class CheckboxColumn extends Column {
-  getEditType() {
-    return 'checkbox'
-  }
-  getType() {
-    return 'checkbox'
-  }
-  getField() {
-    return 'checkboxField' //
-  }
-  getColumnProps() {
-    let _this = this
-    let _props: CheckboxColumnDefine = super.getColumnProps()
-    _props.showSort = false //
-    _props.headerIcon = undefined //
-    _props.width = 60
-    _props.checked = (config) => {
-      //@ts-ignore
-      let table: VTable.ListTable = config.table
-      let row = table.getRecordByCell(config.col, config.row)
-      let checkboxField = row?.checkboxField //
-      return checkboxField //
-    }
-    _props.disable = (config) => {
-      let table = config.table
-      let row = table.getRecordByCell(config.col, config.row)
-      let d = false
-      let disableFn = _this.table.config.checkDisable
-      if (typeof disableFn == 'function') {
-        let isDisable = disableFn({ row: row, table: _this.table })
-      }
-      return false
-    }
-    //@ts-ignore
-    _props.headerCustomLayout = (args) => {
-      const { table, row, col, rect } = args
-      const { height, width } = rect ?? table.getCellRect(col, row)
-      // console.log(width,'testWidth')//
-      const container = createGroup({
-        height,
-        width,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      })
-
-      const checkboxGroup = createGroup({
-        display: 'flex',
-        flexDirection: 'column',
-        boundsPadding: [0, 0, 0, 0],
-        justifyContent: 'center', //
-      })
-      container.appendChild(checkboxGroup)
-      const checkbox1 = new CheckBox({
-        text: {
-          text: '', //
-        },
-        disabled: false, //
-        checked: _this.table.isCheckAll, //
-        boundsPadding: [0, 0, 0, 0],
-      }) //
-      checkbox1.render()
-      checkboxGroup.appendChild(checkbox1)
-      checkbox1.addEventListener('checkbox_state_change', (e) => {
-        const target = e.target ////
-        let attributes = target.attribute //
-        let checked = attributes.checked
-        _this.table.updateCheckboxAll(checked)
-      }) //
-      return {
-        rootContainer: container,
-        renderDefault: false,
-      }
-    }
-    // _props.disableSelect = true //
-    return _props //
-  }
-  
 }

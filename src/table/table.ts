@@ -8,7 +8,8 @@ import {
   triggerRef,
   toRaw,
 } from 'vue'
-import { CheckboxColumn, Column } from './column'
+import { Column } from './column'
+import { CheckboxColumn } from './checkboxColumn' //
 import {
   ColumnDefine,
   ListTable,

@@ -1,6 +1,14 @@
-import { defineComponent, isReactive, nextTick, onMounted, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  isReactive,
+  nextTick,
+  onMounted,
+  ref,
+} from 'vue'
 import { Column } from '../column'
 import { VxeInput } from 'vxe-pc-ui'
+import SelectCom from '@/select/selectCom'
 // import { VxeSelect } from 'vxe-pc-ui'
 export default defineComponent({
   name: 'tableInput',
@@ -20,11 +28,22 @@ export default defineComponent({
     const column: Column = props.column as any ////
     const table = column.table
     let row = props.row
-    let modelValue = props.row[column.getField()]
+    let modelValue = computed(() => {
+      let _value = props.row[column.getField()]
+      return _value ////
+    })
+    let selectModelValue = computed(() => {
+      let _value = modelValue.value
+      let cacheValue = column.cacheValue
+      if (cacheValue != null) {
+        _value = cacheValue
+      }
+      return _value
+    })
     const updateValue = (config) => {
       column.canHiddenEditor = false
       column.isChangeValue = true
-      column.cacheValue = config.value
+      column.cacheValue = config.value //
     }
     const insRef = (ins: any) => {
       column.registerRef('input', ins)
@@ -45,8 +64,8 @@ export default defineComponent({
               ref={insRef}
               onChange={(v) => {
                 updateValue(v)
-              }}
-              modelValue={modelValue}
+              }} //
+              modelValue={modelValue.value}
             ></VxeInput>
           </div>
         )
@@ -62,7 +81,7 @@ export default defineComponent({
               }}
               transfer
               type={type} //
-              modelValue={modelValue}
+              modelValue={modelValue.value}
             ></VxeInput>
           </div>
         )
@@ -70,19 +89,19 @@ export default defineComponent({
       if (type == 'select') {
         com = (
           <div style={{ width: '100%', height: '100%' }}>
-            <VxeSelect
+            <SelectCom
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
               onChange={(v) => {
                 updateValue(v)
-              }}//
+              }} //
               options={column.getSelectOptions()} //
               transfer
               type={type} //
-              modelValue={modelValue}
-            ></VxeSelect>
+              modelValue={selectModelValue.value} //
+            ></SelectCom>
           </div>
-        )
+        ) //
       }
       return com ////
     }
