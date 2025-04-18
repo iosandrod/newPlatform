@@ -43,6 +43,7 @@ const layoutType = [
 ]
 const pName = [] //
 export class Form extends Base {
+  pageType='form'
   cachePlugin: any
   formIns?: any
   lang: any = {}

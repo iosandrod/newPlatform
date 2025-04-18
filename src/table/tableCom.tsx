@@ -101,15 +101,16 @@ export default defineComponent({
     }) //
     watchEffect(() => {
       let s = tableIns.updateIndexArr.size
-      if(s==0){
-        return 
+      if (s == 0) {
+        return
       }
       nextTick(() => {
-        tableIns.updateColumns()
+        tableIns.updateRecords()
       })
     })
     watch(
       () => {
+        //@ts-ignore
         return tableIns.templateProps.columns
       },
       (e) => {
@@ -117,7 +118,7 @@ export default defineComponent({
         if (ins == null) {
           return
         }
-        ins.updateColumns(e)
+        ins.updateColumns(e) //
       },
     )
     watch(

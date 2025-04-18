@@ -38,7 +38,7 @@ import { combineAdjacentEqualElements } from '@ER/utils'
 import { VxeInputEvents, VxeInputProps } from 'vxe-table'
 import { VxeInputEventProps } from 'vxe-pc-ui'
 import { Dropdown } from '@/menu/dropdown'
-import { useTimeout } from '@ER/utils/decoration'
+import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { calculate } from './calculate'
 //@ts-ignore
 // import WorkerURL from './calculate?url&worker'
@@ -60,7 +60,10 @@ export class Table extends Base {
     value: '', //
     show: false, //
   }
-  templateProps={}
+  templateProps = {
+    columns: [],
+    data: [],
+  }
   timeout: {
     [key: string]: any
   } = {}
@@ -139,7 +142,7 @@ export class Table extends Base {
     },
   }
   sortCache: SortState[] = []
-  selectCache: any = {}//
+  selectCache: any = {} //
   hooksManager: { [key: string]: Array<any> } = {}
   constructor(config) {
     super()
@@ -284,7 +287,15 @@ export class Table extends Base {
     key: 'updateColumns',
   })
   updateColumns() {
-    //
+    let _columns = this.templateProps.columns || []
+    let instance = this.getInstance()
+    instance.updateColumns(_columns) //
+  }
+  @useTimeout({
+    number: 100, //
+    key: 'updateRecords',
+  }) //
+  updateRecords() {
     let tableIns = this
     let _arr = []
     let _iArr = []
@@ -514,9 +525,7 @@ export class Table extends Base {
     }
   }
   loadData(loadConfig?: any) {
-    if (this.permission.loadData == false) {
-      return //
-    }
+    //
     let data = this.getShowData() //
     let sortState = this.sortCache
     let _data = data
@@ -528,59 +537,6 @@ export class Table extends Base {
     if (instance == null) {
       return
     }
-    // nextTick(async () => {
-    //   let now = Date.now().toString()
-    //   console.time(now)
-    //   if (globalValue.length > 0) {
-    //     _data1 = _data1.filter((v) => {
-    //       let _shtml = v['_shtml'] //
-    //       let reg = new RegExp(globalValue, 'g') //
-    //       if (reg.test(_shtml)) {
-    //         return true
-    //       }
-    //       return false
-    //     })
-    //   }
-    //   const sortconfig = _sortState //自定义的排序配置
-    //   //@ts-ignore
-    //   const _sortConfig = sortconfig?.sort((s1, s2) => {
-    //     //@ts-ignore
-    //     return 0 //
-    //   })
-    //   let _data3 = _data1 //
-    //   if (_filterConfig.length > 0) {
-    //     for (const { field, indexArr } of _filterConfig) {
-    //       if (indexArr?.length > 0) {
-    //         const indexSet = new Set(indexArr)
-    //         _data3 = _data3.filter((item) => indexSet.has(item[field]))
-    //       }
-    //     }
-    //   }
-    //   _data3 = _sortConfig//
-    //     ?.reduce((res, item, i) => {
-    //       const field = item.field
-    //       const type = item.type
-    //       let order = item.order
-    //       // debugger//
-    //       const colType: string = 'number' //类型//
-    //       const _data4 = combineAdjacentEqualElements(
-    //         res, //
-    //         field,
-    //         i,
-    //         // colType,
-    //         // type,
-    //         type,
-    //         order,
-    //       )
-    //       return _data4
-    //     }, _data1)
-    //     .flat(sortconfig?.length)
-
-    //   console.timeEnd(now) //
-    //   this.updateCanvas({
-    //     data: _data3, //
-    //   })
-    // })
     if (globalValue.length > 0) {
       _data1 = _data1.filter((v) => {
         let _shtml = v['_shtml'] //
@@ -607,7 +563,7 @@ export class Table extends Base {
         const _data4 = combineAdjacentEqualElements(
           res, //
           field,
-          i,
+          i, //
           // colType,
           // type,
           type,
@@ -720,8 +676,9 @@ export class Table extends Base {
     let data = this.getData()
     let lastD = data[data.length - 1]
     this.addAfterMethod({
-      methodName: 'loadData',
+      methodName: 'updateCanvas', //
       fn: () => {
+        //
         nextTick(() => {
           this.setCurRow(lastD)
           this.scrollToRow({
@@ -748,6 +705,7 @@ export class Table extends Base {
     this.instance = null //
   }
   @useTimeout({ number: 50, key: 'updateTimeout' })
+  @useRunAfter()
   updateCanvas() {
     let data = this.templateProps.data //
     let instance = this.getInstance() //

@@ -1,17 +1,18 @@
 @use '../base.scss' as *;
 @include b(Home) {
-    .tab-line{
-        padding-bottom: 2px;
-    }
+  .tab-line {
+    padding-bottom: 2px;
+  }
   .home-tab-item {
     // background-color: red;
     min-width: 80px;
     display: flex;
-    justify-content: center;
+    justify-content: center; //
     align-items: center;
     height: 100%;
     border: 1px solid #dddddd;
     box-sizing: border-box;
+    cursor: pointer;
     // padding-top: 2px;
     // padding-bottom: 2px;
     .home-tab-item-label {

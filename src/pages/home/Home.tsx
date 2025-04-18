@@ -8,6 +8,7 @@ import fieldCom from '@/menu/fieldCom'
 import { fieldsConfig } from '@ER/formEditor/componentsConfig'
 import { system } from '@/system'
 import tabCom from '@/buttonGroup/tabCom'
+import PageCom from '@ER/pageCom'
 export default defineComponent({
   components: {
     erForm,
@@ -75,11 +76,19 @@ export default defineComponent({
                 <div class="home-tab-item">
                   <div class="home-tab-item-label">{item.getLabel()}</div>
                 </div>
-              ) //
+              )
             },
           }}
         ></tabCom>
       )
+      const allShowEntity = systemIns.getShowEntityArr() //
+      let _showCom = allShowEntity.map((item: any) => {
+        //
+        let _com = (
+          <PageCom isDesign={false} key={item.id} formIns={item}></PageCom>
+        )
+        return _com
+      })
       return (
         <div
           class={ns.b()}
@@ -88,6 +97,20 @@ export default defineComponent({
           <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
           <div class="flex flex-col flex-1 h-full bg-red">
             <div class="w-full bg-white tab-line">{tableTab}</div>
+            <div class="" style={{ height: '30px' }}>
+              <er-button-group
+                items={[
+                  {
+                    label: 'test',
+                    fn: async () => {
+                      let _b = await systemIns.createPageDesign('t_SdOrder') //
+                      console.log(_b, 'testB') //
+                    },
+                  },
+                ]}
+              ></er-button-group>
+            </div>
+            <div class="flex-1">{_showCom}</div>
           </div>
         </div>
       )

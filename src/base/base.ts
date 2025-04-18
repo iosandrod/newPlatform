@@ -6,13 +6,16 @@ import {
   System,
 } from '@/system'
 import pool from 'workerpool'
+import { myHttp } from '@/service/client'
+import { Router } from 'vue-router'
 export const workerPool = pool.pool()
 export class Base {
   hooks: typeof hooks = shallowRef(hooks) as any
   id: string
   refPool: any = shallowRef({}) as any
   _refPool: any = shallowRef({}) as any
-  system: System
+  // system: System
+  // http: myHttp
   cacheTemplateProps: any = {} ////
   uuid() {
     return nanoid()
@@ -21,7 +24,7 @@ export class Base {
     let cacheTemplateProps = this.cacheTemplateProps
     if (key == null) {
       Object.keys(cacheTemplateProps).forEach((key) => {
-        delete cacheTemplateProps[key] //  
+        delete cacheTemplateProps[key] //
       })
     }
   }
@@ -36,10 +39,18 @@ export class Base {
   }
   constructor() {
     this.id = this.uuid()
-    // this.system = system
+    //@ts-ignore
     return reactive(this) //
   }
   init() {}
+  getHttp(): myHttp {
+    //@ts-ignore
+    return this.http
+  }
+  getSystem(): System {
+    //@ts-ignore
+    return this.system
+  }
   setIsDesign(status?: boolean) {
     //@ts-ignore
     this.isDesign = status
@@ -75,4 +86,8 @@ export class Base {
   }
   getRunBefore(config?: { method: string; params?: any }) {}
   getRunAfter(config?: { method: string; params?: any }) {}
+  getRouter(): Router {
+    //@ts-ignore
+    return this._router //
+  }
 }

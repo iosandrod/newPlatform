@@ -29,9 +29,22 @@ export default defineComponent({
       formIns.registerRef('form', ref) //
     }
     const renderContent = () => {
-      const TagComponent: any = resolveComponent(unref(isPc) ? 'el-form' : 'van-form')
+      let TagComponent: any = resolveComponent(
+        unref(isPc) ? 'el-form' : 'van-form',
+      )
+      if (formIns.pageType !== 'form') {
+        TagComponent = 'div' //
+      }
       const typeProps = hooks.useProps(state, state, unref(isPc), true)
-      const Layout = <LayoutDragGable data-layout-type={'root'} class={[unref(isEditModel) && ns.e('wrap')]} data={state.store} parent={state.store} isRoot></LayoutDragGable>
+      const Layout = (
+        <LayoutDragGable
+          data-layout-type={'root'}
+          class={[unref(isEditModel) && ns.e('wrap'), 'h-full']}
+          data={state.store}
+          parent={state.store}
+          isRoot
+        ></LayoutDragGable>
+      )
       let bar = null
       if (formIns.getShowFormBar()) {
         bar = (
@@ -41,9 +54,16 @@ export default defineComponent({
         )
       }
       return (
-        <div>
+        <div class="h-full">
           {bar}
-          <TagComponent ref={setFormRef} onClick={unref(isEditModel) && handleClick} {...typeProps.value} model={formIns.data} rules={formIns.getValidateRules()}>
+          <TagComponent
+            class={['h-full']} //
+            ref={setFormRef}
+            onClick={unref(isEditModel) && handleClick}
+            {...typeProps.value}
+            model={formIns.data}
+            rules={formIns.getValidateRules()}
+          >
             {Layout}
           </TagComponent>
           {/* {!unref(isEditModel) && !_.isEmpty(state.config) && ER.props.isShowCompleteButton && (

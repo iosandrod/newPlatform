@@ -35,14 +35,70 @@ export const createClient = (config) => {
     methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
   })
   app.use('entity', app.service('entity'), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'update'],
+    methods: [
+      'find',
+      'get',
+      'create',
+      'patch',
+      'remove',
+      'update',
+      'getDefaultPageLayout',
+    ],
   }) //
   app.use('company', app.service('company'), {
     methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
   })
-//   const allEntity = app.service('entity').find()
-//   const allCompany = app.service('company').find() //
-  return client //
+  //   const allEntity = app.service('entity').find()
+  //   const allCompany = app.service('company').find() //
+  return app //
 }
 
 export const client = createClient({})
+const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
+export class myHttp {
+  client = client
+  async post(tableName, method, params = {}, query = {}) {
+    //
+    let connection = this.client.get('connection')
+    return new Promise((resolve, reject) => {
+      connection.emit(
+        method, //
+        tableName,
+        params,
+        query,
+        (data, err) => {
+          if (defaultMethod.includes(method)) {
+            if (err) {
+              reject(err)
+            }
+            resolve(data)
+          } else {
+            if (data) {
+              reject(data)
+            }
+            resolve(err) //
+          }
+        },
+      )
+    })
+  }
+  async get(tableName, method, query) {
+    let connection = this.client.get('connection')
+    return new Promise((resolve, reject) => {
+      connection.emit(
+        method, //
+        tableName, //
+        {},
+        query,
+        (data, err) => {
+          if (err) {
+            reject(err)
+          }
+          resolve(data)
+        },
+      )
+    })
+  }
+}
+
+export const http = new myHttp()

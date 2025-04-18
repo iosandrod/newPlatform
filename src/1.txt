@@ -1712,3 +1712,58 @@ const app = createApp({
     //   }, 1000);
     //   return //
     // }
+
+
+    // nextTick(async () => {
+    //   let now = Date.now().toString()
+    //   console.time(now)
+    //   if (globalValue.length > 0) {
+    //     _data1 = _data1.filter((v) => {
+    //       let _shtml = v['_shtml'] //
+    //       let reg = new RegExp(globalValue, 'g') //
+    //       if (reg.test(_shtml)) {
+    //         return true
+    //       }
+    //       return false
+    //     })
+    //   }
+    //   const sortconfig = _sortState //自定义的排序配置
+    //   //@ts-ignore
+    //   const _sortConfig = sortconfig?.sort((s1, s2) => {
+    //     //@ts-ignore
+    //     return 0 //
+    //   })
+    //   let _data3 = _data1 //
+    //   if (_filterConfig.length > 0) {
+    //     for (const { field, indexArr } of _filterConfig) {
+    //       if (indexArr?.length > 0) {
+    //         const indexSet = new Set(indexArr)
+    //         _data3 = _data3.filter((item) => indexSet.has(item[field]))
+    //       }
+    //     }
+    //   }
+    //   _data3 = _sortConfig//
+    //     ?.reduce((res, item, i) => {
+    //       const field = item.field
+    //       const type = item.type
+    //       let order = item.order
+    //       // debugger//
+    //       const colType: string = 'number' //类型//
+    //       const _data4 = combineAdjacentEqualElements(
+    //         res, //
+    //         field,
+    //         i,
+    //         // colType,
+    //         // type,
+    //         type,
+    //         order,
+    //       )
+    //       return _data4
+    //     }, _data1)
+    //     .flat(sortconfig?.length)
+
+    //   console.timeEnd(now) //
+    //   this.updateCanvas({
+    //     data: _data3, //
+    //   })
+    // })

@@ -27,16 +27,21 @@ export function useTimeout(config) {
     } else {
       if (isNumber(number) && _key !== null) {
         descriptor.value = function (...args) {
-          //
-          _args = args //
-          if (this.timeout[_key]) {
-            //
-            return
-          }
-          this.timeout[_key] = setTimeout(() => {
-            this.timeout[_key] = null //
-            oldFn.apply(this, _args) //
-          }, number)
+          return new Promise((resolve, reject) => {
+            _args = args //
+            if (this.timeout[_key]) {
+              return
+            }
+            this.timeout[_key] = setTimeout(() => {
+              try {
+                this.timeout[_key] = null //
+                let _value = oldFn.apply(this, _args) //
+                resolve(_value) //
+              } catch (error) {
+                reject(error) //
+              }
+            }, number)
+          })
         } //
       }
     }
@@ -112,4 +117,26 @@ export function cacheValue(config?: Function) {
     }
   }
   return cacheReturnValue as any
+}
+
+export function useRunAfter(config?: any) {
+  return function (target, key, descriptor?: any) {
+    let oldFn = descriptor.value
+    if (isAsyncFunction(oldFn)) {
+      descriptor.value = async function (...args) {
+        let result = await oldFn.apply(this, args)
+        return result
+      }
+    } else {
+    }
+  }
+}
+
+export function useRunBefore(config?: any) {
+  return function (target, key, descriptor?: any) {
+    let oldFn = descriptor.value
+    if (isAsyncFunction(oldFn)) {
+    } else {
+    }
+  }
 }

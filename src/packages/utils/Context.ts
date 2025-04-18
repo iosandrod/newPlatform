@@ -671,12 +671,6 @@ export class Context {
         node.context.col <= offsetx[1] &&
         node.context.row >= offsety[0] &&
         node.context.row <= offsety[1]
-      // if (status) {
-      //   console.log(offsetx)
-      //   console.log(offsety)
-      //   console.log(col)
-      //   console.log(row)
-      // }
       return status
     })[0]
   }

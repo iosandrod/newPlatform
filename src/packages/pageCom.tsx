@@ -1,4 +1,4 @@
-import { defineComponent, withDirectives } from 'vue';
+import { defineComponent, withDirectives } from 'vue'
 import {
   ClickOutside as vClickOutside,
   ElMessage,
@@ -10,7 +10,7 @@ import {
   ElDropdownMenu,
   ElDropdownItem,
   ElButton,
-} from 'element-plus';
+} from 'element-plus'
 import {
   defineProps,
   defineEmits,
@@ -23,35 +23,27 @@ import {
   onMounted,
   watch,
   defineExpose,
-} from 'vue';
-import fieldMenu from '@/menu/fieldCom';
-import CanvesPanel from '@ER/formEditor/components/Panels/Canves';//
-import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel';
-import DeviceSwitch from '@ER/formEditor/components/DeviceSwitch.vue';
-import Icon from '@ER/icon';
-import hooks from '@ER/hooks';
-import utils from '@ER/utils'; 
-import _ from 'lodash';
-import defaultProps from '@ER/formEditor/defaultProps';
-import generatorData from '@ER/formEditor/generatorData';
-import { validate } from 'uuid';  
-import { Form } from '@ER/form';
-import fieldCom from '@/menu/fieldCom';
-import { PageDesign } from './pageDesign';
-export default defineComponent({
-  directives: {
-    vClickOutside,
-  },
-  components: {
-    fieldMenu,
-    fieldCom,
-  },
-  name: 'Everright-form-editor',
-  props: {
+} from 'vue'
+import fieldMenu from '@/menu/fieldCom'
+import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
+import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
+import DeviceSwitch from '@ER/formEditor/components/DeviceSwitch.vue'
+import Icon from '@ER/icon'
+import hooks from '@ER/hooks'
+import utils from '@ER/utils'
+import _ from 'lodash'
+import defaultProps from '@ER/formEditor/defaultProps'
+import generatorData from '@ER/formEditor/generatorData'
+import { validate } from 'uuid'
+import { Form } from '@ER/form'
+import fieldCom from '@/menu/fieldCom'
+import { PageDesign } from './pageDesign'
+export const getDefaultPageProps = () => {
+  return {
     itemSpan: {
       type: Number,
       default: 6,
-    },//
+    }, //
     fieldsPanelWidth: {
       type: String,
       default: '220px',
@@ -62,11 +54,11 @@ export default defineComponent({
     },
     delHandle: {
       type: Function,
-      default: () => { },
+      default: () => {},
     },
     copyHandle: {
       type: Function,
-      default: () => { },
+      default: () => {},
     },
     inlineMax: {
       type: Number,
@@ -87,7 +79,7 @@ export default defineComponent({
     },
     checkFieldsForNewBadge: {
       type: Function,
-      default: () => { },
+      default: () => {},
     },
     formIns: {
       type: Object,
@@ -95,28 +87,46 @@ export default defineComponent({
     ...defaultProps,
     isDesign: {
       type: Boolean,
-      default: true//
+      default: true, //
     },
     data: {
       type: Object,
       default: () => {
         return {}
-       }
+      },
     },
+  }
+}
+export default defineComponent({
+  directives: {
+    vClickOutside,
   },
+  components: {
+    fieldMenu,
+    fieldCom,
+  },
+  name: 'Everright-form-editor',
+  props: getDefaultPageProps(),
   emits: ['listener'],
   setup(props: any, { attrs, slots, emit, expose }) {
-    const form = ref('');
-    const previewPlatform = ref('pc');
-    const previewLoading = ref(true);
+    const form = ref('')
+    const previewPlatform = ref('pc')
+    const previewLoading = ref(true)
     //
-    let formIns: PageDesign = props.formIns as any;//
-    if (formIns == null) { 
-      formIns = new PageDesign(props);//
+    let formIns: PageDesign = props.formIns as any //
+    if (formIns == null) {
+      formIns = new PageDesign(props) //
     } else {
+      // let _props={...props}
+      // Object.entries(_props).forEach(([key, value]) => {
+      //   // let _config=formIns.config
+      //   // if(_config[key]==null&&key!=='formIns'){//
+      //   //   _config[key]=value//
+      //   // }
+      // })//
     }
-    provide('formIns', formIns);
-    let layout = formIns.layout;
+    provide('formIns', formIns)
+    let layout = formIns.layout
     let _state = formIns.state
     let state = _state
     if (_state == null) {
@@ -138,34 +148,32 @@ export default defineComponent({
         logic: {},
         othersFiles: {},
         fieldsLogicState: new Map(),
-      });
-      formIns.setState(state);
-    }//
-    formIns.setCurrentDesign(props.isDesign)////
+      })
+      formIns.setState(state)
+    } //
+    formIns.setCurrentDesign(props.isDesign) ////
     const isFoldFields = computed({
       get: () => {
-        return formIns.isDesign;
+        return formIns.isDesign
       },
       set: (val) => {
-        formIns.setCurrentDesign(val);
+        formIns.setCurrentDesign(val)
       },
-    });
+    })
     const isFoldConfig = computed({
       get: () => {
-        return formIns.isDesign;
+        return formIns.isDesign
       },
       set: (val) => {
-        formIns.setCurrentDesign(val);
+        formIns.setCurrentDesign(val)
       },
-    });
-    //@ts-ignore 
-    state.validator = (target, fn) => {
-
-    };//
-    const { t, lang } = hooks.useI18n(props);
+    })
+    //@ts-ignore
+    state.validator = (target, fn) => {} //
+    const { t, lang } = hooks.useI18n(props)
     formIns.lang = lang
     formIns.t = t
-    const EReditorPreviewRef = ref<any>('');
+    const EReditorPreviewRef = ref<any>('')
     const isShow = computed({
       get: () => {
         return formIns.isShow
@@ -174,9 +182,12 @@ export default defineComponent({
         formIns.isShow = val
       },
     })
-    watch(() => props.data, (val) => {
-      formIns.setData(val);//
-    })
+    watch(
+      () => props.data,
+      (val) => {
+        formIns.setData(val) //
+      },
+    )
     const isShowConfig = computed({
       get: () => {
         return formIns.isShowConfig
@@ -184,111 +195,119 @@ export default defineComponent({
       set: (val) => {
         formIns.isShowConfig = val
       },
-    });
-    let setSelection = formIns.setSelection.bind(formIns);//
-    setSelection(state.config);
-    const addField = formIns.addField.bind(formIns);
-    const delField = formIns.delField.bind(formIns);
-    const addFieldData = formIns.addFieldData.bind(formIns);//
-    const wrapElement = formIns.wrapElement.bind(formIns);
-    const syncLayout = formIns.syncLayout.bind(formIns);
-    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(formIns);
-    const switchPlatform = formIns.switchPlatform.bind(formIns);
-    const canvesScrollRef = ref('');//
+    })
+    let setSelection = formIns.setSelection.bind(formIns) //
+    setSelection(state.config)
+    const addField = formIns.addField.bind(formIns)
+    const delField = formIns.delField.bind(formIns)
+    const addFieldData = formIns.addFieldData.bind(formIns) //
+    const wrapElement = formIns.wrapElement.bind(formIns)
+    const syncLayout = formIns.syncLayout.bind(formIns)
+    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(
+      formIns,
+    )
+    const switchPlatform = formIns.switchPlatform.bind(formIns)
+    const canvesScrollRef = ref('') //
     const fireEvent = (type, data) => {
       emit('listener', {
-        type,//
+        type, //
         data,
-      });
-    };
+      })
+    }
     // const getData2 = formIns.getLayoutData.bind(formIns);
-    const setData2 = formIns.setLayoutData.bind(formIns);
+    const setData2 = formIns.setLayoutData.bind(formIns)
     // const clearData = formIns.clearData.bind(formIns);//
     const getData = formIns.getLayoutData.bind(formIns)
-    const setData = setData2;
+    const setData = setData2
     expose({
       form,
       switchPlatform(platform) {
-        switchPlatform(platform);
+        switchPlatform(platform)
       },
       setData,
       getData,
-    });
+    })
     const handleOperation = (type, val?: any) => {
       switch (type) {
         case 1:
-          break;
+          break
         case 2:
           // state.store = []
-          layout.pc = [];
-          layout.mobile = [];
-          state.fields.splice(0);
-          state.store.splice(0);
-          state.data = {};
-          setSelection('root');
-          break;
+          layout.pc = []
+          layout.mobile = []
+          state.fields.splice(0)
+          state.store.splice(0)
+          state.data = {}
+          setSelection('root')
+          break
         case 3:
-          state.previewVisible = true;
-          previewLoading.value = true;
+          state.previewVisible = true
+          previewLoading.value = true
           // setTimeout(() => {
           //   EReditorPreviewRef.value.setData(getData());
           //   nextTick(() => {
           //     previewLoading.value = false;
           //   });
           // }, 500);
-          break;
+          break
         case 4:
-          fireEvent('save', getData());
-          break;
+          fireEvent('save', getData())
+          break
         case 7:
-          previewLoading.value = true;
-          previewPlatform.value = val;
+          previewLoading.value = true
+          previewPlatform.value = val
 
-          EReditorPreviewRef.value.switchPlatform(val);
-          EReditorPreviewRef.value.setData(getData());
+          EReditorPreviewRef.value.switchPlatform(val)
+          EReditorPreviewRef.value.setData(getData())
           nextTick(() => {
             nextTick(() => {
-              previewLoading.value = false;
-            });
-          });
-          break;
+              previewLoading.value = false
+            })
+          })
+          break
       }
-    };
+    }
     watch(
-      () =>{return  state.fields.map((e) => e.id)},
+      () => {
+        return state.fields.map((e) => e.id)
+      },
       (newV, old) => {
-        const deleteFields = old.filter((item) => !newV.includes(item));
-        const addFields = newV.filter((item) => !old.includes(item));
+        old = old || [] //
+        const deleteFields = old.filter((item) => !newV.includes(item))
+        const addFields = newV.filter((item) => !old.includes(item))
         for (const delField of deleteFields) {
           //
-          formIns.delFormItem(delField);
+          formIns.delFormItem(delField)
         }
         for (const addField of addFields) {
-          let field = state.fields.find((e) => e.id === addField);
-          formIns.addFormItem(field); //
+          let field = state.fields.find((e) => e.id === addField)
+          formIns.addFormItem(field) //
         }
-      }
-    );
+      },
+      {
+        immediate: true, //
+      },
+    )
     watch(
       () => state.selected,
       (newVal) => {
-        fireEvent('changeParams', _.cloneDeep(newVal));
+        fireEvent('changeParams', _.cloneDeep(newVal))
       },
       {
         deep: true,
         immediate: true,
-      }
-    );
-    const onClickOutside = () => { };
+      },
+    )
+    const onClickOutside = () => {}
     watch(
       () => {
-        return state.store;
+        return state.store
       },
-      (newValue) => { },
+      (newValue) => {},
       {
         deep: true,
-      }
-    );
+      },
+    )
     const eve = {
       formIns: formIns,
       state,
@@ -303,14 +322,14 @@ export default defineComponent({
       fireEvent,
       getData,
       form,
-    }; //
-    provide('Everright', eve);
-    provide('pageDesign', formIns);////
-    const setPreviewRef=(ref: any) => {
+    } //
+    provide('Everright', eve)
+    provide('pageDesign', formIns) ////
+    const setPreviewRef = (ref: any) => {
       EReditorPreviewRef.value = ref
     }
     return () => {
-      let nextForm = formIns.nextForm; //
+      let nextForm = formIns.nextForm //
       // let dialogCom = <ElDialog
       //   destroyOnClose
       //   fullscreen
@@ -327,19 +346,20 @@ export default defineComponent({
       //     ),
       //     default: () => (
       //       <ElScrollbar>
-              
+
       //       </ElScrollbar>
       //     ),
       //   }}
       // </ElDialog>
       let com = (
-        <div class='h-full w-full'>
+        <div class="h-full w-full bg-white">
           {/* {dialogCom} */}
-          <ElContainer class='container' direction='vertical'>
-            <ElContainer>
+          <ElContainer class="container h-full" direction="vertical">
+            <ElContainer class="h-full">
               {isFoldFields.value && <fieldCom></fieldCom>}
-              <ElContainer class='container'>
-              {isFoldFields.value&&  <ElHeader class='operation' style='display: flex;flex-derection: row;justify-content: space-between;'>
+              <ElContainer class="container h-full">
+                {/* {isFoldFields.value&&  
+              <ElHeader class='operation' style='display: flex;flex-derection: row;justify-content: space-between;'>
                   <div>
                     <Icon class='icon' icon='save' onClick={() => handleOperation(4)} />
                     {props.isShowClear && <Icon class='icon' icon='clear0' onClick={() => handleOperation(2)} />}
@@ -376,19 +396,22 @@ export default defineComponent({
                     )}
                     <Icon class='icon' icon='preview' onClick={() => handleOperation(3)} />
                   </div>
-                </ElHeader>}
-                {isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}
+                </ElHeader>} */}
+                {isShow.value &&
+                  withDirectives(<CanvesPanel data={state.store} />, [
+                    [vClickOutside, onClickOutside],
+                  ])}
               </ElContainer>
               {isFoldConfig.value && <ConfigPanel />}
             </ElContainer>
           </ElContainer>
           {/* <Everright-form-editor></Everright-form-editor> */}
         </div>
-      );
+      )
       if (nextForm != null) {
-        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>;
+        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
       } //
-      return com; //
-    };
+      return com //
+    }
   },
-});
+})

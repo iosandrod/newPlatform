@@ -22,11 +22,16 @@ import { registerEdit } from '@/table/registerEdit'
 import tableCom from './table/tableCom'
 import dropdownCom from './menu/dropdownCom'
 import buttonCom from './buttonGroup/buttonCom'
-import { Base } from '@ER/base' //w
+import { Base } from '@/base/base' //w
 import { system } from './system'
 import buttonGroupCom from './buttonGroup/buttonGroupCom'
+import { http } from './service/client'
+//@ts-ignore
 Base.prototype.system = system //
-// import '@/table/calculate'
+//@ts-ignore
+Base.prototype.http = http ////
+//@ts-ignore
+Base.prototype._router = router
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)
@@ -39,6 +44,6 @@ app.use(context) //
 app.use(VxeTable)
 app.use(VxeUIAll)
 app.use(router)
-app.use(elementPlus)
+app.use(elementPlus)//
 app.component('vue-list-table', VueVTable.ListTable)
 app.mount('#app')

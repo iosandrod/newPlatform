@@ -9,14 +9,17 @@ import { entityData } from './formEditor/testData'
 
 export class PageDesign extends Form {
   pageType = 'pageDesign' //
+  tableName = 't_SdOrder' ////
   constructor(config) {
     super(config) //
     this.init()
   } //
   init(): void {
     super.init()
-    nextTick(() => {
-      this.setLayoutData(JSON.parse(JSON.stringify(entityData))) //
+    nextTick(async () => {
+      // let system = this.getSystem()
+      // let tableConfig = await system.getDefaultPageLayout(this.tableName) //
+      // console.log(tableConfig, 'tableConfig') //
     })
   }
   setItems(items: any, setLayout?: boolean): void {
@@ -67,9 +70,7 @@ export class PageDesign extends Form {
   getValidateRules() {
     return []
   }
-  async getTableData() {
-    //
-  } //
+  async getTableData() {} //
   async createTableData() {}
   async updateTableData() {}
 }
