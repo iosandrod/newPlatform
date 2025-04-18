@@ -15,7 +15,7 @@ export interface OnStartParams {
   container: HTMLElement
   endEdit: () => void
 }
-import { createApp } from 'vue' //
+import { createApp, isReactive } from 'vue' //
 import {} from 'element-plus' //
 import { VxeInput } from 'vxe-pc-ui'
 import tableInput from './tableInput'
@@ -50,6 +50,9 @@ export class InputEditor extends BaseEditor {
     let _row = select[0]
     this.column = column
     this.row = _row
+    let field = column.getField()
+    let _value = _row[field]
+    column.cacheValue = _value
     let app = createApp(tableInput, {
       column: column, //这是个函数
       row: _row,
@@ -69,20 +72,30 @@ export class InputEditor extends BaseEditor {
 
   setValue(value?: string): void {
     if (this.element) {
-      this.element.value = value !== undefined ? value : ''
+      //@ts-ignore
+      this.element.value = value !== undefined ? value : '' //
     }
+  } //
+  //@ts-ignore
+  targetIsOnEditor?: (target: HTMLElement) => boolean = (target) => {
+    //@ts-ignore
+    let status = this.column.getCanHidden() ////
+    // console.log(status, 'status') ////
+    return status ////
   }
-
   getValue(): string {
-    return this.element ? this.element.value : ''
+    //@ts-ignore
+    return this.column.cacheValue //
   }
-
+  //@ts-ignore
+  exit?: () => void = () => {
+    console.log('exit') //
+  }
   onStart(config: OnStartParams): void {
     const { value, referencePosition, container, endEdit, table } = config
     const row = table
     this.container = container
     this.successCallback = endEdit
-
     if (!this.element) {
       this.createElement()
       if (value !== undefined) {
@@ -94,14 +107,15 @@ export class InputEditor extends BaseEditor {
     }
   }
   onEnd(): void {
-    const app = this.app
+    const app = this.app //
     app.unmount() //
     if (this.container?.contains(this.element!)) {
       this.container.removeChild(this.element!)
     }
     let column = this.column
     let value = column.cacheValue
-    if (column.isChangeValue == true) {
+    if (column.isChangeValue == true && column.isChangeValue == true) {
+      //
       let oldValue = this.row[column.getField()] //
       if (value != oldValue) {
         column.updateBindValue({
@@ -109,11 +123,12 @@ export class InputEditor extends BaseEditor {
           row: this.row, //
         })
       }
-    }
+    } //
     column.cacheValue = undefined
     column.isChangeValue = false //
     this.element = undefined //
     this.column = null //
+    let _row = this.row
     this.row = null //
   }
   adjustPosition(rect: DOMRect): void {
@@ -131,14 +146,13 @@ export class InputEditor extends BaseEditor {
 
   isEditorElement(target: EventTarget | null): boolean {
     return target === this.element
-  }
-
+  } //
   validateValue(
     newValue: string,
     oldValue: string,
     position: any,
     table: any,
   ): boolean {
-    return true
+    return true //
   }
 }

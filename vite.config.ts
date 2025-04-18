@@ -36,7 +36,9 @@ export default ({ command, mode }) => {
       port: 3003,
       hmr: true,
     },
-
+    define: {
+      'process.env': {}
+    },
     resolve: {
       alias: [
         {

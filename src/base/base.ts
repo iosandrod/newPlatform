@@ -38,8 +38,7 @@ export class Base {
     return workerPool
   }
   constructor() {
-    this.id = this.uuid()
-    //@ts-ignore
+    this.id = this.uuid()//
     return reactive(this) //
   }
   init() {}

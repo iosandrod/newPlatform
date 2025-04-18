@@ -17,6 +17,7 @@ import formCom from '@ER/formCom'
 import FConfigPanel from '@ER/formEditor/components/Panels/Config/components/fConfigPanel'
 import { Simple } from '../home/index copy'
 import pageCom from '@ER/pageCom'
+import SelectCom from '@/select/selectCom'
 export default defineComponent({
   components: {
     buttonCom, //
@@ -35,6 +36,7 @@ export default defineComponent({
     formCom,
     FConfigPanel,
     Simple,
+    SelectCom,
   },
   setup(props) {
     const formConfig = {
@@ -177,7 +179,8 @@ export default defineComponent({
           <tableCom {...tableConfig}></tableCom>
         </div>
       ) //
-      let com2 = <buttonCom></buttonCom>//
+      let com2 = <buttonCom></buttonCom> //
+      com = <SelectCom></SelectCom>
       let _com = (
         <div
           style={{

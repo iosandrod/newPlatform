@@ -2,7 +2,15 @@ import { Base } from '@/base/base'
 import { Table } from './table'
 import { ColumnDefine, ListTableConstructorOptions } from '@visactor/vtable'
 import * as VTable from '@visactor/vtable'
-import { h, isProxy, shallowRef, watch, watchEffect } from 'vue'
+import {
+  h,
+  isProxy,
+  isReactive,
+  reactive,
+  shallowRef,
+  watch,
+  watchEffect,
+} from 'vue'
 import { InputEditor } from '@/table/editor/string' //
 import {
   CheckBox,
@@ -25,6 +33,7 @@ import {
 import { nextTick } from 'vue' //
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
+  canHiddenEditor = false
   effectPool = shallowRef({})
   isChangeValue = false
   table: Table
@@ -37,7 +46,12 @@ export class Column extends Base {
     this.config = config
     this.init()
   } //
-  getFormitem() {}
+  getSelectOptions() {
+    let options = this.config.options || []
+    return options //
+  }
+  setHidden(bool) {} //
+  getFormitem() {} //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -63,6 +77,24 @@ export class Column extends Base {
   init(): void {
     super.init() //
     this.setColumns()
+  }
+  getCanHidden() {
+    let _this = reactive(this)
+    let input = _this.getRef('input')
+    let type = this.getEditType()
+    if (['date', 'datetime', 'time'].includes(type)) {
+      let isAniVisible = input?.reactData?.isAniVisible //
+      if (isAniVisible == true) {
+        //
+        return true
+      }
+    }
+    return false ////
+  }
+  hiddenEditor() {
+    let table = this.table
+    let ins = table.getInstance()
+    ins.completeEditCell() //
   }
   setColumns() {
     this.columns.splice(0) //
@@ -145,8 +177,9 @@ export class Column extends Base {
     }
     let _this = this
     let edit = null
-    if (this.getField() == 'id') {
-      edit = new InputEditor(() => this) ////
+    let editType = this.getEditType()
+    if (editType != null) {
+      edit = new InputEditor(() => this) //
     }
     let hIconColor = '#1890ff'
     let enterType = 'mouseenter_cell'
@@ -242,6 +275,7 @@ export class Column extends Base {
     return width
   }
   updateBindValue(config) {
+    console.log(' updateBindValue') //
     let value = config.value //值
     let row = config.row //行
     let field = this.getField()
@@ -255,10 +289,20 @@ export class Column extends Base {
       type: editType,
     }
   }
+  focusInput() {
+    //
+    let inputRef = this.getRef('input')
+    if (inputRef) {
+      inputRef.focus && inputRef.focus() //
+    }
+  }
   getEditType() {
     let config = this.config
-    let editType = config.editType || 'string'
-    return editType
+    let editType = config.editType
+    if (editType == null) {
+      return
+    }
+    return editType //
   }
   getColType() {
     let config = this.config
@@ -324,21 +368,12 @@ export class CheckboxColumn extends Column {
         justifyContent: 'center', //
       })
       container.appendChild(checkboxGroup)
-
-      // const checkboxText = createText({
-      //   text: 'operate: ',
-      //   fontSize: 12,
-      //   boundsPadding: [0, 0, 0, 0],
-      // })
-      // checkboxGroup.appendChild(checkboxText)
       const checkbox1 = new CheckBox({
         text: {
           text: '', //
-          // fontSize: 12,
         },
         disabled: false, //
         checked: _this.table.isCheckAll, //
-        // spaceBetweenTextAndIcon: 2,
         boundsPadding: [0, 0, 0, 0],
       }) //
       checkbox1.render()
@@ -348,7 +383,6 @@ export class CheckboxColumn extends Column {
         let attributes = target.attribute //
         let checked = attributes.checked
         _this.table.updateCheckboxAll(checked)
-        // _this.table.updateCanvas() //
       }) //
       return {
         rootContainer: container,
@@ -358,4 +392,5 @@ export class CheckboxColumn extends Column {
     // _props.disableSelect = true //
     return _props //
   }
+  
 }

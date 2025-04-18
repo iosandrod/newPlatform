@@ -607,24 +607,35 @@ export class Table extends Base {
     instance.scrollToRow(index) //
   }
   async runBefore(config?: any) {}
+  //@ts-ignore
+  getAfterMethod(name: string, _static = false) {
+    if (_static) {
+      let staticCacheMethod = this.staticCacheMethod
+      let method = staticCacheMethod[name] || {}
+      let after = method.after || []
+      return after
+    }
+    let cacheMethod = this.cacheMethod
+    let method = cacheMethod[name] || {}
+    let after = method.after || []
+    return after
+  }
+  clearAfter(name: string) {
+    let cacheMethod = this.cacheMethod
+    let method = cacheMethod[name] || {}
+    method.after = []
+  }
   runAfter(config?: any) {
     if (config == null) {
       return
     }
     let methodName = config.methodName //
-    let cacheMethod = this.cacheMethod
-    let method = cacheMethod[methodName] || {}
-    let after = method.after || []
+    let after = this.getAfterMethod(methodName)
     for (const fn of after) {
       fn(config) //
     }
-    // cacheMethod[methodName].after = []
-    if (cacheMethod?.[methodName]?.after != null) {
-      cacheMethod[methodName].after = [] //
-    }
-    let staticCacheMethod = this.staticCacheMethod
-    let staticMethod = staticCacheMethod[methodName] || {}
-    let staticAfter = staticMethod.after || []
+    this.clearAfter(methodName) //
+    let staticAfter = this.getAfterMethod(methodName, true)
     for (const fn of staticAfter) {
       fn(config)
     } //
@@ -675,17 +686,13 @@ export class Table extends Base {
     }
     let data = this.getData()
     let lastD = data[data.length - 1]
+    this.setCurRow(lastD)
     this.addAfterMethod({
       methodName: 'updateCanvas', //
-      fn: () => {
-        //
-        nextTick(() => {
-          this.setCurRow(lastD)
-          this.scrollToRow({
-            row: lastD,
-          })
-          this.updateCanvas() //
-        })
+      fn: async () => {
+        this.scrollToRow({
+          row: lastD,
+        }) ////
       },
     })
   }
@@ -704,8 +711,8 @@ export class Table extends Base {
     instance.release()
     this.instance = null //
   }
-  @useTimeout({ number: 50, key: 'updateTimeout' })
   @useRunAfter()
+  @useTimeout({ number: 50, key: 'updateTimeout' }) //
   updateCanvas() {
     let data = this.templateProps.data //
     let instance = this.getInstance() //
@@ -713,7 +720,10 @@ export class Table extends Base {
       return
     }
     let records = data || instance.records //
-    instance.setRecords(records) ////
+    let d = Date.now().toString()
+    console.time(d)
+    instance.setRecords(records) //////
+    console.timeEnd(d) //
   }
   addAfterMethod(config) {
     config.type = 'after'

@@ -28,11 +28,12 @@ export function useTimeout(config) {
       if (isNumber(number) && _key !== null) {
         descriptor.value = function (...args) {
           return new Promise((resolve, reject) => {
-            _args = args //
-            if (this.timeout[_key]) {
+            _args = args ////
+            if (this.timeout[_key] != null) {
               return
             }
             this.timeout[_key] = setTimeout(() => {
+              console.log('我执行到这里了') //
               try {
                 this.timeout[_key] = null //
                 let _value = oldFn.apply(this, _args) //
@@ -65,7 +66,6 @@ export function cacheValue(config?: Function) {
     const originalMethod = descriptor.value
     if (isAsyncFunction(originalMethod)) {
       descriptor.value = async function (...args: any[]) {
-        // debugger//
         //@ts-ignore
         let cache = this.cacheTemplateProps
         let id = args[0] || ''
@@ -125,9 +125,24 @@ export function useRunAfter(config?: any) {
     if (isAsyncFunction(oldFn)) {
       descriptor.value = async function (...args) {
         let result = await oldFn.apply(this, args)
+        await this.runAfter({
+          methodName: key, //
+        })
         return result
       }
     } else {
+      descriptor.value = function (...args) {
+        let _this = this
+        let result = oldFn.apply(this, args)
+        if (isPromise(result)) {
+          result.then((res) => {
+            _this.runAfter({
+              methodName: key, //
+            })
+          })
+        }
+        return result
+      }
     }
   }
 }

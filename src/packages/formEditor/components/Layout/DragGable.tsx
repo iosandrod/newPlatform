@@ -216,7 +216,7 @@ export default defineComponent({
                 parent: props.data,
                 key: element.id,
               }
-              if (process.env.NODE_ENV === 'test') {
+              if (process?.env?.NODE_ENV === 'test') {
                 params['data-field-id'] = `${element.id}`
               }
               if (unref(isPc)) {

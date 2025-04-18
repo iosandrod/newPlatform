@@ -72,7 +72,7 @@ export default defineComponent({
       data: props.data,
       parent: props.parent,
     }
-    if (process.env.NODE_ENV === 'test') {
+    if (process?.env?.NODE_ENV === 'test') {
       params['data-field-id'] = `${props.data.id}`
     }
     let formIns: any = inject('formIns') //
