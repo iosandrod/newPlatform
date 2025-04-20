@@ -57,7 +57,6 @@ export class InputEditor extends BaseEditor {
       column: column, //这是个函数
       row: _row,
       onChange: (v) => {
-        console.log(v, 'testsV') //
       },
       style: {
         width: '100%',

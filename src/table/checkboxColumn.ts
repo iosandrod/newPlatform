@@ -80,7 +80,6 @@ export class CheckboxColumn extends Column {
         alignItems: 'center',
         justifyContent: 'center',
       })
-
       const checkboxGroup = createGroup({
         display: 'flex',
         flexDirection: 'column',

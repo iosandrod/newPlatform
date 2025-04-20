@@ -116,6 +116,7 @@ export const tableConfig: ListTableConstructorOptions = {
       field: 'id',
       title: 'ID',
       width: 250,
+      calculateType: 'sum', //合计
       editType: 'string',
       // sort: true,//
       fieldFormat: (config) => {
@@ -162,12 +163,13 @@ export const tableConfig: ListTableConstructorOptions = {
       field: 'birthday',
       title: 'birthday',
       width: 120,
-      editType: 'date',//虚假的
+      editType: 'date', //虚假的
     },
     {
       field: 'sex',
       title: 'sex',
-      editType:'select',//
+      editType: 'select', //
+      
       options: [
         {
           value: 'boy',

@@ -31,8 +31,10 @@ import {
   ICustomRenderObj,
 } from '@visactor/vtable/es/ts-types'
 import { nextTick } from 'vue' //
+import { calObj } from './calculateType'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
+  templateCalValue = ''
   canHiddenEditor = false
   effectPool = shallowRef({})
   isChangeValue = false
@@ -74,17 +76,7 @@ export class Column extends Base {
     let columns = this.columns
     return [this, ...columns.map((col) => col.getSubColumns()).flat()] //
   }
-  getFooterProps() {
-    let obj: ColumnDefine = {
-      field: this.getField(),
-      width: this.getColumnWidth(), //
-      showSort: false,
-      title: '行',
-      disableHeaderSelect: true,
-      disableColumnResize: true,
-    }
-    return obj //
-  }
+
   init(): void {
     super.init() //
     this.setColumns()
@@ -197,6 +189,9 @@ export class Column extends Base {
     let table = this.table
     let config = this.config
     let _columns = this.columns.map((col) => {
+      if (isFooter == true) {
+        return col.getFooterColumnProps()
+      } //
       return col.getColumnProps(isFooter) //
     })
     if (_columns.length == 0) {
@@ -332,7 +327,7 @@ export class Column extends Base {
     }
     let obj: ColumnDefine = {
       ...config,
-      disableColumnResize: true,
+      disableColumnResize: false,//
       field: this.getField(),
       width: this.getColumnWidth(),
       showSort: true,
@@ -340,23 +335,9 @@ export class Column extends Base {
       sort: () => {
         return 0
       },
-      /* 
-         RECORD = "RECORD",
-    NONE = "NONE",
-    SUM = "SUM",
-    MIN = "MIN",
-    MAX = "MAX",
-    AVG = "AVG",
-    COUNT = "COUNT",
-    CUSTOM = "CUSTOM",
-    RECALCULATE = "RECALCULATE"
-      */
-      // aggregation: {
-      //   formatFun: (value) => {
-      //     return 'Total:'
-      //   },
-      //   aggregationType: 'CUSTOM', //
-      // },
+      /*
+       */
+
       fieldFormat: _this.getFormat(),
       headerIcon: headerIcon, //
       style: {
@@ -389,6 +370,84 @@ export class Column extends Base {
       obj.headerIcon = null
     }
     return obj //
+  }
+  getCalculateValue() {
+    let _this = this
+    let table = this.table //
+    let field = this.getField()
+    if (this.effectPool[`${this.id}_cal`] == null) {
+      let _data = table.templateProps.data //
+      let calType = this.getCalculateType() //
+      let v1 = null
+      if (calType == 'sum') {
+        let calFn = calObj[calType]
+        if (typeof calFn == 'function') {
+          let _value = calFn(_data, field)
+          v1 = _value
+        }
+      }
+      _this.templateCalValue = v1
+      this.effectPool[`${this.id}_cal`] = watch(
+        () => {
+          let _data = table.templateProps.data //
+          let calType = this.getCalculateType() //
+          let v1 = null
+          if (calType == 'sum') {
+            let calFn = calObj[calType]
+            if (typeof calFn == 'function') {
+              let _value = calFn(_data, field)
+              v1 = _value
+            }
+          }
+          return v1 //
+        },
+        (v) => {
+          _this.templateCalValue = v
+          table.updateFooterColumns()
+        },
+      )
+    }
+    return this.templateCalValue
+  }
+  getFooterColumnProps() {
+    let _this = this
+    let props: ColumnDefine = this.getColumnProps(true) //
+    let calType = this.getCalculateType() //
+    props.title = '' //
+    // console.log(calType, 'testCalType')//
+    if (calType == 'sum') {
+      props.headerCustomLayout = (args) => {
+        const { table, row, col, rect } = args
+        const { height, width } = rect ?? table.getCellRect(col, row)
+        const container = createGroup({
+          height,
+          width,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }) //
+        let calValue = _this.getCalculateValue() //
+        let text = createText({
+          text: calValue, //
+          fontSize: 16,
+          fill: 'black',
+          fontWeight: 'bold',
+          boundsPadding: [0, 0, 0, 0],
+          lineDashOffset: 0,
+        }) //
+        container.add(text)
+        return {
+          rootContainer: container,
+          renderDefault: false,
+        }
+      }
+    }
+    return props //
+  }
+  getCalculateType() {
+    let type = this.config.calculateType
+    return type
   }
   getIsShow() {
     let config = this.config

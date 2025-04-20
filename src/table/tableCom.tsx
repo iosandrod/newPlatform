@@ -38,6 +38,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    showCalculate: {
+      type: Boolean,
+      default: true, ////
+    },
     width: {
       type: Number,
     },
@@ -103,6 +107,10 @@ export default defineComponent({
       tableIns.loadData() //
     }) //
     watchEffect(() => {
+      if (tableIns.getShowCalColumns() == false) {
+        //
+        return //
+      }
       tableIns.loadFooterColumn() //
     })
     watchEffect(() => {
@@ -236,6 +244,27 @@ export default defineComponent({
         </div>,
         [[vShow, tableIns.globalConfig.show]],
       )
+      let calCom = withDirectives(
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            height: '50px',
+            width: '100%',
+            background: 'red', //
+          }}
+          ref={registerFooterDiv}
+        ></div>,
+        [[vShow, tableIns.getShowCalColumns()]],
+      )
+      let calDiv = withDirectives(
+        <div
+          style={{
+            height: '50px',
+          }}
+        ></div>,
+        [[vShow, tableIns.getShowCalColumns()]],
+      )
       let outCom = (
         <div
           style={{
@@ -266,21 +295,19 @@ export default defineComponent({
             >
               {com}
             </div>
-            <div
-              style={{
-                height: '40px',
-              }}
-            ></div>
-            <div
+
+            {/* <div
               style={{
                 position: 'absolute',
                 bottom: 0,
-                height: '40px',
+                height: '50px',
                 width: '100%',
                 background: 'red', //
               }}
               ref={registerFooterDiv}
-            ></div>
+            ></div> */}
+            {calDiv}
+            {calCom}
           </div>
         </div>
       )

@@ -1,9 +1,10 @@
 import { SortState } from '@visactor/vtable/es/ts-types'
 import { Table } from './table'
 import _ from 'lodash'
-import { nextTick } from 'vue' //
+import { nextTick, toRaw } from 'vue' //
 import { RangeType } from '@visactor/vtable/es/vrender'
 import { CellRange } from '@visactor/vtable-export/es/util/type'
+import { Column } from './column'
 export const scroll = (table: Table) => {
   let _this = table
   table.registerEvent({
@@ -21,7 +22,9 @@ export const scroll = (table: Table) => {
       let sub = childScrollNum - _this.fatherScrollNum
       if (sub < 0) {
         let scrollLeft = config.scrollLeft
-        _this.getFooterInstance().setScrollLeft(scrollLeft) //
+        let ins = _this.getFooterInstance()
+        if (ins == null) return //
+        ins.setScrollLeft(scrollLeft) //
       }
       let range = table.getBodyVisibleCellRange()
       if (range == null) return //
@@ -195,6 +198,41 @@ export const checkboxChange = (table: Table) => {
   table.registerEvent({
     name: 'checkboxChange',
     keyName: 'checkboxChange',
+    callback: (config) => {},
+  })
+}
+
+export const resize_column = (table: Table) => {
+  const _this = table
+  table.registerEvent({
+    name: 'resize_column',
+    keyName: 'resize_column',
+    callback: (config) => {
+      let col = config.col
+      let _col: Column = table.getCurrentResizeCol(col)
+      if (_col == null) {
+        return //
+      }
+      let field = _col.getField() //
+      table.currentResizeField = field //
+      let fIns = table.getFooterInstance()
+      if (fIns == null) {
+        return
+      }
+      let fCol = fIns.getTableIndexByField(field) //
+      let colWidth = config.colWidth
+      fIns.setColWidth(fCol, colWidth) //
+      let rowCols: Column = toRaw(_col)
+      rowCols.config.width = colWidth //
+    },
+  })
+}
+
+export const mousedown_cell = (table: Table) => {
+  const _this = table
+  table.registerEvent({
+    name: 'mousedown_cell',
+    keyName: 'mousedown_cell',
     callback: (config) => {},
   })
 }

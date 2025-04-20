@@ -76,6 +76,7 @@ export default defineComponent({
                     <erTable
                       ref={registerTable}
                       showHeaderButton={false}
+                      showCalculate={false} //
                       columns={[]}
                       data={[]}
                       showGlobalSearch={true}
@@ -83,10 +84,10 @@ export default defineComponent({
                       showRowSeriesNumber={false} //
                       checkboxChange={(config) => {
                         tableIns.updateFilterConfig(config) ////
-                        let _table=config.table
+                        let _table = config.table
                         setTimeout(() => {
-                          console.log(_table, 'testTable')//
-                        }, 100);
+                          console.log(_table, 'testTable') //
+                        }, 100)
                       }}
                     ></erTable>
                   </div>

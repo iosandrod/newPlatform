@@ -29,6 +29,8 @@ import {
   click_cell,
   contextmenu_cell,
   icon_click,
+  mousedown_cell,
+  resize_column,
   scroll,
   selected_cell,
   sort_click,
@@ -40,20 +42,9 @@ import { VxeInputEvents, VxeInputProps } from 'vxe-table'
 import { VxeInputEventProps } from 'vxe-pc-ui'
 import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
-import { calculate } from './calculate'
-import { createTheme } from './tableTheme'
-//@ts-ignore
-// import WorkerURL from './calculate?url&worker'
-// const pool = workerpool.pool(WorkerURL, {
-//   maxWorkers: 10,
-//   workerOpts: {
-//     // type: 'module', //
-//     type: import.meta.env.PROD ? undefined : 'module',
-//     // By default, Vite uses a module worker in dev mode, which can cause your application to fail. Therefore, we need to use a module worker in dev mode and a classic worker in prod mode.
-//   },
-// }) //
-// const tablePool = pool.pool()
+import { createTheme } from './tableTheme' //
 export class Table extends Base {
+  currentResizeField: string
   fatherScrollNum = 0
   childScrollNum = 0
   footerInstance: ListTable
@@ -237,22 +228,7 @@ export class Table extends Base {
       sortState: [],
       theme: createTheme() as any,
       defaultRowHeight: 30,
-      // autoFillHeight: true,
       heightMode: 'standard', //
-      // customComputeRowHeight: (args) => {
-      //   if(args.row==5){
-      //     return 300
-      //   }
-      //   // console.log(args)//
-      //   //@ts-ignore
-      //   // let table: ListTable = args.table
-      //   // // let row = args.row
-      //   // let _row = table.getRecordByCell(0, args.row)
-      //   // if (_row == table.records.slice(-1).pop()) {
-      //   //   return 100 //
-      //   // }
-      //   return 30 //
-      // }, //
       defaultHeaderRowHeight: 30, //
       container: rootDiv,
       select: {
@@ -271,6 +247,8 @@ export class Table extends Base {
       //头部的
     }) //
     const emitEventArr = [
+      'mousedown_cell',
+      'resize_column',
       'icon_click', //
       'contextmenu_cell',
       'sort_click',
@@ -279,6 +257,7 @@ export class Table extends Base {
       'click_cell',
       'checkbox_state_change',
       'dblclick_cell',
+      'resize_column',
     ]
     emitEventArr.forEach((item) => {
       //@ts-ignore//
@@ -364,9 +343,24 @@ export class Table extends Base {
       })
       .flat()
   }
+  getFooterShowColumns() {
+    let columns = this.getColumns()
+    let _cols = columns.filter((col) => {
+      return col.getIsShow()
+    })
+    let _col1 = _cols.map((col) => {
+      return col.getFooterColumnProps()
+    })
+    let _show = this.config.showCheckboxColumn
+    if (_show) {
+      let cCol = this.checkboxColumn
+      _col1.unshift(cCol.getFooterColumnProps()) ////
+    }
+    return _col1 ////
+  }
   loadFooterColumn() {
     try {
-      let columns = this.getShowColumns(true)
+      let columns = this.getFooterShowColumns()
       columns = this.getLastFlatColumns(columns) //
       this.templateProps.footerColumns = columns
     } catch (error) {
@@ -396,9 +390,16 @@ export class Table extends Base {
     let instance = this.getInstance()
     instance.updateColumns(_columns) //
   }
+  @useTimeout({
+    number: 100, //
+    key: 'updateFooterColumns',
+  })
   updateFooterColumns() {
     let _columns = this.templateProps.footerColumns || []
     let instance = this.getFooterInstance()
+    if (instance == null) {
+      return //
+    }
     instance.updateColumns(_columns) ////
   }
   @useTimeout({
@@ -541,6 +542,7 @@ export class Table extends Base {
     }
   }
   initEventListener() {
+    mousedown_cell(this) //
     scroll(this) //
     click_cell(this) //
     selected_cell(this)
@@ -549,12 +551,12 @@ export class Table extends Base {
     icon_click(this) //
     checkbox_state_change(this)
     checkboxChange(this) //
+    resize_column(this)
   }
 
   setCurTableSelect() {}
   openContextMenu(config) {
     //
-    console.log(config, 'test_config') //
     const event: PointerEvent = config.event
     let x = event.x
     let y = event.y
@@ -590,20 +592,27 @@ export class Table extends Base {
     let data = this.getData().map((row) => row) ////
     return data //
   }
-  getShowColumns(isFooter = false) {
+  getShowColumns() {
     let columns = this.getColumns()
     let _cols = columns.filter((col) => {
       return col.getIsShow()
     })
     let _col1 = _cols.map((col) => {
-      return col.getColumnProps(isFooter)
+      return col.getColumnProps()
     })
     let _show = this.config.showCheckboxColumn
     if (_show) {
       let cCol = this.checkboxColumn
-      _col1.unshift(cCol.getColumnProps(true)) //
+      _col1.unshift(cCol.getColumnProps()) //
     }
     return _col1 ////
+  }
+  //返回bool//
+  getShowCalColumns() {
+    //
+    let config = this.config
+    let showCalculate = config.showCalculate
+    return showCalculate
   }
   getData() {
     let tableData = this.tableData
@@ -822,11 +831,19 @@ export class Table extends Base {
     let instance = this.getInstance()
     if (instance == null) {
       return
+    } else {
+      let columns = this.columns
+      columns.forEach((item) => {})
+      instance.release()
+      this.instance = null //
     }
-    let columns = this.columns
-    columns.forEach((item) => {})
-    instance.release()
-    this.instance = null //
+    let footerInstance = this.footerInstance
+    if (footerInstance == null) {
+      return
+    } else {
+      footerInstance.release()
+      this.footerInstance = null //
+    } //
   }
   @useRunAfter()
   @useTimeout({ number: 50, key: 'updateTimeout' }) //
@@ -841,6 +858,7 @@ export class Table extends Base {
     instance.setRecords(records) //////
   }
   addAfterMethod(config) {
+    config.type = 'after' //
     this.addMethod(config)
   }
   addMethod(config) {
@@ -945,7 +963,6 @@ export class Table extends Base {
             return obj //
           }),
         ]
-        console.log(_data1, '_data1') //
         _config = _.cloneDeep(_config) //
         filterTable.setColumns(_config) ////
         filterTable.setData(_data1) //
@@ -1217,6 +1234,41 @@ export class Table extends Base {
   getFooterDivStyle() {
     let showFooter = this.showFooter
     let columnHeight = this.getInstance()
+  }
+  getCurrentResizeCol(col: number, tCol = null, i = 0) {
+    // debugger //
+    let ins = this.getInstance()
+    let field = ins.getHeaderField(col, i)
+    let tf = null
+    if (tCol == null) {
+      let _c = this.getFlatColumns().find((col) => {
+        let f = col.getField()
+        if (f == field) {
+          return true
+        }
+      })
+      tf = _c
+      if (tf?.columns?.length > 0) {
+        return this.getCurrentResizeCol(col, tf, i + 1)
+      } //
+    } else {
+      let _columns = tCol.columns || []
+      if (_columns.length == 0) {
+        tf = tCol
+      } else {
+        tf = _columns.find((col) => {
+          let f = col.getField()
+          if (f == field) {
+            return true
+          }
+        })
+        if (tf == null) {
+          return null
+        }
+        return this.getCurrentResizeCol(col, tf, i + 1)
+      }
+    }
+    return tf //
   }
 }
 //
