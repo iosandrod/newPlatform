@@ -41,6 +41,7 @@ import { VxeInputEventProps } from 'vxe-pc-ui'
 import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { calculate } from './calculate'
+import { createTheme } from './tableTheme'
 //@ts-ignore
 // import WorkerURL from './calculate?url&worker'
 // const pool = workerpool.pool(WorkerURL, {
@@ -53,15 +54,22 @@ import { calculate } from './calculate'
 // }) //
 // const tablePool = pool.pool()
 export class Table extends Base {
+  fatherScrollNum = 0
+  childScrollNum = 0
+  footerInstance: ListTable
+  showFooter = false
+  showCustomLayout = true //
   isCheckAll = false
+  globalRowSet = new Set()
   currentFilterColumn: Column
   updateTimeout?: any
   checkboxColumn: Column //
   globalConfig = {
-    value: '', //
-    show: false, //
+    value: '', ////
+    show: true, //
   }
   templateProps = {
+    footerColumns: [],
     columns: [],
     data: [],
   }
@@ -113,10 +121,14 @@ export class Table extends Base {
     showData: [], //
     curRow: null,
   }
-  setCurRow(row) {
+  @useTimeout({ number: 30, key: 'setCurRow' }) //
+  setCurRow(row, isDb = false) {
+    console.log('setCurRow', isDb) ////
+    if (toRaw(row) == toRaw(this.tableData.curRow)) return //
     this.tableData.curRow = row //
+    this.timeout['updateCanvas__now'] = true //
     this.updateCanvas() //
-  }
+  } //
   getCurRow() {
     return this.tableData.curRow //
   }
@@ -199,13 +211,91 @@ export class Table extends Base {
     }
   }
   getListTableOption() {}
-  render() {
-    const rootDiv = this.getRef('root')
-    const rect = rootDiv.getBoundingClientRect()
-    const { width, height } = rect
-    let _instance = this.instance
-    if (_instance != null) {
-      //
+  createInstance(rootDiv) {
+    let _this = this
+    let showRowSeriesNumber = this.config.showRowSeriesNumber
+    let _sConfig: ColumnDefine = null
+    if (showRowSeriesNumber) {
+      _sConfig = {
+        style: (config) => {
+          const table = config.table
+          let record = table.getRecordByCell(config.col, config.row)
+          let obj = {}
+          if (record == _this.tableData.curRow) {
+            //@ts-ignore
+            obj.bgColor = 'RGB(200, 190, 230)'
+          }
+          return obj
+        },
+        disableColumnResize: true, //
+        width: 120, ////
+      } as ColumnDefine
+    }
+    let table = new ListTable({
+      padding: {},
+      multipleSort: true,
+      sortState: [],
+      theme: createTheme() as any,
+      defaultRowHeight: 30,
+      // autoFillHeight: true,
+      heightMode: 'standard', //
+      // customComputeRowHeight: (args) => {
+      //   if(args.row==5){
+      //     return 300
+      //   }
+      //   // console.log(args)//
+      //   //@ts-ignore
+      //   // let table: ListTable = args.table
+      //   // // let row = args.row
+      //   // let _row = table.getRecordByCell(0, args.row)
+      //   // if (_row == table.records.slice(-1).pop()) {
+      //   //   return 100 //
+      //   // }
+      //   return 30 //
+      // }, //
+      defaultHeaderRowHeight: 30, //
+      container: rootDiv,
+      select: {
+        highlightMode: 'cell', //
+        headerSelectMode: 'cell', //
+        highlightInRange: true, //
+        disableHeaderSelect: true,
+        outsideClickDeselect: false, //
+        blankAreaClickDeselect: false, //
+      },
+      rowSeriesNumber: _sConfig as any, //
+      editCellTrigger: 'click',
+      customConfig: {
+        createReactContainer: true, //
+      },
+      //头部的
+    }) //
+    const emitEventArr = [
+      'icon_click', //
+      'contextmenu_cell',
+      'sort_click',
+      'selected_cell',
+      'scroll',
+      'click_cell',
+      'checkbox_state_change',
+      'dblclick_cell',
+    ]
+    emitEventArr.forEach((item) => {
+      //@ts-ignore//
+      table.on(item, (config) => {
+        this.emit(item, config)
+      })
+    })
+    const instance = shallowRef(table)
+    //@ts-ignore
+    this.instance = instance ////
+    this.initEventListener() //
+    this.loadColumns()
+    this.loadData()
+    this.setCurRow(this.templateProps.data[0])
+  }
+  createFooterInstance(rootDiv) {
+    if (rootDiv == null) {
       return
     }
     let _this = this
@@ -228,13 +318,15 @@ export class Table extends Base {
       } as ColumnDefine
     }
     let table = new ListTable({
+      autoFillHeight: true,
       multipleSort: true,
       sortState: [],
       defaultRowHeight: 30,
-      defaultHeaderRowHeight: 30, //
+      heightMode: 'standard', //
+      defaultHeaderRowHeight: 50, //
       container: rootDiv,
       select: {
-        highlightMode: 'row',
+        highlightMode: 'cell', //
         headerSelectMode: 'cell', //
         highlightInRange: true, //
         disableHeaderSelect: true,
@@ -248,40 +340,52 @@ export class Table extends Base {
       },
       //头部的
     }) //
-    table.on('drag_select_end', (config) => {})
-    const emitEventArr = [
-      'icon_click', //
-      'contextmenu_cell',
-      'sort_click',
-      'selected_cell',
-      'scroll',
-      'click_cell',
-      'checkbox_state_change',
-    ]
-    emitEventArr.forEach((item) => {
-      //@ts-ignore//
-      table.on(item, (config) => {
-        this.emit(item, config)
-      })
-    })
     const instance = shallowRef(table)
-    //@ts-ignore
-    this.instance = instance ////
-    // const serchCom=new SearchComponent({
-
-    // })
-    this.initEventListener() //
-    this.loadColumns()
-    this.loadData()
-    nextTick(() => {
-      let record = this.instance.records[0]
-      if (record == null) {
-        return
-      } //
-      this.setCurRow(record) //
-      this.scrollToRow({ row: record })
-      this.updateCanvas() //
+    table.on('scroll', (config) => {
+      _this.childScrollNum = Date.now() ////
+      let sub = _this.childScrollNum - _this.fatherScrollNum
+      if (sub > 0) {
+        let scrollLeft = config.scrollLeft
+        _this.getInstance().setScrollLeft(scrollLeft) //
+      }
     })
+    //@ts-ignore
+    this.footerInstance = instance ////
+    this.loadFooterColumn()
+  }
+  getLastFlatColumns(cols: any[]) {
+    return cols
+      .map((col) => {
+        let columns = col.columns || []
+        if (columns.length > 0) {
+          return this.getLastFlatColumns(columns).flat()
+        }
+        return [col]
+      })
+      .flat()
+  }
+  loadFooterColumn() {
+    try {
+      let columns = this.getShowColumns(true)
+      columns = this.getLastFlatColumns(columns) //
+      this.templateProps.footerColumns = columns
+    } catch (error) {
+      console.error(error) //
+    }
+  }
+  render() {
+    const rootDiv = this.getRef('root')
+    let footDiv = this.getRef('footerDiv')
+    let _instance = this.instance
+    if (_instance != null) {
+    } else {
+      this.createInstance(rootDiv)
+    }
+    let footerInstance = this.footerInstance
+    if (footerInstance != null) {
+    } else {
+      this.createFooterInstance(footDiv) //
+    }
   }
   @useTimeout({
     number: 100, //
@@ -291,6 +395,11 @@ export class Table extends Base {
     let _columns = this.templateProps.columns || []
     let instance = this.getInstance()
     instance.updateColumns(_columns) //
+  }
+  updateFooterColumns() {
+    let _columns = this.templateProps.footerColumns || []
+    let instance = this.getFooterInstance()
+    instance.updateColumns(_columns) ////
   }
   @useTimeout({
     number: 100, //
@@ -481,18 +590,18 @@ export class Table extends Base {
     let data = this.getData().map((row) => row) ////
     return data //
   }
-  getShowColumns() {
+  getShowColumns(isFooter = false) {
     let columns = this.getColumns()
     let _cols = columns.filter((col) => {
       return col.getIsShow()
     })
     let _col1 = _cols.map((col) => {
-      return col.getColumnProps()
+      return col.getColumnProps(isFooter)
     })
     let _show = this.config.showCheckboxColumn
     if (_show) {
       let cCol = this.checkboxColumn
-      _col1.unshift(cCol.getColumnProps())
+      _col1.unshift(cCol.getColumnProps(true)) //
     }
     return _col1 ////
   }
@@ -524,9 +633,8 @@ export class Table extends Base {
       //
       console.log('加载列出错了')
     }
-  }
+  } //
   loadData(loadConfig?: any) {
-    //
     let data = this.getShowData() //
     let sortState = this.sortCache
     let _data = data
@@ -541,10 +649,12 @@ export class Table extends Base {
     if (globalValue.length > 0) {
       _data1 = _data1.filter((v) => {
         let _shtml = v['_shtml'] //
-        let reg = new RegExp(globalValue, 'g') //
+        let reg = new RegExp(globalValue, 'gi') ////
         if (reg.test(_shtml)) {
+          this.globalRowSet.add(v['_index'])
           return true
         }
+        this.globalRowSet.delete(v['_index']) ////
         return false
       })
     }
@@ -572,8 +682,7 @@ export class Table extends Base {
         )
         return _data4
       }, _data1)
-      .flat(sortconfig?.length)
-
+      .flat(sortconfig?.length) //
     if (_filterConfig.length > 0) {
       for (const { field, indexArr } of _filterConfig) {
         if (indexArr?.length > 0) {
@@ -654,6 +763,13 @@ export class Table extends Base {
     }
     return instance
   }
+  getFooterInstance() {
+    let instance = this.footerInstance
+    if (instance == null) {
+      return null
+    }
+    return instance //
+  }
   setMergeConfig(config?: any) {}
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
@@ -722,12 +838,9 @@ export class Table extends Base {
     }
     let records = data || instance.records //
     let d = Date.now().toString()
-    console.time(d)
     instance.setRecords(records) //////
-    console.timeEnd(d) //
   }
   addAfterMethod(config) {
-    config.type = 'after'
     this.addMethod(config)
   }
   addMethod(config) {
@@ -759,19 +872,23 @@ export class Table extends Base {
     let _this = this
     let changeFn = _.debounce((config: any) => {
       let value = config.value
-      _this.updateGlobalSerach(value)
+      _this.updateGlobalSearch(value)
     }, 200) //
     let obj: VxeInputEventProps & VxeInputProps = {
       onChange: changeFn,
     }
     return obj //
   }
-  updateGlobalSerach(value: any) {
-    console.log(value, 'isChageValue') //
+  updateGlobalSearch(value: any) {
     if (value == this.globalConfig.value) {
       return
     }
     this.globalConfig.value = value
+    if (this.globalConfig.value.length > 0) {
+      this.showCustomLayout = true
+    } else {
+      this.showCustomLayout = false //
+    }
   }
   showGlobalSearch(status = true) {
     if (status) {
@@ -864,7 +981,6 @@ export class Table extends Base {
     this.updateCheckboxField(this.getShowRecords(), _this.isCheckAll) //
   }
   getShowRecords() {
-    //
     let instance = this.getInstance()
     let records = instance.records //
     return records
@@ -943,6 +1059,164 @@ export class Table extends Base {
     if (all == true) {
       this.columnFilterConfig.filterConfig = [] //
     }
+  }
+  jumpToSearchNext(pre = false) {
+    //
+    let ins = this.getInstance() //
+    let select = ins.getSelectedCellInfos()
+    let globalValue = this.globalConfig.value
+    if (globalValue.length == 0) {
+      return //
+    }
+    let records = this.getShowRecords()
+    let field = null
+    let rowIndex = null
+    if (select.length == 0) {
+      if (pre == true) {
+        for (let i = records.length - 1; i >= 0; i--) {
+          let row = records[i]
+          let _value = Object.entries(row).find(([key, value]) => {
+            if (
+              key != '_index' &&
+              key != '_shtml' &&
+              typeof value != 'boolean' &&
+              typeof value != 'object'
+            ) {
+              let reg = new RegExp(globalValue, 'gi')
+              let _value1 = `${value}` //
+              return reg.test(_value1) //
+            }
+          })
+          if (_value != null) {
+            field = _value[0]
+            rowIndex = i
+            break
+          }
+        }
+      } else {
+        for (let i = 0; i < records.length; i++) {
+          let row = records[i]
+          let _value = Object.entries(row).find(([key, value]) => {
+            if (
+              key != '_index' &&
+              key != '_shtml' &&
+              typeof value != 'boolean' &&
+              typeof value != 'object'
+            ) {
+              let reg = new RegExp(globalValue, 'gi')
+              let _value1 = `${value}` //
+              return reg.test(_value1) //
+            }
+          })
+          if (_value != null) {
+            field = _value[0]
+            rowIndex = i
+            break
+          }
+        }
+      }
+    } else {
+      let _d = select[0][0]
+      let _field = _d.field //
+      let originData = select[0][0].originData
+      let index = records.findIndex((item) => item == originData)
+      if (pre == true) {
+        for (let i = index; i >= 0; i--) {
+          let row = records[i]
+          let _value = Object.entries(row).find((item) => {
+            let [key, value] = item
+            if (
+              key != '_index' &&
+              key != '_shtml' &&
+              typeof value != 'boolean' &&
+              typeof value != 'object'
+            ) {
+              let reg = new RegExp(globalValue, 'gi')
+              let _value1 = `${value}` //
+              let status = reg.test(_value1) //
+              if (i == index) {
+                let allCols = this.templateProps.columns
+                let lastAllField = allCols.findIndex(
+                  (item) => item.field == _field, //
+                )
+                let lastFields = allCols //
+                  .slice(lastAllField + 1) //
+                  .map((item) => item.field)
+                if (!lastFields.includes(key)) {
+                  status = false //
+                }
+              }
+              return status
+            }
+          }) //
+          if (_value != null) {
+            field = _value[0]
+            rowIndex = i
+            break
+          }
+        }
+      } else {
+        for (let i = index; i < records.length; i++) {
+          let row = records[i]
+          let _value = Object.entries(row).find((item) => {
+            let [key, value] = item
+            if (
+              key != '_index' &&
+              key != '_shtml' &&
+              typeof value != 'boolean' &&
+              typeof value != 'object'
+            ) {
+              let reg = new RegExp(globalValue, 'gi')
+              let _value1 = `${value}` //
+              let status = reg.test(_value1) //
+              if (i == index) {
+                let allCols = this.templateProps.columns
+                let lastAllField = allCols.findIndex(
+                  (item) => item.field == _field, //
+                )
+                let lastFields = allCols //
+                  .slice(lastAllField + 1) //
+                  .map((item) => item.field)
+                if (!lastFields.includes(key)) {
+                  status = false //
+                }
+              }
+              return status
+            }
+          }) //
+          if (_value != null) {
+            field = _value[0]
+            rowIndex = i
+            break
+          }
+        }
+      }
+    }
+    if (field == null || rowIndex == null) {
+      return
+    }
+    let addr = ins.getCellAddrByFieldRecord(field, rowIndex) //
+    ins.selectCell(addr.col, addr.row) //
+  }
+  getCurrentVisibleRecords() {
+    let ins = this.getInstance() //
+    let currentScrollRecords = ins.getBodyVisibleRowRange()
+    let records = ins.records
+    let startIndex = records.findIndex((item) => item == records[0])
+    let subIndex = currentScrollRecords.rowEnd - currentScrollRecords.rowStart
+    let showArr = records.slice(startIndex, startIndex + subIndex)
+    return showArr //
+  }
+  resetHeight() {
+    let ins = this.getInstance() //
+    let outDiv = this.getRef('outDiv')
+    let rect = outDiv.getBoundingClientRect()
+    let height = rect.height //
+    ins.canvasHeight = height //
+  }
+  getFooterDivStyle() {
+    let showFooter = this.showFooter
+    let columnHeight = this.getInstance()
   }
 }
 //

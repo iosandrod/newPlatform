@@ -74,6 +74,17 @@ export class Column extends Base {
     let columns = this.columns
     return [this, ...columns.map((col) => col.getSubColumns()).flat()] //
   }
+  getFooterProps() {
+    let obj: ColumnDefine = {
+      field: this.getField(),
+      width: this.getColumnWidth(), //
+      showSort: false,
+      title: '行',
+      disableHeaderSelect: true,
+      disableColumnResize: true,
+    }
+    return obj //
+  }
   init(): void {
     super.init() //
     this.setColumns()
@@ -83,7 +94,7 @@ export class Column extends Base {
     let input = _this.getRef('input')
     let type = this.getEditType()
     if (['date', 'datetime', 'time'].includes(type)) {
-      let isAniVisible = input?.reactData?.isAniVisible //
+      let isAniVisible = input?.getDatePanelVisible() //
       if (isAniVisible == true) {
         //
         return true
@@ -182,11 +193,11 @@ export class Column extends Base {
     }
     return formatFn
   }
-  getColumnProps() {
+  getColumnProps(isFooter = false) {
     let table = this.table
     let config = this.config
     let _columns = this.columns.map((col) => {
-      return col.getColumnProps()
+      return col.getColumnProps(isFooter) //
     })
     if (_columns.length == 0) {
       _columns = null
@@ -194,7 +205,8 @@ export class Column extends Base {
     let _this = this
     let edit = null
     let editType = this.getEditType()
-    if (editType != null) {
+    if (editType != null && editType != 'checkbox') {
+      //
       edit = new InputEditor(() => this) //
     }
     let hIconColor = '#1890ff'
@@ -208,7 +220,7 @@ export class Column extends Base {
         hIconColor = 'red'
         enterType = null
       }
-    }
+    } //
     //@ts-ignore
     let headerIcon: ColumnIconOption = {
       // type: 'svg',
@@ -220,6 +232,7 @@ export class Column extends Base {
       positionType: VTable.TYPES.IconPosition.right,
       cursor: 'pointer',
       name: 'filter', //
+
       //@ts-ignore
       visibleTime: enterType, //
     }
@@ -228,6 +241,94 @@ export class Column extends Base {
     }
     if (this.table.config.showColumnFilterTable == false) {
       headerIcon = undefined //
+    }
+    let customLayout = undefined
+    if (this.table.showCustomLayout == true) {
+      customLayout = (args) => {
+        const { table, row, col, rect, value } = args
+        let _value: string = value
+        // const record = table.getCellOriginRecord(col, row)
+        const { height, width } = rect ?? table.getCellRect(col, row)
+        const container = createGroup({
+          height,
+          width,
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'nowrap',
+          overflow: 'hidden',
+          alignItems: 'center',
+          boundsPadding: [0, 0, 0, 0],
+        })
+        let locationName = createText({
+          text: value, //
+          fontSize: 16,
+          // fontFamily: 'sans-serif',
+          fill: 'black',
+          boundsPadding: [0, 0, 0, 0],
+          lineDashOffset: 0,
+        })
+        let globalValue = this.table.globalConfig.value
+        if (globalValue.length > 0) {
+          let reg = new RegExp(globalValue, 'gi') //
+          let vArr = _value.matchAll(reg)
+          let _vArr = [...vArr]
+          _vArr = _vArr
+            .map((v, i) => {
+              let arr = []
+              let t = createText({
+                text: v[0], //
+                fontSize: 16,
+                fill: 'red',
+                boundsPadding: [0, 0, 0, 0],
+                lineDashOffset: 0,
+              })
+              if (i == 0 && v.index > 0) {
+                //
+                let t1 = createText({
+                  text: _value.slice(0, v.index), //
+                  fontSize: 16,
+                  // fontFamily: 'sans-serif',
+                  fill: 'black',
+                  boundsPadding: [0, 0, 0, 0],
+                  lineDashOffset: 0,
+                })
+                arr.push(t1)
+              }
+              arr.push(t)
+              if (
+                i == _vArr.length - 1 &&
+                v.index + v[0].length < _value.length
+              ) {
+                //
+                let t2 = createText({
+                  text: _value.slice(v.index + v[0].length), //
+                  fontSize: 16,
+                  // fontFamily: 'sans-serif',
+                  fill: 'black',
+                  boundsPadding: [0, 0, 0, 0],
+                  lineDashOffset: 0,
+                })
+                arr.push(t2)
+              }
+              return arr
+            })
+            .flat() //
+          if (_vArr.length > 0) {
+            _vArr.forEach((item) => {
+              //@ts-ignore
+              container.add(item) //
+            })
+          } else {
+            container.add(locationName) //
+          }
+        } else {
+          container.add(locationName) //
+        }
+        return {
+          rootContainer: container,
+          renderDefault: false,
+        }
+      }
     }
     let obj: ColumnDefine = {
       ...config,
@@ -239,6 +340,23 @@ export class Column extends Base {
       sort: () => {
         return 0
       },
+      /* 
+         RECORD = "RECORD",
+    NONE = "NONE",
+    SUM = "SUM",
+    MIN = "MIN",
+    MAX = "MAX",
+    AVG = "AVG",
+    COUNT = "COUNT",
+    CUSTOM = "CUSTOM",
+    RECALCULATE = "RECALCULATE"
+      */
+      // aggregation: {
+      //   formatFun: (value) => {
+      //     return 'Total:'
+      //   },
+      //   aggregationType: 'CUSTOM', //
+      // },
       fieldFormat: _this.getFormat(),
       headerIcon: headerIcon, //
       style: {
@@ -259,8 +377,16 @@ export class Column extends Base {
           }
         }, //
       },
+
       editor: edit, ////
       columns: _columns, //
+      customLayout: customLayout, //
+    }
+    if (isFooter) {
+      obj.headerCustomLayout = null
+      obj.showSort = false
+      obj.disableColumnResize = true //
+      obj.headerIcon = null
     }
     return obj //
   }

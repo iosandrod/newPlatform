@@ -83,7 +83,19 @@ export class Button extends Base {
         this.hiddenDropdown() //
       }
     } catch (error) {
+      console.error(error) //
       console.log('报错了') //
     }
+  }
+  getButtonWidth() {
+    let config = this.config
+    let width = config.width 
+    if(width == null) {
+      let _w=this?.group?.getButtonWidth()
+      if(_w) {
+        width=_w
+      }
+    }
+    return width
   }
 }

@@ -99,7 +99,7 @@ export default defineComponent({
       ],
     }
     let _data = reactive({
-      height: 300,
+      height: 600,
       width: 300,
     })
     let _data1 = reactive({

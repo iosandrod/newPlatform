@@ -18,6 +18,11 @@ export class itemGroup extends Base {
     let items = config.items || []
     this.setItems(items) //
   }
+  getButtonWidth() {
+    let config = this.config
+    let buttonWidth = config.buttonWidth || 100
+    return buttonWidth //
+  }
   addItem(b) {
     let _class = this._class
     let _b = new _class(b, this)

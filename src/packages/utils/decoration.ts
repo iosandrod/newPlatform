@@ -14,7 +14,17 @@ export function useTimeout(config) {
         descriptor.value = async function (...args) {
           //
           _args = args //
-          if (this.timeout[_key]) {
+          let _now = this.timeout[`${key}__now`]
+          if (_now == true) {
+            this.timeout[`${key}__now`] = false //
+            if (this.timeout[_key]) {
+              clearTimeout(this.timeout[_key])
+              this.timeout[_key] = null
+            }
+            let _value = oldFn.apply(this, _args)
+            return _value
+          }
+          if (this.timeout[_key] != null) {
             return
           }
           this.timeout[_key] = setTimeout(async () => {
@@ -29,11 +39,22 @@ export function useTimeout(config) {
         descriptor.value = function (...args) {
           return new Promise((resolve, reject) => {
             _args = args ////
+            let _now = this.timeout[`${key}__now`]
+            if (_now == true) {
+              this.timeout[`${key}__now`] = false //
+              if (this.timeout[_key]) {
+                //
+                clearTimeout(this.timeout[_key])
+                this.timeout[_key] = null
+              }
+              let _value = oldFn.apply(this, _args)
+              resolve(_value)
+              return
+            }
             if (this.timeout[_key] != null) {
               return
             }
             this.timeout[_key] = setTimeout(() => {
-              console.log('我执行到这里了') //
               try {
                 this.timeout[_key] = null //
                 let _value = oldFn.apply(this, _args) //

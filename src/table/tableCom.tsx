@@ -22,6 +22,7 @@ import TableButtonCom from './tableButtonCom'
 import TableMenuCom from './tableMenuCom'
 import { useResizeObserver } from '@vueuse/core'
 import TableFitlerCom from './tableFilterCom'
+import InputCom from '@/input/inputCom'
 // new ListTable()
 //核心表格组件
 export default defineComponent({
@@ -69,6 +70,9 @@ export default defineComponent({
   },
   setup(props, { slots, attrs, emit, expose }) {
     const tableIns = new Table(props)
+    // setInterval(() => {
+    //   tableIns.updateCanvas() //
+    // }, 3000)
     expose(tableIns) //
     provide('tableIns', tableIns)
     onMounted(() => {
@@ -86,19 +90,21 @@ export default defineComponent({
     } //
     onMounted(() => {
       nextTick(() => {
-        tableIns.render() //、、
+        tableIns.render() //
       })
     }) //
     onUnmounted(() => {
       tableIns.onUnmounted()
     })
-
     watchEffect(() => {
       tableIns.loadColumns()
     })
     watchEffect(() => {
       tableIns.loadData() //
     }) //
+    watchEffect(() => {
+      tableIns.loadFooterColumn() //
+    })
     watchEffect(() => {
       let s = tableIns.updateIndexArr.size
       if (s == 0) {
@@ -114,11 +120,16 @@ export default defineComponent({
         return tableIns.templateProps.columns
       },
       (e) => {
-        let ins = tableIns.getInstance()
-        if (ins == null) {
-          return
-        }
-        ins.updateColumns(e) //
+        tableIns.updateColumns()
+      },
+    ) //
+    watch(
+      () => {
+        return tableIns.templateProps.footerColumns
+      },
+      (e) => {
+        //
+        tableIns.updateFooterColumns()
       },
     )
     watch(
@@ -143,6 +154,12 @@ export default defineComponent({
     )
     provide('tableIns', tableIns)
     const inputProps = tableIns.getGlobalSearchProps()
+    const registerOutDiv = (el) => {
+      tableIns.registerRef('outDiv', el) //
+    }
+    const registerFooterDiv = (el) => {
+      tableIns.registerRef('footerDiv', el) //
+    }
     return () => {
       let com = null
       com = withDirectives(
@@ -182,10 +199,40 @@ export default defineComponent({
             top: '0px',
           }}
         >
-          <vxe-input
+          <InputCom
             modelValue={tableIns.globalConfig.value}
             {...inputProps}
-          ></vxe-input>
+            v-slots={{
+              buttons: () => {
+                let com = (
+                  <buttonGroupCom
+                    buttonWidth={40}
+                    items={[
+                      {
+                        label: '<<',
+                        fn: () => {
+                          tableIns.jumpToSearchNext(true) //
+                        }, //
+                      },
+                      {
+                        label: '>>',
+                        fn: () => {
+                          tableIns.jumpToSearchNext() //
+                        },
+                      },
+                      {
+                        label: 'X',
+                        fn: () => {
+                          tableIns.showGlobalSearch(false) //
+                        },
+                      },
+                    ]}
+                  ></buttonGroupCom>
+                )
+                return com //
+              },
+            }}
+          ></InputCom>
         </div>,
         [[vShow, tableIns.globalConfig.show]],
       )
@@ -208,10 +255,32 @@ export default defineComponent({
               width: '100%', //
               overflow: 'hidden',
               position: 'relative',
+              display: 'flex',
+              flexDirection: 'column', //
             }} //
           >
             {globalSearchInput}
-            {com}
+            <div
+              ref={registerOutDiv}
+              style={{ flex: 1, width: '100%', overflow: '' }}
+            >
+              {com}
+            </div>
+            <div
+              style={{
+                height: '40px',
+              }}
+            ></div>
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                height: '40px',
+                width: '100%',
+                background: 'red', //
+              }}
+              ref={registerFooterDiv}
+            ></div>
           </div>
         </div>
       )

@@ -9,11 +9,19 @@ export const scroll = (table: Table) => {
   table.registerEvent({
     name: 'scroll',
     keyName: 'scroll',
-    timeout: 100,
+    // timeout: 100, //设置了timeout//
     callback: (config) => {
       let table = _this.getInstance() //
       if (table == null) {
         return //
+      }
+      // console.log(Date.now(), '父级的')
+      _this.fatherScrollNum = Date.now()
+      let childScrollNum = _this.childScrollNum
+      let sub = childScrollNum - _this.fatherScrollNum
+      if (sub < 0) {
+        let scrollLeft = config.scrollLeft
+        _this.getFooterInstance().setScrollLeft(scrollLeft) //
       }
       let range = table.getBodyVisibleCellRange()
       if (range == null) return //
@@ -48,14 +56,24 @@ export const click_cell = (table: Table) => {
       let field = config.field
       let originData = config.originData //
       if (field == 'checkboxField') {
-        // originData.checkboxField = !originData.checkboxField //
       } //
       if (originData == null) {
       } else {
-        if (originData == _this.tableData.curRow) {
-          _this.updateCanvas() //
-        }
-        _this.tableData.curRow = originData //
+        table.setCurRow(originData) ////
+      } //
+    },
+  })
+  table.registerEvent({
+    name: 'dblclick_cell',
+    keyName: 'dblclick_cell',
+    callback: (config) => {
+      let field = config.field
+      let originData = config.originData //
+      if (field == 'checkboxField') {
+      } //
+      if (originData == null) {
+      } else {
+        table.setCurRow(originData, true) ////
       } //
     },
   })
@@ -78,7 +96,6 @@ export const selected_cell = (table: Table) => {
     name: 'selected_cell',
     keyName: 'selected_cell',
     callback: (config) => {
-      console.log('select _cells') //
       let ranges: CellRange[] = config.ranges
       let ins = table.getInstance()
       let lastR = ranges.slice(-1)[0]

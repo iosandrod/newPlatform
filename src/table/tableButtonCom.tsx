@@ -53,14 +53,18 @@ export default defineComponent({
         fn: async () => {
           let data = tableIns.getData() //、、
           data[1].hobbies = data[1].hobbies + '2' ////
-          // data[0].id = data[0].id + '2' ////
-          // data[1].id = data[1].id + '2' ////
-          // nextTick(() => {
-          //   data[0].email1 = data[0].email1 + '2' ////
-          //   data[1].email1 = data[1].email1 + '2' ////
-          // })
         },
-      }, //
+      },
+      {
+        label: '刷新视图', //
+        fn: async () => {
+          tableIns.updateCanvas() //
+        },
+      },
+      {
+        label: '高度重置', //
+        fn: async () => {}, //
+      },
     ] //
     return () => {
       return <div>{<buttonGroupCom items={buttons}></buttonGroupCom>}</div>

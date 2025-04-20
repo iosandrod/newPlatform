@@ -27,6 +27,10 @@ export default defineComponent({
     ClickOutside,
   },
   props: {
+    buttonWidth: {
+      type: Number,
+      default: 100,
+    },
     items: {
       default: () => [],
     },
@@ -60,7 +64,11 @@ export default defineComponent({
               let com = (
                 <div
                   class="v-contextmenu"
-                  style={{ width: '100px', position: 'relative', zIndex: 0 }}
+                  style={{
+                    width: `${btn.getButtonWidth()}px`,
+                    position: 'relative',
+                    zIndex: 0,
+                  }}
                   onClick={() => {
                     runBtnFn(btn)
                   }}

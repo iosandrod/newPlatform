@@ -9,11 +9,14 @@ import {
 import { Column } from '../column'
 import { VxeInput } from 'vxe-pc-ui'
 import SelectCom from '@/select/selectCom'
+import InputCom from '@/input/inputCom'
 // import { VxeSelect } from 'vxe-pc-ui'
 export default defineComponent({
   name: 'tableInput',
   components: {
     VxeInput,
+    SelectCom,
+    InputCom, //
   },
   props: {
     row: {
@@ -59,21 +62,21 @@ export default defineComponent({
       if (type == 'string') {
         com = (
           <div style={{ width: '100%', height: '100%' }}>
-            <VxeInput
+            <InputCom
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
               onChange={(v) => {
                 updateValue(v)
               }} //
               modelValue={modelValue.value}
-            ></VxeInput>
+            ></InputCom>
           </div>
         )
       }
       if (type == 'datetime' || type == 'time' || type == 'date') {
         com = (
           <div style={{ width: '100%', height: '100%' }}>
-            <VxeInput
+            <InputCom
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
               onChange={(v) => {
@@ -82,7 +85,7 @@ export default defineComponent({
               transfer
               type={type} //
               modelValue={modelValue.value}
-            ></VxeInput>
+            ></InputCom>
           </div>
         )
       }

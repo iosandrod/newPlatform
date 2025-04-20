@@ -1767,3 +1767,160 @@ const app = createApp({
     //     data: _data3, //
     //   })
     // })
+    
+
+     // _internalIconsStyle: {},
+    // isPivot: false,
+    // name: 'DEFAULT',
+    // internalTheme: {
+    //   obj: {
+    //     name: 'DEFAULT',
+    //     underlayBackgroundColor: '#FFF',
+    //     defaultStyle: {
+    //       borderColor: '#E1E4E8',
+    //       color: '#000',
+    //       bgColor: '#ECF1F5',
+    //     },
+    //     headerStyle: {
+    //       fontSize: 16,
+    //       fontWeight: 'bold',
+    //       bgColor: '#ECF1F5',
+    //       hover: {
+    //         cellBgColor: '#CCE0FF',
+    //         inlineRowBgColor: '#F3F8FF',
+    //         inlineColumnBgColor: '#F3F8FF',
+    //       },
+    //     },
+    //     rowHeaderStyle: {
+    //       fontSize: 16,
+    //       fontWeight: 'bold',
+    //       bgColor: '#ECF1F5',
+    //       hover: {
+    //         cellBgColor: '#CCE0FF',
+    //         inlineRowBgColor: '#F3F8FF',
+    //         inlineColumnBgColor: '#F3F8FF',
+    //       },
+    //     },
+    //     cornerHeaderStyle: {
+    //       fontSize: 16,
+    //       fontWeight: 'bold',
+    //     },
+    //     bodyStyle: {
+    //       fontSize: 14,
+    //       hover: {
+    //         cellBgColor: '#CCE0FF',
+    //         inlineRowBgColor: '#F3F8FF',
+    //         inlineColumnBgColor: '#F3F8FF',
+    //       },
+    //     },
+    //     frameStyle: {
+    //       borderColor: '#E1E4E8',
+    //       borderLineWidth: 1,
+    //       borderLineDash: [],
+    //       cornerRadius: 0,
+    //       shadowBlur: 0,
+    //       shadowOffsetX: 0,
+    //       shadowOffsetY: 0,
+    //       shadowColor: 'black',
+    //     },
+    //     columnResize: {
+    //       lineWidth: 1,
+    //       lineColor: '#416EFF',
+    //       bgColor: '#D9E2FF',
+    //       width: 3,
+    //     },
+    //     frozenColumnLine: {
+    //       shadow: {
+    //         width: 3,
+    //         startColor: 'rgba(225, 228, 232, 0.6)',
+    //         endColor: 'rgba(225, 228, 232, 0.6)',
+    //       },
+    //     },
+    //     selectionStyle: {
+    //       cellBgColor: 'rgba(0, 0, 255,0.1)',
+    //       cellBorderLineWidth: 2,
+    //       cellBorderColor: '#0000ff',
+    //     },
+    //     tooltipStyle: {
+    //       bgColor: '#FFF',
+    //       color: '#000',
+    //       fontSize: 12,
+    //       fontFamily: 'Arial,sans-serif',
+    //     },
+    //   },
+    //   superTheme: {
+    //     name: 'DEFAULT',
+    //     underlayBackgroundColor: '#FFF',
+    //     defaultStyle: {
+    //       borderColor: '#E1E4E8',
+    //       color: '#000',
+    //       bgColor: '#ECF1F5',
+    //     },
+    //     headerStyle: {
+    //       fontSize: 16,
+    //       fontWeight: 'bold',
+    //       bgColor: '#ECF1F5',
+    //       hover: {
+    //         cellBgColor: '#CCE0FF',
+    //         inlineRowBgColor: '#F3F8FF',
+    //         inlineColumnBgColor: '#F3F8FF',
+    //       },
+    //     },
+    //     rowHeaderStyle: {
+    //       fontSize: 16,
+    //       fontWeight: 'bold',
+    //       bgColor: '#ECF1F5',
+    //       hover: {
+    //         cellBgColor: '#CCE0FF',
+    //         inlineRowBgColor: '#F3F8FF',
+    //         inlineColumnBgColor: '#F3F8FF',
+    //       },
+    //     },
+    //     cornerHeaderStyle: {
+    //       fontSize: 16,
+    //       fontWeight: 'bold',
+    //     },
+    //     bodyStyle: {
+    //       fontSize: 14,
+    //       hover: {
+    //         cellBgColor: '#CCE0FF',
+    //         inlineRowBgColor: '#F3F8FF',
+    //         inlineColumnBgColor: '#F3F8FF',
+    //       },
+    //     },
+    //     frameStyle: {
+    //       borderColor: '#E1E4E8',
+    //       borderLineWidth: 1,
+    //       borderLineDash: [],
+    //       cornerRadius: 0,
+    //       shadowBlur: 0,
+    //       shadowOffsetX: 0,
+    //       shadowOffsetY: 0,
+    //       shadowColor: 'black',
+    //     },
+    //     columnResize: {
+    //       lineWidth: 1,
+    //       lineColor: '#416EFF',
+    //       bgColor: '#D9E2FF',
+    //       width: 3,
+    //     },
+    //     frozenColumnLine: {
+    //       shadow: {
+    //         width: 3,
+    //         startColor: 'rgba(225, 228, 232, 0.6)',
+    //         endColor: 'rgba(225, 228, 232, 0.6)',
+    //       },
+    //     },
+    //     selectionStyle: {
+    //       cellBgColor: 'rgba(0, 0, 255,0.1)',
+    //       cellBorderLineWidth: 2,
+    //       cellBorderColor: '#0000ff',
+    //     },
+    //     tooltipStyle: {
+    //       bgColor: '#FFF',
+    //       color: '#000',
+    //       fontSize: 12,
+    //       fontFamily: 'Arial,sans-serif',
+    //     },
+    //   },
+    // },
