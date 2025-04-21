@@ -1,40 +1,48 @@
-import { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'home',
-    redirect: '/home',
+    name: 'index',
+    component: () => import('@/pages/index'), //
     meta: {
       title: '首页',
       renderMenu: false,
       icon: 'CreditCardOutlined',
     },
+    children: [
+      {
+        path: 'home',
+        name: 'home',
+        // meta: {
+        //   view: 'blank',
+        // },
+        component: () => import('@/pages/home/Home'),
+      },
+      {
+        path: ':tableName',
+        name: 'entity', //
+        component: () => import('@/pages/design/index'), //
+      },
+    ],
   },
   {
     path: '/login',
-    name: '登录',
+    name: 'login',
     meta: {
       view: 'blank',
     },
     component: () => import('@/pages/login/Login'),
   },
+
   {
-    path: '/home',
-    name: '首页',
-    meta: {
-      view: 'blank',
-    },
-    component: () => import('@/pages/home/Home'),
-  },
-  {
-    path: "/config",
-    name: "配置",
+    path: '/config',
+    name: 'config', //
     meta: {
       view: 'blank',
     },
     component: () => import('@/pages/home/Config1'),
   },
-];
+]
 
-export default routes;
+export default routes

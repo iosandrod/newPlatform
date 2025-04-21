@@ -10,6 +10,7 @@ import 'element-plus/dist/index.css'
 import 'element-plus/dist/index.css'
 import 'vant/lib/index.css'
 import './mainStyle.css'
+import './style.scss'//
 import 'vxe-table/lib/style.css'
 import 'vxe-pc-ui/styles/all.scss'
 import 'default-passive-events' //

@@ -130,7 +130,7 @@ export const createTheme = () => {
         inlineColumnBgColor: 'rgba(26, 26, 255, 0.1)',
         inlineRowBgColor: 'rgba(26, 26, 255, 0.1)',
       },
-      padding: [10, 16, 10, 16],//
+      padding: [10, 16, 10, 16], //
       textAlign: 'left',
       textBaseline: 'middle',
       textOverflow: 'ellipsis',
@@ -149,7 +149,7 @@ export const createTheme = () => {
       width: 7,
       hoverOn: true,
       barToSide: false,
-      horizontalPadding: 30,
+      horizontalPadding: 30, //
       verticalPadding: 0,
     },
     tooltipStyle: null,
@@ -227,7 +227,12 @@ export const createTheme = () => {
         space: 12,
       },
     },
-   
   }
   return obj
+}
+
+export const createFooterTheme = () => {
+  let _theme = createTheme()
+  _theme.scrollStyle.horizontalPadding = 0 //
+  return _theme
 }

@@ -17,15 +17,15 @@ export default {
       if (p.pluginName === plugin.pluginName) {
         throw `Sortable: Cannot mount plugin ${plugin.pluginName} more than once`
       }
-    })
-
+    }) //
     plugins.push(plugin)
   },
-  unmounted(name){
-	let index = plugins.findIndex((p) => p.pluginName === name)
-	if (index > -1) {//
-		plugins.splice(index, 1)
-	}
+  unmounted(name) {
+    let index = plugins.findIndex((p) => p.pluginName === name)
+    if (index > -1) {
+      //
+      plugins.splice(index, 1)
+    }
   },
   pluginEvent(eventName, sortable, evt) {
     this.eventCanceled = false
@@ -47,7 +47,7 @@ export default {
 
       // Only fire plugin event if plugin is enabled in this sortable,
       // and plugin has event defined
-     
+
       if (
         sortable.options[plugin.pluginName] &&
         sortable[plugin.pluginName][eventName]

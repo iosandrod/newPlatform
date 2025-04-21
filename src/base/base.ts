@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { reactive, shallowRef, toRaw } from 'vue'
+import { Reactive, reactive, shallowRef, toRaw } from 'vue'
 import hooks from '@ER/hooks'
 import {
   // system,
@@ -85,7 +85,7 @@ export class Base {
   }
   getRunBefore(config?: { method: string; params?: any }) {}
   getRunAfter(config?: { method: string; params?: any }) {}
-  getRouter(): Router {
+  getRouter():Reactive<Router>  {
     //@ts-ignore
     return this._router //
   }

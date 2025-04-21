@@ -106,7 +106,22 @@ export default defineComponent({
           </div>
         ) //
       }
-      return com ////
+      if (type == 'baseinfo') {
+        com = <div style={{ width: '100%', height: '100%' }}>参照表</div>
+      }
+      return (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            paddingTop: '1px',
+            paddingBottom: '1px',
+            boxSizing: 'border-box', //
+          }}
+        >
+          {com}
+        </div>
+      )
     }
   },
 })

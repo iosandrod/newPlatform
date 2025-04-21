@@ -835,9 +835,7 @@ export class Form extends Base {
         formIns: this,
       }) //
     }) //
-    console.log(state.store, 'state.store')
     nextTick(() => {
-      //
       this.isShow = true
     })
   }
@@ -939,17 +937,17 @@ export class Form extends Base {
       // 如果 sourceBlock 和 isWrap 都为 false，直接返回原始元素
       node = el
     }
-    if (!sourceBlock && resetWidth) {
-      if (utils.checkIsField(el)) {
-        if (state.platform === 'pc') {
-          el.style.width.pc = '100%'
-        } else {
-          el.style.width.mobile = '100%'
-        }
-      } else {
-        el.style.width = '100%'
-      }
-    }
+    // if (!sourceBlock && resetWidth) {
+    //   if (utils.checkIsField(el)) {
+    //     if (state.platform === 'pc') {
+    //       el.style.width.pc = '100%'
+    //     } else {
+    //       el.style.width.mobile = '100%'
+    //     }
+    //   } else {
+    //     el.style.width = '100%'
+    //   }
+    // }
     if (isSetSelection) {
     }
     return node

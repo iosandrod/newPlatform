@@ -56,8 +56,7 @@ export class InputEditor extends BaseEditor {
     let app = createApp(tableInput, {
       column: column, //这是个函数
       row: _row,
-      onChange: (v) => {
-      },
+      onChange: (v) => {},
       style: {
         width: '100%',
         height: '100%',
@@ -77,17 +76,20 @@ export class InputEditor extends BaseEditor {
   } //
   //@ts-ignore
   targetIsOnEditor?: (target: HTMLElement) => boolean = (target) => {
-    //@ts-ignore
-    let status = this.column.getCanHidden() ////
-    // console.log(status, 'status') ////
-    return status ////
+    // let status = this.column.getCanHidden() ////
+    // if (1 == 1) {
+    //   return true //
+    // }
+    // return status ////
+    return true //
   }
   getValue(): string {
     //@ts-ignore
-    return this.column.cacheValue //
+    return this.row[this.column.getField()]//
   }
   //@ts-ignore
-  exit?: () => void = () => {}
+  exit?: () => void = () => {//
+  }
   onStart(config: OnStartParams): void {
     const { value, referencePosition, container, endEdit, table } = config
     const row = table
@@ -112,8 +114,7 @@ export class InputEditor extends BaseEditor {
     let column = this.column
     let value = column.cacheValue
     if (column.isChangeValue == true && column.isChangeValue == true) {
-      //
-      let oldValue = this.row[column.getField()] //
+      let oldValue = this.row[column.getField()] ////
       if (value != oldValue) {
         column.updateBindValue({
           value: value,
@@ -143,12 +144,13 @@ export class InputEditor extends BaseEditor {
   isEditorElement(target: EventTarget | null): boolean {
     return target === this.element
   } //
-  validateValue(
+  async validateValue(
     newValue: string,
     oldValue: string,
     position: any,
     table: any,
-  ): boolean {
-    return true //
+  ) {
+    //校验
+    return true ////
   }
 }

@@ -32,8 +32,10 @@ import {
 } from '@visactor/vtable/es/ts-types'
 import { nextTick } from 'vue' //
 import { calObj } from './calculateType'
+import { stringToFunction } from '@ER/utils'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
+  tableState = 'edit' //
   templateCalValue = ''
   canHiddenEditor = false
   effectPool = shallowRef({})
@@ -327,7 +329,7 @@ export class Column extends Base {
     }
     let obj: ColumnDefine = {
       ...config,
-      disableColumnResize: false,//
+      disableColumnResize: true, ////
       field: this.getField(),
       width: this.getColumnWidth(),
       showSort: true,
@@ -337,25 +339,67 @@ export class Column extends Base {
       },
       /*
        */
-
       fieldFormat: _this.getFormat(),
       headerIcon: headerIcon, //
       style: {
+        borderColor: (config) => {
+          let _table = config.table
+          let record = _table.getRecordByCell(config.col, config.row)
+          let color = 'RGB(225, 228, 232)' //
+          let _index = record._index
+          let validateMap = table.validateMap
+          let errStr = validateMap[_index]
+          //报错了//
+          if (errStr) {
+            let allField = errStr.map((row) => row.field)
+            if (allField.includes(this.getField())) {
+              color = 'red'
+            } //
+          }
+          return color
+        },
+        borderLineWidth: (config) => {
+          let _table = config.table
+          let record = _table.getRecordByCell(config.col, config.row)
+          let color = 1 //
+          let _index = record._index
+          let validateMap = table.validateMap
+          let errStr = validateMap[_index]
+          //报错了//
+          if (errStr) {
+            let allField = errStr.map((row) => row.field)
+            if (allField.includes(this.getField())) {
+              color = 3
+            } //
+          }
+          return color
+        }, //
         bgColor: (config) => {
           let _table = config.table
           let record = _table.getRecordByCell(config.col, config.row)
-          // console.log(config, 'testConfig') //
           let gValue = table.globalConfig.value
           let value = config.value
+          let color = null
+          if (record == table.tableData.curRow) {
+            color = 'RGB(200, 190, 230)'
+          }
           if (gValue.length > 0) {
             let reg = new RegExp(gValue, 'g')
             if (reg.test(value)) {
-              return 'RGB(230, 220, 230)' //
+              color = 'RGB(230, 220, 230)' //
             }
           }
-          if (record == table.tableData.curRow) {
-            return 'RGB(200, 190, 230)'
-          }
+          // let _index = record._index
+          // let validateMap = table.validateMap
+          // let errStr = validateMap[_index]
+          // //报错了//
+          // if (errStr) {
+          //   let allField = errStr.map((row) => row.field)
+          //   if (allField.includes(this.getField())) {
+          //     color = 'red'
+          //   } //
+          // }
+          return color
         }, //
       },
 
@@ -475,12 +519,19 @@ export class Column extends Base {
     }
     return width
   }
-  updateBindValue(config) {
-    console.log(' updateBindValue') //
+  async updateBindValue(config) {
     let value = config.value //值
     let row = config.row //行
     let field = this.getField()
-    row[field] = value //
+    let table = this.table
+    let _res = await this.validateValue({ ...config, table })
+    if (_res == true) {
+      row[field] = value //
+    } else {
+      let table = this.table //
+      //@ts-ignore
+      table.validateMap[row._index] = [_res] //
+    }
   }
   getBindConfig() {
     let editType = this.getEditType()
@@ -512,5 +563,78 @@ export class Column extends Base {
       type = 'string'
     } //
     return type
+  }
+  getIsEditField() {
+    let editType = this.getEditType()
+    if (editType) {
+      return true
+    }
+    return false
+  }
+  getValidator() {
+    let config = this.config
+    let required = config.required
+    let _arr = []
+    if (required) {
+      let _fn = (vConfig) => {
+        let value = vConfig.value
+        if (value == null || value == '') {
+          return '此项为必填项' //
+        }
+        return true
+      }
+      _arr.push(_fn)
+    }
+    let validator = config.validator
+    if (typeof validator == 'function') {
+      _arr.push(validator)
+    }
+    if (typeof validator == 'string') {
+      let _fn1 = stringToFunction(validator)
+      if (typeof _fn1 == 'function') {
+        _arr.push(_fn1)
+      }
+    }
+    return _arr //
+  }
+  async validateValue(vConfig?: any) {
+    //
+    let editType = this.getEditType() //
+    if (editType) {
+      let validator = this.getValidator() //
+      let _res = null
+      if (validator) {
+        for (const fn of validator) {
+          try {
+            let _res1 = await fn(vConfig)
+            if (typeof _res1 == 'boolean' && _res1 == false) {
+              _res = {
+                message: '字段校验失败',
+                field: this.getField(),
+              }
+              break
+            }
+            if (typeof _res1 == 'string') {
+              _res = {
+                message: _res1,
+                field: this.getField(),
+              }
+              break
+            }
+          } catch (error) {
+            _res = {
+              message: error?.message || error, //
+              field: this.getField(),
+            }
+          }
+        }
+        if (_res == null) {
+          return true
+        } else {
+          return _res //
+        }
+      }
+    }
+    return true
   }
 }

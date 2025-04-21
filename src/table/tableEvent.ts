@@ -2,6 +2,7 @@ import { SortState } from '@visactor/vtable/es/ts-types'
 import { Table } from './table'
 import _ from 'lodash'
 import { nextTick, toRaw } from 'vue' //
+import * as VTable from '@visactor/vtable'
 import { RangeType } from '@visactor/vtable/es/vrender'
 import { CellRange } from '@visactor/vtable-export/es/util/type'
 import { Column } from './column'
@@ -58,10 +59,28 @@ export const click_cell = (table: Table) => {
     callback: (config) => {
       let field = config.field
       let originData = config.originData //
+      let tCol = table.getLastFlatColumns().find((col) => {
+        return col.getField() === field
+      })
+      if (tCol != null) {
+        if (tCol.getIsEditField()) {
+          //是编辑的列数据//
+          let curEdit = table.getCurrentCellEdit()
+          if (curEdit != null) {
+            table.clearEditCell() //
+          }
+          nextTick(() => {
+            _this.startEditCell(config.col, config.row, config.value) //
+          }) //
+          return
+        }
+      }
+
       if (field == 'checkboxField') {
       } //
       if (originData == null) {
       } else {
+        table.clearEditCell()
         table.setCurRow(originData) ////
       } //
     },
@@ -208,7 +227,8 @@ export const resize_column = (table: Table) => {
     name: 'resize_column',
     keyName: 'resize_column',
     callback: (config) => {
-      let col = config.col
+      //
+      let col = config.col //
       let _col: Column = table.getCurrentResizeCol(col)
       if (_col == null) {
         return //
@@ -234,5 +254,50 @@ export const mousedown_cell = (table: Table) => {
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
     callback: (config) => {},
+  })
+}
+
+export const mouseenter_cell = (table: Table) => {
+  const _this = table
+  table.registerEvent({
+    name: 'mouseenter_cell',
+    keyName: 'mouseenter_cell',
+    callback: (config) => {
+      //
+      let tableInstance = _this.getInstance()
+      let args = config
+      const { col, row, targetIcon } = args
+      const rect = tableInstance.getVisibleCellRangeRelativeRect({ col, row })
+      if (table.getIsEditTable()) {
+        let field = tableInstance.getBodyField(col, row)
+        let record = tableInstance.getRecordByCell(col, row)
+        let _index = record?._index
+        if (_index == null) {
+          return
+        }
+        let errMap = table.validateMap
+        let errStr = errMap[_index]
+        let _err = errStr?.find((row) => row.field == field)
+        if (_err) {
+          //
+          let fMes = _err.message || '数据校验失败' //
+          tableInstance.showTooltip(col, row, {
+            content: fMes,
+            referencePosition: { rect, placement: VTable.TYPES.Placement.top }, //TODO
+            className: 'defineTooltip',
+            disappearDelay: 100,
+            style: {
+              bgColor: 'red',
+              //@ts-ignore
+              borderColor: 'red',
+              color: 'white', //
+              //@ts-ignore
+              font: 'normal bold normal 14px/1 STKaiti',
+              arrowMark: true,
+            },
+          })
+        }
+      }
+    },
   })
 }

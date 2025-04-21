@@ -65,6 +65,28 @@ export default defineComponent({
         label: '高度重置', //
         fn: async () => {}, //
       },
+      {
+        label: '清理编辑', //
+        fn: async () => {
+          tableIns.clearEditCell() ////
+        },
+      },
+      {
+        label: '显示toptip', //
+        fn: async () => {
+          tableIns.showTableTopTool({
+            row: 3,
+            col: 3,
+            content: '显示toptip',
+          }) //
+        },
+      },
+      {
+        label: '清除校验',
+        fn: async () => {
+          tableIns.clearValidate()
+        }, 
+      },
     ] //
     return () => {
       return <div>{<buttonGroupCom items={buttons}></buttonGroupCom>}</div>

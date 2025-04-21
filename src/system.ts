@@ -20,7 +20,7 @@ export class System extends Base {
    * @returns {Promise<void>}
    */
   /*******  7f3c90cf-03e0-4ca7-9500-28a98548d915  *******/
-  tableMap = {} //
+  tableMap:{ [key: string]: PageDesign } = {} //
   async login() {}
   @cacheValue() //
   async getMenuData() {
@@ -73,8 +73,15 @@ export class System extends Base {
       } //
     }
     let router = this.getRouter()
-    let allRouter = router.getRoutes()
-    console.log(allRouter, 'testRouter') ////
+    let tableName = config.tableName
+    router.push(`/${tableName}`) //
+    // let allRouter = router.getRoutes()
+    // let tableName = config.tableName
+    // router.addRoute({
+    //   path: '/:tableName',
+    //   name: 'pageDesign',
+    //   component: () => import('@ER/pageDesign'),
+    // })//
   }
   async createPageDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {
@@ -86,6 +93,10 @@ export class System extends Base {
     let layoutConfig = await this.getDefaultPageLayout(tableName) //
     let _props = getDefaultPageProps()
     let obj = {}
+    let _design = this.tableMap[tableName]
+    if (_design) {
+      return _design //
+    }
     Object.entries(_props).forEach(([key, value]) => {
       //@ts-ignore
       let _default = value.default

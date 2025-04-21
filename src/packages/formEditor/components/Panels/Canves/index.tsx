@@ -34,12 +34,12 @@ export default defineComponent({
       )
       if (formIns.pageType !== 'form') {
         TagComponent = 'div' //
-      }
+      } //
       const typeProps = hooks.useProps(state, state, unref(isPc), true)
       const Layout = (
         <LayoutDragGable
           data-layout-type={'root'}
-          class={[unref(isEditModel) && ns.e('wrap'), 'h-full']}
+          class={[unref(isEditModel) && ns.e('wrap'), 'h-full','overflow-hidden']}
           data={state.store}
           parent={state.store}
           isRoot
@@ -66,14 +66,60 @@ export default defineComponent({
           >
             {Layout}
           </TagComponent>
-          {/* {!unref(isEditModel) && !_.isEmpty(state.config) && ER.props.isShowCompleteButton && (
-            <CompleteButton handle={ER.form} />
-          )} */}
         </div>
       )
     }
     return () => {
-      return (
+      let TagComponent: any = resolveComponent(
+        unref(isPc) ? 'el-form' : 'van-form',
+      )
+      if (formIns.pageType !== 'form') {
+        TagComponent = 'div' //
+      } //
+      const typeProps = hooks.useProps(state, state, unref(isPc), true)
+      const Layout = (
+        <LayoutDragGable
+          data-layout-type={'root'}
+          class={[unref(isEditModel) && ns.e('wrap'), 'h-full']}
+          data={state.store}
+          parent={state.store}
+          isRoot
+        ></LayoutDragGable>
+      )
+      let bar = null
+      if (formIns.getShowFormBar()) {
+        bar = (
+          <div>
+            <formBarBread></formBarBread>
+          </div>
+        )
+      }
+      let inCom = (
+        <div class="h-full">
+          {bar}
+          <TagComponent
+            class={['h-full']} //
+            ref={setFormRef}
+            onClick={unref(isEditModel) && handleClick}
+            {...typeProps.value}
+            model={formIns.data}
+            rules={formIns.getValidateRules()}
+          >
+            {Layout}
+          </TagComponent>
+        </div>
+      )
+      let _inCom = (
+        <div class={[ns.e('container')]}>
+          <el-scrollbar ref={ER.canvesScrollRef}>
+            <div class={[ns.e('subject')]}>{inCom}</div>
+          </el-scrollbar>
+        </div>
+      )
+      if (!isEditModel.value) {
+        _inCom = inCom
+      }
+      let com = (
         <ElMain
           class={[
             ns.b(),
@@ -83,17 +129,10 @@ export default defineComponent({
             // ER.props.layoutType === 1  && ns.e('layoutType1')
           ]}
         >
-          {unref(isEditModel) ? (
-            <div class={[ns.e('container')]}>
-              <el-scrollbar ref={ER.canvesScrollRef}>
-                <div class={[ns.e('subject')]}>{renderContent()}</div>
-              </el-scrollbar>
-            </div>
-          ) : (
-            renderContent()
-          )}
+          {_inCom}
         </ElMain>
       )
+      return com //
     }
   },
 })

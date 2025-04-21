@@ -38,6 +38,7 @@ export default defineComponent({
       let obj = {
         width: `${width}px`,
         height: '400px',
+        minWidth: '300px',
         display: 'flex',
         flexDirection: 'column',
         border: '1px solid #ddd',

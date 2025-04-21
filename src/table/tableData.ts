@@ -118,7 +118,7 @@ export const tableConfig: ListTableConstructorOptions = {
       width: 250,
       calculateType: 'sum', //合计
       editType: 'string',
-      // sort: true,//
+      required: true,
       fieldFormat: (config) => {
         let row = config.row //
         let email = row.id
@@ -140,19 +140,20 @@ export const tableConfig: ListTableConstructorOptions = {
     {
       field: 'full name',
       title: 'Full name',
-      columns: [
-        {
-          field: 'name',
-          title: 'First Name',
-          width: 120,
-        },
-        //@ts-ignore
-        {
-          field: 'lastName',
-          title: 'Last Name',
-          width: 100,
-        },
-      ],
+      width: 200,
+      // columns: [
+      //   {
+      //     field: 'name',
+      //     title: 'First Name',
+      //     width: 120,
+      //   },
+      //   //@ts-ignore
+      //   {
+      //     field: 'lastName',
+      //     title: 'Last Name',
+      //     width: 100,
+      //   },
+      // ],
     },
     {
       field: 'hobbies',
@@ -169,7 +170,7 @@ export const tableConfig: ListTableConstructorOptions = {
       field: 'sex',
       title: 'sex',
       editType: 'select', //
-      
+
       options: [
         {
           value: 'boy',
@@ -12208,5 +12209,5 @@ export const tablestaticData = {
   defaultRowHeight: 80,
   customConfig: {
     createReactContainer: true,
-  },
+  }, //
 }

@@ -2008,7 +2008,9 @@ Sortable.mount = function(...plugins) {
 		PluginManager.mount(plugin);
 	});
 };
-
+Sortable.unmounted = function(name) {//
+	PluginManager.unmounted(name);//
+}
 
 
 /**

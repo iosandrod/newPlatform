@@ -13,7 +13,7 @@ import {
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { Table } from './table'
-import { tableV2Props } from 'element-plus'
+import { tableV2Props, ClickOutside } from 'element-plus'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { nextTick } from 'vue'
 import { generatePersons } from './tableData'
@@ -175,15 +175,8 @@ export default defineComponent({
           style={{ width: '100%', height: '100%' }}
           ref={registerRootDiv}
         ></div>,
-        [
-          [
-            {
-              mounted(el) {},
-              unmounted(el) {},
-            },
-          ],
-        ],
-      )
+        [],
+      ) //
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
       if (props.showHeaderButton == false) {
@@ -197,14 +190,10 @@ export default defineComponent({
       const globalSearchInput = withDirectives(
         <div
           style={{
-            zIndex: 100,
             width: '100%',
             height: '40px',
             display: 'flex',
             alignItems: 'center',
-            //  position: 'absolute',
-            left: '0px',
-            top: '0px',
           }}
         >
           <InputCom
@@ -250,8 +239,8 @@ export default defineComponent({
             position: 'absolute',
             bottom: 0,
             height: '50px',
+            boxSizing: 'border-box',
             width: '100%',
-            background: 'red', //
           }}
           ref={registerFooterDiv}
         ></div>,
@@ -270,6 +259,7 @@ export default defineComponent({
           style={{
             width: '100%',
             height: '100%',
+            // minHeight: '200px', //
             display: 'flex',
             flexDirection: 'column',
             position: 'relative',
@@ -291,21 +281,18 @@ export default defineComponent({
             {globalSearchInput}
             <div
               ref={registerOutDiv}
-              style={{ flex: 1, width: '100%', overflow: '' }}
+              style={{
+                flex: 1,
+                width: '100%',
+                overflow: 'hidden', //
+                borderLeft: '1px solid RGB(225, 228, 232)',
+                borderRight: '1px solid RGB(225, 228, 232)',
+                borderTop: '1px solid RGB(225, 228, 232)',
+                boxSizing: 'border-box',
+              }}
             >
               {com}
             </div>
-
-            {/* <div
-              style={{
-                position: 'absolute',
-                bottom: 0,
-                height: '50px',
-                width: '100%',
-                background: 'red', //
-              }}
-              ref={registerFooterDiv}
-            ></div> */}
             {calDiv}
             {calCom}
           </div>

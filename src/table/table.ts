@@ -30,6 +30,7 @@ import {
   contextmenu_cell,
   icon_click,
   mousedown_cell,
+  mouseenter_cell,
   resize_column,
   scroll,
   selected_cell,
@@ -42,8 +43,10 @@ import { VxeInputEvents, VxeInputProps } from 'vxe-table'
 import { VxeInputEventProps } from 'vxe-pc-ui'
 import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
-import { createTheme } from './tableTheme' //
+import { createFooterTheme, createTheme } from './tableTheme' //
 export class Table extends Base {
+  tableState: 'edit' | 'scan' = 'edit'
+  templateEditCell: { col?: number; row?: number; value?: any } = {}
   currentResizeField: string
   fatherScrollNum = 0
   childScrollNum = 0
@@ -59,6 +62,7 @@ export class Table extends Base {
     value: '', ////
     show: true, //
   }
+  validateMap: { [key: string]: any[] } = {}
   templateProps = {
     footerColumns: [],
     columns: [],
@@ -112,9 +116,10 @@ export class Table extends Base {
     showData: [], //
     curRow: null,
   }
-  @useTimeout({ number: 30, key: 'setCurRow' }) //
+  @useRunAfter()
+  @useTimeout({ number: 30, key: 'setCurRow' }) ////
   setCurRow(row, isDb = false) {
-    console.log('setCurRow', isDb) ////
+    // console.log('setCurRow', isDb) ////
     if (toRaw(row) == toRaw(this.tableData.curRow)) return //
     this.tableData.curRow = row //
     this.timeout['updateCanvas__now'] = true //
@@ -230,7 +235,8 @@ export class Table extends Base {
       defaultRowHeight: 30,
       heightMode: 'standard', //
       defaultHeaderRowHeight: 30, //
-      container: rootDiv,
+      container: rootDiv, //
+      editCellTrigger: 'api',
       select: {
         highlightMode: 'cell', //
         headerSelectMode: 'cell', //
@@ -239,14 +245,18 @@ export class Table extends Base {
         outsideClickDeselect: false, //
         blankAreaClickDeselect: false, //
       },
+      tooltip: {
+        isShowOverflowTextTooltip: true, //
+      },
       rowSeriesNumber: _sConfig as any, //
-      editCellTrigger: 'click',
+      // editCellTrigger: 'click',
       customConfig: {
         createReactContainer: true, //
       },
       //头部的
     }) //
     const emitEventArr = [
+      'mouseenter_cell',
       'mousedown_cell',
       'resize_column',
       'icon_click', //
@@ -312,6 +322,7 @@ export class Table extends Base {
         outsideClickDeselect: false, //
         blankAreaClickDeselect: false, //
       },
+      theme: createFooterTheme() as any, ////
       rowSeriesNumber: _sConfig as any, //
       editCellTrigger: 'click',
       customConfig: {
@@ -332,7 +343,7 @@ export class Table extends Base {
     this.footerInstance = instance ////
     this.loadFooterColumn()
   }
-  getLastFlatColumns(cols: any[]) {
+  getLastFlatColumns(cols: any[] = this.columns): Column[] {
     return cols
       .map((col) => {
         let columns = col.columns || []
@@ -368,6 +379,7 @@ export class Table extends Base {
     }
   }
   render() {
+    console.log('我渲染了') //
     const rootDiv = this.getRef('root')
     let footDiv = this.getRef('footerDiv')
     let _instance = this.instance
@@ -552,6 +564,7 @@ export class Table extends Base {
     checkbox_state_change(this)
     checkboxChange(this) //
     resize_column(this)
+    mouseenter_cell(this) //
   }
 
   setCurTableSelect() {}
@@ -700,7 +713,7 @@ export class Table extends Base {
         }
       }
     }
-    this.templateProps.data = _data3
+    this.templateProps.data = _data3 //
     //@ts-ignore
     nextTick(() => {
       //
@@ -912,6 +925,7 @@ export class Table extends Base {
     if (status) {
       this.globalConfig.show = true //
     } else {
+      this.globalConfig.value = '' //
       this.globalConfig.show = false
     }
   }
@@ -1270,5 +1284,73 @@ export class Table extends Base {
     }
     return tf //
   }
+  startEditCell(col, row, value) {
+    this.templateEditCell = { col: col, row: row, value: value }
+    let ins = this.getInstance()
+    ins.startEditCell(col, row, value) //
+  }
+  clearEditCell() {
+    //
+    this.templateEditCell = null //
+    let ins = this.getInstance()
+    ins.completeEditCell() ////
+  }
+  getCurrentCellEdit() {
+    let ins = this.getInstance()
+    if (
+      this.templateEditCell?.row == null ||
+      this.templateEditCell?.col == null
+    ) {
+      return null
+    }
+    let edit = ins.getEditor(
+      this.templateEditCell.col,
+      this.templateEditCell.row,
+    ) //
+    return edit
+  }
+  exportToExcel() {
+    //
+  }
+  showTableTopTool(showConfig: { row: number; col: number; content: string }) {
+    let ins = this.getInstance()
+    let rect = ins.getVisibleCellRangeRelativeRect(showConfig)
+    ins.showTooltip(showConfig.col, showConfig.row, {
+      content: showConfig.content,
+      referencePosition: { rect, placement: VTable.TYPES.Placement.top }, //TODO
+      className: 'defineTooltip',
+      disappearDelay: 100,
+      style: {
+        bgColor: 'black',
+        color: 'white',
+        //@ts-ignore
+        font: 'normal bold normal 14px/1 STKaiti',
+        arrowMark: true,
+      },
+    })
+  }
+  clearValidate() {
+    if (Object.keys(this.validateMap).length == 0) {
+      return //
+    }
+    this.validateMap = {} //
+    this.updateCanvas() //
+  }
+  async validateData(config) {}
+  blur() {
+    nextTick(() => {
+      this.clearValidate()
+      this.clearEditCell() //
+    })
+  }
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
+  getIsEditTable() {
+    let editType = this.tableState
+    if (editType == 'edit') {
+      return true
+    }
+    return false
+  }
+  copyCurrentSelectCells() {}
 }
 //

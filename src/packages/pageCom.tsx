@@ -117,13 +117,7 @@ export default defineComponent({
     if (formIns == null) {
       formIns = new PageDesign(props) //
     } else {
-      // let _props={...props}
-      // Object.entries(_props).forEach(([key, value]) => {
-      //   // let _config=formIns.config
-      //   // if(_config[key]==null&&key!=='formIns'){//
-      //   //   _config[key]=value//
-      //   // }
-      // })//
+      
     }
     provide('formIns', formIns)
     let layout = formIns.layout
@@ -243,12 +237,7 @@ export default defineComponent({
         case 3:
           state.previewVisible = true
           previewLoading.value = true
-          // setTimeout(() => {
-          //   EReditorPreviewRef.value.setData(getData());
-          //   nextTick(() => {
-          //     previewLoading.value = false;
-          //   });
-          // }, 500);
+          
           break
         case 4:
           fireEvent('save', getData())
@@ -308,95 +297,17 @@ export default defineComponent({
         deep: true,
       },
     )
-    const eve = {
-      formIns: formIns,
-      state,
-      setSelection,
-      props,
-      wrapElement,
-      delField,
-      addField, //
-      switchPlatform,
-      addFieldData,
-      canvesScrollRef,
-      fireEvent,
-      getData,
-      form,
-    } //
+    const eve = formIns //
     provide('Everright', eve)
-    provide('pageDesign', formIns) ////
-    const setPreviewRef = (ref: any) => {
-      EReditorPreviewRef.value = ref
-    }
+    provide('pageDesign', formIns) //////
     return () => {
       let nextForm = formIns.nextForm //
-      // let dialogCom = <ElDialog
-      //   destroyOnClose
-      //   fullscreen
-      //   class='previewDialog'
-      //   v-model={state.previewVisible}
-      //   onClosed={() => (previewPlatform.value = 'pc')}
-      // >
-      //   {{
-      //     header: () => (
-      //       <DeviceSwitch
-      //         modelValue={previewPlatform.value}
-      //         onUpdate:modelValue={(val) => handleOperation(7, val)}
-      //       />
-      //     ),
-      //     default: () => (
-      //       <ElScrollbar>
-
-      //       </ElScrollbar>
-      //     ),
-      //   }}
-      // </ElDialog>
       let com = (
-        <div class="h-full w-full bg-white">
-          {/* {dialogCom} */}
+        <div class="h-full w-full bg-white overflow-hidden">
           <ElContainer class="container h-full" direction="vertical">
             <ElContainer class="h-full">
               {isFoldFields.value && <fieldCom></fieldCom>}
               <ElContainer class="container h-full">
-                {/* {isFoldFields.value&&  
-              <ElHeader class='operation' style='display: flex;flex-derection: row;justify-content: space-between;'>
-                  <div>
-                    <Icon class='icon' icon='save' onClick={() => handleOperation(4)} />
-                    {props.isShowClear && <Icon class='icon' icon='clear0' onClick={() => handleOperation(2)} />}
-                    {slots['operation-left'] && slots['operation-left']()}
-                  </div>
-                  <div>
-                    <DeviceSwitch modelValue={state.platform} onUpdate:modelValue={switchPlatform} />
-                    <ElButton
-                      onClick={() => {
-                        formIns.runTestMethod()//
-                      }}
-                    >
-                      测试
-                    </ElButton>
-                  </div>
-                  <div>
-                    {slots['operation-right'] && slots['operation-right']()}
-                    {props.isShowI18n && (
-                      <ElDropdown onCommand={(command) => fireEvent('lang', command)}>
-                        <Icon class='icon' icon='language' />
-                        {{
-                          dropdown: () => (//
-                            <ElDropdownMenu>
-                              <ElDropdownItem command='zh-cn' disabled={lang.value === 'zh-cn'}>
-                                中文
-                              </ElDropdownItem>
-                              <ElDropdownItem command='en' disabled={lang.value === 'en'}>
-                                English
-                              </ElDropdownItem>
-                            </ElDropdownMenu>
-                          ),
-                        }}
-                      </ElDropdown>
-                    )}
-                    <Icon class='icon' icon='preview' onClick={() => handleOperation(3)} />
-                  </div>
-                </ElHeader>} */}
                 {isShow.value &&
                   withDirectives(<CanvesPanel data={state.store} />, [
                     [vClickOutside, onClickOutside],
@@ -405,7 +316,6 @@ export default defineComponent({
               {isFoldConfig.value && <ConfigPanel />}
             </ElContainer>
           </ElContainer>
-          {/* <Everright-form-editor></Everright-form-editor> */}
         </div>
       )
       if (nextForm != null) {

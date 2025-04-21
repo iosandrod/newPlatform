@@ -196,7 +196,8 @@ export default defineComponent({
             ref={register}
             style={{
               flex: 1,
-            }}
+              height: '100%',//
+            }}//
             {...props} //
             modelValue={_input.getModelValue()}
           ></VxeInput>
