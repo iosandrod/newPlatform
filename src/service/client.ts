@@ -91,7 +91,7 @@ export class myHttp {
             reject(error)
           }
           let _data1 = _data
-          resolve (_data1) //
+          resolve(_data1) //
         },
       )
     })
@@ -112,6 +112,24 @@ export class myHttp {
       )
     })
   }
+  async patch(tableName, params = {}, query = {}): Promise<any> {
+    let connection = this.client.get('connection')
+    return new Promise((resolve, reject) => {
+      connection.emit(
+        'update', //
+        tableName,
+        params, //
+        query,
+        (data, err) => {
+          if (err) {
+            reject(err)
+          } //
+          resolve(data?.data || {}) //
+        },
+      )
+    })
+  }
+  async delete(tableName, params = {}, query = {}) {}
 }
 
 export const http = new myHttp()

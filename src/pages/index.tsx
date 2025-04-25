@@ -129,11 +129,11 @@ export default defineComponent({
                     },
                   },
                   {
-                    label:'test4',
+                    label: 'test4',
                     fn: async () => {
-                      
-                    }
-                  }
+                      let currentPage = systemIns.getCurrentPageDesign() //
+                    },
+                  },
                 ]}
               ></er-button-group>
             </div>
