@@ -1,15 +1,4 @@
-import {
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  provide,
-  ref,
-  toRaw,
-  vShow,
-  watch,
-  watchEffect,
-  withDirectives,
-} from 'vue'
+import { defineComponent, onMounted, onUnmounted, provide, ref, toRaw, vShow, watch, watchEffect, withDirectives } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { Table } from './table'
@@ -68,6 +57,10 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    tableState: {
+      type: String,
+      default: 'scan',
+    },
     checkboxChange: {
       type: Function,
     },
@@ -92,6 +85,12 @@ export default defineComponent({
     })
     watchEffect(() => {
       tableIns.loadColumns()
+    })
+    watchEffect(() => {
+      let tableState = props.tableState //
+      if (['scan', 'edit'].includes(tableState)) {
+        tableIns.setTableState(tableState as any) ////
+      }
     })
     watchEffect(() => {
       tableIns.loadData() //
@@ -119,7 +118,7 @@ export default defineComponent({
       },
       (e) => {
         tableIns.updateColumns()
-      },
+      }
     ) //
     watch(
       () => {
@@ -128,7 +127,7 @@ export default defineComponent({
       (e) => {
         //
         tableIns.updateFooterColumns()
-      },
+      }
     )
     // watch(
     //   () => {
@@ -148,7 +147,7 @@ export default defineComponent({
       },
       {
         deep: true,
-      },
+      }
     )
     provide('tableIns', tableIns)
     const inputProps = tableIns.getGlobalSearchProps()
@@ -160,13 +159,7 @@ export default defineComponent({
     }
     return () => {
       let com = null
-      com = withDirectives(
-        <div
-          style={{ width: '100%', height: '100%' }}
-          ref={registerRootDiv}
-        ></div>,
-        [],
-      ) //
+      com = withDirectives(<div style={{ width: '100%', height: '100%' }} ref={registerRootDiv}></div>, []) //
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
       if (props.showHeaderButton == false) {
@@ -221,7 +214,7 @@ export default defineComponent({
             }}
           ></InputCom>
         </div>,
-        [[vShow, tableIns.globalConfig.show]],
+        [[vShow, tableIns.globalConfig.show]]
       )
       let calCom = withDirectives(
         <div
@@ -234,7 +227,7 @@ export default defineComponent({
           }}
           ref={registerFooterDiv}
         ></div>,
-        [[vShow, tableIns.getShowCalColumns()]],
+        [[vShow, tableIns.getShowCalColumns()]]
       )
       let calDiv = withDirectives(
         <div
@@ -242,7 +235,7 @@ export default defineComponent({
             height: '50px',
           }}
         ></div>,
-        [[vShow, tableIns.getShowCalColumns()]],
+        [[vShow, tableIns.getShowCalColumns()]]
       )
       let outCom = (
         <div

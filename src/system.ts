@@ -13,15 +13,8 @@ export class System extends Base {
   } //
   pageLayout = [] //
   selectOptions = {}
-  /*************  ✨ Windsurf Command ⭐  *************/
-  /**
-   * login
-   * @description login
-   * @returns {Promise<void>}
-   */
-  /*******  7f3c90cf-03e0-4ca7-9500-28a98548d915  *******/
   tableMap: { [key: string]: PageDesign } = {} //
-  async login() {}
+  async login() { }
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient()
@@ -29,17 +22,17 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = d //
     return d //
   }
-  getCurrentShowPage() {} //
-  buildMenuTree(rows) {}
+  getCurrentShowPage() { }
+  buildMenuTree(rows) { }
   getClient(): myHttp {
     return http
   }
-  getMenuProps() {}
+  getMenuProps() { }
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) {}
+  _getCacheValue(key) { }
   getTabItems() {
     return [
       {
@@ -50,7 +43,7 @@ export class System extends Base {
       },
     ] //
   }
-  openPageDesign(config) {}
+  openPageDesign(config) { }
   async getDefaultPageLayout(name?: string) {
     let http = this.getHttp()
     let _data = await http.post(
@@ -68,7 +61,7 @@ export class System extends Base {
       'entity',
       'find', //
       { tableName: name },
-    )
+    )//
     let row = data[0]
     return row //
   }
@@ -87,9 +80,9 @@ export class System extends Base {
     let _res = await http.patch('entity', { tableName, ...config })
     console.log(_res, 'updatePageLayout') //
   }
-  deletePageLayout(tableName, config) {}
-  getCurrentPageDesign() {}
-  getCurrentPageName() {}
+  deletePageLayout(tableName, config) { }
+  getCurrentPageDesign() { }
+  getCurrentPageName() { }
   routeOpen(config: any) {
     if (typeof config == 'string') {
       config = {
@@ -99,13 +92,6 @@ export class System extends Base {
     let router = this.getRouter()
     let tableName = config.tableName
     router.push(`/${tableName}`) //
-    // let allRouter = router.getRoutes()
-    // let tableName = config.tableName
-    // router.addRoute({
-    //   path: '/:tableName',
-    //   name: 'pageDesign',
-    //   component: () => import('@ER/pageDesign'),
-    // })//
   }
   async createPageDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {
@@ -114,7 +100,7 @@ export class System extends Base {
       }
     }
     let tableName = config.tableName
-    let layoutConfig = await this.getDefaultPageLayout(tableName) //
+    let layoutConfig = await this.getPageLayout(tableName) //
     let _props = getDefaultPageProps()
     let obj = {}
     let _design = this.tableMap[tableName]

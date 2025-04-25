@@ -1,29 +1,6 @@
 import { defineComponent, withDirectives } from 'vue'
-import {
-  ClickOutside as vClickOutside,
-  ElMessage,
-  ElDialog,
-  ElScrollbar,
-  ElContainer,
-  ElHeader,
-  ElDropdown,
-  ElDropdownMenu,
-  ElDropdownItem,
-  ElButton,
-} from 'element-plus'
-import {
-  defineProps,
-  defineEmits,
-  ref,
-  reactive,
-  computed,
-  provide,
-  getCurrentInstance,
-  nextTick,
-  onMounted,
-  watch,
-  defineExpose,
-} from 'vue'
+import { ClickOutside as vClickOutside, ElMessage, ElDialog, ElScrollbar, ElContainer, ElHeader, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus'
+import { defineProps, defineEmits, ref, reactive, computed, provide, getCurrentInstance, nextTick, onMounted, watch, defineExpose } from 'vue'
 import fieldMenu from '@/menu/fieldCom'
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
@@ -117,7 +94,6 @@ export default defineComponent({
     if (formIns == null) {
       formIns = new PageDesign(props) //
     } else {
-      
     }
     provide('formIns', formIns)
     let layout = formIns.layout
@@ -180,7 +156,7 @@ export default defineComponent({
       () => props.data,
       (val) => {
         formIns.setData(val) //
-      },
+      }
     )
     const isShowConfig = computed({
       get: () => {
@@ -192,18 +168,10 @@ export default defineComponent({
     })
     let setSelection = formIns.setSelection.bind(formIns) //
     setSelection(state.config)
-    const addField = formIns.addField.bind(formIns)
-    const delField = formIns.delField.bind(formIns)
-    const addFieldData = formIns.addFieldData.bind(formIns) //
-    const wrapElement = formIns.wrapElement.bind(formIns)
-    const syncLayout = formIns.syncLayout.bind(formIns)
-    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(
-      formIns,
-    )
     const switchPlatform = formIns.switchPlatform.bind(formIns)
-    const canvesScrollRef = ref('') //
     const fireEvent = (type, data) => {
       emit('listener', {
+        //
         type, //
         data,
       })
@@ -237,7 +205,7 @@ export default defineComponent({
         case 3:
           state.previewVisible = true
           previewLoading.value = true
-          
+
           break
         case 4:
           fireEvent('save', getData())
@@ -275,7 +243,7 @@ export default defineComponent({
       },
       {
         immediate: true, //
-      },
+      }
     )
     watch(
       () => state.selected,
@@ -285,7 +253,7 @@ export default defineComponent({
       {
         deep: true,
         immediate: true,
-      },
+      }
     )
     const onClickOutside = () => {}
     watch(
@@ -295,7 +263,7 @@ export default defineComponent({
       (newValue) => {},
       {
         deep: true,
-      },
+      }
     )
     const eve = formIns //
     provide('Everright', eve)
@@ -307,12 +275,7 @@ export default defineComponent({
           <ElContainer class="container h-full" direction="vertical">
             <ElContainer class="h-full">
               {isFoldFields.value && <fieldCom></fieldCom>}
-              <ElContainer class="container h-full">
-                {isShow.value &&
-                  withDirectives(<CanvesPanel data={state.store} />, [
-                    [vClickOutside, onClickOutside],
-                  ])}
-              </ElContainer>
+              <ElContainer class="container h-full">{isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}</ElContainer>
               {isFoldConfig.value && <ConfigPanel />}
             </ElContainer>
           </ElContainer>

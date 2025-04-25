@@ -2,7 +2,7 @@ import io from 'socket.io-client'
 import socketio from '@feathersjs/socketio-client'
 import { feathers } from '@feathersjs/feathers'
 import auth from '@feathersjs/authentication-client'
-export class Client {}
+export class Client { }
 //
 export type createConfig = {}
 export const createClient = (config) => {
@@ -107,6 +107,7 @@ export class myHttp {
           if (err) {
             reject(err)
           } //
+          // console.log('数据获取成功', data)//
           resolve(data?.data || {}) //
         },
       )
@@ -129,7 +130,13 @@ export class myHttp {
       )
     })
   }
-  async delete(tableName, params = {}, query = {}) {}
+  async delete(tableName, params = {}, query = {}) { }
+  async getPageLayout(navName) {
+    let data = await this.get('entity', 'find', {
+      tableName: navName
+    })
+    return data//
+  }
 }
 
 export const http = new myHttp()

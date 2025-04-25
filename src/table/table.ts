@@ -80,11 +80,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-    x: 0,
-    y: 0,
-    width: 0,
-    filterConfig: [],
-  }
+      x: 0,
+      y: 0,
+      width: 0,
+      filterConfig: [],
+    }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -115,6 +115,9 @@ export class Table extends Base {
     data: [],
     showData: [], //
     curRow: null,
+  }
+  setTableState(state: 'edit' | 'scan') {
+    if (['edit', 'scan'].includes(state)) this.tableState = state//
   }
   @useRunAfter()
   @useTimeout({ number: 30, key: 'setCurRow' }) ////
@@ -203,7 +206,7 @@ export class Table extends Base {
     }) ////
     this.tableData.data = data
   }
-  getTableName() {}
+  getTableName() { }
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
@@ -212,7 +215,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() {}
+  getListTableOption() { }
   createInstance(rootDiv) {
     let _this = this
     let showRowSeriesNumber = this.config.showRowSeriesNumber
@@ -578,7 +581,7 @@ export class Table extends Base {
     mouseenter_cell(this) //
   }
 
-  setCurTableSelect() {}
+  setCurTableSelect() { }
   openContextMenu(config) {
     //
     const event: PointerEvent = config.event
@@ -750,7 +753,7 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) {}
+  async runBefore(config?: any) { }
   //@ts-ignore
   getAfterMethod(name: string, _static = false) {
     if (_static) {
@@ -789,7 +792,7 @@ export class Table extends Base {
       return null
     }
   }
-  registerHooks(hConfig?: any) {}
+  registerHooks(hConfig?: any) { }
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -804,7 +807,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) {}
+  setMergeConfig(config?: any) { }
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -858,7 +861,7 @@ export class Table extends Base {
       return
     } else {
       let columns = this.columns
-      columns.forEach((item) => {})
+      columns.forEach((item) => { })
       instance.release()
       this.instance = null //
     }
@@ -1352,14 +1355,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) {}
+  async validateData(config) { }
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1367,6 +1370,6 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() {}
+  copyCurrentSelectCells() { }
 }
 //

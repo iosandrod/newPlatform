@@ -16,11 +16,7 @@ export class PageDesign extends Form {
   } //
   init(): void {
     super.init()
-    nextTick(async () => {
-      // let system = this.getSystem()
-      // let tableConfig = await system.getDefaultPageLayout(this.tableName) //
-      // console.log(tableConfig, 'tableConfig') //
-    })
+
   }
   setItems(items: any, setLayout?: boolean): void {
     this.items.splice(0) //
@@ -45,6 +41,7 @@ export class PageDesign extends Form {
     }
   }
   addFormItem(config): any {
+    // console.log(config, 'test_config')//
     let _item = new PageDesignItem(config, this) //
     //@ts-ignore
     this.items.push(_item)
@@ -70,7 +67,7 @@ export class PageDesign extends Form {
   getValidateRules() {
     return []
   }
-  async getTableData() {} //
-  async createTableData() {}
-  async updateTableData() {}
+  async getTableData() { } //
+  async createTableData() { }
+  async updateTableData() { }
 }

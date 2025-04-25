@@ -6,78 +6,15 @@ import _ from 'lodash'
 import { tableConfig } from '@/table/tableData'
 export default defineComponent({
   name: 'entityPc', //
-  props: ['data', 'params'], //
+  props: ['data', 'params', 'item'], //
   setup(props, attrs) {
     const formIns: PageDesign = inject('formIns') //
     const formitem: PageDesignItem = props.params.formitem
     const config = formitem.config //
     const _tableConfig: any = _.cloneDeep(tableConfig)
+    console.log(props, 'testProps') //
     const pageDesign: PageDesign = inject('pageDesign')
-    // _tableConfig.data = [
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    //   ..._.cloneDeep(_tableConfig.data),
-    // ]
+    //只能有个一个pageDesign//
     const registerTable = (ins) => {
       pageDesign.registerRef('table', ins)
     } //

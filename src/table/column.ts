@@ -54,8 +54,8 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   }
-  setHidden(bool) {} //
-  getFormitem() {} //
+  setHidden(bool) { } //
+  getFormitem() { } //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -565,6 +565,11 @@ export class Column extends Base {
     return type
   }
   getIsEditField() {
+    let table = this.table
+    let isEdit = table.getIsEditTable()
+    if (isEdit == false) {
+      return false//
+    }
     let editType = this.getEditType()
     if (editType) {
       return true
