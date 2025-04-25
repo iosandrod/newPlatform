@@ -46,8 +46,10 @@ export class CheckboxColumn extends Column {
   getColumnProps(isFooter = false) {
     let _this = this
     let _props: CheckboxColumnDefine = super.getColumnProps()
-    delete _props.customLayout //
+    // delete _props.customLayout //
     _props.showSort = false //
+    //@ts-ignore
+    _props.cellType = 'text' //
     _props.headerIcon = undefined //
     _props.width = 60
     _props.checked = (config) => {
@@ -55,8 +57,9 @@ export class CheckboxColumn extends Column {
       let table: VTable.ListTable = config.table
       let row = table.getRecordByCell(config.col, config.row)
       let checkboxField = row?.checkboxField //
+      console.log(checkboxField, 'testCheckbo') ////
       return checkboxField //
-    }
+    } //
     _props.disable = (config) => {
       let table = config.table
       let row = table.getRecordByCell(config.col, config.row)
@@ -110,8 +113,48 @@ export class CheckboxColumn extends Column {
     }
     if (isFooter) {
       _props.headerCustomLayout = null //
+    } //
+    _props.customLayout = (args) => {
+      const { table, row, col, rect } = args
+      const { height, width } = rect ?? table.getCellRect(col, row)
+      let rows = table.getRecordByCell(col, row)
+      const container = createGroup({
+        height,
+        width,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      })
+      const checkboxGroup = createGroup({
+        display: 'flex',
+        flexDirection: 'column',
+        boundsPadding: [0, 0, 0, 0],
+        justifyContent: 'center', //
+      })
+      container.appendChild(checkboxGroup)
+      const checkbox1 = new CheckBox({
+        text: {
+          text: '', //
+        },
+        disabled: false, //
+        checked: Boolean(rows.checkboxField), //
+        boundsPadding: [0, 0, 0, 0],
+      }) //
+      checkbox1.render()
+      checkboxGroup.appendChild(checkbox1)
+      checkbox1.addEventListener('checkbox_state_change', (e) => {
+        // const target = e.target ////
+        // let attributes = target.attribute //
+        // let checked = attributes.checked
+        // let rows = table.getRecordByCell(col, row)
+        // _this.table.updateCheckboxField([rows], checked) //
+      }) //
+      return {
+        rootContainer: container,
+        renderDefault: false,
+      }
     }
-    // _props.disableSelect = true //
     return _props //
   }
 }

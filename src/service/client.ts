@@ -57,7 +57,7 @@ export const client = createClient({})
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
-  async post(tableName, method, params = {}, query = {}) {
+  async post(tableName, method, params = {}, query = {}): Promise<any> {
     //
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
@@ -67,34 +67,47 @@ export class myHttp {
         params,
         query,
         (data, err) => {
+          let isError = false
+          let error = null
+          let _data = null
           if (defaultMethod.includes(method)) {
             if (err) {
-              reject(err)
+              isError = true
+              error = err
+            } else {
+              isError = false
+              _data = data?.data || {}
             }
-            resolve(data)
           } else {
             if (data) {
-              reject(data)
+              isError = true
+              error = data
+            } else {
+              isError = false
+              _data = err?.data || {}
             }
-            resolve(err) //
           }
+          if (isError == true) {
+            reject(error)
+          }
+          let _data1 = _data
+          resolve (_data1) //
         },
       )
     })
   }
-  async get(tableName, method, query) {
+  async get(tableName, method, query?: any): Promise<any> {
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(
         method, //
         tableName, //
-        {},
         query,
-        (data, err) => {
+        (err, data) => {
           if (err) {
             reject(err)
-          }
-          resolve(data)
+          } //
+          resolve(data?.data || {}) //
         },
       )
     })

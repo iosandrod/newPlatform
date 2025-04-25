@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import { Client, client as _client } from './service/client'
+import { Client, client as _client, http, myHttp } from './service/client'
 import { Base } from '@ER/base'
 import { cacheValue } from '@ER/utils/decoration'
 import { PageDesign } from '@ER/pageDesign'
@@ -20,20 +20,19 @@ export class System extends Base {
    * @returns {Promise<void>}
    */
   /*******  7f3c90cf-03e0-4ca7-9500-28a98548d915  *******/
-  tableMap:{ [key: string]: PageDesign } = {} //
+  tableMap: { [key: string]: PageDesign } = {} //
   async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient()
-    let s = await client.service('navs') //所有表格////
-    let d = await s.find()
+    let d = await client.get('navs', 'find') ////
     this.systemConfig.menuConfig.items = d //
     return d //
   }
   getCurrentShowPage() {} //
   buildMenuTree(rows) {}
-  getClient() {
-    return _client
+  getClient(): myHttp {
+    return http
   }
   getMenuProps() {}
   getMenuItems() {
@@ -59,13 +58,31 @@ export class System extends Base {
       'getDefaultPageLayout',
       {
         tableName: name,
-      },
-      {
-        query: 1, //
-      },
-    ) ////
+      }, //
+    ) //
     return _data //
   }
+  async getPageLayout(name?: string) {
+    let http = this.getHttp()
+    let data = await http.get(
+      'entity',
+      'find', //
+      { tableName: name },
+    )
+    let row = data[0]
+    return row //
+  }
+  async addPageLayout(tableName, config) {
+    let http = this.getHttp()
+    let data = await http.post(
+      'entity',
+      'create', //
+      { tableName, ...config }, //
+    )
+    return data //
+  }
+  getCurrentPageDesign() {}
+  getCurrentPageName() {}
   routeOpen(config: any) {
     if (typeof config == 'string') {
       config = {

@@ -29,7 +29,7 @@ export default defineComponent({
       if (show.value == false) {
         return null
       }
-      return <PageCom isDesign={true} formIns={en}></PageCom>
+      return <PageCom isDesign={false} formIns={en}></PageCom>
     }
   },
 })

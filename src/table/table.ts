@@ -119,11 +119,14 @@ export class Table extends Base {
   @useRunAfter()
   @useTimeout({ number: 30, key: 'setCurRow' }) ////
   setCurRow(row, isDb = false) {
-    // console.log('setCurRow', isDb) ////
+    let oldCurRow = this.tableData.curRow || {}
     if (toRaw(row) == toRaw(this.tableData.curRow)) return //
     this.tableData.curRow = row //
-    this.timeout['updateCanvas__now'] = true //
-    this.updateCanvas() //
+    let oldIndex = oldCurRow._index || ''
+    let newIndex = row._index || ''
+    this.timeout['updateRecords__now'] = true //
+    this.updateIndexArr.add(oldIndex)
+    this.updateIndexArr.add(newIndex) //
   } //
   getCurRow() {
     return this.tableData.curRow //
@@ -194,6 +197,9 @@ export class Table extends Base {
         }, '')
         e['_shtml'] = _v
       }
+      if (e['checkboxField'] == null) {
+        // e['checkboxField'] = true
+      } //
     }) ////
     this.tableData.data = data
   }
@@ -434,8 +440,13 @@ export class Table extends Base {
     }
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
+      console.log(_arr) //
       tableIns.getInstance().updateRecords(_arr, _iArr) //
     }
+  }
+  updateCheckboxRecords() {
+    let ins = this.getInstance()
+    // ins.setCellCheckboxState('')
   }
   setSortState(config) {
     if (!Array.isArray(config)) {
@@ -657,6 +668,7 @@ export class Table extends Base {
     }
   } //
   loadData(loadConfig?: any) {
+    console.log('数据发生了更新') //
     let data = this.getShowData() //
     let sortState = this.sortCache
     let _data = data
@@ -867,7 +879,7 @@ export class Table extends Base {
       return
     }
     let records = data || instance.records //
-    let d = Date.now().toString()
+    console.log('我又更新了视图了') //
     instance.setRecords(records) //////
   }
   addAfterMethod(config) {
@@ -1021,6 +1033,7 @@ export class Table extends Base {
       return
     } //
     rows.forEach((row) => {
+      let oldStatus = row.checkboxField
       if (row == null) {
         return //
       }
@@ -1029,6 +1042,9 @@ export class Table extends Base {
       } else {
         row.checkboxField = !row.checkboxField //
       }
+      if (oldStatus != row.checkboxField) {
+        this.updateIndexArr.add(row._index) //
+      }
     }) //
     let resRow = this.getShowRecords()
     if (
@@ -1036,7 +1052,7 @@ export class Table extends Base {
         return item.checkboxField
       })
     ) {
-      this.isCheckAll = true
+      this.isCheckAll = true //
     } else {
       this.isCheckAll = false //
     }

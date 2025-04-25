@@ -147,7 +147,7 @@ export const selected_cell = (table: Table) => {
             //@ts-ignore
             table.permission.canChangecheckbox = true
           }, 0)
-          table.updateCanvas() //
+          // table.updateCanvas() //
         }
       }
     },
@@ -269,6 +269,9 @@ export const mouseenter_cell = (table: Table) => {
       const { col, row, targetIcon } = args
       const rect = tableInstance.getVisibleCellRangeRelativeRect({ col, row })
       if (table.getIsEditTable()) {
+        if (col == 0 && row == 0) {
+          return //
+        }
         let field = tableInstance.getBodyField(col, row)
         let record = tableInstance.getRecordByCell(col, row)
         let _index = record?._index

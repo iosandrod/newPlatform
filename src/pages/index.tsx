@@ -81,14 +81,7 @@ export default defineComponent({
           }}
         ></tabCom>
       )
-      const allShowEntity = systemIns.getShowEntityArr() //
-      let _showCom = allShowEntity.map((item: any) => {
-        //
-        let _com = (
-          <PageCom isDesign={false} key={item.id} formIns={item}></PageCom>
-        )
-        return _com
-      })
+
       return (
         <div
           class={ns.b()}
@@ -121,6 +114,26 @@ export default defineComponent({
                       })
                     },
                   },
+                  {
+                    label: 'test2',
+                    fn: async () => {
+                      let d = Object.values(systemIns.tableMap).pop()
+                      let _data = d.getLayoutData() //
+                      console.log(_data, 'data') //
+                    },
+                  },
+                  {
+                    label: 'test3',
+                    fn: async () => {
+                      await systemIns.getPageLayout('t_SdOrder') // //
+                    },
+                  },
+                  {
+                    label:'test4',
+                    fn: async () => {
+                      
+                    }
+                  }
                 ]}
               ></er-button-group>
             </div>
@@ -129,6 +142,9 @@ export default defineComponent({
                 v-slots={{
                   default: (config) => {
                     let { Component, route } = config
+                    if (Component == null) {
+                      return <div></div>
+                    }
                     let FullPath = route.fullPath
                     return <Component key={FullPath}></Component>
                   },

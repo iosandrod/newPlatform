@@ -74,22 +74,12 @@ export default defineComponent({
   },
   setup(props, { slots, attrs, emit, expose }) {
     const tableIns = new Table(props)
-    // setInterval(() => {
-    //   tableIns.updateCanvas() //
-    // }, 3000)
     expose(tableIns) //
     provide('tableIns', tableIns)
     onMounted(() => {
       tableIns.onMounted() //
     })
-    // let _refDiv = ref(null)
-    // useResizeObserver(_refDiv, (entries) => {
-    //   const entry = entries[0]
-    //   const { width: w, height: h } = entry.contentRect
-    // })
     const registerRootDiv = (el) => {
-      // _refDiv.value = el
-      // tableIns.registerRef('root', el) //注册实例//
       tableIns.registerRef('root', el) //注册实例//
     } //
     onMounted(() => {
@@ -140,15 +130,15 @@ export default defineComponent({
         tableIns.updateFooterColumns()
       },
     )
-    watch(
-      () => {
-        let tableData = { ...tableIns.tableData }
-        return tableData //
-      },
-      (e) => {
-        tableIns.updateCanvas() //
-      },
-    )
+    // watch(
+    //   () => {
+    //     let tableData = { ...tableIns.tableData }
+    //     return tableData //
+    //   },
+    //   (e) => {
+    //     tableIns.updateCanvas() //
+    //   },
+    // )
     watch(
       () => {
         return tableIns.tableConfig
