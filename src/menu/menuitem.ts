@@ -112,6 +112,11 @@ export class MenuItem extends Base {
       return [this, ...menuitems.map((item) => item.getSubMenuItems()).flat()] //
     }
   }
+  getDisabled() {
+    let config = this.config //
+    let disabled = config.disabled //
+    return disabled //
+  }
 }
 /* 
 这个警告是什么

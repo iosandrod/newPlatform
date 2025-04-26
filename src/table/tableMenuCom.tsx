@@ -8,15 +8,16 @@ export default defineComponent({
   name: 'tableMenuCom',
   setup() {
     const tableIns: Table = inject('tableIns')
-    const items = [
-      {
-        label: '复制', //
-        fn: async () => {
-          tableIns.copyCurrentCell() //
-        },
-      },
-    ]
+    // const items = [
+    //   {
+    //     label: '复制', //
+    //     fn: async () => {
+    //       tableIns.copyCurrentCell() //
+    //     },
+    //   },
+    // ]
     return () => {
+      const items=tableIns.contextItems
       let com = <ContextmenuCom ref={(e) => tableIns.registerRef('contextmenu', e)} items={items}></ContextmenuCom>
       return com
     }

@@ -14,7 +14,7 @@ export class System extends Base {
   pageLayout = [] //
   selectOptions = {}
   tableMap: { [key: string]: PageDesign } = {} //
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient()
@@ -22,17 +22,17 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = d //
     return d //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabItems() {
     return [
       {
@@ -43,7 +43,7 @@ export class System extends Base {
       },
     ] //
   }
-  openPageDesign(config) { }
+  openPageDesign(config) {}
   async getDefaultPageLayout(name?: string) {
     let http = this.getHttp()
     let _data = await http.post(
@@ -61,7 +61,7 @@ export class System extends Base {
       'entity',
       'find', //
       { tableName: name },
-    )//
+    ) //
     let row = data[0]
     return row //
   }
@@ -77,12 +77,21 @@ export class System extends Base {
   async updatePageLayout(tableName, config) {
     //
     let http = this.getHttp() //
-    let _res = await http.patch('entity', { tableName, ...config })
-    console.log(_res, 'updatePageLayout') //
+    let _res = await http.patch('entity', { tableName, ...config }) //
   }
-  deletePageLayout(tableName, config) { }
-  getCurrentPageDesign() { }
-  getCurrentPageName() { }
+  deletePageLayout(tableName, config) {}
+  getCurrentPageDesign() {
+    let tableName = this.getCurrentPageName()
+    let design = this.tableMap[tableName]
+    return design //
+  }
+  getCurrentPageName() {
+    let router = this.getRouter()
+    let currentRoute = router.currentRoute
+    let p = currentRoute.path
+    let _tableName = p.split('/').pop()
+    return _tableName
+  }
   routeOpen(config: any) {
     if (typeof config == 'string') {
       config = {

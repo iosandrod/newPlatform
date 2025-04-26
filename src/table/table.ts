@@ -31,6 +31,7 @@ import {
   icon_click,
   mousedown_cell,
   mouseenter_cell,
+  mouseleave_cell,
   resize_column,
   scroll,
   selected_cell,
@@ -45,6 +46,8 @@ import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { createFooterTheme, createTheme } from './tableTheme' //
 export class Table extends Base {
+  contextItems: any[] = []
+  disableColumnResize = false
   tableState: 'edit' | 'scan' = 'edit'
   templateEditCell: { col?: number; row?: number; value?: any } = {}
   currentResizeField: string
@@ -80,11 +83,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-      x: 0,
-      y: 0,
-      width: 0,
-      filterConfig: [],
-    }
+    x: 0,
+    y: 0,
+    width: 0,
+    filterConfig: [],
+  }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -117,7 +120,7 @@ export class Table extends Base {
     curRow: null,
   }
   setTableState(state: 'edit' | 'scan') {
-    if (['edit', 'scan'].includes(state)) this.tableState = state//
+    if (['edit', 'scan'].includes(state)) this.tableState = state //
   }
   @useRunAfter()
   @useTimeout({ number: 30, key: 'setCurRow' }) ////
@@ -174,6 +177,7 @@ export class Table extends Base {
     this.initSortState()
     this.initCheckboxColumn()
     this.initGlobalSearch()
+    this.initCurrentContextItems() //
   }
   initCheckboxColumn() {
     let _col = new CheckboxColumn({ field: 'checkboxField' }, this) //
@@ -188,25 +192,11 @@ export class Table extends Base {
   }
   setData(data) {
     data.forEach((e) => {
-      if (e['_index'] == null) {
-        e._index = this.uuid()
-        this.dataMap[e._index] = e
-      }
-      if (e['_shtml'] == null) {
-        let _v = Object.entries(e).reduce((res, [k, v]) => {
-          if (k === '_index') return res //
-          res += `${v}  ^^^`
-          return res
-        }, '')
-        e['_shtml'] = _v
-      }
-      if (e['checkboxField'] == null) {
-        // e['checkboxField'] = true
-      } //
-    }) ////
+      this.initDataRow(e)
+    })
     this.tableData.data = data
   }
-  getTableName() { }
+  getTableName() {}
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
@@ -215,7 +205,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   createInstance(rootDiv) {
     let _this = this
     let showRowSeriesNumber = this.config.showRowSeriesNumber
@@ -243,11 +233,11 @@ export class Table extends Base {
       theme: createTheme() as any,
       defaultRowHeight: 30,
       heightMode: 'standard', //
-      defaultHeaderRowHeight: 30, //
+      defaultHeaderRowHeight: 40, //
       container: rootDiv, //
       editCellTrigger: 'api',
       select: {
-        highlightMode: 'cell', //
+        highlightMode: 'cell',
         headerSelectMode: 'cell', //
         highlightInRange: true, //
         disableHeaderSelect: true,
@@ -264,7 +254,9 @@ export class Table extends Base {
       },
       //头部的
     }) //
+    // table.on('le', (config) => {})
     const emitEventArr = [
+      'mouseleave_cell',
       'mouseenter_cell',
       'mousedown_cell',
       'resize_column',
@@ -579,14 +571,29 @@ export class Table extends Base {
     checkboxChange(this) //
     resize_column(this)
     mouseenter_cell(this) //
+    mouseleave_cell(this) //
   }
-
-  setCurTableSelect() { }
+  initCurrentContextItems() {
+    let items = [
+      {
+        label: '复制',
+        visible: true,
+      },
+      {
+        label: '删除',
+        visible: false,
+      },
+      {
+        label: '编辑',
+        disabled: true, //
+        visible: true,
+      },
+    ]
+    this.contextItems = items
+  }
+  setCurTableSelect() {}
   openContextMenu(config) {
-    //
     const event: PointerEvent = config.event
-    let x = event.x
-    let y = event.y
     let contextmenu: BMenu = this.getRef('contextmenu')
     contextmenu.open(event) //
   }
@@ -753,7 +760,7 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   //@ts-ignore
   getAfterMethod(name: string, _static = false) {
     if (_static) {
@@ -792,7 +799,7 @@ export class Table extends Base {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -807,7 +814,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) { }
+  setMergeConfig(config?: any) {}
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -822,22 +829,12 @@ export class Table extends Base {
       }
     }
     _arr.forEach((item) => {
-      let _index = item._index
-      if (_index == null) {
-        item._index = this.uuid()
-        this.dataMap[item._index] = item //
-      } //
-      if (item['_shtml'] == null) {
-        let _v = Object.entries(item).reduce((res, [k, v]) => {
-          res += `${v}  ^^^`
-          return res
-        }, '')
-        item['_shtml'] = _v //
-      }
+      item['_rowState'] = 'add' //
+      this.initDataRow(item)
     })
     for (const row of _arr) {
       this.addRow(row)
-    }
+    } //
     let data = this.getData()
     let lastD = data[data.length - 1]
     this.setCurRow(lastD)
@@ -861,7 +858,7 @@ export class Table extends Base {
       return
     } else {
       let columns = this.columns
-      columns.forEach((item) => { })
+      columns.forEach((item) => {})
       instance.release()
       this.instance = null //
     }
@@ -945,15 +942,18 @@ export class Table extends Base {
     }
   }
   openColumnFilter(config) {
-    let col = config.col
-    let row = config.row
+    // debugger//
     let ins = this.getInstance()
+    let _col = ins.getColAt(config.canvas.x)
+    let _row = ins.getRowAt(config.canvas.y)
+    let col = _col.col
+    let row = _row.row //
     let field: string = ins.getBodyField(col, row) as any
     let tColumn = this.getFlatColumns().find((col) => col.getField() == field)
     let width = tColumn.getColumnWidth()
     this.columnFilterConfig.width = width + 60 //
-    let event = config.event
-    let client = event.client
+    // let event = config.event
+    let client = config.client
     let x = client.x
     let y = client.y
     let oldColumnFilter = this.currentFilterColumn
@@ -1020,6 +1020,14 @@ export class Table extends Base {
       }
       this.setCurRow(_row) //
     })
+  }
+  getDisableColumnResize() {
+    let config = this.config
+    let disableColumnResize = config.disableColumnResize
+    if (disableColumnResize == null) {
+      return this.disableColumnResize
+    }
+    return disableColumnResize
   }
   updateCheckboxAll(e) {
     let _this = this ////
@@ -1355,14 +1363,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) { }
+  async validateData(config) {}
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1370,6 +1378,38 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() { }
+  copyCurrentSelectCells() {}
+  headerSortClick(config: any) {
+    let sortState = this.sortCache
+    let hasSort = sortState.findIndex((s) => s.field == config.field) //
+    if (hasSort != -1) {
+      sortState.splice(hasSort, 1)
+      let newState = [...sortState]
+      this.setSortState(newState) //
+      return
+    }
+    sortState.push(config) //
+    let newState = [...sortState]
+    this.setSortState(newState)
+  }
+  initDataRow(row) {
+    let e = row
+    if (e['_index'] == null) {
+      e._index = this.uuid()
+      this.dataMap[e._index] = e
+    }
+    if (e['_shtml'] == null) {
+      let _v = Object.entries(e).reduce((res, [k, v]) => {
+        if (k === '_index') return res //
+        res += `${v}  ^^^`
+        return res
+      }, '')
+      e['_shtml'] = _v
+    }
+    let rowState = e['_rowState'] //
+    if (rowState == null) {
+      e['_rowState'] = 'unChange'
+    } //
+  }
 }
 //

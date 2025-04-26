@@ -40,6 +40,9 @@ export class CheckboxColumn extends Column {
   getType() {
     return 'checkbox'
   }
+  getDisableColumnResize() {
+    return true //
+  }
   getField() {
     return 'checkboxField' //
   }

@@ -83,7 +83,10 @@ export default defineComponent({
       )
 
       return (
-        <div class={ns.b()} style={{ display: 'flex', width: '100vw', height: '100vh' }}>
+        <div
+          class={ns.b()}
+          style={{ display: 'flex', width: '100vw', height: '100vh' }}
+        >
           <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
           <div class="flex flex-col flex-1 h-full bg-red">
             <div class="w-full bg-white tab-line">{tableTab}</div>
@@ -129,6 +132,13 @@ export default defineComponent({
                     label: 'test4',
                     fn: async () => {
                       let currentPage = systemIns.getCurrentPageDesign() //
+                    },
+                  },
+                  {
+                    label: '获取主表实例',
+                    fn: async () => {
+                      let currentPage = systemIns.getCurrentPageDesign() //
+                      console.log(currentPage, 'testCurrentPage') //
                     },
                   },
                 ]}

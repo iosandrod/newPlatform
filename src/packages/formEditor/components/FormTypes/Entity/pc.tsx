@@ -1,4 +1,4 @@
-import { defineComponent, inject } from 'vue'
+import { computed, defineComponent, inject } from 'vue'
 import tableCom from '@/table/tableCom'
 import { PageDesign } from '@ER/pageDesign'
 import { PageDesignItem } from '@ER/pageItem'
@@ -8,18 +8,31 @@ export default defineComponent({
   name: 'entityPc', //
   props: ['data', 'params', 'item'], //
   setup(props, attrs) {
-    const formIns: PageDesign = inject('formIns') //
-    const formitem: PageDesignItem = props.params.formitem
-    const config = formitem.config //
-    const _tableConfig: any = _.cloneDeep(tableConfig)
-    console.log(props, 'testProps') //
+    const item: PageDesignItem = props.item //
+    // const _tableConfig: any = _.cloneDeep(tableConfig)
+    let columns = computed(() => {
+      let cols = item.getTableColumns()
+      return cols
+    }) //
+    let data = computed(() => {
+      return item.getTableData()
+    })
+    let tableName = item.getTableName()
     const pageDesign: PageDesign = inject('pageDesign')
+    let tableType = item.getTableType()
     //只能有个一个pageDesign//
     const registerTable = (ins) => {
-      pageDesign.registerRef('table', ins)
+      pageDesign.registerRef(tableName, ins) //
+      pageDesign.registerRef(`${tableType}__${tableName}`, ins) //
     } //
     return () => {
-      let com = <erTable ref={registerTable} {..._tableConfig}></erTable>
+      let com = (
+        <erTable
+          ref={registerTable}
+          data={data.value} //
+          columns={columns.value}
+        ></erTable>
+      )
       return com
     } //
   },

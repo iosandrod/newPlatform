@@ -11,12 +11,11 @@ export class PageDesign extends Form {
   pageType = 'pageDesign' //
   tableName = 't_SdOrder' ////
   constructor(config) {
-    super(config) //
+    super(config)
     this.init()
   } //
   init(): void {
     super.init()
-
   }
   setItems(items: any, setLayout?: boolean): void {
     this.items.splice(0) //
@@ -67,7 +66,31 @@ export class PageDesign extends Form {
   getValidateRules() {
     return []
   }
-  async getTableData() { } //
-  async createTableData() { }
-  async updateTableData() { }
+  getTableName() {
+    let tableName = this.tableName
+    return tableName
+  }
+  async getTableData(tableName = this.getTableName()) {} //
+  async createTableData() {}
+  async updateTableData() {}
+  async getDefaultValue() {}
+  getMainTableColumns() {}
+  getMainTableConfig() {}
+  async addTableRow(data) {
+    if (data == null) {
+      data = await this.getDefaultValue()
+    }
+  }
+  async addTableRows(rows: number | Array<any>) {
+    if (typeof rows == 'number') {
+      rows = Array(rows).fill(null)
+      for (let i = 0; i < rows.length; i++) {
+        await this.addTableRow(rows[i])
+      }
+    }
+  }
+  getTableRef(tableName = this.getTableName()) {
+    let tableIns = this.getRef(tableName)
+    return tableIns //
+  }
 }

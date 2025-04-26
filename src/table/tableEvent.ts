@@ -155,6 +155,7 @@ export const selected_cell = (table: Table) => {
 }
 
 export const sort_click = (table: Table) => {
+  //
   const _this = table
   table.registerEvent({
     name: 'sort_click',
@@ -181,10 +182,6 @@ export const sort_click = (table: Table) => {
           obj.type = tColType //
           return obj
         })
-        // console.log(
-        //   _sortState.map((row) => row.field),
-        //   '_sortState',
-        // ) ////
         _this.setSortState(_sortState) //
       })
     },
@@ -227,7 +224,6 @@ export const resize_column = (table: Table) => {
     name: 'resize_column',
     keyName: 'resize_column',
     callback: (config) => {
-      //
       let col = config.col //
       let _col: Column = table.getCurrentResizeCol(col)
       if (_col == null) {
@@ -263,7 +259,6 @@ export const mouseenter_cell = (table: Table) => {
     name: 'mouseenter_cell',
     keyName: 'mouseenter_cell',
     callback: (config) => {
-      //
       let tableInstance = _this.getInstance()
       let args = config
       const { col, row, targetIcon } = args
@@ -301,6 +296,17 @@ export const mouseenter_cell = (table: Table) => {
           })
         }
       }
+    },
+  })
+}
+
+export const mouseleave_cell = (table: Table) => {
+  const _this = table
+  table.registerEvent({
+    name: 'mouseleave_cell',
+    keyName: 'mouseleave_cell',
+    callback: (config) => {
+      let layout = _this.getInstance().getCellInfo(config.col, config.row)
     },
   })
 }

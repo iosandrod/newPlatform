@@ -49,7 +49,7 @@ export const itemCom = defineComponent({
         )
       } else {
         com = (
-          <ContextmenuItem>
+          <ContextmenuItem {...item.config}>
             {{
               default: () => {
                 let _slot = slots.itemSlot
@@ -59,8 +59,15 @@ export const itemCom = defineComponent({
                 } else {
                   _com = <div>{item.getLabel()}</div>
                 }
+                //@ts-ignore
+                let disabled = item.getDisabled()
+                let _class = []
+                if (disabled == true) {
+                  _class.push('is-disabled')
+                }
                 return (
                   <div
+                    class={_class}
                     onClick={() => {
                       item.onClick()
                     }}
@@ -72,6 +79,10 @@ export const itemCom = defineComponent({
             }}
           </ContextmenuItem>
         )
+        let visible = item.config.visible
+        if (visible == false) {
+          com = null
+        }
       }
       return com
     }
@@ -136,10 +147,10 @@ export default defineComponent({
             default: () => {
               return comArr //
             },
-          }}
+          }}//
         ></Contextmenu>
       )
       return com //
     }
-  },
+  }, //
 })

@@ -6,7 +6,7 @@ export class BMenu extends itemGroup {
   constructor(config, _class = BMenuItem) {
     super(config, _class) //
   }
-  setPosition() { }
+  setPosition() {}
   getModelValue() {
     return this.modelValue
   }
@@ -36,7 +36,7 @@ export class BMenuItem extends Base {
     let items = config.items || []
     this.setItems(items) //
   }
-  show() { }
+  show() {}
   setItems(items) {
     this.items.splice(0)
     for (const b of items) {
@@ -60,5 +60,10 @@ export class BMenuItem extends Base {
     const fn = _config.fn
     if (typeof fn == 'function') fn(this)
     // const onItemClick=config.onItemClick()
+  }
+  getDisabled() {
+    let config = this.config //
+    let disabled = config.disabled //
+    return disabled //
   }
 }

@@ -20,7 +20,7 @@ export class FormItem extends Base {
   field: Field = {} as any
   subForm?: Form
   form: Form
-  config: Field //
+  config: Field | { [key: string]: any } //
   rowIndex: number //
   columns: TableCell[] = []
   mobileColumns: TableCell[] = []
@@ -69,10 +69,11 @@ export class FormItem extends Base {
   }
   getSpan() {
     let options = this.config
-    let span = options.span
+    let span = options?.span
     let form = this.form //
     let _span = form.getItemSpan()
     if (span == null) {
+      //
       span = _span
     } //
     return span

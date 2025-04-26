@@ -18,8 +18,9 @@ export default defineComponent({
       let p = currentTable.path
       let _tableName = p.split('/').pop()
       tableName = _tableName
-    }
+    } //
     let show = ref(false)
+    // console.log(tableName, 'testTableName') //
     let en = null
     system.createPageDesign(tableName).then((res) => {
       en = res

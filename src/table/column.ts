@@ -15,7 +15,9 @@ import { InputEditor } from '@/table/editor/string' //
 import {
   CheckBox,
   createGroup,
+  createImage,
   createText,
+  Group,
   Radio,
 } from '@visactor/vtable/es/vrender'
 const VGroup = VTable.VGroup
@@ -54,8 +56,8 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   }
-  setHidden(bool) { } //
-  getFormitem() { } //
+  setHidden(bool) {} //
+  getFormitem() {} //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -65,6 +67,23 @@ export class Column extends Base {
       sort,
       type,
     }
+  }
+  getDisableColumnResize() {
+    let config = this.config
+    let disableColumnResize = config.disableColumnResize
+    if (disableColumnResize == null) {
+      let table = this.table
+      disableColumnResize = table.getDisableColumnResize()
+    }
+    return disableColumnResize
+  }
+  getTitle() {
+    let config = this.config
+    let title = config.title
+    if (title == null) {
+      title = this.getField()
+    } //
+    return title
   }
   getType() {
     let config = this.config
@@ -117,6 +136,101 @@ export class Column extends Base {
       this.addColumn(col)
     }
   } //
+  getHeaderCustomLayout() {
+    //
+    let hCustomLayout = (args) => {
+      const { table, row, col, rect, value } = args
+      let _value: string = value
+      // const record = table.getCellOriginRecord(col, row)
+      const { height, width } = rect ?? table.getCellRect(col, row)
+      const container = createGroup({
+        height,
+        width,
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        overflow: 'hidden',
+        alignItems: 'center',
+        boundsPadding: [0, 0, 0, 0],
+      })
+      let locationName = createText({
+        text: value, //
+        fontSize: 14,
+        fontWeight: 'bold',
+        fill: 'black',
+        boundsPadding: [0, 0, 0, 20],
+        lineDashOffset: 0,
+      }) //
+      const g1 = this.createFilter({
+        table,
+        row,
+        col,
+        rect,
+        value,
+        height,
+        width,
+      })
+      //@ts-ignore
+      let sortG = this.createSortableIcon({
+        table,
+        row,
+        col,
+        rect,
+        value,
+        height,
+        width,
+      })
+      container.add(locationName) //
+      container.add(sortG) //
+      container.add(g1) //
+      container.on('mouseenter', () => {
+        //
+        //显示filter
+        let image = g1._lastChild
+        image.attribute.y = height / 2 - image.attribute.height / 2 //
+        image.attribute.visible = true
+        //显示sortable
+        let sortImage = sortG
+        let g: Group = sortImage as any
+        if (g) {
+          // g.attribute.visibleAll = true
+          g.visibleAll(true) //
+        }
+      })
+      let _this = this
+      container.on('mouseleave', () => {
+        let image = g1._lastChild
+        let item = _this.table.columnFilterConfig.filterConfig.find(
+          (item) => item.field == _this.getField(),
+        )
+        if (item != null) {
+          let indexArr = item.indexArr
+          if (indexArr.length > 0) {
+            return
+          }
+          image.attribute.visible = false //
+        } else {
+          image.attribute.visible = false //
+        }
+        let g: Group = sortG as any //
+        if (g) {
+          //@ts-ignore
+          let colors = g.children.map(
+            //@ts-ignore
+            (item) => item.attribute.textureColor as string,
+          )
+          if (!colors.includes('red')) {
+            g.visibleAll(false) //
+          }
+        }
+      })
+      return {
+        rootContainer: container,
+        renderDefault: false,
+      }
+    }
+    return hCustomLayout
+  }
   addColumn(col: any) {
     let table = this.table
     let columns = this.columns
@@ -217,7 +331,7 @@ export class Column extends Base {
         hIconColor = 'red'
         enterType = null
       }
-    } //
+    }
     //@ts-ignore
     let headerIcon: ColumnIconOption = {
       // type: 'svg',
@@ -225,7 +339,6 @@ export class Column extends Base {
       svg: `<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${hIconColor}"></path></svg>`,
       width: 20,
       height: 20,
-      marginRight: 6, //
       positionType: VTable.TYPES.IconPosition.right,
       cursor: 'pointer',
       name: 'filter', //
@@ -241,98 +354,16 @@ export class Column extends Base {
     }
     let customLayout = undefined
     if (this.table.showCustomLayout == true) {
-      customLayout = (args) => {
-        const { table, row, col, rect, value } = args
-        let _value: string = value
-        // const record = table.getCellOriginRecord(col, row)
-        const { height, width } = rect ?? table.getCellRect(col, row)
-        const container = createGroup({
-          height,
-          width,
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'nowrap',
-          overflow: 'hidden',
-          alignItems: 'center',
-          boundsPadding: [0, 0, 0, 0],
-        })
-        let locationName = createText({
-          text: value, //
-          fontSize: 16,
-          // fontFamily: 'sans-serif',
-          fill: 'black',
-          boundsPadding: [0, 0, 0, 0],
-          lineDashOffset: 0,
-        })
-        let globalValue = this.table.globalConfig.value
-        if (globalValue.length > 0) {
-          let reg = new RegExp(globalValue, 'gi') //
-          let vArr = _value.matchAll(reg)
-          let _vArr = [...vArr]
-          _vArr = _vArr
-            .map((v, i) => {
-              let arr = []
-              let t = createText({
-                text: v[0], //
-                fontSize: 16,
-                fill: 'red',
-                boundsPadding: [0, 0, 0, 0],
-                lineDashOffset: 0,
-              })
-              if (i == 0 && v.index > 0) {
-                //
-                let t1 = createText({
-                  text: _value.slice(0, v.index), //
-                  fontSize: 16,
-                  // fontFamily: 'sans-serif',
-                  fill: 'black',
-                  boundsPadding: [0, 0, 0, 0],
-                  lineDashOffset: 0,
-                })
-                arr.push(t1)
-              }
-              arr.push(t)
-              if (
-                i == _vArr.length - 1 &&
-                v.index + v[0].length < _value.length
-              ) {
-                //
-                let t2 = createText({
-                  text: _value.slice(v.index + v[0].length), //
-                  fontSize: 16,
-                  // fontFamily: 'sans-serif',
-                  fill: 'black',
-                  boundsPadding: [0, 0, 0, 0],
-                  lineDashOffset: 0,
-                })
-                arr.push(t2)
-              }
-              return arr
-            })
-            .flat() //
-          if (_vArr.length > 0) {
-            _vArr.forEach((item) => {
-              //@ts-ignore
-              container.add(item) //
-            })
-          } else {
-            container.add(locationName) //
-          }
-        } else {
-          container.add(locationName) //
-        }
-        return {
-          rootContainer: container,
-          renderDefault: false,
-        }
-      }
+      customLayout = this.getCustomLayout() //
     }
+
     let obj: ColumnDefine = {
       ...config,
-      disableColumnResize: true, ////
+      disableColumnResize: this.getDisableColumnResize(), ////
       field: this.getField(),
       width: this.getColumnWidth(),
       showSort: true,
+      title: this.getTitle(), //
       cellType: this.getType(),
       sort: () => {
         return 0
@@ -389,20 +420,10 @@ export class Column extends Base {
               color = 'RGB(230, 220, 230)' //
             }
           }
-          // let _index = record._index
-          // let validateMap = table.validateMap
-          // let errStr = validateMap[_index]
-          // //报错了//
-          // if (errStr) {
-          //   let allField = errStr.map((row) => row.field)
-          //   if (allField.includes(this.getField())) {
-          //     color = 'red'
-          //   } //
-          // }
           return color
         }, //
       },
-
+      headerCustomLayout: this.getHeaderCustomLayout(), //
       editor: edit, ////
       columns: _columns, //
       customLayout: customLayout, //
@@ -568,7 +589,7 @@ export class Column extends Base {
     let table = this.table
     let isEdit = table.getIsEditTable()
     if (isEdit == false) {
-      return false//
+      return false //
     }
     let editType = this.getEditType()
     if (editType) {
@@ -641,5 +662,219 @@ export class Column extends Base {
       }
     }
     return true
+  }
+  createSortableIcon(
+    config: {
+      table?: any
+      row?: number
+      col?: number
+      rect?: any
+      value?: any
+      height?: any
+      width?: any
+    } = {},
+  ) {
+    let group = createGroup({
+      height: config.height,
+      width: 20,
+      display: 'flex',
+      flexDirection: 'column',
+      visibleAll: true,
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+    })
+    let topColor = 'black'
+    let bottomColor = 'black' //
+    let createTopImageSvg = (topColor = 'black', bottomColor = 'red') => {
+      return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+         <!-- 上箭头 -->
+         <g transform="translate(0, 6)">
+         <path d="M8 4L5 7H11L8 4Z" fill="${topColor}"/>
+         </g>
+         <!-- 下箭头 -->
+       </svg>
+       `
+    }
+    let createBottomImageSvg = (topColor = 'black', bottomColor = 'red') => {
+      return `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(0, -6)">
+      <path d="M8 12L5 9H11L8 12Z" fill="${bottomColor}"/>
+      </g>   
+      </svg>
+       `
+    }
+    let sortCache = this.table.sortCache
+    let v = sortCache.find((s) => s.field == this.getField())
+    let s = Boolean(v)
+    let order = v?.order
+    if (order == 'asc') {
+      topColor = 'red'
+    } else if (order == 'desc') {
+      bottomColor = 'red'
+    }
+    let topImage = createImage({
+      cursor: 'pointer', ////
+      height: 20,
+      textureColor: topColor,
+      visible: s,
+      width: 20,
+      image: createTopImageSvg(topColor, bottomColor), //
+    })
+    let bottomImage = createImage({
+      cursor: 'pointer', //
+      height: 20,
+      textureColor: bottomColor,
+      width: 20,
+      visible: s,
+      image: createBottomImageSvg(topColor, bottomColor), //
+    })
+    topImage.on('click', (config: any) => {
+      let field = this.getField()
+      this.table.headerSortClick({
+        field,
+        order: 'asc',
+        type: this.getColType(), //
+      })
+    })
+    bottomImage.on('click', () => {
+      let field = this.getField()
+      this.table.headerSortClick({
+        field,
+        order: 'desc',
+        type: this.getColType(),
+      })
+    })
+    group.add(topImage)
+    group.add(bottomImage) //
+    // group.add()
+    return group //
+  }
+  createFilter(config: any) {
+    let height = config.height
+    let hIconColor = '#1890ff' //
+    let _this = this
+    let item = _this.table.columnFilterConfig.filterConfig.find(
+      (item) => item.field == _this.getField(),
+    )
+    if (item != null) {
+      let indexArr = item.indexArr
+      if (indexArr.length > 0) {
+        hIconColor = 'red'
+      }
+    }
+    const image = createImage({
+      image: `<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${hIconColor}"></path></svg>`,
+      width: 16,
+      height: 16, //
+      textureColor: hIconColor,
+      cursor: 'pointer',
+      visible: hIconColor == 'red' ? true : false, //
+    })
+    const g1 = createGroup({
+      height: height,
+      width: 25, //
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'nowrap',
+      cursor: 'pointer',
+      overflow: 'hidden',
+      alignItems: 'center',
+      justifyContent: 'center',
+      boundsPadding: [0, 0, 0, 0],
+    })
+    g1.on('click', (config) => {
+      this.table.openColumnFilter(config)
+    }) //三角形
+    g1.add(image)
+    return g1
+  }
+  getCustomLayout() {
+    let customLayout = (args) => {
+      const { table, row, col, rect, value } = args
+      let _value: string = value
+      // const record = table.getCellOriginRecord(col, row)
+      const { height, width } = rect ?? table.getCellRect(col, row)
+      const container = createGroup({
+        height,
+        width,
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        overflow: 'hidden',
+        alignItems: 'center',
+        boundsPadding: [0, 0, 0, 0],
+      })
+      let locationName = createText({
+        text: value, //
+        fontSize: 16,
+        // fontFamily: 'sans-serif',
+        fill: 'black',
+        boundsPadding: [0, 0, 0, 20],
+        lineDashOffset: 0,
+      })
+      let globalValue = this.table.globalConfig.value
+      if (globalValue.length > 0) {
+        let reg = new RegExp(globalValue, 'gi') //
+        let vArr = _value.matchAll(reg)
+        let _vArr = [...vArr]
+        _vArr = _vArr
+          .map((v, i) => {
+            let arr = []
+            let t = createText({
+              text: v[0], //
+              fontSize: 16,
+              fill: 'red',
+              boundsPadding: [0, 0, 0, 0],
+              lineDashOffset: 0,
+            })
+            if (i == 0 && v.index > 0) {
+              //
+              let t1 = createText({
+                text: _value.slice(0, v.index), //
+                fontSize: 16,
+                // fontFamily: 'sans-serif',
+                fill: 'black',
+                boundsPadding: [0, 0, 0, 0],
+                lineDashOffset: 0,
+              })
+              arr.push(t1)
+            }
+            arr.push(t)
+            if (
+              i == _vArr.length - 1 &&
+              v.index + v[0].length < _value.length
+            ) {
+              //
+              let t2 = createText({
+                text: _value.slice(v.index + v[0].length), //
+                fontSize: 14,
+                // fontFamily: 'sans-serif',
+                fill: 'black',
+                boundsPadding: [0, 0, 0, 0],
+                lineDashOffset: 0,
+              })
+              arr.push(t2)
+            }
+            return arr
+          })
+          .flat() //
+        if (_vArr.length > 0) {
+          _vArr.forEach((item) => {
+            //@ts-ignore
+            container.add(item) //
+          })
+        } else {
+          container.add(locationName) //
+        }
+      } else {
+        container.add(locationName) //
+      }
+      return {
+        rootContainer: container,
+        renderDefault: false,
+      }
+    }
+    return customLayout
   }
 }
