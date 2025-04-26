@@ -28,47 +28,6 @@ export default defineComponent({
       ER.form = ref
       formIns.registerRef('form', ref) //
     }
-    const renderContent = () => {
-      let TagComponent: any = resolveComponent(
-        unref(isPc) ? 'el-form' : 'van-form',
-      )
-      if (formIns.pageType !== 'form') {
-        TagComponent = 'div' //
-      } //
-      const typeProps = hooks.useProps(state, state, unref(isPc), true)
-      const Layout = (
-        <LayoutDragGable
-          data-layout-type={'root'}
-          class={[unref(isEditModel) && ns.e('wrap'), 'h-full','overflow-hidden']}
-          data={state.store}
-          parent={state.store}
-          isRoot
-        ></LayoutDragGable>
-      )
-      let bar = null
-      if (formIns.getShowFormBar()) {
-        bar = (
-          <div>
-            <formBarBread></formBarBread>
-          </div>
-        )
-      }
-      return (
-        <div class="h-full">
-          {bar}
-          <TagComponent
-            class={['h-full']} //
-            ref={setFormRef}
-            onClick={unref(isEditModel) && handleClick}
-            {...typeProps.value}
-            model={formIns.data}
-            rules={formIns.getValidateRules()}
-          >
-            {Layout}
-          </TagComponent>
-        </div>
-      )
-    }
     return () => {
       let TagComponent: any = resolveComponent(
         unref(isPc) ? 'el-form' : 'van-form',
@@ -126,7 +85,6 @@ export default defineComponent({
             isEditModel.value && ns.e('editModel'),
             !unref(isPc) && ns.e('mobile'),
             !unref(isPc) && ns.e(`mobile_layoutType${ER.props.layoutType}`),
-            // ER.props.layoutType === 1  && ns.e('layoutType1')
           ]}
         >
           {_inCom}

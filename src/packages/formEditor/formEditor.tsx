@@ -348,7 +348,8 @@ export default defineComponent({
           {/* <Everright-form-editor></Everright-form-editor> */}
         </div>
       )
-      if (nextForm != null) {
+      //如果是设计模式就使用面包屑
+      if (nextForm != null&&formIns.isDesign==true) {
         com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
       } //
       return com //

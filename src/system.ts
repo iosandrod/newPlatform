@@ -134,6 +134,9 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
+  async confirmForm(formConfig: any) {}
+  async openDialog(dialogConfig: any) {}
+  async confirmTable(tableConfig: any) {}
 }
 
 export const system = reactive(new System()) //

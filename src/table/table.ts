@@ -612,7 +612,7 @@ export class Table extends Base {
         },
       },
       {
-        label: '设计当前列',
+        label: '设计当前列',//
         key: 'designColumn',
         disabled: false, //
         visible: true,

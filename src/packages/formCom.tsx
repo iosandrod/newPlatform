@@ -8,12 +8,9 @@ import {
   provide,
   watch,
 } from 'vue'
-import preview from '@ER/formEditor/preview'
-import editor from '@ER/formEditor/formEditor'
 import { Form } from './form'
 export default defineComponent({
   components: {
-    preview,
   },
   props: {
     isDesign: {
@@ -70,7 +67,6 @@ export default defineComponent({
         // immediate: true,//
       }
     )
-    // provide('formIns', fIns)
     onUnmounted(() => {
       fIns.onUnmounted() //
     }) //
