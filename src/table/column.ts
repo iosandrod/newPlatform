@@ -4,6 +4,7 @@ import { ColumnDefine, ListTableConstructorOptions } from '@visactor/vtable'
 import * as VTable from '@visactor/vtable'
 import {
   h,
+  inject,
   isProxy,
   isReactive,
   reactive,
@@ -879,6 +880,23 @@ export class Column extends Base {
   }
   async getDefaultValue() {
     let field = this.getField()
-    let obj = {}
+    let config = this.config
+    let defaultValue = config.defaultValue
+    let design = this.getCurrentDesign() //
+    console.log(design, 'design') ////
+    if (defaultValue == null) {
+      return {} //
+    }
+    if (typeof defaultValue == 'function') {
+      defaultValue = await defaultValue()
+    }
+    let obj = {
+      [field]: defaultValue,
+    }
+    return obj
+  }
+  getCurrentDesign() {
+    let design = inject('pageDesign')
+    return design
   }
 }

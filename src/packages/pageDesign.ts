@@ -76,8 +76,14 @@ export class PageDesign extends Form {
   async updateTableData() {}
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
-    console.log(columns, 'columns') //
-    return {}
+    let obj1 = {}
+    for (const col of columns) {
+      let defaultValue = await col.getDefaultValue()
+      if (defaultValue) {
+        obj1 = { ...obj1, ...defaultValue } //
+      }
+    } //
+    return obj1
   }
   getTableColumns(tableName = this.getTableName()) {
     let tableIns = this.getRef(tableName)
@@ -90,6 +96,7 @@ export class PageDesign extends Form {
     if (data == null) {
       data = await this.getDefaultValue(tableName)
     }
+    return data
   } //
   @useRunAfter()
   async addTableRows(
@@ -99,10 +106,13 @@ export class PageDesign extends Form {
     if (typeof rows == 'number') {
       rows = Array(rows).fill(null)
     }
+    let arr1 = []
     for (let i = 0; i < rows.length; i++) {
-      //
-      await this.addTableRow(rows[i], tableName)
+      let d = await this.addTableRow(rows[i], tableName)
+      arr1.push(d) //
     }
+    let tableIns = this.getTableRef(tableName)
+    tableIns.addRows({ rows: arr1 }) ////
   }
   getTableRef(tableName = this.getTableName()) {
     let tableIns = this.getRef(tableName)

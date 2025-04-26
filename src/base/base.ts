@@ -8,6 +8,7 @@ import {
 import pool from 'workerpool'
 import { myHttp } from '@/service/client'
 import { Router } from 'vue-router'
+import { PageDesign } from '@ER/pageDesign'
 export const workerPool = pool.pool()
 export class Base {
   cacheMethod: {
@@ -25,6 +26,14 @@ export class Base {
   cacheTemplateProps: any = {} ////
   uuid() {
     return nanoid()
+  }
+  _getPageDesign?: () => PageDesign
+  getPageDesignIns() {
+    let _getPageDesign = this._getPageDesign
+    if (_getPageDesign) {
+      return _getPageDesign()
+    }
+    return null //
   }
   async clearCacheValue(key) {
     let cacheTemplateProps = this.cacheTemplateProps
@@ -71,7 +80,8 @@ export class Base {
   unregisterRef(key: string, all = false, fn?: any) {
     let refPool = this.refPool
     let ref = refPool[key]
-    if (ref == null) {
+    if (ref != null) {
+      //@ts-ignore
       delete refPool[key]
       return
     }
@@ -126,5 +136,5 @@ export class Base {
     let cacheMethod = this.cacheMethod
     let method = cacheMethod[name] || {}
     method.after = []
-  } //
+  }
 }

@@ -9,7 +9,7 @@ export default defineComponent({
   props: ['data', 'params', 'item'], //
   setup(props, attrs) {
     const item: PageDesignItem = props.item //
-    // const _tableConfig: any = _.cloneDeep(tableConfig)
+    let formIns = inject('formIns') //
     let columns = computed(() => {
       let cols = item.getTableColumns()
       return cols

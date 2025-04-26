@@ -147,8 +147,6 @@ export class Table extends Base {
     return data
   }
 
-  
-  
   tableConfig: ListTableConstructorOptions = {
     select: {
       highlightMode: 'row',
@@ -589,9 +587,12 @@ export class Table extends Base {
   }
   setCurTableSelect() {}
   openContextMenu(config) {
-    const event: PointerEvent = config.event
-    let contextmenu: BMenu = this.getRef('contextmenu')
-    contextmenu.open(event) //
+    nextTick(() => {
+      console.log(config, 'config123123') //
+      const event: PointerEvent = config.event
+      let contextmenu: BMenu = this.getRef('contextmenu')
+      contextmenu.open(event) //
+    })
   }
   getColumns() {
     const columns = this.columns //
