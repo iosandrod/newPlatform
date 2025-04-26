@@ -79,7 +79,7 @@ export const itemCom = defineComponent({
             }}
           </ContextmenuItem>
         )
-        let visible = item.config.visible
+        let visible = item.getVisible() //
         if (visible == false) {
           com = null
         }
@@ -147,7 +147,7 @@ export default defineComponent({
             default: () => {
               return comArr //
             },
-          }}//
+          }} //
         ></Contextmenu>
       )
       return com //

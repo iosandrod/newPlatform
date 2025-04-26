@@ -60,7 +60,7 @@ export default defineComponent({
       {
         label: '按钮1',
       },
-      
+
       {
         label: '按钮5',
         children: [
@@ -101,11 +101,8 @@ export default defineComponent({
     let _data = reactive({
       height: 600,
       width: 300,
-    })
-    let _data1 = reactive({
-      value: '',
-    })
-    let _reg1=ref('')
+    }) //
+    let _reg1 = ref('')
     return () => {
       // let com0 = <formCom data={_data} {...formConfig1}></formCom>
       let com0 = null
@@ -175,24 +172,14 @@ export default defineComponent({
           <tableCom {...tableConfig}></tableCom>
         </div>
       ) //
-      let com2 = <buttonCom onClick={() => {
-        let _reg11:any = _reg1.value
-        _reg11.focus()//
-      }}></buttonCom> //
-      // com = (
-      //   <SelectCom
-      //     ref={_reg1}
-      //     modelValue={_data1.value}
-      //     onChange={(value) => {
-      //       let _value = value.value
-      //       _data1.value = _value //
-      //     }} //
-      //     options={[
-      //       { label: '123', value: 'abc' },
-      //       { label: '456', value: 'feg' },
-      //     ]}
-      //   ></SelectCom>
-      // )
+      let com2 = (
+        <buttonCom
+          onClick={() => {
+            let _reg11: any = _reg1.value
+            _reg11.focus() //
+          }}
+        ></buttonCom>
+      ) //
       let _com = (
         <div
           style={{

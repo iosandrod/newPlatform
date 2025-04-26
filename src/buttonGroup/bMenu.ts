@@ -63,7 +63,14 @@ export class BMenuItem extends Base {
   }
   getDisabled() {
     let config = this.config //
-    let disabled = config.disabled //
+    let disabled = config.disabled
+    if (typeof disabled === 'function') disabled = disabled({ menu: this })
     return disabled //
+  }
+  getVisible() {
+    let config = this.config //
+    let visible = config.visible
+    if (typeof visible === 'function') visible = visible({ menu: this })
+    return visible
   }
 }

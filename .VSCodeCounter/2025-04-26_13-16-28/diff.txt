@@ -1,0 +1,700 @@
+Date : 2025-04-26 13:16:28
+Directory : d:\share12\three-template-master\src\table
+Total : 547 files,  -44516 codes, -2880 comments, -2036 blanks, all -49432 lines
+
+Languages
++-----------------------+------------+------------+------------+------------+------------+
+| language              | files      | code       | comment    | blank      | total      |
++-----------------------+------------+------------+------------+------------+------------+
+| CSS                   |          1 |       -131 |         -1 |        -11 |       -143 |
+| SCSS                  |         61 |     -2,033 |       -172 |       -129 |     -2,334 |
+| vue                   |         82 |     -5,968 |        -92 |       -228 |     -6,288 |
+| TypeScript JSX        |        114 |     -6,841 |       -584 |       -382 |     -7,807 |
+| JavaScript            |         35 |     -7,776 |       -688 |       -774 |     -9,238 |
+| TypeScript            |         99 |     -9,985 |     -1,343 |       -354 |    -11,682 |
+| encodingImgTargetFile |        155 |    -11,782 |          0 |       -158 |    -11,940 |
++-----------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                 | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                    |        547 |    -44,516 |     -2,880 |     -2,036 |    -49,432 |
+| . (Files)                                                                                                            |         12 |      1,615 |         43 |         10 |      1,668 |
+| ..                                                                                                                   |        533 |    -46,217 |     -2,933 |     -2,042 |    -51,192 |
+| .. (Files)                                                                                                           |          7 |       -319 |        -14 |        -25 |       -358 |
+| ..\assets                                                                                                            |         36 |    -11,601 |          0 |       -146 |    -11,747 |
+| ..\assets (Files)                                                                                                    |          8 |     -1,630 |          0 |        -11 |     -1,641 |
+| ..\assets\avatar                                                                                                     |          4 |     -1,391 |          0 |        -13 |     -1,404 |
+| ..\assets\image                                                                                                      |          6 |     -3,968 |          0 |        -16 |     -3,984 |
+| ..\assets\logo                                                                                                       |          8 |       -109 |          0 |         -1 |       -110 |
+| ..\assets\theme                                                                                                      |         10 |     -4,503 |          0 |       -105 |     -4,608 |
+| ..\base                                                                                                              |          1 |        -84 |         -9 |         -1 |        -94 |
+| ..\bread                                                                                                             |          4 |       -129 |          0 |         -8 |       -137 |
+| ..\buttonGroup                                                                                                       |          9 |     -1,291 |        -53 |        -31 |     -1,375 |
+| ..\components                                                                                                        |          1 |       -142 |          0 |         -6 |       -148 |
+| ..\contextM                                                                                                          |         25 |     -1,014 |        -96 |       -203 |     -1,313 |
+| ..\contextM (Files)                                                                                                  |          2 |        -97 |         -3 |        -25 |       -125 |
+| ..\contextM\components                                                                                               |          7 |       -617 |        -76 |       -111 |       -804 |
+| ..\contextM\constants                                                                                                |          2 |        -23 |          0 |         -7 |        -30 |
+| ..\contextM\themes                                                                                                   |         13 |       -251 |         -8 |        -51 |       -310 |
+| ..\contextM\themes (Files)                                                                                           |          1 |        -49 |         -8 |         -6 |        -63 |
+| ..\contextM\themes\bright                                                                                            |          2 |         -6 |          0 |         -3 |         -9 |
+| ..\contextM\themes\dark                                                                                              |          2 |         -6 |          0 |         -3 |         -9 |
+| ..\contextM\themes\default                                                                                           |          5 |       -130 |          0 |        -29 |       -159 |
+| ..\contextM\themes\fonts                                                                                             |          3 |        -60 |          0 |        -10 |        -70 |
+| ..\contextM\types                                                                                                    |          1 |        -26 |         -9 |         -9 |        -44 |
+| ..\dialog                                                                                                            |          2 |        -22 |          0 |         -4 |        -26 |
+| ..\game                                                                                                              |         15 |       -627 |          0 |        -82 |       -709 |
+| ..\game (Files)                                                                                                      |          6 |       -253 |          0 |        -36 |       -289 |
+| ..\game\utils                                                                                                        |          6 |       -285 |          0 |        -37 |       -322 |
+| ..\game\world                                                                                                        |          3 |        -89 |          0 |         -9 |        -98 |
+| ..\menu                                                                                                              |          7 |     -1,058 |        -33 |        -10 |     -1,101 |
+| ..\packages                                                                                                          |        382 |    -22,010 |     -2,113 |       -727 |    -24,850 |
+| ..\packages (Files)                                                                                                  |         12 |     -3,137 |       -263 |        -60 |     -3,460 |
+| ..\packages\ckeditor                                                                                                 |          3 |       -333 |        -63 |        -40 |       -436 |
+| ..\packages\ckeditor (Files)                                                                                         |          2 |       -331 |        -63 |        -39 |       -433 |
+| ..\packages\ckeditor\style                                                                                           |          1 |         -2 |          0 |         -1 |         -3 |
+| ..\packages\formEditor                                                                                               |        158 |    -12,240 |     -1,484 |       -361 |    -14,085 |
+| ..\packages\formEditor (Files)                                                                                       |         12 |     -2,815 |     -1,005 |        -29 |     -3,849 |
+| ..\packages\formEditor\components                                                                                    |        142 |     -8,836 |       -477 |       -328 |     -9,641 |
+| ..\packages\formEditor\components (Files)                                                                            |          3 |       -128 |         -4 |         -7 |       -139 |
+| ..\packages\formEditor\components\FormTypes                                                                          |        107 |     -3,296 |       -257 |       -264 |     -3,817 |
+| ..\packages\formEditor\components\FormTypes (Files)                                                                  |          1 |        -52 |        -10 |         -2 |        -64 |
+| ..\packages\formEditor\components\FormTypes\Baseinfo                                                                 |          4 |        -57 |          0 |         -8 |        -65 |
+| ..\packages\formEditor\components\FormTypes\Cascader                                                                 |          4 |        -99 |         -7 |        -11 |       -117 |
+| ..\packages\formEditor\components\FormTypes\Checkbox                                                                 |          8 |       -232 |        -24 |        -20 |       -276 |
+| ..\packages\formEditor\components\FormTypes\Checkbox (Files)                                                         |          4 |       -107 |         -7 |        -11 |       -125 |
+| ..\packages\formEditor\components\FormTypes\Checkbox\Other                                                           |          4 |       -125 |        -17 |         -9 |       -151 |
+| ..\packages\formEditor\components\FormTypes\Date                                                                     |          8 |       -310 |        -24 |        -19 |       -353 |
+| ..\packages\formEditor\components\FormTypes\Date (Files)                                                             |          4 |       -185 |         -7 |        -10 |       -202 |
+| ..\packages\formEditor\components\FormTypes\Date\Other                                                               |          4 |       -125 |        -17 |         -9 |       -151 |
+| ..\packages\formEditor\components\FormTypes\Divider                                                                  |          8 |       -216 |        -24 |        -20 |       -260 |
+| ..\packages\formEditor\components\FormTypes\Divider (Files)                                                          |          4 |        -91 |         -7 |        -11 |       -109 |
+| ..\packages\formEditor\components\FormTypes\Divider\Other                                                            |          4 |       -125 |        -17 |         -9 |       -151 |
+| ..\packages\formEditor\components\FormTypes\Entity                                                                   |          2 |        -96 |          0 |         -2 |        -98 |
+| ..\packages\formEditor\components\FormTypes\Html                                                                     |          8 |       -262 |        -25 |        -20 |       -307 |
+| ..\packages\formEditor\components\FormTypes\Html (Files)                                                             |          4 |       -137 |         -8 |        -11 |       -156 |
+| ..\packages\formEditor\components\FormTypes\Html\Other                                                               |          4 |       -125 |        -17 |         -9 |       -151 |
+| ..\packages\formEditor\components\FormTypes\Input                                                                    |          4 |        -82 |         -7 |        -11 |       -100 |
+| ..\packages\formEditor\components\FormTypes\Number                                                                   |          8 |       -223 |        -24 |        -22 |       -269 |
+| ..\packages\formEditor\components\FormTypes\Number (Files)                                                           |          4 |        -98 |         -7 |        -13 |       -118 |
+| ..\packages\formEditor\components\FormTypes\Number\Other                                                             |          4 |       -125 |        -17 |         -9 |       -151 |
+| ..\packages\formEditor\components\FormTypes\Other                                                                    |          4 |       -125 |        -17 |         -9 |       -151 |
+| ..\packages\formEditor\components\FormTypes\Radio                                                                    |          4 |       -111 |         -7 |        -10 |       -128 |
+| ..\packages\formEditor\components\FormTypes\Rate                                                                     |          4 |        -80 |         -7 |        -10 |        -97 |
+| ..\packages\formEditor\components\FormTypes\Region                                                                   |          4 |       -143 |         -7 |        -11 |       -161 |
+| ..\packages\formEditor\components\FormTypes\Select                                                                   |          4 |       -120 |        -11 |        -11 |       -142 |
+| ..\packages\formEditor\components\FormTypes\Sform                                                                    |          4 |        -46 |         -1 |         -4 |        -51 |
+| ..\packages\formEditor\components\FormTypes\Signature                                                                |          4 |       -356 |         -7 |        -11 |       -374 |
+| ..\packages\formEditor\components\FormTypes\Slider                                                                   |          4 |        -92 |         -7 |        -11 |       -110 |
+| ..\packages\formEditor\components\FormTypes\Stable                                                                   |          4 |        -87 |          0 |        -10 |        -97 |
+| ..\packages\formEditor\components\FormTypes\Switch                                                                   |          4 |        -87 |         -7 |        -11 |       -105 |
+| ..\packages\formEditor\components\FormTypes\Textarea                                                                 |          4 |        -78 |        -27 |        -11 |       -116 |
+| ..\packages\formEditor\components\FormTypes\Time                                                                     |          4 |       -138 |         -7 |        -11 |       -156 |
+| ..\packages\formEditor\components\FormTypes\Uploadfile                                                               |          4 |       -204 |         -7 |         -9 |       -220 |
+| ..\packages\formEditor\components\Layout                                                                             |          9 |     -1,218 |        -94 |        -24 |     -1,336 |
+| ..\packages\formEditor\components\Panels                                                                             |         22 |     -3,778 |        -72 |        -26 |     -3,876 |
+| ..\packages\formEditor\components\Panels\Canves                                                                      |          1 |        -94 |         -5 |         -1 |       -100 |
+| ..\packages\formEditor\components\Panels\Config                                                                      |         20 |     -3,596 |        -66 |        -23 |     -3,685 |
+| ..\packages\formEditor\components\Panels\Config (Files)                                                              |          2 |       -393 |         -3 |         -3 |       -399 |
+| ..\packages\formEditor\components\Panels\Config\components                                                           |         18 |     -3,203 |        -63 |        -20 |     -3,286 |
+| ..\packages\formEditor\components\Panels\Fields                                                                      |          1 |        -88 |         -1 |         -2 |        -91 |
+| ..\packages\formEditor\components\Selection                                                                          |          1 |       -416 |        -50 |         -7 |       -473 |
+| ..\packages\formEditor\locale                                                                                        |          3 |       -586 |         -1 |         -3 |       -590 |
+| ..\packages\formEditor\style                                                                                         |          1 |         -3 |         -1 |         -1 |         -5 |
+| ..\packages\hooks                                                                                                    |          9 |     -1,110 |        -53 |        -17 |     -1,180 |
+| ..\packages\hooks (Files)                                                                                            |          1 |        -20 |         -1 |          0 |        -21 |
+| ..\packages\hooks\use-css                                                                                            |          1 |       -173 |         -1 |         -1 |       -175 |
+| ..\packages\hooks\use-fetch                                                                                          |          1 |        -30 |         -2 |         -1 |        -33 |
+| ..\packages\hooks\use-history                                                                                        |          1 |        -79 |         -8 |         -1 |        -88 |
+| ..\packages\hooks\use-i18n                                                                                           |          1 |        -16 |         -9 |         -2 |        -27 |
+| ..\packages\hooks\use-logic                                                                                          |          1 |       -330 |        -19 |         -1 |       -350 |
+| ..\packages\hooks\use-namespace                                                                                      |          1 |        -36 |          0 |         -1 |        -37 |
+| ..\packages\hooks\use-props                                                                                          |          1 |       -384 |        -13 |         -5 |       -402 |
+| ..\packages\hooks\use-target                                                                                         |          1 |        -42 |          0 |         -5 |        -47 |
+| ..\packages\icon                                                                                                     |        120 |       -212 |         -1 |        -10 |       -223 |
+| ..\packages\icon (Files)                                                                                             |          3 |        -83 |         -1 |         -7 |        -91 |
+| ..\packages\icon\svg                                                                                                 |        117 |       -129 |          0 |         -3 |       -132 |
+| ..\packages\region                                                                                                   |          6 |       -690 |         -9 |        -43 |       -742 |
+| ..\packages\region (Files)                                                                                           |          5 |       -688 |         -8 |        -42 |       -738 |
+| ..\packages\region\style                                                                                             |          1 |         -2 |         -1 |         -1 |         -4 |
+| ..\packages\theme                                                                                                    |         51 |     -1,891 |       -172 |        -93 |     -2,156 |
+| ..\packages\theme (Files)                                                                                            |          2 |        -63 |          0 |         -2 |        -65 |
+| ..\packages\theme\ckeditor                                                                                           |          1 |        -48 |         -1 |         -1 |        -50 |
+| ..\packages\theme\formEditor                                                                                         |         46 |     -1,674 |       -168 |        -88 |     -1,930 |
+| ..\packages\theme\formEditor (Files)                                                                                 |         33 |     -1,486 |       -165 |        -74 |     -1,725 |
+| ..\packages\theme\formEditor\FormTypes                                                                               |         13 |       -188 |         -3 |        -14 |       -205 |
+| ..\packages\theme\region                                                                                             |          2 |       -106 |         -3 |         -2 |       -111 |
+| ..\packages\utils                                                                                                    |         13 |     -1,700 |        -57 |        -27 |     -1,784 |
+| ..\packages\vueDraggable                                                                                             |         10 |       -697 |        -11 |        -76 |       -784 |
+| ..\packages\vueDraggable (Files)                                                                                     |          2 |       -364 |        -11 |        -37 |       -412 |
+| ..\packages\vueDraggable\core                                                                                        |          4 |       -168 |          0 |        -26 |       -194 |
+| ..\packages\vueDraggable\util                                                                                        |          4 |       -165 |          0 |        -13 |       -178 |
+| ..\pages                                                                                                             |         26 |     -1,828 |        -47 |       -132 |     -2,007 |
+| ..\pages\billing                                                                                                     |          3 |       -122 |          0 |         -5 |       -127 |
+| ..\pages\home                                                                                                        |         12 |       -726 |         -4 |        -82 |       -812 |
+| ..\pages\login                                                                                                       |          5 |       -582 |        -43 |        -16 |       -641 |
+| ..\pages\personal                                                                                                    |          6 |       -398 |          0 |        -29 |       -427 |
+| ..\router                                                                                                            |          2 |        -48 |         -1 |         -7 |        -56 |
+| ..\service                                                                                                           |          2 |        -94 |        -10 |         -5 |       -109 |
+| ..\sortablejs                                                                                                        |          7 |     -5,892 |       -557 |       -644 |     -7,093 |
+| ..\tableService                                                                                                      |          7 |        -58 |          0 |        -11 |        -69 |
+| ..\tableService (Files)                                                                                              |          4 |        -41 |          0 |         -7 |        -48 |
+| ..\tableService\sComponent                                                                                           |          3 |        -17 |          0 |         -4 |        -21 |
+| editor                                                                                                               |          2 |         86 |         10 |         -4 |         92 |
++----------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+
+| filename                                                                                                             | language              | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+
+| d:\share12\three-template-master\src\App.vue                                                                         | vue                   |        -22 |          0 |         -1 |        -23 |
+| d:\share12\three-template-master\src\assets\avatar.png                                                               | encodingImgTargetFile |       -610 |          0 |         -4 |       -614 |
+| d:\share12\three-template-master\src\assets\avatar\face-1.jpg                                                        | encodingImgTargetFile |       -379 |          0 |         -3 |       -382 |
+| d:\share12\three-template-master\src\assets\avatar\face-2.jpg                                                        | encodingImgTargetFile |       -327 |          0 |         -3 |       -330 |
+| d:\share12\three-template-master\src\assets\avatar\face-3.jpg                                                        | encodingImgTargetFile |       -253 |          0 |          0 |       -253 |
+| d:\share12\three-template-master\src\assets\avatar\face-4.jpg                                                        | encodingImgTargetFile |       -432 |          0 |         -7 |       -439 |
+| d:\share12\three-template-master\src\assets\gitee-b.svg                                                              | encodingImgTargetFile |        -16 |          0 |         -1 |        -17 |
+| d:\share12\three-template-master\src\assets\gitee.svg                                                                | encodingImgTargetFile |        -15 |          0 |          0 |        -15 |
+| d:\share12\three-template-master\src\assets\image\quick-pass-logo-1.jpg                                              | encodingImgTargetFile |       -259 |          0 |          0 |       -259 |
+| d:\share12\three-template-master\src\assets\image\quick-pass-logo.jpg                                                | encodingImgTargetFile |       -188 |          0 |          0 |       -188 |
+| d:\share12\three-template-master\src\assets\image\quick-pass.jpg                                                     | encodingImgTargetFile |       -233 |          0 |         -1 |       -234 |
+| d:\share12\three-template-master\src\assets\image\step.jpg                                                           | encodingImgTargetFile |     -2,199 |          0 |        -11 |     -2,210 |
+| d:\share12\three-template-master\src\assets\image\union-pay-logo-1.jpg                                               | encodingImgTargetFile |       -500 |          0 |         -1 |       -501 |
+| d:\share12\three-template-master\src\assets\image\unionpay-logo.jpg                                                  | encodingImgTargetFile |       -589 |          0 |         -3 |       -592 |
+| d:\share12\three-template-master\src\assets\logo.png                                                                 | encodingImgTargetFile |        -59 |          0 |         -1 |        -60 |
+| d:\share12\three-template-master\src\assets\logo\antdv.svg                                                           | encodingImgTargetFile |        -27 |          0 |         -1 |        -28 |
+| d:\share12\three-template-master\src\assets\logo\atlassian.svg                                                       | encodingImgTargetFile |        -16 |          0 |          0 |        -16 |
+| d:\share12\three-template-master\src\assets\logo\invision.svg                                                        | encodingImgTargetFile |        -10 |          0 |          0 |        -10 |
+| d:\share12\three-template-master\src\assets\logo\jira.svg                                                            | encodingImgTargetFile |        -21 |          0 |          0 |        -21 |
+| d:\share12\three-template-master\src\assets\logo\shopify.svg                                                         | encodingImgTargetFile |        -11 |          0 |          0 |        -11 |
+| d:\share12\three-template-master\src\assets\logo\slack.svg                                                           | encodingImgTargetFile |        -12 |          0 |          0 |        -12 |
+| d:\share12\three-template-master\src\assets\logo\spotify.svg                                                         | encodingImgTargetFile |         -9 |          0 |          0 |         -9 |
+| d:\share12\three-template-master\src\assets\logo\tailwindcss.svg                                                     | encodingImgTargetFile |         -3 |          0 |          0 |         -3 |
+| d:\share12\three-template-master\src\assets\personal-bg.png                                                          | encodingImgTargetFile |       -916 |          0 |         -5 |       -921 |
+| d:\share12\three-template-master\src\assets\shopify.svg                                                              | encodingImgTargetFile |        -12 |          0 |          0 |        -12 |
+| d:\share12\three-template-master\src\assets\theme\china-red.png                                                      | encodingImgTargetFile |       -492 |          0 |         -2 |       -494 |
+| d:\share12\three-template-master\src\assets\theme\green.png                                                          | encodingImgTargetFile |       -500 |          0 |         -3 |       -503 |
+| d:\share12\three-template-master\src\assets\theme\header-dark.png                                                    | encodingImgTargetFile |       -377 |          0 |         -7 |       -384 |
+| d:\share12\three-template-master\src\assets\theme\idea.png                                                           | encodingImgTargetFile |       -431 |          0 |        -33 |       -464 |
+| d:\share12\three-template-master\src\assets\theme\light.png                                                          | encodingImgTargetFile |       -365 |          0 |        -39 |       -404 |
+| d:\share12\three-template-master\src\assets\theme\orange.png                                                         | encodingImgTargetFile |       -492 |          0 |         -2 |       -494 |
+| d:\share12\three-template-master\src\assets\theme\pink.png                                                           | encodingImgTargetFile |       -472 |          0 |         -3 |       -475 |
+| d:\share12\three-template-master\src\assets\theme\purple.png                                                         | encodingImgTargetFile |       -545 |          0 |         -5 |       -550 |
+| d:\share12\three-template-master\src\assets\theme\side-dark.png                                                      | encodingImgTargetFile |       -370 |          0 |         -7 |       -377 |
+| d:\share12\three-template-master\src\assets\theme\vscode.png                                                         | encodingImgTargetFile |       -459 |          0 |         -4 |       -463 |
+| d:\share12\three-template-master\src\assets\vite.svg                                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\assets\vue.svg                                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\base\base.ts                                                                    | TypeScript            |        -84 |         -9 |         -1 |        -94 |
+| d:\share12\three-template-master\src\bread\bread.ts                                                                  | TypeScript            |        -27 |          0 |         -4 |        -31 |
+| d:\share12\three-template-master\src\bread\breadCom.tsx                                                              | TypeScript JSX        |        -42 |          0 |         -3 |        -45 |
+| d:\share12\three-template-master\src\bread\breaditem.ts                                                              | TypeScript            |        -27 |          0 |         -1 |        -28 |
+| d:\share12\three-template-master\src\bread\formBarBread.tsx                                                          | TypeScript JSX        |        -33 |          0 |          0 |        -33 |
+| d:\share12\three-template-master\src\buttonGroup\bMenu.ts                                                            | TypeScript            |        -61 |         -1 |         -3 |        -65 |
+| d:\share12\three-template-master\src\buttonGroup\button.ts                                                           | TypeScript            |        -88 |          0 |         -2 |        -90 |
+| d:\share12\three-template-master\src\buttonGroup\buttonCom.tsx                                                       | TypeScript JSX        |        -39 |         -2 |         -1 |        -42 |
+| d:\share12\three-template-master\src\buttonGroup\buttonGroup.ts                                                      | TypeScript            |        -41 |          0 |         -2 |        -43 |
+| d:\share12\three-template-master\src\buttonGroup\buttonGroupCom.tsx                                                  | TypeScript JSX        |       -140 |         -2 |         -2 |       -144 |
+| d:\share12\three-template-master\src\buttonGroup\dragPlugin.ts                                                       | TypeScript            |       -453 |        -32 |        -15 |       -500 |
+| d:\share12\three-template-master\src\buttonGroup\tab.ts                                                              | TypeScript            |        -97 |         -1 |         -2 |       -100 |
+| d:\share12\three-template-master\src\buttonGroup\tabCom.tsx                                                          | TypeScript JSX        |       -176 |         -6 |         -2 |       -184 |
+| d:\share12\three-template-master\src\buttonGroup\tabitem.ts                                                          | TypeScript            |       -196 |         -9 |         -2 |       -207 |
+| d:\share12\three-template-master\src\components\Preload.vue                                                          | vue                   |       -142 |          0 |         -6 |       -148 |
+| d:\share12\three-template-master\src\contextM\components\Contextmenu.tsx                                             | TypeScript JSX        |       -214 |        -72 |        -37 |       -323 |
+| d:\share12\three-template-master\src\contextM\components\ContextmenuCom.tsx                                          | TypeScript JSX        |       -142 |         -1 |         -3 |       -146 |
+| d:\share12\three-template-master\src\contextM\components\ContextmenuDivider.tsx                                      | TypeScript JSX        |         -9 |          0 |         -5 |        -14 |
+| d:\share12\three-template-master\src\contextM\components\ContextmenuGroup.tsx                                        | TypeScript JSX        |        -50 |          0 |        -12 |        -62 |
+| d:\share12\three-template-master\src\contextM\components\ContextmenuIcon.tsx                                         | TypeScript JSX        |        -22 |          0 |         -6 |        -28 |
+| d:\share12\three-template-master\src\contextM\components\ContextmenuItem.tsx                                         | TypeScript JSX        |        -72 |          0 |        -22 |        -94 |
+| d:\share12\three-template-master\src\contextM\components\ContextmenuSubmenu.tsx                                      | TypeScript JSX        |       -108 |         -3 |        -26 |       -137 |
+| d:\share12\three-template-master\src\contextM\constants\classes.ts                                                   | TypeScript            |        -21 |          0 |         -5 |        -26 |
+| d:\share12\three-template-master\src\contextM\constants\index.ts                                                     | TypeScript            |         -2 |          0 |         -2 |         -4 |
+| d:\share12\three-template-master\src\contextM\directive.ts                                                           | TypeScript            |        -69 |         -3 |        -16 |        -88 |
+| d:\share12\three-template-master\src\contextM\index.ts                                                               | TypeScript            |        -28 |          0 |         -9 |        -37 |
+| d:\share12\three-template-master\src\contextM\themes\bright\index.scss                                               | SCSS                  |         -4 |          0 |         -1 |         -5 |
+| d:\share12\three-template-master\src\contextM\themes\bright\variables.scss                                           | SCSS                  |         -2 |          0 |         -2 |         -4 |
+| d:\share12\three-template-master\src\contextM\themes\dark\index.scss                                                 | SCSS                  |         -4 |          0 |         -1 |         -5 |
+| d:\share12\three-template-master\src\contextM\themes\dark\variables.scss                                             | SCSS                  |         -2 |          0 |         -2 |         -4 |
+| d:\share12\three-template-master\src\contextM\themes\default\animate.scss                                            | SCSS                  |        -11 |          0 |         -3 |        -14 |
+| d:\share12\three-template-master\src\contextM\themes\default\contextmenu.scss                                        | SCSS                  |        -83 |          0 |        -17 |       -100 |
+| d:\share12\three-template-master\src\contextM\themes\default\icon.scss                                               | SCSS                  |        -21 |          0 |         -3 |        -24 |
+| d:\share12\three-template-master\src\contextM\themes\default\index.scss                                              | SCSS                  |         -4 |          0 |         -1 |         -5 |
+| d:\share12\three-template-master\src\contextM\themes\default\variables.scss                                          | SCSS                  |        -11 |          0 |         -5 |        -16 |
+| d:\share12\three-template-master\src\contextM\themes\fonts\iconfont.svg                                              | encodingImgTargetFile |        -27 |          0 |        -10 |        -37 |
+| d:\share12\three-template-master\src\contextM\themes\fonts\iconfont.ttf                                              | encodingImgTargetFile |        -24 |          0 |          0 |        -24 |
+| d:\share12\three-template-master\src\contextM\themes\fonts\iconfont.woff                                             | encodingImgTargetFile |         -9 |          0 |          0 |         -9 |
+| d:\share12\three-template-master\src\contextM\themes\test.cjs                                                        | JavaScript            |        -49 |         -8 |         -6 |        -63 |
+| d:\share12\three-template-master\src\contextM\types\index.ts                                                         | TypeScript            |        -26 |         -9 |         -9 |        -44 |
+| d:\share12\three-template-master\src\dialog\dialog.ts                                                                | TypeScript            |        -12 |          0 |         -2 |        -14 |
+| d:\share12\three-template-master\src\dialog\dialogCom.tsx                                                            | TypeScript JSX        |        -10 |          0 |         -2 |        -12 |
+| d:\share12\three-template-master\src\game\camera.ts                                                                  | TypeScript            |        -38 |          0 |         -4 |        -42 |
+| d:\share12\three-template-master\src\game\controls.ts                                                                | TypeScript            |        -19 |          0 |         -2 |        -21 |
+| d:\share12\three-template-master\src\game\index.ts                                                                   | TypeScript            |       -125 |          0 |        -21 |       -146 |
+| d:\share12\three-template-master\src\game\light.ts                                                                   | TypeScript            |        -16 |          0 |         -2 |        -18 |
+| d:\share12\three-template-master\src\game\renderer.ts                                                                | TypeScript            |        -44 |          0 |         -5 |        -49 |
+| d:\share12\three-template-master\src\game\scene.ts                                                                   | TypeScript            |        -11 |          0 |         -2 |        -13 |
+| d:\share12\three-template-master\src\game\utils\assets.ts                                                            | TypeScript            |        -29 |          0 |         -3 |        -32 |
+| d:\share12\three-template-master\src\game\utils\audio.ts                                                             | TypeScript            |        -52 |          0 |         -8 |        -60 |
+| d:\share12\three-template-master\src\game\utils\loaders.ts                                                           | TypeScript            |        -69 |          0 |        -10 |        -79 |
+| d:\share12\three-template-master\src\game\utils\resource.ts                                                          | TypeScript            |       -104 |          0 |        -13 |       -117 |
+| d:\share12\three-template-master\src\game\utils\stats.ts                                                             | TypeScript            |        -14 |          0 |         -1 |        -15 |
+| d:\share12\three-template-master\src\game\utils\time.ts                                                              | TypeScript            |        -17 |          0 |         -2 |        -19 |
+| d:\share12\three-template-master\src\game\world\cube.ts                                                              | TypeScript            |        -21 |          0 |         -3 |        -24 |
+| d:\share12\three-template-master\src\game\world\index.ts                                                             | TypeScript            |        -27 |          0 |         -3 |        -30 |
+| d:\share12\three-template-master\src\game\world\sky-box.ts                                                           | TypeScript            |        -41 |          0 |         -3 |        -44 |
+| d:\share12\three-template-master\src\global.d.ts                                                                     | TypeScript            |         -9 |          0 |         -5 |        -14 |
+| d:\share12\three-template-master\src\main.ts                                                                         | TypeScript            |        -46 |         -3 |         -1 |        -50 |
+| d:\share12\three-template-master\src\mainStyle.css                                                                   | CSS                   |       -131 |         -1 |        -11 |       -143 |
+| d:\share12\three-template-master\src\menu\dropdown.ts                                                                | TypeScript            |        -43 |          0 |         -2 |        -45 |
+| d:\share12\three-template-master\src\menu\dropdownCom.tsx                                                            | TypeScript JSX        |        -67 |         -1 |         -1 |        -69 |
+| d:\share12\three-template-master\src\menu\fieldCom.tsx                                                               | TypeScript JSX        |       -109 |         -2 |         -1 |       -112 |
+| d:\share12\three-template-master\src\menu\menu.ts                                                                    | TypeScript            |        -94 |          0 |         -1 |        -95 |
+| d:\share12\three-template-master\src\menu\menuCom.tsx                                                                | TypeScript JSX        |       -192 |         -1 |         -2 |       -195 |
+| d:\share12\three-template-master\src\menu\menuitem.ts                                                                | TypeScript            |       -111 |         -7 |         -2 |       -120 |
+| d:\share12\three-template-master\src\menu\pulldownCom.tsx                                                            | TypeScript JSX        |       -442 |        -22 |         -1 |       -465 |
+| d:\share12\three-template-master\src\packages\base.ts                                                                | TypeScript            |         -7 |          0 |         -1 |         -8 |
+| d:\share12\three-template-master\src\packages\ckeditor\__index.jsx                                                   | JavaScript            |       -112 |        -54 |        -29 |       -195 |
+| d:\share12\three-template-master\src\packages\ckeditor\index.jsx                                                     | JavaScript            |       -219 |         -9 |        -10 |       -238 |
+| d:\share12\three-template-master\src\packages\ckeditor\style\index.js                                                | JavaScript            |         -2 |          0 |         -1 |         -3 |
+| d:\share12\three-template-master\src\packages\form.ts                                                                | TypeScript            |     -1,417 |        -84 |        -20 |     -1,521 |
+| d:\share12\three-template-master\src\packages\formCom.tsx                                                            | TypeScript JSX        |        -78 |         -4 |         -1 |        -83 |
+| d:\share12\three-template-master\src\packages\formEditor\componentsConfig.ts                                         | TypeScript            |       -496 |        -90 |         -2 |       -588 |
+| d:\share12\three-template-master\src\packages\formEditor\components\CompleteButton.tsx                               | TypeScript JSX        |        -61 |         -2 |         -1 |        -64 |
+| d:\share12\three-template-master\src\packages\formEditor\components\DeviceSwitch.vue                                 | vue                   |        -34 |         -2 |         -3 |        -39 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Baseinfo\mobile.tsx                    | TypeScript JSX        |          0 |          0 |         -1 |         -1 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Baseinfo\mobile.vue                    | vue                   |        -36 |          0 |         -3 |        -39 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Baseinfo\pc.tsx                        | TypeScript JSX        |          0 |          0 |         -1 |         -1 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Baseinfo\pc.vue                        | vue                   |        -21 |          0 |         -3 |        -24 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Cascader\mobile.tsx                    | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Cascader\mobile.vue                    | vue                   |        -36 |          0 |         -3 |        -39 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Cascader\pc.tsx                        | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Cascader\pc.vue                        | vue                   |        -21 |          0 |         -3 |        -24 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\Other\mobile.tsx              | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\Other\mobile.vue              | vue                   |        -42 |        -10 |         -2 |        -54 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\Other\pc.tsx                  | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\Other\pc.vue                  | vue                   |        -41 |          0 |         -2 |        -43 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\mobile.tsx                    | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\mobile.vue                    | vue                   |        -39 |          0 |         -3 |        -42 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\pc.tsx                        | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\pc.vue                        | vue                   |        -26 |          0 |         -3 |        -29 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Date\Other\mobile.tsx                  | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Date\Other\mobile.vue                  | vue                   |        -42 |        -10 |         -2 |        -54 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Date\Other\pc.tsx                      | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Date\Other\pc.vue                      | vue                   |        -41 |          0 |         -2 |        -43 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Date\mobile.tsx                        | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Date\mobile.vue                        | vue                   |       -122 |          0 |         -2 |       -124 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Date\pc.tsx                            | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Date\pc.vue                            | vue                   |        -21 |          0 |         -3 |        -24 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\Other\mobile.tsx               | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\Other\mobile.vue               | vue                   |        -42 |        -10 |         -2 |        -54 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\Other\pc.tsx                   | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\Other\pc.vue                   | vue                   |        -41 |          0 |         -2 |        -43 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\mobile.tsx                     | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\mobile.vue                     | vue                   |        -29 |          0 |         -3 |        -32 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\pc.tsx                         | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\pc.vue                         | vue                   |        -20 |          0 |         -3 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Entity\mobile.tsx                      | TypeScript JSX        |         -7 |          0 |         -1 |         -8 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Entity\pc.tsx                          | TypeScript JSX        |        -89 |          0 |         -1 |        -90 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\Other\mobile.tsx                  | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\Other\mobile.vue                  | vue                   |        -42 |        -10 |         -2 |        -54 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\Other\pc.tsx                      | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\Other\pc.vue                      | vue                   |        -41 |          0 |         -2 |        -43 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\mobile.tsx                        | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\mobile.vue                        | vue                   |        -67 |         -1 |         -3 |        -71 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\pc.tsx                            | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\pc.vue                            | vue                   |        -28 |          0 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Input\mobile.tsx                       | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Input\mobile.vue                       | vue                   |        -18 |          0 |         -3 |        -21 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Input\pc.tsx                           | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Input\pc.vue                           | vue                   |        -22 |          0 |         -3 |        -25 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\Other\mobile.tsx                | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\Other\mobile.vue                | vue                   |        -42 |        -10 |         -2 |        -54 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\Other\pc.tsx                    | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\Other\pc.vue                    | vue                   |        -41 |          0 |         -2 |        -43 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\mobile.tsx                      | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\mobile.vue                      | vue                   |        -35 |          0 |         -5 |        -40 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\pc.tsx                          | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\pc.vue                          | vue                   |        -21 |          0 |         -3 |        -24 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Other\mobile.tsx                       | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Other\mobile.vue                       | vue                   |        -42 |        -10 |         -2 |        -54 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Other\pc.tsx                           | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Other\pc.vue                           | vue                   |        -41 |          0 |         -2 |        -43 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Radio\mobile.tsx                       | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Radio\mobile.vue                       | vue                   |        -39 |          0 |         -3 |        -42 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Radio\pc.tsx                           | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Radio\pc.vue                           | vue                   |        -30 |          0 |         -2 |        -32 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Rate\mobile.tsx                        | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Rate\mobile.vue                        | vue                   |        -19 |          0 |         -2 |        -21 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Rate\pc.tsx                            | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Rate\pc.vue                            | vue                   |        -19 |          0 |         -3 |        -22 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Region\mobile.tsx                      | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Region\mobile.vue                      | vue                   |        -79 |          0 |         -3 |        -82 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Region\pc.tsx                          | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Region\pc.vue                          | vue                   |        -22 |          0 |         -3 |        -25 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Select\mobile.tsx                      | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Select\mobile.vue                      | vue                   |        -49 |          0 |         -3 |        -52 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Select\pc.tsx                          | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Select\pc.vue                          | vue                   |        -29 |         -4 |         -3 |        -36 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Sform\mobile.tsx                       | TypeScript JSX        |        -20 |         -1 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Sform\mobile.vue                       | vue                   |         -3 |          0 |          0 |         -3 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Sform\pc.tsx                           | TypeScript JSX        |        -20 |          0 |         -2 |        -22 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Sform\pc.vue                           | vue                   |         -3 |          0 |          0 |         -3 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Signature\mobile.tsx                   | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Signature\mobile.vue                   | vue                   |       -161 |          0 |         -3 |       -164 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Signature\pc.tsx                       | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Signature\pc.vue                       | vue                   |       -153 |          0 |         -3 |       -156 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Slider\mobile.tsx                      | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Slider\mobile.vue                      | vue                   |        -31 |          0 |         -3 |        -34 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Slider\pc.tsx                          | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Slider\pc.vue                          | vue                   |        -19 |          0 |         -3 |        -22 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Stable\mobile.tsx                      | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Stable\mobile.vue                      | vue                   |        -26 |          0 |         -3 |        -29 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Stable\pc.tsx                          | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Stable\pc.vue                          | vue                   |        -19 |          0 |         -3 |        -22 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Switch\mobile.tsx                      | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Switch\mobile.vue                      | vue                   |        -26 |          0 |         -3 |        -29 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Switch\pc.tsx                          | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Switch\pc.vue                          | vue                   |        -19 |          0 |         -3 |        -22 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Textarea\mobile.tsx                    | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Textarea\mobile.vue                    | vue                   |        -18 |        -10 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Textarea\pc.tsx                        | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Textarea\pc.vue                        | vue                   |        -18 |        -10 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Time\mobile.tsx                        | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Time\mobile.vue                        | vue                   |        -74 |          0 |         -3 |        -77 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Time\pc.tsx                            | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Time\pc.vue                            | vue                   |        -22 |          0 |         -3 |        -25 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Uploadfile\mobile.tsx                  | TypeScript JSX        |        -21 |         -7 |         -3 |        -31 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Uploadfile\mobile.vue                  | vue                   |        -69 |          0 |         -1 |        -70 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Uploadfile\pc.tsx                      | TypeScript JSX        |        -21 |          0 |         -2 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Uploadfile\pc.vue                      | vue                   |        -93 |          0 |         -3 |        -96 |
+| d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\index.ts                               | TypeScript            |        -52 |        -10 |         -2 |        -64 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Icon.vue                                         | vue                   |        -33 |          0 |         -3 |        -36 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\CollapseLayout.tsx                        | TypeScript JSX        |        -46 |          0 |         -1 |        -47 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\ControlInsertionPlugin.ts                 | TypeScript            |       -489 |        -40 |        -14 |       -543 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\DragGable.tsx                             | TypeScript JSX        |       -245 |        -41 |         -3 |       -289 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\DragGableWrap.tsx                         | TypeScript JSX        |        -58 |         -1 |          0 |        -59 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\GridLayout.tsx                            | TypeScript JSX        |        -77 |         -7 |         -1 |        -85 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\InlineLayout.tsx                          | TypeScript JSX        |        -38 |          0 |         -2 |        -40 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\SubformLayout.tsx                         | TypeScript JSX        |       -121 |         -1 |         -1 |       -123 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\TableLayout.tsx                           | TypeScript JSX        |       -105 |          0 |         -1 |       -106 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Layout\TabsLayout.tsx                            | TypeScript JSX        |        -39 |         -4 |         -1 |        -44 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Canves\index.tsx                          | TypeScript JSX        |        -94 |         -5 |         -1 |       -100 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\AllsidesComponent.vue   | vue                   |        -81 |          0 |         -1 |        -82 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\BackgroundComponent.vue | vue                   |       -295 |         -1 |         -2 |       -298 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\BorderComponent.vue     | vue                   |       -163 |          0 |         -1 |       -164 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\CheckboxComponent.vue   | vue                   |        -39 |          0 |         -1 |        -40 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\CollapseComponent.vue   | vue                   |        -45 |          0 |         -1 |        -46 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\DataComponent1.jsx      | JavaScript            |       -212 |         -2 |         -1 |       -215 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\DataComponent2.jsx      | JavaScript            |       -184 |        -15 |         -1 |       -200 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\DataComponent3.vue      | vue                   |        -91 |          0 |         -1 |        -92 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\GlobalConfigPanel.tsx   | TypeScript JSX        |        -16 |          0 |         -1 |        -17 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\GlobalConfigPanel.vue   | vue                   |       -218 |          0 |         -1 |       -219 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\LimitComponent.vue      | vue                   |        -55 |          0 |         -1 |        -56 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\LogicComponent.vue      | vue                   |       -299 |          0 |         -2 |       -301 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\PropsPanel copy.tsx     | TypeScript JSX        |        -23 |          0 |          0 |        -23 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\PropsPanel.vue          | vue                   |       -805 |         -4 |         -2 |       -811 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\SubformDefaultValue.vue | vue                   |       -121 |          0 |         -1 |       -122 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\TypeComponent.vue       | vue                   |        -86 |          0 |         -1 |        -87 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\fConfigPanel.tsx        | TypeScript JSX        |        -76 |         -9 |         -1 |        -86 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\generateFilterdata.js   | JavaScript            |       -394 |        -32 |         -1 |       -427 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\configPanel.tsx                    | TypeScript JSX        |       -208 |         -3 |         -1 |       -212 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\index.vue                          | vue                   |       -185 |          0 |         -2 |       -187 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Panels\Fields\index.tsx                          | TypeScript JSX        |        -88 |         -1 |         -2 |        -91 |
+| d:\share12\three-template-master\src\packages\formEditor\components\Selection\selectElement.tsx                      | TypeScript JSX        |       -416 |        -50 |         -7 |       -473 |
+| d:\share12\three-template-master\src\packages\formEditor\config.tsx                                                  | TypeScript JSX        |       -106 |          0 |         -1 |       -107 |
+| d:\share12\three-template-master\src\packages\formEditor\defaultProps.ts                                             | TypeScript            |        -64 |          0 |         -1 |        -65 |
+| d:\share12\three-template-master\src\packages\formEditor\fieldFormConfig.ts                                          | TypeScript            |        -12 |          0 |         -1 |        -13 |
+| d:\share12\three-template-master\src\packages\formEditor\formEditor.tsx                                              | TypeScript JSX        |       -325 |        -30 |         -3 |       -358 |
+| d:\share12\three-template-master\src\packages\formEditor\formTab.tsx                                                 | TypeScript JSX        |        -25 |          0 |         -1 |        -26 |
+| d:\share12\three-template-master\src\packages\formEditor\formType.ts                                                 | TypeScript            |        -18 |          0 |         -2 |        -20 |
+| d:\share12\three-template-master\src\packages\formEditor\generatorData.ts                                            | TypeScript            |        -26 |         -2 |         -1 |        -29 |
+| d:\share12\three-template-master\src\packages\formEditor\index.ts                                                    | TypeScript            |        -15 |         -6 |         -1 |        -22 |
+| d:\share12\three-template-master\src\packages\formEditor\locale\en.ts                                                | TypeScript            |       -289 |          0 |         -1 |       -290 |
+| d:\share12\three-template-master\src\packages\formEditor\locale\index.ts                                             | TypeScript            |         -8 |         -1 |         -1 |        -10 |
+| d:\share12\three-template-master\src\packages\formEditor\locale\zh-cn.ts                                             | TypeScript            |       -289 |          0 |         -1 |       -290 |
+| d:\share12\three-template-master\src\packages\formEditor\node.ts                                                     | TypeScript            |       -135 |         -2 |         -1 |       -138 |
+| d:\share12\three-template-master\src\packages\formEditor\preview.tsx                                                 | TypeScript JSX        |       -214 |        -11 |         -4 |       -229 |
+| d:\share12\three-template-master\src\packages\formEditor\style\index.js                                              | JavaScript            |         -3 |         -1 |         -1 |         -5 |
+| d:\share12\three-template-master\src\packages\formEditor\testData.ts                                                 | TypeScript            |     -1,379 |       -864 |        -11 |     -2,254 |
+| d:\share12\three-template-master\src\packages\formitem.ts                                                            | TypeScript            |       -572 |        -35 |         -4 |       -611 |
+| d:\share12\three-template-master\src\packages\hooks\index.ts                                                         | TypeScript            |        -20 |         -1 |          0 |        -21 |
+| d:\share12\three-template-master\src\packages\hooks\use-css\index.ts                                                 | TypeScript            |       -173 |         -1 |         -1 |       -175 |
+| d:\share12\three-template-master\src\packages\hooks\use-fetch\index.ts                                               | TypeScript            |        -30 |         -2 |         -1 |        -33 |
+| d:\share12\three-template-master\src\packages\hooks\use-history\index.ts                                             | TypeScript            |        -79 |         -8 |         -1 |        -88 |
+| d:\share12\three-template-master\src\packages\hooks\use-i18n\index.ts                                                | TypeScript            |        -16 |         -9 |         -2 |        -27 |
+| d:\share12\three-template-master\src\packages\hooks\use-logic\index.ts                                               | TypeScript            |       -330 |        -19 |         -1 |       -350 |
+| d:\share12\three-template-master\src\packages\hooks\use-namespace\index.ts                                           | TypeScript            |        -36 |          0 |         -1 |        -37 |
+| d:\share12\three-template-master\src\packages\hooks\use-props\index.ts                                               | TypeScript            |       -384 |        -13 |         -5 |       -402 |
+| d:\share12\three-template-master\src\packages\hooks\use-target\index.ts                                              | TypeScript            |        -42 |          0 |         -5 |        -47 |
+| d:\share12\three-template-master\src\packages\icon\__index.vue                                                       | vue                   |        -32 |          0 |         -3 |        -35 |
+| d:\share12\three-template-master\src\packages\icon\index.js                                                          | JavaScript            |         -2 |         -1 |         -1 |         -4 |
+| d:\share12\three-template-master\src\packages\icon\index.vue                                                         | vue                   |        -49 |          0 |         -3 |        -52 |
+| d:\share12\three-template-master\src\packages\icon\svg\ID.svg                                                        | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\PC.svg                                                        | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\Rank.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowDown.svg                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowDownBold.svg                                             | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowLeft.svg                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowLeftBold.svg                                             | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowRight.svg                                                | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowRightBold.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowUp.svg                                                   | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowUpBold .svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\arrowUpBold.svg                                               | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\back.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\bottom.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\bottomLeft .svg                                               | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\bottomRight.svg                                               | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\calendar.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\cascader.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\cellphone.svg                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\checkbox.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\circleClose.svg                                               | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\circleMinus.svg                                               | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\circlePlus.svg                                                | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\clear0.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\clear1.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\collapse.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\copy.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\delete.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\divider.svg                                                   | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\dividerLocationP1.svg                                         | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\dividerLocationP2.svg                                         | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\dividerLocationP3.svg                                         | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\doubleArrowLeft.svg                                           | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\doubleArrowRight.svg                                          | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\drag.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\dragHeight.svg                                                | encodingImgTargetFile |         -6 |          0 |         -1 |         -7 |
+| d:\share12\three-template-master\src\packages\icon\svg\dragWidth.svg                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\dropUp0.svg                                                   | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\dropdown0.svg                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\email.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\grid.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP1.svg                                        | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP2.svg                                        | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP3.svg                                        | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP4.svg                                        | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP5.svg                                        | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\html.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\index.js                                                      | JavaScript            |         -8 |          0 |         -1 |         -9 |
+| d:\share12\three-template-master\src\packages\icon\svg\input.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\label.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\labelStructureP1.svg                                          | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\labelStructureP2.svg                                          | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\labelStructureP3.svg                                          | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\language.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\lineThickness.svg                                             | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\location.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\minus.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\minusBold.svg                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\move1.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\numberButtonP1.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\numberButtonP2.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\numbers.svg                                                   | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\plus.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\plusBold.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\preview.svg                                                   | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\radio.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\radius.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\rating.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\redo.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\right.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\save.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\search.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\signature.svg                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\slider.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\sort.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\spaceBottom.svg                                               | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\spaceLeft.svg                                                 | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\spaceRight.svg                                                | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\spaceTop.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\subform.svg                                                   | encodingImgTargetFile |         -1 |          0 |         -1 |         -2 |
+| d:\share12\three-template-master\src\packages\icon\svg\switch.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tabStyleP1.svg                                                | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tabStyleP2.svg                                                | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tabStyleP3.svg                                                | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\table.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableInsertCol.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableInsertRow.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableOperation.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableStokeP1.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableStokeP2.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableStokeP3.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableStokeP4.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableStokeP5.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableStokeP6.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableStokeP7.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tableStokeP8.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tabsLocationP1.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tabsLocationP2.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tabsLocationP3.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\tabsLocationP4.svg                                            | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\textarea.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\time.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\title.svg                                                     | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\top.svg                                                       | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\topLeft.svg                                                   | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\topRight.svg                                                  | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\undo.svg                                                      | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\upload.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\url.svg                                                       | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\widthRatioP1.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\widthRatioP2.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\widthRatioP3.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\widthRatioP4.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\widthRatioP5.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\widthRatioP6.svg                                              | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\zoomIn.svg                                                    | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\icon\svg\zoomOut.svg                                                   | encodingImgTargetFile |         -1 |          0 |          0 |         -1 |
+| d:\share12\three-template-master\src\packages\itemTypeMap.ts                                                         | TypeScript            |        -23 |          0 |         -2 |        -25 |
+| d:\share12\three-template-master\src\packages\layoutType.ts                                                          | TypeScript            |       -133 |          0 |        -16 |       -149 |
+| d:\share12\three-template-master\src\packages\pageCom.tsx                                                            | TypeScript JSX        |       -334 |        -81 |         -3 |       -418 |
+| d:\share12\three-template-master\src\packages\pageDesign.ts                                                          | TypeScript            |        -68 |         -7 |         -2 |        -77 |
+| d:\share12\three-template-master\src\packages\pageDesignConfig.ts                                                    | TypeScript            |       -194 |        -50 |         -1 |       -245 |
+| d:\share12\three-template-master\src\packages\pageDesignFn.ts                                                        | TypeScript            |       -217 |          0 |         -2 |       -219 |
+| d:\share12\three-template-master\src\packages\pageItem.ts                                                            | TypeScript            |         -6 |         -1 |         -2 |         -9 |
+| d:\share12\three-template-master\src\packages\region\Region.js                                                       | JavaScript            |        -72 |          0 |         -5 |        -77 |
+| d:\share12\three-template-master\src\packages\region\index.js                                                        | JavaScript            |         -5 |          0 |         -1 |         -6 |
+| d:\share12\three-template-master\src\packages\region\index.vue                                                       | vue                   |       -429 |          0 |        -10 |       -439 |
+| d:\share12\three-template-master\src\packages\region\node.js                                                         | JavaScript            |        -51 |          0 |         -7 |        -58 |
+| d:\share12\three-template-master\src\packages\region\store.js                                                        | JavaScript            |       -131 |         -8 |        -19 |       -158 |
+| d:\share12\three-template-master\src\packages\region\style\index.js                                                  | JavaScript            |         -2 |         -1 |         -1 |         -4 |
+| d:\share12\three-template-master\src\packages\theme\base.scss                                                        | SCSS                  |        -45 |          0 |         -1 |        -46 |
+| d:\share12\three-template-master\src\packages\theme\ckeditor\index.scss                                              | SCSS                  |        -48 |         -1 |         -1 |        -50 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\Canves.scss                                           | SCSS                  |        -69 |         -7 |         -1 |        -77 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\CollapseLayout.scss                                   | SCSS                  |         -6 |          0 |         -1 |         -7 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\Config.scss                                           | SCSS                  |        -85 |        -22 |         -1 |       -108 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigAllsides.scss                                   | SCSS                  |        -18 |          0 |         -1 |        -19 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigBackground.scss                                 | SCSS                  |        -87 |         -4 |         -1 |        -92 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigBorder.scss                                     | SCSS                  |        -23 |          0 |         -1 |        -24 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigCheckboxComponent.scss                          | SCSS                  |        -17 |         -7 |         -1 |        -25 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigCollapseComponent.scss                          | SCSS                  |        -23 |        -28 |         -1 |        -52 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigData1.scss                                      | SCSS                  |        -54 |          0 |         -2 |        -56 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigData2.scss                                      | SCSS                  |        -71 |        -11 |         -1 |        -83 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigData3.scss                                      | SCSS                  |        -33 |         -3 |         -1 |        -37 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigGridLayoutComponent.scss                        | SCSS                  |         -3 |          0 |         -1 |         -4 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigLogicComponent.scss                             | SCSS                  |        -65 |          0 |         -1 |        -66 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigSubformDefaultValueComponent.scss               | SCSS                  |        -15 |          0 |         -1 |        -16 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\ConfigTypeComponent.scss                              | SCSS                  |        -64 |         -7 |         -1 |        -72 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\DeviceSwitch.scss                                     | SCSS                  |        -26 |        -29 |         -1 |        -56 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\DragGableLayout.scss                                  | SCSS                  |        -17 |         -3 |         -1 |        -21 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\Fields.scss                                           | SCSS                  |        -67 |          0 |         -1 |        -68 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Cascader.scss                               | SCSS                  |        -22 |          0 |         -1 |        -23 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Checkbox.scss                               | SCSS                  |        -13 |          0 |         -1 |        -14 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Date.scss                                   | SCSS                  |         -6 |          0 |         -2 |         -8 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Divider.scss                                | SCSS                  |         -7 |         -2 |         -1 |        -10 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Html.scss                                   | SCSS                  |         -7 |         -1 |         -1 |         -9 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Number.scss                                 | SCSS                  |         -6 |          0 |         -1 |         -7 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Other.scss                                  | SCSS                  |        -14 |          0 |         -1 |        -15 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Radio.scss                                  | SCSS                  |        -12 |          0 |         -1 |        -13 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Region.scss                                 | SCSS                  |         -6 |          0 |         -1 |         -7 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Select.scss                                 | SCSS                  |        -21 |          0 |         -1 |        -22 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Signature.scss                              | SCSS                  |        -52 |          0 |         -1 |        -53 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Slider.scss                                 | SCSS                  |        -16 |          0 |         -1 |        -17 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Time.scss                                   | SCSS                  |         -6 |          0 |         -1 |         -7 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\GlobalConfigPanel.scss                                | SCSS                  |        -90 |        -12 |         -1 |       -103 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\GridLayout.scss                                       | SCSS                  |         -5 |         -1 |         -1 |         -7 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\Home.scss                                             | SCSS                  |        -22 |         -3 |         -1 |        -26 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\Icon.scss                                             | SCSS                  |         -7 |          0 |         -1 |         -8 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\IconFont.scss                                         | SCSS                  |       -143 |          0 |        -41 |       -184 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\InlineLayout.scss                                     | SCSS                  |         -7 |         -1 |         -1 |         -9 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\Main.scss                                             | SCSS                  |       -147 |         -4 |         -1 |       -152 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\PropsPanel.scss                                       | SCSS                  |        -31 |          0 |         -1 |        -32 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\SelectElement.scss                                    | SCSS                  |        -79 |        -12 |         -1 |        -92 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\SubformLayout.scss                                    | SCSS                  |        -53 |         -6 |         -1 |        -60 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\TableLayout.scss                                      | SCSS                  |        -11 |         -1 |         -1 |        -13 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\TabsLayout.scss                                       | SCSS                  |         -9 |         -3 |         -1 |        -13 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\buttonGroupCom.scss                                   | SCSS                  |        -29 |          0 |         -1 |        -30 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\index.scss                                            | SCSS                  |        -44 |          0 |         -1 |        -45 |
+| d:\share12\three-template-master\src\packages\theme\formEditor\tabCom.scss                                           | SCSS                  |        -66 |         -1 |         -1 |        -68 |
+| d:\share12\three-template-master\src\packages\theme\icon.scss                                                        | SCSS                  |        -18 |          0 |         -1 |        -19 |
+| d:\share12\three-template-master\src\packages\theme\region\Main.scss                                                 | SCSS                  |       -104 |         -2 |         -1 |       -107 |
+| d:\share12\three-template-master\src\packages\theme\region\index.scss                                                | SCSS                  |         -2 |         -1 |         -1 |         -4 |
+| d:\share12\three-template-master\src\packages\type.ts                                                                | TypeScript            |        -88 |         -1 |         -6 |        -95 |
+| d:\share12\three-template-master\src\packages\utils\Context.ts                                                       | TypeScript            |       -944 |        -12 |         -3 |       -959 |
+| d:\share12\three-template-master\src\packages\utils\addContext.ts                                                    | TypeScript            |        -19 |         -4 |         -1 |        -24 |
+| d:\share12\three-template-master\src\packages\utils\decoration.ts                                                    | TypeScript            |       -133 |         -5 |         -5 |       -143 |
+| d:\share12\three-template-master\src\packages\utils\device.js                                                        | JavaScript            |         -4 |          0 |         -1 |         -5 |
+| d:\share12\three-template-master\src\packages\utils\equal.ts                                                         | TypeScript            |        -56 |         -5 |         -7 |        -68 |
+| d:\share12\three-template-master\src\packages\utils\field.ts                                                         | TypeScript            |       -303 |         -4 |         -1 |       -308 |
+| d:\share12\three-template-master\src\packages\utils\fileData.ts                                                      | TypeScript            |        -31 |          0 |         -1 |        -32 |
+| d:\share12\three-template-master\src\packages\utils\generateOptions.js                                               | JavaScript            |        -26 |          0 |         -1 |        -27 |
+| d:\share12\three-template-master\src\packages\utils\index.ts                                                         | TypeScript            |        -27 |        -16 |         -1 |        -44 |
+| d:\share12\three-template-master\src\packages\utils\logic.js                                                         | JavaScript            |        -47 |          0 |         -2 |        -49 |
+| d:\share12\three-template-master\src\packages\utils\nanoid.js                                                        | JavaScript            |         -5 |          0 |         -1 |         -6 |
+| d:\share12\three-template-master\src\packages\utils\test.js                                                          | JavaScript            |        -23 |          0 |         -1 |        -24 |
+| d:\share12\three-template-master\src\packages\utils\utils.ts                                                         | TypeScript            |        -82 |        -11 |         -2 |        -95 |
+| d:\share12\three-template-master\src\packages\vueDraggable\core\componentBuilderHelper.js                            | JavaScript            |        -42 |          0 |         -6 |        -48 |
+| d:\share12\three-template-master\src\packages\vueDraggable\core\componentStructure.js                                | JavaScript            |        -60 |          0 |        -10 |        -70 |
+| d:\share12\three-template-master\src\packages\vueDraggable\core\renderHelper.js                                      | JavaScript            |        -51 |          0 |         -6 |        -57 |
+| d:\share12\three-template-master\src\packages\vueDraggable\core\sortableEvents.js                                    | JavaScript            |        -15 |          0 |         -4 |        -19 |
+| d:\share12\three-template-master\src\packages\vueDraggable\util\console.js                                           | JavaScript            |         -8 |          0 |         -2 |        -10 |
+| d:\share12\three-template-master\src\packages\vueDraggable\util\htmlHelper.js                                        | JavaScript            |        -13 |          0 |         -3 |        -16 |
+| d:\share12\three-template-master\src\packages\vueDraggable\util\string.js                                            | JavaScript            |        -10 |          0 |         -3 |        -13 |
+| d:\share12\three-template-master\src\packages\vueDraggable\util\tags.js                                              | JavaScript            |       -134 |          0 |         -5 |       -139 |
+| d:\share12\three-template-master\src\packages\vueDraggable\vuedraggable.d.ts                                         | TypeScript            |        -74 |          0 |         -1 |        -75 |
+| d:\share12\three-template-master\src\packages\vueDraggable\vuedraggable.ts                                           | TypeScript            |       -290 |        -11 |        -36 |       -337 |
+| d:\share12\three-template-master\src\pages\billing\BankCard.vue                                                      | vue                   |        -61 |          0 |         -2 |        -63 |
+| d:\share12\three-template-master\src\pages\billing\Billing.vue                                                       | vue                   |        -59 |          0 |         -2 |        -61 |
+| d:\share12\three-template-master\src\pages\billing\index.ts                                                          | TypeScript            |         -2 |          0 |         -1 |         -3 |
+| d:\share12\three-template-master\src\pages\home\Config1.tsx                                                          | TypeScript JSX        |       -137 |         -2 |          0 |       -139 |
+| d:\share12\three-template-master\src\pages\home\CustomShow.tsx                                                       | TypeScript JSX        |        -84 |          0 |        -17 |       -101 |
+| d:\share12\three-template-master\src\pages\home\CustomTrigger.tsx                                                    | TypeScript JSX        |        -70 |          0 |        -10 |        -80 |
+| d:\share12\three-template-master\src\pages\home\Dynamic.tsx                                                          | TypeScript JSX        |        -89 |          0 |        -10 |        -99 |
+| d:\share12\three-template-master\src\pages\home\Group.tsx                                                            | TypeScript JSX        |        -57 |          0 |         -9 |        -66 |
+| d:\share12\three-template-master\src\pages\home\Home.tsx                                                             | TypeScript JSX        |       -118 |         -1 |         -1 |       -120 |
+| d:\share12\three-template-master\src\pages\home\Multiple.tsx                                                         | TypeScript JSX        |        -75 |          0 |        -11 |        -86 |
+| d:\share12\three-template-master\src\pages\home\Simple.tsx                                                           | TypeScript JSX        |        -52 |         -1 |        -13 |        -66 |
+| d:\share12\three-template-master\src\pages\home\TriggerBox.tsx                                                       | TypeScript JSX        |        -18 |          0 |         -4 |        -22 |
+| d:\share12\three-template-master\src\pages\home\d.vue                                                                | vue                   |        -17 |          0 |         -4 |        -21 |
+| d:\share12\three-template-master\src\pages\home\index copy.ts                                                        | TypeScript            |         -7 |          0 |         -2 |         -9 |
+| d:\share12\three-template-master\src\pages\home\index.ts                                                             | TypeScript            |         -2 |          0 |         -1 |         -3 |
+| d:\share12\three-template-master\src\pages\login\Login.tsx                                                           | TypeScript JSX        |       -157 |        -43 |         -2 |       -202 |
+| d:\share12\three-template-master\src\pages\login\LoginBox.vue                                                        | vue                   |        -66 |          0 |         -5 |        -71 |
+| d:\share12\three-template-master\src\pages\login\LoginModal.vue                                                      | vue                   |        -45 |          0 |         -6 |        -51 |
+| d:\share12\three-template-master\src\pages\login\data.ts                                                             | TypeScript            |       -311 |          0 |         -2 |       -313 |
+| d:\share12\three-template-master\src\pages\login\index.ts                                                            | TypeScript            |         -3 |          0 |         -1 |         -4 |
+| d:\share12\three-template-master\src\pages\personal\Conversation.vue                                                 | vue                   |        -58 |          0 |         -3 |        -61 |
+| d:\share12\three-template-master\src\pages\personal\Personal.vue                                                     | vue                   |        -65 |          0 |         -5 |        -70 |
+| d:\share12\three-template-master\src\pages\personal\PlatformSetting.vue                                              | vue                   |        -68 |          0 |         -2 |        -70 |
+| d:\share12\three-template-master\src\pages\personal\ProfileInfo.vue                                                  | vue                   |        -85 |          0 |         -9 |        -94 |
+| d:\share12\three-template-master\src\pages\personal\Projects.vue                                                     | vue                   |       -120 |          0 |         -9 |       -129 |
+| d:\share12\three-template-master\src\pages\personal\index.ts                                                         | TypeScript            |         -2 |          0 |         -1 |         -3 |
+| d:\share12\three-template-master\src\router\index.ts                                                                 | TypeScript            |        -10 |         -1 |         -4 |        -15 |
+| d:\share12\three-template-master\src\router\routes.ts                                                                | TypeScript            |        -38 |          0 |         -3 |        -41 |
+| d:\share12\three-template-master\src\service\client.ts                                                               | TypeScript            |        -92 |        -10 |         -3 |       -105 |
+| d:\share12\three-template-master\src\service\index.ts                                                                | TypeScript            |         -2 |          0 |         -2 |         -4 |
+| d:\share12\three-template-master\src\sortablejs\Animation.js                                                         | JavaScript            |       -141 |         -6 |        -29 |       -176 |
+| d:\share12\three-template-master\src\sortablejs\BrowserInfo.js                                                       | JavaScript            |        -11 |          0 |         -2 |        -13 |
+| d:\share12\three-template-master\src\sortablejs\EventDispatcher.js                                                   | JavaScript            |        -47 |         -1 |        -10 |        -58 |
+| d:\share12\three-template-master\src\sortablejs\PluginManager.js                                                     | JavaScript            |        -96 |         -9 |        -13 |       -118 |
+| d:\share12\three-template-master\src\sortablejs\Sortable.js                                                          | JavaScript            |     -1,495 |       -162 |       -372 |     -2,029 |
+| d:\share12\three-template-master\src\sortablejs\index.js                                                             | JavaScript            |     -3,674 |       -311 |       -118 |     -4,103 |
+| d:\share12\three-template-master\src\sortablejs\utils.js                                                             | JavaScript            |       -428 |        -68 |       -100 |       -596 |
+| d:\share12\three-template-master\src\style.scss                                                                      | SCSS                  |          0 |          0 |         -1 |         -1 |
+| d:\share12\three-template-master\src\system.ts                                                                       | TypeScript            |        -99 |         -9 |         -2 |       -110 |
+| d:\share12\three-template-master\src\tableService\fService.ts                                                        | TypeScript            |        -19 |          0 |         -1 |        -20 |
+| d:\share12\three-template-master\src\tableService\sComponent\chart.tsx                                               | TypeScript JSX        |         -6 |          0 |         -2 |         -8 |
+| d:\share12\three-template-master\src\tableService\sComponent\here.tsx                                                | TypeScript JSX        |         -7 |          0 |         -2 |         -9 |
+| d:\share12\three-template-master\src\tableService\sComponent\index.ts                                                | TypeScript            |         -4 |          0 |          0 |         -4 |
+| d:\share12\three-template-master\src\tableService\serviceDesign.tsx                                                  | TypeScript JSX        |        -10 |          0 |         -2 |        -12 |
+| d:\share12\three-template-master\src\tableService\serviceDrag.tsx                                                    | TypeScript JSX        |         -8 |          0 |         -2 |        -10 |
+| d:\share12\three-template-master\src\tableService\serviceSelect.tsx                                                  | TypeScript JSX        |         -4 |          0 |         -2 |         -6 |
+| d:\share12\three-template-master\src\table\calculateType.ts                                                          | TypeScript            |         14 |          0 |          2 |         16 |
+| d:\share12\three-template-master\src\table\checkboxColumn.ts                                                         | TypeScript            |        153 |         10 |          1 |        164 |
+| d:\share12\three-template-master\src\table\column.ts                                                                 | TypeScript            |        864 |         35 |          4 |        903 |
+| d:\share12\three-template-master\src\table\column.tsx                                                                | TypeScript JSX        |       -338 |        -20 |         -4 |       -362 |
+| d:\share12\three-template-master\src\table\editor\string.ts                                                          | TypeScript            |          6 |         10 |         -4 |         12 |
+| d:\share12\three-template-master\src\table\editor\tableInput.tsx                                                     | TypeScript JSX        |         80 |          0 |          0 |         80 |
+| d:\share12\three-template-master\src\table\table.ts                                                                  | TypeScript            |        449 |         -3 |         -3 |        443 |
+| d:\share12\three-template-master\src\table\tableButtonCom.tsx                                                        | TypeScript JSX        |         32 |         -6 |          0 |         26 |
+| d:\share12\three-template-master\src\table\tableCom.tsx                                                              | TypeScript JSX        |         86 |          5 |         -1 |         90 |
+| d:\share12\three-template-master\src\table\tableData.ts                                                              | TypeScript            |          5 |         11 |          1 |         17 |
+| d:\share12\three-template-master\src\table\tableEvent.ts                                                             | TypeScript            |        121 |          3 |          5 |        129 |
+| d:\share12\three-template-master\src\table\tableFilterCom.tsx                                                        | TypeScript JSX        |          2 |          0 |          0 |          2 |
+| d:\share12\three-template-master\src\table\tableMenuCom.tsx                                                          | TypeScript JSX        |         -7 |          8 |          0 |          1 |
+| d:\share12\three-template-master\src\table\tableTheme.ts                                                             | TypeScript            |        234 |          0 |          5 |        239 |
+| d:\share12\three-template-master\src\vite-env.d.ts                                                                   | TypeScript            |        -12 |         -1 |         -4 |        -17 |
+| Total                                                                                                                |                       |    -44,516 |     -2,880 |     -2,036 |    -49,432 |
++----------------------------------------------------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+

@@ -7,7 +7,6 @@ const ContextmenuItem = defineComponent({
 
   props: {
     disabled: {
-      type: Boolean,
       default: false,
     },
     hideOnClick: {
@@ -30,7 +29,6 @@ const ContextmenuItem = defineComponent({
       [CLASSES.contextmenuItemDisabled]: props.disabled,
       [CLASSES.contextmenuItemHover]: hover.value,
     }))
-
     const handleClick = (evt: Event) => {
       emit('click', evt)
 

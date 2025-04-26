@@ -46,6 +46,8 @@ import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { createFooterTheme, createTheme } from './tableTheme' //
 export class Table extends Base {
+  curContextRow: any = null
+  isHeaderContext: boolean = false
   contextItems: any[] = []
   disableColumnResize = false
   tableState: 'edit' | 'scan' = 'edit'
@@ -217,7 +219,7 @@ export class Table extends Base {
           return obj
         },
         disableColumnResize: true, //
-        width: 120, ////
+        width: 60,
       } as ColumnDefine
     }
     let table = new ListTable({
@@ -571,24 +573,66 @@ export class Table extends Base {
     let items = [
       {
         label: '复制',
+        key: 'copy',
         visible: true,
       },
       {
         label: '删除',
-        visible: false,
+        key: 'delete',
+        visible: () => {
+          let isHeaderContext = this.isHeaderContext //
+          if (isHeaderContext) {
+            return false
+          }
+          return true
+        },
       },
       {
         label: '编辑',
-        disabled: true, //
+        key: 'edit',
+        disabled: () => {
+          return true
+        },
+        visible: () => {
+          let isHeaderContext = this.isHeaderContext //
+          if (isHeaderContext) {
+            return false
+          }
+          return true //
+        },
+      },
+      {
+        label: '全局查询',
+        key: 'globalQuery',
+        disabled: false, //
         visible: true,
+        fn: () => {
+          //
+          this.showGlobalSearch(true) //
+        },
+      },
+      {
+        label: '设计当前列',
+        key: 'designColumn',
+        disabled: false, //
+        visible: true,
+        fn: () => {},
       },
     ]
     this.contextItems = items
   }
   setCurTableSelect() {}
   openContextMenu(config) {
+    let originData = config.originData
+    if (originData == null) {
+      this.isHeaderContext = true
+      this.curContextRow = null
+    } else {
+      this.isHeaderContext = false
+      this.curContextRow = originData
+    }
     nextTick(() => {
-      console.log(config, 'config123123') //
+      //
       const event: PointerEvent = config.event
       let contextmenu: BMenu = this.getRef('contextmenu')
       contextmenu.open(event) //
@@ -1376,5 +1420,6 @@ export class Table extends Base {
       e['_rowState'] = 'unChange'
     } //
   }
+  designCurrentColumn() {}
 }
 //

@@ -90,7 +90,7 @@ export class System extends Base {
     let currentRoute = router.currentRoute
     let p = currentRoute.path
     let _tableName = p.split('/').pop()
-    return _tableName
+    return _tableName //
   }
   routeOpen(config: any) {
     if (typeof config == 'string') {

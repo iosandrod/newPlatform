@@ -25,7 +25,7 @@ export class Base {
   // http: myHttp
   cacheTemplateProps: any = {} ////
   uuid() {
-    return nanoid()
+    return nanoid() //
   }
   _getPageDesign?: () => PageDesign
   getPageDesignIns() {
