@@ -10,6 +10,12 @@ import { myHttp } from '@/service/client'
 import { Router } from 'vue-router'
 export const workerPool = pool.pool()
 export class Base {
+  cacheMethod: {
+    [key: string]: { before?: Array<any>; after?: Array<any> }
+  } = {}
+  staticCacheMethod: {
+    [key: string]: { before?: Array<any>; after?: Array<any> }
+  } = {}
   hooks: typeof hooks = shallowRef(hooks) as any
   id: string
   refPool: any = shallowRef({}) as any
@@ -38,7 +44,7 @@ export class Base {
     return workerPool
   }
   constructor() {
-    this.id = this.uuid()//
+    this.id = this.uuid() //
     return reactive(this) //
   }
   init() {}
@@ -85,8 +91,40 @@ export class Base {
   }
   getRunBefore(config?: { method: string; params?: any }) {}
   getRunAfter(config?: { method: string; params?: any }) {}
-  getRouter():Reactive<Router>  {
+  getRouter(): Reactive<Router> {
     //@ts-ignore
     return this._router //
   }
+  getAfterMethod(name: string, _static = false) {
+    if (_static) {
+      let staticCacheMethod = this.staticCacheMethod
+      let method = staticCacheMethod[name] || {}
+      let after = method.after || []
+      return after
+    }
+    let cacheMethod = this.cacheMethod
+    let method = cacheMethod[name] || {}
+    let after = method.after || []
+    return after
+  }
+  runAfter(config?: any) {
+    if (config == null) {
+      return
+    }
+    let methodName = config.methodName //
+    let after = this.getAfterMethod(methodName)
+    for (const fn of after) {
+      fn(config) //
+    }
+    this.clearAfter(methodName) //
+    let staticAfter = this.getAfterMethod(methodName, true)
+    for (const fn of staticAfter) {
+      fn(config)
+    } //
+  }
+  clearAfter(name: string) {
+    let cacheMethod = this.cacheMethod
+    let method = cacheMethod[name] || {}
+    method.after = []
+  } //
 }

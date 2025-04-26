@@ -147,12 +147,8 @@ export class Table extends Base {
     return data
   }
 
-  cacheMethod: {
-    [key: string]: { before?: Array<any>; after?: Array<any> }
-  } = {}
-  staticCacheMethod: {
-    [key: string]: { before?: Array<any>; after?: Array<any> }
-  } = {}
+  
+  
   tableConfig: ListTableConstructorOptions = {
     select: {
       highlightMode: 'row',
@@ -601,7 +597,7 @@ export class Table extends Base {
     const columns = this.columns //
     let _cols = columns.map((col) => {
       return col //
-    })
+    }) //
     return _cols //
   }
   getFlatColumns(): Column[] {
@@ -762,38 +758,6 @@ export class Table extends Base {
   }
   async runBefore(config?: any) {}
   //@ts-ignore
-  getAfterMethod(name: string, _static = false) {
-    if (_static) {
-      let staticCacheMethod = this.staticCacheMethod
-      let method = staticCacheMethod[name] || {}
-      let after = method.after || []
-      return after
-    }
-    let cacheMethod = this.cacheMethod
-    let method = cacheMethod[name] || {}
-    let after = method.after || []
-    return after
-  }
-  clearAfter(name: string) {
-    let cacheMethod = this.cacheMethod
-    let method = cacheMethod[name] || {}
-    method.after = []
-  }
-  runAfter(config?: any) {
-    if (config == null) {
-      return
-    }
-    let methodName = config.methodName //
-    let after = this.getAfterMethod(methodName)
-    for (const fn of after) {
-      fn(config) //
-    }
-    this.clearAfter(methodName) //
-    let staticAfter = this.getAfterMethod(methodName, true)
-    for (const fn of staticAfter) {
-      fn(config)
-    } //
-  }
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
@@ -871,7 +835,7 @@ export class Table extends Base {
     } //
   }
   @useRunAfter()
-  @useTimeout({ number: 50, key: 'updateTimeout' }) //
+  @useTimeout({ number: 50, key: 'updateTimeout' })
   updateCanvas() {
     let data = this.templateProps.data //
     let instance = this.getInstance() //

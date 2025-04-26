@@ -141,6 +141,13 @@ export default defineComponent({
                       console.log(currentPage, 'testCurrentPage') //
                     },
                   },
+                  {
+                    label: '获取子表实例',
+                    fn: async () => {
+                      let currentPage = systemIns.getCurrentPageDesign() //
+                      currentPage.addTableRows(1) //
+                    },
+                  },
                 ]}
               ></er-button-group>
             </div>

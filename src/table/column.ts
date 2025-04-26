@@ -877,4 +877,8 @@ export class Column extends Base {
     }
     return customLayout
   }
+  async getDefaultValue() {
+    let field = this.getField()
+    let obj = {}
+  }
 }

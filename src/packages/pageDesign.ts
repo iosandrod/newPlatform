@@ -6,6 +6,7 @@ import { Field } from './layoutType'
 import { PageDesignItem } from './pageItem'
 import { nextTick } from 'vue'
 import { entityData } from './formEditor/testData'
+import { useRunAfter } from './utils/decoration'
 
 export class PageDesign extends Form {
   pageType = 'pageDesign' //
@@ -73,20 +74,34 @@ export class PageDesign extends Form {
   async getTableData(tableName = this.getTableName()) {} //
   async createTableData() {}
   async updateTableData() {}
-  async getDefaultValue() {}
-  getMainTableColumns() {}
-  getMainTableConfig() {}
-  async addTableRow(data) {
-    if (data == null) {
-      data = await this.getDefaultValue()
-    }
+  async getDefaultValue(tableName: string) {
+    let columns = this.getTableColumns(tableName)
+    console.log(columns, 'columns') //
+    return {}
   }
-  async addTableRows(rows: number | Array<any>) {
+  getTableColumns(tableName = this.getTableName()) {
+    let tableIns = this.getRef(tableName)
+    let columns = tableIns.getColumns()
+    return columns //
+  }
+  getMainTableConfig() {}
+  @useRunAfter()
+  async addTableRow(data, tableName = this.getTableName()) {
+    if (data == null) {
+      data = await this.getDefaultValue(tableName)
+    }
+  } //
+  @useRunAfter()
+  async addTableRows(
+    rows: number | Array<any> = 1, //
+    tableName = this.getTableName(),
+  ) {
     if (typeof rows == 'number') {
       rows = Array(rows).fill(null)
-      for (let i = 0; i < rows.length; i++) {
-        await this.addTableRow(rows[i])
-      }
+    }
+    for (let i = 0; i < rows.length; i++) {
+      //
+      await this.addTableRow(rows[i], tableName)
     }
   }
   getTableRef(tableName = this.getTableName()) {
