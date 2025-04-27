@@ -1929,3 +1929,96 @@ const app = createApp({
       // let tableConfig = await system.getDefaultPageLayout(this.tableName) //
       // console.log(tableConfig, 'tableConfig') //
     })
+
+
+     com = (
+        <formCom
+          itemSpan={24}
+          items={[
+            {
+              field: 'email',
+              label: '邮箱',
+              required: true,
+            },
+            {
+              field: 'password',
+              label: '密码',
+              required: true,
+              password: true,
+            },
+          ]} //
+        ></formCom> //
+      )
+
+
+       let btns = [
+      {
+        label: '按钮1',
+      },
+
+      {
+        label: '按钮5',
+        children: [
+          {
+            label: '按钮5-111',
+          },
+        ],
+        items: [
+          {
+            label: '按钮5-222',
+          },
+          {
+            label: '按钮5-333',
+            items: [
+              {
+                label: '按钮5-444',
+                disabled: true,
+              }, //
+            ],
+          },
+        ],
+      },
+    ]
+
+
+    {/* {isFoldFields.value && (
+                  <ElHeader class="operation" style="display: flex;flex-derection: row;justify-content: space-between;">
+                    <div>
+                      <Icon class="icon" icon="save" onClick={() => handleOperation(4)} />
+                      {props.isShowClear && <Icon class="icon" icon="clear0" onClick={() => handleOperation(2)} />}
+                      {slots['operation-left'] && slots['operation-left']()}
+                    </div>
+                    <div>
+                      <DeviceSwitch modelValue={state.platform} onUpdate:modelValue={switchPlatform} />
+                      <ElButton
+                        onClick={() => {
+                          formIns.runTestMethod() //
+                        }}
+                      >
+                        测试
+                      </ElButton>
+                    </div>
+                    <div>
+                      {slots['operation-right'] && slots['operation-right']()}
+                      {props.isShowI18n && (
+                        <ElDropdown onCommand={(command) => fireEvent('lang', command)}>
+                          <Icon class="icon" icon="language" />
+                          {{
+                            dropdown: () => (
+                              //
+                              <ElDropdownMenu>
+                                <ElDropdownItem command="zh-cn" disabled={lang.value === 'zh-cn'}>
+                                  中文
+                                </ElDropdownItem>
+                                <ElDropdownItem command="en" disabled={lang.value === 'en'}>
+                                  English
+                                </ElDropdownItem>
+                              </ElDropdownMenu>
+                            ),
+                          }}
+                        </ElDropdown>
+                      )}
+                      <Icon class="icon" icon="preview" onClick={() => handleOperation(3)} />
+                    </div>
+                  </ElHeader>
+                )} */}

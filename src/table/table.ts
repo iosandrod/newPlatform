@@ -612,8 +612,8 @@ export class Table extends Base {
         },
       },
       {
-        label: '设计当前列',//
-        key: 'designColumn',
+        label: '设计当前列', //
+        key: 'designColumn',  
         disabled: false, //
         visible: true,
         fn: () => {},

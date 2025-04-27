@@ -79,7 +79,7 @@ export default defineComponent({
   },
   setup(props, { slots, attrs, emit, expose }) {
     const tableIns = new Table(props)
-    expose(tableIns) //
+    expose({ _instance: tableIns }) ////
     provide('tableIns', tableIns)
     onMounted(() => {
       tableIns.onMounted() //
@@ -146,16 +146,7 @@ export default defineComponent({
         //
         tableIns.updateFooterColumns()
       },
-    )
-    // watch(
-    //   () => {
-    //     let tableData = { ...tableIns.tableData }
-    //     return tableData //
-    //   },
-    //   (e) => {
-    //     tableIns.updateCanvas() //
-    //   },
-    // )
+    ) //
     watch(
       () => {
         return tableIns.tableConfig
@@ -179,7 +170,7 @@ export default defineComponent({
       let com = null
       com = withDirectives(
         <div
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '100%', minHeight: '200px' }}
           ref={registerRootDiv}
         ></div>,
         [],
@@ -264,6 +255,7 @@ export default defineComponent({
       let outCom = (
         <div
           style={{
+            minHeight: '200px', //
             width: '100%',
             height: '100%',
             // minHeight: '200px', //

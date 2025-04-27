@@ -12,7 +12,11 @@ export default defineComponent({
     let formIns = inject('formIns') //
     let columns = computed(() => {
       let cols = item.getTableColumns()
-      return cols
+      let _cols = cols || []
+      if (_cols.length == 0) {
+        _cols = tableConfig.columns //
+      }
+      return _cols //
     }) //
     let data = computed(() => {
       return item.getTableData()

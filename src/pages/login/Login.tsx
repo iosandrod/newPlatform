@@ -16,8 +16,13 @@ import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import formCom from '@ER/formCom'
 import FConfigPanel from '@ER/formEditor/components/Panels/Config/components/fConfigPanel'
 import { Simple } from '../home/index copy'
-import pageCom from '@ER/pageCom'
+import pageCom, { getDefaultPageProps } from '@ER/pageCom'
 import SelectCom from '@/select/selectCom'
+import dialogCom from '@/dialog/dialogCom'
+import { Dialog } from '@/dialog/dialog'
+import { PageDesign } from '@ER/pageDesign'
+import FormEditor from '@ER/formEditor/formEditor'
+import { Button } from '@/buttonGroup/button'
 export default defineComponent({
   components: {
     buttonCom, //
@@ -37,6 +42,7 @@ export default defineComponent({
     FConfigPanel,
     Simple,
     SelectCom,
+    dialogCom,
   },
   setup(props) {
     const formConfig = {
@@ -56,34 +62,7 @@ export default defineComponent({
       ],
     }
     let style = { width: '400px', margin: '0 auto' }
-    let btns = [
-      {
-        label: '按钮1',
-      },
 
-      {
-        label: '按钮5',
-        children: [
-          {
-            label: '按钮5-111',
-          },
-        ],
-        items: [
-          {
-            label: '按钮5-222',
-          },
-          {
-            label: '按钮5-333',
-            items: [
-              {
-                label: '按钮5-444',
-                disabled: true,
-              }, //
-            ],
-          },
-        ],
-      },
-    ]
     const formConfig1 = {
       items: [
         {
@@ -103,98 +82,49 @@ export default defineComponent({
       width: 300,
     }) //
     let _reg1 = ref('')
+    let _reg2 = ref('')
+    let _ins = null
+    let tIns = ref()
+    let testObj = { ins: null }
+    let btn = new Button({})
+    let _reg3 = (el) => {
+      btn.registerRef('page', el)
+    }
+    let fn1 = () => {
+      let _ref = btn.getRef('page')
+      _ref.isDesign=!_ref.isDesign
+    }
+    // let p = new PageDesign(getDefaultPageProps())
     return () => {
-      // let com0 = <formCom data={_data} {...formConfig1}></formCom>
       let com0 = null
-      let com = <buttonGroupCom items={btns}></buttonGroupCom>
-      // com = <erFormEditor isDesign={true} {...formConfig}></erFormEditor>
-      // com = <d></d>
-      com = <tableCom {...tableConfig}></tableCom> //
-      // com = <menuCom mode="horizontal" items={btns} v-slots={{
-      //   itemTitle: (item) => {
-      //     return <div>123</div>
-      //   },
-      //   subItemTitle: (item) => {
-      //     return <div>123456</div>
-      //   }
-      // }}></menuCom>
-      // com = <d></d>
-      // com = <testCom></testCom>
-      // com=<ContextmenuItem>testCom</ContextmenuItem>
-      // let com1 = <d></d>
-      // com = <ContextmenuCom items={btns}></ContextmenuCom>
-      let com1 = <buttonGroupCom items={btns}></buttonGroupCom>
+      let com = null
+      // com = <tableCom {...tableConfig}></tableCom> //
       // com = (
-      //   <dropdownCom
-      //     modelValue={true}
-      //     v-slots={{
-      //       default: () => {
-      //         return <div>default</div>
-      //       },
-      //       dropdown: (value) => {
-      //         console.log('渲染了', value) //
-      //         return (
-      //           <div
-      //             style={{ background: 'red', height: '100px', width: '100px' }}
-      //           >
-      //             123
-      //           </div>
-      //         )
-      //       },
-      //     }}
-      //   ></dropdownCom>
-      // )
-      com = (
-        <formCom
-          itemSpan={24}
-          items={[
-            {
-              field: 'email',
-              label: '邮箱',
-              required: true,
-            },
-            {
-              field: 'password',
-              label: '密码',
-              required: true,
-              password: true,
-            },
-          ]} //
-        ></formCom> //
-      )
-      // com = <FConfigPanel></FConfigPanel>
-      // com = <erFormEditor isDesign={true}></erFormEditor>
-      // com=<d></d>
-
-      com = <pageCom isDesign={false}></pageCom> ////
-      com = (
-        <div style={{ height: `${_data.height}px`, width: `100%` }}>
-          <tableCom {...tableConfig}></tableCom>
-        </div>
-      ) //
-      let com2 = (
-        <buttonCom
-          onClick={() => {
-            let _reg11: any = _reg1.value
-            _reg11.focus() //
-          }}
-        ></buttonCom>
-      ) //
+      //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
+      //     <tableCom {...tableConfig}></tableCom>
+      //   </div>
+      // ) //
+      // let com2 = <buttonCom fn={fn1}></buttonCom> //
+      // com = <dialogCom ref={_reg2}></dialogCom>
+      let com2 = <button onClick={fn1}>123123</button>
+      com = <pageCom ref={_reg3}></pageCom> //
       let _com = (
         <div
           style={{
             padding: '100px', //
+            overflow: 'hidden', //
           }}
         >
           {com2}
           {com0}
-          {/* <erFormEditor isDesign={true} {...formConfig}></erFormEditor> */}
-          {/* <buttonCom></buttonCom> */}
-          {}
-          {/* <tabCom>  </tabCom> */}
-          {com}
-          {/* {com1} */}
-          {}
+          <div
+            style={{
+              height: '500px',
+              width: '100%', //
+            }}
+          >
+            {com}
+          </div>
         </div>
       )
       return _com

@@ -10,8 +10,7 @@ import {
 } from 'vue'
 import { Form } from './form'
 export default defineComponent({
-  components: {
-  },
+  components: {},
   props: {
     isDesign: {
       type: Boolean,
@@ -26,11 +25,12 @@ export default defineComponent({
       default: () => [],
     },
     data: {
-      type: Object,//
+      type: Object, //
       default: () => {},
-    }
+    },
   },
-  setup(props, { slots }) {//
+  setup(props, { slots, expose }) {
+    //
     let fIns = new Form(props)
     fIns.setCurrentDesign(false) //
     onMounted(() => {
@@ -44,7 +44,8 @@ export default defineComponent({
         return arr
       }, //
       ([items, len], [oldItems, oldLen]) => {
-        if (items != oldItems) {//
+        if (items != oldItems) {
+          //
           fIns.setItems(items) ////
         } else {
           //@ts-ignore
@@ -63,13 +64,15 @@ export default defineComponent({
           }
         }
       },
-      { //
+      {
+        //
         // immediate: true,//
-      }
+      },
     )
     onUnmounted(() => {
       fIns.onUnmounted() //
     }) //
+    expose(fIns)
     return () => {
       let com = <erForm formIns={fIns}></erForm>
       return com

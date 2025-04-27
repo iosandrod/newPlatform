@@ -199,6 +199,7 @@ export const tableConfig: ListTableConstructorOptions = {
       width: 150,
     },
   ],
+  //@ts-ignore
   data: [
     {
       id: 1,

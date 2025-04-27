@@ -87,8 +87,8 @@ export default {
     // console.log(props.data, 'test pData') //
     if (props.data.type == 'entity') {
       let style = props.data.style
-      if (style && !style.height) {
-        style.height = '400px' //
+      if (style) {
+        style.minHeight = '200px' //
       }
     }
     if (props.data.type && isField) {

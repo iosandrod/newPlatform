@@ -70,6 +70,10 @@ export class Base {
     this.isDesign = status
   }
   registerRef(key: string, ref: any) {
+    let _instance = ref?._instance
+    if (_instance) {
+      ref = _instance //
+    }
     if (ref == null) {
       this.unregisterRef(key)
       return

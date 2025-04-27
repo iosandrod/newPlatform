@@ -1,10 +1,45 @@
-import { defineComponent, h, Teleport, ref, Ref, inject, computed, reactive, provide, nextTick, watch, PropType, VNode, onMounted, onUnmounted, createCommentVNode } from 'vue'
+import {
+  defineComponent,
+  h,
+  Teleport,
+  ref,
+  Ref,
+  inject,
+  computed,
+  reactive,
+  provide,
+  nextTick,
+  watch,
+  PropType,
+  VNode,
+  onMounted,
+  onUnmounted,
+  createCommentVNode,
+} from 'vue'
 import XEUtils from 'xe-utils'
 // import { getDomNode, getEventTargetNode, toCssUnit } from '../../ui/src/dom'
-import { getDomNode, getEventTargetNode, toCssUnit } from 'vxe-pc-ui/packages/ui/src/dom'
+import {
+  getDomNode,
+  getEventTargetNode,
+  toCssUnit,
+} from 'vxe-pc-ui/packages/ui/src/dom'
 // import { getLastZIndex, nextZIndex, getFuncText, handleBooleanDefaultValue } from '../../ui/src/utils'
-import { getLastZIndex, nextZIndex, getFuncText, handleBooleanDefaultValue } from 'vxe-pc-ui/packages/ui/src/utils'
-import { VxeUI, getConfig, getIcon, getI18n, globalEvents, GLOBAL_EVENT_KEYS, createEvent, useSize } from 'vxe-pc-ui/packages/ui'
+import {
+  getLastZIndex,
+  nextZIndex,
+  getFuncText,
+  handleBooleanDefaultValue,
+} from 'vxe-pc-ui/packages/ui/src/utils'
+import {
+  VxeUI,
+  getConfig,
+  getIcon,
+  getI18n,
+  globalEvents,
+  GLOBAL_EVENT_KEYS,
+  createEvent,
+  useSize,
+} from 'vxe-pc-ui/packages/ui'
 import VxeButtonComponent from 'vxe-pc-ui/packages/button/src/button'
 import VxeLoadingComponent from 'vxe-pc-ui/packages/loading/index'
 // import { getSlotVNs } from '../../ui/src/vn'
@@ -12,9 +47,29 @@ import { getSlotVNs } from 'vxe-pc-ui/packages/ui/src/vn'
 // import { warnLog, errLog } from '../../ui/src/log'
 import { warnLog, errLog } from 'vxe-pc-ui/packages/ui/src/log'
 
-import type { VxeModalConstructor, VxeModalPropTypes, ModalReactData, ModalInternalData, VxeModalEmits, VxeModalPrivateComputed, ModalEventTypes, VxeButtonInstance, ModalMethods, ModalPrivateRef, VxeModalMethods, ValueOf, VxeDrawerConstructor, VxeDrawerMethods, VxeFormConstructor, VxeFormPrivateMethods } from 'vxe-pc-ui/types'
+import type {
+  VxeModalConstructor,
+  VxeModalPropTypes,
+  ModalReactData,
+  ModalInternalData,
+  VxeModalEmits,
+  VxeModalPrivateComputed,
+  ModalEventTypes,
+  VxeButtonInstance,
+  ModalMethods,
+  ModalPrivateRef,
+  VxeModalMethods,
+  ValueOf,
+  VxeDrawerConstructor,
+  VxeDrawerMethods,
+  VxeFormConstructor,
+  VxeFormPrivateMethods,
+} from 'vxe-pc-ui/types'
 // import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/components/table'
-import type { VxeTableConstructor, VxeTablePrivateMethods } from 'vxe-pc-ui/types/components/table'
+import type {
+  VxeTableConstructor,
+  VxeTablePrivateMethods,
+} from 'vxe-pc-ui/types/components/table'
 
 export const allActiveModals: VxeModalConstructor[] = []
 const msgQueue: VxeModalConstructor[] = []
@@ -30,145 +85,145 @@ export default defineComponent({
     id: String as PropType<VxeModalPropTypes.ID>,
     type: {
       type: String as PropType<VxeModalPropTypes.Type>,
-      default: 'modal'
+      default: 'modal',
     },
     loading: {
       type: Boolean as PropType<VxeModalPropTypes.Loading>,
-      default: null
+      default: null,
     },
     status: String as PropType<VxeModalPropTypes.Status>,
     iconStatus: String as PropType<VxeModalPropTypes.IconStatus>,
     className: String as PropType<VxeModalPropTypes.ClassName>,
     top: {
       type: [Number, String] as PropType<VxeModalPropTypes.Top>,
-      default: () => getConfig().modal.top
+      default: () => getConfig().modal.top,
     },
     position: [String, Object] as PropType<VxeModalPropTypes.Position>,
     title: String as PropType<VxeModalPropTypes.Title>,
     duration: {
       type: [Number, String] as PropType<VxeModalPropTypes.Duration>,
-      default: () => getConfig().modal.duration
+      default: () => getConfig().modal.duration,
     },
     content: [Number, String] as PropType<VxeModalPropTypes.Content>,
     showCancelButton: {
       type: Boolean as PropType<VxeModalPropTypes.ShowCancelButton>,
-      default: null
+      default: null,
     },
     cancelButtonText: {
       type: String as PropType<VxeModalPropTypes.CancelButtonText>,
-      default: () => getConfig().modal.cancelButtonText
+      default: () => getConfig().modal.cancelButtonText,
     },
     showConfirmButton: {
       type: Boolean as PropType<VxeModalPropTypes.ShowConfirmButton>,
-      default: () => getConfig().modal.showConfirmButton
+      default: () => getConfig().modal.showConfirmButton,
     },
     confirmButtonText: {
       type: String as PropType<VxeModalPropTypes.ConfirmButtonText>,
-      default: () => getConfig().modal.confirmButtonText
+      default: () => getConfig().modal.confirmButtonText,
     },
     lockView: {
       type: Boolean as PropType<VxeModalPropTypes.LockView>,
-      default: () => getConfig().modal.lockView
+      default: () => getConfig().modal.lockView,
     },
     lockScroll: Boolean as PropType<VxeModalPropTypes.LockScroll>,
     mask: {
       type: Boolean as PropType<VxeModalPropTypes.Mask>,
-      default: () => getConfig().modal.mask
+      default: () => getConfig().modal.mask,
     },
     maskClosable: {
       type: Boolean as PropType<VxeModalPropTypes.MaskClosable>,
-      default: () => getConfig().modal.maskClosable
+      default: () => getConfig().modal.maskClosable,
     },
     escClosable: {
       type: Boolean as PropType<VxeModalPropTypes.EscClosable>,
-      default: () => getConfig().modal.escClosable
+      default: () => getConfig().modal.escClosable,
     },
     cancelClosable: {
       type: Boolean as PropType<VxeModalPropTypes.CancelClosable>,
-      default: () => getConfig().modal.cancelClosable
+      default: () => getConfig().modal.cancelClosable,
     },
     confirmClosable: {
       type: Boolean as PropType<VxeModalPropTypes.ConfirmClosable>,
-      default: () => getConfig().modal.confirmClosable
+      default: () => getConfig().modal.confirmClosable,
     },
     resize: Boolean as PropType<VxeModalPropTypes.Resize>,
     showHeader: {
       type: Boolean as PropType<VxeModalPropTypes.ShowHeader>,
-      default: () => getConfig().modal.showHeader
+      default: () => getConfig().modal.showHeader,
     },
     showFooter: {
       type: Boolean as PropType<VxeModalPropTypes.ShowFooter>,
-      default: () => getConfig().modal.showFooter
+      default: () => getConfig().modal.showFooter,
     },
     showZoom: Boolean as PropType<VxeModalPropTypes.ShowZoom>,
     zoomConfig: Object as PropType<VxeModalPropTypes.ZoomConfig>,
     showMaximize: {
       type: Boolean as PropType<VxeModalPropTypes.ShowMaximize>,
-      default: () => handleBooleanDefaultValue(getConfig().modal.showMaximize)
+      default: () => handleBooleanDefaultValue(getConfig().modal.showMaximize),
     },
     showMinimize: {
       type: Boolean as PropType<VxeModalPropTypes.ShowMinimize>,
-      default: () => handleBooleanDefaultValue(getConfig().modal.showMinimize)
+      default: () => handleBooleanDefaultValue(getConfig().modal.showMinimize),
     },
     showClose: {
       type: Boolean as PropType<VxeModalPropTypes.ShowClose>,
-      default: () => getConfig().modal.showClose
+      default: () => getConfig().modal.showClose,
     },
     dblclickZoom: {
       type: Boolean as PropType<VxeModalPropTypes.DblclickZoom>,
-      default: () => getConfig().modal.dblclickZoom
+      default: () => getConfig().modal.dblclickZoom,
     },
     width: [Number, String] as PropType<VxeModalPropTypes.Width>,
     height: [Number, String] as PropType<VxeModalPropTypes.Height>,
     minWidth: {
       type: [Number, String] as PropType<VxeModalPropTypes.MinWidth>,
-      default: () => getConfig().modal.minWidth
+      default: () => getConfig().modal.minWidth,
     },
     minHeight: {
       type: [Number, String] as PropType<VxeModalPropTypes.MinHeight>,
-      default: () => getConfig().modal.minHeight
+      default: () => getConfig().modal.minHeight,
     },
     zIndex: Number as PropType<VxeModalPropTypes.ZIndex>,
     marginSize: {
       type: [Number, String] as PropType<VxeModalPropTypes.MarginSize>,
-      default: () => getConfig().modal.marginSize
+      default: () => getConfig().modal.marginSize,
     },
     fullscreen: Boolean as PropType<VxeModalPropTypes.Fullscreen>,
     draggable: {
       type: Boolean as PropType<VxeModalPropTypes.Draggable>,
-      default: () => getConfig().modal.draggable
+      default: () => getConfig().modal.draggable,
     },
     remember: {
       type: Boolean,
-      default: () => getConfig().modal.remember
+      default: () => getConfig().modal.remember,
     },
     destroyOnClose: {
       type: Boolean as PropType<VxeModalPropTypes.DestroyOnClose>,
-      default: () => getConfig().modal.destroyOnClose
+      default: () => getConfig().modal.destroyOnClose,
     },
     showTitleOverflow: {
       type: Boolean as PropType<VxeModalPropTypes.ShowTitleOverflow>,
-      default: () => getConfig().modal.showTitleOverflow
+      default: () => getConfig().modal.showTitleOverflow,
     },
     transfer: {
       type: Boolean as PropType<VxeModalPropTypes.Transfer>,
-      default: () => getConfig().modal.transfer
+      default: () => getConfig().modal.transfer,
     },
     storage: {
       type: Boolean as PropType<VxeModalPropTypes.Storage>,
-      default: () => getConfig().modal.storage
+      default: () => getConfig().modal.storage,
     },
     storageKey: {
       type: String as PropType<VxeModalPropTypes.StorageKey>,
-      default: () => getConfig().modal.storageKey
+      default: () => getConfig().modal.storageKey,
     },
     padding: {
       type: Boolean as PropType<VxeModalPropTypes.Padding>,
-      default: () => getConfig().modal.padding
+      default: () => getConfig().modal.padding,
     },
     size: {
       type: String as PropType<VxeModalPropTypes.Size>,
-      default: () => getConfig().modal.size || getConfig().size
+      default: () => getConfig().modal.size || getConfig().size,
     },
     beforeHideMethod: Function as PropType<VxeModalPropTypes.BeforeHideMethod>,
     slots: Object as PropType<VxeModalPropTypes.Slots>,
@@ -184,8 +239,8 @@ export default defineComponent({
      */
     animat: {
       type: Boolean as PropType<VxeModalPropTypes.Animat>,
-      default: () => getConfig().modal.animat
-    }
+      default: () => getConfig().modal.animat,
+    },
   },
   emits: [
     'update:modelValue',
@@ -197,17 +252,27 @@ export default defineComponent({
     'cancel',
     'zoom',
     'resize',
-    'move'
+    'move',
   ] as VxeModalEmits,
-  setup (props, context) {
+  setup(props, context) {
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
 
-    const $xeParentModal = inject<(VxeModalConstructor & VxeModalMethods)| null>('$xeModal', null)
-    const $xeDrawer = inject<(VxeDrawerConstructor & VxeDrawerMethods) | null>('$xeDrawer', null)
-    const $xeTable = inject<(VxeTableConstructor & VxeTablePrivateMethods) | null>('$xeTable', null)
-    const $xeForm = inject<(VxeFormConstructor & VxeFormPrivateMethods)| null>('$xeForm', null)
+    const $xeParentModal = inject<
+      (VxeModalConstructor & VxeModalMethods) | null
+    >('$xeModal', null)
+    const $xeDrawer = inject<(VxeDrawerConstructor & VxeDrawerMethods) | null>(
+      '$xeDrawer',
+      null,
+    )
+    const $xeTable = inject<
+      (VxeTableConstructor & VxeTablePrivateMethods) | null
+    >('$xeTable', null)
+    const $xeForm = inject<(VxeFormConstructor & VxeFormPrivateMethods) | null>(
+      '$xeForm',
+      null,
+    )
 
     const { computeSize } = useSize(props)
 
@@ -221,11 +286,11 @@ export default defineComponent({
       zoomStatus: '',
       revertLocat: null,
       prevLocat: null,
-      firstOpen: true
+      firstOpen: true,
     })
 
     const internalData: ModalInternalData = {
-      msgTimeout: undefined
+      msgTimeout: undefined,
     }
 
     const refElem = ref<HTMLDivElement>()
@@ -235,7 +300,7 @@ export default defineComponent({
     const refCancelBtn = ref<VxeButtonInstance>()
 
     const refMaps: ModalPrivateRef = {
-      refElem
+      refElem,
     }
 
     const computeBtnTransfer = computed(() => {
@@ -270,18 +335,18 @@ export default defineComponent({
 
     const computeMaps: VxeModalPrivateComputed = {
       computeSize,
-      computeZoomOpts
+      computeZoomOpts,
     }
 
-    const $xeModal = {
+    const $xeModal = ({
       xID,
       props,
       context,
       reactData,
       internalData,
       getRefMaps: () => refMaps,
-      getComputeMaps: () => computeMaps
-    } as unknown as VxeModalConstructor & VxeModalMethods
+      getComputeMaps: () => computeMaps,
+    } as unknown) as VxeModalConstructor & VxeModalMethods
 
     let modalMethods = {} as ModalMethods
 
@@ -318,10 +383,14 @@ export default defineComponent({
         if (!boxElem) {
           return
         }
-        const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
-        const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
+        const clientVisibleWidth =
+          document.documentElement.clientWidth || document.body.clientWidth
+        const clientVisibleHeight =
+          document.documentElement.clientHeight || document.body.clientHeight
         const isPosCenter = position === 'center'
-        const { top, left }: any = XEUtils.isString(position) ? { top: position, left: position } : Object.assign({}, position)
+        const { top, left }: any = XEUtils.isString(position)
+          ? { top: position, left: position }
+          : Object.assign({}, position)
         const topCenter = isPosCenter || top === 'center'
         const leftCenter = isPosCenter || left === 'center'
         let posTop = ''
@@ -329,12 +398,18 @@ export default defineComponent({
         if (left && !leftCenter) {
           posLeft = isNaN(left) ? left : `${left}px`
         } else {
-          posLeft = `${Math.max(marginSize, clientVisibleWidth / 2 - boxElem.offsetWidth / 2)}px`
+          posLeft = `${Math.max(
+            marginSize,
+            clientVisibleWidth / 2 - boxElem.offsetWidth / 2,
+          )}px`
         }
         if (top && !topCenter) {
           posTop = isNaN(top) ? top : `${top}px`
         } else {
-          posTop = `${Math.max(marginSize, clientVisibleHeight / 2 - boxElem.offsetHeight / 2)}px`
+          posTop = `${Math.max(
+            marginSize,
+            clientVisibleHeight / 2 - boxElem.offsetHeight / 2,
+          )}px`
         }
         boxElem.style.top = posTop
         boxElem.style.left = posLeft
@@ -346,7 +421,7 @@ export default defineComponent({
         const { type } = props
         const queueList = type === 'notification' ? notifyQueue : msgQueue
         let offsetTop = 0
-        queueList.forEach(comp => {
+        queueList.forEach((comp) => {
           const boxElem = comp.getBox()
           if (boxElem) {
             offsetTop += XEUtils.toNumber(comp.props.top)
@@ -361,7 +436,7 @@ export default defineComponent({
       const { type } = props
       const queueList = type === 'notification' ? notifyQueue : msgQueue
       if (queueList.indexOf($xeModal) > -1) {
-        XEUtils.remove(queueList, comp => comp === $xeModal)
+        XEUtils.remove(queueList, (comp) => comp === $xeModal)
       }
       updateStyle()
     }
@@ -370,28 +445,34 @@ export default defineComponent({
       const { remember } = props
       const { visible } = reactData
       const isMsg = computeIsMsg.value
-      const beforeHideFn = props.beforeHideMethod || getConfig().modal.beforeHideMethod
+      const beforeHideFn =
+        props.beforeHideMethod || getConfig().modal.beforeHideMethod
       const params = { type }
+      if (1 == 1) {
+        return //
+      }
       if (visible) {
-        Promise.resolve(beforeHideFn ? beforeHideFn(params) : null).then((rest) => {
-          if (!XEUtils.isError(rest)) {
-            if (isMsg) {
-              removeMsgQueue()
+        Promise.resolve(beforeHideFn ? beforeHideFn(params) : null)
+          .then((rest) => {
+            if (!XEUtils.isError(rest)) {
+              if (isMsg) {
+                removeMsgQueue()
+              }
+              reactData.contentVisible = false
+              if (!remember) {
+                handleRevert()
+              }
+              XEUtils.remove(allActiveModals, (item) => item === $xeModal)
+              dispatchEvent('before-hide', params, null)
+              setTimeout(() => {
+                reactData.visible = false
+                emit('update:modelValue', false)
+                dispatchEvent('hide', params, null)
+              }, 200)
+              removeBodyLockScroll()
             }
-            reactData.contentVisible = false
-            if (!remember) {
-              handleRevert()
-            }
-            XEUtils.remove(allActiveModals, item => item === $xeModal)
-            dispatchEvent('before-hide', params, null)
-            setTimeout(() => {
-              reactData.visible = false
-              emit('update:modelValue', false)
-              dispatchEvent('hide', params, null)
-            }, 200)
-            removeBodyLockScroll()
-          }
-        }).catch(e => e)
+          })
+          .catch((e) => e)
       }
       return nextTick()
     }
@@ -437,7 +518,16 @@ export default defineComponent({
         const posStorage = getStorageMap(storageKey)[id]
         if (posStorage) {
           const boxElem = getBox()
-          const [left, top, width, height, zoomLeft, zoomTop, zoomWidth, zoomHeight] = posStorage.split(',')
+          const [
+            left,
+            top,
+            width,
+            height,
+            zoomLeft,
+            zoomTop,
+            zoomWidth,
+            zoomHeight,
+          ] = posStorage.split(',')
           if (boxElem) {
             if (left) {
               boxElem.style.left = `${left}px`
@@ -457,7 +547,7 @@ export default defineComponent({
               left: zoomLeft,
               top: zoomTop,
               width: zoomWidth,
-              height: zoomHeight
+              height: zoomHeight,
             }
           }
         }
@@ -489,28 +579,43 @@ export default defineComponent({
           boxElem.style.left,
           boxElem.style.top,
           boxElem.style.width,
-          boxElem.style.height
-        ] as (string | number)[]).concat(revertLocat
-          ? [
-              revertLocat.left,
-              revertLocat.top,
-              revertLocat.width,
-              revertLocat.height
-            ]
-          : []).map(val => val ? XEUtils.toNumber(val) : '').join(',')
+          boxElem.style.height,
+        ] as (string | number)[])
+          .concat(
+            revertLocat
+              ? [
+                  revertLocat.left,
+                  revertLocat.top,
+                  revertLocat.width,
+                  revertLocat.height,
+                ]
+              : [],
+          )
+          .map((val) => (val ? XEUtils.toNumber(val) : ''))
+          .join(',')
         localStorage.setItem(storageKey, XEUtils.toJSONString(posStorageMap))
       }
     }
 
     const handleMinimize = () => {
       const zoomOpts = computeZoomOpts.value
-      const { minimizeLayout, minimizeMaxSize, minimizeHorizontalOffset, minimizeVerticalOffset, minimizeOffsetMethod } = zoomOpts
+      const {
+        minimizeLayout,
+        minimizeMaxSize,
+        minimizeHorizontalOffset,
+        minimizeVerticalOffset,
+        minimizeOffsetMethod,
+      } = zoomOpts
       const isHorizontalLayout = minimizeLayout === 'horizontal'
       const prevZoomStatus = reactData.zoomStatus
       const hlMList: VxeModalConstructor[] = []
       const vlMList: VxeModalConstructor[] = []
-      allActiveModals.forEach(item => {
-        if (item.xID !== $xeModal.xID && item.props.type === 'modal' && item.reactData.zoomStatus === 'minimize') {
+      allActiveModals.forEach((item) => {
+        if (
+          item.xID !== $xeModal.xID &&
+          item.props.type === 'modal' &&
+          item.reactData.zoomStatus === 'minimize'
+        ) {
           const itemZoomOpts = item.getComputeMaps().computeZoomOpts.value
           if (itemZoomOpts.minimizeLayout === 'horizontal') {
             hlMList.push(item)
@@ -525,11 +630,11 @@ export default defineComponent({
         if (VxeUI.modal) {
           VxeUI.modal.message({
             status: 'error',
-            content: getI18n('vxe.modal.miniMaxSize', [minimizeMaxSize])
+            content: getI18n('vxe.modal.miniMaxSize', [minimizeMaxSize]),
           })
         }
         return Promise.resolve({
-          status: false
+          status: false,
         })
       }
       reactData.prevZoomStatus = prevZoomStatus
@@ -538,13 +643,13 @@ export default defineComponent({
         const boxElem = getBox()
         if (!boxElem) {
           return {
-            status: false
+            status: false,
           }
         }
         const headerEl = refHeaderElem.value
         if (!headerEl) {
           return {
-            status: false
+            status: false,
           }
         }
         const { visibleHeight } = getDomNode()
@@ -554,13 +659,20 @@ export default defineComponent({
             top: boxElem.offsetTop,
             left: boxElem.offsetLeft,
             width: boxElem.offsetWidth + (boxElem.style.width ? 0 : 1),
-            height: boxElem.offsetHeight + (boxElem.style.height ? 0 : 1)
+            height: boxElem.offsetHeight + (boxElem.style.height ? 0 : 1),
           }
         }
-        const targetModal = XEUtils[isHorizontalLayout ? 'max' : 'min'](mList, ($modal) => {
-          const boxElem = $modal.getBox()
-          return boxElem ? XEUtils.toNumber(boxElem.style[isHorizontalLayout ? 'left' : 'top']) : 0
-        })
+        const targetModal = XEUtils[isHorizontalLayout ? 'max' : 'min'](
+          mList,
+          ($modal) => {
+            const boxElem = $modal.getBox()
+            return boxElem
+              ? XEUtils.toNumber(
+                  boxElem.style[isHorizontalLayout ? 'left' : 'top'],
+                )
+              : 0
+          },
+        )
         let targetTop = visibleHeight - headerEl.offsetHeight - 16
         let targetLeft = 16
         if (targetModal) {
@@ -583,7 +695,7 @@ export default defineComponent({
               offsetObj = minimizeOffsetMethod({
                 $modal: $xeModal,
                 left: targetLeft,
-                top: targetTop
+                top: targetTop,
               })
               targetLeft = XEUtils.toNumber(offsetObj.left)
               targetTop = XEUtils.toNumber(offsetObj.top)
@@ -594,11 +706,11 @@ export default defineComponent({
           top: `${targetTop}px`,
           left: `${targetLeft}px`,
           width: '200px',
-          height: `${headerEl.offsetHeight}px`
+          height: `${headerEl.offsetHeight}px`,
         })
         savePosStorage()
         return {
-          status: true
+          status: true,
         }
       })
     }
@@ -613,25 +725,34 @@ export default defineComponent({
           // 如果当前处于复原状态
           if (!prevZoomStatus) {
             const marginSize = XEUtils.toNumber(props.marginSize)
-            const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
-            const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
+            const clientVisibleWidth =
+              document.documentElement.clientWidth || document.body.clientWidth
+            const clientVisibleHeight =
+              document.documentElement.clientHeight ||
+              document.body.clientHeight
             reactData.revertLocat = {
-              top: Math.max(marginSize, clientVisibleHeight / 2 - boxElem.offsetHeight / 2),
-              left: Math.max(marginSize, clientVisibleWidth / 2 - boxElem.offsetWidth / 2),
+              top: Math.max(
+                marginSize,
+                clientVisibleHeight / 2 - boxElem.offsetHeight / 2,
+              ),
+              left: Math.max(
+                marginSize,
+                clientVisibleWidth / 2 - boxElem.offsetWidth / 2,
+              ),
               width: boxElem.offsetWidth + (boxElem.style.width ? 0 : 1),
-              height: boxElem.offsetHeight + (boxElem.style.height ? 0 : 1)
+              height: boxElem.offsetHeight + (boxElem.style.height ? 0 : 1),
             }
           }
           Object.assign(boxElem.style, {
             top: '0',
             left: '0',
             width: '100%',
-            height: '100%'
+            height: '100%',
           })
         }
         savePosStorage()
         return {
-          status: true
+          status: true,
         }
       })
     }
@@ -640,7 +761,10 @@ export default defineComponent({
       const { duration } = props
       if (duration !== -1) {
         //@ts-ignore
-        internalData.msgTimeout = setTimeout(() => closeModal('close'), XEUtils.toNumber(duration))
+        internalData.msgTimeout = setTimeout(
+          () => closeModal('close'),
+          XEUtils.toNumber(duration),
+        )
       }
     }
 
@@ -648,7 +772,7 @@ export default defineComponent({
       const htmlElem = document.documentElement
       const lockData = htmlElem.getAttribute(lockScrollAttrKey)
       if (lockData) {
-        const lockList = lockData.split(',').filter(key => key !== xID)
+        const lockList = lockData.split(',').filter((key) => key !== xID)
         if (lockList.length) {
           htmlElem.setAttribute(lockScrollAttrKey, lockList.join(','))
         } else {
@@ -772,7 +896,10 @@ export default defineComponent({
     const handleGlobalKeydownEvent = (evnt: KeyboardEvent) => {
       const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
       if (isEsc) {
-        const lastModal = XEUtils.max(allActiveModals, (item) => item.reactData.modalZindex)
+        const lastModal = XEUtils.max(
+          allActiveModals,
+          (item) => item.reactData.modalZindex,
+        )
         // 多个时，只关掉最上层的窗口
         if (lastModal) {
           setTimeout(() => {
@@ -807,25 +934,25 @@ export default defineComponent({
               top: `${revertLocat.top}px`,
               left: `${revertLocat.left}px`,
               width: `${revertLocat.width}px`,
-              height: `${revertLocat.height}px`
+              height: `${revertLocat.height}px`,
             })
           }
           savePosStorage()
           return nextTick().then(() => {
             return {
-              status: true
+              status: true,
             }
           })
         }
         return {
-          status: false
+          status: false,
         }
       })
     }
 
     const handleZoom = (type?: 'minimize' | 'revert' | 'maximize') => {
       const { zoomStatus } = reactData
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         if (type) {
           if (type === 'maximize') {
             resolve(handleMaximize())
@@ -846,7 +973,9 @@ export default defineComponent({
 
     const toggleZoomMinEvent = (evnt: Event) => {
       const { zoomStatus, prevZoomStatus } = reactData
-      return handleZoom(zoomStatus === 'minimize' ? (prevZoomStatus || 'revert') : 'minimize').then((type) => {
+      return handleZoom(
+        zoomStatus === 'minimize' ? prevZoomStatus || 'revert' : 'minimize',
+      ).then((type) => {
         const params = { type }
         dispatchEvent('zoom', params, evnt)
       })
@@ -866,7 +995,7 @@ export default defineComponent({
         if (boxElem) {
           return {
             top: boxElem.offsetTop,
-            left: boxElem.offsetLeft
+            left: boxElem.offsetLeft,
           }
         }
       }
@@ -891,7 +1020,12 @@ export default defineComponent({
 
     const boxMousedownEvent = () => {
       const { modalZindex } = reactData
-      if (allActiveModals.some(comp => comp.reactData.visible && comp.reactData.modalZindex > modalZindex)) {
+      if (
+        allActiveModals.some(
+          (comp) =>
+            comp.reactData.visible && comp.reactData.modalZindex > modalZindex,
+        )
+      ) {
         updateZindex()
       }
     }
@@ -904,14 +1038,18 @@ export default defineComponent({
       if (!boxElem) {
         return
       }
-      if (zoomStatus !== 'maximize' && evnt.button === 0 && !getEventTargetNode(evnt, boxElem, 'trigger--btn').flag) {
+      if (
+        zoomStatus !== 'maximize' &&
+        evnt.button === 0 &&
+        !getEventTargetNode(evnt, boxElem, 'trigger--btn').flag
+      ) {
         evnt.preventDefault()
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
         const disX = evnt.clientX - boxElem.offsetLeft
         const disY = evnt.clientY - boxElem.offsetTop
         const { visibleHeight, visibleWidth } = getDomNode()
-        document.onmousemove = evnt => {
+        document.onmousemove = (evnt) => {
           evnt.preventDefault()
           const offsetWidth = boxElem.offsetWidth
           const offsetHeight = boxElem.offsetHeight
@@ -935,7 +1073,8 @@ export default defineComponent({
           }
           boxElem.style.left = `${left}px`
           boxElem.style.top = `${top}px`
-          boxElem.className = boxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
+          boxElem.className =
+            boxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
           dispatchEvent('move', { type: 'move' }, evnt)
         }
         document.onmouseup = () => {
@@ -974,7 +1113,7 @@ export default defineComponent({
       const offsetTop = boxElem.offsetTop
       const offsetLeft = boxElem.offsetLeft
       const params = { type: 'resize' }
-      document.onmousemove = evnt => {
+      document.onmousemove = (evnt) => {
         evnt.preventDefault()
         let dragLeft
         let dragTop
@@ -1004,7 +1143,9 @@ export default defineComponent({
             }
             if (offsetTop - dragTop > marginSize) {
               if (height > minHeight) {
-                boxElem.style.height = `${height < maxHeight ? height : maxHeight}px`
+                boxElem.style.height = `${
+                  height < maxHeight ? height : maxHeight
+                }px`
                 boxElem.style.top = `${offsetTop - dragTop}px`
               }
             }
@@ -1022,7 +1163,9 @@ export default defineComponent({
             }
             if (offsetTop + height + marginSize < visibleHeight) {
               if (height > minHeight) {
-                boxElem.style.height = `${height < maxHeight ? height : maxHeight}px`
+                boxElem.style.height = `${
+                  height < maxHeight ? height : maxHeight
+                }px`
               }
             }
             break
@@ -1031,7 +1174,9 @@ export default defineComponent({
             height = clientHeight + dragTop
             if (offsetTop - dragTop > marginSize) {
               if (height > minHeight) {
-                boxElem.style.height = `${height < maxHeight ? height : maxHeight}px`
+                boxElem.style.height = `${
+                  height < maxHeight ? height : maxHeight
+                }px`
                 boxElem.style.top = `${offsetTop - dragTop}px`
               }
             }
@@ -1057,7 +1202,9 @@ export default defineComponent({
             }
             if (offsetTop - dragTop > marginSize) {
               if (height > minHeight) {
-                boxElem.style.height = `${height < maxHeight ? height : maxHeight}px`
+                boxElem.style.height = `${
+                  height < maxHeight ? height : maxHeight
+                }px`
                 boxElem.style.top = `${offsetTop - dragTop}px`
               }
             }
@@ -1074,7 +1221,9 @@ export default defineComponent({
             }
             if (offsetTop + height + marginSize < visibleHeight) {
               if (height > minHeight) {
-                boxElem.style.height = `${height < maxHeight ? height : maxHeight}px`
+                boxElem.style.height = `${
+                  height < maxHeight ? height : maxHeight
+                }px`
               }
             }
             break
@@ -1083,12 +1232,15 @@ export default defineComponent({
             height = dragTop + clientHeight
             if (offsetTop + height + marginSize < visibleHeight) {
               if (height > minHeight) {
-                boxElem.style.height = `${height < maxHeight ? height : maxHeight}px`
+                boxElem.style.height = `${
+                  height < maxHeight ? height : maxHeight
+                }px`
               }
             }
             break
         }
-        boxElem.className = boxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
+        boxElem.className =
+          boxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         if (storage) {
           savePosStorage()
         }
@@ -1104,14 +1256,18 @@ export default defineComponent({
       }
     }
 
-    const dispatchEvent = (type: ValueOf<VxeModalEmits>, params: Record<string, any>, evnt: Event | null) => {
+    const dispatchEvent = (
+      type: ValueOf<VxeModalEmits>,
+      params: Record<string, any>,
+      evnt: Event | null,
+    ) => {
       emit(type, createEvent(evnt, { $modal: $xeModal }, params))
     }
 
     modalMethods = {
       dispatchEvent,
       open: openModal,
-      close () {
+      close() {
         return closeModal('close')
       },
       getBox,
@@ -1119,96 +1275,146 @@ export default defineComponent({
       setPosition,
       isMinimized,
       isMaximized,
-      zoom () {
+      zoom() {
         return handleZoom()
       },
-      minimize () {
+      minimize() {
         if (!reactData.visible) {
           return Promise.resolve({
-            status: false
+            status: false,
           })
         }
         return handleMinimize()
       },
-      maximize () {
+      maximize() {
         if (!reactData.visible) {
           return Promise.resolve({
-            status: false
+            status: false,
           })
         }
         return handleMaximize()
       },
-      revert () {
+      revert() {
         if (!reactData.visible) {
           return Promise.resolve({
-            status: false
+            status: false,
           })
         }
         return handleRevert()
-      }
+      },
     }
 
     Object.assign($xeModal, modalMethods)
 
     const renderTitles = () => {
-      const { slots: propSlots = {}, showClose, showZoom, showMaximize, showMinimize, title } = props
+      const {
+        slots: propSlots = {},
+        showClose,
+        showZoom,
+        showMaximize,
+        showMinimize,
+        title,
+      } = props
       const { zoomStatus } = reactData
       const titleSlot = slots.title || propSlots.title
       const cornerSlot = slots.corner || propSlots.corner
       const isMinimizeStatus = computeIsMinimizeStatus.value
       const isMaximizeStatus = computeIsMaximizeStatus.value
       return [
-        h('div', {
-          class: 'vxe-modal--header-title'
-        }, titleSlot
-          ? getSlotVNs(titleSlot({
-            $modal: $xeModal,
-            minimized: isMinimizeStatus,
-            maximized: isMaximizeStatus
-          }))
-          : (title ? getFuncText(title) : getI18n('vxe.alert.title'))),
-        h('div', {
-          class: 'vxe-modal--header-right'
-        }, [
-          cornerSlot && !isMinimizeStatus
-            ? h('div', {
-              class: 'vxe-modal--corner-wrapper'
-            }, getSlotVNs(cornerSlot({ $modal: $xeModal })))
-            : createCommentVNode(),
-          (XEUtils.isBoolean(showMinimize) ? showMinimize : showZoom)
-            ? h('div', {
-              class: ['vxe-modal--zoom-btn', 'trigger--btn'],
-              title: getI18n(`vxe.modal.zoom${zoomStatus === 'minimize' ? 'Out' : 'Min'}`),
-              onClick: toggleZoomMinEvent
-            }, [
-              h('i', {
-                class: zoomStatus === 'minimize' ? getIcon().MODAL_ZOOM_REVERT : getIcon().MODAL_ZOOM_MIN
-              })
-            ])
-            : createCommentVNode(),
-          (XEUtils.isBoolean(showMaximize) ? showMaximize : showZoom) && zoomStatus !== 'minimize'
-            ? h('div', {
-              class: ['vxe-modal--zoom-btn', 'trigger--btn'],
-              title: getI18n(`vxe.modal.zoom${zoomStatus === 'maximize' ? 'Out' : 'In'}`),
-              onClick: toggleZoomMaxEvent
-            }, [
-              h('i', {
-                class: zoomStatus === 'maximize' ? getIcon().MODAL_ZOOM_OUT : getIcon().MODAL_ZOOM_IN
-              })
-            ])
-            : createCommentVNode(),
-          showClose
-            ? h('div', {
-              class: ['vxe-modal--close-btn', 'trigger--btn'],
-              title: getI18n('vxe.modal.close'),
-              onClick: closeEvent
-            }, [
-              h('i', {
-                class: getIcon().MODAL_CLOSE
-              })
-            ])
-            : createCommentVNode()
-        ])
+        h(
+          'div',
+          {
+            class: 'vxe-modal--header-title',
+          },
+          titleSlot
+            ? getSlotVNs(
+                titleSlot({
+                  $modal: $xeModal,
+                  minimized: isMinimizeStatus,
+                  maximized: isMaximizeStatus,
+                }),
+              )
+            : title
+            ? getFuncText(title)
+            : getI18n('vxe.alert.title'),
+        ),
+        h(
+          'div',
+          {
+            class: 'vxe-modal--header-right',
+          },
+          [
+            cornerSlot && !isMinimizeStatus
+              ? h(
+                  'div',
+                  {
+                    class: 'vxe-modal--corner-wrapper',
+                  },
+                  getSlotVNs(cornerSlot({ $modal: $xeModal })),
+                )
+              : createCommentVNode(),
+            (XEUtils.isBoolean(showMinimize) ? showMinimize : showZoom)
+              ? h(
+                  'div',
+                  {
+                    class: ['vxe-modal--zoom-btn', 'trigger--btn'],
+                    title: getI18n(
+                      `vxe.modal.zoom${
+                        zoomStatus === 'minimize' ? 'Out' : 'Min'
+                      }`,
+                    ),
+                    onClick: toggleZoomMinEvent,
+                  },
+                  [
+                    h('i', {
+                      class:
+                        zoomStatus === 'minimize'
+                          ? getIcon().MODAL_ZOOM_REVERT
+                          : getIcon().MODAL_ZOOM_MIN,
+                    }),
+                  ],
+                )
+              : createCommentVNode(),
+            (XEUtils.isBoolean(showMaximize) ? showMaximize : showZoom) &&
+            zoomStatus !== 'minimize'
+              ? h(
+                  'div',
+                  {
+                    class: ['vxe-modal--zoom-btn', 'trigger--btn'],
+                    title: getI18n(
+                      `vxe.modal.zoom${
+                        zoomStatus === 'maximize' ? 'Out' : 'In'
+                      }`,
+                    ),
+                    onClick: toggleZoomMaxEvent,
+                  },
+                  [
+                    h('i', {
+                      class:
+                        zoomStatus === 'maximize'
+                          ? getIcon().MODAL_ZOOM_OUT
+                          : getIcon().MODAL_ZOOM_IN,
+                    }),
+                  ],
+                )
+              : createCommentVNode(),
+            showClose
+              ? h(
+                  'div',
+                  {
+                    class: ['vxe-modal--close-btn', 'trigger--btn'],
+                    title: getI18n('vxe.modal.close'),
+                    onClick: closeEvent,
+                  },
+                  [
+                    h('i', {
+                      class: getIcon().MODAL_CLOSE,
+                    }),
+                  ],
+                )
+              : createCommentVNode(),
+          ],
+        ),
       ]
     }
 
@@ -1221,16 +1427,29 @@ export default defineComponent({
         if (draggable) {
           headerOns.onMousedown = mousedownEvent
         }
-        if ((XEUtils.isBoolean(showMaximize) ? showMaximize : showZoom) && props.dblclickZoom && props.type === 'modal') {
+        if (
+          (XEUtils.isBoolean(showMaximize) ? showMaximize : showZoom) &&
+          props.dblclickZoom &&
+          props.type === 'modal'
+        ) {
           headerOns.onDblclick = toggleZoomMaxEvent
         }
-        return h('div', {
-          ref: refHeaderElem,
-          class: ['vxe-modal--header', {
-            'is--ellipsis': !isMsg && props.showTitleOverflow
-          }],
-          ...headerOns
-        }, headerSlot ? getSlotVNs(headerSlot({ $modal: $xeModal })) : renderTitles())
+        return h(
+          'div',
+          {
+            ref: refHeaderElem,
+            class: [
+              'vxe-modal--header',
+              {
+                'is--ellipsis': !isMsg && props.showTitleOverflow,
+              },
+            ],
+            ...headerOns,
+          },
+          headerSlot
+            ? getSlotVNs(headerSlot({ $modal: $xeModal }))
+            : renderTitles(),
+        )
       }
       return createCommentVNode()
     }
@@ -1245,61 +1464,109 @@ export default defineComponent({
       const contVNs: VNode[] = []
       if (!isMsg && (status || iconStatus)) {
         contVNs.push(
-          h('div', {
-            class: 'vxe-modal--status-wrapper'
-          }, [
-            h('i', {
-              class: ['vxe-modal--status-icon', iconStatus || getIcon()[`MODAL_${status}`.toLocaleUpperCase() as 'MODAL_SUCCESS' | 'MODAL_ERROR']]
-            })
-          ])
+          h(
+            'div',
+            {
+              class: 'vxe-modal--status-wrapper',
+            },
+            [
+              h('i', {
+                class: [
+                  'vxe-modal--status-icon',
+                  iconStatus ||
+                    getIcon()[
+                      `MODAL_${status}`.toLocaleUpperCase() as
+                        | 'MODAL_SUCCESS'
+                        | 'MODAL_ERROR'
+                    ],
+                ],
+              }),
+            ],
+          ),
         )
       }
       contVNs.push(
-        h('div', {
-          class: 'vxe-modal--content'
-        }, defaultSlot ? getSlotVNs(defaultSlot({ $modal: $xeModal })) : getFuncText(content))
+        h(
+          'div',
+          {
+            class: 'vxe-modal--content',
+          },
+          defaultSlot
+            ? getSlotVNs(defaultSlot({ $modal: $xeModal }))
+            : getFuncText(content),
+        ),
       )
-      return h('div', {
-        class: 'vxe-modal--body'
-      }, [
-        leftSlot
-          ? h('div', {
-            class: 'vxe-modal--body-left'
-          }, getSlotVNs(leftSlot({ $modal: $xeModal })))
-          : createCommentVNode(),
-        h('div', {
-          class: 'vxe-modal--body-default'
-        }, contVNs),
-        rightSlot
-          ? h('div', {
-            class: 'vxe-modal--body-right'
-          }, getSlotVNs(rightSlot({ $modal: $xeModal })))
-          : createCommentVNode(),
-        isMsg
-          ? createCommentVNode()
-          : h(VxeLoadingComponent, {
-            class: 'vxe-modal--loading',
-            modelValue: props.loading
-          })
-      ])
+      return h(
+        'div',
+        {
+          class: 'vxe-modal--body',
+        },
+        [
+          leftSlot
+            ? h(
+                'div',
+                {
+                  class: 'vxe-modal--body-left',
+                },
+                getSlotVNs(leftSlot({ $modal: $xeModal })),
+              )
+            : createCommentVNode(),
+          h(
+            'div',
+            {
+              class: 'vxe-modal--body-default',
+            },
+            contVNs,
+          ),
+          rightSlot
+            ? h(
+                'div',
+                {
+                  class: 'vxe-modal--body-right',
+                },
+                getSlotVNs(rightSlot({ $modal: $xeModal })),
+              )
+            : createCommentVNode(),
+          isMsg
+            ? createCommentVNode()
+            : h(VxeLoadingComponent, {
+                class: 'vxe-modal--loading',
+                modelValue: props.loading,
+              }),
+        ],
+      )
     }
 
     const renderDefaultFooter = () => {
-      const { slots: propSlots = {}, showCancelButton, showConfirmButton, type, loading } = props
+      const {
+        slots: propSlots = {},
+        showCancelButton,
+        showConfirmButton,
+        type,
+        loading,
+      } = props
       const lfSlot = slots.leftfoot || propSlots.leftfoot
       const rfSlot = slots.rightfoot || propSlots.rightfoot
       const btnVNs = []
-      if (XEUtils.isBoolean(showCancelButton) ? showCancelButton : type === 'confirm') {
+      if (
+        XEUtils.isBoolean(showCancelButton)
+          ? showCancelButton
+          : type === 'confirm'
+      ) {
         btnVNs.push(
           h(VxeButtonComponent, {
             key: 1,
             ref: refCancelBtn,
             content: props.cancelButtonText || getI18n('vxe.button.cancel'),
-            onClick: cancelEvent
-          })
+            onClick: cancelEvent,
+          }),
         )
       }
-      if (XEUtils.isBoolean(showConfirmButton) ? showConfirmButton : (type === 'confirm' || type === 'alert')) {
+      if (
+        XEUtils.isBoolean(showConfirmButton)
+          ? showConfirmButton
+          : type === 'confirm' || type === 'alert'
+      ) {
         btnVNs.push(
           h(VxeButtonComponent, {
             key: 2,
@@ -1307,36 +1574,76 @@ export default defineComponent({
             loading: loading,
             status: 'primary',
             content: props.confirmButtonText || getI18n('vxe.button.confirm'),
-            onClick: confirmEvent
-          })
+            onClick: confirmEvent,
+          }),
         )
       }
-      return h('div', {
-        class: 'vxe-modal--footer-wrapper'
-      }, [
-        h('div', {
-          class: 'vxe-modal--footer-left'
-        }, lfSlot ? getSlotVNs(lfSlot({ $modal: $xeModal })) : []),
-        h('div', {
-          class: 'vxe-modal--footer-right'
-        }, rfSlot ? getSlotVNs(rfSlot({ $modal: $xeModal })) : btnVNs)
-      ])
+      return h(
+        'div',
+        {
+          class: 'vxe-modal--footer-wrapper',
+        },
+        [
+          h(
+            'div',
+            {
+              class: 'vxe-modal--footer-left',
+            },
+            lfSlot ? getSlotVNs(lfSlot({ $modal: $xeModal })) : [],
+          ),
+          h(
+            'div',
+            {
+              class: 'vxe-modal--footer-right',
+            },
+            rfSlot ? getSlotVNs(rfSlot({ $modal: $xeModal })) : btnVNs,
+          ),
+        ],
+      )
     }
 
     const renderFooter = () => {
       const { slots: propSlots = {} } = props
       const footerSlot = slots.footer || propSlots.footer
       if (props.showFooter) {
-        return h('div', {
-          class: 'vxe-modal--footer'
-        }, footerSlot ? getSlotVNs(footerSlot({ $modal: $xeModal })) : [renderDefaultFooter()])
+        return h(
+          'div',
+          {
+            class: 'vxe-modal--footer',
+          },
+          footerSlot
+            ? getSlotVNs(footerSlot({ $modal: $xeModal }))
+            : [renderDefaultFooter()],
+        )
       }
       return createCommentVNode()
     }
 
     const renderVN = () => {
-      const { slots: propSlots = {}, className, type, animat, draggable, iconStatus, position, loading, destroyOnClose, status, lockScroll, padding, lockView, mask, resize } = props
-      const { initialized, modalTop, contentVisible, visible, zoomStatus } = reactData
+      const {
+        slots: propSlots = {},
+        className,
+        type,
+        animat,
+        draggable,
+        iconStatus,
+        position,
+        loading,
+        destroyOnClose,
+        status,
+        lockScroll,
+        padding,
+        lockView,
+        mask,
+        resize,
+      } = props
+      const {
+        initialized,
+        modalTop,
+        contentVisible,
+        visible,
+        zoomStatus,
+      } = reactData
       const asideSlot = slots.aside || propSlots.aside
       const vSize = computeSize.value
       const isMsg = computeIsMsg.value
@@ -1347,80 +1654,131 @@ export default defineComponent({
         ons.onMouseover = selfMouseoverEvent
         ons.onMouseout = selfMouseoutEvent
       }
-      return h(Teleport, {
-        to: 'body',
-        disabled: btnTransfer ? !initialized : true
-      }, [
-        h('div', {
-          ref: refElem,
-          class: ['vxe-modal--wrapper', `type--${type}`, `zoom--${zoomStatus || 'revert'}`, className || '', position ? `pos--${position}` : '', {
-            [`size--${vSize}`]: vSize,
-            [`status--${status}`]: status,
-            'is--padding': padding,
-            'is--animat': animat,
-            'lock--scroll': lockScroll,
-            'lock--view': lockView,
-            'is--draggable': draggable,
-            'is--resize': resize,
-            'is--mask': mask,
-            'is--visible': contentVisible,
-            'is--active': visible,
-            'is--loading': loading
-          }],
-          style: {
-            zIndex: reactData.modalZindex,
-            top: modalTop ? `${modalTop}px` : null
-          },
-          onClick: selfClickEvent,
-          ...ons
-        }, [
-          h('div', {
-            ref: refModalBox,
-            class: 'vxe-modal--box',
-            onMousedown: boxMousedownEvent
-          }, [
-            (isMsg || asideSlot) && !isMinimizeStatus
-              ? h('div', {
-                class: 'vxe-modal--aside'
+      return h(
+        Teleport,
+        {
+          to: 'body',
+          disabled: btnTransfer ? !initialized : true,
+        },
+        [
+          h(
+            'div',
+            {
+              ref: refElem,
+              class: [
+                'vxe-modal--wrapper',
+                `type--${type}`,
+                `zoom--${zoomStatus || 'revert'}`,
+                className || '',
+                position ? `pos--${position}` : '',
+                {
+                  [`size--${vSize}`]: vSize,
+                  [`status--${status}`]: status,
+                  'is--padding': padding,
+                  'is--animat': animat,
+                  'lock--scroll': lockScroll,
+                  'lock--view': lockView,
+                  'is--draggable': draggable,
+                  'is--resize': resize,
+                  'is--mask': mask,
+                  'is--visible': contentVisible,
+                  'is--active': visible,
+                  'is--loading': loading,
+                },
+              ],
+              style: {
+                zIndex: reactData.modalZindex,
+                top: modalTop ? `${modalTop}px` : null,
               },
-              asideSlot
-                ? getSlotVNs(asideSlot({ $modal: $xeModal }))
-                : [
-                    status || iconStatus
-                      ? h('div', {
-                        class: 'vxe-modal--status-wrapper'
-                      }, [
-                        h('i', {
-                          class: ['vxe-modal--status-icon', iconStatus || getIcon()[`MODAL_${status}`.toLocaleUpperCase() as 'MODAL_SUCCESS' | 'MODAL_ERROR']]
-                        })
-                      ])
-                      : createCommentVNode()
-                  ]
-              )
-              : createCommentVNode(),
-            h('div', {
-              class: 'vxe-modal--container'
-            }, !reactData.initialized || (destroyOnClose && !reactData.visible)
-              ? []
-              : [
-                  renderHeader(),
-                  renderBody(),
-                  renderFooter(),
-                  !isMsg && resize
-                    ? h('span', {
-                      class: 'vxe-modal--resize'
-                    }, ['wl', 'wr', 'swst', 'sest', 'st', 'swlb', 'selb', 'sb'].map(type => {
-                      return h('span', {
-                        class: `${type}-resize`,
-                        type: type,
-                        onMousedown: dragEvent
-                      })
-                    }))
-                    : createCommentVNode()
-                ])
-          ])
-        ])
-      ])
+              onClick: selfClickEvent,
+              ...ons,
+            },
+            [
+              h(
+                'div',
+                {
+                  ref: refModalBox,
+                  class: 'vxe-modal--box',
+                  onMousedown: boxMousedownEvent,
+                },
+                [
+                  (isMsg || asideSlot) && !isMinimizeStatus
+                    ? h(
+                        'div',
+                        {
+                          class: 'vxe-modal--aside',
+                        },
+                        asideSlot
+                          ? getSlotVNs(asideSlot({ $modal: $xeModal }))
+                          : [
+                              status || iconStatus
+                                ? h(
+                                    'div',
+                                    {
+                                      class: 'vxe-modal--status-wrapper',
+                                    },
+                                    [
+                                      h('i', {
+                                        class: [
+                                          'vxe-modal--status-icon',
+                                          iconStatus ||
+                                            getIcon()[
+                                              `MODAL_${status}`.toLocaleUpperCase() as
+                                                | 'MODAL_SUCCESS'
+                                                | 'MODAL_ERROR'
+                                            ],
+                                        ],
+                                      }),
+                                    ],
+                                  )
+                                : createCommentVNode(),
+                            ],
+                      )
+                    : createCommentVNode(),
+                  h(
+                    'div',
+                    {
+                      class: 'vxe-modal--container',
+                    },
+                    !reactData.initialized ||
+                      (destroyOnClose && !reactData.visible)
+                      ? []
+                      : [
+                          renderHeader(),
+                          renderBody(),
+                          renderFooter(),
+                          !isMsg && resize
+                            ? h(
+                                'span',
+                                {
+                                  class: 'vxe-modal--resize',
+                                },
+                                [
+                                  'wl',
+                                  'wr',
+                                  'swst',
+                                  'sest',
+                                  'st',
+                                  'swlb',
+                                  'selb',
+                                  'sb',
+                                ].map((type) => {
+                                  return h('span', {
+                                    class: `${type}-resize`,
+                                    type: type,
+                                    onMousedown: dragEvent,
+                                  })
+                                }),
+                              )
+                            : createCommentVNode(),
+                        ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      )
     }
 
     $xeModal.renderVN = renderVN
@@ -1428,17 +1786,24 @@ export default defineComponent({
     watch(() => props.width, recalculate)
     watch(() => props.height, recalculate)
 
-    watch(() => props.modelValue, (value) => {
-      if (value) {
-        openModal()
-      } else {
-        closeModal('model')
-      }
-    })
+    watch(
+      () => props.modelValue,
+      (value) => {
+        if (value) {
+          openModal()
+        } else {
+          closeModal('model')
+        }
+      },
+    )
 
     onMounted(() => {
       if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (props.type === 'modal' && props.showFooter && !(props.showConfirmButton || props.showCancelButton || slots.footer)) {
+        if (
+          props.type === 'modal' &&
+          props.showFooter &&
+          !(props.showConfirmButton || props.showCancelButton || slots.footer)
+        ) {
           warnLog('vxe.modal.footPropErr')
         }
       }
@@ -1466,7 +1831,7 @@ export default defineComponent({
 
     return $xeModal
   },
-  render () {
+  render() {
     return this.renderVN()
-  }
+  },
 })

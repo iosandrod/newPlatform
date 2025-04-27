@@ -48,6 +48,9 @@ export class Context {
       this.addContext(e, node, fn)
     })
   }
+  getIsLastNode() {
+    let parents = this.parents
+  }
   getFlattenNodes() {
     const columns = this.node.columns || []
     let list = this.node.list || []
@@ -294,6 +297,7 @@ export class Context {
     while (cursor) {
       result.unshift(cursor)
       if (cursor.context.parent && !_.isArray(cursor.context.parent)) {
+        //
         cursor = cursor.context.parent
       } else {
         cursor = ''
@@ -329,17 +333,15 @@ export class Context {
     }) //
     return context
   }
-  delete() { 
+  delete() {
     //删除节点
     const arr = this.arr
-    const node = this.node//
+    const node = this.node //
     if (node.type === 'inline') {
       arr.splice(arr.indexOf(node), 1)
     } else {
       arr.splice(arr.indexOf(node), 1)
     }
-    // let nextNode = this.getFlattenNodes()
-    // let _arr = [this.node, ...nextNode]
   }
   appendCol() {
     const parent = this.parent
@@ -952,7 +954,5 @@ export class Context {
     }
     return obj //
   }
-  getNodeStyle(){
-    
-  }
+  getNodeStyle() {}
 }

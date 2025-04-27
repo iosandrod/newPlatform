@@ -1,6 +1,29 @@
-import { defineComponent, withDirectives } from 'vue'
-import { ClickOutside as vClickOutside, ElMessage, ElDialog, ElScrollbar, ElContainer, ElHeader, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus'
-import { defineProps, defineEmits, ref, reactive, computed, provide, getCurrentInstance, nextTick, onMounted, watch, defineExpose } from 'vue'
+import { defineComponent, isReactive, watchEffect, withDirectives } from 'vue'
+import {
+  ClickOutside as vClickOutside,
+  ElMessage,
+  ElDialog,
+  ElScrollbar,
+  ElContainer,
+  ElHeader,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElButton,
+} from 'element-plus'
+import {
+  defineProps,
+  defineEmits,
+  ref,
+  reactive,
+  computed,
+  provide,
+  getCurrentInstance,
+  nextTick,
+  onMounted,
+  watch,
+  defineExpose,
+} from 'vue'
 import fieldMenu from '@/menu/fieldCom'
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
@@ -9,11 +32,10 @@ import Icon from '@ER/icon'
 import hooks from '@ER/hooks'
 import utils from '@ER/utils'
 import _ from 'lodash'
-import defaultProps from '@ER/formEditor/defaultProps'
-import generatorData from '@ER/formEditor/generatorData'
 import { validate } from 'uuid'
 import { Form } from '@ER/form'
 import fieldCom from '@/menu/fieldCom'
+import defaultProps from './formEditor/defaultProps'
 import { PageDesign } from './pageDesign'
 export const getDefaultPageProps = () => {
   return {
@@ -21,6 +43,9 @@ export const getDefaultPageProps = () => {
       type: Number,
       default: 6,
     }, //
+    items: {
+      default: () => [],
+    },
     fieldsPanelWidth: {
       type: String,
       default: '220px',
@@ -83,19 +108,18 @@ export default defineComponent({
     fieldCom,
   },
   name: 'Everright-form-editor',
-  props: getDefaultPageProps(),
+  props: getDefaultPageProps(), //
   emits: ['listener'],
   setup(props: any, { attrs, slots, emit, expose }) {
     const form = ref('')
     const previewPlatform = ref('pc')
     const previewLoading = ref(true)
     //
-    let formIns: PageDesign = props.formIns as any //
+    let formIns: PageDesign = props.formIns as any
     if (formIns == null) {
-      formIns = new PageDesign(props) //
+      formIns = reactive(new PageDesign(props))
     } else {
-    }
-    provide('formIns', formIns)
+    } //
     let layout = formIns.layout
     let _state = formIns.state
     let state = _state
@@ -121,23 +145,7 @@ export default defineComponent({
       })
       formIns.setState(state)
     } //
-    formIns.setCurrentDesign(props.isDesign) ////
-    const isFoldFields = computed({
-      get: () => {
-        return formIns.isDesign
-      },
-      set: (val) => {
-        formIns.setCurrentDesign(val)
-      },
-    })
-    const isFoldConfig = computed({
-      get: () => {
-        return formIns.isDesign
-      },
-      set: (val) => {
-        formIns.setCurrentDesign(val)
-      },
-    })
+
     //@ts-ignore
     state.validator = (target, fn) => {} //
     const { t, lang } = hooks.useI18n(props)
@@ -156,8 +164,10 @@ export default defineComponent({
       () => props.data,
       (val) => {
         formIns.setData(val) //
-      }
+      },
     )
+    provide('pageDesign', formIns) //
+    provide('formIns', formIns) //
     const isShowConfig = computed({
       get: () => {
         return formIns.isShowConfig
@@ -168,27 +178,21 @@ export default defineComponent({
     })
     let setSelection = formIns.setSelection.bind(formIns) //
     setSelection(state.config)
+    const syncLayout = formIns.syncLayout.bind(formIns)
+    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(
+      formIns,
+    )
     const switchPlatform = formIns.switchPlatform.bind(formIns)
+    const canvesScrollRef = ref('')
     const fireEvent = (type, data) => {
       emit('listener', {
-        //
-        type, //
+        type,
         data,
       })
     }
-    // const getData2 = formIns.getLayoutData.bind(formIns);
     const setData2 = formIns.setLayoutData.bind(formIns)
-    // const clearData = formIns.clearData.bind(formIns);//
     const getData = formIns.getLayoutData.bind(formIns)
     const setData = setData2
-    expose({
-      form,
-      switchPlatform(platform) {
-        switchPlatform(platform)
-      },
-      setData,
-      getData,
-    })
     const handleOperation = (type, val?: any) => {
       switch (type) {
         case 1:
@@ -205,7 +209,6 @@ export default defineComponent({
         case 3:
           state.previewVisible = true
           previewLoading.value = true
-
           break
         case 4:
           fireEvent('save', getData())
@@ -225,11 +228,8 @@ export default defineComponent({
       }
     }
     watch(
-      () => {
-        return state.fields.map((e) => e.id)
-      },
-      (newV, old) => {
-        old = old || [] //
+      () => state.fields.map((e) => e.id), //
+      (newV = [], old = []) => {
         const deleteFields = old.filter((item) => !newV.includes(item))
         const addFields = newV.filter((item) => !old.includes(item))
         for (const delField of deleteFields) {
@@ -242,8 +242,8 @@ export default defineComponent({
         }
       },
       {
-        immediate: true, //
-      }
+        immediate: true,
+      },
     )
     watch(
       () => state.selected,
@@ -253,7 +253,7 @@ export default defineComponent({
       {
         deep: true,
         immediate: true,
-      }
+      },
     )
     const onClickOutside = () => {}
     watch(
@@ -263,25 +263,50 @@ export default defineComponent({
       (newValue) => {},
       {
         deep: true,
-      }
+      },
     )
     const eve = formIns //
     provide('Everright', eve)
-    provide('pageDesign', formIns) //////
+    let hide = () => {
+      formIns.isDesign = false
+    }
+    //@ts-ignore
+    formIns.hide = hide
+    expose({ _instance: formIns }) //
     return () => {
       let nextForm = formIns.nextForm //
+      let _fieldCom = null
+      let _ConfigCom = null
+      if (formIns.isDesign == true) {
+        _fieldCom = <fieldMenu></fieldMenu>
+        _ConfigCom = <ConfigPanel></ConfigPanel>
+      } //
       let com = (
-        <div class="h-full w-full bg-white overflow-hidden">
-          <ElContainer class="container h-full" direction="vertical">
-            <ElContainer class="h-full">
+        <div class="h-full w-full">
+          <button onClick={() => (formIns.isDesign = false)}>测试</button>
+          {/* {dialogCom} */}
+          {/* <ElContainer class="container" direction="vertical">
+            <ElContainer>
               {isFoldFields.value && <fieldCom></fieldCom>}
-              <ElContainer class="container h-full">{isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}</ElContainer>
+              <ElContainer class="container">
+                {isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}
+              </ElContainer>
               {isFoldConfig.value && <ConfigPanel />}
             </ElContainer>
-          </ElContainer>
+          </ElContainer> */}
+          <div class="flex h-full w-full flex-row">
+            {_fieldCom}
+            {isShow.value &&
+              withDirectives(<CanvesPanel data={state.store} />, [
+                [vClickOutside, onClickOutside],
+              ])}
+            {_ConfigCom}
+          </div>
+          {/* <Everright-form-editor></Everright-form-editor> */}
         </div>
       )
-      if (nextForm != null) {
+      //如果是设计模式就使用面包屑
+      if (nextForm != null && formIns.isDesign == true) {
         com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
       } //
       return com //

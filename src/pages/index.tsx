@@ -110,7 +110,7 @@ export default defineComponent({
                     label: 'test1',
                     fn: async () => {
                       Object.values(systemIns.tableMap).forEach((item) => {
-                        item.setCurrentDesign(false) //
+                        item.setCurrentDesign(!item.isDesign) //
                       })
                     },
                   },

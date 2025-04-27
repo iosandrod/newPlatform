@@ -190,14 +190,15 @@ export default defineComponent({
     const setData2 = formIns.setLayoutData.bind(formIns)
     const getData = formIns.getLayoutData.bind(formIns)
     const setData = setData2
-    expose({
-      form,
-      switchPlatform(platform) {
-        switchPlatform(platform)
-      },
-      setData,
-      getData,
-    })
+    // expose({
+    //   form,
+    //   switchPlatform(platform) {
+    //     switchPlatform(platform)
+    //   },
+    //   setData,
+    //   getData,
+    // })
+    expose(formIns)//
     const handleOperation = (type, val?: any) => {
       switch (type) {
         case 1:

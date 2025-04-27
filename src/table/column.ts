@@ -532,6 +532,9 @@ export class Column extends Base {
     return field //
   }
   getColumnWidth() {
+    // if (1 == 1) {
+    //   return 60
+    // }
     let config = this.config
     let width = config.width
     if (width == null) {

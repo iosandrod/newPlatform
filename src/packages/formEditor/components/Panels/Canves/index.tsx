@@ -36,10 +36,15 @@ export default defineComponent({
         TagComponent = 'div' //
       } //
       const typeProps = hooks.useProps(state, state, unref(isPc), true)
+      let _class = []
+      //如果是编辑
+      if (!unref(isEditModel)) {
+        _class.push('flex flex-col')
+      }
       const Layout = (
         <LayoutDragGable
           data-layout-type={'root'}
-          class={[unref(isEditModel) && ns.e('wrap'), 'h-full']}
+          class={[unref(isEditModel) && ns.e('wrap'), 'h-full', ..._class]}
           data={state.store}
           parent={state.store}
           isRoot
@@ -57,12 +62,11 @@ export default defineComponent({
         <div class="h-full">
           {bar}
           <TagComponent
-            class={['h-full']} //
+            class={['h-full flex flex-col']} //
             ref={setFormRef}
             onClick={unref(isEditModel) && handleClick}
             {...typeProps.value}
             model={formIns.data}
-            rules={formIns.getValidateRules()}
           >
             {Layout}
           </TagComponent>
@@ -78,18 +82,19 @@ export default defineComponent({
       if (!isEditModel.value) {
         _inCom = inCom
       }
-      let com = (
-        <ElMain
-          class={[
-            ns.b(),
-            isEditModel.value && ns.e('editModel'),
-            !unref(isPc) && ns.e('mobile'),
-            !unref(isPc) && ns.e(`mobile_layoutType${ER.props.layoutType}`),
-          ]}
-        >
-          {_inCom}
-        </ElMain>
-      )
+      // let com = (
+      //   <ElMain
+      //     class={[
+      //       ns.b(),
+      //       isEditModel.value && ns.e('editModel'),
+      //       !unref(isPc) && ns.e('mobile'),
+      //       !unref(isPc) && ns.e(`mobile_layoutType${ER.props.layoutType}`),
+      //     ]}
+      //   >
+      //     {_inCom}
+      //   </ElMain>
+      // )
+      let com = _inCom //
       return com //
     }
   },

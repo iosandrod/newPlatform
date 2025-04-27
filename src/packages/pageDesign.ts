@@ -19,6 +19,9 @@ export class PageDesign extends Form {
     super.init()
   }
   setItems(items: any, setLayout?: boolean): void {
+    if (!Array.isArray(items)) {
+      return  
+    }
     this.items.splice(0) //
     for (const item of items) {
       this.addFormItem(item)

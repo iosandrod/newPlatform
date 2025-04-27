@@ -43,7 +43,7 @@ const layoutType = [
 ]
 const pName = [] //
 export class Form extends Base {
-  pageType='form'
+  pageType = 'form'
   cachePlugin: any
   formIns?: any
   lang: any = {}
@@ -67,7 +67,7 @@ export class Form extends Base {
     [key: string]: any
   }
   isShow: boolean = true
-  isDesign = true //
+  isDesign = true ////
   data: any = {} //
   config: any = {}
   curFormItem?: FormItem
@@ -133,7 +133,7 @@ export class Form extends Base {
     this.props = config
     //@ts-ignore
     this.formIns = this
-    this.init()
+    this.init() //
   } //
   getButtons() {
     let config = this.config
@@ -431,13 +431,15 @@ export class Form extends Base {
     return itemsRules //
   }
   setCurrentDesign(status: boolean = true) {
-    this.isDesign = status //
-    // let d = this.getData()
+    let _state = Boolean(status)
+    this.isDesign = _state //
+  }
+  getIsDesign() {
+    return this.isDesign
   }
   runTestMethod() {
     // let d=this.getData()
     let d = this.getLayoutData() //
-    console.log(d, 'testThis') ////
     // let plugin = ControlInsertionPlugin(this)
     // Sortable.mount(plugin) //
   }

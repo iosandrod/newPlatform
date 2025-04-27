@@ -276,72 +276,8 @@ const operatingRequired = (isValidation, rule, fields, fieldsLogicState) => {
     }
   })
 }
-const operatingReadOnly = (isValidation, rule, fields, fieldsLogicState) => {
-  _.get(rule, 'then.conditions', []).forEach(condition => {
-    switch (condition.operator) {
-      case 'readOnly':
-        if (isValidation) {
-          findFieldsByid(condition.value, fields).forEach(field => {
-            changeState(fieldsLogicState, field, 'readOnly', 1)
-          })
-        } else {
-          findFieldsByid(condition.value, fields).forEach(field => {
-            changeState(fieldsLogicState, field, 'readOnly', 0)
-          })
-        }
-        break
-      case 'editable':
-        if (isValidation) {
-          findFieldsByid(condition.value, fields).forEach(field => {
-            changeState(fieldsLogicState, field, 'readOnly', 0)
-          })
-        } else {
-          findFieldsByid(condition.value, fields).forEach(field => {
-            changeState(fieldsLogicState, field, 'readOnly', 1)
-          })
-        }
-        break
-    }
-  })
-}
-const listenEvent = (state) => {
-  const rules = findValidityRule(state)
-  for (const type in rules) {
-    rules[type].forEach(rule => {
-      const targetFields = findFieldsByid(rule.if.conditions.map(e => e.property), state.fields)
-      const operator = (v) => rule.if.logicalOperator === 'and' ? v.every(v => v) : v.some(v => v)
-      //@ts-ignore
-      const subforms = targetFields.filter(field => field.type === 'subform')
-      subforms.forEach(subform => {
-        watch(() => utils.findSubFormAllFields(subform).map(e => e.options.defaultValue), () => {
-          //@ts-ignore
-          subform.options.defaultValue = utils.getSubFormValues(subform)
-        }, {
-          immediate: true,
-          deep: true,
-          flush: 'sync'
-        })
-      })
-      //@ts-ignore
-      watch(() => targetFields.map(e => e.options.defaultValue), (values) => {
-        switch (type) {
-          case 'visible':
-            operatingVisible(operator(values.map((value, index) => validator(rule.if.conditions[index], value, targetFields[index]))), rule, state.fields, state.fieldsLogicState)
-            break
-          case 'required':
-            operatingRequired(operator(values.map((value, index) => validator(rule.if.conditions[index], value, targetFields[index]))), rule, state.fields, state.fieldsLogicState)
-            break
-          case 'readOnly':
-            operatingReadOnly(operator(values.map((value, index) => validator(rule.if.conditions[index], value, targetFields[index]))), rule, state.fields, state.fieldsLogicState)
-            break
-        }
-      }, {
-        immediate: true,
-        deep: true
-      })
-    })
-  }
-}
+
+
 export const useLogic = (state) => {
   // watch(() => state.logic, () => {
   //   listenEvent(state)

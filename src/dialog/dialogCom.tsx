@@ -77,6 +77,18 @@ import { PageDesign } from '@ER/pageDesign'
 export const allActiveModals: VxeModalConstructor[] = []
 export default defineComponent({
   name: 'DialogCom',
+  emits: [
+    'update:modelValue',
+    'show',
+    'hide',
+    'before-hide',
+    'close',
+    'confirm',
+    'cancel',
+    'zoom',
+    'resize',
+    'move',
+  ],
   components: {
     ModalCom, //
   },
@@ -241,15 +253,70 @@ export default defineComponent({
       type: Boolean as PropType<VxeModalPropTypes.Animat>,
       default: () => getConfig().modal.animat,
     },
+    /*
+     */
+    onShow: {
+      type: Function,
+    },
+    onHide: {
+      type: Function,
+    },
+    onBeforeHide: {
+      type: Function,
+    },
+    onConfirm: {
+      type: Function,
+    },
+    onCancel: {
+      type: Function,
+    },
+    onClose: {
+      type: Function,
+    },
+    onZoom: {
+      type: Function,
+    },
+    onResize: {
+      type: Function,
+    },
+    onMove: {
+      type: Function,
+    },
   },
   setup(props, { slots, expose, emit }) {
     let dialog = new Dialog(props)
-    const pageDesign: PageDesign = inject('pageDesign') //
     expose(dialog) //
+    let registerDialog = (e) => dialog.registerRef('dialog', e) //
+    let registerRoot = (e) => dialog.registerRef('root', e) //
     return () => {
       let com = (
         <div>
-          <ModalCom {...props}></ModalCom>
+          <ModalCom
+            v-slots={{
+              default: () => {
+                let _com = slots.default?.(dialog) //
+                let outCom = (
+                  <div class="w-full h-full" ref={registerRoot}>
+                    {_com}
+                  </div> //
+                )
+                return outCom //
+              },
+              header: () => {
+                return <div style={{}}>头部标题</div> //
+              },
+            }}
+            {...props}
+            modelValue={dialog.getModelValue()}
+            ref={registerDialog}
+            width={dialog.getWidth()}
+            height={dialog.getHeight()}
+            onHide={() => dialog.onVisibleChange(false)}
+            onShow={() => dialog.onVisibleChange(true)}
+            resize={true} //
+            minHeight={dialog.getMinHeight()}
+            minWidth={dialog.getMinWidth()}
+          ></ModalCom>
         </div>
       )
       return com

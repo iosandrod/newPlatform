@@ -1,4 +1,11 @@
-import { defineComponent, resolveComponent, watch, useAttrs, unref, inject } from 'vue'
+import {
+  defineComponent,
+  resolveComponent,
+  watch,
+  useAttrs,
+  unref,
+  inject,
+} from 'vue'
 import hooks from '@ER/hooks'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable, { dragGableWrap } from './DragGable'
@@ -9,23 +16,21 @@ export default defineComponent({
   // components: {
   //   DragGable
   // },
+  components: {
+    Selection,
+  },
   props: {
     data: Object,
-    parent: Array
+    parent: Array,
   },
   setup(props) {
     const ns = hooks.useNamespace('GridLayout')
-    const {
-      state,
-      isPc
-    } = hooks.useTarget()
+    const { state, isPc, isEditModel } = hooks.useTarget()
     const handleMove = (evt, originalEvent) => {
       const {
         relatedContext: {
-          element: {
-            type
-          }
-        }
+          element: { type },
+        },
       } = evt
       return type === 'col'
     }
@@ -34,51 +39,68 @@ export default defineComponent({
     let formIns: any = inject('formIns')
     let pluginName = formIns.getPluginName()
     let opt = {
-      [pluginName]: true
+      [pluginName]: true,
     }
     return () => {
+      let _class = []
+      if (!unref(isEditModel)) {
+      }
       const node = (
-        <Selection {...useAttrs()} hasWidthScale hasCopy hasAddCol hasDel hasDrag data={props.data} parent={props.parent}>
-          <tag data-layout-type={'grid'} {...{
-            gutter: props.data.options.gutter,
-            justify: props.data.options.justify,
-            align: props.data.options.align
-            // inset: !state.isPc
-          }} class={[ns.b()]}>
-            {
-              props.data.columns.map((element, index) => {
-                return (
-                  <Selection
-                    key={element.id}
-                    hasCopy
-                    hasDel={props.data.columns.length > 1}
-                    hasWidthScale
-                    // hasAddContainer
+        //@ts-ignore
+        <Selection
+          {...useAttrs()}
+          hasWidthScale
+          hasCopy
+          hasAddCol
+          hasDel
+          hasDrag
+          data={props.data}
+          parent={props.parent}
+          class={['flex']} //
+        >
+          <tag
+            data-layout-type={'grid'}
+            {...{
+              gutter: props.data.options.gutter,
+              justify: props.data.options.justify,
+              align: props.data.options.align,
+              // inset: !state.isPc
+            }}
+            class={[ns.b(), 'flex']}
+          >
+            {props.data.columns.map((element, index) => {
+              return (
+                //@ts-ignore
+                <Selection
+                  key={element.id}
+                  hasCopy
+                  hasDel={props.data.columns.length > 1}
+                  hasWidthScale
+                  // hasAddContainer
+                  data-layout-type={'grid-col'}
+                  tag={'el-col'}
+                  class={[ns.e('area')]} //
+                  span={element.options.span}
+                  offset={element.options.offset}
+                  pull={element.options.pull}
+                  push={element.options.push}
+                  data={element}
+                  parent={props.data.columns}
+                >
+                  <LayoutDragGable
+                    data={element.list}
                     data-layout-type={'grid-col'}
-                    tag={'el-col'}
-                    class={[ns.e('area')]}
-                    span={element.options.span}
-                    offset={element.options.offset}
-                    pull={element.options.pull}
-                    push={element.options.push}
-                    data={element}
-                    parent={props.data.columns}
-                  >
-                    <LayoutDragGable
-                      data={element.list}
-                      data-layout-type={'grid-col'}
-                      parent={element}
-                      // ControlInsertion={true}
-                      {...opt}
-                    />
-                  </Selection>
-                )
-              })
-            }
+                    parent={element}
+                    // ControlInsertion={true}
+                    {...opt}
+                  />
+                </Selection>
+              )
+            })}
           </tag>
         </Selection>
       )
       return node
     }
-  }
+  },
 })
