@@ -20,7 +20,7 @@ import { Node } from './formEditor/node'
 import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
 import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
-import {} from 'vxe-table'
+import { } from 'vxe-table'
 //转换数据
 //
 let prevEl: any = ''
@@ -157,8 +157,7 @@ export class Form extends Base {
         fields,
         layout,
         list: [], //
-      }
-      console.log(obj, 'testObj') //
+      }//
       this.setLayoutData(obj) //
     }
   }
@@ -252,7 +251,7 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-            sortableUtils.index(prevSortable.el.parentNode)
+          sortableUtils.index(prevSortable.el.parentNode)
           ],
         form: ER.formIns,
       })
@@ -345,8 +344,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-            ? newTarget.children[0]
-            : newTarget.parentNode
+              ? newTarget.children[0]
+              : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -548,7 +547,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() {}
+  closeCurSubForm() { }
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -601,70 +600,67 @@ export class Form extends Base {
   }
   getPcLayout() {
     let items = this.items
-    let rows = []
     let _pcLayout = this._pcLayout
     if (_pcLayout != null) {
       return _pcLayout //
     }
+    let rootInline = {
+      ...this.createNodeIdKey('inline'),
+      columns: [],
+      style: {}
+    }
     let _index = 0
+    let _rows = rootInline.columns
     for (const item of items) {
       let index = item.getRowIndex()
-      let _row = rows[index]
+      let _row = _rows[index]
       if (_row == null) {
-        let nRow = this.createTrRow()
-        rows[index] = nRow
-        let initCols = Array(24)
-          .fill(null)
-          .map((row, i) => {
-            let id = this.uuid()
-            return {
-              type: 'td',
-              style: {},
-              options: {
-                colspan: 1,
-                rowspan: 1,
-                isMerged: false,
-              },
-              id: id,
-              key: `td_${id}`,
-              list: [],
-            }
-          })
-        nRow.columns.push(...initCols)
-        _row = nRow
+        _row = {
+          ...this.createNodeIdKey('grid'),
+          columns: [],
+          options: {
+            gutter: 0,
+            justify: "start",
+            align: "top"
+          },
+          style: {
+            width: "100%"
+          },
+        }
+        _rows[index] = _row//
         _index = 0
       }
-      let _cols = item.getTdColumn()
       let span = item.getSpan()
-      // _row.columns.push(...item.getTdColumn())
-      _row.columns.splice(_index, span, ..._cols)
-      _index += span //
-    }
-    let pcLayout = this.pcLayout
-    pcLayout.columns[0].rows = rows
-    if (pcLayout.columns[0].rows.length == 0) {
-      let nRow = this.createTrRow()
-      let td = Array(1)
-        .fill(null)
-        .map((row, i) => {
-          let id = this.uuid()
-          return {
-            type: 'td',
-            style: {},
-            options: {
-              colspan: 1,
-              rowspan: 1,
-              isMerged: false,
-            },
-            id: id,
-            key: `td_${id}`,
-            list: [],
+      let colLayout = {
+        ...this.createNodeIdKey('col'),
+        options: {
+          span,
+          offset: 0,
+          pull: 0,
+          push: 0,
+
+        },
+        list: [
+          {
+            ...this.createNodeIdKey('inline'),
+            columns: [item.id],
           }
-        })
-      nRow.columns.push(...td)
-      pcLayout.columns[0].rows.push(nRow) //
+        ]//
+      }
+      _row.columns.push(colLayout)
     }
-    return pcLayout
+    console.log(rootInline, 'testInline')
+    return rootInline//
+  }
+  createNodeIdKey(type) {
+    let id = this.uuid()
+    let key = `${type}_${id}`
+    let obj = {
+      id,
+      key,
+      type,
+    }
+    return obj
   }
   getMobileLayout() {
     let mobileLayout = []
@@ -690,7 +686,7 @@ export class Form extends Base {
     pcLayout.columns[0].id = id2
     pcLayout.columns[0].key = `table_${id2}` //
   }
-  initMobileLayout() {}
+  initMobileLayout() { }
   addFormItem(config: Field) {
     let id = config.id
     let oldItems = this.items
@@ -746,7 +742,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) {}
+  setEditData(data) { }
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -1476,26 +1472,6 @@ export class Form extends Base {
         node.style.width = value + '%'
       }
     }
-    // const otherNodes = isArray
-    //   ? node
-    //   : node.context.parent.columns.filter((e) => e !== node)
-    // const averageWidths = this.calculateAverage(
-    //   otherNodes.length,
-    //   isArray ? 100 : 100 - value,
-    // )
-    // otherNodes.forEach((node, index) => {
-    //   const isFieldWidth = _.isObject(node.style.width)
-    //   if (isFieldWidth) {
-    //     if (syncFullplatform) {
-    //       node.style.width.pc = node.style.width.mobile =
-    //         averageWidths[index] + '%'
-    //     } else {
-    //       node.style.width[platform] = averageWidths[index] + '%'
-    //     }
-    //   } else {
-    //     node.style.width = averageWidths[index] + '%'
-    //   }
-    // })
   }
   calculateAverage(count, total = 100) {
     const base = Number((total / count).toFixed(2))

@@ -96,7 +96,7 @@ export class myHttp {
       )
     })
   }
-  async get(tableName, method, query?: any): Promise<any> {
+  async get(tableName, method, query?: any): Promise<any> {//
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(

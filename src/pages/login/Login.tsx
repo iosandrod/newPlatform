@@ -46,7 +46,7 @@ export default defineComponent({
   },
   setup(props) {
     const formConfig = {
-      itemSpan: 24,
+      itemSpan: 12,
       items: [
         {
           field: 'email',
@@ -92,7 +92,7 @@ export default defineComponent({
     }
     let fn1 = () => {
       let _ref = btn.getRef('page')
-      _ref.isDesign=!_ref.isDesign
+      _ref.isDesign = !_ref.isDesign
     }
     // let p = new PageDesign(getDefaultPageProps())
     return () => {
@@ -107,7 +107,12 @@ export default defineComponent({
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       // com = <dialogCom ref={_reg2}></dialogCom>
       let com2 = <button onClick={fn1}>123123</button>
-      com = <pageCom ref={_reg3}></pageCom> //
+      // com = <pageCom ref={_reg3}></pageCom> //
+      com = (
+        <div style={{ width: '400px' }}>
+          <formCom {...formConfig}></formCom>
+        </div>
+      )
       let _com = (
         <div
           style={{

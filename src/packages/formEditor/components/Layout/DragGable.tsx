@@ -1,15 +1,4 @@
-import {
-  defineComponent,
-  resolveComponent,
-  watch,
-  useAttrs,
-  useSlots,
-  unref,
-  nextTick,
-  ref,
-  inject,
-  reactive,
-} from 'vue'
+import { defineComponent, resolveComponent, watch, useAttrs, useSlots, unref, nextTick, ref, inject, reactive } from 'vue'
 import { isHTMLTag } from '@vue/shared'
 // import DragGable from 'vuedraggable'
 import DragGable from '@ER/vueDraggable/vuedraggable'
@@ -49,13 +38,11 @@ const dragGableWrap = defineComponent({
           </dragGable>
         )
       } else {
-        const _tag = isHTMLTag(attrs.tag)
-          ? attrs.tag
-          : resolveComponent(attrs.tag)
+        const _tag = isHTMLTag(attrs.tag) ? attrs.tag : resolveComponent(attrs.tag)
         const { item } = useSlots()
         node = (
           <_tag {...attrs.componentData}>
-            {attrs.list.map((e, i) => {
+            {attrs?.list?.map((e, i) => {
               let style = {
                 width: '100%', //
               }
@@ -80,7 +67,7 @@ const dragGableWrap = defineComponent({
   },
 })
 export { dragGableWrap }
-  export default defineComponent({
+export default defineComponent({
   name: 'DragGableLayout',
   components: {
     // DragGable
@@ -131,14 +118,13 @@ export { dragGableWrap }
         () => state.platform,
         () => {
           componentMap = {}
-        },
+        }
       )
       return {
         findComponent(type, element) {
           let info = componentMap[type + element]
           if (!info) {
-            componentMap[type + element] =
-              typeMap[element.toLowerCase()]?.[state.platform]
+            componentMap[type + element] = typeMap[element.toLowerCase()]?.[state.platform]
             if (!componentMap[type + element]) {
               // console.log(Object.keys(typeMap), 'typeMap') ////
               console.error(element, '找不到组件') //
@@ -173,54 +159,19 @@ export { dragGableWrap }
         switch (element.type) {
           //这些都是布局控件
           case 'grid':
-            node = (
-              <LayoutGridLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutGridLayout>
-            )
+            node = <LayoutGridLayout style={_style} key={element.id} data={element} parent={props.data}></LayoutGridLayout>
             break
           case 'table':
-            node = (
-              <LayoutTableLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTableLayout>
-            )
+            node = <LayoutTableLayout style={_style} key={element.id} data={element} parent={props.data}></LayoutTableLayout>
             break
           case 'tabs':
-            node = (
-              <LayoutTabsLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTabsLayout>
-            )
+            node = <LayoutTabsLayout style={_style} key={element.id} data={element} parent={props.data}></LayoutTabsLayout>
             break
           case 'collapse':
-            node = (
-              <LayoutCollapseLayout
-                key={element.id}
-                style={_style}
-                data={element}
-                parent={props.data}
-              ></LayoutCollapseLayout>
-            )
+            node = <LayoutCollapseLayout key={element.id} style={_style} data={element} parent={props.data}></LayoutCollapseLayout>
             break
           case 'inline':
-            node = (
-              <LayoutInlineLayout
-                key={element.id}
-                style={_style}
-                data={element}
-                parent={props.data}
-              ></LayoutInlineLayout>
-            )
+            node = <LayoutInlineLayout key={element.id} style={_style} data={element} parent={props.data}></LayoutInlineLayout>
             break
           default:
             let formitem = formIns.items.find((item) => item.id === element.id)
@@ -233,14 +184,7 @@ export { dragGableWrap }
               }, 100)
             }
             let TypeComponent = ''
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
+            if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
               TypeComponent = load.findComponent('FormTypes', element.type)
               const params = {
                 data: element,
@@ -254,64 +198,25 @@ export { dragGableWrap }
                 let innerCom = null //
                 //@ts-ignore
                 if (formIns.pageType == 'pageDesign') {
-                  innerCom = (
-                    <TypeComponent
-                      item={formitem}
-                      key={element.id}
-                      data={element}
-                      params={typeProps}
-                    ></TypeComponent>
-                  )
+                  innerCom = <TypeComponent item={formitem} key={element.id} data={element} params={typeProps}></TypeComponent>
                 } else {
                   innerCom = (
                     <el-form-item {...typeProps} prop={prop}>
-                      <TypeComponent
-                        item={formitem}
-                        key={element.id}
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
+                      <TypeComponent item={formitem} key={element.id} data={element} params={typeProps}></TypeComponent>
                     </el-form-item>
                   )
                 }
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    {element.type !== 'divider' ? (
-                      innerCom
-                    ) : (
-                      <TypeComponent
-                        key={element.id}
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
-                    )}
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
+                    {element.type !== 'divider' ? innerCom : <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>}
                   </Selection>
                 )
               } else {
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    <TypeComponent
-                      item={formitem}
-                      key={element.id}
-                      data={element}
-                      params={typeProps}
-                    ></TypeComponent>
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
+                    <TypeComponent item={formitem} key={element.id} data={element} params={typeProps}></TypeComponent>
                   </Selection>
                 )
               }

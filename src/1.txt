@@ -2022,3 +2022,72 @@ const app = createApp({
                     </div>
                   </ElHeader>
                 )} */}
+
+
+
+
+                let items = this.items
+    let rows = []
+    let _pcLayout = this._pcLayout
+    if (_pcLayout != null) {
+      return _pcLayout //
+    }
+    let _index = 0
+    for (const item of items) {
+      let index = item.getRowIndex()
+      let _row = rows[index]
+      if (_row == null) {
+        let nRow = this.createTrRow()
+        rows[index] = nRow
+        let initCols = Array(24)
+          .fill(null)
+          .map((row, i) => {
+            let id = this.uuid()
+            return {
+              type: 'td',
+              style: {},
+              options: {
+                colspan: 1,
+                rowspan: 1,
+                isMerged: false,
+              },
+              id: id,
+              key: `td_${id}`,
+              list: [],
+            }
+          })
+        nRow.columns.push(...initCols)
+        _row = nRow
+        _index = 0
+      }
+      let _cols = item.getTdColumn()
+      let span = item.getSpan()
+      // _row.columns.push(...item.getTdColumn())
+      _row.columns.splice(_index, span, ..._cols)
+      _index += span //
+    }
+    let pcLayout = this.pcLayout
+    pcLayout.columns[0].rows = rows
+    if (pcLayout.columns[0].rows.length == 0) {
+      let nRow = this.createTrRow()
+      let td = Array(1)
+        .fill(null)
+        .map((row, i) => {
+          let id = this.uuid()
+          return {
+            type: 'td',
+            style: {},
+            options: {
+              colspan: 1,
+              rowspan: 1,
+              isMerged: false,
+            },
+            id: id,
+            key: `td_${id}`,
+            list: [],
+          }
+        })
+      nRow.columns.push(...td)
+      pcLayout.columns[0].rows.push(nRow) //
+    }
+    return pcLayout

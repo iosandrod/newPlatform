@@ -12,6 +12,7 @@ export default defineComponent({
   },
 
   setup(props) {
+    const { state, isPc, isEditModel } = hooks.useTarget()
     const ER: FormEditorContext = inject('Everright')
     const ns = hooks.useNamespace('InlineLayout') //
     watch(
@@ -29,9 +30,13 @@ export default defineComponent({
       direction: 'horizontal',
     } //
     return () => {
+      let _class = []
+      if (!unref(isEditModel)) {
+        _class.push('flex flex-col')
+      }
       return (
         <div class={[ns.b(), 'h-full']}>
-          <LayoutDragGable data-layout-type={'inline'} class={'h-full'} type={'inline'} {...dragOptions} data={props.data.columns} parent={props.parent} />
+          <LayoutDragGable data-layout-type={'inline'} class={['h-full', ..._class]} type={'inline'} {...dragOptions} data={props.data.columns} parent={props.parent} />
         </div>
       )
     }

@@ -1,11 +1,4 @@
-import {
-  defineComponent,
-  resolveComponent,
-  watch,
-  useAttrs,
-  unref,
-  inject,
-} from 'vue'
+import { defineComponent, resolveComponent, watch, useAttrs, unref, inject } from 'vue'
 import hooks from '@ER/hooks'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable, { dragGableWrap } from './DragGable'
@@ -44,6 +37,7 @@ export default defineComponent({
     return () => {
       let _class = []
       if (!unref(isEditModel)) {
+        _class.push('flex flex-col')
       }
       const node = (
         //@ts-ignore
@@ -90,6 +84,7 @@ export default defineComponent({
                   <LayoutDragGable
                     data={element.list}
                     data-layout-type={'grid-col'}
+                    class={[..._class, 'h-full']} //
                     parent={element}
                     // ControlInsertion={true}
                     {...opt}
