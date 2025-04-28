@@ -5,7 +5,7 @@ import { FormItem } from './formitem'
 import { Field } from './layoutType'
 import { PageDesignItem } from './pageItem'
 import { nextTick } from 'vue'
-import { entityData } from './formEditor/testData'
+import { _tData, _testData, entityData } from './formEditor/testData'
 import { useRunAfter } from './utils/decoration'
 
 export class PageDesign extends Form {
@@ -16,11 +16,11 @@ export class PageDesign extends Form {
     this.init()
   } //
   init(): void {
-    super.init()
+    super.init() //
   }
   setItems(items: any, setLayout?: boolean): void {
     if (!Array.isArray(items)) {
-      return  
+      return
     }
     this.items.splice(0) //
     for (const item of items) {
@@ -31,13 +31,13 @@ export class PageDesign extends Form {
       let pcLayout = this.getPcLayout()
       let mobileLayout = this.getMobileLayout()
       let layout = {
-        pc: [pcLayout],
+        pc: pcLayout,
         mobile: mobileLayout,
       }
       let fields = this.getFields()
       let obj = {
         fields,
-        layout,
+        layout, //
         list: [], //
       }
       this.setLayoutData(obj)
@@ -54,19 +54,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() {
-    //用户表
-    let mainTable = {
-      tableName: 'users',
-    } //
-    let detailTable = {
-      tableName: 'roles',
-    }
-    let obj = {
-      mainTable,
-      detailTable,
-    }
-  }
+  initDefaultTemplatePage() {}
   getValidateRules() {
     return []
   }

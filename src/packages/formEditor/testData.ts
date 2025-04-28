@@ -267,7 +267,6 @@
 //   }
 // }
 
-
 // export const  staticData={
 //   "layout": {
 //     "pc": [
@@ -865,1559 +864,1824 @@
 //   ]
 // }
 export const staticData = {
-  "layout": {
-    "pc": [
+  layout: {
+    pc: [
       {
-        "type": "inline",
-        "columns": [
+        type: 'inline',
+        columns: [
           {
-            "type": "table",
-            "label": "表格布局",
-            "icon": "tableStokeP2",
-            "id": "6CNUjT70zEIhC_fWFtw8z",
-            "rows": [
+            type: 'table',
+            label: '表格布局',
+            icon: 'tableStokeP2',
+            id: '6CNUjT70zEIhC_fWFtw8z',
+            rows: [
               {
-                "type": "tr",
-                "columns": [
+                type: 'tr',
+                columns: [
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": false
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: false,
                     },
-                    "list": [
+                    list: [
                       {
-                        "type": "inline",
-                        "columns": [
-                          "caFRuwlWKZjxx4AbJoSVv"
-                        ],
-                        "style": {},
-                        "id": "52uWJ8p4ba0exHzsSP4iq",
-                        "key": "inline_52uWJ8p4ba0exHzsSP4iq"
-                      }
+                        type: 'inline',
+                        columns: ['caFRuwlWKZjxx4AbJoSVv'],
+                        style: {},
+                        id: '52uWJ8p4ba0exHzsSP4iq',
+                        key: 'inline_52uWJ8p4ba0exHzsSP4iq',
+                      },
                     ],
-                    "style": {},
-                    "id": "3GJrM4yOTDiDgfsxL92mu",
-                    "key": "td_3GJrM4yOTDiDgfsxL92mu"
+                    style: {},
+                    id: '3GJrM4yOTDiDgfsxL92mu',
+                    key: 'td_3GJrM4yOTDiDgfsxL92mu',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "7c3j2c97sdqGAPnMqSLA4",
-                    "key": "td_7c3j2c97sdqGAPnMqSLA4"
+                    list: [],
+                    style: {},
+                    id: '7c3j2c97sdqGAPnMqSLA4',
+                    key: 'td_7c3j2c97sdqGAPnMqSLA4',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "eJzM3aQ2hwJvt2r_MkJGX",
-                    "key": "td_eJzM3aQ2hwJvt2r_MkJGX"
+                    list: [],
+                    style: {},
+                    id: 'eJzM3aQ2hwJvt2r_MkJGX',
+                    key: 'td_eJzM3aQ2hwJvt2r_MkJGX',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": false
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: false,
                     },
-                    "list": [
+                    list: [
                       {
-                        "type": "inline",
-                        "columns": [
-                          "i1nIAT9_R7uUfscmFYAnL"
-                        ],
-                        "style": {},
-                        "id": "qSiR3l7_PBr4X4slsC9pt",
-                        "key": "inline_qSiR3l7_PBr4X4slsC9pt"
-                      }
+                        type: 'inline',
+                        columns: ['i1nIAT9_R7uUfscmFYAnL'],
+                        style: {},
+                        id: 'qSiR3l7_PBr4X4slsC9pt',
+                        key: 'inline_qSiR3l7_PBr4X4slsC9pt',
+                      },
                     ],
-                    "style": {},
-                    "id": "BIHZscH-BXk1xz5-IGY36",
-                    "key": "td_BIHZscH-BXk1xz5-IGY36"
+                    style: {},
+                    id: 'BIHZscH-BXk1xz5-IGY36',
+                    key: 'td_BIHZscH-BXk1xz5-IGY36',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "_2A1xr_iBba-qf6WVBMLp",
-                    "key": "td__2A1xr_iBba-qf6WVBMLp"
+                    list: [],
+                    style: {},
+                    id: '_2A1xr_iBba-qf6WVBMLp',
+                    key: 'td__2A1xr_iBba-qf6WVBMLp',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "8f8EzuK12IzMWjhH6lQ7B",
-                    "key": "td_8f8EzuK12IzMWjhH6lQ7B"
+                    list: [],
+                    style: {},
+                    id: '8f8EzuK12IzMWjhH6lQ7B',
+                    key: 'td_8f8EzuK12IzMWjhH6lQ7B',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": false
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: false,
                     },
-                    "list": [
+                    list: [
                       {
-                        "type": "inline",
-                        "columns": [
-                          "8JTtsbxm4TaWjBtmk4txy"
-                        ],
-                        "style": {},
-                        "id": "Adr2o5qOUP8zt2GmKpwb3",
-                        "key": "inline_Adr2o5qOUP8zt2GmKpwb3"
-                      }
+                        type: 'inline',
+                        columns: ['8JTtsbxm4TaWjBtmk4txy'],
+                        style: {},
+                        id: 'Adr2o5qOUP8zt2GmKpwb3',
+                        key: 'inline_Adr2o5qOUP8zt2GmKpwb3',
+                      },
                     ],
-                    "style": {},
-                    "id": "FRaPcjM2n76BVrbJbxrAC",
-                    "key": "td_FRaPcjM2n76BVrbJbxrAC"
+                    style: {},
+                    id: 'FRaPcjM2n76BVrbJbxrAC',
+                    key: 'td_FRaPcjM2n76BVrbJbxrAC',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "qBFvlNofTv2ciDvbXiLjU",
-                    "key": "td_qBFvlNofTv2ciDvbXiLjU"
+                    list: [],
+                    style: {},
+                    id: 'qBFvlNofTv2ciDvbXiLjU',
+                    key: 'td_qBFvlNofTv2ciDvbXiLjU',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "WsaXvZy67W5_m9Ja_tD5_",
-                    "key": "td_WsaXvZy67W5_m9Ja_tD5_"
+                    list: [],
+                    style: {},
+                    id: 'WsaXvZy67W5_m9Ja_tD5_',
+                    key: 'td_WsaXvZy67W5_m9Ja_tD5_',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": false
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: false,
                     },
-                    "list": [
+                    list: [
                       {
-                        "type": "inline",
-                        "columns": [
-                          "8wcqe-PRuQnsdoPMomyvm"
-                        ],
-                        "style": {},
-                        "id": "bmR_XnCBjHYx05CBBNhjO",
-                        "key": "inline_bmR_XnCBjHYx05CBBNhjO"
-                      }
+                        type: 'inline',
+                        columns: ['8wcqe-PRuQnsdoPMomyvm'],
+                        style: {},
+                        id: 'bmR_XnCBjHYx05CBBNhjO',
+                        key: 'inline_bmR_XnCBjHYx05CBBNhjO',
+                      },
                     ],
-                    "style": {},
-                    "id": "cAEv-3P2wzRxBzav6MZdf",
-                    "key": "td_cAEv-3P2wzRxBzav6MZdf"
+                    style: {},
+                    id: 'cAEv-3P2wzRxBzav6MZdf',
+                    key: 'td_cAEv-3P2wzRxBzav6MZdf',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "2j03np61zXe7zVN0i_iRs",
-                    "key": "td_2j03np61zXe7zVN0i_iRs"
+                    list: [],
+                    style: {},
+                    id: '2j03np61zXe7zVN0i_iRs',
+                    key: 'td_2j03np61zXe7zVN0i_iRs',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "Awx6o8cRqi69DEOr1EbHk",
-                    "key": "td_Awx6o8cRqi69DEOr1EbHk"
-                  }
+                    list: [],
+                    style: {},
+                    id: 'Awx6o8cRqi69DEOr1EbHk',
+                    key: 'td_Awx6o8cRqi69DEOr1EbHk',
+                  },
                 ],
-                "style": {},
-                "id": "qymq7XjwhETSIp5bkTNuU",
-                "key": "tr_qymq7XjwhETSIp5bkTNuU"
+                style: {},
+                id: 'qymq7XjwhETSIp5bkTNuU',
+                key: 'tr_qymq7XjwhETSIp5bkTNuU',
               },
               {
-                "type": "tr",
-                "columns": [
+                type: 'tr',
+                columns: [
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": false
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: false,
                     },
-                    "list": [
+                    list: [
                       {
-                        "type": "inline",
-                        "columns": [
-                          "8MPg1eJ6iD_mPJF-MUvDM"
-                        ],
-                        "style": {},
-                        "id": "J9MMMMnUa1SBDogLGNu-A",
-                        "key": "inline_J9MMMMnUa1SBDogLGNu-A"
-                      }
+                        type: 'inline',
+                        columns: ['8MPg1eJ6iD_mPJF-MUvDM'],
+                        style: {},
+                        id: 'J9MMMMnUa1SBDogLGNu-A',
+                        key: 'inline_J9MMMMnUa1SBDogLGNu-A',
+                      },
                     ],
-                    "style": {},
-                    "id": "QPtes4k2imNaP5wUqoM_t",
-                    "key": "td_QPtes4k2imNaP5wUqoM_t"
+                    style: {},
+                    id: 'QPtes4k2imNaP5wUqoM_t',
+                    key: 'td_QPtes4k2imNaP5wUqoM_t',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "pE6LR5UsDGzSvQ3JkJ1ix",
-                    "key": "td_pE6LR5UsDGzSvQ3JkJ1ix"
+                    list: [],
+                    style: {},
+                    id: 'pE6LR5UsDGzSvQ3JkJ1ix',
+                    key: 'td_pE6LR5UsDGzSvQ3JkJ1ix',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "tnfUZsOCZZh1obIF2X4NG",
-                    "key": "td_tnfUZsOCZZh1obIF2X4NG"
+                    list: [],
+                    style: {},
+                    id: 'tnfUZsOCZZh1obIF2X4NG',
+                    key: 'td_tnfUZsOCZZh1obIF2X4NG',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": false
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: false,
                     },
-                    "list": [
+                    list: [
                       {
-                        "type": "inline",
-                        "columns": [
-                          "QoVaVK5tVXI3dwbAJ-zAq"
-                        ],
-                        "style": {},
-                        "id": "SH8rH4VJrQMd9D81yYVh3",
-                        "key": "inline_SH8rH4VJrQMd9D81yYVh3"
-                      }
+                        type: 'inline',
+                        columns: ['QoVaVK5tVXI3dwbAJ-zAq'],
+                        style: {},
+                        id: 'SH8rH4VJrQMd9D81yYVh3',
+                        key: 'inline_SH8rH4VJrQMd9D81yYVh3',
+                      },
                     ],
-                    "style": {},
-                    "id": "lN39unTgaLqTfgIdks3Hw",
-                    "key": "td_lN39unTgaLqTfgIdks3Hw"
+                    style: {},
+                    id: 'lN39unTgaLqTfgIdks3Hw',
+                    key: 'td_lN39unTgaLqTfgIdks3Hw',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "Ug2NLY_TfZ6KXYFFFKis9",
-                    "key": "td_Ug2NLY_TfZ6KXYFFFKis9"
+                    list: [],
+                    style: {},
+                    id: 'Ug2NLY_TfZ6KXYFFFKis9',
+                    key: 'td_Ug2NLY_TfZ6KXYFFFKis9',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "LauoAB03gmP5qw5nz9Jxv",
-                    "key": "td_LauoAB03gmP5qw5nz9Jxv"
+                    list: [],
+                    style: {},
+                    id: 'LauoAB03gmP5qw5nz9Jxv',
+                    key: 'td_LauoAB03gmP5qw5nz9Jxv',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": false
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: false,
                     },
-                    "list": [
+                    list: [
                       {
-                        "type": "inline",
-                        "columns": [
-                          "7JVD5Fzq_EomvEi8NVO5j"
-                        ],
-                        "style": {},
-                        "id": "JpYTKP2TjbrCtcPK9Ek6l",
-                        "key": "inline_JpYTKP2TjbrCtcPK9Ek6l"
-                      }
+                        type: 'inline',
+                        columns: ['7JVD5Fzq_EomvEi8NVO5j'],
+                        style: {},
+                        id: 'JpYTKP2TjbrCtcPK9Ek6l',
+                        key: 'inline_JpYTKP2TjbrCtcPK9Ek6l',
+                      },
                     ],
-                    "style": {},
-                    "id": "8jfCSpS7xj8WYTEQO1Zv2",
-                    "key": "td_8jfCSpS7xj8WYTEQO1Zv2"
+                    style: {},
+                    id: '8jfCSpS7xj8WYTEQO1Zv2',
+                    key: 'td_8jfCSpS7xj8WYTEQO1Zv2',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "UeaK1V8YYUOV3cuNEZvsT",
-                    "key": "td_UeaK1V8YYUOV3cuNEZvsT"
+                    list: [],
+                    style: {},
+                    id: 'UeaK1V8YYUOV3cuNEZvsT',
+                    key: 'td_UeaK1V8YYUOV3cuNEZvsT',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "eceWgiScwr_7ZRYQp0rW-",
-                    "key": "td_eceWgiScwr_7ZRYQp0rW-"
+                    list: [],
+                    style: {},
+                    id: 'eceWgiScwr_7ZRYQp0rW-',
+                    key: 'td_eceWgiScwr_7ZRYQp0rW-',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": false
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: false,
                     },
-                    "list": [
+                    list: [
                       {
-                        "type": "inline",
-                        "columns": [
-                          "Yjoe71hXFDbw93b3ukBS5"
-                        ],
-                        "style": {},
-                        "id": "vw6eC7rnnrswg8dCX-6Bb",
-                        "key": "inline_vw6eC7rnnrswg8dCX-6Bb"
-                      }
+                        type: 'inline',
+                        columns: ['Yjoe71hXFDbw93b3ukBS5'],
+                        style: {},
+                        id: 'vw6eC7rnnrswg8dCX-6Bb',
+                        key: 'inline_vw6eC7rnnrswg8dCX-6Bb',
+                      },
                     ],
-                    "style": {},
-                    "id": "Te3MGXaN4RCd8sUYkuMWq",
-                    "key": "td_Te3MGXaN4RCd8sUYkuMWq"
+                    style: {},
+                    id: 'Te3MGXaN4RCd8sUYkuMWq',
+                    key: 'td_Te3MGXaN4RCd8sUYkuMWq',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "CqDPbKExcT_IxeVtKi-Ln",
-                    "key": "td_CqDPbKExcT_IxeVtKi-Ln"
+                    list: [],
+                    style: {},
+                    id: 'CqDPbKExcT_IxeVtKi-Ln',
+                    key: 'td_CqDPbKExcT_IxeVtKi-Ln',
                   },
                   {
-                    "type": "td",
-                    "options": {
-                      "colspan": 3,
-                      "rowspan": 1,
-                      "isMerged": true
+                    type: 'td',
+                    options: {
+                      colspan: 3,
+                      rowspan: 1,
+                      isMerged: true,
                     },
-                    "list": [],
-                    "style": {},
-                    "id": "-8Xun9ZFqwm8U1mvYIYaa",
-                    "key": "td_-8Xun9ZFqwm8U1mvYIYaa"
-                  }
+                    list: [],
+                    style: {},
+                    id: '-8Xun9ZFqwm8U1mvYIYaa',
+                    key: 'td_-8Xun9ZFqwm8U1mvYIYaa',
+                  },
                 ],
-                "style": {},
-                "id": "dc9X2Npd1SpSvuMyG2FyE",
-                "key": "tr_dc9X2Npd1SpSvuMyG2FyE"
-              }
+                style: {},
+                id: 'dc9X2Npd1SpSvuMyG2FyE',
+                key: 'tr_dc9X2Npd1SpSvuMyG2FyE',
+              },
             ],
-            "options": {
-              "width": 100,
-              "widthType": "%"
+            options: {
+              width: 100,
+              widthType: '%',
             },
-            "style": {
-              "width": "100%"
+            style: {
+              width: '100%',
             },
-            "key": "table_6CNUjT70zEIhC_fWFtw8z"
-          }
+            key: 'table_6CNUjT70zEIhC_fWFtw8z',
+          },
         ],
-        "style": {},
-        "id": "PpsmPtqpZQ59S8PZQOA6q",
-        "key": "inline_PpsmPtqpZQ59S8PZQOA6q"
-      }
+        style: {},
+        id: 'PpsmPtqpZQ59S8PZQOA6q',
+        key: 'inline_PpsmPtqpZQ59S8PZQOA6q',
+      },
     ],
-    "mobile": [
+    mobile: [
       {
-        "type": "inline",
-        "columns": [
-          "caFRuwlWKZjxx4AbJoSVv"
-        ]
+        type: 'inline',
+        columns: ['caFRuwlWKZjxx4AbJoSVv'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "i1nIAT9_R7uUfscmFYAnL"
-        ]
+        type: 'inline',
+        columns: ['i1nIAT9_R7uUfscmFYAnL'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "8JTtsbxm4TaWjBtmk4txy"
-        ]
+        type: 'inline',
+        columns: ['8JTtsbxm4TaWjBtmk4txy'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "8wcqe-PRuQnsdoPMomyvm"
-        ]
+        type: 'inline',
+        columns: ['8wcqe-PRuQnsdoPMomyvm'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "8MPg1eJ6iD_mPJF-MUvDM"
-        ]
+        type: 'inline',
+        columns: ['8MPg1eJ6iD_mPJF-MUvDM'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "QoVaVK5tVXI3dwbAJ-zAq"
-        ]
+        type: 'inline',
+        columns: ['QoVaVK5tVXI3dwbAJ-zAq'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "7JVD5Fzq_EomvEi8NVO5j"
-        ]
+        type: 'inline',
+        columns: ['7JVD5Fzq_EomvEi8NVO5j'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "Yjoe71hXFDbw93b3ukBS5"
-        ]
-      }
-    ]
+        type: 'inline',
+        columns: ['Yjoe71hXFDbw93b3ukBS5'],
+      },
+    ],
   },
-  "data": {},
-  "config": {
-    "isSync": true,
-    "pc": {
-      "size": "default",
-      "labelPosition": "left",
-      "completeButton": {
-        "text": "提交",
-        "color": "",
-        "backgroundColor": ""
-      }
+  data: {},
+  config: {
+    isSync: true,
+    pc: {
+      size: 'default',
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
     },
-    "mobile": {
-      "labelPosition": "left",
-      "completeButton": {
-        "text": "提交",
-        "color": "",
-        "backgroundColor": ""
-      }
-    }
+    mobile: {
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
   },
-  "fields": [
+  fields: [
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_caFRuwlWKZjxx4AbJoSVv",
-      "id": "caFRuwlWKZjxx4AbJoSVv",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_caFRuwlWKZjxx4AbJoSVv',
+      id: 'caFRuwlWKZjxx4AbJoSVv',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_i1nIAT9_R7uUfscmFYAnL",
-      "id": "i1nIAT9_R7uUfscmFYAnL",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_i1nIAT9_R7uUfscmFYAnL',
+      id: 'i1nIAT9_R7uUfscmFYAnL',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_8JTtsbxm4TaWjBtmk4txy",
-      "id": "8JTtsbxm4TaWjBtmk4txy",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_8JTtsbxm4TaWjBtmk4txy',
+      id: '8JTtsbxm4TaWjBtmk4txy',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_8wcqe-PRuQnsdoPMomyvm",
-      "id": "8wcqe-PRuQnsdoPMomyvm",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_8wcqe-PRuQnsdoPMomyvm',
+      id: '8wcqe-PRuQnsdoPMomyvm',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_8MPg1eJ6iD_mPJF-MUvDM",
-      "id": "8MPg1eJ6iD_mPJF-MUvDM",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_8MPg1eJ6iD_mPJF-MUvDM',
+      id: '8MPg1eJ6iD_mPJF-MUvDM',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_QoVaVK5tVXI3dwbAJ-zAq",
-      "id": "QoVaVK5tVXI3dwbAJ-zAq",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_QoVaVK5tVXI3dwbAJ-zAq',
+      id: 'QoVaVK5tVXI3dwbAJ-zAq',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_7JVD5Fzq_EomvEi8NVO5j",
-      "id": "7JVD5Fzq_EomvEi8NVO5j",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_7JVD5Fzq_EomvEi8NVO5j',
+      id: '7JVD5Fzq_EomvEi8NVO5j',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_Yjoe71hXFDbw93b3ukBS5",
-      "id": "Yjoe71hXFDbw93b3ukBS5",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_Yjoe71hXFDbw93b3ukBS5',
+      id: 'Yjoe71hXFDbw93b3ukBS5',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
-    }
-  ]
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
+    },
+  ],
 }
 
 let fieldArr = [
   {
     span: 24,
-    field: "email",
-    type: "input",
-    label: "单行文本",
-    icon: "input",
-    key: "input_8wcqe-PRuQnsdoPMomyvm",
-    id: "8wcqe-PRuQnsdoPMomyvm",
+    field: 'email',
+    type: 'input',
+    label: '单行文本',
+    icon: 'input',
+    key: 'input_8wcqe-PRuQnsdoPMomyvm',
+    id: '8wcqe-PRuQnsdoPMomyvm',
     options: {
       clearable: true,
       isShowWordLimit: false,
       renderType: 1,
       disabled: false,
       showPassword: false,
-      defaultValue: "",
-      placeholder: "请输入",
+      defaultValue: '',
+      placeholder: '请输入',
       labelWidth: 100,
     },
     style: {
       width: {
-        pc: "100%",
-        mobile: "100%"
-      }
-    }
+        pc: '100%',
+        mobile: '100%',
+      },
+    },
   },
   {
-    field: "age",
-    type: "input",
-    label: "单行文本",
-    icon: "input",
-    key: "input_8wcqe-PRuQnsdoPMomyvm",
-    id: "8wcqe-PRuQnsdoPMomyvm",
+    field: 'age',
+    type: 'input',
+    label: '单行文本',
+    icon: 'input',
+    key: 'input_8wcqe-PRuQnsdoPMomyvm',
+    id: '8wcqe-PRuQnsdoPMomyvm',
     options: {
       clearable: true,
       isShowWordLimit: false,
       renderType: 1,
       disabled: false,
       showPassword: false,
-      defaultValue: "",
-      placeholder: "请输入",
+      defaultValue: '',
+      placeholder: '请输入',
       labelWidth: 100,
     },
     style: {
       width: {
-        pc: "100%",
-        mobile: "100%"
-      }
-    }
+        pc: '100%',
+        mobile: '100%',
+      },
+    },
   },
   {
-    field: "name",
-    type: "input",
-    label: "单行文本",
-    icon: "input",
-    key: "input_8wcqe-PRuQnsdoPMomyvm",
-    id: "8wcqe-PRuQnsdoPMomyvm",
+    field: 'name',
+    type: 'input',
+    label: '单行文本',
+    icon: 'input',
+    key: 'input_8wcqe-PRuQnsdoPMomyvm',
+    id: '8wcqe-PRuQnsdoPMomyvm',
     options: {
       clearable: true,
       isShowWordLimit: false,
       renderType: 1,
       disabled: false,
       showPassword: false,
-      defaultValue: "",
-      placeholder: "请输入",
+      defaultValue: '',
+      placeholder: '请输入',
       labelWidth: 100,
     },
     style: {
       width: {
-        pc: "100%",
-        mobile: "100%"
-      }
-    }
+        pc: '100%',
+        mobile: '100%',
+      },
+    },
   },
   {
-    field: "email",
-    type: "input",
-    label: "单行文本",
-    icon: "input",
-    key: "input_8wcqe-PRuQnsdoPMomyvm",
-    id: "8wcqe-PRuQnsdoPMomyvm",
+    field: 'email',
+    type: 'input',
+    label: '单行文本',
+    icon: 'input',
+    key: 'input_8wcqe-PRuQnsdoPMomyvm',
+    id: '8wcqe-PRuQnsdoPMomyvm',
     options: {
       clearable: true,
       isShowWordLimit: false,
       renderType: 1,
       disabled: false,
       showPassword: false,
-      defaultValue: "",
-      placeholder: "请输入",
+      defaultValue: '',
+      placeholder: '请输入',
       labelWidth: 100,
     },
     style: {
       width: {
-        pc: "100%",
-        mobile: "100%"
-      }
-    }
-  }, {
-    field: "email",
-    type: "input",
-    label: "单行文本",
-    icon: "input",
-    key: "input_8wcqe-PRuQnsdoPMomyvm",
-    id: "8wcqe-PRuQnsdoPMomyvm",
+        pc: '100%',
+        mobile: '100%',
+      },
+    },
+  },
+  {
+    field: 'email',
+    type: 'input',
+    label: '单行文本',
+    icon: 'input',
+    key: 'input_8wcqe-PRuQnsdoPMomyvm',
+    id: '8wcqe-PRuQnsdoPMomyvm',
     options: {
       clearable: true,
       isShowWordLimit: false,
       renderType: 1,
       disabled: false,
       showPassword: false,
-      defaultValue: "",
-      placeholder: "请输入",
+      defaultValue: '',
+      placeholder: '请输入',
       labelWidth: 100,
     },
     style: {
       width: {
-        pc: "100%",
-        mobile: "100%"
-      }
-    }
-  }
+        pc: '100%',
+        mobile: '100%',
+      },
+    },
+  },
 ]
 
 export const formConfig = {
   items: fieldArr,
-  data: {}
+  data: {},
 }
 
-
-
-
-
-
 export const testData1 = {
-  "layout": {
-    "pc": [
+  layout: {
+    pc: [
       {
-        "type": "inline",
-        "columns": [
-          "NvExu6Re6uRIVMgxnnWgB"
-        ],
-        "style": {},
-        "id": "ScXkQTnYEl2Yf0988YPBg",
-        "key": "inline_ScXkQTnYEl2Yf0988YPBg"
+        type: 'inline',
+        columns: ['NvExu6Re6uRIVMgxnnWgB'],
+        style: {},
+        id: 'ScXkQTnYEl2Yf0988YPBg',
+        key: 'inline_ScXkQTnYEl2Yf0988YPBg',
       },
       {
-        "type": "inline",
-        "columns": [
+        type: 'inline',
+        columns: [
           {
-            "type": "grid",
-            "label": "栅格布局",
-            "icon": "grid",
-            "id": "kfgkpJhCt_4MuTSwU6uSy",
-            "columns": [
+            type: 'grid',
+            label: '栅格布局',
+            icon: 'grid',
+            id: 'kfgkpJhCt_4MuTSwU6uSy',
+            columns: [
               {
-                "id": "THhJJHB9FXu4Pc37jeq6S",
-                "options": {
-                  "span": 6,
-                  "offset": 0,
-                  "pull": 0,
-                  "push": 0
+                id: 'THhJJHB9FXu4Pc37jeq6S',
+                options: {
+                  span: 6,
+                  offset: 0,
+                  pull: 0,
+                  push: 0,
                 },
-                "type": "col",
-                "list": [
+                type: 'col',
+                list: [
                   {
-                    "type": "inline",
-                    "columns": [
-                      "r6hNllBugy4l9IijZ6akr"
-                    ],
-                    "style": {},
-                    "id": "np3_ZFEhTK0kpb6YlpdD1",
-                    "key": "inline_np3_ZFEhTK0kpb6YlpdD1"
-                  }
+                    type: 'inline',
+                    columns: ['r6hNllBugy4l9IijZ6akr'],
+                    style: {},
+                    id: 'np3_ZFEhTK0kpb6YlpdD1',
+                    key: 'inline_np3_ZFEhTK0kpb6YlpdD1',
+                  },
                 ],
-                "style": {},
-                "key": "col_THhJJHB9FXu4Pc37jeq6S"
+                style: {},
+                key: 'col_THhJJHB9FXu4Pc37jeq6S',
               },
               {
-                "id": "0rVaPXcAc8LQuvACRc9CO",
-                "options": {
-                  "span": 6,
-                  "offset": 0,
-                  "pull": 0,
-                  "push": 0
+                id: '0rVaPXcAc8LQuvACRc9CO',
+                options: {
+                  span: 6,
+                  offset: 0,
+                  pull: 0,
+                  push: 0,
                 },
-                "type": "col",
-                "list": [
+                type: 'col',
+                list: [
                   {
-                    "type": "inline",
-                    "columns": [
+                    type: 'inline',
+                    columns: [
                       {
-                        "type": "grid",
-                        "label": "栅格布局",
-                        "icon": "grid",
-                        "id": "FYBr8vZUnyzUu0jwEh60O",
-                        "columns": [
+                        type: 'grid',
+                        label: '栅格布局',
+                        icon: 'grid',
+                        id: 'FYBr8vZUnyzUu0jwEh60O',
+                        columns: [
                           {
-                            "id": "lucUF_w1ojfobuPHXZfp4",
-                            "options": {
-                              "span": 6,
-                              "offset": 0,
-                              "pull": 0,
-                              "push": 0
+                            id: 'lucUF_w1ojfobuPHXZfp4',
+                            options: {
+                              span: 6,
+                              offset: 0,
+                              pull: 0,
+                              push: 0,
                             },
-                            "type": "col",
-                            "list": [
+                            type: 'col',
+                            list: [
                               {
-                                "type": "inline",
-                                "columns": [
-                                  "SfWRLacWt4CekAOvVaOAy"
-                                ],
-                                "style": {},
-                                "id": "zRaAIjYFkDmLcNdpFRO2A",
-                                "key": "inline_zRaAIjYFkDmLcNdpFRO2A"
-                              }
+                                type: 'inline',
+                                columns: ['SfWRLacWt4CekAOvVaOAy'],
+                                style: {},
+                                id: 'zRaAIjYFkDmLcNdpFRO2A',
+                                key: 'inline_zRaAIjYFkDmLcNdpFRO2A',
+                              },
                             ],
-                            "style": {},
-                            "key": "col_lucUF_w1ojfobuPHXZfp4"
+                            style: {},
+                            key: 'col_lucUF_w1ojfobuPHXZfp4',
                           },
                           {
-                            "id": "gKO_iidheyRmh8HB2KmVJ",
-                            "options": {
-                              "span": 6,
-                              "offset": 0,
-                              "pull": 0,
-                              "push": 0
+                            id: 'gKO_iidheyRmh8HB2KmVJ',
+                            options: {
+                              span: 6,
+                              offset: 0,
+                              pull: 0,
+                              push: 0,
                             },
-                            "type": "col",
-                            "list": [],
-                            "style": {},
-                            "key": "col_gKO_iidheyRmh8HB2KmVJ"
+                            type: 'col',
+                            list: [],
+                            style: {},
+                            key: 'col_gKO_iidheyRmh8HB2KmVJ',
                           },
                           {
-                            "id": "_HBtzNATjkrz-Ki7ibfyl",
-                            "options": {
-                              "span": 6,
-                              "offset": 0,
-                              "pull": 0,
-                              "push": 0
+                            id: '_HBtzNATjkrz-Ki7ibfyl',
+                            options: {
+                              span: 6,
+                              offset: 0,
+                              pull: 0,
+                              push: 0,
                             },
-                            "type": "col",
-                            "list": [],
-                            "style": {},
-                            "key": "col__HBtzNATjkrz-Ki7ibfyl"
-                          }
+                            type: 'col',
+                            list: [],
+                            style: {},
+                            key: 'col__HBtzNATjkrz-Ki7ibfyl',
+                          },
                         ],
-                        "options": {
-                          "gutter": 0,
-                          "justify": "space-around",
-                          "align": "top"
+                        options: {
+                          gutter: 0,
+                          justify: 'start',
+                          align: 'top',
                         },
-                        "style": {
-                          "width": "142%"
+                        style: {
+                          width: '142%',
                         },
-                        "key": "grid_FYBr8vZUnyzUu0jwEh60O"
-                      }
+                        key: 'grid_FYBr8vZUnyzUu0jwEh60O',
+                      },
                     ],
-                    "style": {},
-                    "id": "6eQ1PwVlfGTRqM_lfVmHi",
-                    "key": "inline_6eQ1PwVlfGTRqM_lfVmHi"
-                  }
+                    style: {},
+                    id: '6eQ1PwVlfGTRqM_lfVmHi',
+                    key: 'inline_6eQ1PwVlfGTRqM_lfVmHi',
+                  },
                 ],
-                "style": {},
-                "key": "col_0rVaPXcAc8LQuvACRc9CO"
+                style: {},
+                key: 'col_0rVaPXcAc8LQuvACRc9CO',
               },
               {
-                "id": "gycRCrNJilkjr4WIsOQ8J",
-                "options": {
-                  "span": 6,
-                  "offset": 0,
-                  "pull": 0,
-                  "push": 0
+                id: 'gycRCrNJilkjr4WIsOQ8J',
+                options: {
+                  span: 6,
+                  offset: 0,
+                  pull: 0,
+                  push: 0,
                 },
-                "type": "col",
-                "list": [],
-                "style": {},
-                "key": "col_gycRCrNJilkjr4WIsOQ8J"
-              }
+                type: 'col',
+                list: [],
+                style: {},
+                key: 'col_gycRCrNJilkjr4WIsOQ8J',
+              },
             ],
-            "options": {
-              "gutter": 0,
-              "justify": "space-around",
-              "align": "top"
+            options: {
+              gutter: 0,
+              justify: 'start',
+              align: 'top',
             },
-            "style": {
-              "width": "100%"
+            style: {
+              width: '100%',
             },
-            "key": "grid_kfgkpJhCt_4MuTSwU6uSy"
-          }
+            key: 'grid_kfgkpJhCt_4MuTSwU6uSy',
+          },
         ],
-        "style": {},
-        "id": "mXRnE_gweMtYpEPev1f2x",
-        "key": "inline_mXRnE_gweMtYpEPev1f2x"
-      }
+        style: {},
+        id: 'mXRnE_gweMtYpEPev1f2x',
+        key: 'inline_mXRnE_gweMtYpEPev1f2x',
+      },
     ],
-    "mobile": [
+    mobile: [
       {
-        "type": "inline",
-        "columns": [
-          "NvExu6Re6uRIVMgxnnWgB"
-        ]
+        type: 'inline',
+        columns: ['NvExu6Re6uRIVMgxnnWgB'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "r6hNllBugy4l9IijZ6akr"
-        ]
+        type: 'inline',
+        columns: ['r6hNllBugy4l9IijZ6akr'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "SfWRLacWt4CekAOvVaOAy"
-        ]
-      }
-    ]
+        type: 'inline',
+        columns: ['SfWRLacWt4CekAOvVaOAy'],
+      },
+    ],
   },
-  "data": {},
-  "config": {
-    "isSync": true,
-    "pc": {
-      "size": "default",
-      "labelPosition": "left",
-      "completeButton": {
-        "text": "提交",
-        "color": "",
-        "backgroundColor": ""
-      }
+  data: {},
+  config: {
+    isSync: true,
+    pc: {
+      size: 'default',
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
     },
-    "mobile": {
-      "labelPosition": "left",
-      "completeButton": {
-        "text": "提交",
-        "color": "",
-        "backgroundColor": ""
-      }
-    }
-  },
-  "fields": [
-    {
-      "type": "Sform",//
-      "label": "单行文本",
-      "icon": "input",
-      field: "email",
-      "key": "input_NvExu6Re6uRIVMgxnnWgB",
-      "id": "NvExu6Re6uRIVMgxnnWgB",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+    mobile: {
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+    },
+  },
+  fields: [
+    {
+      type: 'Sform', //
+      label: '单行文本',
+      icon: 'input',
+      field: 'email',
+      key: 'input_NvExu6Re6uRIVMgxnnWgB',
+      id: 'NvExu6Re6uRIVMgxnnWgB',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
+      },
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      field: "name",
-      "icon": "input",
-      "key": "input_r6hNllBugy4l9IijZ6akr",
-      "id": "r6hNllBugy4l9IijZ6akr",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      field: 'name',
+      icon: 'input',
+      key: 'input_r6hNllBugy4l9IijZ6akr',
+      id: 'r6hNllBugy4l9IijZ6akr',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
       field: 'password',
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_SfWRLacWt4CekAOvVaOAy",
-      "id": "SfWRLacWt4CekAOvVaOAy",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_SfWRLacWt4CekAOvVaOAy',
+      id: 'SfWRLacWt4CekAOvVaOAy',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
-    }
-  ]
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
+    },
+  ],
 }
 
 export const entityData = {
-  "layout": {
-    "pc": [
+  layout: {
+    pc: [
       {
-        "type": "inline",
-        "columns": [
-          "2Hz_88s0BVOVr9HoOoI3a"
-        ],
-        "style": {},
-        "id": "tOl0nRItNpHC1sWguSGHn",
-        "key": "inline_tOl0nRItNpHC1sWguSGHn"
+        type: 'inline',
+        columns: ['2Hz_88s0BVOVr9HoOoI3a'],
+        style: {},
+        id: 'tOl0nRItNpHC1sWguSGHn',
+        key: 'inline_tOl0nRItNpHC1sWguSGHn',
       },
       {
-        "type": "inline",
-        "columns": [
+        type: 'inline',
+        columns: [
           {
-            "type": "tabs",
-            "label": "标签页",
-            "icon": "label",
-            "id": "ClTBS39cRJcNKeqYDLi84",
-            "columns": [
+            type: 'tabs',
+            label: '标签页',
+            icon: 'label',
+            id: 'ClTBS39cRJcNKeqYDLi84',
+            columns: [
               {
-                "id": "LlwsiXoMgVQCpRNXFTK0T",
-                "type": "tabsCol",
-                "label": "Tab 1",
-                "list": [
+                id: 'LlwsiXoMgVQCpRNXFTK0T',
+                type: 'tabsCol',
+                label: 'Tab 1',
+                list: [
                   {
-                    "type": "inline",
-                    "columns": [
-                      "qOOKKQf7tIQHpmEsDVZQm"
-                    ],
-                    "style": {},
-                    "id": "dH8YcpOAaqqf5SjT6oDqG",
-                    "key": "inline_dH8YcpOAaqqf5SjT6oDqG"
-                  }
+                    type: 'inline',
+                    columns: ['qOOKKQf7tIQHpmEsDVZQm'],
+                    style: {},
+                    id: 'dH8YcpOAaqqf5SjT6oDqG',
+                    key: 'inline_dH8YcpOAaqqf5SjT6oDqG',
+                  },
                 ],
-                "style": {},
-                "options": {},
-                "key": "tabsCol_LlwsiXoMgVQCpRNXFTK0T"
+                style: {},
+                options: {},
+                key: 'tabsCol_LlwsiXoMgVQCpRNXFTK0T',
               },
               {
-                "id": "f2GBlLqG63Nnk3denLeAe",
-                "type": "tabsCol",
-                "label": "Tab 2",
-                "list": [
+                id: 'f2GBlLqG63Nnk3denLeAe',
+                type: 'tabsCol',
+                label: 'Tab 2',
+                list: [
                   {
-                    "type": "inline",
-                    "columns": [
-                      "ajK_arECmlSyIvbDObxC6"
-                    ],
-                    "style": {},
-                    "id": "DCWZ6slhaQI0Cofacr_yH",
-                    "key": "inline_DCWZ6slhaQI0Cofacr_yH"
-                  }
+                    type: 'inline',
+                    columns: ['ajK_arECmlSyIvbDObxC6'],
+                    style: {},
+                    id: 'DCWZ6slhaQI0Cofacr_yH',
+                    key: 'inline_DCWZ6slhaQI0Cofacr_yH',
+                  },
                 ],
-                "style": {},
-                "options": {},
-                "key": "tabsCol_f2GBlLqG63Nnk3denLeAe"
+                style: {},
+                options: {},
+                key: 'tabsCol_f2GBlLqG63Nnk3denLeAe',
               },
               {
-                "id": "8--mKpheTje2pZiy9wxlA",
-                "type": "tabsCol",
-                "label": "Tab 3",
-                "list": [
+                id: '8--mKpheTje2pZiy9wxlA',
+                type: 'tabsCol',
+                label: 'Tab 3',
+                list: [
                   {
-                    "type": "inline",
-                    "columns": [
-                      "vxz7_UfuMb3f3uIqy36vg"
-                    ],
-                    "style": {},
-                    "id": "JnPpc4Teb07r02kDMfB5G",
-                    "key": "inline_JnPpc4Teb07r02kDMfB5G"
-                  }
+                    type: 'inline',
+                    columns: ['vxz7_UfuMb3f3uIqy36vg'],
+                    style: {},
+                    id: 'JnPpc4Teb07r02kDMfB5G',
+                    key: 'inline_JnPpc4Teb07r02kDMfB5G',
+                  },
                 ],
-                "style": {},
-                "options": {},
-                "key": "tabsCol_8--mKpheTje2pZiy9wxlA"
-              }
+                style: {},
+                options: {},
+                key: 'tabsCol_8--mKpheTje2pZiy9wxlA',
+              },
             ],
-            "options": {
-              "type": "",
-              "tabPosition": "top",
-              "align": "top",
-              "hidden": false,
-              "defaultValue": "8--mKpheTje2pZiy9wxlA"
+            options: {
+              type: '',
+              tabPosition: 'top',
+              align: 'top',
+              hidden: false,
+              defaultValue: '8--mKpheTje2pZiy9wxlA',
             },
-            "style": {
-              "width": "100%",
-              "height": "376px"
+            style: {
+              width: '100%',
+              height: '376px',
             },
-            "key": "tabs_ClTBS39cRJcNKeqYDLi84"
-          }
+            key: 'tabs_ClTBS39cRJcNKeqYDLi84',
+          },
         ],
-        "style": {},
-        "id": "pjWHToGmOUKrEbYUt9FzT",
-        "key": "inline_pjWHToGmOUKrEbYUt9FzT"
-      }
+        style: {},
+        id: 'pjWHToGmOUKrEbYUt9FzT',
+        key: 'inline_pjWHToGmOUKrEbYUt9FzT',
+      },
     ],
-    "mobile": [
+    mobile: [
       {
-        "type": "inline",
-        "columns": [
-          "2Hz_88s0BVOVr9HoOoI3a"
-        ]
+        type: 'inline',
+        columns: ['2Hz_88s0BVOVr9HoOoI3a'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "qOOKKQf7tIQHpmEsDVZQm"
-        ]
+        type: 'inline',
+        columns: ['qOOKKQf7tIQHpmEsDVZQm'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "ajK_arECmlSyIvbDObxC6"
-        ]
+        type: 'inline',
+        columns: ['ajK_arECmlSyIvbDObxC6'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "vxz7_UfuMb3f3uIqy36vg"
-        ]
-      }
-    ]
+        type: 'inline',
+        columns: ['vxz7_UfuMb3f3uIqy36vg'],
+      },
+    ],
   },
-  "data": {},
-  "config": {
-    "isSync": true,
-    "pc": {
-      "size": "default",
-      "labelPosition": "left",
-      "completeButton": {
-        "text": "提交",
-        "color": "",
-        "backgroundColor": ""
-      }
+  data: {},
+  config: {
+    isSync: true,
+    pc: {
+      size: 'default',
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
     },
-    "mobile": {
-      "labelPosition": "left",
-      "completeButton": {
-        "text": "提交",
-        "color": "",
-        "backgroundColor": ""
-      }
-    }
-  },
-  "fields": [
-    {
-      "type": "entity",
-      "label": "",
-      "icon": "input",
-      "key": "entity_2Hz_88s0BVOVr9HoOoI3a",
-      "id": "2Hz_88s0BVOVr9HoOoI3a",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+    mobile: {
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
+    },
+  },
+  fields: [
+    {
+      type: 'entity',
+      label: '',
+      icon: 'input',
+      key: 'entity_2Hz_88s0BVOVr9HoOoI3a',
+      id: '2Hz_88s0BVOVr9HoOoI3a',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
+      },
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
         },
-        "height": "320px"
-      }
+        height: '320px',
+      },
     },
     {
-      "type": "entity",
-      "label": "",
-      "icon": "input",
-      "key": "entity_qOOKKQf7tIQHpmEsDVZQm",
-      "id": "qOOKKQf7tIQHpmEsDVZQm",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'entity',
+      label: '',
+      icon: 'input',
+      key: 'entity_qOOKKQf7tIQHpmEsDVZQm',
+      id: 'qOOKKQf7tIQHpmEsDVZQm',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "entity",
-      "label": "",
-      "icon": "input",
-      "key": "entity_ajK_arECmlSyIvbDObxC6",
-      "id": "ajK_arECmlSyIvbDObxC6",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'entity',
+      label: '',
+      icon: 'input',
+      key: 'entity_ajK_arECmlSyIvbDObxC6',
+      id: 'ajK_arECmlSyIvbDObxC6',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "entity",
-      "label": "",
-      "icon": "input",
-      "key": "entity_vxz7_UfuMb3f3uIqy36vg",
-      "id": "vxz7_UfuMb3f3uIqy36vg",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'entity',
+      label: '',
+      icon: 'input',
+      key: 'entity_vxz7_UfuMb3f3uIqy36vg',
+      id: 'vxz7_UfuMb3f3uIqy36vg',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
-    }
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
+    },
   ],
-  "logic": {}
+  logic: {},
 }
 
 export const gridData = {
-  "layout": {
-    "pc": [
+  layout: {
+    pc: [
       {
-        "type": "inline",
-        "columns": [
+        type: 'inline',
+        columns: [
           {
-            "type": "grid",
-            "label": "栅格布局",
-            "icon": "grid",
-            "id": "352g9OjdTFGeKWG_5GT_n",
-            "columns": [
+            type: 'grid',
+            label: '栅格布局',
+            icon: 'grid',
+            id: '352g9OjdTFGeKWG_5GT_n',
+            columns: [
               {
-                "id": "KUJnWTjss12GhVVmDlmuL",
-                "options": {
-                  "span": 6,
-                  "offset": 0,
-                  "pull": 0,
-                  "push": 0
+                id: 'KUJnWTjss12GhVVmDlmuL',
+                options: {
+                  span: 6,
+                  offset: 0,
+                  pull: 0,
+                  push: 0,
                 },
-                "type": "col",
-                "list": [
+                type: 'col',
+                list: [
                   {
-                    "type": "inline",
-                    "columns": [
-                      "VkBtjpv1MLp68MovtFbqR"
-                    ],
-                    "style": {},
-                    "id": "aHUOXzkreWQqbrmVKmA5I",
-                    "key": "inline_aHUOXzkreWQqbrmVKmA5I"
-                  }
+                    type: 'inline',
+                    columns: ['VkBtjpv1MLp68MovtFbqR'],
+                    style: {},
+                    id: 'aHUOXzkreWQqbrmVKmA5I',
+                    key: 'inline_aHUOXzkreWQqbrmVKmA5I',
+                  },
                 ],
-                "style": {},
-                "key": "col_KUJnWTjss12GhVVmDlmuL"
+                style: {},
+                key: 'col_KUJnWTjss12GhVVmDlmuL',
               },
               {
-                "id": "drg_5a0uVUKTvHJ7kImWc",
-                "options": {
-                  "span": 6,
-                  "offset": 0,
-                  "pull": 0,
-                  "push": 0
+                id: 'drg_5a0uVUKTvHJ7kImWc',
+                options: {
+                  span: 6,
+                  offset: 0,
+                  pull: 0,
+                  push: 0,
                 },
-                "type": "col",
-                "list": [
+                type: 'col',
+                list: [
                   {
-                    "type": "inline",
-                    "columns": [
-                      "wk4k7YSmjZzT0rMHNAEOB"
-                    ],
-                    "style": {},
-                    "id": "S2mdLt_UO8CIy-A6KkE4I",
-                    "key": "inline_S2mdLt_UO8CIy-A6KkE4I"
-                  }
+                    type: 'inline',
+                    columns: ['wk4k7YSmjZzT0rMHNAEOB'],
+                    style: {},
+                    id: 'S2mdLt_UO8CIy-A6KkE4I',
+                    key: 'inline_S2mdLt_UO8CIy-A6KkE4I',
+                  },
                 ],
-                "style": {},
-                "key": "col_drg_5a0uVUKTvHJ7kImWc"
-              }
+                style: {},
+                key: 'col_drg_5a0uVUKTvHJ7kImWc',
+              },
             ],
-            "options": {
-              "gutter": 0,
-              "justify": "space-around",
-              "align": "top"
+            options: {
+              gutter: 0,
+              justify: 'start',
+              align: 'top',
             },
-            "style": {
-              "width": "109%"
+            style: {
+              width: '109%',
             },
-            "key": "grid_352g9OjdTFGeKWG_5GT_n"
-          }
+            key: 'grid_352g9OjdTFGeKWG_5GT_n',
+          },
         ],
-        "style": {},
-        "id": "xQ6cylkvbeBgW-kkEuI_m",
-        "key": "inline_xQ6cylkvbeBgW-kkEuI_m"
-      }
+        style: {},
+        id: 'xQ6cylkvbeBgW-kkEuI_m',
+        key: 'inline_xQ6cylkvbeBgW-kkEuI_m',
+      },
     ],
-    "mobile": [
+    mobile: [
       {
-        "type": "inline",
-        "columns": [
-          "VkBtjpv1MLp68MovtFbqR"
-        ]
+        type: 'inline',
+        columns: ['VkBtjpv1MLp68MovtFbqR'],
       },
       {
-        "type": "inline",
-        "columns": [
-          "wk4k7YSmjZzT0rMHNAEOB"
-        ]
-      }
-    ]
-  },
-  "data": {},
-  "config": {
-    "isSync": true,
-    "pc": {
-      "size": "default",
-      "labelPosition": "left",
-      "completeButton": {
-        "text": "提交",
-        "color": "",
-        "backgroundColor": ""
-      }
-    },
-    "mobile": {
-      "labelPosition": "left",
-      "completeButton": {
-        "text": "提交",
-        "color": "",
-        "backgroundColor": ""
-      }
-    }
-  },
-  "fields": [
-    {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_VkBtjpv1MLp68MovtFbqR",
-      "id": "VkBtjpv1MLp68MovtFbqR",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+        type: 'inline',
+        columns: ['wk4k7YSmjZzT0rMHNAEOB'],
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
+    ],
+  },
+  data: {},
+  config: {
+    isSync: true,
+    pc: {
+      size: 'default',
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
+    mobile: {
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
+  },
+  fields: [
+    {
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_VkBtjpv1MLp68MovtFbqR',
+      id: 'VkBtjpv1MLp68MovtFbqR',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
+      },
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
     },
     {
-      "type": "input",
-      "label": "单行文本",
-      "icon": "input",
-      "key": "input_wk4k7YSmjZzT0rMHNAEOB",
-      "id": "wk4k7YSmjZzT0rMHNAEOB",
-      "options": {
-        "clearable": true,
-        "isShowWordLimit": false,
-        "renderType": 1,
-        "disabled": false,
-        "showPassword": false,
-        "defaultValue": "",
-        "placeholder": "请输入",
-        "labelWidth": 100,
-        "isShowLabel": true,
-        "required": false,
-        "min": null,
-        "max": null
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_wk4k7YSmjZzT0rMHNAEOB',
+      id: 'wk4k7YSmjZzT0rMHNAEOB',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
       },
-      "style": {
-        "width": {
-          "pc": "100%",
-          "mobile": "100%"
-        }
-      }
-    }
-  ]
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
+    },
+  ],
+}
+
+export const _testData = {
+  layout: {
+    pc: [
+      {
+        type: 'inline',
+        columns: [
+          {
+            type: 'grid',
+            label: '栅格布局',
+            icon: 'grid',
+            id: 'P-0cdaREp4lYJe6XjK4by',
+            columns: [
+              {
+                id: 'KeXSQHj5sR4hx-FjRFH_z',
+                options: {
+                  span: 6,
+                  offset: 0,
+                  pull: 0,
+                  push: 0,
+                },
+                type: 'col',
+                list: [
+                  {
+                    type: 'inline',
+                    columns: ['qNmRCC3z7cOrfevF3TTxZ'],
+                    style: {},
+                    id: 'eh7agOIm50J50N2F3pwOt',
+                    key: 'inline_eh7agOIm50J50N2F3pwOt',
+                  },
+                ],
+                style: {},
+                key: 'col_KeXSQHj5sR4hx-FjRFH_z',
+              },
+              {
+                id: 'sV6wL17oWCKKNPLjgZytC',
+                options: {
+                  span: 6,
+                  offset: 0,
+                  pull: 0,
+                  push: 0,
+                },
+                type: 'col',
+                list: [
+                  {
+                    type: 'inline',
+                    columns: ['JzI-aUYRdpYS6jlAK_gOq'],
+                    style: {},
+                    id: 'PL1n1tx1tm3-K1MyI9f9c',
+                    key: 'inline_PL1n1tx1tm3-K1MyI9f9c',
+                  },
+                  {
+                    type: 'inline',
+                    columns: ['QgIeifQqlwfJrKVUyULdW'],
+                    style: {},
+                    id: 'yLYiTZQMgIN_WfyBNmZ5P',
+                    key: 'inline_yLYiTZQMgIN_WfyBNmZ5P',
+                  },
+                ],
+                style: {},
+                key: 'col_sV6wL17oWCKKNPLjgZytC',
+              },
+              {
+                id: 'a-tk5NL_UJ0OCMm2UOTMx',
+                options: {
+                  span: 6,
+                  offset: 0,
+                  pull: 0,
+                  push: 0,
+                },
+                type: 'col',
+                list: [],
+                style: {},
+                key: 'col_a-tk5NL_UJ0OCMm2UOTMx',
+              },
+            ],
+            options: {
+              gutter: 0,
+              justify: 'start',
+              align: 'top',
+            },
+            style: {
+              width: '100%',
+            },
+            key: 'grid_P-0cdaREp4lYJe6XjK4by',
+          },
+        ],
+        style: {},
+        id: '6USuhwc-oMVUMDP7RHPh2',
+        key: 'inline_6USuhwc-oMVUMDP7RHPh2',
+      },
+    ],
+    mobile: [
+      {
+        type: 'inline',
+        columns: ['qNmRCC3z7cOrfevF3TTxZ'],
+      },
+      {
+        type: 'inline',
+        columns: ['JzI-aUYRdpYS6jlAK_gOq'],
+      },
+      {
+        type: 'inline',
+        columns: ['QgIeifQqlwfJrKVUyULdW'],
+      },
+    ],
+  },
+  data: {},
+  config: {
+    isSync: true,
+    pc: {
+      size: 'default',
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
+    mobile: {
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
+  },
+  fields: [
+    {
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_qNmRCC3z7cOrfevF3TTxZ',
+      id: 'qNmRCC3z7cOrfevF3TTxZ',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
+      },
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
+    },
+    {
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_JzI-aUYRdpYS6jlAK_gOq',
+      id: 'JzI-aUYRdpYS6jlAK_gOq',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
+      },
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
+    },
+    {
+      type: 'input',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_QgIeifQqlwfJrKVUyULdW',
+      id: 'QgIeifQqlwfJrKVUyULdW',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
+      },
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
+    },
+  ],
+}
+
+export const _tData = {
+  layout: {
+    pc: [
+      {
+        type: 'inline',
+        columns: [
+          {
+            type: 'tabs',
+            label: '标签页',
+            icon: 'label',
+            id: 'Gi7GscTMjQrh7BCvL2txu',
+            columns: [
+              {
+                id: '4KtAG3My86J0zSrnwh42B',
+                type: 'tabsCol',
+                label: 'Tab 1',
+                list: [
+                  {
+                    type: 'inline',
+                    columns: ['Y6Rm4f7IOIYw4stoDYknk'],
+                    style: {},
+                    id: 'fXfGlOoNicqpwJM0Rzgx5',
+                    key: 'inline_fXfGlOoNicqpwJM0Rzgx5',
+                  },
+                ],
+                style: {},
+                options: {},
+                key: 'tabsCol_4KtAG3My86J0zSrnwh42B',
+              },
+              {
+                id: 'KCvZ0jPEq7U87fzlAidkU',
+                type: 'tabsCol',
+                label: 'Tab 2',
+                list: [],
+                style: {},
+                options: {},
+                key: 'tabsCol_KCvZ0jPEq7U87fzlAidkU',
+              },
+              {
+                id: 'QFb-U2GJYd9N8v_uYJeH0',
+                type: 'tabsCol',
+                label: 'Tab 3',
+                list: [],
+                style: {},
+                options: {},
+                key: 'tabsCol_QFb-U2GJYd9N8v_uYJeH0',
+              },
+            ],
+            options: {
+              type: '',
+              tabPosition: 'top',
+              align: 'top',
+              hidden: false,
+              defaultValue: '4KtAG3My86J0zSrnwh42B',
+            },
+            style: {
+              width: '100%',
+            },
+            key: 'tabs_Gi7GscTMjQrh7BCvL2txu',
+          },
+        ],
+        style: {},
+        id: '4S03qL55b7lPDlBs-7Db5',
+        key: 'inline_4S03qL55b7lPDlBs-7Db5',
+      },
+    ],
+    mobile: [
+      {
+        type: 'inline',
+        columns: ['Y6Rm4f7IOIYw4stoDYknk'],
+      },
+    ],
+  },
+  data: {},
+  config: {
+    isSync: true,
+    pc: {
+      size: 'default',
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
+    mobile: {
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
+  },
+  fields: [
+    {
+      type: 'entity',
+      label: '单行文本',
+      icon: 'input',
+      key: 'input_Y6Rm4f7IOIYw4stoDYknk',
+      id: 'Y6Rm4f7IOIYw4stoDYknk',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
+      },
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+      },
+    },
+  ],
 }

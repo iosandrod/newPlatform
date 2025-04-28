@@ -31,7 +31,7 @@ export const pageDesignFieldConfig = [
     children: [
       {
         type: 'entity',
-        label: '单行文本',
+        label: '表格', //
         icon: 'input', //
         key: '',
         id: '',
@@ -86,29 +86,7 @@ export const pageDesignFieldConfig = [
           {
             id: '',
             options: {
-              span: 6,
-              offset: 0,
-              pull: 0,
-              push: 0,
-            },
-            type: 'col',
-            list: [],
-          },
-          {
-            id: '',
-            options: {
-              span: 6,
-              offset: 0,
-              pull: 0,
-              push: 0,
-            },
-            type: 'col',
-            list: [],
-          },
-          {
-            id: '',
-            options: {
-              span: 6,
+              span: 12,
               offset: 0,
               pull: 0,
               push: 0,
@@ -119,7 +97,7 @@ export const pageDesignFieldConfig = [
         ],
         options: {
           gutter: 0,
-          justify: 'space-around',
+          justify: 'start',
           align: 'top',
         },
       },

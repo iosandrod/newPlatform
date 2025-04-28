@@ -20,7 +20,7 @@ import { Node } from './formEditor/node'
 import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
 import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
-import { } from 'vxe-table'
+import {} from 'vxe-table'
 //转换数据
 //
 let prevEl: any = ''
@@ -67,7 +67,7 @@ export class Form extends Base {
     [key: string]: any
   }
   isShow: boolean = true
-  isDesign = true ////
+  isDesign = false ////
   data: any = {} //
   config: any = {}
   curFormItem?: FormItem
@@ -79,21 +79,7 @@ export class Form extends Base {
   items: FormItem[] = []
   pcLayout: Layout = {
     type: 'inline',
-    columns: [
-      {
-        type: 'table',
-        label: '表格布局',
-        icon: 'tableStokeP2',
-        id: null,
-        key: null,
-        rows: [],
-        style: {},
-        options: {
-          width: 100,
-          widthType: '%',
-        },
-      },
-    ],
+    columns: [],
     style: {},
     id: null,
     key: null,
@@ -149,7 +135,7 @@ export class Form extends Base {
       let pcLayout = this.getPcLayout()
       let mobileLayout = this.getMobileLayout()
       let layout = {
-        pc: [pcLayout],
+        pc: pcLayout,
         mobile: mobileLayout,
       }
       let fields = this.getFields()
@@ -157,7 +143,7 @@ export class Form extends Base {
         fields,
         layout,
         list: [], //
-      }//
+      } //
       this.setLayoutData(obj) //
     }
   }
@@ -251,7 +237,7 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-          sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
           ],
         form: ER.formIns,
       })
@@ -344,8 +330,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-              ? newTarget.children[0]
-              : newTarget.parentNode
+            ? newTarget.children[0]
+            : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -445,7 +431,6 @@ export class Form extends Base {
   init() {
     super.init()
     let config = this.config
-    this.initPcLayout()
     this.initMobileLayout()
     this.initState() //
     let items = config.items || config.fields || []
@@ -453,12 +438,7 @@ export class Form extends Base {
     if (_data) {
       this.setData(_data) //
     }
-    // console.log('items',items,'test')//
     this.setItems(items, true) ////
-    nextTick(() => {
-      //
-      // this.setLayoutData(JSON.parse(JSON.stringify(testData1))) //
-    })
   } //
   setState(state) {
     this.state = state //
@@ -547,7 +527,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() { }
+  closeCurSubForm() {}
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -607,10 +587,13 @@ export class Form extends Base {
     let rootInline = {
       ...this.createNodeIdKey('inline'),
       columns: [],
-      style: {}
+      style: {},
     }
     let _index = 0
     let _rows = rootInline.columns
+    if (items.length == 0) {
+      return [] //
+    }
     for (const item of items) {
       let index = item.getRowIndex()
       let _row = _rows[index]
@@ -620,14 +603,14 @@ export class Form extends Base {
           columns: [],
           options: {
             gutter: 0,
-            justify: "start",
-            align: "top"
+            justify: 'start',
+            align: 'top',
           },
           style: {
-            width: "100%"
+            width: '100%',
           },
         }
-        _rows[index] = _row//
+        _rows[index] = _row //
         _index = 0
       }
       let span = item.getSpan()
@@ -638,19 +621,17 @@ export class Form extends Base {
           offset: 0,
           pull: 0,
           push: 0,
-
         },
         list: [
           {
             ...this.createNodeIdKey('inline'),
             columns: [item.id],
-          }
-        ]//
+          },
+        ], //
       }
       _row.columns.push(colLayout)
-    }
-    console.log(rootInline, 'testInline')
-    return rootInline//
+    } //
+    return [rootInline] //
   }
   createNodeIdKey(type) {
     let id = this.uuid()
@@ -679,14 +660,8 @@ export class Form extends Base {
   }
   initPcLayout() {
     let pcLayout = this.pcLayout
-    let id1 = this.uuid()
-    let id2 = this.uuid()
-    pcLayout.id = id1
-    pcLayout.key = `inline_${id1}`
-    pcLayout.columns[0].id = id2
-    pcLayout.columns[0].key = `table_${id2}` //
   }
-  initMobileLayout() { }
+  initMobileLayout() {}
   addFormItem(config: Field) {
     let id = config.id
     let oldItems = this.items
@@ -742,7 +717,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) { }
+  setEditData(data) {}
   switchPlatform(platform) {
     let props = this.config
     let state = this.state

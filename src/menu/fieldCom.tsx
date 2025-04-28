@@ -34,7 +34,12 @@ export default defineComponent({
     const slots = {
       item: ({ element }) => {
         return (
-          <li class={[ER.props.checkFieldsForNewBadge(element) ? ns.is('new') : '']} onClick={() => addStore(element)}>
+          <li
+            class={[
+              ER.props.checkFieldsForNewBadge(element) ? ns.is('new') : '',
+            ]}
+            onClick={() => addStore(element)}
+          >
             <Icon class={[ns.e('icon')]} icon={element.icon}></Icon>
             <span>{utils.fieldLabel(t, element)}</span>
           </li>

@@ -147,7 +147,7 @@ li {
 }
 
 .Everright-formEditor-selectElement__mask{
-  display: none !important;
+  /* display: none !important; */
 }
 
 .Everright-formEditor-Canves__wrap{

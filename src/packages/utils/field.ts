@@ -232,11 +232,13 @@ const transferLabelPath = (node) =>
     node.type === 'input'
       ? `${node.type}.${node.options.renderType - 1}`
       : `${node.type}`
-  }`
+  }` //
 const fieldLabel = (t, node) => {
   // console.log(node,'testNode')//
-  let value = transferLabelPath(node)
-  return t(transferLabelPath(node))
+  // let value = transferLabelPath(node)
+  let value1 = t(transferLabelPath(node))
+
+  return value1
 }
 const transferData = (lang, path, locale, options = {}) => {
   let result = ''

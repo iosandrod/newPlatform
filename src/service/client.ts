@@ -107,7 +107,7 @@ export class myHttp {
           if (err) {
             reject(err)
           } //
-          // console.log('数据获取成功', data)//
+          console.log('数据获取成功', data)//
           resolve(data?.data || {}) //
         },
       )

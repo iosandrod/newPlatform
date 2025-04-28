@@ -2091,3 +2091,28 @@ const app = createApp({
       pcLayout.columns[0].rows.push(nRow) //
     }
     return pcLayout
+
+     let offset = Math.ceil(
+                (oldWidth +
+                  Math.round((e.clientX - oldX) / columnWidth) * columnWidth) /
+                  columnWidth,
+              )
+              if (offset >= 24) {
+                offset = 24
+              }
+              if (offset <= 6) {
+                offset = 6
+              }
+              let isCol = props.data.type == 'col'
+              if (isCol) {
+                let allCols = props.data?.context?.parent?.columns || []
+                let allSpan = allCols
+                  .filter((col) => col.id !== props.data.id)
+                  .map((col) => col.options.span)
+                  .reduce((pre, cur) => pre + cur)
+                let _allSpan = allSpan + offset
+                if (_allSpan > 24) {
+                  return //
+                }
+                props.data.options.span = offset
+              }

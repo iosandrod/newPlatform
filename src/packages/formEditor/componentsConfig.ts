@@ -427,31 +427,9 @@ export const fieldsConfig = [
         id: '',
         columns: [
           {
-            id: '',//
+            id: '', //
             options: {
-              span: 6,
-              offset: 0,
-              pull: 0,
-              push: 0,
-            },
-            type: 'col',
-            list: [],
-          },
-          {
-            id: '',
-            options: {
-              span: 6,
-              offset: 0,
-              pull: 0,
-              push: 0,
-            },
-            type: 'col',
-            list: [],
-          },
-          {
-            id: '',
-            options: {
-              span: 6,
+              span: 12,
               offset: 0,
               pull: 0,
               push: 0,
@@ -462,7 +440,7 @@ export const fieldsConfig = [
         ],
         options: {
           gutter: 0,
-          justify: 'space-around',
+          justify: 'start',
           align: 'top',
         },
       },

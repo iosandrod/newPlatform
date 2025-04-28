@@ -88,7 +88,11 @@ const draggableComponent = defineComponent({
   },
 
   render() {
-    try {
+    // try {
+    // } catch (err) {
+    //   this.error = true
+    //   return h('div')
+    // }
       this.error = false
       const { $slots, $attrs, tag, componentData, realList, getKey } = this
       const componentStructure = computeComponentStructure({
@@ -100,10 +104,6 @@ const draggableComponent = defineComponent({
       this.componentStructure = componentStructure
       const attributes = getComponentAttributes({ $attrs, componentData })
       return componentStructure.render(h, attributes)
-    } catch (err) {
-      this.error = true
-      return h('pre', { style: { color: 'red' } }, err.stack)
-    }
   },
 
   created() {

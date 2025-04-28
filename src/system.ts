@@ -75,9 +75,8 @@ export class System extends Base {
     return data //
   }
   async updatePageLayout(tableName, config) {
-    //
     let http = this.getHttp() //
-    let _res = await http.patch('entity', { tableName, ...config }) //
+    let _res = await http.patch('entity', { tableName, ...config })
   }
   deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {

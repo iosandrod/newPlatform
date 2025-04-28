@@ -59,10 +59,10 @@ export default defineComponent({
         )
       }
       let inCom = (
-        <div class="h-full">
+        <div class="h-full w-full">
           {bar}
           <TagComponent
-            class={['h-full flex flex-col']} //
+            class={['h-full w-full flex flex-col']} //
             ref={setFormRef}
             onClick={unref(isEditModel) && handleClick}
             {...typeProps.value}
@@ -82,18 +82,6 @@ export default defineComponent({
       if (!isEditModel.value) {
         _inCom = inCom
       }
-      // let com = (
-      //   <ElMain
-      //     class={[
-      //       ns.b(),
-      //       isEditModel.value && ns.e('editModel'),
-      //       !unref(isPc) && ns.e('mobile'),
-      //       !unref(isPc) && ns.e(`mobile_layoutType${ER.props.layoutType}`),
-      //     ]}
-      //   >
-      //     {_inCom}
-      //   </ElMain>
-      // )
       let com = _inCom //
       return com //
     }

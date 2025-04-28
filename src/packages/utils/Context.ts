@@ -345,11 +345,17 @@ export class Context {
   }
   appendCol() {
     const parent = this.parent
+    let allCols = this.state.columns || []
+    let allSpan = allCols
+      .map((col) => col.options.span)
+      .reduce((pre, cur) => pre + cur)
+    if (allSpan >= 24) return
+    let subSpan = 24 - allSpan
     const arr = this.arr
     const node = this.node
     const newNode = wrapElement({
       options: {
-        span: 6,
+        span: subSpan, //
         offset: 0,
         pull: 0,
         push: 0,

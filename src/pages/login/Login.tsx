@@ -91,7 +91,7 @@ export default defineComponent({
       btn.registerRef('page', el)
     }
     let fn1 = () => {
-      let _ref = btn.getRef('page')
+      let _ref: PageDesign = btn.getRef('page')
       _ref.isDesign = !_ref.isDesign
     }
     // let p = new PageDesign(getDefaultPageProps())
@@ -107,12 +107,12 @@ export default defineComponent({
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       // com = <dialogCom ref={_reg2}></dialogCom>
       let com2 = <button onClick={fn1}>123123</button>
-      // com = <pageCom ref={_reg3}></pageCom> //
-      com = (
-        <div style={{ width: '400px' }}>
-          <formCom {...formConfig}></formCom>
-        </div>
-      )
+      com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
+      // com = (
+      //   <div style={{ width: '400px' }}>
+      //     <formCom {...formConfig}></formCom>
+      //   </div>
+      // )
       let _com = (
         <div
           style={{
