@@ -15,3 +15,13 @@
     height: #{$i}px;
   }
 }
+@for $i from 1 through 2000 {
+  .pl-#{$i} {
+    padding-left: #{$i}px;
+  }
+}
+@for $i from 1 through 2000 {
+  .pr-#{$i} {
+    padding-right: #{$i}px;
+  }
+}

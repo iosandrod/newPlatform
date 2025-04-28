@@ -18,8 +18,9 @@ export class Dialog extends Base {
   }
   close() {
     let dia: VxeModalInstance = this.getRef('dialog')
+    console.log(dia, 'testDia') //
     if (dia) {
-      dia.close()
+      // dia.close()
     }
   }
   getWidth() {
@@ -38,6 +39,10 @@ export class Dialog extends Base {
   }
   getModelValue() {
     return true //
+  }
+  getTitle() {
+    let title = this.config.title || '窗口'
+    return title
   }
   onVisibleChange(bool) {}
   getMinWidth() {

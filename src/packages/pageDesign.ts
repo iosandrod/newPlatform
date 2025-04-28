@@ -5,7 +5,7 @@ import { FormItem } from './formitem'
 import { Field } from './layoutType'
 import { PageDesignItem } from './pageItem'
 import { nextTick } from 'vue'
-import { _tData, _testData, entityData } from './formEditor/testData'
+import { _tData, _tData123, _testData, entityData } from './formEditor/testData'
 import { useRunAfter } from './utils/decoration'
 
 export class PageDesign extends Form {
@@ -17,6 +17,9 @@ export class PageDesign extends Form {
   } //
   init(): void {
     super.init() //
+    nextTick(() => {
+      this.setLayoutData(_tData123) //
+    })
   }
   setItems(items: any, setLayout?: boolean): void {
     if (!Array.isArray(items)) {

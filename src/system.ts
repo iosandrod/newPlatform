@@ -4,6 +4,8 @@ import { Base } from '@ER/base'
 import { cacheValue } from '@ER/utils/decoration'
 import { PageDesign } from '@ER/pageDesign'
 import { getDefaultPageProps } from '@ER/pageCom'
+import { Dialog } from './dialog/dialog'
+import { getDialogDefaultProps } from './dialog/dialogCom'
 export class System extends Base {
   activePage = ''
   systemConfig = {
@@ -13,7 +15,8 @@ export class System extends Base {
   } //
   pageLayout = [] //
   selectOptions = {}
-  tableMap: { [key: string]: PageDesign } = {} //
+  dialogArr: Dialog[] = []
+  tableMap: { [key: string]: PageDesign } = {}
   async login() {}
   @cacheValue() //
   async getMenuData() {
@@ -133,9 +136,21 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
+  async confirm(config: any) {}
   async confirmForm(formConfig: any) {}
-  async openDialog(dialogConfig: any) {}
+  async openDialog(dialogConfig: any = {}) {
+    let _dialog = new Dialog(dialogConfig)
+    this.dialogArr.push(_dialog) //
+  }
   async confirmTable(tableConfig: any) {}
+  getAllDialog() {
+    let _this = this
+    let dialogArr = this.dialogArr
+    let _dialogArr = dialogArr.sort((d1, d2) => {
+      return 0
+    })
+    return _dialogArr
+  }
 }
 
 export const system = reactive(new System()) //

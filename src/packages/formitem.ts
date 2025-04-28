@@ -270,10 +270,7 @@ export class FormItem extends Base {
     return obj
   }
   getBindValue(getConfig?: any) {
-    // let form = this.form
-    // debugger //
     let data = this.getData() //
-    console.log(data, 'testData1') //
     let field = this.getField()
     let value = _.get(data, field) //
     if (getConfig) {
@@ -282,7 +279,6 @@ export class FormItem extends Base {
     return value
   }
   getTitle() {
-    // console.log('fsklfsdjflkdsfjlksdfjdskl')//
     let config = this.config
     let label = config.label
     return label || '标题' //

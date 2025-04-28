@@ -21,6 +21,7 @@ import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsert
 import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
 import {} from 'vxe-table'
+import { PageDesignItem } from './pageItem'
 //转换数据
 //
 let prevEl: any = ''
@@ -76,7 +77,7 @@ export class Form extends Base {
   formData: any
   nextForm?: Form
   nextFormMap: any = {}
-  items: FormItem[] = []
+  items: PageDesignItem[] = []
   pcLayout: Layout = {
     type: 'inline',
     columns: [],
@@ -813,6 +814,7 @@ export class Form extends Base {
     })
   }
   setSelection(node) {
+    // debugger //
     let state = this.state
     if (node == null) {
       node = 'root' //
@@ -890,9 +892,8 @@ export class Form extends Base {
     isWrap = true,
     isSetSelection = true,
     sourceBlock = true,
-    resetWidth = true,
+    isInRoot = false,
   ) {
-    let state = this.state
     let node: any = null //
     if (sourceBlock) {
       // 如果 sourceBlock 为 true，则调用 generatorData 生成数据，并为节点添加字段数据和字段
@@ -910,18 +911,40 @@ export class Form extends Base {
       // 如果 sourceBlock 和 isWrap 都为 false，直接返回原始元素
       node = el
     }
-    // if (!sourceBlock && resetWidth) {
-    //   if (utils.checkIsField(el)) {
-    //     if (state.platform === 'pc') {
-    //       el.style.width.pc = '100%'
-    //     } else {
-    //       el.style.width.mobile = '100%'
-    //     }
-    //   } else {
-    //     el.style.width = '100%'
-    //   }
-    // }
     if (isSetSelection) {
+    }
+    if (isInRoot) {
+      let _node = {
+        ...this.createNodeIdKey('inline'),
+        columns: [
+          {
+            ...this.createNodeIdKey('grid'),
+            options: {
+              gutter: 0,
+              justify: 'start',
+              align: 'top',
+            },
+            style: {
+              width: '100%',
+            },
+            columns: [
+              {
+                ...this.createNodeIdKey('col'), //
+                list: [_.cloneDeep(node)],
+                options: {
+                  span: 24,
+                  offset: 0,
+                  push: 0,
+                  pull: 0,
+                  style: {},
+                },
+              },
+            ],
+          },
+        ],
+      }
+      node = _node //
+      console.log(node, 'testnode') //
     }
     return node
   }
@@ -1463,6 +1486,16 @@ export class Form extends Base {
       node.style.height = value //
     })
   }
+  designForm(props: any) {
+    let data = props.data
+    let id = data.id
+    let items = this.items
+    let item = items.find((item) => item.id === id)
+    if (item) {
+      item.designForm()
+    }
+  }
+  dragWidth(props: any) {}
 }
 //使用默认布局
 

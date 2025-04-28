@@ -142,7 +142,7 @@ export default defineComponent({
             componentMap[type + element] =
               typeMap[element.toLowerCase()]?.[state.platform]
             if (!componentMap[type + element]) {
-              // console.log(Object.keys(typeMap), 'typeMap') ////
+              console.log(Object.keys(typeMap), 'typeMap') ////
               console.error(element, '找不到组件') //
             }
             info = componentMap[type + element] //

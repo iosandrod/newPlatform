@@ -73,26 +73,8 @@ import type {
 } from 'vxe-pc-ui/types/components/table'
 import { Dialog } from './dialog'
 import { PageDesign } from '@ER/pageDesign'
-
-export const allActiveModals: VxeModalConstructor[] = []
-export default defineComponent({
-  name: 'DialogCom',
-  emits: [
-    'update:modelValue',
-    'show',
-    'hide',
-    'before-hide',
-    'close',
-    'confirm',
-    'cancel',
-    'zoom',
-    'resize',
-    'move',
-  ],
-  components: {
-    ModalCom, //
-  },
-  props: {
+export const getDialogDefaultProps = () => {
+  return {
     modelValue: Boolean as PropType<VxeModalPropTypes.ModelValue>,
     id: String as PropType<VxeModalPropTypes.ID>,
     type: {
@@ -282,10 +264,47 @@ export default defineComponent({
     onMove: {
       type: Function,
     },
+    _instance: {
+      type: Object,
+    },
+  }
+}
+export const allActiveModals: VxeModalConstructor[] = []
+export default defineComponent({
+  name: 'DialogCom',
+  emits: [
+    'update:modelValue',
+    'show',
+    'hide',
+    'before-hide',
+    'close',
+    'confirm',
+    'cancel',
+    'zoom',
+    'resize',
+    'move',
+  ],
+  components: {
+    ModalCom, //
   },
+  props: getDialogDefaultProps(), //
   setup(props, { slots, expose, emit }) {
-    let dialog = new Dialog(props)
-    expose(dialog) //
+    let _dialog: any = props._instance
+    let dialog: Dialog = null as any
+    if (_dialog != null) {
+      dialog = _dialog
+      let config = dialog.config
+      Object.entries(props).forEach(([key, value]) => {
+        //@ts-ignore
+        let oldValue = config[key]
+        if (oldValue == null) {
+          config[key] = value
+        }
+      }) //
+    } else {
+      dialog = new Dialog(props)
+    } //
+    expose({ _instance: dialog }) //
     let registerDialog = (e) => dialog.registerRef('dialog', e) //
     let registerRoot = (e) => dialog.registerRef('root', e) //
     return () => {
@@ -300,10 +319,35 @@ export default defineComponent({
                     {_com}
                   </div> //
                 )
-                return outCom //
+                return outCom
               },
               header: () => {
-                return <div style={{}}>头部标题</div> //
+                let title = <div>{dialog.getTitle()}</div>
+                let rightController = (
+                  <div>
+                    <div
+                      onClick={(e) => {
+                        dialog.close() //
+                      }}
+                    >
+                      X
+                    </div>
+                  </div>
+                )
+                let com = (
+                  <div
+                    class={[
+                      'flex-row',
+                      'justify-between',
+                      'w-full',
+                      'pl-20 pr-20',
+                    ]}
+                  >
+                    {title}
+                    {rightController}
+                  </div>
+                ) //
+                return com
               },
             }}
             {...props}

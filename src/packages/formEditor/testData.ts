@@ -2685,3 +2685,88 @@ export const _tData = {
     },
   ],
 }
+
+export const _tData123 = {
+  layout: {
+    pc: [
+      {
+        type: 'inline',
+        columns: ['L36B677OXk9KEVwQtFjZ7'],
+        style: {},
+        id: 'Zmnh58MOH1mWEf6AVG4FQ',
+        key: 'inline_Zmnh58MOH1mWEf6AVG4FQ',
+      },
+    ],
+    mobile: [
+      {
+        type: 'inline',
+        columns: ['L36B677OXk9KEVwQtFjZ7'],
+      },
+    ],
+  },
+  data: {},
+  config: {
+    isSync: true,
+    pc: {
+      size: 'default',
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
+    mobile: {
+      labelPosition: 'left',
+      completeButton: {
+        text: '提交',
+        color: '',
+        backgroundColor: '',
+      },
+    },
+  },
+  fields: [
+    {
+      type: 'dform', //
+      label: '单行文本',
+      icon: 'dform',
+      key: 'input_L36B677OXk9KEVwQtFjZ7',
+      id: 'L36B677OXk9KEVwQtFjZ7',
+      options: {
+        clearable: true,
+        isShowWordLimit: false,
+        renderType: 1,
+        disabled: false,
+        showPassword: false,
+        defaultValue: '',
+        placeholder: '请输入',
+        labelWidth: 100,
+        isShowLabel: true,
+        required: false,
+        min: null,
+        max: null,
+        itemSpan: 24,
+        items: [
+          {
+            field: 'email',
+            label: '邮箱',
+            required: true,
+          },
+          {
+            field: 'password',
+            label: '密码',
+            required: true,
+            password: true,
+          },
+        ],
+      },
+      style: {
+        width: {
+          pc: '100%',
+          mobile: '100%',
+        },
+        minHeight: '100px',
+      },
+    },
+  ],
+}

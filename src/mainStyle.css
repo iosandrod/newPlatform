@@ -158,3 +158,22 @@ li {
 }
 .ER-element{
 }
+
+.relative{
+  position: relative;
+}
+.absolute{
+  position: absolute;
+}
+.fixed{
+  position: fixed;
+}
+
+.border-1{
+  border: 1px solid ;
+}
+.border-red{
+  border-width: 1px;
+  border:'solid';
+  border-color: red;
+}

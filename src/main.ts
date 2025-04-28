@@ -1,5 +1,5 @@
 import { createApp } from 'vue' //
-import App from './App.vue'
+import App from './App' //
 import router from '@/router'
 import elementPlus from 'element-plus'
 import * as VueVTable from '@visactor/vue-vtable'
@@ -10,7 +10,7 @@ import 'element-plus/dist/index.css'
 import 'element-plus/dist/index.css'
 import 'vant/lib/index.css'
 import './mainStyle.css'
-import './style.scss'//
+import './style.scss' //
 import 'vxe-table/lib/style.css'
 import 'vxe-pc-ui/styles/all.scss'
 import 'default-passive-events' //

@@ -72,10 +72,10 @@ export default defineComponent({
     onUnmounted(() => {
       fIns.onUnmounted() //
     }) //
-    expose(fIns)
+    expose({ _instance: fIns }) //
     return () => {
       let com = <erForm formIns={fIns}></erForm>
-      return com
+      return <div class="w-full h-full bg-white">{com}</div>
     }
   },
 })

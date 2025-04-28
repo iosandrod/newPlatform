@@ -80,6 +80,8 @@ export type FieldOptions = {
 }
 
 export type Field = {
+  itemSpan?:any
+  items?: any[]
   tableName?: string
   columns?: any
   password?: boolean

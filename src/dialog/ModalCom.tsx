@@ -241,6 +241,7 @@ export default defineComponent({
       type: Boolean as PropType<VxeModalPropTypes.Animat>,
       default: () => getConfig().modal.animat,
     },
+    _instance: {}, //
   },
   emits: [
     'update:modelValue',

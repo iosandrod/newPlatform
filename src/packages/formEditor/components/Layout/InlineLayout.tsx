@@ -65,8 +65,6 @@ export default defineComponent({
           }
         }
       }
-
-      console.log(_class1, 'testClass') //
       return (
         <div class={[ns.b(), ..._class1]}>
           <LayoutDragGable

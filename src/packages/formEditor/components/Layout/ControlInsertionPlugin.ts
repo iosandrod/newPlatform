@@ -4,6 +4,7 @@ import _ from 'lodash'
 import utils from '@ER/utils'
 import { nextTick } from 'vue'
 import { nanoid } from 'nanoid'
+import { Form } from '@ER/form'
 let prevEl: any = ''
 let prevSortable: any = ''
 let inserRowIndex: any = ''
@@ -321,7 +322,7 @@ const resetStates = () => {
   }
   prevEl = prevSortable = inserColIndex = inserRowIndex = ''
 }
-function ControlInsertionPlugin(ER) {
+function ControlInsertionPlugin(ER: Form) {
   if (ER.cachePlugin != null) {
     return ER.cachePlugin
   } //
@@ -340,13 +341,25 @@ function ControlInsertionPlugin(ER) {
       const { dragEl, target } = e //
       // 获取拖拽元素的真实DOM结构
       const oldEl = getDragElement(dragEl)
+      let isInRootDiv = false
+      if (inserRowIndex !== '') {
+        let store = []
+        store = Array.isArray(prevSortable.options.parent)
+          ? prevSortable.options.parent
+          : prevSortable.options.parent.list
+        // 在指定的索引位置插入新元素
+        let _store = ER.state.store
+        if (_store == store) {
+          isInRootDiv = true //
+        }
+      }
       // 克隆并包装拖拽的元素，以便插入到新位置
-      // console.log(oldEl, 'testOld')//
       const newElement = ER.wrapElement(
         _.cloneDeep(oldEl),
         inserRowIndex !== '',
         true,
         isBlock,
+        isInRootDiv, //
       )
       // 如果不是 'block' 类型的元素，并且原始元素有 context，则删除该 context
       if (!isBlock) {
@@ -373,7 +386,7 @@ function ControlInsertionPlugin(ER) {
         // 在指定的索引位置插入新元素
         store.splice(inserRowIndex, 0, newElement)
         // 关联新元素的上下文信息
-        let _node = store[inserRowIndex]
+        // let _node = store[inserRowIndex]
         // if (_node == null) {
         //   return //
         // }

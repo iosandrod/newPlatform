@@ -118,24 +118,26 @@ export default {
       copy: () => {
         formIns.copyNode(props) //
       },
-      tableInsertRow: () => {
-        //@ts-ignore
-        formIns.tableInsertRow(props)
-      },
-      tableInsertCol: () => {
-        //@ts-ignore
-        formIns.tableInsertCol(props)
-      },
-
       top: () => {
         formIns.topNode(props) //
       },
-
       plus: () => {
         props.data.context.appendCol()
       },
       enterForm: () => {
         formIns.enterForm(props)
+      },
+      designForm: () => {
+        formIns.designForm(props)
+      },
+      dragWidth: () => {
+        formIns.dragWidth(props)
+      },
+      tableInsertRow: () => {
+        formIns.tableInsertRow(props)
+      },
+      tableInsertCol: () => {
+        formIns.tableInsertCol(props)
       },
     }
     const handleAction = (type) => {
@@ -147,6 +149,7 @@ export default {
         5: 'top', // 置顶/选择父级
         6: 'plus', // 添加列
         7: 'enterForm',
+        8: 'designForm',
         widthScale: 'dragWidth', // 调整宽度（特殊情况，无 action 数字）
       }
       let actionString = iconActionMap[type]
@@ -422,6 +425,18 @@ export default {
                     },
                     ['stop'],
                   )}
+                  icon="config"
+                ></Icon> //设置子表
+              )}
+              {props.data.type == 'dform' && (
+                <Icon
+                  class={[ns.e('copy')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(8)
+                    },
+                    ['stop'],
+                  )} //
                   icon="config"
                 ></Icon> //设置子表
               )}

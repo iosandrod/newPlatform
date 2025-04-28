@@ -16,6 +16,7 @@ export default {
       date: '日期',
       rate: '评分',
       switch: '开关',
+      dform: '表单',
       slider: '滑块',
       html: '富文本',
       cascader: '级联框',

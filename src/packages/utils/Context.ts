@@ -353,6 +353,9 @@ export class Context {
     let subSpan = 24 - allSpan
     const arr = this.arr
     const node = this.node
+    if (subSpan > 6) {
+      subSpan = 6 //
+    }
     const newNode = wrapElement({
       options: {
         span: subSpan, //

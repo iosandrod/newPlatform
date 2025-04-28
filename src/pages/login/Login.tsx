@@ -1,4 +1,4 @@
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, inject, reactive, ref } from 'vue'
 import { erFormEditor } from '@ER/formEditor'
 import buttonCom from '@/buttonGroup/buttonCom'
 import tabCom from '@/buttonGroup/tabCom'
@@ -23,6 +23,7 @@ import { Dialog } from '@/dialog/dialog'
 import { PageDesign } from '@ER/pageDesign'
 import FormEditor from '@ER/formEditor/formEditor'
 import { Button } from '@/buttonGroup/button'
+import { System } from '@/system'
 export default defineComponent({
   components: {
     buttonCom, //
@@ -94,6 +95,7 @@ export default defineComponent({
       let _ref: PageDesign = btn.getRef('page')
       _ref.isDesign = !_ref.isDesign
     }
+    let _system: System = inject('systemIns')
     // let p = new PageDesign(getDefaultPageProps())
     return () => {
       let com0 = null
@@ -108,11 +110,7 @@ export default defineComponent({
       // com = <dialogCom ref={_reg2}></dialogCom>
       let com2 = <button onClick={fn1}>123123</button>
       com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
-      // com = (
-      //   <div style={{ width: '400px' }}>
-      //     <formCom {...formConfig}></formCom>
-      //   </div>
-      // )
+      com = null
       let _com = (
         <div
           style={{
@@ -122,6 +120,16 @@ export default defineComponent({
         >
           {com2}
           {com0}
+          <buttonCom
+            fn={async () => {
+              _system.openDialog({
+                height: 500,
+                width: 500, //
+              })
+            }}
+          >
+            测试1
+          </buttonCom>
           <div
             style={{
               height: '500px',
