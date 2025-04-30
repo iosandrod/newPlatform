@@ -154,6 +154,51 @@ export default defineComponent({
     ) //
     watch(
       () => {
+        let rowStart = tableIns.scrollConfig.rowStart
+        let rowEnd = tableIns.scrollConfig.rowEnd
+        return [rowStart, rowEnd]
+      },
+      ([rowStart, rowEnd], [oldRowStart, oldRowEnd]) => {
+        //向上滚动
+        let _start = rowStart - 200
+        let _end = rowEnd + 200
+        if (_start < 0) {
+          _start = 0
+        }
+        let data = tableIns.templateProps.data
+        if (_end > data.length) {
+          _end = data.length
+        }
+        let _oldStart = oldRowStart - 200
+        if (_oldStart < 0) {
+          _oldStart = 0
+        }
+        let _oldEnd = oldRowEnd + 200
+        if (_oldEnd > data.length) {
+          _oldEnd = data.length
+        }
+        let records = tableIns.getInstance().records
+        //向下滚动
+        let contain = tableIns.currentIndexContain
+        if (_start > _oldStart) {
+          let _records = records.slice(_oldStart, _start)
+          _records.forEach((item) => {
+            let _index = item._index
+            delete contain[_index] //
+          })
+        }
+        //向上滚动
+        if (_end < _oldEnd) {
+          let _records = records.slice(_end, _oldEnd)
+          _records.forEach((item) => {
+            let _index = item._index
+            delete contain[_index] //
+          })
+        } //
+      },
+    )
+    watch(
+      () => {
         return tableIns.tableConfig
       },
       (e) => {

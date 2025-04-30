@@ -23,6 +23,7 @@ import { Dialog } from '@/dialog/dialog'
 import { PageDesign } from '@ER/pageDesign'
 import FormEditor from '@ER/formEditor/formEditor'
 import { Button } from '@/buttonGroup/button'
+import { system } from '@/system'
 export default defineComponent({
   components: {
     buttonCom, //
@@ -91,14 +92,20 @@ export default defineComponent({
       btn.registerRef('page', el)
     }
     let fn1 = () => {
-      let _ref = btn.getRef('page')
-      _ref.isDesign = !_ref.isDesign
+      system.confirmForm({
+        ...formConfig,//
+      })
     }
     // let p = new PageDesign(getDefaultPageProps())
+    let _data1 = Array(10000)
+      .fill(null)
+      .map((row) => {
+        return {}
+      })
     return () => {
-      let com0 = null
+      let com0 = null //
       let com = null
-      com = <tableCom {...tableConfig}></tableCom> //
+      com = <tableCom {...tableConfig} data={_data1}></tableCom> //
       // com = (
       //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
       //     <tableCom {...tableConfig}></tableCom>

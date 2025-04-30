@@ -144,43 +144,10 @@ export const pageDesignFieldConfig = [
                 list: [],
                 style: {},
               },
-              // {
-              //   type: 'td',
-              //   options: {
-              //     colspan: 1,
-              //     rowspan: 1,
-              //     isMerged: false
-              //   },
-              //   list: [],
-              //   style: {}
-              // }
+            
             ],
           },
-          // {
-          //   type: 'tr',
-          //   columns: [
-          //     {
-          //       type: 'td',
-          //       options: {
-          //         colspan: 1,
-          //         rowspan: 1,
-          //         isMerged: false
-          //       },
-          //       list: [],
-          //       style: {}
-          //     },
-          //     {
-          //       type: 'td',
-          //       options: {
-          //         colspan: 1,
-          //         rowspan: 1,
-          //         isMerged: false
-          //       },
-          //       list: [],
-          //       style: {}
-          //     }
-          //   ]
-          // }
+
         ],
         options: {
           width: 100,

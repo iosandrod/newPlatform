@@ -149,8 +149,10 @@ export class PageDesign extends Form {
   async updateTableDesign() {
     let _data = this.getLayoutData() //
     let http = this.getHttp()
-    let _res = await http.patch('entity', _data)
-    console.log(_res, 'testRes') //
+    let _config = this.config
+    let _config1 = { ..._config, ..._data,id: _config.id } //
+    let _res = await http.patch(`entity/${_config.id}`,_config1.id, _config1) //
+    console.log('保存成功')//
   }
   getMainTableName() {
     let config = this.config

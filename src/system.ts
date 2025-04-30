@@ -49,17 +49,17 @@ export class System extends Base {
     ] //
   }
   openPageDesign(config) {} //
-  async getDefaultPageLayout(name?: string) {
-    let http = this.getHttp()
-    let _data = await http.post(
-      'entity',
-      'getDefaultPageLayout',
-      {
-        tableName: name,
-      }, //
-    ) //
-    return _data //
-  }
+  // async getDefaultPageLayout(name?: string) {
+  //   let http = this.getHttp()
+  //   let _data = await http.post(
+  //     'entity',
+  //     'getDefaultPageLayout',
+  //     {
+  //       tableName: name,
+  //     }, //
+  //   ) //
+  //   return _data //
+  // }
   async getPageLayout(name?: string) {
     let http = this.getHttp()
     let data = await http.get(
@@ -80,8 +80,8 @@ export class System extends Base {
     return data //
   }
   async updatePageLayout(tableName, config) {
-    let http = this.getHttp() //
-    let _res = await http.patch('entity', { tableName, ...config })
+    // let http = this.getHttp() //
+    // let _res = await http.patch('entity', { tableName, ...config })
   }
   deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
@@ -113,22 +113,26 @@ export class System extends Base {
       }
     }
     let tableName = config.tableName
-    let layoutConfig = await this.getPageLayout(tableName) //
-    let _props = getDefaultPageProps()
-    let obj = {}
     let _design = this.tableMap[tableName]
     if (_design) {
       return _design //
     }
+    let layoutConfig = await this.getPageLayout(tableName) //
+    let _props = getDefaultPageProps()
+    let obj = {} //
     Object.entries(_props).forEach(([key, value]) => {
       //@ts-ignore
       let _default = value.default
       if (typeof _default == 'function' && value.type != Function) {
         //@ts-ignore
-        _default = _default()
+        _default = _default()//
       }
       obj[key] = _default //
     })
+    obj = {
+      ...obj,
+      ...layoutConfig,
+    } //
     //@ts-ignore
     obj.tableName = tableName
     let pageDesign = new PageDesign(obj)

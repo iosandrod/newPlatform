@@ -59,9 +59,9 @@ export class Column extends Base {
   getSelectOptions() {
     let options = this.config.options || []
     return options //
-  }
-  setHidden(bool) { } //
-  getFormitem() { } //
+  } //
+  setHidden(bool) {} //
+  getFormitem() {} //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -157,15 +157,25 @@ export class Column extends Base {
         justifyContent: 'space-between',
         boundsPadding: [0, 0, 0, 0],
       })
+      let _g=createGroup({
+        width:width-40,
+        height,
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        overflow: 'hidden',
+        alignItems: 'center',//
+      })
       let locationName = createText({
         text: value, //
         fontSize: 14,
         fontWeight: 'bold',
         fill: 'black',
         overflow: 'hidden',
-        boundsPadding: [0, 0, 0, 20],
+        boundsPadding: [0, 0, 0, 0],
         lineDashOffset: 0,
-      }) //
+      }) 
+      _g.add(locationName)
       const g1 = this.createFilter({
         table,
         row,
@@ -192,9 +202,7 @@ export class Column extends Base {
         height,
         width,
       })
-      container.add(locationName) //
-      // container.add(sortG) //
-      // container.add(g1) //
+      container.add(_g) //
       controllerGroup.add(sortG)
       controllerGroup.add(g1)
       container.add(controllerGroup) //
@@ -297,7 +305,8 @@ export class Column extends Base {
                 })
                 return value //
               },
-              () => {
+              (newV) => {
+                //
                 _table.updateIndexArr.add(_index) //
               },
             )
@@ -808,8 +817,8 @@ export class Column extends Base {
   }
   getCustomLayout() {
     let customLayout = (args) => {
-      // console.log('is createLayout 1231123')//
       const { table, row, col, rect, value } = args
+      // console.log(row, 'testRow') //
       let _value: string = value
       const record = table.getCellOriginRecord(col, row)
       let bg = '' //
@@ -831,7 +840,7 @@ export class Column extends Base {
       container.on('click', () => {
         let _table = this.table
         _table.setCurRow(record) //
-      })//
+      }) //
       let locationName = createText({
         text: value, //
         fontSize: 16,
@@ -894,7 +903,7 @@ export class Column extends Base {
           container.add(locationName) //
         }
       } else {
-        container.add(locationName) //
+        container.add(locationName)
       }
       container.on('mousedown', (args) => {
         if (this.isMousedownRecord != null) {
@@ -906,46 +915,52 @@ export class Column extends Base {
           this.isMousedownRecord = null
         }, 130)
       })
-      let _index = record['_index']//
-      let _table = this.table//
-      let scrollConfig = _table.scrollConfig//
+      let _index = record['_index'] //
+      let _table = this.table //
+      let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
       let rowStart = scrollConfig.rowStart
       let rowEnd = scrollConfig.rowEnd
       let _row = row
-      let currentIndexContain = _table.currentIndexContain
-      container['currentRowIndex'] = row//
-      container['updateCanvas'] = () => {
+      container['currentRowIndex'] = row //
+      let _this = this
+      container['updateCanvas'] = function () {
+        const record = table.getCellOriginRecord(col, row)
         let bg = ''
-        if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
+        // console.log(record, 'testRecords') //
+        if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
           bg = 'RGB(200, 190, 230)'
         }
-        container.setAttribute('background', bg)//
-        container.update()//
-      }
-      let length = this.table.templateProps.data.length
-      let _length = length / 5
+        this.setAttribute('background', bg) //
+        let formatFn = _this.getFormat()
+        let _value = formatFn(record, row, col, table)
+        locationName.setAttribute('text', _value) //
+        // container.update() //
+      }.bind(container) //
+      // let length = this.table.templateProps.data.length
+      // let _length = length / 5
+      let _length = 200 //
       rowStart = rowStart - _length
       if (rowStart < 0) {
-        rowStart = 0//
+        rowStart = 0 //
       }
-      rowEnd = rowEnd + _length//
+      rowEnd = rowEnd + _length
       if (_row >= rowStart && _row <= rowEnd) {
+        let currentIndexContain = _table.currentIndexContain
         //显示在视图上
         let _arr = currentIndexContain[_index]
         if (_arr == null) {
           currentIndexContain[_index] = {}
-          _arr = currentIndexContain[_index]//
+          _arr = currentIndexContain[_index] //
         }
-        // _arr.push(container)
         let field = this.getField()
-        _arr[field] = container//
+        _arr[field] = container //
       } else {
-        // delete currentIndexContain[_index]//
-        // currentIndexContain[_index] = null
+        let currentIndexContain = _table.currentIndexContain //
+        delete currentIndexContain[_index] //
       }
       return {
         rootContainer: container,
-        renderDefault: false,
+        renderDefault: false, //
       }
     }
     return customLayout

@@ -47,7 +47,9 @@ import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { createFooterTheme, createTheme } from './tableTheme' //
 import tableCom from './tableCom'
 import { createGroup } from '@visactor/vtable/es/vrender'
+import { SeriesNumberColumn } from './seriesNumberColumn'
 export class Table extends Base {
+  seriesNumberColumn: SeriesNumberColumn
   curContextRow: any = null
   isHeaderContext: boolean = false
   contextItems: any[] = []
@@ -87,11 +89,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-      x: 0,
-      y: 0,
-      width: 0,
-      filterConfig: [],
-    }
+    x: 0,
+    y: 0,
+    width: 0,
+    filterConfig: [],
+  }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -104,12 +106,12 @@ export class Table extends Base {
   columns: Column[] = []
   columnsMap: { [key: string]: Column } = {}
   config: any
-  scrollConfig = ({
+  scrollConfig = {
     rowStart: 0,
     rowEnd: 0,
     colStart: 0,
     colEnd: 0,
-  })
+  }
   currentIndexContain = shallowRef({}) as any
   eventManager: {
     [key: string]: Array<{
@@ -193,12 +195,17 @@ export class Table extends Base {
     this.setColumns(columns) //
     this.initSortState()
     this.initCheckboxColumn()
+    this.initSeriesNumberColumn()
     this.initGlobalSearch()
     this.initCurrentContextItems() //
   }
   initCheckboxColumn() {
     let _col = new CheckboxColumn({ field: 'checkboxField' }, this) //
     this.checkboxColumn = _col
+  }
+  initSeriesNumberColumn() {
+    let _col = new SeriesNumberColumn({ field: 'seriesNumber' }, this) //
+    this.seriesNumberColumn = _col
   }
   initGlobalSearch() {
     let config = this.config
@@ -213,7 +220,7 @@ export class Table extends Base {
     })
     this.tableData.data = data
   }
-  getTableName() { }
+  getTableName() {}
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
@@ -222,26 +229,27 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   createInstance(rootDiv) {
     let _this = this
     let showRowSeriesNumber = this.config.showRowSeriesNumber
     let _sConfig: ColumnDefine = null
     if (showRowSeriesNumber) {
-      _sConfig = {
-        style: (config) => {
-          const table = config.table
-          let record = table.getRecordByCell(config.col, config.row)
-          let obj = {}
-          if (record == _this.tableData.curRow) {
-            //@ts-ignore
-            obj.bgColor = 'RGB(200, 190, 230)'
-          }
-          return obj
-        },
-        disableColumnResize: true, //
-        width: this.getSerialNumberWidth(), //
-      } as ColumnDefine
+      // _sConfig = {
+      //   style: (config) => {
+      //     const table = config.table
+      //     let record = table.getRecordByCell(config.col, config.row)
+      //     let obj = {}
+      //     if (record == _this.tableData.curRow) {
+      //       //@ts-ignore
+      //       obj.bgColor = 'RGB(200, 190, 230)'
+      //     }
+      //     return obj
+      //   },
+      //   disableColumnResize: true, //
+      //   width: this.getSerialNumberWidth(), //
+      // } as ColumnDefine
+      _sConfig = this.seriesNumberColumn.getColumnProps() //
     }
     let table = new ListTable({
       padding: {},
@@ -309,27 +317,7 @@ export class Table extends Base {
     let showRowSeriesNumber = this.config.showRowSeriesNumber
     let _sConfig: ColumnDefine = null
     if (showRowSeriesNumber) {
-      _sConfig = {
-        style: (config) => {
-          const table = config.table
-          let record = table.getRecordByCell(config.col, config.row)
-          let obj = {}
-          if (record == _this.tableData.curRow) {
-            //@ts-ignore
-            obj.bgColor = 'RGB(200, 190, 230)'
-          }
-          return obj
-        },
-        disableColumnResize: true, //
-        width: this.getSerialNumberWidth(),
-        customLayout: (args) => {
-          let g = createGroup({})
-          return {
-            rootContainer: g,
-            renderDefault: false,
-          }
-        },
-      } as ColumnDefine
+      _sConfig = this.seriesNumberColumn.getColumnProps(true) //
     }
     let table = new ListTable({
       autoFillHeight: true,
@@ -466,34 +454,44 @@ export class Table extends Base {
     }
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
-      console.time(uuid)//
+      console.time(uuid) //
       let ins = toRaw(tableIns.getInstance())
       let currentIndexContain = this.currentIndexContain
-      let updateKeys = Object.keys(currentIndexContain)//
-      // console.log(_iArr1)//
-      let _keys = updateKeys.filter(key => {//
+      let updateKeys = Object.keys(currentIndexContain) //
+      let _keys = updateKeys.filter((key) => {
+        //
         return _iArr1.includes(key)
       })
-      let allContain = _keys.map(key => {
-        return currentIndexContain[key]
+      let allContain = _keys.map((key) => {
+        return currentIndexContain[key] //
       })
-      let allRowIndex = Object.entries(currentIndexContain).map(([keys, value]) => {
-        let _value = Object.values(value).map(row => row['currentRowIndex'])
-        return _value.filter((v, i) => _value.indexOf(v) == i)//
-      })
-      if (allContain.length == 0) {
-        console.log('点击不生效')//
-        console.log(this)//
-      }
-      allContain.forEach(cArr => {
+      let allRowIndex = Object.entries(currentIndexContain).map(
+        ([keys, value]) => {
+          value = value || {} //
+          let _value = Object.values(value).map((row) => row['currentRowIndex'])
+          let _arr1 = _value.filter((v, i) => _value.indexOf(v) == i) //
+          if (_arr1.length == 1) {
+            return _arr1[0]
+          }
+        },
+      )
+      console.log(allRowIndex) //
+      // if (allContain.length == 0) {
+      //   console.log('点击不生效') //
+      //   console.log(this) //
+      // }
+      allContain.forEach((cArr) => {
+        if (cArr == null) {
+          return //
+        }
         let Arr = Object.values(cArr)
         Arr.forEach((c: any) => {
-          c.updateCanvas()//
+          c.updateCanvas() //
         })
       })
       nextTick(() => {
         let _select = ins.getSelectedCellRanges()
-        ins.selectCells(_select)//
+        ins.selectCells(_select) //
       })
       // ins.changeCellValue(0, 0, '')//
       console.timeEnd(uuid) //
@@ -680,12 +678,12 @@ export class Table extends Base {
         key: 'designColumn',
         disabled: false, //
         visible: true,
-        fn: () => { },
+        fn: () => {},
       },
     ]
     this.contextItems = items
   }
-  setCurTableSelect() { }
+  setCurTableSelect() {}
   openContextMenu(config) {
     let originData = config.originData
     if (originData == null) {
@@ -865,23 +863,23 @@ export class Table extends Base {
       return
     }
     let scrollRange = this.scrollConfig.rowEnd - this.scrollConfig.rowStart
-    this.scrollConfig.rowEnd = index//
+    this.scrollConfig.rowEnd = index //
     this.scrollConfig.rowStart = index - scrollRange
     if (this.scrollConfig.rowStart < 0) {
       this.scrollConfig.rowStart = 0
-      this.scrollConfig.rowEnd = scrollRange//
+      this.scrollConfig.rowEnd = scrollRange //
     }
-    console.log(this.scrollConfig)//
+    console.log(this.scrollConfig) //
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   //@ts-ignore
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -896,8 +894,17 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) { }
-  addRows(rowsConfig?: { rows?: Array<any> }) {
+  setMergeConfig(config?: any) {}
+  async addRows(rowsConfig?: { rows?: Array<any> } | number) {
+    if (typeof rowsConfig === 'number') {
+      let _rows = Array(rowsConfig).fill(null)
+      let _row1 = []
+      for (const i of _rows) {
+        let dValue = await this.getDefaultValue()
+        _row1.push(dValue) //
+      } //
+      rowsConfig = { rows: _row1 }
+    }
     let rows = rowsConfig.rows || []
     if (rows == null) {
       return
@@ -940,7 +947,7 @@ export class Table extends Base {
       return
     } else {
       let columns = this.columns
-      columns.forEach((item) => { })
+      columns.forEach((item) => {})
       instance.release()
       this.instance = null //
     }
@@ -951,19 +958,21 @@ export class Table extends Base {
       footerInstance.release()
       this.footerInstance = null //
     } //
+    this.currentIndexContain = shallowRef({}) //
   }
   @useRunAfter()
-  @useTimeout({ number: 50, key: 'updateTimeout' })
+  @useTimeout({ number: 500, key: 'updateTimeout' })
   updateCanvas() {
     let data = this.templateProps.data //
     let instance = this.getInstance() //
     if (instance == null) {
       return
     }
-    let records = data || instance.records //
+    let records = data || instance.records
     let id = this.uuid()
     // console.log('视图用时') //
     console.time(id)
+    this.currentIndexContain = shallowRef({}) //
     instance.setRecords(records)
     console.timeEnd(id)
   }
@@ -1015,7 +1024,7 @@ export class Table extends Base {
     if (this.globalConfig.value.length > 0) {
       this.showCustomLayout = true
     } else {
-      this.showCustomLayout = false //
+      // this.showCustomLayout = false //
     }
   }
   showGlobalSearch(status = true) {
@@ -1448,14 +1457,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) { }
+  async validateData(config) {}
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1463,7 +1472,7 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() { }
+  copyCurrentSelectCells() {}
   headerSortClick(config: any) {
     let sortState = this.sortCache
     let hasSort = sortState.findIndex((s) => s.field == config.field) //
@@ -1496,8 +1505,8 @@ export class Table extends Base {
       e['_rowState'] = 'unChange'
     } //
   }
-  designCurrentColumn() { }
-  getCacheContain(row) { }
+  designCurrentColumn() {}
+  getCacheContain(row) {}
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -1505,10 +1514,20 @@ export class Table extends Base {
         this.registerEvent({
           keyName: key,
           name: key,
-          callback: (...args) => { },
+          callback: (...args) => {},
         })
       }
     })
   }
+  async getDefaultValue(tableName: string) {
+    let columns = this.getColumns()
+    let obj1 = {}
+    for (const col of columns) {
+      let defaultValue = await col.getDefaultValue()
+      if (defaultValue) {
+        obj1 = { ...obj1, ...defaultValue } //
+      }
+    } //
+    return obj1
+  }
 }
-

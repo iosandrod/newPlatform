@@ -5,9 +5,9 @@ export const createTheme = () => {
     defaultStyle: {
       fontSize: 16,
       fontFamily: 'Arial,sans-serif',
-      bgColor: '#ECF1F5',
+      bgColor: 'RGB(248, 248, 248)',
       color: '#000',
-      borderColor: '#E1E4E8',
+      borderColor: 'RGB(236, 241, 245)',
       borderLineWidth: 1,
       borderLineDash: [],
       padding: [10, 16, 10, 16],

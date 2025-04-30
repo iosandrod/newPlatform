@@ -29,9 +29,7 @@ export default defineComponent({
         fn: async () => {
           //添加行
           // console.log('执行到这里')//
-          tableIns.addRows({
-            rows: generatePersons(100), //
-          })
+          tableIns.addRows(1)//
         },
       },
       {

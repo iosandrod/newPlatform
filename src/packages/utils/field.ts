@@ -40,7 +40,7 @@ const wrapElement = (element, fn?: any) => {
       }
     }
     if (/^(tabs)$/.test(node.type)) {
-      node.columns = new Array(3).fill('').map((e, index) => {
+      node.columns = new Array(1).fill('').map((e, index) => {
         const data: any = renderFieldData('tabsCol')
         data.label = `Tab ${index + 1}`
         data.options = {}
@@ -48,7 +48,7 @@ const wrapElement = (element, fn?: any) => {
       })
     }
     if (/^(collapse)$/.test(node.type)) {
-      node.columns = new Array(3).fill('').map((e, index) => {
+      node.columns = new Array(1).fill('').map((e, index) => {
         const data: any = renderFieldData('collapseCol')
         data.label = `Tab ${index + 1}`
         data.options = {}

@@ -816,7 +816,6 @@ export class Form extends Base {
     })
   }
   setSelection(node) {
-    // debugger //
     let state = this.state
     if (node == null) {
       node = 'root' //

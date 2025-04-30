@@ -13131,7 +13131,6 @@ export const tableConfig: ListTableConstructorOptions = {
     },
   ],
 }
-
 export const tablestaticData = {
   defaultRowHeight: 80,
   customConfig: {

@@ -65,25 +65,28 @@ export class myHttp {
         method, //
         tableName,
         params,
-        {
-          // authorization: `${token}`,
-          aaa: 'bbb', //
-        },
+        {},
         (data, err) => {
           let isError = false
-          let error = null
+          let error = null //
           let _data = null
           if (defaultMethod.includes(method)) {
             if (err) {
-              isError = true
-              error = err
-            } else {
               isError = false
+              // error = err
+              _data = err?.data || {}
+              if (err?.code == '401') {
+                isError = true
+                error = err //
+              }
+            } else {
+              isError = true
               if (data?.code == '401') {
                 isError = true
                 error = data
               } else {
-                _data = data?.data || {}
+                // _data = data?.data || {}
+                error = data //
               }
             }
           } else {
@@ -130,16 +133,53 @@ export class myHttp {
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(
-        'update', //
+        'patch', //
         tableName,
         params, //
-        query,
+        query,//
         (data, err) => {
-          if (err) {
-            reject(err)
-          } //
-          resolve(data?.data || {}) //
-        },
+          let isError = false
+          let error = null //
+          let _data = null
+          let method = 'patch'//
+          if (defaultMethod.includes(method)) {
+            if (err) {
+              isError = false
+              // error = err
+              _data = err?.data || {}
+              if (err?.code == '401') {
+                isError = true
+                error = err //
+              }
+            } else {
+              isError = true
+              if (data?.code == '401') {
+                isError = true
+                error = data
+              } else {
+                // _data = data?.data || {}
+                error = data //
+              }
+            }
+          } else {
+            if (data) {
+              isError = true
+              error = data
+            } else {
+              isError = false
+              if (err?.code == '401') {
+                isError = true
+                error = err
+              }
+              _data = err?.data || {}
+            }
+          }
+          if (isError == true) {
+            reject(error)
+          }
+          let _data1 = _data
+          resolve(_data1) //
+        },//
       )
     })
   }

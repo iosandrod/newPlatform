@@ -34,18 +34,18 @@ import {
 import { nextTick } from 'vue' //
 import { Column } from './column'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
-export class CheckboxColumn extends Column {
+export class SeriesNumberColumn extends Column {
   getEditType() {
-    return 'checkbox'
+    return 'text'
   }
   getType() {
-    return 'checkbox'
+    return 'text'
   }
   getDisableColumnResize() {
     return true //
   }
   getField() {
-    return 'checkboxField' //
+    return 'seriesNumber' //
   }
   getColumnProps(isFooter = false) {
     let _this = this
@@ -117,7 +117,7 @@ export class CheckboxColumn extends Column {
       _props.headerCustomLayout = null //
     } //
     _props.customLayout = (args) => {
-      const { table, row, col, rect } = args
+      const { table, row, col, rect, value } = args
       const { height, width } = rect ?? table.getCellRect(col, row)
       let rows = table.getRecordByCell(col, row)
       let _table = this.table
@@ -135,24 +135,13 @@ export class CheckboxColumn extends Column {
         justifyContent: 'center',
         background: gb,
       })
-      const checkboxGroup = createGroup({
-        display: 'flex',
-        flexDirection: 'column',
-        boundsPadding: [0, 0, 0, 0],
-        justifyContent: 'center', //
+      let t = createText({
+        text: value, //
+        fontSize: 14,
+        fill: 'black',
+        fontWeight: 'bold',
       })
-      container.appendChild(checkboxGroup)
-      const checkbox1 = new CheckBox({
-        text: {
-          text: '', //
-        },
-        disabled: false, //
-        checked: Boolean(rows.checkboxField), //
-        boundsPadding: [0, 0, 0, 0],
-      }) //
-      checkbox1.render()
-      checkboxGroup.appendChild(checkbox1)
-      checkbox1.addEventListener('checkbox_state_change', (e) => {}) //
+      container.add(t) //
       /* 
       
       */
@@ -168,9 +157,7 @@ export class CheckboxColumn extends Column {
         let bg = ''
         if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
           bg = 'RGB(200, 190, 230)'
-        }
-        let checkboxField = Boolean(record.checkboxField)
-        checkbox1.setAttribute('checked', checkboxField) //
+        } //
         container.setAttribute('background', bg) //
       }
       let length = this.table.templateProps.data.length
@@ -187,7 +174,6 @@ export class CheckboxColumn extends Column {
           currentIndexContain[_index] = {}
           _arr = currentIndexContain[_index] //
         }
-        // _arr.push(container)
         let field = this.getField()
         _arr[field] = container //
       } else {
