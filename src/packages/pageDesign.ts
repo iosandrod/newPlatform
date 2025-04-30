@@ -7,19 +7,18 @@ import { PageDesignItem } from './pageItem'
 import { nextTick } from 'vue'
 import { _tData, _tData123, _testData, entityData } from './formEditor/testData'
 import { useRunAfter } from './utils/decoration'
+import pageCom from './pageCom'
 
 export class PageDesign extends Form {
+  static component = pageCom //
   pageType = 'pageDesign' //
-  tableName = 't_SdOrder' ////
+  tableName ////
   constructor(config) {
     super(config)
     this.init()
   } //
   init(): void {
     super.init() //
-    nextTick(() => {
-      this.setLayoutData(_tData123) //
-    })
   }
   setItems(items: any, setLayout?: boolean): void {
     if (!Array.isArray(items)) {
@@ -65,7 +64,24 @@ export class PageDesign extends Form {
     let tableName = this.tableName
     return tableName
   }
-  async getTableData(tableName = this.getTableName()) {} //
+  async getTableData(
+    getDataConfig: any = {
+      tableName: this.getTableName(),
+    },
+  ) {
+    if (typeof getDataConfig == 'string') {
+      getDataConfig = {
+        tableName: getDataConfig,
+      }
+    }
+    let tableName = getDataConfig.tableName //
+    let http = this.getHttp()
+    let res = await http.get(tableName, 'find')
+    console.log(res, 'testRes') //
+    return res
+  }
+  buildQuery() {}
+  openSearchForm() {}
   async createTableData() {}
   async updateTableData() {}
   async getDefaultValue(tableName: string) {
@@ -111,5 +127,37 @@ export class PageDesign extends Form {
   getTableRef(tableName = this.getTableName()) {
     let tableIns = this.getRef(tableName)
     return tableIns //
+  }
+  async saveTableDesign() {
+    //获取表格的id配置
+    let config = this.config
+    let id = config.id
+    if (id == null) {
+      await this.createTableDesign()
+    } else {
+      await this.updateTableDesign()
+    }
+  }
+  async createTableDesign() {
+    let _data = this.getLayoutData()
+    //@ts-ignore
+    _data.tableName = this.getMainTableName()
+    let http = this.getHttp()
+    let _res = await http.create('entity', _data) // //
+    console.log(_res)
+  }
+  async updateTableDesign() {
+    let _data = this.getLayoutData() //
+    let http = this.getHttp()
+    let _res = await http.patch('entity', _data)
+    console.log(_res, 'testRes') //
+  }
+  getMainTableName() {
+    let config = this.config
+    let tableName = config.tableName
+    if (!tableName) {
+      tableName = this.tableName
+    }
+    return tableName //
   }
 }

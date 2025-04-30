@@ -42,8 +42,8 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any;[key: string]: any }) {
-    // debugger //
+  updateBindData(updateConfig: { value: any; [key: string]: any }) {
+    //
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -62,8 +62,8 @@ export class FormItem extends Base {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() { }
-  async onValueChange() { }
+  getItemChange() {}
+  async onValueChange() {}
   getForm() {
     return this.form //
   }
@@ -111,12 +111,12 @@ export class FormItem extends Base {
   async getSelectOptions() {
     const config = this.config
   }
-  getSubForm(id: string) { }
+  getSubForm(id: string) {}
   getData() {
-    //
     let form = this.form
-    let data = form.config?.data //
-    return data //
+    // let data = form.config?.data //
+    let data = form.getData()
+    return data ////
   }
   getTdColumn(): TableCell[] {
     let span = this.getSpan()
@@ -341,7 +341,8 @@ export class FormItem extends Base {
     }
     const { options } = node
     let result1 = {
-      label: this.getTitle(), //
+      // label: this.getTitle(), //
+      label: '',
       disabled: this.getDisabled(),
       placeholder: this.getPlaceholder(),
       clearable: this.getClearable(),

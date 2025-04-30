@@ -11,16 +11,15 @@ export class Dialog extends Base {
     super.init()
   } //
   open(config: any = {}) {
-    let dia: VxeModalInstance = this.getRef('dialog')
+    let dia: VxeModalInstance = this.getRef('modal')
     if (dia) {
       dia.open() //
     }
   }
   close() {
-    let dia: VxeModalInstance = this.getRef('dialog')
-    console.log(dia, 'testDia') //
+    let dia: VxeModalInstance = this.getRef('modal') //
     if (dia) {
-      // dia.close()
+      dia.close()
     }
   }
   getWidth() {
@@ -50,5 +49,14 @@ export class Dialog extends Base {
   }
   getMinHeight() {
     return 300 //
+  }
+  getInnerInstance() {
+    let _createFn = this.config.createFn
+    let _ins = null
+    if (typeof _createFn == 'function') {
+      let config = this.config
+      _ins = _createFn({ props: config }) //
+    }
+    return _ins
   }
 }

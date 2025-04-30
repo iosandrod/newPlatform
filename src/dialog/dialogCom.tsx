@@ -264,10 +264,16 @@ export const getDialogDefaultProps = () => {
     onMove: {
       type: Function,
     },
-    _instance: {
+    dialogIns: {
       type: Object,
     },
-  }
+    createFn: {
+      type: Function, //
+    },
+    createName: {},
+    formConfig: {},
+    tableConfig: {},
+  } //
 }
 export const allActiveModals: VxeModalConstructor[] = []
 export default defineComponent({
@@ -289,7 +295,7 @@ export default defineComponent({
   },
   props: getDialogDefaultProps(), //
   setup(props, { slots, expose, emit }) {
-    let _dialog: any = props._instance
+    let _dialog: any = props.dialogIns //
     let dialog: Dialog = null as any
     if (_dialog != null) {
       dialog = _dialog
@@ -305,7 +311,9 @@ export default defineComponent({
       dialog = new Dialog(props)
     } //
     expose({ _instance: dialog }) //
-    let registerDialog = (e) => dialog.registerRef('dialog', e) //
+    let registerDialog = (e) => {
+      dialog.registerRef('modal', e) //
+    }
     let registerRoot = (e) => dialog.registerRef('root', e) //
     return () => {
       let com = (
@@ -313,7 +321,20 @@ export default defineComponent({
           <ModalCom
             v-slots={{
               default: () => {
-                let _com = slots.default?.(dialog) //
+                let _com = slots?.default?.(dialog) //
+                let insConfig = dialog.getInnerInstance()
+                let component = null
+                let props = null
+                if (insConfig != null) {
+                  component = insConfig.component
+                  props = insConfig.props
+                }
+                console.log(props) //
+                if (_com == null) {
+                  if (component) {
+                    _com = <component {...props}></component>
+                  }
+                } //
                 let outCom = (
                   <div class="w-full h-full" ref={registerRoot}>
                     {_com}
@@ -326,8 +347,12 @@ export default defineComponent({
                 let rightController = (
                   <div>
                     <div
-                      onClick={(e) => {
-                        dialog.close() //
+                      class={['pointer']} //
+                      onMousedown={(e: MouseEvent) => {
+                        e.stopPropagation() //
+                      }}
+                      onClick={(e: MouseEvent) => {
+                        dialog.close() ////
                       }}
                     >
                       X

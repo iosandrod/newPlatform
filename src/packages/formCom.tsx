@@ -28,10 +28,18 @@ export default defineComponent({
       type: Object, //
       default: () => {},
     },
+    formIns: {
+      type: Object,
+    },
   },
   setup(props, { slots, expose }) {
-    //
-    let fIns = new Form(props)
+    let fIns = null
+    if (props.formIns != null) {
+      fIns = props.formIns
+    } else {
+      //
+      fIns = new Form(props)
+    }
     fIns.setCurrentDesign(false) //
     onMounted(() => {
       nextTick(() => {

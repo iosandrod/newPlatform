@@ -45,11 +45,13 @@ import { VxeInputEventProps } from 'vxe-pc-ui'
 import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { createFooterTheme, createTheme } from './tableTheme' //
+import tableCom from './tableCom'
+import { createGroup } from '@visactor/vtable/es/vrender'
 export class Table extends Base {
   curContextRow: any = null
   isHeaderContext: boolean = false
   contextItems: any[] = []
-  disableColumnResize = false
+  disableColumnResize = true //
   tableState: 'edit' | 'scan' = 'edit'
   templateEditCell: { col?: number; row?: number; value?: any } = {}
   currentResizeField: string
@@ -85,11 +87,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-      x: 0,
-      y: 0,
-      width: 0,
-      filterConfig: [],
-    }
+    x: 0,
+    y: 0,
+    width: 0,
+    filterConfig: [],
+  }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -130,11 +132,31 @@ export class Table extends Base {
     let oldCurRow = this.tableData.curRow || {}
     if (toRaw(row) == toRaw(this.tableData.curRow)) return //
     this.tableData.curRow = row //
-    let oldIndex = oldCurRow._index || ''
+    let oldIndex = oldCurRow._index || '' //
     let newIndex = row._index || ''
-    this.timeout['updateRecords__now'] = true //
-    this.updateIndexArr.add(oldIndex)
+    this.timeout['updateRecords__now'] = true
+    // if (isDb == true) {
+    //   return
+    // }
+    this.updateIndexArr.add(oldIndex) //
     this.updateIndexArr.add(newIndex) //
+    // let instance = this.getInstance()
+    // let _index1 = instance.records.findIndex(
+    //   (r) => r['_index'] == row['_index'],
+    // )
+    // let _index2 = instance.records.findIndex(
+    //   (r) => r['_index'] == oldCurRow['_index'],
+    // )
+    // let id = this.uuid()
+    // console.time(id)
+    // let bodyIndex = instance.getTableIndexByRecordIndex(_index1)
+    // let bodyIndex1 = instance.getTableIndexByRecordIndex(_index2)
+    // // console.log(bodyIndex, bodyIndex1) //
+    // // let _cell=instance.getCellInfo(null,bodyIndex)
+    // // let cells = instance.getAllCells(null, bodyIndex)
+    // // let cell1 = instance.getAllCells(null, bodyIndex1)
+    // // console.log(cells) //
+    // console.timeEnd(id) //
   } //
   getCurRow() {
     return this.tableData.curRow //
@@ -160,6 +182,7 @@ export class Table extends Base {
   hooksManager: { [key: string]: Array<any> } = {}
   constructor(config) {
     super()
+    //@ts-ignore
     this.config = config
     this.init() ////
   }
@@ -192,7 +215,7 @@ export class Table extends Base {
     })
     this.tableData.data = data
   }
-  getTableName() { }
+  getTableName() {}
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
@@ -201,7 +224,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   createInstance(rootDiv) {
     let _this = this
     let showRowSeriesNumber = this.config.showRowSeriesNumber
@@ -219,12 +242,12 @@ export class Table extends Base {
           return obj
         },
         disableColumnResize: true, //
-        width: this.getSerialNumberWidth(),//
+        width: this.getSerialNumberWidth(), //
       } as ColumnDefine
     }
     let table = new ListTable({
       padding: {},
-      multipleSort: true,
+      // multipleSort: true,
       sortState: [],
       theme: createTheme() as any,
       defaultRowHeight: 30,
@@ -274,7 +297,7 @@ export class Table extends Base {
     })
     const instance = shallowRef(table)
     //@ts-ignore
-    this.instance = instance ////
+    this.instance = instance
     this.initEventListener() //
     this.loadColumns()
     this.loadData()
@@ -300,7 +323,14 @@ export class Table extends Base {
           return obj
         },
         disableColumnResize: true, //
-        width: this.getSerialNumberWidth(), ////
+        width: this.getSerialNumberWidth(),
+        customLayout: (args) => {
+          let g = createGroup({})
+          return {
+            rootContainer: g,
+            renderDefault: false,
+          }
+        },
       } as ColumnDefine
     }
     let table = new ListTable({
@@ -398,7 +428,7 @@ export class Table extends Base {
     key: 'updateColumns',
   })
   updateColumns() {
-    let _columns = this.templateProps.columns || []
+    let _columns = this.templateProps.columns || [] //
     let instance = this.getInstance()
     instance.updateColumns(_columns) //
   }
@@ -415,10 +445,11 @@ export class Table extends Base {
     instance.updateColumns(_columns) ////
   }
   @useTimeout({
-    number: 100, //
+    number: 200, ////
     key: 'updateRecords',
   }) //
   updateRecords() {
+    let uuid = this.uuid()
     let tableIns = this
     let _arr = []
     let _iArr = []
@@ -434,8 +465,11 @@ export class Table extends Base {
     }
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
-      console.log(_arr) //
-      tableIns.getInstance().updateRecords(_arr, _iArr) //
+      console.time(uuid)
+      let ins = toRaw(tableIns.getInstance())
+      // let _arr1 = toRaw(_arr) //
+      ins.updateRecords(_arr, _iArr) //
+      console.timeEnd(uuid) //
     }
   }
   updateCheckboxRecords() {
@@ -569,8 +603,8 @@ export class Table extends Base {
     checkbox_state_change(this)
     checkboxChange(this) //
     resize_column(this)
-    mouseenter_cell(this) //
-    mouseleave_cell(this) //
+    mouseenter_cell(this)
+    mouseleave_cell(this)
   }
   initCurrentContextItems() {
     let items = [
@@ -619,12 +653,12 @@ export class Table extends Base {
         key: 'designColumn',
         disabled: false, //
         visible: true,
-        fn: () => { },
+        fn: () => {},
       },
     ]
     this.contextItems = items
   }
-  setCurTableSelect() { }
+  setCurTableSelect() {}
   openContextMenu(config) {
     let originData = config.originData
     if (originData == null) {
@@ -804,14 +838,14 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   //@ts-ignore
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -826,7 +860,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) { }
+  setMergeConfig(config?: any) {}
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -870,7 +904,7 @@ export class Table extends Base {
       return
     } else {
       let columns = this.columns
-      columns.forEach((item) => { })
+      columns.forEach((item) => {})
       instance.release()
       this.instance = null //
     }
@@ -891,8 +925,11 @@ export class Table extends Base {
       return
     }
     let records = data || instance.records //
-    console.log('我又更新了视图了') //
-    instance.setRecords(records) //////
+    let id = this.uuid()
+    // console.log('视图用时') //
+    console.time(id)
+    instance.setRecords(records)
+    console.timeEnd(id)
   }
   addAfterMethod(config) {
     config.type = 'after' //
@@ -1360,7 +1397,7 @@ export class Table extends Base {
       className: 'defineTooltip',
       disappearDelay: 100,
       style: {
-        bgColor: 'black',
+        bgColor: 'black', //
         color: 'white',
         //@ts-ignore
         font: 'normal bold normal 14px/1 STKaiti',
@@ -1375,14 +1412,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) { }
+  async validateData(config) {}
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1390,7 +1427,7 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() { }
+  copyCurrentSelectCells() {}
   headerSortClick(config: any) {
     let sortState = this.sortCache
     let hasSort = sortState.findIndex((s) => s.field == config.field) //
@@ -1423,6 +1460,19 @@ export class Table extends Base {
       e['_rowState'] = 'unChange'
     } //
   }
-  designCurrentColumn() { }
+  designCurrentColumn() {}
+  getCacheContain(row) {}
+  setEventMap(map = {}) {
+    Object.entries(map).forEach(([key, value]) => {
+      let _callback = value['callback']
+      if (typeof _callback == 'function') {
+        this.registerEvent({
+          keyName: key,
+          name: key,
+          callback: (...args) => {},
+        })
+      }
+    })
+  }
 }
-//
+

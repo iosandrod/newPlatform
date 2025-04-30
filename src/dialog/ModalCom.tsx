@@ -81,6 +81,14 @@ const lockScrollCssWidthKey = '--vxe-ui-modal-lock-scroll-view-width'
 export default defineComponent({
   name: 'VxeModal',
   props: {
+    createDefaultFn: {
+      type: Function, //
+    },
+    createName: {},
+    formConfig: {},
+    tableConfig: {},
+    createFn: {},
+    dialogIns: {},
     modelValue: Boolean as PropType<VxeModalPropTypes.ModelValue>,
     id: String as PropType<VxeModalPropTypes.ID>,
     type: {
@@ -240,8 +248,7 @@ export default defineComponent({
     animat: {
       type: Boolean as PropType<VxeModalPropTypes.Animat>,
       default: () => getConfig().modal.animat,
-    },
-    _instance: {}, //
+    }, //
   },
   emits: [
     'update:modelValue',
@@ -449,9 +456,9 @@ export default defineComponent({
       const beforeHideFn =
         props.beforeHideMethod || getConfig().modal.beforeHideMethod
       const params = { type }
-      if (1 == 1) {
-        return //
-      }
+      // if (1 == 1) {
+      //   return //
+      // }
       if (visible) {
         Promise.resolve(beforeHideFn ? beforeHideFn(params) : null)
           .then((rest) => {
@@ -1044,14 +1051,14 @@ export default defineComponent({
         evnt.button === 0 &&
         !getEventTargetNode(evnt, boxElem, 'trigger--btn').flag
       ) {
-        evnt.preventDefault()
+        // evnt.preventDefault()
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
         const disX = evnt.clientX - boxElem.offsetLeft
         const disY = evnt.clientY - boxElem.offsetTop
         const { visibleHeight, visibleWidth } = getDomNode()
         document.onmousemove = (evnt) => {
-          evnt.preventDefault()
+          // evnt.preventDefault()
           const offsetWidth = boxElem.offsetWidth
           const offsetHeight = boxElem.offsetHeight
           const minX = marginSize
@@ -1094,7 +1101,7 @@ export default defineComponent({
     }
 
     const dragEvent = (evnt: MouseEvent) => {
-      evnt.preventDefault()
+      // evnt.preventDefault()
       const { storage } = props
       const { visibleHeight, visibleWidth } = getDomNode()
       const marginSize = XEUtils.toNumber(props.marginSize)
@@ -1115,7 +1122,7 @@ export default defineComponent({
       const offsetLeft = boxElem.offsetLeft
       const params = { type: 'resize' }
       document.onmousemove = (evnt) => {
-        evnt.preventDefault()
+        // evnt.preventDefault()
         let dragLeft
         let dragTop
         let width

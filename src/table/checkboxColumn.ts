@@ -60,7 +60,6 @@ export class CheckboxColumn extends Column {
       let table: VTable.ListTable = config.table
       let row = table.getRecordByCell(config.col, config.row)
       let checkboxField = row?.checkboxField //
-      console.log(checkboxField, 'testCheckbo') ////
       return checkboxField //
     } //
     _props.disable = (config) => {
@@ -121,6 +120,12 @@ export class CheckboxColumn extends Column {
       const { table, row, col, rect } = args
       const { height, width } = rect ?? table.getCellRect(col, row)
       let rows = table.getRecordByCell(col, row)
+      let _table = this.table
+      let curRow = _table.tableData.curRow
+      let gb = ''
+      if (curRow == rows) {
+        gb = 'RGB(200, 190, 230)' //
+      }
       const container = createGroup({
         height,
         width,
@@ -128,6 +133,7 @@ export class CheckboxColumn extends Column {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        background: gb,
       })
       const checkboxGroup = createGroup({
         display: 'flex',

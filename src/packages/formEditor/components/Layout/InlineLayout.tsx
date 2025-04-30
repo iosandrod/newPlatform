@@ -63,6 +63,14 @@ export default defineComponent({
               _class1.push('flex-1') //
             }
           }
+          if (_parent?.type == 'col') {
+            let list = _parent.list
+            let _index = list.findIndex((item) => item.id === props.data.id)
+            if (_index == list.length - 1) {
+              _class.push('flex-1')
+              _class1.push('flex-1') //
+            }
+          }
         }
       }
       return (

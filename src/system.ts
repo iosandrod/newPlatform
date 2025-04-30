@@ -6,6 +6,8 @@ import { PageDesign } from '@ER/pageDesign'
 import { getDefaultPageProps } from '@ER/pageCom'
 import { Dialog } from './dialog/dialog'
 import { getDialogDefaultProps } from './dialog/dialogCom'
+import { Form } from '@ER/form'
+import formCom from '@ER/formCom'
 export class System extends Base {
   activePage = ''
   systemConfig = {
@@ -46,7 +48,7 @@ export class System extends Base {
       },
     ] //
   }
-  openPageDesign(config) {}
+  openPageDesign(config) {} //
   async getDefaultPageLayout(name?: string) {
     let http = this.getHttp()
     let _data = await http.post(
@@ -127,7 +129,10 @@ export class System extends Base {
       }
       obj[key] = _default //
     })
+    //@ts-ignore
+    obj.tableName = tableName
     let pageDesign = new PageDesign(obj)
+    pageDesign.tableName = tableName //
     pageDesign.setLayoutData(layoutConfig)
     this.tableMap[tableName] = pageDesign //
     return pageDesign
@@ -137,7 +142,25 @@ export class System extends Base {
     return Object.values(entityMap) //
   }
   async confirm(config: any) {}
-  async confirmForm(formConfig: any) {}
+  async confirmForm(formConfig: any) {
+    let _form = new Form(formConfig) //
+    let component = formCom
+    let createFn = () => {
+      return {
+        component: component, //
+        props: {
+          formIns: _form,
+        },
+      }
+    }
+    let _config = {
+      createFn,
+      width: 600,
+      height: 400,
+    }
+    let dialog = await this.openDialog(_config) //
+    return dialog
+  }
   async openDialog(dialogConfig: any = {}) {
     let _dialog = new Dialog(dialogConfig)
     this.dialogArr.push(_dialog) //

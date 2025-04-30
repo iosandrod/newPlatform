@@ -2,7 +2,7 @@ import io from 'socket.io-client'
 import socketio from '@feathersjs/socketio-client'
 import { feathers } from '@feathersjs/feathers'
 import auth from '@feathersjs/authentication-client'
-export class Client { }
+export class Client {}
 //
 export type createConfig = {}
 export const createClient = (config) => {
@@ -52,20 +52,23 @@ export const createClient = (config) => {
   //   const allCompany = app.service('company').find() //
   return app //
 }
-
+let token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE3NDU5MjUzMzEsImV4cCI6MTc0NjAxMTczMSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjEiLCJqdGkiOiJhOTYyM2ZlOS04NTQ5LTQxNWMtOTc5NS1iYTFiMmYyZjdjOGEifQ.SgpYPmb7Cuh_EKXn8IGOiFEUVN3atSguCnoxgIRi3rQ'
 export const client = createClient({})
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
   async post(tableName, method, params = {}, query = {}): Promise<any> {
-    //
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(
         method, //
         tableName,
         params,
-        query,
+        {
+          // authorization: `${token}`,
+          aaa: 'bbb', //
+        },
         (data, err) => {
           let isError = false
           let error = null
@@ -76,7 +79,12 @@ export class myHttp {
               error = err
             } else {
               isError = false
-              _data = data?.data || {}
+              if (data?.code == '401') {
+                isError = true
+                error = data
+              } else {
+                _data = data?.data || {}
+              }
             }
           } else {
             if (data) {
@@ -84,6 +92,10 @@ export class myHttp {
               error = data
             } else {
               isError = false
+              if (err?.code == '401') {
+                isError = true
+                error = err
+              }
               _data = err?.data || {}
             }
           }
@@ -96,7 +108,8 @@ export class myHttp {
       )
     })
   }
-  async get(tableName, method, query?: any): Promise<any> {//
+  async get(tableName, method, query?: any): Promise<any> {
+    //
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(
@@ -107,7 +120,7 @@ export class myHttp {
           if (err) {
             reject(err)
           } //
-          console.log('数据获取成功', data)//
+          console.log('数据获取成功', data) //
           resolve(data?.data || {}) //
         },
       )
@@ -130,12 +143,16 @@ export class myHttp {
       )
     })
   }
-  async delete(tableName, params = {}, query = {}) { }
+  async delete(tableName, params = {}, query = {}) {}
   async getPageLayout(navName) {
     let data = await this.get('entity', 'find', {
-      tableName: navName
+      tableName: navName,
     })
-    return data//
+    return data //
+  }
+  async create(tableName, data) {
+    let _res = await this.post('entity', 'create', data)
+    return _res //
   }
 }
 

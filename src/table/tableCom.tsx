@@ -13,7 +13,6 @@ import {
 } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
-import { Table } from './table'
 import { tableV2Props, ClickOutside } from 'element-plus'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { nextTick } from 'vue'
@@ -24,6 +23,8 @@ import TableMenuCom from './tableMenuCom'
 import { useResizeObserver } from '@vueuse/core'
 import TableFitlerCom from './tableFilterCom'
 import InputCom from '@/input/inputCom'
+import { Table } from './table'
+
 // new ListTable()
 //核心表格组件
 export default defineComponent({
@@ -76,10 +77,14 @@ export default defineComponent({
     checkboxChange: {
       type: Function,
     },
+    eventMap: {
+      type: Object,
+      default: () => {},
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     const tableIns = new Table(props)
-    expose({ _instance: tableIns }) ////
+    expose({ _instance: tableIns })
     provide('tableIns', tableIns)
     onMounted(() => {
       tableIns.onMounted() //
@@ -107,7 +112,7 @@ export default defineComponent({
     watchEffect(() => {
       tableIns.loadData() //
     })
-    let pageDesign = inject('pageDesign')
+    let pageDesign = inject('pageDesign', {}) //
     tableIns._getPageDesign = () => pageDesign as any
     onUnmounted(() => {
       //

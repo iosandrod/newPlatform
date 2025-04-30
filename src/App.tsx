@@ -19,7 +19,7 @@ export default defineComponent({
     return () => {
       //
       let dArr = diaArr.value.map((d) => {
-        return <dialogCom _instance={d}></dialogCom>
+        return <dialogCom dialogIns={d}></dialogCom>
       })
       let com = <RouterView></RouterView>
       return (

@@ -9,6 +9,7 @@ import {
   isReactive,
   reactive,
   shallowRef,
+  toRaw,
   watch,
   watchEffect,
 } from 'vue'
@@ -38,6 +39,7 @@ import { calObj } from './calculateType'
 import { stringToFunction } from '@ER/utils'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
+  isMousedownRecord = null
   tableState = 'edit' //
   templateCalValue = ''
   canHiddenEditor = false
@@ -46,6 +48,7 @@ export class Column extends Base {
   table: Table
   cacheValue?: any
   config: any
+  layoutWatchMap = {}
   columns: Column[] = []
   constructor(config: any, table?: any) {
     super()
@@ -142,7 +145,6 @@ export class Column extends Base {
     let hCustomLayout = (args) => {
       const { table, row, col, rect, value } = args
       let _value: string = value
-      // const record = table.getCellOriginRecord(col, row)
       const { height, width } = rect ?? table.getCellRect(col, row)
       const container = createGroup({
         height,
@@ -152,6 +154,7 @@ export class Column extends Base {
         flexWrap: 'nowrap',
         overflow: 'hidden',
         alignItems: 'center',
+        justifyContent: 'space-between',
         boundsPadding: [0, 0, 0, 0],
       })
       let locationName = createText({
@@ -159,6 +162,7 @@ export class Column extends Base {
         fontSize: 14,
         fontWeight: 'bold',
         fill: 'black',
+        overflow: 'hidden',
         boundsPadding: [0, 0, 0, 20],
         lineDashOffset: 0,
       }) //
@@ -171,6 +175,13 @@ export class Column extends Base {
         height,
         width,
       })
+      let controllerGroup = createGroup({
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        overflow: 'hidden',
+        alignItems: 'center',
+      })
       //@ts-ignore
       let sortG = this.createSortableIcon({
         table,
@@ -182,8 +193,12 @@ export class Column extends Base {
         width,
       })
       container.add(locationName) //
-      container.add(sortG) //
-      container.add(g1) //
+      // container.add(sortG) //
+      // container.add(g1) //
+      controllerGroup.add(sortG)
+      controllerGroup.add(g1)
+      container.add(controllerGroup) //
+
       container.on('mouseenter', () => {
         //
         //显示filter
@@ -283,7 +298,6 @@ export class Column extends Base {
                 return value //
               },
               () => {
-                //
                 _table.updateIndexArr.add(_index) //
               },
             )
@@ -374,55 +388,56 @@ export class Column extends Base {
       fieldFormat: _this.getFormat(),
       headerIcon: headerIcon, //
       style: {
-        borderColor: (config) => {
-          let _table = config.table
-          let record = _table.getRecordByCell(config.col, config.row)
-          let color = 'RGB(225, 228, 232)' //
-          let _index = record._index
-          let validateMap = table.validateMap
-          let errStr = validateMap[_index]
-          //报错了//
-          if (errStr) {
-            let allField = errStr.map((row) => row.field)
-            if (allField.includes(this.getField())) {
-              color = 'red'
-            } //
-          }
-          return color
-        },
-        borderLineWidth: (config) => {
-          let _table = config.table
-          let record = _table.getRecordByCell(config.col, config.row)
-          let color = 1 //
-          let _index = record._index
-          let validateMap = table.validateMap
-          let errStr = validateMap[_index]
-          //报错了//
-          if (errStr) {
-            let allField = errStr.map((row) => row.field)
-            if (allField.includes(this.getField())) {
-              color = 3
-            } //
-          }
-          return color
-        }, //
-        bgColor: (config) => {
-          let _table = config.table
-          let record = _table.getRecordByCell(config.col, config.row)
-          let gValue = table.globalConfig.value
-          let value = config.value
-          let color = null
-          if (record == table.tableData.curRow) {
-            color = 'RGB(200, 190, 230)'
-          }
-          if (gValue.length > 0) {
-            let reg = new RegExp(gValue, 'g')
-            if (reg.test(value)) {
-              color = 'RGB(230, 220, 230)' //
-            }
-          }
-          return color
-        }, //
+        // borderColor: (config) => {
+        //   let _table = config.table
+        //   let record = _table.getRecordByCell(config.col, config.row)
+        //   let color = 'RGB(225, 228, 232)' //
+        //   let _index = record._index
+        //   let validateMap = table.validateMap
+        //   let errStr = validateMap[_index]
+        //   //报错了//
+        //   if (errStr) {
+        //     let allField = errStr.map((row) => row.field)
+        //     if (allField.includes(this.getField())) {
+        //       color = 'red'
+        //     } //
+        //   }
+        //   return color
+        // },
+        // borderLineWidth: (config) => {
+        //   let _table = config.table
+        //   let record = _table.getRecordByCell(config.col, config.row)
+        //   let color = 1 //
+        //   let _index = record._index
+        //   let validateMap = table.validateMap
+        //   let errStr = validateMap[_index]
+        //   //报错了//
+        //   if (errStr) {
+        //     let allField = errStr.map((row) => row.field)
+        //     if (allField.includes(this.getField())) {
+        //       color = 3
+        //     } //
+        //   }
+        //   return color
+        // }, //
+        // bgColor: (config) => {
+        //   //
+        //   let _table = config.table
+        //   let record = _table.getRecordByCell(config.col, config.row)
+        //   let gValue = table.globalConfig.value
+        //   let value = config.value
+        //   let color = null
+        //   if (record == table.tableData.curRow) {
+        //     color = 'RGB(200, 190, 230)'
+        //   }
+        //   if (gValue.length > 0) {
+        //     let reg = new RegExp(gValue, 'g')
+        //     if (reg.test(value)) {
+        //       color = 'RGB(230, 220, 230)' //
+        //     }
+        //   }
+        //   return color
+        // }, //
       },
       headerCustomLayout: this.getHeaderCustomLayout(), //
       editor: edit, ////
@@ -628,7 +643,6 @@ export class Column extends Base {
     return _arr //
   }
   async validateValue(vConfig?: any) {
-    //
     let editType = this.getEditType() //
     if (editType) {
       let validator = this.getValidator() //
@@ -751,7 +765,6 @@ export class Column extends Base {
     })
     group.add(topImage)
     group.add(bottomImage) //
-    // group.add()
     return group //
   }
   createFilter(config: any) {
@@ -797,7 +810,11 @@ export class Column extends Base {
     let customLayout = (args) => {
       const { table, row, col, rect, value } = args
       let _value: string = value
-      // const record = table.getCellOriginRecord(col, row)
+      const record = table.getCellOriginRecord(col, row)
+      let bg = '' //
+      if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
+        bg = 'RGB(200, 190, 230)'
+      }
       const { height, width } = rect ?? table.getCellRect(col, row)
       const container = createGroup({
         height,
@@ -805,9 +822,14 @@ export class Column extends Base {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'nowrap',
+        background: bg, //
         overflow: 'hidden',
         alignItems: 'center',
         boundsPadding: [0, 0, 0, 0],
+      })
+      container.on('click', () => {
+        let _table = this.table
+        _table.setCurRow(record) //
       })
       let locationName = createText({
         text: value, //
@@ -849,7 +871,6 @@ export class Column extends Base {
               i == _vArr.length - 1 &&
               v.index + v[0].length < _value.length
             ) {
-              //
               let t2 = createText({
                 text: _value.slice(v.index + v[0].length), //
                 fontSize: 14,
@@ -862,7 +883,7 @@ export class Column extends Base {
             }
             return arr
           })
-          .flat() //
+          .flat()
         if (_vArr.length > 0) {
           _vArr.forEach((item) => {
             //@ts-ignore
@@ -874,6 +895,16 @@ export class Column extends Base {
       } else {
         container.add(locationName) //
       }
+      container.on('mousedown', (args) => {
+        if (this.isMousedownRecord != null) {
+          this.table.emit('dblclick_cell', { originalData: record }) ////
+        }
+        this.isMousedownRecord = record
+        setTimeout(() => {
+          //
+          this.isMousedownRecord = null
+        }, 130)
+      })
       return {
         rootContainer: container,
         renderDefault: false,
@@ -886,7 +917,6 @@ export class Column extends Base {
     let config = this.config
     let defaultValue = config.defaultValue
     let design = this.getCurrentDesign() //
-    console.log(design, 'design') ////
     if (defaultValue == null) {
       return {} //
     }

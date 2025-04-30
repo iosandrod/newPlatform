@@ -177,3 +177,6 @@ li {
   border:'solid';
   border-color: red;
 }
+.pointer{
+  cursor: pointer;
+}

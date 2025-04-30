@@ -32,8 +32,9 @@ export default defineComponent({
     return () => {
       let com = (
         <erTable
+          key={item.id}
           ref={registerTable}
-          data={data.value} //
+          data={data.value}
           columns={columns.value}
         ></erTable>
       )

@@ -22,6 +22,7 @@ import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
 import {} from 'vxe-table'
 import { PageDesignItem } from './pageItem'
+import formCom from './formCom'
 //转换数据
 //
 let prevEl: any = ''
@@ -44,7 +45,9 @@ const layoutType = [
 ]
 const pName = [] //
 export class Form extends Base {
-  pageType = 'form'
+  originalData = {}
+  static component = formCom
+  pageType = 'form' //
   cachePlugin: any
   formIns?: any
   lang: any = {}
@@ -424,7 +427,6 @@ export class Form extends Base {
     return this.isDesign
   }
   runTestMethod() {
-    // let d=this.getData()
     let d = this.getLayoutData() //
     // let plugin = ControlInsertionPlugin(this)
     // Sortable.mount(plugin) //
@@ -1004,8 +1006,11 @@ export class Form extends Base {
     }
   }
   getData() {
-    let data = this.config.data || {}
-    return data
+    let data = this.config.data
+    if (data == null) {
+      data = this.originalData
+    }
+    return data //
   }
   clearData() {
     let layout = this.layout

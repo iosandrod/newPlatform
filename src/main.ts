@@ -28,12 +28,15 @@ import { system } from './system'
 import buttonGroupCom from './buttonGroup/buttonGroupCom'
 import { http } from './service/client'
 import selectCom from './select/selectCom'
+import { Table } from './table/table'
 //@ts-ignore
 Base.prototype.system = system //
 //@ts-ignore
 Base.prototype.http = http ////
 //@ts-ignore
 Base.prototype._router = router
+//@ts-ignore
+Table.component = tableCom
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)

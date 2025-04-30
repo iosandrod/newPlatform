@@ -79,7 +79,7 @@ export default defineComponent({
       ],
     }
     let _data = reactive({
-      height: 600,
+      height: 1400,
       width: 300,
     }) //
     let _reg1 = ref('')
@@ -100,7 +100,7 @@ export default defineComponent({
     return () => {
       let com0 = null
       let com = null
-      // com = <tableCom {...tableConfig}></tableCom> //
+      com = <tableCom {...tableConfig}></tableCom> //
       // com = (
       //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
       //     <tableCom {...tableConfig}></tableCom>
@@ -109,12 +109,13 @@ export default defineComponent({
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       // com = <dialogCom ref={_reg2}></dialogCom>
       let com2 = <button onClick={fn1}>123123</button>
-      com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
-      com = null
+      // com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
+      // com = null
+
       let _com = (
         <div
           style={{
-            padding: '100px', //
+            padding: '', //
             overflow: 'hidden', //
           }}
         >
@@ -122,9 +123,10 @@ export default defineComponent({
           {com0}
           <buttonCom
             fn={async () => {
-              _system.openDialog({
+              _system.confirmForm({
                 height: 500,
-                width: 500, //
+                width: 500,
+                ...formConfig, //
               })
             }}
           >
@@ -132,7 +134,7 @@ export default defineComponent({
           </buttonCom>
           <div
             style={{
-              height: '500px',
+              height: '800px',
               width: '100%', //
             }}
           >

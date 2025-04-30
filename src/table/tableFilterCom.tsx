@@ -96,12 +96,16 @@ export default defineComponent({
                     <buttonCom
                       fn={() => {
                         tableIns.resetFilterColumn(true)
+                        let _table: Table = tableIns.getRef('columnFilterTable')
+                        _table.updateCheckboxAll(false) //
                       }}
                       label={'重置所有'}
                     ></buttonCom>
                     <buttonCom
                       fn={() => {
                         tableIns.resetFilterColumn(false) //
+                        let _table = tableIns.getRef('columnFilterTable') //
+                        _table.updateCheckboxAll(false) //
                       }}
                       label={'重置当前'}
                     ></buttonCom>

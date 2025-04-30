@@ -75,28 +75,22 @@ export const click_cell = (table: Table) => {
           return
         }
       }
-
       if (field == 'checkboxField') {
       } //
       if (originData == null) {
-      } else {
+      } else { 
         table.clearEditCell()
         table.setCurRow(originData) ////
       } //
     },
   })
+  let ins=table.getInstance()
+  
   table.registerEvent({
     name: 'dblclick_cell',
     keyName: 'dblclick_cell',
     callback: (config) => {
-      let field = config.field
-      let originData = config.originData //
-      if (field == 'checkboxField') {
-      } //
-      if (originData == null) {
-      } else {
-        table.setCurRow(originData, true) ////
-      } //
+      console.log('我双击了')//
     },
   })
 }
@@ -107,7 +101,7 @@ export const contextmenu_cell = (table: Table) => {
     name: 'contextmenu_cell',
     keyName: 'contextmenu_cell',
     callback: (config) => {
-      _this.openContextMenu(config)
+      _this.openContextMenu(config) //
     },
   })
 }
@@ -187,7 +181,7 @@ export const sort_click = (table: Table) => {
     },
   })
 }
-
+//
 export const checkbox_state_change = (table: Table) => {
   const _this = table
   table.registerEvent({
@@ -310,3 +304,4 @@ export const mouseleave_cell = (table: Table) => {
     },
   })
 }
+

@@ -1,4 +1,4 @@
-import { defineComponent, provide } from 'vue'
+import { defineComponent, KeepAlive, provide } from 'vue'
 import erForm from '@ER/formCom'
 import erFormEditor from '@ER/formEditor/formEditor'
 import tableEditor from '@/table/tableCom'
@@ -9,6 +9,7 @@ import { fieldsConfig } from '@ER/formEditor/componentsConfig'
 import { system } from '@/system'
 import tabCom from '@/buttonGroup/tabCom'
 import PageCom from '@ER/pageCom'
+import { tableConfig } from '@/table/tableData'
 export default defineComponent({
   components: {
     erForm,
@@ -107,15 +108,28 @@ export default defineComponent({
                     },
                   },
                   {
-                    label: 'test1',
+                    label: '进入设计', //
                     fn: async () => {
-                      Object.values(systemIns.tableMap).forEach((item) => {
-                        item.setCurrentDesign(!item.isDesign) //
-                      })
+                      let currentPage = systemIns.getCurrentPageDesign()
+                      currentPage.setCurrentDesign(true) //
                     },
                   },
                   {
-                    label: 'test2',
+                    label: '离开设计',
+                    fn: async () => {
+                      let cp = systemIns.getCurrentPageDesign()
+                      cp.setCurrentDesign(false) //
+                    },
+                  },
+                  {
+                    label: '保存设计',
+                    fn: async () => {
+                      let currentPage = systemIns.getCurrentPageDesign()
+                      currentPage.saveTableDesign()
+                    },
+                  },
+                  {
+                    label: '打印layout',
                     fn: async () => {
                       let d = Object.values(systemIns.tableMap).pop()
                       let _data = d.getLayoutData() //
@@ -129,9 +143,11 @@ export default defineComponent({
                     },
                   },
                   {
-                    label: 'test4',
+                    label: '获取表格数据',
                     fn: async () => {
                       let currentPage = systemIns.getCurrentPageDesign() //
+                      let _data = await currentPage.getTableData()
+                      console.log(_data, 'test_data') //
                     },
                   },
                   {
@@ -155,12 +171,12 @@ export default defineComponent({
               <router-view
                 v-slots={{
                   default: (config) => {
-                    let { Component, route } = config
-                    if (Component == null) {
+                    const { Component, route } = config
+                    if (!Component) {
                       return <div></div>
                     }
-                    let FullPath = route.fullPath
-                    return <Component key={FullPath}></Component>
+                    const FullPath = route.fullPath //
+                    return <Component key={FullPath} />
                   },
                 }}
               ></router-view>
@@ -171,3 +187,21 @@ export default defineComponent({
     }
   },
 })
+/* 
+    <router-view
+                v-slots={{
+                  default: (config) => {
+                    const { Component, route } = config
+                    if (!Component) {
+                      return <div></div>
+                    }
+                    const FullPath = route.fullPath//
+                    return (
+                      <KeepAlive>
+                        <Component key={FullPath} />
+                      </KeepAlive>
+                    )
+                  },
+                }}
+              ></router-view>
+*/

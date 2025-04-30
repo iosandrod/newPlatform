@@ -28,6 +28,7 @@ import { typeMap } from '../FormTypes'
 import { Form } from '@ER/form'
 import { dName } from '@ER/vueDraggable/vuedraggable'
 import Sortable from 'sortablejs'
+import { FormItem } from '@ER/formitem'
 const dragGableWrap = defineComponent({
   inheritAttrs: false,
   name: 'customDragGable',
@@ -251,11 +252,12 @@ export default defineComponent({
               }
               if (unref(isPc)) {
                 //@ts-ignore
-                const formitem = typeProps?.formitem //
+                const formitem: FormItem = typeProps?.formitem //
                 const prop = formitem?.getField()
                 let innerCom = null //
                 //@ts-ignore
                 if (formIns.pageType == 'pageDesign') {
+                  //
                   innerCom = (
                     <TypeComponent
                       item={formitem}
@@ -266,14 +268,21 @@ export default defineComponent({
                   )
                 } else {
                   innerCom = (
-                    <el-form-item {...typeProps} prop={prop}>
-                      <TypeComponent
-                        item={formitem}
-                        key={element.id}
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
-                    </el-form-item>
+                    <div class="flex flex-row">
+                      <div class="pl-10 h-30 flex align-center">
+                        {formitem.getTitle()}
+                      </div>
+                      <div class="flex-1 overflow-hidden">
+                        <el-form-item c {...typeProps} prop={prop}>
+                          <TypeComponent
+                            item={formitem}
+                            key={element.id}
+                            data={element}
+                            params={typeProps}
+                          ></TypeComponent>
+                        </el-form-item>
+                      </div>
+                    </div>
                   )
                 }
                 node = (
