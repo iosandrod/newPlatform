@@ -17,7 +17,6 @@ export const scroll = (table: Table) => {
       if (table == null) {
         return //
       }
-      // console.log(Date.now(), '父级的')
       _this.fatherScrollNum = Date.now()
       let childScrollNum = _this.childScrollNum
       let sub = childScrollNum - _this.fatherScrollNum
@@ -28,6 +27,7 @@ export const scroll = (table: Table) => {
         ins.setScrollLeft(scrollLeft) //
       }
       let range = table.getBodyVisibleCellRange()
+      let _range = table.getBodyVisibleRowRange()
       if (range == null) return //
       const headerheight = table.columnHeaderLevelCount
       range.rowStart = range.rowStart - headerheight
@@ -78,14 +78,14 @@ export const click_cell = (table: Table) => {
       if (field == 'checkboxField') {
       } //
       if (originData == null) {
-      } else { 
+      } else {
         table.clearEditCell()
         table.setCurRow(originData) ////
       } //
     },
   })
-  let ins=table.getInstance()
-  
+  let ins = table.getInstance()
+
   table.registerEvent({
     name: 'dblclick_cell',
     keyName: 'dblclick_cell',
@@ -208,7 +208,7 @@ export const checkboxChange = (table: Table) => {
   table.registerEvent({
     name: 'checkboxChange',
     keyName: 'checkboxChange',
-    callback: (config) => {},
+    callback: (config) => { },
   })
 }
 
@@ -236,14 +236,13 @@ export const resize_column = (table: Table) => {
       rowCols.config.width = colWidth //
     },
   })
-}
-
+}//
 export const mousedown_cell = (table: Table) => {
   const _this = table
   table.registerEvent({
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
-    callback: (config) => {},
+    callback: (config) => { },
   })
 }
 

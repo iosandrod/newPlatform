@@ -87,11 +87,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-    x: 0,
-    y: 0,
-    width: 0,
-    filterConfig: [],
-  }
+      x: 0,
+      y: 0,
+      width: 0,
+      filterConfig: [],
+    }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -104,12 +104,13 @@ export class Table extends Base {
   columns: Column[] = []
   columnsMap: { [key: string]: Column } = {}
   config: any
-  scrollConfig = shallowRef({
+  scrollConfig = ({
     rowStart: 0,
     rowEnd: 0,
     colStart: 0,
     colEnd: 0,
   })
+  currentIndexContain = shallowRef({}) as any
   eventManager: {
     [key: string]: Array<{
       callback?: Function
@@ -135,9 +136,6 @@ export class Table extends Base {
     let oldIndex = oldCurRow._index || '' //
     let newIndex = row._index || ''
     this.timeout['updateRecords__now'] = true
-    // if (isDb == true) {
-    //   return
-    // }
     this.updateIndexArr.add(oldIndex) //
     this.updateIndexArr.add(newIndex) //
     // let instance = this.getInstance()
@@ -215,7 +213,7 @@ export class Table extends Base {
     })
     this.tableData.data = data
   }
-  getTableName() {}
+  getTableName() { }
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
@@ -224,7 +222,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() {}
+  getListTableOption() { }
   createInstance(rootDiv) {
     let _this = this
     let showRowSeriesNumber = this.config.showRowSeriesNumber
@@ -371,7 +369,7 @@ export class Table extends Base {
     this.loadFooterColumn()
   }
   getSerialNumberWidth() {
-    return 60
+    return 140
   }
   getLastFlatColumns(cols: any[] = this.columns): Column[] {
     return cols
@@ -454,21 +452,50 @@ export class Table extends Base {
     let _arr = []
     let _iArr = []
     let records = tableIns.getInstance().records
-    for (const k of tableIns.updateIndexArr.keys()) {
+    let keys = tableIns.updateIndexArr.keys()
+    let _iArr1 = []
+    for (const k of keys) {
       //@ts-ignore
       let record = tableIns.dataMap[k]
       let index = records.indexOf(record)
       if (index != -1) {
         _arr.push(record)
         _iArr.push(index)
+        _iArr1.push(k)
       }
     }
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
-      console.time(uuid)
+      console.time(uuid)//
       let ins = toRaw(tableIns.getInstance())
-      // let _arr1 = toRaw(_arr) //
-      ins.updateRecords(_arr, _iArr) //
+      let currentIndexContain = this.currentIndexContain
+      let updateKeys = Object.keys(currentIndexContain)//
+      // console.log(_iArr1)//
+      let _keys = updateKeys.filter(key => {//
+        return _iArr1.includes(key)
+      })
+      let allContain = _keys.map(key => {
+        return currentIndexContain[key]
+      })
+      let allRowIndex = Object.entries(currentIndexContain).map(([keys, value]) => {
+        let _value = Object.values(value).map(row => row['currentRowIndex'])
+        return _value.filter((v, i) => _value.indexOf(v) == i)//
+      })
+      if (allContain.length == 0) {
+        console.log('点击不生效')//
+        console.log(this)//
+      }
+      allContain.forEach(cArr => {
+        let Arr = Object.values(cArr)
+        Arr.forEach((c: any) => {
+          c.updateCanvas()//
+        })
+      })
+      nextTick(() => {
+        let _select = ins.getSelectedCellRanges()
+        ins.selectCells(_select)//
+      })
+      // ins.changeCellValue(0, 0, '')//
       console.timeEnd(uuid) //
     }
   }
@@ -653,12 +680,12 @@ export class Table extends Base {
         key: 'designColumn',
         disabled: false, //
         visible: true,
-        fn: () => {},
+        fn: () => { },
       },
     ]
     this.contextItems = items
   }
-  setCurTableSelect() {}
+  setCurTableSelect() { }
   openContextMenu(config) {
     let originData = config.originData
     if (originData == null) {
@@ -830,22 +857,31 @@ export class Table extends Base {
       return
     }
     let records = instance.records
+    // debugger//
     let index = records.findIndex((item) => {
       return item == row
     })
     if (index == -1) {
       return
     }
+    let scrollRange = this.scrollConfig.rowEnd - this.scrollConfig.rowStart
+    this.scrollConfig.rowEnd = index//
+    this.scrollConfig.rowStart = index - scrollRange
+    if (this.scrollConfig.rowStart < 0) {
+      this.scrollConfig.rowStart = 0
+      this.scrollConfig.rowEnd = scrollRange//
+    }
+    console.log(this.scrollConfig)//
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) {}
+  async runBefore(config?: any) { }
   //@ts-ignore
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
     }
   }
-  registerHooks(hConfig?: any) {}
+  registerHooks(hConfig?: any) { }
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -860,7 +896,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) {}
+  setMergeConfig(config?: any) { }
   addRows(rowsConfig?: { rows?: Array<any> }) {
     let rows = rowsConfig.rows || []
     if (rows == null) {
@@ -904,7 +940,7 @@ export class Table extends Base {
       return
     } else {
       let columns = this.columns
-      columns.forEach((item) => {})
+      columns.forEach((item) => { })
       instance.release()
       this.instance = null //
     }
@@ -1412,14 +1448,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) {}
+  async validateData(config) { }
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1427,7 +1463,7 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() {}
+  copyCurrentSelectCells() { }
   headerSortClick(config: any) {
     let sortState = this.sortCache
     let hasSort = sortState.findIndex((s) => s.field == config.field) //
@@ -1460,8 +1496,8 @@ export class Table extends Base {
       e['_rowState'] = 'unChange'
     } //
   }
-  designCurrentColumn() {}
-  getCacheContain(row) {}
+  designCurrentColumn() { }
+  getCacheContain(row) { }
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -1469,7 +1505,7 @@ export class Table extends Base {
         this.registerEvent({
           keyName: key,
           name: key,
-          callback: (...args) => {},
+          callback: (...args) => { },
         })
       }
     })

@@ -1,4 +1,4 @@
-import { defineComponent, inject, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { erFormEditor } from '@ER/formEditor'
 import buttonCom from '@/buttonGroup/buttonCom'
 import tabCom from '@/buttonGroup/tabCom'
@@ -23,7 +23,6 @@ import { Dialog } from '@/dialog/dialog'
 import { PageDesign } from '@ER/pageDesign'
 import FormEditor from '@ER/formEditor/formEditor'
 import { Button } from '@/buttonGroup/button'
-import { System } from '@/system'
 export default defineComponent({
   components: {
     buttonCom, //
@@ -79,7 +78,7 @@ export default defineComponent({
       ],
     }
     let _data = reactive({
-      height: 1400,
+      height: 600,
       width: 300,
     }) //
     let _reg1 = ref('')
@@ -92,10 +91,9 @@ export default defineComponent({
       btn.registerRef('page', el)
     }
     let fn1 = () => {
-      let _ref: PageDesign = btn.getRef('page')
+      let _ref = btn.getRef('page')
       _ref.isDesign = !_ref.isDesign
     }
-    let _system: System = inject('systemIns')
     // let p = new PageDesign(getDefaultPageProps())
     return () => {
       let com0 = null
@@ -109,32 +107,24 @@ export default defineComponent({
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       // com = <dialogCom ref={_reg2}></dialogCom>
       let com2 = <button onClick={fn1}>123123</button>
-      // com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
-      // com = null
-
+      // com = <pageCom ref={_reg3}></pageCom> //
+      // com = (
+      //   <div style={{ width: '400px' }}>
+      //     <formCom {...formConfig}></formCom>
+      //   </div>
+      // )
       let _com = (
         <div
           style={{
-            padding: '', //
+            padding: '100px', //
             overflow: 'hidden', //
           }}
         >
           {com2}
           {com0}
-          <buttonCom
-            fn={async () => {
-              _system.confirmForm({
-                height: 500,
-                width: 500,
-                ...formConfig, //
-              })
-            }}
-          >
-            测试1
-          </buttonCom>
           <div
             style={{
-              height: '800px',
+              height: '500px',
               width: '100%', //
             }}
           >

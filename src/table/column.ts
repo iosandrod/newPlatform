@@ -60,8 +60,8 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   }
-  setHidden(bool) {} //
-  getFormitem() {} //
+  setHidden(bool) { } //
+  getFormitem() { } //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -808,6 +808,7 @@ export class Column extends Base {
   }
   getCustomLayout() {
     let customLayout = (args) => {
+      // console.log('is createLayout 1231123')//
       const { table, row, col, rect, value } = args
       let _value: string = value
       const record = table.getCellOriginRecord(col, row)
@@ -830,7 +831,7 @@ export class Column extends Base {
       container.on('click', () => {
         let _table = this.table
         _table.setCurRow(record) //
-      })
+      })//
       let locationName = createText({
         text: value, //
         fontSize: 16,
@@ -905,6 +906,43 @@ export class Column extends Base {
           this.isMousedownRecord = null
         }, 130)
       })
+      let _index = record['_index']//
+      let _table = this.table//
+      let scrollConfig = _table.scrollConfig//
+      let rowStart = scrollConfig.rowStart
+      let rowEnd = scrollConfig.rowEnd
+      let _row = row
+      let currentIndexContain = _table.currentIndexContain
+      container['currentRowIndex'] = row//
+      container['updateCanvas'] = () => {
+        let bg = ''
+        if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
+          bg = 'RGB(200, 190, 230)'
+        }
+        container.setAttribute('background', bg)//
+        container.update()//
+      }
+      let length = this.table.templateProps.data.length
+      let _length = length / 5
+      rowStart = rowStart - _length
+      if (rowStart < 0) {
+        rowStart = 0//
+      }
+      rowEnd = rowEnd + _length//
+      if (_row >= rowStart && _row <= rowEnd) {
+        //显示在视图上
+        let _arr = currentIndexContain[_index]
+        if (_arr == null) {
+          currentIndexContain[_index] = {}
+          _arr = currentIndexContain[_index]//
+        }
+        // _arr.push(container)
+        let field = this.getField()
+        _arr[field] = container//
+      } else {
+        // delete currentIndexContain[_index]//
+        // currentIndexContain[_index] = null
+      }
       return {
         rootContainer: container,
         renderDefault: false,
