@@ -1,5 +1,5 @@
 import { BMenu, BMenuItem } from '@/buttonGroup/bMenu'
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, watch } from 'vue' //
 import Contextmenu from './Contextmenu'
 import ContextmenuItem from './ContextmenuItem'
 import ContextmenuSubmenu from './ContextmenuSubmenu'
@@ -127,7 +127,16 @@ export default defineComponent({
   },
   setup(props, { slots, attrs, emit, expose }) {
     let mIns = new BMenu(props) //
-    expose(mIns)
+    watch(
+      () => {
+        return props.items
+      },
+      (newV) => {
+        if (!Array.isArray(newV)) newV = [] //
+        mIns.setItems(newV) //
+      },
+    )
+    expose({ _instance: mIns })
     return () => {
       const comArr = mIns.items.map((item) => {
         return <itemCom item={item} v-slots={slots}></itemCom>

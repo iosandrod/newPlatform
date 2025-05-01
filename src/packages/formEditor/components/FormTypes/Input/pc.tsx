@@ -1,6 +1,6 @@
-import { FormItem } from '@ER/formitem';
-import { ElInput } from 'element-plus';
-import { defineComponent } from 'vue';
+import { FormItem } from '@ER/formitem'
+import { ElInput } from 'element-plus'
+import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'InputPc',
@@ -11,12 +11,15 @@ export default defineComponent({
     params: Object,
   },
   setup(props) {
-    const data = props.data;
-    const params = props.params;
-    const formitem: FormItem = params.formitem;
+    const data = props.data
+    const params = props.params
+    const formitem: FormItem = params.formitem
+    let _value = computed(() => {
+      let _config = formitem?.getBindConfig()
+      return _config
+    })
     return () => {
-      const bindConfig = formitem?.getBindConfig();
-      return <ElInput {...bindConfig}></ElInput>;
-    };
+      return <ElInput {..._value.value}></ElInput>
+    }
   },
-});
+})

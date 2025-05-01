@@ -18,14 +18,24 @@ export default defineComponent({
       let p = currentTable.path
       let _tableName = p.split('/').pop()
       tableName = _tableName
-    } //
+    }
     let show = ref(false)
-    // console.log(tableName, 'testTableName') //
+    let _tableName = tableName.split('---')
     let en = null
-    system.createPageDesign(tableName).then((res) => {
-      en = res
-      show.value = true //
-    })
+    if (_tableName.length == 2) {
+      let _tableName1 = _tableName[0]
+      tableName = _tableName1 //
+      system.createPageEditDesign(tableName).then((res) => {
+        en = res
+        show.value = true //
+      })
+    } else {
+      // console.log(tableName, 'testTableName') //
+      system.createPageDesign(tableName).then((res) => {
+        en = res
+        show.value = true //
+      })
+    }
     return () => {
       if (show.value == false) {
         return null

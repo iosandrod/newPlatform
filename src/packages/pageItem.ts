@@ -51,7 +51,7 @@ export class PageDesignItem extends FormItem {
     let config = this.config
     let tableType = config?.options?.tableType
     if (!tableType) {
-      tableType = 'mainTable' //
+      tableType = 'main' ////
     }
     return tableType
   }
@@ -61,5 +61,18 @@ export class PageDesignItem extends FormItem {
     let _config = cloneDeep(formConfig) //
     let system = this.getSystem()
     system.openDialog({})
+  }
+  getShowHeaderButtons() {
+    // debugger //
+    let options = this.getOptions()
+    let tableType = this.getTableType()
+    if (tableType == 'detail') {
+      return false
+    }
+    if (tableType == 'main') {
+      return true
+    }
+    let showHeaderButtons = options?.showHeaderButtons
+    return showHeaderButtons
   }
 } //

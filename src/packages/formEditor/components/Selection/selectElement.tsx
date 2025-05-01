@@ -366,6 +366,7 @@ export default {
           // @ts-ignore
           class={[
             ns.b(),
+            'overflow-x-hidden',
             unref(isEditModel) &&
               ER.props.dragMode === 'full' &&
               props.hasDrag &&

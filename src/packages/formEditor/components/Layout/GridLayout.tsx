@@ -60,7 +60,7 @@ export default defineComponent({
               align: props.data.options.align,
               // inset: !state.isPc
             }}
-            class={[ns.b(), 'flex']}
+            class={[ns.b(), 'flex','w-full']}
           >
             {props.data.columns.map((element, index) => {
               return (

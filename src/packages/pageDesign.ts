@@ -4,21 +4,25 @@ import { createPageDesignFieldConfig } from './pageDesignConfig'
 import { FormItem } from './formitem'
 import { Field } from './layoutType'
 import { PageDesignItem } from './pageItem'
-import { nextTick } from 'vue'
+import { computed, nextTick } from 'vue'
 import { _tData, _tData123, _testData, entityData } from './formEditor/testData'
-import { useRunAfter } from './utils/decoration'
+import { useOnce, useRunAfter } from './utils/decoration'
 import pageCom from './pageCom'
 
 export class PageDesign extends Form {
   static component = pageCom //
   pageType = 'pageDesign' //
-  tableName ////
+  tableName
+  tableType: 'main' | 'edit' | 'search' = 'main'
   constructor(config) {
     super(config)
     this.init()
   } //
   init(): void {
     super.init() //
+  }
+  getTabTitle() {
+    let config = this.config //
   }
   setItems(items: any, setLayout?: boolean): void {
     if (!Array.isArray(items)) {
@@ -150,9 +154,9 @@ export class PageDesign extends Form {
     let _data = this.getLayoutData() //
     let http = this.getHttp()
     let _config = this.config
-    let _config1 = { ..._config, ..._data,id: _config.id } //
-    let _res = await http.patch(`entity/${_config.id}`,_config1.id, _config1) //
-    console.log('保存成功')//
+    let _config1 = { ..._config, ..._data, id: _config.id } //
+    let _res = await http.patch(`entity/${_config.id}`, _config1.id, _config1) //
+    console.log('保存成功') //
   }
   getMainTableName() {
     let config = this.config
@@ -162,4 +166,92 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
+  getAllFormMap() {}
+  @useOnce()
+  initDefaultDForm() {
+    let allType = ['input', 'input', 'entity', 'form']
+    let inputF = {
+      itemSpan: 24,
+      items: [
+        {
+          field: 'title',
+          label: '标题',
+          type: 'input', //
+        },
+        {
+          field: 'placeholder',
+          label: '提示',
+          type: 'input', //
+        },
+      ],
+      data: computed(() => {
+        return this.state.selected?.options || {} //
+      }), //
+    }
+    let _f = new Form(inputF) //
+    let entityF = {
+      itemSpan: 24,
+      items: [
+        {
+          field: 'tableName',
+          label: '表名',
+          type: 'input', //
+          onBlur: async (config) => {
+            let value = config.value
+            let oldValue = config.oldValue
+            if (value == oldValue) {
+              return
+            }
+            let system = this.getSystem()
+            let tableInfo = await system.getTableConfig(value)
+            if (tableInfo == null) {
+              return //
+            }
+            let currentBindData = config.form.getData() //
+            Object.entries(tableInfo).forEach(([key, value]) => {
+              //@ts-ignore//
+              currentBindData[key] = value
+            })
+          },
+        },
+        {
+          filed: 'eventMap',
+          label: '事件',
+          type: 'input',
+        },
+        {
+          field: 'tableType',
+          label: '表类型',
+          type: 'select', //
+          options: [
+            {
+              label: '主表',
+              value: 'main',
+            },
+            {
+              label: '子表',
+              value: 'detail', //
+            },
+            {
+              label: '关联表',
+              value: 'relate', //
+            },
+          ],
+        },
+      ],
+      data: computed(() => {
+        return this.state?.selected?.options //
+      }),
+    }
+    let _f1 = new Form(entityF)
+    this.dFormMap['entity'] = _f1 //
+    this.dFormMap['input'] = _f //
+    this.curDForm = _f1 //
+  }
+  //打开编辑页面
+  async openEditEntity() {
+    let tableName = this.tableName //
+  }
+  //打开添加页面
+  async openAddEntity() {}
 }

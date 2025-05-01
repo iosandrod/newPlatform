@@ -54,7 +54,7 @@ export class CheckboxColumn extends Column {
     //@ts-ignore
     _props.cellType = 'text' //
     _props.headerIcon = undefined //
-    _props.width = 60
+    _props.width = this.table.getCheckColumnWidth(),
     _props.checked = (config) => {
       //@ts-ignore
       let table: VTable.ListTable = config.table
@@ -78,8 +78,10 @@ export class CheckboxColumn extends Column {
       const { height, width } = rect ?? table.getCellRect(col, row)
       // console.log(width,'testWidth')//
       const container = createGroup({
-        height,
-        width,
+        height: height - 2,
+        width: width - 2,
+        x: 1,
+        y: 1, //
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -122,13 +124,15 @@ export class CheckboxColumn extends Column {
       let rows = table.getRecordByCell(col, row)
       let _table = this.table
       let curRow = _table.tableData.curRow
-      let gb = ''
+      let gb = this.getIndexColor(row)
       if (curRow == rows) {
         gb = 'RGB(200, 190, 230)' //
       }
       const container = createGroup({
-        height,
-        width,
+        height: height - 2,
+        width: width - 2,
+        x: 1,
+        y: 1, //
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -165,7 +169,7 @@ export class CheckboxColumn extends Column {
       let currentIndexContain = _table.currentIndexContain
       container['currentRowIndex'] = row //
       container['updateCanvas'] = () => {
-        let bg = ''
+        let bg = this.getIndexColor(row) //
         if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
           bg = 'RGB(200, 190, 230)'
         }

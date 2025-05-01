@@ -3,6 +3,7 @@ import { Table } from './table'
 import { generatePersons } from './tableData'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { nextTick } from 'vue' //
+import { createGroup, createText } from '@visactor/vtable/es/vrender'
 
 export default defineComponent({
   name: 'tableButtonCom',
@@ -13,27 +14,14 @@ export default defineComponent({
     const tableIns: Table = inject('tableIns')
     const buttons = [
       {
-        label: '改变依赖项',
-        fn: async () => {
-          //添加列
-          let t = tableIns.clickOpt
-          if (t == 1) {
-            tableIns.clickOpt = 0
-            return
-          }
-          tableIns.clickOpt = 1 //
-        },
-      },
-      {
-        label: '添加行',
+        label: '新增',
         fn: async () => {
           //添加行
-          // console.log('执行到这里')//
-          tableIns.addRows(1)//
+          tableIns.addRows(1) //
         },
       },
       {
-        label: '删除操作', //
+        label: '删除', //
         fn: async () => {
           //添加行
           // console.log('执行到这里')//
@@ -41,49 +29,59 @@ export default defineComponent({
         },
       },
       {
-        label: '显示全局查询',
+        label: '复制',
         fn: async () => {
-          tableIns.showGlobalSearch(!tableIns.globalConfig.show) //
+          //添加行
+          let arr = [
+            {
+              // text: '合并单元格',
+              range: {
+                start: {
+                  col: 3,
+                  row: 8,
+                },
+                end: {
+                  col: 7,
+                  row: 10,
+                },
+              },
+              style: {
+                bgColor: '#ccc',
+              },
+              customLayout: (args) => {
+                const { table, row, col, rect, value } = args
+                const { height, width } = rect ?? table.getCellRect(col, row)
+                let c = createGroup({
+                  height,
+                  width,
+                  display: 'flex',
+                  alignItems: 'center',
+                })
+                let t = createText({
+                  text: '测试',
+                  fontSize: 16,
+                  fill: 'black',
+                  fontWeight: 'bold',
+                  boundsPadding: [0, 0, 0, 0],
+                  lineDashOffset: 0,
+                })
+                c.add(t) //
+                return {
+                  rootContainer: c, //
+                }
+              },
+            },
+          ]
+          let ins = tableIns.getInstance()
+          ins.options.customMergeCell = arr //
         },
       },
       {
-        label: '改变前值', //
+        label: '导出',
         fn: async () => {
-          let data = tableIns.getData() //、、
-          data[1].hobbies = data[1].hobbies + '2' ////
-        },
-      },
-      {
-        label: '刷新视图', //
-        fn: async () => {
+          //添加行
           tableIns.updateCanvas() //
         },
-      },
-      {
-        label: '高度重置', //
-        fn: async () => {}, //
-      },
-      {
-        label: '清理编辑', //
-        fn: async () => {
-          tableIns.clearEditCell() ////
-        },
-      },
-      {
-        label: '显示toptip', //
-        fn: async () => {
-          tableIns.showTableTopTool({
-            row: 3,
-            col: 3,
-            content: '显示toptip',
-          }) //
-        },
-      },
-      {
-        label: '清除校验',
-        fn: async () => {
-          tableIns.clearValidate()
-        }, 
       },
     ] //
     return () => {

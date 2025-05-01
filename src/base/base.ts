@@ -11,6 +11,7 @@ import { Router } from 'vue-router'
 import { PageDesign } from '@ER/pageDesign'
 export const workerPool = pool.pool()
 export class Base {
+  _once: { [key: string]: boolean } = {}
   cacheMethod: {
     [key: string]: { before?: Array<any>; after?: Array<any> }
   } = {}

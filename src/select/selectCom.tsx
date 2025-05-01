@@ -192,6 +192,7 @@ export default defineComponent({
             onInput={_onInput}
             onVisibleChange={_onVisibleChange}
             v-slots={slots} //
+            transfer
           ></Select>
         </div>
       ) //

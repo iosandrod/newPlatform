@@ -1,4 +1,11 @@
-import { computed, defineComponent, nextTick, reactive, shallowRef } from 'vue'
+import {
+  computed,
+  defineComponent,
+  isProxy,
+  nextTick,
+  reactive,
+  shallowRef,
+} from 'vue'
 import formEditor from '@ER/formEditor/formEditor'
 import { FormLayout } from './type'
 import { staticData, formConfig, testData1 } from './formEditor/testData'
@@ -45,6 +52,8 @@ const layoutType = [
 ]
 const pName = [] //
 export class Form extends Base {
+  dFormMap: any = shallowRef({})
+  curDForm: any = null
   originalData = {}
   static component = formCom
   pageType = 'form' //
@@ -122,8 +131,8 @@ export class Form extends Base {
     //@ts-ignore
     this.props = config
     //@ts-ignore
-    this.formIns = this
     this.init() //
+    this.formIns = this
   } //
   getButtons() {
     let config = this.config
@@ -451,6 +460,9 @@ export class Form extends Base {
     return value
   }
   initState() {
+    let _config = createGlobalConfig()
+    _config.id = this.uuid()
+    _config.type = 'root' //
     let state = {
       validate: null as any,
       store: [],
@@ -459,7 +471,7 @@ export class Form extends Base {
       platform: 'pc',
       children: [],
       //@ts-ignore
-      config: createGlobalConfig(),
+      config: _config, //
       previewVisible: false,
       widthScaleLock: false,
       data: {},
@@ -833,6 +845,18 @@ export class Form extends Base {
         result = node
       }
     }
+    if (result == state.selected) {
+      return
+    }
+    let oldType = state.selected?.type
+    //@ts-ignore
+    let newType = result?.type
+    if (oldType != newType) {
+      let _t = this.dFormMap[newType]
+      if (_t) {
+        this.curDForm = _t
+      }
+    }
     this.isShowConfig = state.selected === result
     state.selected = result
     nextTick(() => {
@@ -931,7 +955,7 @@ export class Form extends Base {
             columns: [
               {
                 ...this.createNodeIdKey('col'), //
-                list: [_.cloneDeep(node)],
+                list: [node],
                 options: {
                   span: 24,
                   offset: 0,
@@ -944,8 +968,10 @@ export class Form extends Base {
           },
         ],
       }
+      let _node1 = node
+      //@ts-ignore
+      _node._getSelectTarget = () => _node1 //
       node = _node //
-      console.log(node, 'testnode') //
     }
     return node
   }
@@ -1005,9 +1031,11 @@ export class Form extends Base {
     }
   }
   getData() {
-    let data = this.config.data
+    let data = null
+    data = this.config.data
     if (data == null) {
-      data = this.originalData
+      let _data1 = this.originalData
+      return _data1 //
     }
     return data //
   }
@@ -1500,6 +1528,26 @@ export class Form extends Base {
     }
   }
   dragWidth(props: any) {}
+  initDefaultDForm() {
+    let allType = [
+      'input',
+      'select',
+      'radio',
+      'checkbox',
+      'cascader',
+      'uploadfile',
+      'signature',
+      'html',
+    ]
+  }
+  getHeaderButtons() {
+    let buttons = this.config.buttons
+    if (buttons == null) {
+      return []
+    }
+    let _btns = buttons.map((btn) => btn) //
+    return _btns //
+  }
 }
 //使用默认布局
 

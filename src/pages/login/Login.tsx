@@ -92,9 +92,12 @@ export default defineComponent({
       btn.registerRef('page', el)
     }
     let fn1 = () => {
-      system.confirmForm({
-        ...formConfig,//
-      })
+      // system.confirmForm({
+      //   ...formConfig,//
+      // })
+      let _ins = btn.getRef('page')
+      console.log(_ins) //
+      _ins.initDefaultDForm() //
     }
     // let p = new PageDesign(getDefaultPageProps())
     let _data1 = Array(10000)
@@ -105,16 +108,16 @@ export default defineComponent({
     return () => {
       let com0 = null //
       let com = null
-      com = <tableCom {...tableConfig} data={_data1}></tableCom> //
-      // com = (
-      //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
-      //     <tableCom {...tableConfig}></tableCom>
-      //   </div>
-      // ) //
+      com = <pageCom></pageCom> //
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       // com = <dialogCom ref={_reg2}></dialogCom>
       let com2 = <button onClick={fn1}>123123</button>
-      // com = <pageCom ref={_reg3}></pageCom> //
+      com = <pageCom ref={_reg3}></pageCom> //
+      com = (
+        <div style={{ height: `${_data.height}px`, width: `100%` }}>
+          <tableCom {...tableConfig}></tableCom>
+        </div>
+      ) //
       // com = (
       //   <div style={{ width: '400px' }}>
       //     <formCom {...formConfig}></formCom>

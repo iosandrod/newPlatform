@@ -41,7 +41,6 @@ export class Select extends Base {
     return isShow //
   }
   onChange(value) {
-    console.log(value, 'testValue') //
     //
   }
   getCurrentPanelShow() {

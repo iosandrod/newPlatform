@@ -9,9 +9,13 @@ import {
   watch,
 } from 'vue'
 import { Form } from './form'
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 export default defineComponent({
   components: {},
   props: {
+    buttons: {
+      type: Array,
+    },
     isDesign: {
       type: Boolean,
       default: false,
@@ -33,9 +37,9 @@ export default defineComponent({
     },
   },
   setup(props, { slots, expose }) {
-    let fIns = null
+    let fIns: Form = null as any
     if (props.formIns != null) {
-      fIns = props.formIns
+      fIns = props.formIns as any
     } else {
       //
       fIns = new Form(props)
@@ -83,7 +87,17 @@ export default defineComponent({
     expose({ _instance: fIns }) //
     return () => {
       let com = <erForm formIns={fIns}></erForm>
-      return <div class="w-full h-full bg-white">{com}</div>
+      let buttonG = null
+      let hBtns = fIns.getHeaderButtons()
+      if (hBtns.length > 0) {
+        buttonG = <ButtonGroupCom buttons={hBtns}></ButtonGroupCom> //
+      }
+      return (
+        <div class="w-full h-full bg-white">
+          {buttonG}
+          {com}
+        </div>
+      )
     }
   },
 })

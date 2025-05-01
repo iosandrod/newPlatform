@@ -46,9 +46,12 @@ import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { createFooterTheme, createTheme } from './tableTheme' //
 import tableCom from './tableCom'
-import { createGroup } from '@visactor/vtable/es/vrender'
+import { createGroup, createText } from '@visactor/vtable/es/vrender'
 import { SeriesNumberColumn } from './seriesNumberColumn'
+import { initContextMenu } from './tableContext'
 export class Table extends Base {
+  isFilterTable = false
+  isMergeCell = true
   seriesNumberColumn: SeriesNumberColumn
   curContextRow: any = null
   isHeaderContext: boolean = false
@@ -69,7 +72,7 @@ export class Table extends Base {
   checkboxColumn: Column //
   globalConfig = {
     value: '', ////
-    show: true, //
+    show: false, //
   }
   validateMap: { [key: string]: any[] } = {}
   templateProps = {
@@ -127,6 +130,7 @@ export class Table extends Base {
     curRow: null,
   }
   setTableState(state: 'edit' | 'scan') {
+    //
     if (['edit', 'scan'].includes(state)) this.tableState = state //
   }
   @useRunAfter()
@@ -198,6 +202,14 @@ export class Table extends Base {
     this.initSeriesNumberColumn()
     this.initGlobalSearch()
     this.initCurrentContextItems() //
+    this.initTableState()
+  }
+  initTableState() {
+    let config = this.config
+    let state = config.tableState
+    if (state) {
+      this.setTableState(state)
+    }
   }
   initCheckboxColumn() {
     let _col = new CheckboxColumn({ field: 'checkboxField' }, this) //
@@ -215,6 +227,7 @@ export class Table extends Base {
     }
   }
   setData(data) {
+    this.currentIndexContain = shallowRef({}) ////
     data.forEach((e) => {
       this.initDataRow(e)
     })
@@ -253,12 +266,80 @@ export class Table extends Base {
     }
     let table = new ListTable({
       padding: {},
+      customMergeCell: (col, row, table) => {
+        if (1 == 1) {
+          return null
+        }
+        if (col >= 5 && row >= 5 && col <= 7 && row <= 7) {
+          let obj = {
+            range: {
+              start: {
+                col: 5,
+                row: 5,
+              },
+              end: {
+                col: 7,
+                row: 7,
+              },
+            },
+            style: {
+              bgColor: '#ccc',
+            },
+            customLayout: (args) => {
+              const { table, row, col, rect, value } = args
+              const { height, width } = rect
+              let c = createGroup({
+                height,
+                width,
+                background: 'RGB(236, 241, 245)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                stroke: 'RGB(30, 40, 60)',
+              })
+              let t = createText({
+                text: '测试',
+                fontSize: 16,
+                fill: 'black',
+                fontWeight: 'bold',
+                boundsPadding: [0, 0, 0, 0],
+                lineDashOffset: 0,
+              })
+              c.add(t) //
+              return {
+                rootContainer: c, //
+                renderDefault: false, //
+              }
+            },
+          }
+          return obj //
+        }
+        return null
+      },
+      // (col, row, table) => {
+      //   let obj= {
+      //     range: {
+      //       start: {
+      //         col: 3,
+      //         row: 8,
+      //       },
+      //       end: {
+      //         col: 7,
+      //         row: 10,
+      //       },
+      //     },
+      //     style: {
+      //       bgColor: '#ccc',
+      //     },
+      //   } //
+      //   return obj
+      // },
       // multipleSort: true,
       sortState: [],
       theme: createTheme() as any,
       defaultRowHeight: 30,
       heightMode: 'standard', //
-      defaultHeaderRowHeight: 40, //
+      defaultHeaderRowHeight: this.getDefaultHeaderRowHeight(), //
       container: rootDiv, //
       editCellTrigger: 'api',
       select: {
@@ -325,7 +406,7 @@ export class Table extends Base {
       sortState: [],
       defaultRowHeight: 30,
       heightMode: 'standard', //
-      defaultHeaderRowHeight: 50, //
+      defaultHeaderRowHeight: this.getDefaultHeaderRowHeight(), //
       container: rootDiv,
       select: {
         highlightMode: 'cell', //
@@ -357,7 +438,7 @@ export class Table extends Base {
     this.loadFooterColumn()
   }
   getSerialNumberWidth() {
-    return 140
+    return 80
   }
   getLastFlatColumns(cols: any[] = this.columns): Column[] {
     return cols
@@ -416,7 +497,11 @@ export class Table extends Base {
   updateColumns() {
     let _columns = this.templateProps.columns || [] //
     let instance = this.getInstance()
+    let n = Date.now().toString()
+    console.time(n)
+
     instance.updateColumns(_columns) //
+    console.timeEnd(n) //
   }
   @useTimeout({
     number: 100, //
@@ -632,56 +717,7 @@ export class Table extends Base {
     mouseleave_cell(this)
   }
   initCurrentContextItems() {
-    let items = [
-      {
-        label: '复制',
-        key: 'copy',
-        visible: true,
-      },
-      {
-        label: '删除',
-        key: 'delete',
-        visible: () => {
-          let isHeaderContext = this.isHeaderContext //
-          if (isHeaderContext) {
-            return false
-          }
-          return true
-        },
-      },
-      {
-        label: '编辑',
-        key: 'edit',
-        disabled: () => {
-          return true
-        },
-        visible: () => {
-          let isHeaderContext = this.isHeaderContext //
-          if (isHeaderContext) {
-            return false
-          }
-          return true //
-        },
-      },
-      {
-        label: '全局查询',
-        key: 'globalQuery',
-        disabled: false, //
-        visible: true,
-        fn: () => {
-          //
-          this.showGlobalSearch(true) //
-        },
-      },
-      {
-        label: '设计当前列', //
-        key: 'designColumn',
-        disabled: false, //
-        visible: true,
-        fn: () => {},
-      },
-    ]
-    this.contextItems = items
+    initContextMenu(this) //
   }
   setCurTableSelect() {}
   openContextMenu(config) {
@@ -1529,5 +1565,22 @@ export class Table extends Base {
       }
     } //
     return obj1
+  }
+  getContextItems() {
+    let contextItems = this.contextItems.map((item) => {
+      return item
+    })
+    return contextItems
+  }
+  getDefaultHeaderRowHeight() {
+    return 40
+  }
+  getIsFilterTable() {
+    let config = this.config
+    let isFilterTable = config.isFilterTable
+    return isFilterTable //
+  }
+  getCheckColumnWidth() {
+    return 60
   }
 }

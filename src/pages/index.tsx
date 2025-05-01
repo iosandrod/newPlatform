@@ -94,19 +94,7 @@ export default defineComponent({
             <div class="" style={{ height: '30px' }}>
               <er-button-group
                 items={[
-                  {
-                    label: 'test',
-                    fn: async () => {
-                      systemIns.routeOpen('sys_Menu') //
-                    },
-                  },
-                  {
-                    //
-                    label: 'test',
-                    fn: async () => {
-                      systemIns.routeOpen('t_SdOrderEntry') //
-                    },
-                  },
+                  //
                   {
                     label: '进入设计', //
                     fn: async () => {
@@ -129,39 +117,13 @@ export default defineComponent({
                     },
                   },
                   {
-                    label: '打印layout',
+                    label: '进入编辑页面',
                     fn: async () => {
-                      let d = Object.values(systemIns.tableMap).pop()
-                      let _data = d.getLayoutData() //
-                      console.log(_data, 'data') //
-                    },
-                  },
-                  {
-                    label: 'test3',
-                    fn: async () => {
-                      await systemIns.getPageLayout('t_SdOrder') // //
-                    },
-                  },
-                  {
-                    label: '获取表格数据',
-                    fn: async () => {
-                      let currentPage = systemIns.getCurrentPageDesign() //
-                      let _data = await currentPage.getTableData()
-                      console.log(_data, 'test_data') //
-                    },
-                  },
-                  {
-                    label: '获取主表实例',
-                    fn: async () => {
-                      let currentPage = systemIns.getCurrentPageDesign() //
-                      console.log(currentPage, 'testCurrentPage') //
-                    },
-                  },
-                  {
-                    label: '获取子表实例',
-                    fn: async () => {
-                      let currentPage = systemIns.getCurrentPageDesign() //
-                      currentPage.addTableRows(1) //
+                      let currentPage = systemIns.getCurrentPageDesign()
+                      let _res = await systemIns.createPageEditDesign(
+                        't_SdOrder',
+                      ) //
+                      console.log(_res) //
                     },
                   },
                 ]}

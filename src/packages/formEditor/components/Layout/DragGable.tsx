@@ -257,14 +257,24 @@ export default defineComponent({
                 let innerCom = null //
                 //@ts-ignore
                 if (formIns.pageType == 'pageDesign') {
-                  //
+                  let tCom = (
+                    <div class="pl-10 h-30 flex align-center">
+                      {formitem.getTitle()}
+                    </div>
+                  )
+                  if (formitem.isShowTitle() == false) {
+                    tCom = null //
+                  }
                   innerCom = (
-                    <TypeComponent
-                      item={formitem}
-                      key={element.id}
-                      data={element}
-                      params={typeProps}
-                    ></TypeComponent>
+                    <div class="flex flex-row h-full">
+                      {tCom}
+                      <TypeComponent
+                        item={formitem}
+                        key={element.id}
+                        data={element}
+                        params={typeProps}
+                      ></TypeComponent>
+                    </div>
                   )
                 } else {
                   innerCom = (

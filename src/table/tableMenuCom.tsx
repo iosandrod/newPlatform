@@ -17,8 +17,13 @@ export default defineComponent({
     //   },
     // ]
     return () => {
-      const items=tableIns.contextItems
-      let com = <ContextmenuCom ref={(e) => tableIns.registerRef('contextmenu', e)} items={items}></ContextmenuCom>
+      const items = tableIns.getContextItems()
+      let com = (
+        <ContextmenuCom
+          ref={(e) => tableIns.registerRef('contextmenu', e)}
+          items={items}
+        ></ContextmenuCom>
+      )
       return com
     }
   },

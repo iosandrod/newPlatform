@@ -17,6 +17,7 @@ export type FormOptions = {
 }
 
 export class FormItem extends Base {
+  oldValue: any
   field: Field = {} as any
   subForm?: Form
   form: Form
@@ -108,13 +109,15 @@ export class FormItem extends Base {
       _form.curFormItem = this //
     }
   } //
-  async getSelectOptions() {
+  getSelectOptions() {
     const config = this.config
+    let options = config.options || []
+    // console.log(options, 'options1111')//
+    return options //
   }
   getSubForm(id: string) {}
   getData() {
     let form = this.form
-    // let data = form.config?.data //
     let data = form.getData()
     return data ////
   }
@@ -266,6 +269,9 @@ export class FormItem extends Base {
       obj = typeFn(this)
     } else {
       obj = defaultMap(this)
+    }
+    if (type == 'select') {
+      console.log(obj)
     }
     return obj
   }
@@ -603,5 +609,29 @@ export class FormItem extends Base {
     }
     specialHandling && specialHandling(node.type, result)
     return result
+  }
+
+  isShowTitle() {
+    return false
+  }
+  onFocus(config) {
+    let oldValue = this.getBindValue()
+    this.oldValue = oldValue
+  }
+  onBlur(value?: any) {
+    let nValue = this.getBindValue()
+    let oldValue = this.oldValue //
+    let config = this.config
+    let _config = {
+      value: nValue,
+      oldValue: oldValue,
+      item: this,
+      form:this.form
+    }
+    //@ts-ignore
+    let _onBlur = config.onBlur //
+    if (typeof _onBlur == 'function') {
+      _onBlur(_config) //
+    }
   }
 }

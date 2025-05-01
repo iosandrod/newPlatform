@@ -354,7 +354,7 @@ function ControlInsertionPlugin(ER: Form) {
         }
       }
       // 克隆并包装拖拽的元素，以便插入到新位置
-      const newElement = ER.wrapElement(
+      let newElement = ER.wrapElement(
         _.cloneDeep(oldEl),
         inserRowIndex !== '',
         true,
@@ -420,7 +420,6 @@ function ControlInsertionPlugin(ER: Form) {
           form: ER.formIns,
         })
       }
-      console.log(inserColIndex, 'estsfjsdlfjsdlsdf') //
       // 如果有行插入或列插入操作，则遍历新元素，并检查是否需要额外的字段处理
       if (inserColIndex !== '' || inserRowIndex !== '') {
         // console.log(ER, 'testERRR')//
@@ -430,8 +429,12 @@ function ControlInsertionPlugin(ER: Form) {
           }
         })
         // 在下一次DOM更新后，选中新的元素
-        nextTick(() => {
-          ER.setSelection(newElement)
+        nextTick(() => {//
+          let _ele = newElement['_getSelectTarget']
+          if (_ele) {
+            newElement = _ele()
+          }
+          ER.setSelection(newElement) //
         })
       }
       // 重置拖拽状态

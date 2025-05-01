@@ -280,11 +280,27 @@ export default defineComponent({
       let _fieldCom = null
       let _ConfigCom = null
       if (formIns.isDesign == true) {
-        _fieldCom = <fieldMenu></fieldMenu>
-        _ConfigCom = <ConfigPanel></ConfigPanel>
+        _fieldCom = (
+          <div
+            style={{
+              minWidth: '200px',
+            }}
+          >
+            <fieldMenu></fieldMenu>
+          </div>
+        )
+        _ConfigCom = (
+          <div
+            style={{
+              minWidth: '300px', //
+            }}
+          >
+            <ConfigPanel></ConfigPanel>
+          </div>
+        )
       } //
       let com = (
-        <div class="h-full w-full bg-white">
+        <div class="h-full w-full overflow-hidden bg-white">
           {/* {dialogCom} */}
           {/* <ElContainer class="container" direction="vertical">
             <ElContainer>
@@ -295,9 +311,9 @@ export default defineComponent({
               {isFoldConfig.value && <ConfigPanel />}
             </ElContainer>
           </ElContainer> */}
-          <div class="flex h-full w-full flex-row">
+          <div class="flex h-full w-full bg-white overflow-hidden flex-row">
             {_fieldCom}
-            <div class="flex-1">
+            <div class="flex-1 flex flex-col overflow-hidden">
               {isShow.value &&
                 withDirectives(<CanvesPanel data={state.store} />, [
                   [vClickOutside, onClickOutside],

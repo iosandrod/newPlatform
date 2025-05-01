@@ -8,6 +8,7 @@ export type createConfig = {}
 export const createClient = (config) => {
   const socket = io('http://localhost:3031', {
     transports: ['websocket'],
+    
   })
   const client = socketio(socket)
   let app = feathers()
@@ -111,8 +112,11 @@ export class myHttp {
       )
     })
   }
+  async find(tableName, query = {}): Promise<any> {
+    let _data=await this.get(tableName, 'find', query) //
+    return _data
+  }
   async get(tableName, method, query?: any): Promise<any> {
-    //
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(

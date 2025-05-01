@@ -8,6 +8,8 @@ import { Dialog } from './dialog/dialog'
 import { getDialogDefaultProps } from './dialog/dialogCom'
 import { Form } from '@ER/form'
 import formCom from '@ER/formCom'
+import { Table } from './table/table'
+import tableCom from './table/tableCom'
 export class System extends Base {
   activePage = ''
   systemConfig = {
@@ -39,6 +41,9 @@ export class System extends Base {
   }
   _getCacheValue(key) {}
   getTabItems() {
+    let tableMap = this.tableMap
+    let allT = Object.values(tableMap) //
+    console.log(allT, 'testAllT') //
     return [
       {
         label: '首页',
@@ -68,6 +73,18 @@ export class System extends Base {
       { tableName: name },
     ) //
     let row = data[0]
+    return row //
+  }
+  async getPageEditLayout(name?: string) {
+    let http = this.getHttp()
+    let data = await http.find('entity', { tableName: name, tableType: 'edit' })
+    let row = data[0] //
+    if (row == null) {
+      let _data = await http.post('entity', 'createEditPageLayout', {
+        tableName: name,
+      })
+      console.log(_data || {})
+    }
     return row //
   }
   async addPageLayout(tableName, config) {
@@ -100,10 +117,15 @@ export class System extends Base {
     if (typeof config == 'string') {
       config = {
         tableName: config,
-      } //
-    }
+      }
+    } //
     let router = this.getRouter()
-    let tableName = config.tableName
+    let tableName: string = config.tableName
+    let _tableName = tableName.split('---')
+    if (_tableName.length == 2) {
+      let _tableName1 = _tableName[0]
+      let type = _tableName[1]
+    }
     router.push(`/${tableName}`) //
   }
   async createPageDesign(config: { tableName: string } | string) {
@@ -125,7 +147,7 @@ export class System extends Base {
       let _default = value.default
       if (typeof _default == 'function' && value.type != Function) {
         //@ts-ignore
-        _default = _default()//
+        _default = _default() //
       }
       obj[key] = _default //
     })
@@ -139,6 +161,41 @@ export class System extends Base {
     pageDesign.tableName = tableName //
     pageDesign.setLayoutData(layoutConfig)
     this.tableMap[tableName] = pageDesign //
+    return pageDesign
+  }
+  async createPageEditDesign(config: { tableName: string } | string) {
+    if (typeof config == 'string') {
+      config = {
+        tableName: config,
+      }
+    }
+    let tableName = config.tableName
+    let _design = this.tableMap[tableName]
+    if (_design) {
+      return _design //
+    }
+    let layoutConfig = await this.getPageEditLayout(tableName) //
+    let _props = getDefaultPageProps()
+    let obj = {} //
+    Object.entries(_props).forEach(([key, value]) => {
+      //@ts-ignore
+      let _default = value.default
+      if (typeof _default == 'function' && value.type != Function) {
+        //@ts-ignore
+        _default = _default() //
+      }
+      obj[key] = _default //
+    })
+    obj = {
+      ...obj,
+      ...layoutConfig,
+    } //
+    //@ts-ignore
+    obj.tableName = tableName
+    let pageDesign = new PageDesign(obj)
+    pageDesign.tableName = tableName //
+    pageDesign.setLayoutData(layoutConfig)
+    //这是编辑的页面//
     return pageDesign
   }
   getShowEntityArr() {
@@ -169,7 +226,25 @@ export class System extends Base {
     let _dialog = new Dialog(dialogConfig)
     this.dialogArr.push(_dialog) //
   }
-  async confirmTable(tableConfig: any) {}
+  async confirmTable(tableConfig: any) {
+    let _table = new Table(tableConfig)
+    let component = tableCom
+    let createFn = () => {
+      return {
+        component: component, //
+        props: {
+          tableIns: _table,
+        },
+      }
+    }
+    let _config = {
+      createFn,
+      width: 600,
+      height: 400,
+    }
+    let dialog = await this.openDialog(_config) //
+    return dialog //
+  }
   getAllDialog() {
     let _this = this
     let dialogArr = this.dialogArr
@@ -177,6 +252,18 @@ export class System extends Base {
       return 0
     })
     return _dialogArr
+  }
+  async getSelectData() {
+    //
+  }
+  async getTableConfig(tableName) {
+    if (tableName == null) {
+      return
+    }
+    let http = this.getHttp()
+    let tableInfo = await http.find('tables', { tableName })
+    let row = tableInfo[0]
+    return row //
   }
 }
 

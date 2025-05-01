@@ -22,6 +22,8 @@ import {
   ElForm,
   ElScrollbar,
 } from 'element-plus'
+import { Form } from '@ER/form'
+import FormCom from '@ER/formCom'
 export default defineComponent({
   name: 'Config',
   inheritAttrs: false,
@@ -63,6 +65,9 @@ export default defineComponent({
     const handleChangePanel = (panel) => {
       // activeName0.value = panel
     }
+    let formIns: Form = inject('formIns') //
+    formIns.initDefaultDForm()
+    // let allFormMap=form
     const validator = (rule, value, callback) => {
       const newValue = value.trim()
       const fn = (type) => {
@@ -159,7 +164,16 @@ export default defineComponent({
       },
     )
     return () => {
-      return (
+      let lF = (
+        <FormCom
+          key={formIns?.curDForm?.id}
+          formIns={formIns?.curDForm}
+        ></FormCom>
+      )
+      if (formIns?.curDForm?.id == null) {
+        lF = null
+      }
+      let com = (
         <ElAside class={[ns.b()]} width={ER.props.configPanelWidth}>
           <ElBreadcrumb
             class={[ns.e('breadcrumb')]}
@@ -192,20 +206,23 @@ export default defineComponent({
           <ElForm
             ref="form"
             model={target}
-            rules={rules}
             label-width="120px"
             label-position="top"
           >
             <ElScrollbar>
               <div class={[ns.e('wrap')]}>
-                {isSelectAnyElement.value && <PanelsConfigComponentsPropsPanel key={target.value.id} />}
-                {isSelectRoot.value && <GlobalConfigPanel />}
-                <fConfigPanel></fConfigPanel>
+                {isSelectAnyElement.value && (
+                  <PanelsConfigComponentsPropsPanel key={target.value.id} />
+                )}
+                {/* {isSelectRoot.value && <GlobalConfigPanel />} */}
+                {/* <fConfigPanel></fConfigPanel> */}
+                {lF}
               </div>
             </ElScrollbar>
           </ElForm>
         </ElAside>
       )
+      return com
     }
   },
 })

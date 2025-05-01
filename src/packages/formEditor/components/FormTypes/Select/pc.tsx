@@ -1,6 +1,7 @@
-import { FormItem } from '@ER/formitem';
-import { ElInput, ElSelect } from 'element-plus';
-import { defineComponent } from 'vue';
+import SelectCom from '@/select/selectCom'
+import { FormItem } from '@ER/formitem'
+import { ElInput, ElSelect } from 'element-plus'
+import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'SelectPc',
@@ -11,12 +12,20 @@ export default defineComponent({
     params: Object,
   },
   setup(props) {
-    const data = props.data;
-    const params = props.params;
-    const formitem: FormItem = params.formitem;
-    const bindConfig = formitem?.getBindConfig();
+    const data = props.data
+    const params = props.params
+    const formitem: FormItem = params.formitem
+    const bindConfig = computed(() => {
+      let _config = formitem?.getBindConfig()
+      return _config
+    })
     return () => {
-      return <ElSelect {...bindConfig?.value}></ElSelect>;
-    };
+      let com = (
+        <div class='w-full'>
+          <SelectCom {...bindConfig.value}></SelectCom>
+        </div>
+      )
+      return com
+    }
   },
-});
+})

@@ -36,7 +36,19 @@ export default defineComponent({
   },
   props: {
     ...tableV2Props,
-    showHeaderButton: {
+    columns: {
+      type: Array,
+      // default: () => [],
+    },
+    isFilterTable: {
+      type: Boolean,
+      default: false,
+    }, //
+    data: {
+      type: Array,
+      // default: () => [],
+    }, //
+    showHeaderButtons: {
       type: Boolean,
       default: true,
     },
@@ -72,7 +84,6 @@ export default defineComponent({
     },
     tableState: {
       type: String,
-      default: 'scan',
     },
     checkboxChange: {
       type: Function,
@@ -81,14 +92,31 @@ export default defineComponent({
       type: Object,
       default: () => {},
     },
+    tableIns: {
+      type: Object,
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
-    const tableIns = new Table(props)
+    let tableIns: Table = null as any
+    if (props.tableIns) {
+      tableIns = props.tableIns as any
+    } else {
+      tableIns = new Table(props) //
+    }
     expose({ _instance: tableIns })
     provide('tableIns', tableIns)
     onMounted(() => {
       tableIns.onMounted() //
     })
+    watch(
+      () => props.columns,
+      (newV) => {
+        if (!Array.isArray(newV)) {
+          newV = []
+        }
+        tableIns.setColumns(newV) //
+      },
+    )
     const registerRootDiv = (el) => {
       tableIns.registerRef('root', el) //注册实例//
     } //
@@ -208,6 +236,17 @@ export default defineComponent({
         deep: true,
       },
     )
+    watch(
+      () => {
+        return props.data
+      },
+      (e) => {
+        if (!Array.isArray(e)) {
+          e = [] //
+        }
+        tableIns.setData(e)
+      },
+    )
     provide('tableIns', tableIns)
     const inputProps = tableIns.getGlobalSearchProps()
     const registerOutDiv = (el) => {
@@ -227,7 +266,7 @@ export default defineComponent({
       ) //
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
-      if (props.showHeaderButton == false) {
+      if (props.showHeaderButtons == false) {
         btnCom = null
       }
       let filterTCom = null
@@ -281,12 +320,26 @@ export default defineComponent({
         </div>,
         [[vShow, tableIns.globalConfig.show]],
       )
+      /* 
+        {
+                flex: 1,
+                width: '100%',
+                overflow: 'hidden', //
+                borderLeft: '1px solid RGB(225, 228, 232)',
+                borderRight: '1px solid RGB(225, 228, 232)',
+                borderTop: '1px solid RGB(225, 228, 232)',
+                boxSizing: 'border-box',
+              }
+      
+      */
       let calCom = withDirectives(
         <div
           style={{
             position: 'absolute',
             bottom: 0,
-            height: '50px',
+            height: `${tableIns.getDefaultHeaderRowHeight()}px`,
+            borderLeft: '1px solid RGBA(30, 40, 60,0)',
+            borderRight: '1px solid RGBA(30, 40, 60,0)',
             boxSizing: 'border-box',
             width: '100%',
           }}
@@ -297,7 +350,7 @@ export default defineComponent({
       let calDiv = withDirectives(
         <div
           style={{
-            height: '50px',
+            height: `${tableIns.getDefaultHeaderRowHeight()}px`,
           }}
         ></div>,
         [[vShow, tableIns.getShowCalColumns()]],
@@ -317,6 +370,7 @@ export default defineComponent({
           {filterTCom}
           {menuCom}
           {btnCom}
+          {globalSearchInput}
           <div
             style={{
               flex: 1,
@@ -325,18 +379,20 @@ export default defineComponent({
               position: 'relative',
               display: 'flex',
               flexDirection: 'column', //
+              // border: '1px solid RGBA(30, 40, 60)',
+              // boxSizing: 'content-box',
+              borderBottom: '1px solid RGBA(30, 40, 60)',
             }} //
           >
-            {globalSearchInput}
             <div
               ref={registerOutDiv}
               style={{
                 flex: 1,
                 width: '100%',
                 overflow: 'hidden', //
-                borderLeft: '1px solid RGB(225, 228, 232)',
-                borderRight: '1px solid RGB(225, 228, 232)',
-                borderTop: '1px solid RGB(225, 228, 232)',
+                borderLeft: '1px solid RGBA(30, 40, 60,0)',
+                borderRight: '1px solid RGBA(30, 40, 60,0)',
+                borderTop: '1px solid RGBA(225, 228, 232,0)',
                 boxSizing: 'border-box',
               }}
             >

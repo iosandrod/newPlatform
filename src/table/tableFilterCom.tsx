@@ -75,11 +75,10 @@ export default defineComponent({
                 <div style={_dStyle.value}>
                   <div style={{ flex: 1, overflow: 'hidden' }}>
                     <erTable
+                      isFilterTable={true} //
                       ref={registerTable}
                       showHeaderButton={false}
                       showCalculate={false} //
-                      columns={[]}
-                      data={[]}
                       showGlobalSearch={true}
                       showColumnFilterTable={false}
                       showRowSeriesNumber={false} //
@@ -89,7 +88,7 @@ export default defineComponent({
                         setTimeout(() => {
                           console.log(_table, 'testTable') //
                         }, 100)
-                      }}
+                      }} //
                     ></erTable>
                   </div>
                   <div class="flex justify-between">

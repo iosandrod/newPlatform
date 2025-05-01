@@ -14,7 +14,7 @@ export default defineComponent({
       let cols = item.getTableColumns()
       let _cols = cols || []
       if (_cols.length == 0) {
-        _cols = tableConfig.columns //
+        _cols = [] //
       }
       return _cols //
     }) //
@@ -30,8 +30,10 @@ export default defineComponent({
       pageDesign.registerRef(`${tableType}__${tableName}`, ins) //
     } //
     return () => {
+      //
       let com = (
         <erTable
+          showHeaderButtons={item.getShowHeaderButtons()}
           key={item.id}
           ref={registerTable}
           data={data.value}

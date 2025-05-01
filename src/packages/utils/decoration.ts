@@ -168,6 +168,36 @@ export function useRunAfter(config?: any) {
   }
 }
 
+export function useOnce(config?: any) {
+  return function (target, key, descriptor?: any) {
+    let oldFn = descriptor.value
+    if (isAsyncFunction(oldFn)) {
+      descriptor.value = async function (...args) {
+        let once = this._once || {}
+        if (once[key] == true) {
+          let resKey = `${key}--result`
+          let res = once[resKey]
+          return res //
+        }
+        let result = await oldFn.apply(this, args)
+        once[key] = true //
+        return result
+      }
+    } else {
+      descriptor.value = function (...args) {
+        let once = this._once || {}
+        if (once[key] == true) {
+          let resKey = `${key}--result`
+          let res = once[resKey]
+          return res
+        }
+        let result = oldFn.apply(this, args) //
+        once[key] = true //
+        return result
+      }
+    }
+  }
+}
 export function useRunBefore(config?: any) {
   return function (target, key, descriptor?: any) {
     let oldFn = descriptor.value

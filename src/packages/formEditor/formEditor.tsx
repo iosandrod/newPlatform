@@ -198,7 +198,7 @@ export default defineComponent({
     //   setData,
     //   getData,
     // })
-    expose(formIns)//
+    expose({_instance:formIns})////
     const handleOperation = (type, val?: any) => {
       switch (type) {
         case 1:

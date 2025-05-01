@@ -54,7 +54,7 @@ export class SeriesNumberColumn extends Column {
     //@ts-ignore
     _props.cellType = 'text' //
     _props.headerIcon = undefined //
-    _props.width = 60
+    _props.width = this.table.getSerialNumberWidth()
     _props.checked = (config) => {
       //@ts-ignore
       let table: VTable.ListTable = config.table
@@ -72,48 +72,11 @@ export class SeriesNumberColumn extends Column {
       }
       return false
     }
+    _props.title = '' //
     //@ts-ignore
-    _props.headerCustomLayout = (args) => {
-      const { table, row, col, rect } = args
-      const { height, width } = rect ?? table.getCellRect(col, row)
-      // console.log(width,'testWidth')//
-      const container = createGroup({
-        height,
-        width,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      })
-      const checkboxGroup = createGroup({
-        display: 'flex',
-        flexDirection: 'column',
-        boundsPadding: [0, 0, 0, 0],
-        justifyContent: 'center', //
-      })
-      container.appendChild(checkboxGroup)
-      const checkbox1 = new CheckBox({
-        text: {
-          text: '', //
-        },
-        disabled: false, //
-        checked: _this.table.isCheckAll, //
-        boundsPadding: [0, 0, 0, 0],
-      }) //
-      checkbox1.render()
-      checkboxGroup.appendChild(checkbox1)
-      checkbox1.addEventListener('checkbox_state_change', (e) => {
-        const target = e.target ////
-        let attributes = target.attribute //
-        let checked = attributes.checked
-        _this.table.updateCheckboxAll(checked)
-      }) //
-      return {
-        rootContainer: container,
-        renderDefault: false,
-      }
-    }
+
     if (isFooter) {
+      _props.title = '汇总' //
       _props.headerCustomLayout = null //
     } //
     _props.customLayout = (args) => {
@@ -122,13 +85,15 @@ export class SeriesNumberColumn extends Column {
       let rows = table.getRecordByCell(col, row)
       let _table = this.table
       let curRow = _table.tableData.curRow
-      let gb = ''
+      let gb = this.getIndexColor(row)
       if (curRow == rows) {
         gb = 'RGB(200, 190, 230)' //
       }
       const container = createGroup({
-        height,
-        width,
+        height: height - 2,
+        width: width - 2,
+        x: 1,
+        y: 1, //
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -154,7 +119,7 @@ export class SeriesNumberColumn extends Column {
       let currentIndexContain = _table.currentIndexContain
       container['currentRowIndex'] = row //
       container['updateCanvas'] = () => {
-        let bg = ''
+        let bg = this.getIndexColor(row)
         if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
           bg = 'RGB(200, 190, 230)'
         } //

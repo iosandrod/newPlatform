@@ -84,7 +84,8 @@ export class Column extends Base {
   getTitle() {
     let config = this.config
     let title = config.title
-    if (title == null) {
+    if (title == null || title === '') {
+      //
       title = this.getField()
     } //
     return title
@@ -147,24 +148,27 @@ export class Column extends Base {
       let _value: string = value
       const { height, width } = rect ?? table.getCellRect(col, row)
       const container = createGroup({
-        height,
-        width,
-        display: 'flex',
-        flexDirection: 'row',
+        height: height,
+        stroke: 'RGB(30, 40, 60)', //
+        width: width,
+        // display: 'flex',
+        // flexDirection: 'row',
         flexWrap: 'nowrap',
         overflow: 'hidden',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         boundsPadding: [0, 0, 0, 0],
       })
-      let _g=createGroup({
-        width:width-40,
+      let _g = createGroup({
+        width: width,
         height,
+        x: 0,
+        y: 0,
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
         overflow: 'hidden',
-        alignItems: 'center',//
+        alignItems: 'center', //
       })
       let locationName = createText({
         text: value, //
@@ -172,9 +176,9 @@ export class Column extends Base {
         fontWeight: 'bold',
         fill: 'black',
         overflow: 'hidden',
-        boundsPadding: [0, 0, 0, 0],
+        boundsPadding: [0, 10, 0, 5],
         lineDashOffset: 0,
-      }) 
+      })
       _g.add(locationName)
       const g1 = this.createFilter({
         table,
@@ -191,6 +195,10 @@ export class Column extends Base {
         flexWrap: 'nowrap',
         overflow: 'hidden',
         alignItems: 'center',
+        x: width - 40,
+        y: 1, ////
+        height: height - 2, //
+        background: '',
       })
       //@ts-ignore
       let sortG = this.createSortableIcon({
@@ -203,12 +211,13 @@ export class Column extends Base {
         width,
       })
       container.add(_g) //
+      container.add(controllerGroup) //
       controllerGroup.add(sortG)
       controllerGroup.add(g1)
-      container.add(controllerGroup) //
+      // container.add(locationName)//
 
       container.on('mouseenter', () => {
-        //
+        controllerGroup.attribute.background = 'RGB(204, 224, 255)' //
         //显示filter
         let image = g1._lastChild
         image.attribute.y = height / 2 - image.attribute.height / 2 //
@@ -223,6 +232,7 @@ export class Column extends Base {
       })
       let _this = this
       container.on('mouseleave', () => {
+        controllerGroup.attribute.background = '' //
         let image = g1._lastChild
         let item = _this.table.columnFilterConfig.filterConfig.find(
           (item) => item.field == _this.getField(),
@@ -325,6 +335,23 @@ export class Column extends Base {
     }
     return formatFn
   }
+  getIndexColor(row) {
+    let color = 'RGB(248, 248, 248)'
+    if (row % 2 == 0) {
+      color = 'RGB(236, 241, 245)'
+    } else {
+      color = 'RGB(248, 248, 248)'
+    }
+    return color
+  }
+  getMergeCell() {
+    let table = this.table
+    let isMergeCell = table.isMergeCell
+  }
+  getMergeCellColor() {
+    let color = 'RGB(236, 241, 245)'
+    return color
+  }
   getColumnProps(isFooter = false) {
     let table = this.table
     let config = this.config
@@ -389,14 +416,23 @@ export class Column extends Base {
       showSort: true,
       title: this.getTitle(), //
       cellType: this.getType(),
+      headerStyle: {
+        borderColor: 'rgb(30,40,60)', //
+      },
       sort: () => {
         return 0
       },
       /*
        */
       fieldFormat: _this.getFormat(),
-      headerIcon: headerIcon, //
+      headerIcon: headerIcon,
       style: {
+        // bgColor: (config) => {
+        //   let row = config.row
+        //   let _col = this.getIndexColor(row)
+        //   return _col
+        // }, //
+        borderColor: 'rgb(30,40,60)',
         // borderColor: (config) => {
         //   let _table = config.table
         //   let record = _table.getRecordByCell(config.col, config.row)
@@ -556,12 +592,23 @@ export class Column extends Base {
     return field //
   }
   getColumnWidth() {
-    // if (1 == 1) {
-    //   return 60
-    // }
+    let isFilterTable = this.table.getIsFilterTable()
+    let table = this.table
     let config = this.config
     let width = config.width
+    if (isFilterTable == true) {
+      // debugger//
+      // let sW = table.getSerialNumberWidth()
+      let sW = 0
+      let checkWidth = table.getCheckColumnWidth()
+      let addW = sW + checkWidth
+      let _w = 300 - addW-10
+      if (width == null || width <= addW) {
+        width = _w //
+      }
+    }
     if (width == null) {
+      //
       let table = this.table
       let defaultWidth = table.getDefaultWidth()
       width = defaultWidth
@@ -742,7 +789,7 @@ export class Column extends Base {
     }
     let topImage = createImage({
       cursor: 'pointer', ////
-      height: 20,
+      height: config.height / 2,
       textureColor: topColor,
       visible: s,
       width: 20,
@@ -750,7 +797,7 @@ export class Column extends Base {
     })
     let bottomImage = createImage({
       cursor: 'pointer', //
-      height: 20,
+      height: config.height / 2, //
       textureColor: bottomColor,
       width: 20,
       visible: s,
@@ -815,32 +862,50 @@ export class Column extends Base {
     g1.add(image)
     return g1
   }
+  getHoverColor() {
+    return 'RGB(204, 224, 255)'
+  }
+  getBorderColor() {
+    return 'RGB(30, 40, 60)' //
+  }
   getCustomLayout() {
     let customLayout = (args) => {
       const { table, row, col, rect, value } = args
-      // console.log(row, 'testRow') //
       let _value: string = value
       const record = table.getCellOriginRecord(col, row)
-      let bg = '' //
+      let bg = this.getIndexColor(row) //
       if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
         bg = 'RGB(200, 190, 230)'
       }
       const { height, width } = rect ?? table.getCellRect(col, row)
       const container = createGroup({
-        height,
-        width,
+        height: height,
+        width: width,
+        // x: 1,
+        // y: 1, //
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'nowrap',
         background: bg, //
         overflow: 'hidden',
+        lineWidth: 1,
+        stroke: this.getBorderColor(), //
         alignItems: 'center',
-        boundsPadding: [0, 0, 0, 0],
+        boundsPadding: [0, 0, 0, 0], //
       })
       container.on('click', () => {
         let _table = this.table
         _table.setCurRow(record) //
       }) //
+      container.on('mouseover', () => {
+        let oldColor = container.attribute.background
+        container._oldColor = oldColor
+        container.setAttribute('background', this.getHoverColor()) ///
+      })
+      container.on('mouseout', () => {
+        let color = container._oldColor
+        container.setAttribute('background', color) ////
+      })
       let locationName = createText({
         text: value, //
         fontSize: 16,
@@ -925,8 +990,7 @@ export class Column extends Base {
       let _this = this
       container['updateCanvas'] = function () {
         const record = table.getCellOriginRecord(col, row)
-        let bg = ''
-        // console.log(record, 'testRecords') //
+        let bg = _this.getIndexColor(row) //
         if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
           bg = 'RGB(200, 190, 230)'
         }

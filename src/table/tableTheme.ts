@@ -3,12 +3,13 @@ import { ITableThemeDefine } from '@visactor/vtable/es/ts-types'
 export const createTheme = () => {
   let obj: ITableThemeDefine = {
     defaultStyle: {
+      //
       fontSize: 16,
       fontFamily: 'Arial,sans-serif',
       bgColor: 'RGB(248, 248, 248)',
       color: '#000',
       borderColor: 'RGB(236, 241, 245)',
-      borderLineWidth: 1,
+      // borderLineWidth: 1,
       borderLineDash: [],
       padding: [10, 16, 10, 16],
       textAlign: 'left',
@@ -115,6 +116,7 @@ export const createTheme = () => {
       lineThrough: false,
     },
     bodyStyle: {
+      // strokeColor: 'black',
       fontSize: 14,
       fontFamily: 'Arial,sans-serif',
       color: '#000',
