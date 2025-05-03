@@ -11,6 +11,14 @@ export const createColFormConfig = () => {
   }
 }
 
-export const createColTableConfig=()=>{
-    
+export const createColTableConfig = () => {
+  let tableConfig = {
+    columns: [
+      {
+        field: 'title',
+        title: '标题', //
+        type: 'string',
+      },
+    ],
+  }
 }

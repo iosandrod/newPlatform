@@ -38,7 +38,7 @@ export default defineComponent({
     }
     return () => {
       if (show.value == false) {
-        return null
+        return <div>页面加载当中</div>
       }
       return <PageCom isDesign={false} formIns={en}></PageCom>
     }

@@ -125,7 +125,6 @@ export default defineComponent({
                         't_SdOrder',
                       ) //
                       // console.log(_res) //
-                      // debugger//
                       let _d = new PageDesign(_res) //
                       _d.setCurrentDesign(false) //
                       _d.setLayoutData(_res)

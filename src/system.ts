@@ -22,6 +22,7 @@ export class System extends Base {
   selectOptions = {}
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
+  tableEditMap: { [key: string]: PageDesign } = {}
   async login() {}
   @cacheValue() //
   async getMenuData() {
@@ -356,7 +357,7 @@ export class System extends Base {
     let _tableName = tableName.split('---')
     if (_tableName.length == 2) {
       let _tableName1 = _tableName[0]
-      let type = _tableName[1]
+      let type = _tableName[1] //
     }
     router.push(`/${tableName}`) //
   }
@@ -389,12 +390,17 @@ export class System extends Base {
     }
     let tableName = config.tableName
     let editTableName = `${tableName}---edit` //
-    let _design = this.tableMap[editTableName] //
+    let _design = this.tableEditMap[editTableName] //
     if (_design) {
       return _design //
     } //
     let layoutConfig = await this.getPageEditLayout(tableName) //
-    return layoutConfig //
+    let _d = new PageDesign(layoutConfig)
+    _d.setLayoutData(layoutConfig)
+    _d.tableName = editTableName //
+    this.tableEditMap[editTableName] = _d //
+    this.tableEditMap[tableName] = _d ////
+    return _d //
   }
   getShowEntityArr() {
     let entityMap = this.tableMap
