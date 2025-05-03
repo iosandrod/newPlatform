@@ -57,7 +57,11 @@ export const click_cell = (table: Table) => {
     name: 'click_cell',
     keyName: 'click_cell',
     callback: (config) => {
-      let field = config.field
+      table.isContainerClick = true
+      setTimeout(() => {
+        table.isContainerClick = false //
+      }, 0)
+      let field = config.field //
       let originData = config.originData //
       let tCol = table.getLastFlatColumns().find((col) => {
         return col.getField() === field
@@ -90,7 +94,7 @@ export const click_cell = (table: Table) => {
     name: 'dblclick_cell',
     keyName: 'dblclick_cell',
     callback: (config) => {
-      console.log('我双击了')//
+      console.log('我双击了') //
     },
   })
 }
@@ -208,7 +212,7 @@ export const checkboxChange = (table: Table) => {
   table.registerEvent({
     name: 'checkboxChange',
     keyName: 'checkboxChange',
-    callback: (config) => { },
+    callback: (config) => {},
   })
 }
 
@@ -236,13 +240,15 @@ export const resize_column = (table: Table) => {
       rowCols.config.width = colWidth //
     },
   })
-}//
+} //
 export const mousedown_cell = (table: Table) => {
   const _this = table
   table.registerEvent({
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
-    callback: (config) => { },
+    callback: (config) => {
+      console.log('mouse down') //
+    },
   })
 }
 
@@ -303,4 +309,3 @@ export const mouseleave_cell = (table: Table) => {
     },
   })
 }
-

@@ -271,6 +271,9 @@ export class Column extends Base {
     let column = new Column(col, table)
     columns.push(column) //
   }
+  onUnmounted() {
+    this.unmountedAllWatch()
+  }
   unmountedAllWatch() {
     let effectPool = this.effectPool
     Object.entries(effectPool).forEach(([key, value]) => {
@@ -316,7 +319,7 @@ export class Column extends Base {
                 return value //
               },
               (newV) => {
-                //
+                console.log(newV, '新增了') //
                 _table.updateIndexArr.add(_index) //
               },
             )
@@ -602,7 +605,7 @@ export class Column extends Base {
       let sW = 0
       let checkWidth = table.getCheckColumnWidth()
       let addW = sW + checkWidth
-      let _w = 300 - addW-10
+      let _w = 300 - addW - 10
       if (width == null || width <= addW) {
         width = _w //
       }
@@ -868,9 +871,13 @@ export class Column extends Base {
   getBorderColor() {
     return 'RGB(30, 40, 60)' //
   }
+  getCurrentRowColor() {
+    return 'RGB(200, 190, 230)'
+  }
   getCustomLayout() {
     let customLayout = (args) => {
-      const { table, row, col, rect, value } = args
+      let { table, row, col, rect, value } = args
+      let t1: VTable.ListTable = table
       let _value: string = value
       const record = table.getCellOriginRecord(col, row)
       let bg = this.getIndexColor(row) //
@@ -878,9 +885,20 @@ export class Column extends Base {
         bg = 'RGB(200, 190, 230)'
       }
       const { height, width } = rect ?? table.getCellRect(col, row)
+      let _height = height
+      let _length1 = t1.records.length
+      if (_length1 == row) {
+        _height = _height - 1
+      }
+      let _width = width
+      let colCount = t1.colCount
+      // console.log(colCount,col)//
+      if (colCount == col+1) {
+        _width = _width - 1
+      }
       const container = createGroup({
-        height: height,
-        width: width,
+        height: _height,
+        width: _width,
         // x: 1,
         // y: 1, //
         display: 'flex',
@@ -904,6 +922,9 @@ export class Column extends Base {
       })
       container.on('mouseout', () => {
         let color = container._oldColor
+        if (record == this.table.tableData.curRow) {
+          color = this.getCurrentRowColor() //
+        }
         container.setAttribute('background', color) ////
       })
       let locationName = createText({
@@ -997,8 +1018,7 @@ export class Column extends Base {
         this.setAttribute('background', bg) //
         let formatFn = _this.getFormat()
         let _value = formatFn(record, row, col, table)
-        locationName.setAttribute('text', _value) //
-        // container.update() //
+        locationName.setAttribute('text', _value) ////
       }.bind(container) //
       // let length = this.table.templateProps.data.length
       // let _length = length / 5

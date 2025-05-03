@@ -5,7 +5,7 @@ export const defaultType = (item: FormItem): any => {
     modelValue: item.getBindValue(),
     onInput: (val) => {
       let _val = val.value
-      item.updateBindData({ value: _val })//
+      item.updateBindData({ value: _val }) //
     },
     onBlur: () => {
       item.onBlur(item.getBindValue())
@@ -34,9 +34,19 @@ export const selectType = (item: FormItem) => {
   }
   return obj
 }
+export const stableType = (item: FormItem) => {
+  let obj = defaultType(item) //
+  obj.onChange = (config) => {}
+  obj.onInput = (config) => {} //
+  obj.readonly = true //
+  obj.clearable = false //
+  obj.modelValue = item.getBindShowValue()
+  return obj
+}
 export const itemTypeMap = {
   input: inputType,
   string: inputType,
   default: defaultType,
   select: selectType,
+  stable: stableType,
 }

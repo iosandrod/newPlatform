@@ -50,6 +50,7 @@ import { createGroup, createText } from '@visactor/vtable/es/vrender'
 import { SeriesNumberColumn } from './seriesNumberColumn'
 import { initContextMenu } from './tableContext'
 export class Table extends Base {
+  isContainerClick = false
   isFilterTable = false
   isMergeCell = true
   seriesNumberColumn: SeriesNumberColumn
@@ -360,7 +361,6 @@ export class Table extends Base {
       },
       //头部的
     }) //
-    // table.on('le', (config) => {})
     const emitEventArr = [
       'mouseleave_cell',
       'mouseenter_cell',
@@ -402,7 +402,7 @@ export class Table extends Base {
     }
     let table = new ListTable({
       autoFillHeight: true,
-      multipleSort: true,
+      multipleSort: true, //
       sortState: [],
       defaultRowHeight: 30,
       heightMode: 'standard', //
@@ -584,7 +584,6 @@ export class Table extends Base {
   }
   updateCheckboxRecords() {
     let ins = this.getInstance()
-    // ins.setCellCheckboxState('')
   }
   setSortState(config) {
     if (!Array.isArray(config)) {
@@ -979,11 +978,14 @@ export class Table extends Base {
   onUnmounted(): void {
     super.onUnmounted()
     let instance = this.getInstance()
+    this.clearEditCell() //
     if (instance == null) {
       return
     } else {
       let columns = this.columns
-      columns.forEach((item) => {})
+      columns.forEach((item) => {
+        item.onUnmounted() //
+      })
       instance.release()
       this.instance = null //
     }
@@ -991,7 +993,7 @@ export class Table extends Base {
     if (footerInstance == null) {
       return
     } else {
-      footerInstance.release()
+      footerInstance.release() //
       this.footerInstance = null //
     } //
     this.currentIndexContain = shallowRef({}) //
@@ -1161,15 +1163,15 @@ export class Table extends Base {
   }
   updateCheckboxAll(e) {
     let _this = this ////
-    _this.isCheckAll = e
-    this.updateCheckboxField(this.getShowRecords(), _this.isCheckAll) //
+    _this.isCheckAll = e //
+    this.updateCheckboxField(this.getShowRecords(), _this.isCheckAll, true) //
   }
   getShowRecords() {
     let instance = this.getInstance()
     let records = instance.records //
     return records
   }
-  updateCheckboxField(rows, status = null) {
+  updateCheckboxField(rows, status = null, isAllClick = false) {
     if (!Array.isArray(rows)) {
       return
     } //
@@ -1183,7 +1185,7 @@ export class Table extends Base {
       } else {
         row.checkboxField = !row.checkboxField //
       }
-      if (oldStatus != row.checkboxField) {
+      if (oldStatus != row.checkboxField && isAllClick == false) {
         this.updateIndexArr.add(row._index) //
       }
     }) //
@@ -1198,6 +1200,9 @@ export class Table extends Base {
       this.isCheckAll = false //
     }
     let allCheck = this.getData().filter((item) => item.checkboxField)
+    if (isAllClick == true) {
+      this.updateCanvas() //
+    }
     this.emit('checkboxChange', {
       allRows: allCheck,
       table: this,
@@ -1447,8 +1452,7 @@ export class Table extends Base {
     ins.startEditCell(col, row, value) //
   }
   clearEditCell() {
-    //
-    this.templateEditCell = null //
+    this.templateEditCell = null ////
     let ins = this.getInstance()
     ins.completeEditCell() ////
   }
@@ -1539,7 +1543,8 @@ export class Table extends Base {
     let rowState = e['_rowState'] //
     if (rowState == null) {
       e['_rowState'] = 'unChange'
-    } //
+    }
+    this.dataMap[e._index] = e //
   }
   designCurrentColumn() {}
   getCacheContain(row) {}
@@ -1583,4 +1588,8 @@ export class Table extends Base {
   getCheckColumnWidth() {
     return 60
   }
+  //外部点击事件
+  outClick(event, isIn = false) {
+    this.clearEditCell() //
+  } //
 }

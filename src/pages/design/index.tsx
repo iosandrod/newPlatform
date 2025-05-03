@@ -30,8 +30,7 @@ export default defineComponent({
         show.value = true //
       })
     } else {
-      // console.log(tableName, 'testTableName') //
-      system.createPageDesign(tableName).then((res) => {
+      system.createPageDesign(tableName).then((res) => {//
         en = res
         show.value = true //
       })

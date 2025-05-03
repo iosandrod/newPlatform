@@ -62,7 +62,23 @@ export default defineComponent({
         },
         {
           field: 'test',
-          type: 'stable', //
+          type: 'stable',
+          options: {
+            tableConfig: {
+              columns: [
+                {
+                  field: 'name',
+                  title: '姓名',
+                  editType: 'string', //
+                },
+                {
+                  field: 'age',
+                  title: '年龄',
+                  editType: 'string', ////
+                },
+              ],
+            },
+          },
         },
       ],
     }
@@ -118,15 +134,14 @@ export default defineComponent({
       com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
       // com = (
       //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
-      //     {/* <tableCom {...tableConfig}></tableCom> */}
-      //     <tableCom ></tableCom>
+      //     <tableCom {...tableConfig} tableState="edit"></tableCom>
       //   </div>
       // ) //
-      com = (
-        <div style={{ width: '400px' }}>
-          <formCom {...formConfig}></formCom>
-        </div>
-      )
+      // com = (
+      //   <div style={{ width: '400px' }}>
+      //     <formCom {...formConfig}></formCom>
+      //   </div>
+      // )
       // com = <dialogCom ref={_reg2}></dialogCom>
       let _com = (
         <div

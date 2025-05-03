@@ -54,6 +54,10 @@ export class InputEditor extends BaseEditor {
     let _value = _row[field]
     column.cacheValue = _value
     let app = createApp(tableInput, {
+      onClick: (e) => {
+        e.stopPropagation()
+        e.preventDefault() //
+      },
       column: column, //这是个函数
       row: _row,
       onChange: (v) => {},
@@ -85,10 +89,11 @@ export class InputEditor extends BaseEditor {
   }
   getValue(): string {
     //@ts-ignore
-    return this.row[this.column.getField()]//
+    return this.row[this.column.getField()] //
   }
   //@ts-ignore
-  exit?: () => void = () => {//
+  exit?: () => void = () => {
+    //
   }
   onStart(config: OnStartParams): void {
     const { value, referencePosition, container, endEdit, table } = config

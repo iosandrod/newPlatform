@@ -23,7 +23,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient()
@@ -31,17 +31,17 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = d //
     return d //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap) //
@@ -55,7 +55,7 @@ export class System extends Base {
       },
     ] //
   }
-  openPageDesign(config) { } //
+  openPageDesign(config) {} //
   // async getDefaultPageLayout(name?: string) {
   //   let http = this.getHttp()
   //   let _data = await http.post(
@@ -283,7 +283,6 @@ export class System extends Base {
               },
             ],
           },
-
         ],
         mobile: [
           // {
@@ -323,7 +322,7 @@ export class System extends Base {
       logic: {},
     }
     if (detailLayout != null) {
-      editLayout.layout.pc.push(detailLayout)//
+      editLayout.layout.pc.push(detailLayout) //
     }
     return editLayout //
   }
@@ -340,10 +339,10 @@ export class System extends Base {
     // let http = this.getHttp() //
     // let _res = await http.patch('entity', { tableName, ...config })
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
-    let design = this.tableMap[tableName]//
+    let design = this.tableMap[tableName] //
     if (design == null) {
       design = this.tableEditMap[tableName]
     }
@@ -355,7 +354,7 @@ export class System extends Base {
     let p = currentRoute.path
     let _tableName = p.split('/').pop()
     return _tableName //
-  }//
+  } //
   routeOpen(config: any) {
     if (typeof config == 'string') {
       config = {
@@ -415,8 +414,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     let _form = new Form(formConfig) //
     let component = formCom
@@ -437,7 +436,7 @@ export class System extends Base {
     return dialog
   }
   async openDialog(dialogConfig: any = {}) {
-    let _dialog = new Dialog(dialogConfig)
+    let _dialog = new Dialog(dialogConfig) //
     this.dialogArr.push(_dialog) //
   }
   async confirmTable(tableConfig: any) {

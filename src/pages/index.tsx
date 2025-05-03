@@ -88,7 +88,7 @@ export default defineComponent({
       return (
         <div class={ns.b()} style={{ display: 'flex', width: '100vw', height: '100vh' }}>
           <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
-          <div class="flex flex-col flex-1 h-full bg-red">
+          <div class="flex flex-col flex-1 h-full ">
             <div class="w-full bg-white tab-line">{tableTab}</div>
             <div class="" style={{ height: '30px' }}>
               <er-button-group

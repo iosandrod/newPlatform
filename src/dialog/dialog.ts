@@ -1,7 +1,9 @@
 import { Base } from '@/base/base' //
+import { nextTick } from 'vue'
 import { VxeModalInstance } from 'vxe-pc-ui'
 export class Dialog extends Base {
   config: any
+  once = true //
   constructor(config) {
     super()
     this.config = config
@@ -20,6 +22,17 @@ export class Dialog extends Base {
     let dia: VxeModalInstance = this.getRef('modal') //
     if (dia) {
       dia.close()
+      if (this.once == true) {
+        nextTick(() => {
+          //
+          let system = this.getSystem()
+          let diaArr = system.dialogArr
+          let index = diaArr.indexOf(this)
+          if (index > -1) {
+            diaArr.splice(index, 1) //
+          }
+        })
+      }
     }
   }
   getWidth() {

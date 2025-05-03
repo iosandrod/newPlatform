@@ -13,6 +13,8 @@ import { areaList } from '@vant/area-data'
 import { itemTypeMap } from './itemTypeMap'
 import { erFormEditor } from './formEditor'
 import { Dialog } from '@/dialog/dialog'
+import { Table } from '@/table/table'
+import tableCom from '@/table/tableCom'
 
 export type FormOptions = {
   items: Field[]
@@ -45,7 +47,7 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any;[key: string]: any }) {
+  updateBindData(updateConfig: { value: any; [key: string]: any }) {
     //
     try {
       let value = updateConfig.value
@@ -65,8 +67,8 @@ export class FormItem extends Base {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() { }
-  async onValueChange() { }
+  getItemChange() {}
+  async onValueChange() {}
   getForm() {
     return this.form //
   }
@@ -117,7 +119,7 @@ export class FormItem extends Base {
     // console.log(options, 'options1111')//
     return options //
   }
-  getSubForm(id: string) { }
+  getSubForm(id: string) {}
   getData() {
     let form = this.form
     let data = form.getData()
@@ -284,6 +286,9 @@ export class FormItem extends Base {
       return value
     }
     return value
+  }
+  getBindShowValue() {
+    return '....' //
   }
   getTitle() {
     let config = this.config
@@ -660,10 +665,7 @@ export class FormItem extends Base {
         let inCom: Form = dialog.getRef('innerCom')
         let layoutData = inCom.getLayoutData()
         let options = this.getOptions()
-        // Object.entries(layoutData).forEach(([k, v]) => {
-        //   options[k] = v//
-        // })
-        options['layoutData'] = layoutData//
+        options['layoutData'] = layoutData //
         let fieldCom: Form = this.getRef('fieldCom')
         fieldCom.setLayoutData(layoutData) //
       },
@@ -672,17 +674,17 @@ export class FormItem extends Base {
   getFormConfig() {
     let options = this.getOptions()
     let items = options?.items || [] //
-    let itemSpan = this.getItemSpan()//
-    let layoutData = options.layoutData//
+    let itemSpan = this.getItemSpan() //
+    let layoutData = options.layoutData //
     return {
       items: items,
-      layoutData,//
+      layoutData, //
       itemSpan: itemSpan, //
     }
   }
   getPageButtons() {
     let options = this.getOptions()
-    let items = options.items//
+    let items = options.items //
     return items
   }
   getPageButtonsProps() {
@@ -690,7 +692,7 @@ export class FormItem extends Base {
     let items = this.getPageButtons()
     return {
       items,
-      buttonWidth: 50,//
+      buttonWidth: 50, //
     }
   }
   getOptions(): any {
@@ -708,6 +710,40 @@ export class FormItem extends Base {
   }
   openTableDialog() {
     let options = this.getOptions()
-    let formConfig = options.formConfig//
+    let tableConfig = options.tableConfig || {} //
+    let sys = this.getSystem()
+    let value = this.getBindValue() //
+    if (typeof value == 'string') {
+      try {
+        let _value1 = JSON.parse(value) //
+        if (Array.isArray(_value1)) {
+          value = _value1 //
+        }
+      } catch (error) {}
+    }
+    if (!Array.isArray(value)) {
+      value = [] //
+    }
+    let table = new Table(tableConfig) //
+    table.setTableState('edit') //
+    table.setData(value) //
+    let createFn = () => {
+      //
+      return {
+        component: tableCom,
+        props: {
+          tableIns: table, //
+        },
+      }
+    } //
+    sys.openDialog({
+      height: 600,
+      width: 1200,
+      createFn, //
+      confirmFn: (dialog: Dialog) => {
+        let data = table.getData()
+        this.updateBindData({ value: data }) //
+      },
+    })
   }
 }

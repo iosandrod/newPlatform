@@ -202,6 +202,7 @@ export const tableConfig: ListTableConstructorOptions = {
   columns: [
     {
       column_name: 'iInterID',
+      editType: 'string',
       table_name: 't_SdOrder',
       table_schema: 'public',
       ordinal_position: 1,
@@ -13129,7 +13130,7 @@ export const tableConfig: ListTableConstructorOptions = {
       work: 'front-end engineer',
       city: 'beijing',
     },
-  ],
+  ].slice(0,3),//
 }
 export const tablestaticData = {
   defaultRowHeight: 80,

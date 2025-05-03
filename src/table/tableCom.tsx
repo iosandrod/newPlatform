@@ -351,11 +351,55 @@ export default defineComponent({
       let calDiv = withDirectives(
         <div
           style={{
-            height: `${tableIns.getDefaultHeaderRowHeight() }px`,
+            height: `${tableIns.getDefaultHeaderRowHeight()}px`,
             // border: '1px solid RGBA(30, 40, 60,1)', //
           }}
         ></div>,
         [[vShow, tableIns.getShowCalColumns()]],
+      )
+      let tBodyCom = withDirectives(
+        <div
+          onClick={(e) => {
+            let isCClick = tableIns.isContainerClick
+            if (isCClick == true) {
+              return
+            }
+            tableIns.outClick(e,true) //
+          }}
+          style={{
+            flex: 1,
+            width: '100%', //
+            overflow: 'hidden',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column', //
+            border: '1px solid RGBA(30, 40, 60)',
+            boxSizing: 'border-box',
+          }} //
+        >
+          <div
+            ref={registerOutDiv}
+            style={{
+              flex: 1,
+              width: '100%',
+              overflow: 'hidden', //
+              boxSizing: 'border-box',
+            }}
+          >
+            {com}
+          </div>
+          {calDiv}
+          {calCom}
+        </div>,
+        [
+          [
+            ClickOutside,
+            (e) => {
+              //
+              tableIns.outClick(e) //
+            },
+          ],
+        ],
       )
       let outCom = (
         <div
@@ -373,37 +417,7 @@ export default defineComponent({
           {menuCom}
           {btnCom}
           {globalSearchInput}
-          <div
-            style={{
-              flex: 1,
-              width: '100%', //
-              overflow: 'hidden',
-              position: 'relative',
-              display: 'flex',
-              flexDirection: 'column', //
-              border: '1px solid RGBA(30, 40, 60)',
-              boxSizing: 'border-box',
-              // borderBottom: '1px solid RGBA(30, 40, 60)',
-            }} //
-          >
-            <div
-              ref={registerOutDiv}
-              style={{
-                flex: 1,
-                width: '100%',
-                overflow: 'hidden', //
-                // borderLeft: '1px solid RGBA(30, 40, 60,1)',
-                // borderRight: '1px solid RGBA(30, 40, 60,1)',
-                // borderTop: '1px solid RGBA(30, 40, 60,1)',
-                // border: '1px solid RGBA(30, 40, 60,1)',
-                boxSizing: 'border-box',
-              }}
-            >
-              {com}
-            </div>
-            {calDiv}
-            {calCom}
-          </div>
+          {tBodyCom}
         </div>
       )
       return outCom //
