@@ -45,7 +45,7 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any; [key: string]: any }) {
+  updateBindData(updateConfig: { value: any;[key: string]: any }) {
     //
     try {
       let value = updateConfig.value
@@ -65,8 +65,8 @@ export class FormItem extends Base {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() {}
-  async onValueChange() {}
+  getItemChange() { }
+  async onValueChange() { }
   getForm() {
     return this.form //
   }
@@ -117,7 +117,7 @@ export class FormItem extends Base {
     // console.log(options, 'options1111')//
     return options //
   }
-  getSubForm(id: string) {}
+  getSubForm(id: string) { }
   getData() {
     let form = this.form
     let data = form.getData()
@@ -273,7 +273,6 @@ export class FormItem extends Base {
       obj = defaultMap(this)
     }
     if (type == 'select') {
-      console.log(obj)
     }
     return obj
   }
@@ -308,7 +307,7 @@ export class FormItem extends Base {
     let config = this.config
     let type = config.type
     if (type == null) {
-      type = 'input'
+      type = 'string'
     }
     return type
   }
@@ -660,17 +659,38 @@ export class FormItem extends Base {
       confirmFn: (dialog: Dialog) => {
         let inCom: Form = dialog.getRef('innerCom')
         let layoutData = inCom.getLayoutData()
+        let options = this.getOptions()
+        // Object.entries(layoutData).forEach(([k, v]) => {
+        //   options[k] = v//
+        // })
+        options['layoutData'] = layoutData//
         let fieldCom: Form = this.getRef('fieldCom')
         fieldCom.setLayoutData(layoutData) //
       },
     })
   }
   getFormConfig() {
-    let items = this.getOptions()?.items || [] //
-    let itemSpan = this.getItemSpan()
+    let options = this.getOptions()
+    let items = options?.items || [] //
+    let itemSpan = this.getItemSpan()//
+    let layoutData = options.layoutData//
     return {
       items: items,
+      layoutData,//
       itemSpan: itemSpan, //
+    }
+  }
+  getPageButtons() {
+    let options = this.getOptions()
+    let items = options.items//
+    return items
+  }
+  getPageButtonsProps() {
+    let options = this.getOptions()
+    let items = this.getPageButtons()
+    return {
+      items,
+      buttonWidth: 50,//
     }
   }
   getOptions(): any {
@@ -685,5 +705,9 @@ export class FormItem extends Base {
       span = 6 //
     }
     return span //
+  }
+  openTableDialog() {
+    let options = this.getOptions()
+    let formConfig = options.formConfig//
   }
 }

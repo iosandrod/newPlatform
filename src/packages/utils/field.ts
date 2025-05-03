@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import { nanoid } from './nanoid'
-const fieldsRe = /^(input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform|entity|dform)$/
-//
-class LayoutNode {}
+// import { typeMap } from '@ER/formEditor/components/FormTypes'
+const fieldsRe = /^(buttongroup|input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform|entity|dform)$/
+class LayoutNode { }
 const deepTraversal = (node, fn) => {
   fn(node)
   const nodes = node.list || node.rows || node.columns || node.children || []
@@ -28,7 +28,7 @@ const wrapElement = (element, fn?: any) => {
         width: '100%',
       }
     }
-    
+
     if (checkIsField(node)) {
       node.style = {
         width: {
@@ -136,6 +136,9 @@ const combinationData1 = (data) => {
   return result
 }
 const combinationData2 = (list, fields) => {
+  if (fields == null) {
+    // debugger//
+  }
   const fn = (nodes, node, currentIndex) => {
     let cur = fields.find((item) => item.id === node)
     if (!_.isEmpty(cur)) {
@@ -175,8 +178,12 @@ const disassemblyData2 = (list) => {
 const checkIslineChildren = (node) => node.context.parent.type === 'inline'
 const checkIsField = (node) => {
   let type = node.type
-  let res = fieldsRe.test(type)
-  return res //
+  // let res = fieldsRe.test(type)
+  let status = true
+  if (excludes.includes(type)) {
+    status = false
+  }
+  return status //
 }
 const calculateAverage = (count, total = 100) => {
   const base = Number((total / count).toFixed(2))
@@ -226,10 +233,9 @@ const syncWidthByPlatform = (
   })
 }
 const transferLabelPath = (node) =>
-  `er.fields.${
-    node.type === 'input'
-      ? `${node.type}.${node.options.renderType - 1}`
-      : `${node.type}`
+  `er.fields.${node.type === 'input'
+    ? `${node.type}.${node.options.renderType - 1}`
+    : `${node.type}`
   }` //
 const fieldLabel = (t, node) => {
   // console.log(node,'testNode')//

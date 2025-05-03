@@ -79,6 +79,7 @@ export class SeriesNumberColumn extends Column {
       _props.title = '汇总' //
       _props.headerCustomLayout = null //
     } //
+    _props.headerCustomLayout = null//
     _props.customLayout = (args) => {
       const { table, row, col, rect, value } = args
       const { height, width } = rect ?? table.getCellRect(col, row)

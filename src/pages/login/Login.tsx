@@ -60,6 +60,10 @@ export default defineComponent({
           required: true,
           password: true,
         },
+        {
+          field: 'test',
+          type: 'stable', //
+        },
       ],
     }
     let style = { width: '400px', margin: '0 auto' }
@@ -111,18 +115,18 @@ export default defineComponent({
       com = <pageCom></pageCom> //
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       let com2 = <button onClick={fn1}>123123</button>
-      com = <pageCom ref={_reg3}></pageCom> //
+      com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
       // com = (
       //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
       //     {/* <tableCom {...tableConfig}></tableCom> */}
       //     <tableCom ></tableCom>
       //   </div>
       // ) //
-      // com = (
-      //   <div style={{ width: '400px' }}>
-      //     <formCom {...formConfig}></formCom>
-      //   </div>
-      // )
+      com = (
+        <div style={{ width: '400px' }}>
+          <formCom {...formConfig}></formCom>
+        </div>
+      )
       // com = <dialogCom ref={_reg2}></dialogCom>
       let _com = (
         <div

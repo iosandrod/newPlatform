@@ -18,6 +18,7 @@ export default defineComponent({
     const params = props.params
     const formitem: PageDesignItem = params.formitem
     let fConfig = computed(() => {
+      // debugger //
       let _config = formitem.getFormConfig() //
       return _config
     })

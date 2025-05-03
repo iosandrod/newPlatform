@@ -19,7 +19,7 @@ export default defineComponent({
     const params = props.params
     const formitem: FormItem = params.formitem
     let _value = computed(() => {
-      let _config = formitem?.getBindConfig()
+      let _config = formitem?.getBindConfig() //
       return _config
     })
     let registerRef = (el) => {
@@ -28,25 +28,7 @@ export default defineComponent({
     return () => {
       let com = (
         <div class="h-full w-full flex items-center" style={{ minHeight: '36px' }}>
-          <inputCom
-            ref={registerRef}
-            {..._value.value}
-            v-slots={{
-              buttons: () => {
-                let com = (
-                  <div
-                    onClick={() => {
-                      formitem.openTableDialog() //
-                    }}
-                    class="h-full "
-                  >
-                    <i class="vxe-icon-edit"></i>
-                  </div>
-                )
-                return com //
-              },
-            }}
-          ></inputCom>
+          <inputCom ref={registerRef} {..._value.value}></inputCom>
         </div>
       )
       return com //

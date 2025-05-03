@@ -23,7 +23,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() {}
+  async login() { }
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient()
@@ -31,17 +31,17 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = d //
     return d //
   }
-  getCurrentShowPage() {}
-  buildMenuTree(rows) {}
+  getCurrentShowPage() { }
+  buildMenuTree(rows) { }
   getClient(): myHttp {
     return http
   }
-  getMenuProps() {}
+  getMenuProps() { }
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) {}
+  _getCacheValue(key) { }
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap) //
@@ -55,7 +55,7 @@ export class System extends Base {
       },
     ] //
   }
-  openPageDesign(config) {} //
+  openPageDesign(config) { } //
   // async getDefaultPageLayout(name?: string) {
   //   let http = this.getHttp()
   //   let _data = await http.post(
@@ -141,6 +141,68 @@ export class System extends Base {
       type: 'dform',
       options: {},
     }
+    let detailLayout = {
+      id: 'f6qNjbhckRKxcgbyzimpA',
+      key: 'inline_f6qNjbhckRKxcgbyzimpA',
+      type: 'inline',
+      columns: [
+        {
+          id: 'NFcD7gLoRJ0UQJcRGAP1I',
+          key: 'grid_NFcD7gLoRJ0UQJcRGAP1I',
+          type: 'grid',
+          options: {
+            gutter: 0,
+            justify: 'start',
+            align: 'top',
+          },
+          style: {
+            width: '100%',
+          },
+          columns: [
+            {
+              id: '0Ifq8JGCuqIYsIEJEcOE4',
+              key: 'col_0Ifq8JGCuqIYsIEJEcOE4',
+              type: 'col',
+              list: [
+                {
+                  type: 'inline',
+                  columns: [
+                    {
+                      id: 'mJp7crngSZBQiiMhqIJ1N',
+                      key: 'tabs_mJp7crngSZBQiiMhqIJ1N',
+                      icon: 'label',
+                      type: 'tabs',
+                      label: '标签页',
+                      style: {
+                        width: '100%',
+                      },
+                      columns: [...dEnF2],
+                      options: {
+                        type: '',
+                        align: 'top',
+                        hidden: false,
+                        tabPosition: 'top',
+                        defaultValue: dEnF2[0]?.id, //
+                      },
+                    },
+                  ],
+                },
+              ],
+              options: {
+                span: 24,
+                offset: 0,
+                push: 0,
+                pull: 0,
+                style: {},
+              },
+            },
+          ],
+        },
+      ],
+    }
+    if (dEnF2.length == 0) {
+      detailLayout = null
+    }
     const editLayout = {
       layout: {
         pc: [
@@ -221,75 +283,17 @@ export class System extends Base {
               },
             ],
           },
-          {
-            id: 'f6qNjbhckRKxcgbyzimpA',
-            key: 'inline_f6qNjbhckRKxcgbyzimpA',
-            type: 'inline',
-            columns: [
-              {
-                id: 'NFcD7gLoRJ0UQJcRGAP1I',
-                key: 'grid_NFcD7gLoRJ0UQJcRGAP1I',
-                type: 'grid',
-                options: {
-                  gutter: 0,
-                  justify: 'start',
-                  align: 'top',
-                },
-                style: {
-                  width: '100%',
-                },
-                columns: [
-                  {
-                    id: '0Ifq8JGCuqIYsIEJEcOE4',
-                    key: 'col_0Ifq8JGCuqIYsIEJEcOE4',
-                    type: 'col',
-                    list: [
-                      {
-                        type: 'inline',
-                        columns: [
-                          {
-                            id: 'mJp7crngSZBQiiMhqIJ1N',
-                            key: 'tabs_mJp7crngSZBQiiMhqIJ1N',
-                            icon: 'label',
-                            type: 'tabs',
-                            label: '标签页',
-                            style: {
-                              width: '100%',
-                            },
-                            columns: [...dEnF2],
-                            options: {
-                              type: '',
-                              align: 'top',
-                              hidden: false,
-                              tabPosition: 'top',
-                              defaultValue: dEnF2[0]?.id, //
-                            },
-                          },
-                        ],
-                      },
-                    ],
-                    options: {
-                      span: 24,
-                      offset: 0,
-                      push: 0,
-                      pull: 0,
-                      style: {},
-                    },
-                  },
-                ],
-              },
-            ],
-          },
+
         ],
         mobile: [
-          {
-            type: 'inline',
-            columns: ['61fuq2KoXI-LXZ-d_ep95'],
-          },
-          {
-            type: 'inline',
-            columns: ['KRg51faFSk3H2piRFbrQg'],
-          },
+          // {
+          //   type: 'inline',
+          //   columns: ['61fuq2KoXI-LXZ-d_ep95'],
+          // },
+          // {
+          //   type: 'inline',
+          //   columns: ['KRg51faFSk3H2piRFbrQg'],
+          // },
         ],
       },
       data: {},
@@ -318,6 +322,9 @@ export class System extends Base {
       fields: [fField, ...dEnF],
       logic: {},
     }
+    if (detailLayout != null) {
+      editLayout.layout.pc.push(detailLayout)//
+    }
     return editLayout //
   }
   async addPageLayout(tableName, config) {
@@ -333,10 +340,13 @@ export class System extends Base {
     // let http = this.getHttp() //
     // let _res = await http.patch('entity', { tableName, ...config })
   }
-  deletePageLayout(tableName, config) {}
+  deletePageLayout(tableName, config) { }
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
-    let design = this.tableMap[tableName]
+    let design = this.tableMap[tableName]//
+    if (design == null) {
+      design = this.tableEditMap[tableName]
+    }
     return design //
   }
   getCurrentPageName() {
@@ -345,7 +355,7 @@ export class System extends Base {
     let p = currentRoute.path
     let _tableName = p.split('/').pop()
     return _tableName //
-  }
+  }//
   routeOpen(config: any) {
     if (typeof config == 'string') {
       config = {
@@ -399,15 +409,14 @@ export class System extends Base {
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
     this.tableEditMap[editTableName] = _d //
-    this.tableEditMap[tableName] = _d ////
     return _d //
   }
   getShowEntityArr() {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) {}
-  async confirmEntity(entityConfig: any) {} //
+  async confirm(config: any) { }
+  async confirmEntity(entityConfig: any) { } //
   async confirmForm(formConfig: any) {
     let _form = new Form(formConfig) //
     let component = formCom

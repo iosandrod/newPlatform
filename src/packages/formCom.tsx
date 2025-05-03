@@ -1,13 +1,4 @@
-import {
-  nextTick,
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  ref,
-  withDirectives,
-  provide,
-  watch,
-} from 'vue'
+import { nextTick, defineComponent, onMounted, onUnmounted, ref, withDirectives, provide, watch } from 'vue'
 import { Form } from './form'
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 export default defineComponent({
@@ -35,6 +26,9 @@ export default defineComponent({
     formIns: {
       type: Object,
     },
+    layoutData: {
+      type: Object,
+    },
   },
   setup(props, { slots, expose }) {
     let fIns: Form = null as any
@@ -43,6 +37,9 @@ export default defineComponent({
     } else {
       //
       fIns = new Form(props)
+      if (props.layoutData != null) {
+        fIns.setLayoutData(props.layoutData) //
+      }
     }
     fIns.setCurrentDesign(false) //
     onMounted(() => {
@@ -56,6 +53,9 @@ export default defineComponent({
         return arr
       }, //
       ([items, len], [oldItems, oldLen]) => {
+        if (props.layoutData != null) {
+          return //
+        }
         if (items != oldItems) {
           //
           fIns.setItems(items) ////
@@ -79,7 +79,7 @@ export default defineComponent({
       {
         //
         // immediate: true,//
-      },
+      }
     )
     onUnmounted(() => {
       fIns.onUnmounted() //

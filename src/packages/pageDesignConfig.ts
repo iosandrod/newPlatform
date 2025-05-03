@@ -94,6 +94,29 @@ export const pageDesignFieldConfig = [
           width: '100%',
           minHeight: '50px',
         },
+      }, {
+        type: 'buttongroup', //
+        label: '按钮组',//
+        icon: 'input',
+        id: '',
+        options: {
+          clearable: true,
+          isShowWordLimit: false,
+          renderType: 1,
+          disabled: false,
+          showPassword: false,
+          defaultValue: '',
+          placeholder: '',
+          labelWidth: 100,
+          isShowLabel: true,
+          required: false,
+          min: null,
+          max: null,
+        },
+        style: {
+          width: '100%',
+          minHeight: '50px',
+        },
       },
     ],
   },
@@ -144,7 +167,7 @@ export const pageDesignFieldConfig = [
                 list: [],
                 style: {},
               },
-            
+
             ],
           },
 

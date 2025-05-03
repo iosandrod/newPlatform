@@ -27,7 +27,19 @@ import sformPc from './Sform/pc'
 import sformMobile from './Sform/mobile'
 import dformPc from './Dform/pc'
 import dformMobile from './Dform/mobile' //
+import stringPc from './String/pc'
+import stringMobile from './String/mobile'
+import buttonGroupPc from './ButtonGroup/pc'
+import buttonGroupMobile from './ButtonGroup/mobile'
 export const typeMap = {
+  buttongroup: {
+    pc: buttonGroupPc,
+    mobile: buttonGroupMobile//
+  },
+  string: {
+    pc: stringPc,
+    mobile: stringMobile//
+  },
   input: {
     pc: inputPc,
     mobile: inputMobile,

@@ -86,10 +86,7 @@ export default defineComponent({
       )
 
       return (
-        <div
-          class={ns.b()}
-          style={{ display: 'flex', width: '100vw', height: '100vh' }}
-        >
+        <div class={ns.b()} style={{ display: 'flex', width: '100vw', height: '100vh' }}>
           <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
           <div class="flex flex-col flex-1 h-full bg-red">
             <div class="w-full bg-white tab-line">{tableTab}</div>
@@ -121,26 +118,21 @@ export default defineComponent({
                   {
                     label: '进入编辑页面',
                     fn: async () => {
-                      let _res = await systemIns.createPageEditDesign(
-                        't_SdOrder',
-                      ) //
-                      // console.log(_res) //
-                      let _d = new PageDesign(_res) //
-                      _d.setCurrentDesign(false) //
-                      _d.setLayoutData(_res)
-                      systemIns.openDialog({
-                        title: '编辑页面',
-                        width: '1000px',
-                        height: '500px', //b
-                        createFn: () => {
-                          return {
-                            component: pageCom,
-                            props: {
-                              formIns: _d,
-                            },
-                          }
-                        },
-                      })
+                      // let _res = await systemIns.createPageEditDesign('t_SdOrder') //
+                      // systemIns.openDialog({
+                      //   title: '编辑页面',
+                      //   width: '1000px',
+                      //   height: '500px', //b
+                      //   createFn: () => {
+                      //     return {
+                      //       component: pageCom,
+                      //       props: {
+                      //         formIns: _res,
+                      //       }, //
+                      //     }//
+                      //   },
+                      // })
+                      systemIns.routeOpen('t_SdOrder---edit') //
                     },
                   },
                   {

@@ -4,10 +4,10 @@ export const defaultType = (item: FormItem): any => {
     placeholder: item.getPlaceholder(),
     modelValue: item.getBindValue(),
     onInput: (val) => {
-      item.updateBindData({ value: val })
+      let _val = val.value
+      item.updateBindData({ value: _val })//
     },
     onBlur: () => {
-      //
       item.onBlur(item.getBindValue())
     },
     onFocus: (config) => {
@@ -36,6 +36,7 @@ export const selectType = (item: FormItem) => {
 }
 export const itemTypeMap = {
   input: inputType,
+  string: inputType,
   default: defaultType,
   select: selectType,
 }

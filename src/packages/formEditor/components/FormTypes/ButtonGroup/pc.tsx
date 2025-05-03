@@ -1,14 +1,14 @@
-import inputCom from '@/input/inputCom'
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { FormItem } from '@ER/formitem'
 import { ElInput } from 'element-plus'
-import { computed, defineComponent } from 'vue'
-
+import { computed, defineComponent } from 'vue' //
+//
 export default defineComponent({
-  name: 'InputPc',
+  name: 'buttonGroupPc',
   inheritAttrs: false,
   customOptions: {},
   components: {
-    inputCom,
+    ButtonGroupCom,
   },
   props: {
     data: Object,
@@ -19,20 +19,17 @@ export default defineComponent({
     const params = props.params
     const formitem: FormItem = params.formitem
     let _value = computed(() => {
-      let _config = formitem?.getBindConfig()
-      console.log(_config, 'testConifg') //
+      let _config = formitem?.getPageButtonsProps()
+      console.log(_config, 'test_config') //
       return _config
     })
-    let registerRef = (el) => {
-      formitem.registerRef('fieldCom', el)
-    }
     return () => {
       let com = (
-        <div class="h-full w-full flex items-center" style={{ minHeight: '30px' }}>
-          <inputCom ref={registerRef} {..._value.value}></inputCom>
+        <div class="w-full h-full bg-white" style={{ minHeight: '40px' }}>
+          <ButtonGroupCom {..._value.value}></ButtonGroupCom>
         </div>
       )
-      return com //
+      return com
     }
   }, //
 }) //
