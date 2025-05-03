@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+import _ from 'lodash'
 import { Client, client as _client, http, myHttp } from './service/client'
 import { Base } from '@ER/base'
 import { cacheValue } from '@ER/utils/decoration'
@@ -77,15 +78,246 @@ export class System extends Base {
   }
   async getPageEditLayout(name?: string) {
     let http = this.getHttp()
-    let data = await http.find('entity', { tableName: name, tableType: 'edit' })
+    let _name1 = `${name}---edit`
+    let data = await http.find('entity', { tableName: _name1 }) //
     let row = data[0] //
     if (row == null) {
-      let _data = await http.post('entity', 'createEditPageLayout', {
-        tableName: name,
-      })
-      console.log(_data || {})
+      let _data1 = await http.find('entity', { tableName: name })
+      let _row = _data1[0]
+      let row2 = this.generateEditPageLayout(_row)
+      return row2 //
+      //转换
     }
     return row //
+  }
+  createNodeIdKey(type) {
+    let id = this.uuid()
+    let key = `${type}_${id}`
+    let obj = {
+      id,
+      key,
+      type,
+    }
+    return obj
+  }
+  generateEditPageLayout(row) {
+    let oldFields = row.fields //
+    let dEnF = oldFields
+      .filter((row) => {
+        //
+        return row.type == 'entity' && row?.options?.tableType == 'detail'
+      }) //
+      .map((row) => {
+        let _row = _.cloneDeep(row)
+        return _row
+      })
+    let dEnF2 = dEnF.map((row) => {
+      let fIns = row.id
+      if (fIns == null) {
+        row.id = this.uuid()
+        fIns = row.id //
+      }
+      let obj = {
+        ...this.createNodeIdKey('tabsCol'),
+        label: 'Tab 1',
+        list: [
+          {
+            ...this.createNodeIdKey('inline'),
+            style: {},
+            columns: [fIns],
+          },
+        ],
+        style: {},
+        options: {},
+        innerId: fIns,
+      }
+      return obj
+    })
+    let fId = this.uuid()
+    let fField = {
+      id: fId,
+      key: `dform_${fId}`,
+      type: 'dform',
+      options: {},
+    }
+    const editLayout = {
+      layout: {
+        pc: [
+          {
+            id: 'yWTdNJ14jZVhBpu1kiSHB',
+            key: 'inline_yWTdNJ14jZVhBpu1kiSHB',
+            type: 'inline',
+            columns: [
+              {
+                id: 'LFhDBVgwITtxF-8qbD1Sk',
+                key: 'grid_LFhDBVgwITtxF-8qbD1Sk',
+                type: 'grid',
+                options: {
+                  gutter: 0,
+                  justify: 'start',
+                  align: 'top',
+                },
+                style: {
+                  width: '100%',
+                },
+                columns: [
+                  {
+                    id: 'S9B-oByUkfc2LoAISnY3H',
+                    key: 'col_S9B-oByUkfc2LoAISnY3H',
+                    type: 'col',
+                    list: [
+                      {
+                        type: 'inline',
+                        columns: [
+                          {
+                            type: 'tabs',
+                            label: '标签页',
+                            icon: 'label',
+                            id: 'nWcXBEOYl2M980Eg8OyJj',
+                            columns: [
+                              {
+                                id: '_yNuSux3VBlbqnoWdXvYb',
+                                type: 'tabsCol',
+                                label: 'Tab 1',
+                                list: [
+                                  {
+                                    type: 'inline',
+                                    columns: [fId],
+                                    style: {},
+                                    id: 'n5BkoBMEBOeokN55IDx-M',
+                                    key: 'inline_n5BkoBMEBOeokN55IDx-M',
+                                  },
+                                ],
+                                style: {},
+                                options: {},
+                                key: 'tabsCol__yNuSux3VBlbqnoWdXvYb',
+                              },
+                            ],
+                            options: {
+                              type: '',
+                              tabPosition: 'top',
+                              align: 'top',
+                              hidden: false,
+                              defaultValue: '_yNuSux3VBlbqnoWdXvYb',
+                            },
+                            style: {
+                              width: '100%',
+                            },
+                            key: 'tabs_nWcXBEOYl2M980Eg8OyJj',
+                          },
+                        ],
+                      },
+                    ],
+                    options: {
+                      span: 24,
+                      offset: 0,
+                      push: 0,
+                      pull: 0,
+                      style: {},
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'f6qNjbhckRKxcgbyzimpA',
+            key: 'inline_f6qNjbhckRKxcgbyzimpA',
+            type: 'inline',
+            columns: [
+              {
+                id: 'NFcD7gLoRJ0UQJcRGAP1I',
+                key: 'grid_NFcD7gLoRJ0UQJcRGAP1I',
+                type: 'grid',
+                options: {
+                  gutter: 0,
+                  justify: 'start',
+                  align: 'top',
+                },
+                style: {
+                  width: '100%',
+                },
+                columns: [
+                  {
+                    id: '0Ifq8JGCuqIYsIEJEcOE4',
+                    key: 'col_0Ifq8JGCuqIYsIEJEcOE4',
+                    type: 'col',
+                    list: [
+                      {
+                        type: 'inline',
+                        columns: [
+                          {
+                            id: 'mJp7crngSZBQiiMhqIJ1N',
+                            key: 'tabs_mJp7crngSZBQiiMhqIJ1N',
+                            icon: 'label',
+                            type: 'tabs',
+                            label: '标签页',
+                            style: {
+                              width: '100%',
+                            },
+                            columns: [...dEnF2],
+                            options: {
+                              type: '',
+                              align: 'top',
+                              hidden: false,
+                              tabPosition: 'top',
+                              defaultValue: dEnF2[0]?.id, //
+                            },
+                          },
+                        ],
+                      },
+                    ],
+                    options: {
+                      span: 24,
+                      offset: 0,
+                      push: 0,
+                      pull: 0,
+                      style: {},
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        mobile: [
+          {
+            type: 'inline',
+            columns: ['61fuq2KoXI-LXZ-d_ep95'],
+          },
+          {
+            type: 'inline',
+            columns: ['KRg51faFSk3H2piRFbrQg'],
+          },
+        ],
+      },
+      data: {},
+      config: {
+        isSync: true,
+        pc: {
+          size: 'default',
+          labelPosition: 'left',
+          completeButton: {
+            text: '提交',
+            color: '',
+            backgroundColor: '',
+          },
+        },
+        mobile: {
+          labelPosition: 'left',
+          completeButton: {
+            text: '提交',
+            color: '',
+            backgroundColor: '',
+          },
+        },
+        id: '3H1haKaSUMIocpYwWqD4z',
+        type: 'root',
+      },
+      fields: [fField, ...dEnF],
+      logic: {},
+    }
+    return editLayout //
   }
   async addPageLayout(tableName, config) {
     let http = this.getHttp()
@@ -140,21 +372,7 @@ export class System extends Base {
       return _design //
     }
     let layoutConfig = await this.getPageLayout(tableName) //
-    let _props = getDefaultPageProps()
-    let obj = {} //
-    Object.entries(_props).forEach(([key, value]) => {
-      //@ts-ignore
-      let _default = value.default
-      if (typeof _default == 'function' && value.type != Function) {
-        //@ts-ignore
-        _default = _default() //
-      }
-      obj[key] = _default //
-    })
-    obj = {
-      ...obj,
-      ...layoutConfig,
-    } //
+    let obj = layoutConfig
     //@ts-ignore
     obj.tableName = tableName
     let pageDesign = new PageDesign(obj)
@@ -170,39 +388,20 @@ export class System extends Base {
       }
     }
     let tableName = config.tableName
-    let _design = this.tableMap[tableName]
+    let editTableName = `${tableName}---edit` //
+    let _design = this.tableMap[editTableName] //
     if (_design) {
       return _design //
-    }
-    let layoutConfig = await this.getPageEditLayout(tableName) //
-    let _props = getDefaultPageProps()
-    let obj = {} //
-    Object.entries(_props).forEach(([key, value]) => {
-      //@ts-ignore
-      let _default = value.default
-      if (typeof _default == 'function' && value.type != Function) {
-        //@ts-ignore
-        _default = _default() //
-      }
-      obj[key] = _default //
-    })
-    obj = {
-      ...obj,
-      ...layoutConfig,
     } //
-    //@ts-ignore
-    obj.tableName = tableName
-    let pageDesign = new PageDesign(obj)
-    pageDesign.tableName = tableName //
-    pageDesign.setLayoutData(layoutConfig)
-    //这是编辑的页面//
-    return pageDesign
+    let layoutConfig = await this.getPageEditLayout(tableName) //
+    return layoutConfig //
   }
   getShowEntityArr() {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
   async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     let _form = new Form(formConfig) //
     let component = formCom
@@ -264,6 +463,23 @@ export class System extends Base {
     let tableInfo = await http.find('tables', { tableName })
     let row = tableInfo[0]
     return row //
+  }
+  async createColLayout(filedStr) {
+    let lastArr = []
+    if (typeof lastArr == 'string') {
+      lastArr = [filedStr]
+    }
+    let obj = {
+      ...this.createNodeIdKey('tabsCol'),
+      list: [
+        {
+          ...this.createNodeIdKey('inline'),
+          //some Form
+          columns: lastArr,
+        },
+      ],
+    }
+    return obj
   }
 }
 

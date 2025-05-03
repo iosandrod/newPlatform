@@ -2,7 +2,9 @@ import { computed, inject, reactive } from 'vue'
 import _ from 'lodash'
 import utils from '@ER/utils'
 export const useTarget = () => {
-  const { state, setSelection, props } = inject('Everright') as any
+  let fIns = inject('Everright')
+  let { state, setSelection, props } = inject('Everright') as any
+  setSelection = setSelection.bind(fIns) //
   const formIns: any = inject('formIns')
   const type = computed(() => state.selected?.type)
   const col = computed(() => state.selected?.context?.col ?? null)
@@ -14,7 +16,7 @@ export const useTarget = () => {
     let value = /^(edit|config)$/.test(state.mode)
     let isDesign = formIns.isDesign
     return value && isDesign
-  })//
+  }) //
 
   const checkTypeBySelected = (nodes: string[], propType?: any) => {
     if (!state.selected) return false
@@ -22,9 +24,10 @@ export const useTarget = () => {
     return fn !== undefined ? fn : nodes.includes(type.value)
   }
 
-  const createTypeChecker = (nodes: string[]) => computed(() => checkTypeBySelected(nodes))
+  const createTypeChecker = (nodes: string[]) =>
+    computed(() => checkTypeBySelected(nodes))
 
-  return ({
+  return {
     state,
     setSelection,
     type,
@@ -41,6 +44,6 @@ export const useTarget = () => {
     isSelectCollapse: createTypeChecker(['collapse']),
     isSelectTable: createTypeChecker(['table']),
     isSelectSubform: createTypeChecker(['subform']),
-    checkTypeBySelected
-  })
+    checkTypeBySelected,
+  }
 }

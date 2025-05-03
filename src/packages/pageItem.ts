@@ -14,27 +14,8 @@ export class PageDesignItem extends FormItem {
       columns: columns,
     }
   }
-  getItemSpan() {
-    let config = this.getOptions()
-    let span = config.itemSpan //
-    if (span == null) {
-      span = 6 //
-    }
-    return span //
-  }
-  getOptions(): any {
-    let config = this.config
-    let options = config?.options || {}
-    return options
-  }
-  getFormConfig() {
-    let items = this.getOptions()?.items || []
-    let itemSpan = this.getItemSpan()
-    return {
-      items: items,
-      itemSpan: itemSpan, //
-    }
-  }
+
+  
   getTableColumns() {
     let columns = this.config?.options?.columns || [] //
     return columns
@@ -56,12 +37,7 @@ export class PageDesignItem extends FormItem {
     return tableType
   }
   async addNewRow() {} //
-  async designForm() {
-    let formConfig = this.getFormConfig()
-    let _config = cloneDeep(formConfig) //
-    let system = this.getSystem()
-    system.openDialog({})
-  }
+
   getShowHeaderButtons() {
     // debugger //
     let options = this.getOptions()
@@ -74,5 +50,12 @@ export class PageDesignItem extends FormItem {
     }
     let showHeaderButtons = options?.showHeaderButtons
     return showHeaderButtons
+  }
+  getTitle() {
+    return
+  }
+  isShowTitle() {
+    //
+    return false
   }
 } //

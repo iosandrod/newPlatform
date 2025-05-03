@@ -16,16 +16,8 @@ import { staticData, testData1 } from './testData'
 import { validate } from 'uuid'
 import { Form } from '@ER/form'
 import fieldCom from '@/menu/fieldCom'
-export default defineComponent({
-  directives: {
-    vClickOutside,
-  },
-  components: {
-    fieldMenu,
-    fieldCom,
-  },
-  name: 'Everright-form-editor',
-  props: {
+export const  getDefaultFormEditProps=()=>{
+  return {
     itemSpan: {
       type: Number,
       default: 6,
@@ -40,7 +32,7 @@ export default defineComponent({
     },
     delHandle: {
       type: Function,
-      default: () => {},
+      default: () => ()=>{},//
     },
     copyHandle: {
       type: Function,
@@ -77,11 +69,19 @@ export default defineComponent({
     },
     data: {
       type: Object,
-      default: () => {
-        return {}
-      },
     }, //
+  }
+}
+export default defineComponent({
+  directives: {
+    vClickOutside,
   },
+  components: {
+    fieldMenu,
+    fieldCom,
+  },
+  name: 'Everright-form-editor',
+  props:getDefaultFormEditProps() ,
   emits: ['listener'],
   setup(props: any, { attrs, slots, emit, expose }) {
     const form = ref('')

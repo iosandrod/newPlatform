@@ -36,12 +36,24 @@ export default defineComponent({
     } //
     const slots = {
       item: ({ element }) => {
-        return (
-          <li class={[ER.props.checkFieldsForNewBadge(element) ? ns.is('new') : '']} onClick={() => addStore(element)}>
+        // let _com = (
+        //   <li
+        //     class={[
+        //       ER.props.checkFieldsForNewBadge(element) ? ns.is('new') : '',
+        //     ]}
+        //     onClick={() => addStore(element)}
+        //   >
+        //     <Icon class={[ns.e('icon')]} icon={element.icon}></Icon>
+        //     <span>{utils.fieldLabel(t, element)}</span>
+        //   </li>
+        // )
+        let _com = (
+          <li class={[]} onClick={() => addStore(element)}>
             <Icon class={[ns.e('icon')]} icon={element.icon}></Icon>
             <span>{utils.fieldLabel(t, element)}</span>
           </li>
         )
+        return _com
       },
     }
     const handleClone = (element) => {
@@ -75,7 +87,24 @@ export default defineComponent({
                         return t(`er.fields.${element.id}`)
                       },
                       default() {
-                        return <dragGableWrap class={[ns.e('dragContent')]} list={element.list} clone={handleClone} tag="ul" sort={false} move={handleMove} {...dragOptions} group={{ name: `er-Canves-${id}`, pull: 'clone', put: false }} item-key="null" v-slots={slots}></dragGableWrap>
+                        return (
+                          <dragGableWrap
+                            class={[ns.e('dragContent')]}
+                            list={element.list}
+                            clone={handleClone}
+                            tag="ul"
+                            sort={false}
+                            move={handleMove}
+                            {...dragOptions}
+                            group={{
+                              name: `er-Canves-${id}`,
+                              pull: 'clone',
+                              put: false,
+                            }}
+                            item-key="null"
+                            v-slots={slots}
+                          ></dragGableWrap>
+                        )
                       },
                     }}
                   ></el-sub-menu>

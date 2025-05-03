@@ -343,7 +343,7 @@ export class Context {
       arr.splice(arr.indexOf(node), 1)
     }
   }
-  appendCol() {
+  appendCol(index?: number) {
     const parent = this.parent
     let allCols = this.state.columns || []
     let allSpan = allCols
@@ -366,9 +366,14 @@ export class Context {
       type: 'col',
       list: [],
     })
-    node.columns.push(newNode)
+    if (index == null) {
+      node.columns.push(newNode)
+    } else {
+      node.columns.splice(index, 0, newNode)
+    }
     //@ts-ignore
     this.addContext(newNode, node)
+    return newNode
   }
   get columns() {
     const node = this.node
@@ -744,6 +749,34 @@ export class Context {
       }
     }
     return data
+  }
+  appendBlockNode(newElement, inserRowIndex = 0) {
+    // let store = []
+    // debugger //
+    let store = this.state.columns || this.state.list
+    // if(Array.isArray(store)){
+    // store = store
+    // }
+    // debugger//
+    // 在指定的索引位置插入新元素
+    store.splice(inserRowIndex, 0, newElement)
+    // 关联新元素的上下文信息
+    // let _node = store[inserRowIndex]
+    // if (_node == null) {
+    //   return //
+    // }
+    let parent = this.state //
+    let ER = this.form
+    utils.addContext({
+      node: store[inserRowIndex],
+      parent: parent,
+      form: this.form, //
+    })
+    utils.deepTraversal(newElement, (node) => {
+      if (utils.checkIsField(node)) {
+        ER.addField(node) // 添加字段到表单
+      }
+    })
   }
   appendNodes(node, dir, key) {
     let _this = this

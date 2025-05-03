@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { nanoid } from './nanoid'
-const fieldsRe = /^(input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform|entity)$/
+const fieldsRe = /^(input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform|entity|dform)$/
 //
 class LayoutNode {}
 const deepTraversal = (node, fn) => {
@@ -28,9 +28,7 @@ const wrapElement = (element, fn?: any) => {
         width: '100%',
       }
     }
-    if (/^(entity)$/.test(node.type)) {
-      node.style.minHeight = '200px' ////
-    }
+    
     if (checkIsField(node)) {
       node.style = {
         width: {
@@ -139,7 +137,7 @@ const combinationData1 = (data) => {
 }
 const combinationData2 = (list, fields) => {
   const fn = (nodes, node, currentIndex) => {
-    const cur = fields.find((item) => item.id === node)
+    let cur = fields.find((item) => item.id === node)
     if (!_.isEmpty(cur)) {
       nodes[currentIndex] = cur
     }
@@ -168,7 +166,7 @@ const repairLayout = (layout, fields) => {
   temporary.forEach((e) => {
     e.nodes.splice(e.currentIndex, 1)
   })
-}
+} //
 const disassemblyData2 = (list) => {
   flatNodes(list, excludes, (nodes, node, currentIndex) => {
     nodes[currentIndex] = node.id && node.id

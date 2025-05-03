@@ -337,9 +337,10 @@ export default defineComponent({
           style={{
             position: 'absolute',
             bottom: 0,
-            height: `${tableIns.getDefaultHeaderRowHeight()}px`,
-            borderLeft: '1px solid RGBA(30, 40, 60,0)',
-            borderRight: '1px solid RGBA(30, 40, 60,0)',
+            height: `${tableIns.getDefaultHeaderRowHeight()}px`, //
+            // borderLeft: '1px solid RGBA(30, 40, 60,0)',
+            // borderRight: '1px solid RGBA(30, 40, 60,0)',
+            // border: '1px solid RGBA(30, 40, 60,1)',
             boxSizing: 'border-box',
             width: '100%',
           }}
@@ -350,7 +351,8 @@ export default defineComponent({
       let calDiv = withDirectives(
         <div
           style={{
-            height: `${tableIns.getDefaultHeaderRowHeight()}px`,
+            height: `${tableIns.getDefaultHeaderRowHeight() }px`,
+            // border: '1px solid RGBA(30, 40, 60,1)', //
           }}
         ></div>,
         [[vShow, tableIns.getShowCalColumns()]],
@@ -379,9 +381,9 @@ export default defineComponent({
               position: 'relative',
               display: 'flex',
               flexDirection: 'column', //
-              // border: '1px solid RGBA(30, 40, 60)',
-              // boxSizing: 'content-box',
-              borderBottom: '1px solid RGBA(30, 40, 60)',
+              border: '1px solid RGBA(30, 40, 60)',
+              boxSizing: 'border-box',
+              // borderBottom: '1px solid RGBA(30, 40, 60)',
             }} //
           >
             <div
@@ -390,9 +392,10 @@ export default defineComponent({
                 flex: 1,
                 width: '100%',
                 overflow: 'hidden', //
-                borderLeft: '1px solid RGBA(30, 40, 60,0)',
-                borderRight: '1px solid RGBA(30, 40, 60,0)',
-                borderTop: '1px solid RGBA(225, 228, 232,0)',
+                // borderLeft: '1px solid RGBA(30, 40, 60,1)',
+                // borderRight: '1px solid RGBA(30, 40, 60,1)',
+                // borderTop: '1px solid RGBA(30, 40, 60,1)',
+                // border: '1px solid RGBA(30, 40, 60,1)',
                 boxSizing: 'border-box',
               }}
             >

@@ -329,18 +329,17 @@ function ControlInsertionPlugin(ER: Form) {
   class ControlInsertionPlugin {
     dragStart(e) {}
     drop(e) {
-      // debugger//
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       if (!prevEl || !e.activeSortable) {
         return false
       }
       // 判断当前拖拽的元素是否是 'block' 类型
-      const isBlock =
+      let isBlock =
         _.get(e, 'activeSortable.options.dataSource', false) === 'block'
       // 从事件对象中获取拖拽的元素 (dragEl) 和目标元素 (target)
       const { dragEl, target } = e //
       // 获取拖拽元素的真实DOM结构
-      const oldEl = getDragElement(dragEl)
+      let oldEl = getDragElement(dragEl)
       let isInRootDiv = false
       if (inserRowIndex !== '') {
         let store = []
@@ -352,15 +351,109 @@ function ControlInsertionPlugin(ER: Form) {
         if (_store == store) {
           isInRootDiv = true //
         }
-      }
-      // 克隆并包装拖拽的元素，以便插入到新位置
+      } //
+      // let _oldEl1=_.cloneDeep(oldEl)
+
+      let _parent = prevSortable.options.parent //
+      let _oldEl1 = null //
+      let nSpan: any = null
+      let gColumns = null
+      let oldCol = null
+      let _nIndex = null //
+      if (inserColIndex !== '') {
+        // debugger //
+        if (Array.isArray(_parent)) {
+          let inLineNode = _parent[0]
+          if (inLineNode?.type == 'inline') {
+            let _parent1 = inLineNode?.context?.parent
+            let _type = _parent1?.type
+            if (_type == 'col') {
+              let _parent2 = _parent1?.context?.parent
+              let _span = _parent1.options.span
+              let _span1: number = Number(_span / 2).toFixed(0) as any //
+              _span1 = Number(_span1) as any //
+              if (_parent2?.type == 'grid') {
+                gColumns = _parent2.columns // is Array
+                oldCol = _parent1 //
+                let newIndex = gColumns.findIndex((col) => col.id == oldCol.id)
+                _parent1.options.span = _span - _span1 //
+                //@ts-ignore
+                if (inserColIndex == 1) {
+                  newIndex += 1
+                }
+                let _node = _parent2.context.appendCol(newIndex) //
+                _node.options.span = _span1
+                resetStates()
+                if (_node == null) {
+                  return
+                }
+                let newElement = ER.wrapElement(
+                  _.cloneDeep(oldEl),
+                  inserRowIndex !== '',
+                  true,
+                  isBlock,
+                  isInRootDiv,
+                )
+                newElement = {
+                  type: 'inline',
+                  columns: [newElement], //
+                }
+                // let list = _node.list
+                _node.context.appendBlockNode(newElement) ////
+                if (!isBlock) {
+                  //
+                  // debugger //
+                  if (oldEl.context) {
+                    let _context = oldEl.context
+                    if (_context.parent?.type == 'inline') {
+                      oldEl = _context.parent?.context?.parent
+                      _context = oldEl.context //
+                    } //
+                    let flatNode = _context.getFlattenNodes()
+                    let ids = flatNode.map((node) => node.id)
+                    let next = Array.isArray(prevSortable?.options?.parent)
+                      ? prevSortable?.options?.parent //
+                      : [prevSortable?.options?.parent]
+                    next = next.filter((node) => node != null) //
+                    let _ids = next.map((node) => node.id)
+                    if (_ids.some((id) => ids.includes(id))) {
+                      resetStates()
+                      return
+                    }
+                    oldEl.context.delete()
+                  }
+                }
+                return
+                // nSpan = _span - Number(_span1)
+                // //使用col进行包裹
+                // _nIndex = newIndex
+                // _oldEl1 = {
+                //   type: 'col',
+                //   list: [],
+                //   options: {
+                //     span: _span1,
+                //   },
+                // }
+              }
+            }
+          }
+        }
+      } //
       let newElement = ER.wrapElement(
         _.cloneDeep(oldEl),
         inserRowIndex !== '',
         true,
         isBlock,
-        isInRootDiv, //
+        isInRootDiv,
       )
+      // 克隆并包装拖拽的元素，以便插入到新位置
+      // let newElement = ER.wrapElement(
+      //   _.cloneDeep(oldEl),
+      //   inserRowIndex !== '',
+      //   true,
+      //   isBlock,
+      //   isInRootDiv,
+      // )
       // 如果不是 'block' 类型的元素，并且原始元素有 context，则删除该 context
       if (!isBlock) {
         if (oldEl.context) {
@@ -386,50 +479,56 @@ function ControlInsertionPlugin(ER: Form) {
         // 在指定的索引位置插入新元素
         store.splice(inserRowIndex, 0, newElement)
         // 关联新元素的上下文信息
-        // let _node = store[inserRowIndex]
-        // if (_node == null) {
-        //   return //
-        // }
         utils.addContext({
           node: store[inserRowIndex],
           parent: prevSortable.options.parent,
           form: ER.formIns, //
         })
       }
-
       // 处理列插入逻辑
       if (inserColIndex !== '') {
-        const {
+        let {
           el: {
             __draggable_component__: { list },
           },
           el,
           constructor: { utils: sortableUtils },
         } = prevSortable
-
+        let _parent2 =
+          prevSortable.options.parent[
+            sortableUtils.index(prevSortable.el.parentNode)
+          ]
+        // if (gColumns != null) {
+        //   list = gColumns
+        //   let _el = {
+        //     type: 'inline',
+        //     columns: [newElement],
+        //   }
+        //   newElement = _el //
+        //   _oldEl1.list.push(newElement) //
+        //   newElement = _oldEl1
+        //   newElement = ER.wrapElement(newElement, false, true, true) //
+        //   inserColIndex = _nIndex //
+        //   _parent2 = gColumns //
+        // }
         // 在指定的索引位置插入新元素
         list.splice(inserColIndex, 0, newElement)
-
         // 关联新元素的上下文信息
         utils.addContext({
           node: newElement,
-          parent:
-            prevSortable.options.parent[
-              sortableUtils.index(prevSortable.el.parentNode)
-            ],
+          parent: _parent2,
           form: ER.formIns,
         })
       }
       // 如果有行插入或列插入操作，则遍历新元素，并检查是否需要额外的字段处理
       if (inserColIndex !== '' || inserRowIndex !== '') {
-        // console.log(ER, 'testERRR')//
         utils.deepTraversal(newElement, (node) => {
           if (utils.checkIsField(node)) {
             ER.addField(node) // 添加字段到表单
           }
         })
         // 在下一次DOM更新后，选中新的元素
-        nextTick(() => {//
+        nextTick(() => {
           let _ele = newElement['_getSelectTarget']
           if (_ele) {
             newElement = _ele()
@@ -464,7 +563,6 @@ function ControlInsertionPlugin(ER: Form) {
         },
         sortable,
       } = e
-      // debugger//
       // console.log(dataSource, 'testDataSource')//
       if (sortable.options.dataSource === 'block') {
         return false
@@ -484,7 +582,6 @@ function ControlInsertionPlugin(ER: Form) {
       const direction = '' //
       const targetContainer = el.parentNode
       const targetOnlyOne = targetList.length === 1
-      // debugger//
       const options = sortable.options
       //@ts-ignore
       let newTarget = SortableUtils.closest(

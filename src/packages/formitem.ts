@@ -11,6 +11,8 @@ import Region from '@ER/region/Region'
 import _ from 'lodash'
 import { areaList } from '@vant/area-data'
 import { itemTypeMap } from './itemTypeMap'
+import { erFormEditor } from './formEditor'
+import { Dialog } from '@/dialog/dialog'
 
 export type FormOptions = {
   items: Field[]
@@ -626,12 +628,62 @@ export class FormItem extends Base {
       value: nValue,
       oldValue: oldValue,
       item: this,
-      form:this.form
+      form: this.form,
     }
     //@ts-ignore
     let _onBlur = config.onBlur //
     if (typeof _onBlur == 'function') {
       _onBlur(_config) //
     }
+  }
+  async designForm() {
+    let formConfig = this.getFormConfig()
+    // let _config = cloneDeep(formConfig) //
+    let _config = _.cloneDeep(formConfig) //
+    let system = this.getSystem()
+    let _f = new Form(_config) //
+    let oldLayoutData = this.getRef('fieldCom').getLayoutData()
+    _f.setLayoutData(oldLayoutData) //
+    _f.setCurrentDesign(true) //
+    let createFn = () => {
+      return {
+        component: erFormEditor,
+        props: {
+          formIns: _f,
+        },
+      }
+    }
+    system.openDialog({
+      height: 600,
+      width: 1200,
+      createFn,
+      confirmFn: (dialog: Dialog) => {
+        let inCom: Form = dialog.getRef('innerCom')
+        let layoutData = inCom.getLayoutData()
+        let fieldCom: Form = this.getRef('fieldCom')
+        fieldCom.setLayoutData(layoutData) //
+      },
+    })
+  }
+  getFormConfig() {
+    let items = this.getOptions()?.items || [] //
+    let itemSpan = this.getItemSpan()
+    return {
+      items: items,
+      itemSpan: itemSpan, //
+    }
+  }
+  getOptions(): any {
+    let config = this.config
+    let options = config?.options || {}
+    return options
+  }
+  getItemSpan() {
+    let config = this.getOptions()
+    let span = config.itemSpan //
+    if (span == null) {
+      span = 6 //
+    }
+    return span //
   }
 }

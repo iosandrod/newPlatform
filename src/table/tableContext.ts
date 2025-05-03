@@ -47,7 +47,9 @@ export const initContextMenu = (table: Table) => {
       key: 'designColumn',
       disabled: false, //
       visible: true,
-      fn: () => {},
+      fn: () => {
+        
+      },
     },
     {
       label: '设计表格列', //

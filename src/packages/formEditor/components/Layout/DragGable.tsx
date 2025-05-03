@@ -105,7 +105,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const ER = inject('Everright')
+    const ER = inject('Everright') as any
     const ns = hooks.useNamespace('DragGableLayout')
     const { state, isEditModel, isPc, setSelection } = hooks.useTarget()
     const handleMove = (e) => {
@@ -120,7 +120,7 @@ export default defineComponent({
       group: {
         name: `er-Canves-${id}`,
       },
-      parent: props.parent,
+      parent: props.parent, //
       plugins: [ControlInsertionPlugin(ER)], //
       // ControlInsertion: true,
       [pluginName]: true,
@@ -155,7 +155,8 @@ export default defineComponent({
     const load = loadComponent()
 
     const slots = {
-      item: ({ element }) => {
+      item: (_config) => {
+        let element: any = _config.element
         let node = ''
         let allLayoutType = ['grid', 'table', 'tabs', 'collapse', 'inline']
         let _style: any = {}

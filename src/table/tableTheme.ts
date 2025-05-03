@@ -156,8 +156,11 @@ export const createTheme = () => {
     },
     tooltipStyle: null,
     frameStyle: {
-      borderColor: '#E1E4E8',
-      borderLineWidth: 1,
+      // borderColor: '#E1E4E8',
+      // innerBorder: true,
+      // borderColor:'red',
+      // borderLineWidth: 1,
+      borderLineWidth: 0,
       borderLineDash: [],
       shadowBlur: 0,
       shadowColor: 'black',

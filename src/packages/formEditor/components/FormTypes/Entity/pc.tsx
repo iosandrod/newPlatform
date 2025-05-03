@@ -32,13 +32,15 @@ export default defineComponent({
     return () => {
       //
       let com = (
-        <erTable
-          showHeaderButtons={item.getShowHeaderButtons()}
-          key={item.id}
-          ref={registerTable}
-          data={data.value}
-          columns={columns.value}
-        ></erTable>
+        <div class="h-full w-full" style={{ minHeight: '200px' }}>
+          <erTable
+            showHeaderButtons={item.getShowHeaderButtons()}
+            key={item.id}
+            ref={registerTable}
+            data={data.value}
+            columns={columns.value}
+          ></erTable>
+        </div>
       )
       return com
     } //

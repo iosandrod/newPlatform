@@ -73,6 +73,7 @@ import type {
 } from 'vxe-pc-ui/types/components/table'
 import { Dialog } from './dialog'
 import { PageDesign } from '@ER/pageDesign'
+import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 export const getDialogDefaultProps = () => {
   return {
     modelValue: Boolean as PropType<VxeModalPropTypes.ModelValue>,
@@ -291,6 +292,7 @@ export default defineComponent({
     'move',
   ],
   components: {
+    buttonGroupCom, //
     ModalCom, //
   },
   props: getDialogDefaultProps(), //
@@ -309,12 +311,13 @@ export default defineComponent({
       }) //
     } else {
       dialog = new Dialog(props)
-    } //
+    } 
     expose({ _instance: dialog }) //
     let registerDialog = (e) => {
       dialog.registerRef('modal', e) //
     }
     let registerRoot = (e) => dialog.registerRef('root', e) //
+    let registerInnerCom = (e) => dialog.registerRef('innerCom', e) ////
     return () => {
       let com = (
         <div>
@@ -329,10 +332,11 @@ export default defineComponent({
                   component = insConfig.component
                   props = insConfig.props
                 }
-                console.log(props) //
                 if (_com == null) {
                   if (component) {
-                    _com = <component {...props}></component>
+                    _com = (
+                      <component ref={registerInnerCom} {...props}></component>
+                    )
                   }
                 } //
                 let outCom = (
@@ -374,6 +378,30 @@ export default defineComponent({
                 ) //
                 return com
               },
+              footer: () => {
+                let btnG = (
+                  <buttonGroupCom
+                    buttonWidth={50}
+                    items={[
+                      {
+                        label: '取消',
+                        fn: () => {
+                          // console.log('取消')
+                          dialog.close() //
+                        },
+                      },
+                      {
+                        label: '确定',
+                        fn: () => {
+                          dialog.confirm()//
+                        },
+                      },
+                    ]}
+                  ></buttonGroupCom>
+                )
+                let com = <div class="flex-row justify-end">{btnG}</div> //
+                return com //
+              },
             }}
             {...props}
             modelValue={dialog.getModelValue()}
@@ -385,6 +413,7 @@ export default defineComponent({
             resize={true} //
             minHeight={dialog.getMinHeight()}
             minWidth={dialog.getMinWidth()}
+            showFooter={true} //
           ></ModalCom>
         </div>
       )

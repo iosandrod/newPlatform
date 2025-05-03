@@ -33,10 +33,9 @@ export default defineComponent({
     }
     const slots = {
       item: ({ element }) => {
-        return (
+        let _com = (
           <li
             class={[
-              ER.props.checkFieldsForNewBadge(element) ? ns.is('new') : '',
             ]}
             onClick={() => addStore(element)}
           >
@@ -44,6 +43,7 @@ export default defineComponent({
             <span>{utils.fieldLabel(t, element)}</span>
           </li>
         )
+        return _com
       },
     }
     const handleClone = (element) => {

@@ -81,7 +81,7 @@ export const getDefaultPageProps = () => {
     },
     checkFieldsForNewBadge: {
       type: Function,
-      default: () => {},
+      default: () => () => {}, //
     },
     formIns: {
       type: Object,
@@ -89,7 +89,7 @@ export const getDefaultPageProps = () => {
     ...defaultProps,
     isDesign: {
       type: Boolean,
-      default: true, //
+      default: false, //
     },
     data: {
       type: Object,
@@ -281,7 +281,7 @@ export default defineComponent({
       let _ConfigCom = null
       if (formIns.isDesign == true) {
         _fieldCom = (
-          <div
+          <div //
             style={{
               minWidth: '200px',
             }}

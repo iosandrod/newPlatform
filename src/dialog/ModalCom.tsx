@@ -249,6 +249,10 @@ export default defineComponent({
       type: Boolean as PropType<VxeModalPropTypes.Animat>,
       default: () => getConfig().modal.animat,
     }, //
+    headerHeight: {
+      type: [Number, String] as PropType<any>,
+      default: 30,
+    },
   },
   emits: [
     'update:modelValue',
@@ -1446,6 +1450,9 @@ export default defineComponent({
           'div',
           {
             ref: refHeaderElem,
+            style: {
+              height: `${props.headerHeight}px`, //
+            },
             class: [
               'vxe-modal--header',
               {

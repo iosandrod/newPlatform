@@ -96,8 +96,8 @@ export default defineComponent({
       //   ...formConfig,//
       // })
       let _ins = btn.getRef('page')
-      console.log(_ins) //
-      _ins.initDefaultDForm() //
+      let _d = _ins.getLayoutData()
+      console.log(_d, 'testData') ////
     }
     // let p = new PageDesign(getDefaultPageProps())
     let _data1 = Array(10000)
@@ -110,19 +110,20 @@ export default defineComponent({
       let com = null
       com = <pageCom></pageCom> //
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
-      // com = <dialogCom ref={_reg2}></dialogCom>
       let com2 = <button onClick={fn1}>123123</button>
       com = <pageCom ref={_reg3}></pageCom> //
-      com = (
-        <div style={{ height: `${_data.height}px`, width: `100%` }}>
-          <tableCom {...tableConfig}></tableCom>
-        </div>
-      ) //
+      // com = (
+      //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
+      //     {/* <tableCom {...tableConfig}></tableCom> */}
+      //     <tableCom ></tableCom>
+      //   </div>
+      // ) //
       // com = (
       //   <div style={{ width: '400px' }}>
       //     <formCom {...formConfig}></formCom>
       //   </div>
       // )
+      // com = <dialogCom ref={_reg2}></dialogCom>
       let _com = (
         <div
           style={{

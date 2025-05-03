@@ -163,7 +163,7 @@ export default {
       }
     }
     onUnmounted(() => {
-      props.data.context.getHoverDiv = null //
+      // props.data.context.getHoverDiv = null //
     })
     const widthScaleElement = ref()
     const isScale = ref(false)
@@ -253,6 +253,7 @@ export default {
               }
               let inline = props?.data?.context?.parent
               let parent = inline?.context?.parent
+              // debugger//
               if (parent?.type == 'col') {
                 //重新设定
                 let hoverEl = parent.context?.getHoverDiv()
@@ -367,6 +368,7 @@ export default {
           class={[
             ns.b(),
             'overflow-x-hidden',
+            'w-full',
             unref(isEditModel) &&
               ER.props.dragMode === 'full' &&
               props.hasDrag &&

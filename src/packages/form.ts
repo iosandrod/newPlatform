@@ -2,11 +2,13 @@ import {
   computed,
   defineComponent,
   isProxy,
+  isReadonly,
   nextTick,
   reactive,
   shallowRef,
+  isRef,
 } from 'vue'
-import formEditor from '@ER/formEditor/formEditor'
+import formEditor, { getDefaultFormEditProps } from '@ER/formEditor/formEditor'
 import { FormLayout } from './type'
 import { staticData, formConfig, testData1 } from './formEditor/testData'
 import { nanoid } from 'nanoid'
@@ -127,6 +129,7 @@ export class Form extends Base {
   props?: any
   constructor(config) {
     super()
+    // let _defaultProps
     this.config = config
     //@ts-ignore
     this.props = config
@@ -442,7 +445,31 @@ export class Form extends Base {
   }
   init() {
     super.init()
-    let config = this.config
+    let pageType = this.pageType
+
+    let config = this.config //
+    if (!isReadonly(config)) {
+      //
+      if (pageType == 'form') {
+        let _props = getDefaultFormEditProps()
+        let obj = {} //
+        Object.entries(_props).forEach(([key, value]) => {
+          //@ts-ignore
+          let _default = value.default
+          if (typeof _default == 'function' && value.type != Function) {
+            //@ts-ignore
+            _default = _default() //
+          }
+          obj[key] = _default //
+        })
+        Object.entries(obj).forEach(([key, value]) => {
+          if (config[key] == null && value != null) {
+            //
+            config[key] = value
+          }
+        })
+      }
+    }
     this.initMobileLayout()
     this.initState() //
     let items = config.items || config.fields || []
@@ -685,6 +712,7 @@ export class Form extends Base {
       return
     } //
     let _item = new FormItem(config, this)
+    //@ts-ignore
     this.items.push(_item) //
     return _item
   }
@@ -1469,12 +1497,12 @@ export class Form extends Base {
     this.setSelection(Array.isArray(parent) ? 'root' : parent)
   }
   enterForm(props) {
-    let formIns = this
-    let id = props.data.id
-    let subForm = formIns.getSubForm(id)
-    if (subForm != null) {
-      formIns.nextForm = subForm //
-    }
+    // let formIns = this
+    // let id = props.data.id
+    // let subForm = formIns.getSubForm(id)
+    // if (subForm != null) {
+    //   formIns.nextForm = subForm //
+    // }
   }
   resetContext() {
     // let platform = this.state.platform

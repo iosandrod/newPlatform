@@ -4,10 +4,16 @@ import { createPageDesignFieldConfig } from './pageDesignConfig'
 import { FormItem } from './formitem'
 import { Field } from './layoutType'
 import { PageDesignItem } from './pageItem'
-import { computed, nextTick } from 'vue'
-import { _tData, _tData123, _testData, entityData } from './formEditor/testData'
+import { computed, isReadonly, nextTick } from 'vue'
+import {
+  _editLayout,
+  _tData,
+  _tData123,
+  _testData,
+  entityData,
+} from './formEditor/testData'
 import { useOnce, useRunAfter } from './utils/decoration'
-import pageCom from './pageCom'
+import pageCom, { getDefaultPageProps } from './pageCom'
 
 export class PageDesign extends Form {
   static component = pageCom //
@@ -16,10 +22,33 @@ export class PageDesign extends Form {
   tableType: 'main' | 'edit' | 'search' = 'main'
   constructor(config) {
     super(config)
-    this.init()
-  } //
+  }
   init(): void {
-    super.init() //
+    let _props = getDefaultPageProps() //
+    let config = this.config
+    if (!isReadonly(config)) {
+      let obj = {} //
+      Object.entries(_props).forEach(([key, value]) => {
+        //@ts-ignore
+        let _default = value.default
+        if (typeof _default == 'function' && value.type != Function) {
+          //@ts-ignore
+          _default = _default() //
+        }
+        obj[key] = _default //
+      })
+      Object.entries(obj).forEach(([key, value]) => {
+        if (config[key] == null && value != null) {
+          //
+          config[key] = value
+        }
+      })
+    }
+    super.init()
+    nextTick(() => {
+      // debugger//
+      // this.setLayoutData(_editLayout)
+    })
   }
   getTabTitle() {
     let config = this.config //
@@ -250,7 +279,7 @@ export class PageDesign extends Form {
   }
   //打开编辑页面
   async openEditEntity() {
-    let tableName = this.tableName //
+    let tableName = this.tableName
   }
   //打开添加页面
   async openAddEntity() {}

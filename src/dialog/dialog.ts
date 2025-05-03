@@ -58,5 +58,16 @@ export class Dialog extends Base {
       _ins = _createFn({ props: config }) //
     }
     return _ins
+  } //
+  async confirm() {
+    let config = this.config
+    let confirmFn = config.confirmFn
+    if (typeof confirmFn == 'function') {
+      let status = await confirmFn(this) ////
+      if (status == false) {
+        return //
+      }
+    }
+    this.close() //
   }
 }
