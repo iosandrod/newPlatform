@@ -186,3 +186,12 @@ li {
 .overflow-y-hidden{
   overflow-y: hidden;
 }
+.el-tabs__header{
+  padding: 0 !important;
+}
+.el-tabs__header{
+  margin: 0px    !important;
+}
+.el-tabs{
+  --el-tabs-header-height:30px;
+}

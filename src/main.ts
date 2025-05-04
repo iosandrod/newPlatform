@@ -24,6 +24,7 @@ import tableCom from './table/tableCom'
 import dropdownCom from './menu/dropdownCom'
 import buttonCom from './buttonGroup/buttonCom'
 import { Base } from '@/base/base' //w
+import './run' //
 import { system } from './system'
 import buttonGroupCom from './buttonGroup/buttonGroupCom'
 import { http } from './service/client'
@@ -70,9 +71,8 @@ app.component('erTable', tableCom) //
 app.component('erDropdown', dropdownCom)
 app.component('erSelect', selectCom) //
 app.use(context) //
-app.use(VxeTable)
+app.use(VxeTable) //
 app.use(VxeUIAll)
 app.use(router)
 app.use(elementPlus) //
-app.component('vue-list-table', VueVTable.ListTable)
 app.mount('#app')

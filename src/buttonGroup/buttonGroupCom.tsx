@@ -1,5 +1,5 @@
 import { itemGroup } from '@/buttonGroup/buttonGroup'
-import { defineComponent, toRaw, watch } from 'vue'
+import { defineComponent, inject, toRaw, watch } from 'vue'
 import tabCom from '@/buttonGroup/tabCom'
 import {
   ElButton,
@@ -29,7 +29,7 @@ export default defineComponent({
   props: {
     buttonWidth: {
       type: Number,
-      default: 100,
+      default: 50, //
     },
     items: {
       type: Array,
@@ -46,6 +46,7 @@ export default defineComponent({
     let group = new itemGroup(props, props._class as any)
     const ns = group.hooks.useNamespace('buttonGroupCom')
     const btnG = group.hooks.useNamespace('buttonMenuCom')
+    let currentMainPage = inject('pageDesign')
     watch(
       () => {
         let items = props.items
@@ -79,6 +80,7 @@ export default defineComponent({
       el.runFn({
         parent: props.parent,
         button: el,
+        page: currentMainPage,
       })
     }
     return () => {
@@ -121,7 +123,10 @@ export default defineComponent({
                             }}
                             onMouseleave={() => {}}
                             class="v-contextmenu"
-                            style={{ width: '100px', position: 'relative' }}
+                            style={{
+                              minWidth: `${btn.getButtonWidth()}px`,
+                              position: 'relative',
+                            }}
                           >
                             <ContextmenuItem>{btn?.getLabel()}</ContextmenuItem>
                           </div>

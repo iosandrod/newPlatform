@@ -1,5 +1,4 @@
 import inputCom from '@/input/inputCom'
-import tableCom from '@/table/tableCom'
 import { FormItem } from '@ER/formitem'
 import { ElInput } from 'element-plus'
 import { computed, defineComponent } from 'vue'
@@ -10,7 +9,6 @@ export default defineComponent({
   customOptions: {},
   components: {
     inputCom,
-    tableCom,
   },
   props: {
     data: Object,
@@ -27,16 +25,11 @@ export default defineComponent({
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
     }
-    let showTable = computed(() => {
-      let stable = formitem.getShowTable()
-      let b = Boolean(stable)
-      return b
-    })
     return () => {
       let com = (
         <div
           class="h-full w-full flex items-center"
-          style={{ minHeight: '36px' }}
+          style={{ minHeight: '30px' }}
         >
           <inputCom
             ref={registerRef}
@@ -44,34 +37,21 @@ export default defineComponent({
             v-slots={{
               buttons: () => {
                 let com = (
-                  <div
-                    onClick={() => {
-                      //
-                      formitem.openTableDialog() //
-                    }}
-                    class="h-full pointer"
-                  >
-                    <i class="vxe-icon-edit"></i>
-                  </div>
-                )
-                return com //
+                    <div
+                      onClick={() => {
+                        formitem.openCodeDialog() //
+                      }}
+                      class="h-full pointer"
+                    >
+                      <i class="vxe-icon-edit"></i>
+                    </div>
+                  )
+                return com
               },
             }}
           ></inputCom>
         </div>
       )
-      if (showTable.value == true) {
-        let tableConfig = formitem.getTableConfig()
-        com = (
-          <div class="w-full h-full">
-            <tableCom
-              {...tableConfig}
-              showHeaderButtons={true}
-              data={formitem.getBindValue()}
-            ></tableCom>
-          </div>
-        )
-      }
       return com //
     }
   }, //

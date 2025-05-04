@@ -311,7 +311,7 @@ export default defineComponent({
       }) //
     } else {
       dialog = new Dialog(props)
-    } 
+    }
     expose({ _instance: dialog }) //
     let registerDialog = (e) => {
       dialog.registerRef('modal', e) //
@@ -340,7 +340,14 @@ export default defineComponent({
                   }
                 } //
                 let outCom = (
-                  <div class="w-full h-full" ref={registerRoot}>
+                  <div
+                    class="w-full h-full"
+                    onClick={(e) => {
+                      // e.stopPropagation()
+                      // e.preventDefault()
+                    }}
+                    ref={registerRoot}
+                  >
                     {_com}
                   </div> //
                 )
@@ -393,7 +400,7 @@ export default defineComponent({
                       {
                         label: '确定',
                         fn: () => {
-                          dialog.confirm()//
+                          dialog.confirm() //
                         },
                       },
                     ]}

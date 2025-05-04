@@ -59,7 +59,7 @@ export const click_cell = (table: Table) => {
     callback: (config) => {
       table.isContainerClick = true
       setTimeout(() => {
-        table.isContainerClick = false //
+        table.isContainerClick = false
       }, 0)
       let field = config.field //
       let originData = config.originData //
@@ -74,6 +74,7 @@ export const click_cell = (table: Table) => {
             table.clearEditCell() //
           }
           nextTick(() => {
+            table.currentEditCol=tCol
             _this.startEditCell(config.col, config.row, config.value) //
           }) //
           return

@@ -1,4 +1,4 @@
-// import _ from 'lodash'
+// _ from 'lodash'
 // const importModules = import.meta.glob('./*/*.vue', { eager: true })
 // const modules = {}
 // _.forIn(importModules, (func, path) => {
@@ -10,6 +10,8 @@
 // }
 
 import inputPc from './Input/pc'
+import codePc from './Code/pc'
+import codeMobile from './Code/mobile'
 import inputMobile from './Input/mobile'
 import numberPc from './Number/pc'
 import numberMobile from './Number/mobile'
@@ -75,6 +77,10 @@ export const typeMap = {
   dform: {
     pc: dformPc,
     mobile: dformMobile,
+  },
+  code: {
+    pc: codePc,
+    mobile:  codeMobile,
   },
 }
 export default {}

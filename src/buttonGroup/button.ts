@@ -1,5 +1,6 @@
 import { Base } from '@/base/base'
 import { Dropdown } from '@/menu/dropdown'
+import { stringToFunction } from '@ER/utils'
 
 export class Button extends Base {
   config: any
@@ -73,11 +74,20 @@ export class Button extends Base {
   }
   runFn(_config) {
     try {
+      let page = _config.page
       this.showDropdown() //
       let config = this.config
       let fn = config.fn
       if (typeof fn == 'function') {
+        fn = fn.bind(page)
         fn(_config)
+      }
+      if (typeof fn == 'string') {
+        let _fn = stringToFunction(fn) //
+        if (typeof _fn == 'function') {
+          _fn = _fn.bind(page) //
+          _fn(_config)
+        }
       }
       if (this.parent != null) {
         this.hiddenDropdown() //
@@ -89,11 +99,11 @@ export class Button extends Base {
   }
   getButtonWidth() {
     let config = this.config
-    let width = config.width 
-    if(width == null) {
-      let _w=this?.group?.getButtonWidth()
-      if(_w) {
-        width=_w
+    let width = config.width
+    if (width == null) {
+      let _w = this?.group?.getButtonWidth()
+      if (_w) {
+        width = _w
       }
     }
     return width

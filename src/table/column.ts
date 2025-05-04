@@ -37,8 +37,12 @@ import {
 import { nextTick } from 'vue' //
 import { calObj } from './calculateType'
 import { stringToFunction } from '@ER/utils'
+import codeEditorCom from '@/codeEditor/codeEditorCom'
+import { Dialog } from '@/dialog/dialog'
+import CodeEditor from '@/codeEditor/codeEditor'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
+  disableHideCell=false//
   isMousedownRecord = null
   tableState = 'edit' //
   templateCalValue = ''
@@ -893,7 +897,7 @@ export class Column extends Base {
       let _width = width
       let colCount = t1.colCount
       // console.log(colCount,col)//
-      if (colCount == col+1) {
+      if (colCount == col + 1) {
         _width = _width - 1
       }
       const container = createGroup({
@@ -1069,4 +1073,47 @@ export class Column extends Base {
     let design = inject('pageDesign')
     return design
   }
+  openCodeDialog(config) {
+    this.disableHideCell=true
+    let codeConfig = this.getCodeConfig() //
+    let sys = this.getSystem() //
+    let value = this.getBindValue() ////
+    let createFn = () => {
+      //
+      return {
+        component: codeEditorCom,
+        props: {
+          ...codeConfig,
+          modelValue: value,
+        },
+      }
+    } 
+    this.disableHideCell=true
+    sys.openDialog({
+      height: 600,
+      width: 1200,
+      createFn, //
+      confirmFn: (dialog: Dialog) => {
+        let com: CodeEditor = dialog.getRef('innerCom')
+        let bindValue = com.getBindValue() //
+        let updateFn = config?.updateFn
+        this.disableHideCell=false
+        if (typeof updateFn == 'function') {
+          // this.updateBindData({ value: bindValue }) ////
+          updateFn({ value: bindValue }) 
+        }
+      },
+      closeFn: () => {
+        this.disableHideCell=false
+      }
+    })
+  }
+  getCodeConfig() {
+    return {}
+  }
+  getBindValue() {
+    let cacheValue = this.cacheValue
+    return cacheValue //
+  }
+  updateBindData() {}
 }

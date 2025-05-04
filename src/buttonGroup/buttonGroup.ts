@@ -20,7 +20,7 @@ export class itemGroup extends Base {
   }
   getButtonWidth() {
     let config = this.config
-    let buttonWidth = config.buttonWidth || 100
+    let buttonWidth = config.buttonWidth || 50
     return buttonWidth //
   }
   addItem(b) {

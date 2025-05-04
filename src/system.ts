@@ -363,11 +363,11 @@ export class System extends Base {
     } //
     let router = this.getRouter()
     let tableName: string = config.tableName
-    let _tableName = tableName.split('---')
-    if (_tableName.length == 2) {
-      let _tableName1 = _tableName[0]
-      let type = _tableName[1] //
-    }
+    // let _tableName = tableName.split('---')
+    // if (_tableName.length == 2) {
+    //   let _tableName1 = _tableName[0]
+    //   let type = _tableName[1] //
+    // }
     router.push(`/${tableName}`) //
   }
   async createPageDesign(config: { tableName: string } | string) {

@@ -4,8 +4,17 @@ import CodeEditor from './codeEditor'
 export default defineComponent({
   name: 'CodeEditorCom',
   //
-  props: {},
-  setup(props) {
+  props: {
+    language: {
+      type: String,
+      default: 'javascript',
+    },
+    modelValue: {
+      type: String,
+      default: '',
+    }, //
+  },
+  setup(props, { attrs, slots, emit, expose }) {
     let editor = new CodeEditor(props) //
     const register = (el) => {
       editor.registerRef('root', el)
@@ -14,11 +23,13 @@ export default defineComponent({
       editor.registerRef('out', el)
     }
     onMounted(() => {
+      //
       editor.render()
     })
     onUnmounted(() => {
       editor.unmounted()
     })
+    expose({ _instance: editor })
     return () => {
       let com = (
         <div

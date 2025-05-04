@@ -43,10 +43,20 @@ export const stableType = (item: FormItem) => {
   obj.modelValue = item.getBindShowValue()
   return obj
 }
+export const codeType = (item: FormItem) => {
+  let obj = defaultType(item) //
+  obj.onChange = (config) => {}
+  obj.onInput = (config) => {} //
+  obj.readonly = true //
+  obj.clearable = false //
+  obj.modelValue = item.getBindShowValue()
+  return obj
+}
 export const itemTypeMap = {
   input: inputType,
   string: inputType,
   default: defaultType,
   select: selectType,
   stable: stableType,
+  code: codeType,
 }

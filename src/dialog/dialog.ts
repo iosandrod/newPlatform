@@ -21,13 +21,17 @@ export class Dialog extends Base {
   close() {
     let dia: VxeModalInstance = this.getRef('modal') //
     if (dia) {
+      let closeFn = this.config.closeFn
+      if (typeof closeFn == 'function') {
+        closeFn() //
+      }
       dia.close()
       if (this.once == true) {
         nextTick(() => {
           //
           let system = this.getSystem()
           let diaArr = system.dialogArr
-          let index = diaArr.indexOf(this)
+          let index = diaArr.indexOf(this) //
           if (index > -1) {
             diaArr.splice(index, 1) //
           }

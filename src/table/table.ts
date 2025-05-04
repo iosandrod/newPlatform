@@ -50,6 +50,7 @@ import { createGroup, createText } from '@visactor/vtable/es/vrender'
 import { SeriesNumberColumn } from './seriesNumberColumn'
 import { initContextMenu } from './tableContext'
 export class Table extends Base {
+  currentEditCol?: Column
   isContainerClick = false
   isFilterTable = false
   isMergeCell = true
@@ -524,7 +525,10 @@ export class Table extends Base {
     let tableIns = this
     let _arr = []
     let _iArr = []
-    let records = tableIns.getInstance().records
+    let records = tableIns.getInstance()?.records
+    if (records == null) {
+      return //
+    }
     let keys = tableIns.updateIndexArr.keys()
     let _iArr1 = []
     for (const k of keys) {
@@ -999,7 +1003,7 @@ export class Table extends Base {
     this.currentIndexContain = shallowRef({}) //
   }
   @useRunAfter()
-  @useTimeout({ number: 500, key: 'updateTimeout' })
+  @useTimeout({ number: 300, key: 'updateTimeout' })
   updateCanvas() {
     let data = this.templateProps.data //
     let instance = this.getInstance() //
@@ -1007,8 +1011,7 @@ export class Table extends Base {
       return
     }
     let records = data || instance.records
-    let id = this.uuid()
-    // console.log('视图用时') //
+    let id = this.uuid() //
     console.time(id)
     this.currentIndexContain = shallowRef({}) //
     instance.setRecords(records)
@@ -1452,6 +1455,12 @@ export class Table extends Base {
     ins.startEditCell(col, row, value) //
   }
   clearEditCell() {
+    let currentEditCol = this.currentEditCol
+    let disableHideCell = currentEditCol?.disableHideCell
+    if (disableHideCell == true) {
+      return //
+    }
+    this.currentEditCol = null
     this.templateEditCell = null ////
     let ins = this.getInstance()
     ins.completeEditCell() ////
@@ -1554,13 +1563,14 @@ export class Table extends Base {
       if (typeof _callback == 'function') {
         this.registerEvent({
           keyName: key,
-          name: key,
+          name: key, //
           callback: (...args) => {},
         })
       }
     })
   }
-  async getDefaultValue(tableName: string) {
+  async getDefaultValue(tableName: string = '') {
+    //
     let columns = this.getColumns()
     let obj1 = {}
     for (const col of columns) {

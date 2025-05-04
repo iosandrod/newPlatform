@@ -15,6 +15,8 @@ import { erFormEditor } from './formEditor'
 import { Dialog } from '@/dialog/dialog'
 import { Table } from '@/table/table'
 import tableCom from '@/table/tableCom'
+import CodeEditor from '@/codeEditor/codeEditor'
+import codeEditorCom from '@/codeEditor/codeEditorCom'
 
 export type FormOptions = {
   items: Field[]
@@ -293,7 +295,7 @@ export class FormItem extends Base {
   getTitle() {
     let config = this.config
     let label = config.label
-    return label || '标题' //
+    return label || '' //
   }
   getValidateRoles() {
     let field = this.getField()
@@ -358,12 +360,11 @@ export class FormItem extends Base {
       disabled: this.getDisabled(),
       placeholder: this.getPlaceholder(),
       clearable: this.getClearable(),
-      required: this.getRequired(),
+      required: this.getRequired(), //
     }
     Object.assign(result, result1) //
     //@ts-ignore
-    result.prop = this.getField() //
-    // addValidate(result, node, isPc, t, state, ExtraParams)
+    result.prop = this.getField() ////
     if (isPc) {
       result.labelWidth = this.getLabelWidth() //
     }
@@ -706,10 +707,28 @@ export class FormItem extends Base {
     if (span == null) {
       span = 6 //
     }
+    let type = this.getType()
+    if (type == 'stable') {
+      let showTable = this.getShowTable()
+      if (showTable == true) {
+        span = 24 //
+      }
+    }
     return span //
   }
+  getTableConfig() {
+    let options = this.getOptions()
+    let tableConfig = options.tableConfig || {}
+    let _config = {
+      ...tableConfig,
+      showRowSeriesNumber: false,
+      showCheckboxColumn: false,
+      showFooter: false,
+      showCalculate: false,
+    } //
+    return _config
+  }
   openTableDialog() {
-    //
     let options = this.getOptions()
     let tableConfig = options.tableConfig || {} //
     let sys = this.getSystem()
@@ -746,5 +765,40 @@ export class FormItem extends Base {
         this.updateBindData({ value: data }) //
       },
     })
+  }
+  getCodeConfig() {
+    let options = this.getOptions()
+    let codeConfig = options.codeConfig || {} //
+    return codeConfig //
+  }
+  openCodeDialog() {
+    let codeConfig = this.getCodeConfig() //
+    let sys = this.getSystem() //
+    let value = this.getBindValue() ////
+    let createFn = () => {
+      //
+      return {
+        component: codeEditorCom,
+        props: {
+          ...codeConfig,
+          modelValue: value,
+        },
+      }
+    } //
+    sys.openDialog({
+      height: 600,
+      width: 1200,
+      createFn, //
+      confirmFn: (dialog: Dialog) => {
+        let com: CodeEditor = dialog.getRef('innerCom')
+        let bindValue = com.getBindValue() //
+        this.updateBindData({ value: bindValue }) ////
+      },
+    })
+  }
+  getShowTable() {
+    let options = this.getOptions()
+    let showTable = options.showTable //
+    return showTable
   }
 }

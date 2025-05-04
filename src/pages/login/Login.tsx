@@ -82,6 +82,11 @@ export default defineComponent({
             },
           },
         },
+        {
+          field: 'test1',
+          type: 'code', //
+          options: {},
+        },
       ],
     }
     let style = { width: '400px', margin: '0 auto' }
@@ -145,7 +150,7 @@ export default defineComponent({
       //   </div>
       // )
       // com = <dialogCom ref={_reg2}></dialogCom>
-      com = <codeEditorCom></codeEditorCom>
+      // com = <codeEditorCom></codeEditorCom>
       let _com = (
         <div
           style={{

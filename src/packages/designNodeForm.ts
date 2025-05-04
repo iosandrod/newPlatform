@@ -78,13 +78,23 @@ export const formitemTypeMap = (_this: PageDesign) => {
     },
     buttongroup: {
       itemSpan: 24,
+
       items: [
         {
           title: '按钮',
           field: 'items',
-          label: '按钮',
+          label: '',
           type: 'stable', ////
           options: {
+            showTable: true,
+            buttons: [
+              {
+                label: '添加子按钮',
+                fn: () => {
+                  console.log('添加子按钮') //
+                },
+              },
+            ],
             tableConfig: {
               tableState: 'edit',
               columns: [
@@ -94,10 +104,16 @@ export const formitemTypeMap = (_this: PageDesign) => {
                   type: 'string',
                   editType: 'string',
                 },
+                {
+                  field: 'fn',
+                  title: '执行脚本',
+                  type: 'code',
+                  editType: 'code', //
+                },
               ],
             },
           },
-        },
+        }, //
       ],
       data: computed(() => {
         return _this.state.selected?.options

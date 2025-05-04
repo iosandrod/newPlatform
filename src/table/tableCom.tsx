@@ -50,7 +50,7 @@ export default defineComponent({
     }, //
     showHeaderButtons: {
       type: Boolean,
-      default: true,
+      default: false, //
     },
     showCalculate: {
       type: Boolean,
@@ -364,7 +364,7 @@ export default defineComponent({
             if (isCClick == true) {
               return
             }
-            tableIns.outClick(e,true) //
+            tableIns.outClick(e, true) //
           }}
           style={{
             flex: 1,
@@ -395,7 +395,6 @@ export default defineComponent({
           [
             ClickOutside,
             (e) => {
-              //
               tableIns.outClick(e) //
             },
           ],
@@ -407,8 +406,7 @@ export default defineComponent({
             minHeight: '200px', //
             width: '100%',
             height: '100%',
-            // minHeight: '200px', //
-            display: 'flex',
+            display: 'flex',//
             flexDirection: 'column',
             position: 'relative',
           }}

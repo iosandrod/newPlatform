@@ -44,7 +44,7 @@ export default defineComponent({
       return _value
     })
     const updateValue = (config) => {
-      column.canHiddenEditor = false
+      column.canHiddenEditor = false //
       column.isChangeValue = true
       column.cacheValue = config.value //
     }
@@ -110,7 +110,32 @@ export default defineComponent({
         com = <div style={{ width: '100%', height: '100%' }}>参照表</div>
       }
       if (type == 'code') {
-        com = <div>codeEditor</div> //
+        com = (
+          <div class="h-full w-full flex items-center">
+            <inputCom
+              ref={insRef}
+              modelValue={'...'}
+              readonly //
+              v-slots={{
+                buttons: () => {
+                  let com = (
+                    <div
+                      onClick={() => {
+                        column.openCodeDialog({
+                          updateFn: updateValue,
+                        }) //
+                      }}
+                      class="h-full pointer"
+                    >
+                      <i class="vxe-icon-edit"></i>
+                    </div>
+                  )
+                  return com
+                },
+              }}
+            ></inputCom>
+          </div>
+        )
       }
       return (
         <div

@@ -2,6 +2,7 @@ import { Base } from '@/base/base' //
 import * as monaco from 'monaco-editor'
 import { shallowRef } from 'vue'
 export default class CodeEditor extends Base {
+  templateValue = ''
   instance: monaco.editor.IStandaloneCodeEditor
   config: any
   constructor(config: any) {
@@ -11,15 +12,28 @@ export default class CodeEditor extends Base {
   } //
   init() {
     super.init() //
+    this.templateValue = this.getModelValue()
   }
   getModelValue() {
-    return ''
+    let config = this.config
+    let modelValue = config.modelValue || ''
+    return modelValue
   }
   //
-  onChange(value) {}
+  onChange(value) {
+    let config = this.config
+    this.templateValue = value
+    let onChange = config.onChange
+    if (onChange) {
+      onChange(value)
+    } //
+  }
   unmounted() {}
   getInstance() {
     return this.instance
+  }
+  getBindValue() {
+    return this.templateValue
   }
   getLanguage() {
     let config = this.config
@@ -29,7 +43,7 @@ export default class CodeEditor extends Base {
     }
     return language
   }
-  render() {
+  render() {//
     let root: HTMLDivElement = this.getRef('root')
     let modelValue = this.getModelValue()
     let editor = monaco.editor.create(root!, {

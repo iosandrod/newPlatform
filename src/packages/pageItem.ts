@@ -15,7 +15,6 @@ export class PageDesignItem extends FormItem {
     }
   }
 
-  
   getTableColumns() {
     let columns = this.config?.options?.columns || [] //
     return columns
@@ -46,13 +45,13 @@ export class PageDesignItem extends FormItem {
       return false
     }
     if (tableType == 'main') {
-      return true
+      return false //
     }
     let showHeaderButtons = options?.showHeaderButtons
     return showHeaderButtons
   }
   getTitle() {
-    return
+    return ''
   }
   isShowTitle() {
     //

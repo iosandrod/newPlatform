@@ -49,7 +49,7 @@ export class PageDesign extends Form {
     super.init()
     nextTick(() => {
       // debugger//
-      this.setLayoutData(testBtnData) //
+      // this.setLayoutData(testBtnData) //
     })
   }
   getTabTitle() {
@@ -290,4 +290,9 @@ export class PageDesign extends Form {
   }
   //打开添加页面
   async openAddEntity() {}
+  async addMainTableRow(addConfig) {
+    let system = this.getSystem()
+    let tableName = this.getTableName()
+    system.routeOpen(`${tableName}---edit`) //
+  }
 }

@@ -24,7 +24,7 @@ export default defineComponent({
     })
     return () => {
       let com = (
-        <div class="w-full h-full bg-white" style={{ minHeight: '40px' }}>
+        <div class="w-full h-full bg-white" style={{ minHeight: '30px' }}>
           <ButtonGroupCom {..._value.value}></ButtonGroupCom>
         </div>
       )

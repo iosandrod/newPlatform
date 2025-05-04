@@ -20,14 +20,13 @@ export default defineComponent({
   setup(props) {
     const ns = hooks.useNamespace('TabsLayout')
     if (!props.data.options.defaultValue) {
-      // eslint-disable-next-line vue/no-setup-props-destructure
       props.data.options.defaultValue = props.data.columns[0].id
     }
     let formIns: any = inject('formIns')
     let pluginName = formIns.getPluginName()
     let opt = {
       [pluginName]: true,
-    }
+    } //
     const { isEditModel } = hooks.useTarget()
     return () => {
       let _class = []
