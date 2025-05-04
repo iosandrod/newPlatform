@@ -22,8 +22,7 @@ export class PageDesign extends Form {
   pageType = 'pageDesign' //
   tableName
   tableType: 'main' | 'edit' | 'search' = 'main'
-  tableDataMap = {}
-  tableConfigMap = {}
+
   constructor(config) {
     super(config)
   }
@@ -213,83 +212,6 @@ export class PageDesign extends Form {
       let _f = new Form(value)
       this.dFormMap[key] = _f
     })
-    // let inputF = {
-    //   itemSpan: 24,
-    //   items: [
-    //     {
-    //       field: 'title',
-    //       label: '标题',
-    //       type: 'input', //
-    //     },
-    //     {
-    //       field: 'placeholder',
-    //       label: '提示',
-    //       type: 'input', //
-    //     },
-    //   ],
-    //   data: computed(() => {
-    //     return this.state.selected?.options || {} //
-    //   }), //
-    // }
-    // let _f = new Form(inputF) //
-    // let entityF = {
-    //   itemSpan: 24,
-    //   items: [
-    //     {
-    //       field: 'tableName',
-    //       label: '表名',
-    //       type: 'input', //
-    //       onBlur: async (config) => {
-    //         let value = config.value
-    //         let oldValue = config.oldValue
-    //         if (value == oldValue) {
-    //           return
-    //         }
-    //         let system = this.getSystem()
-    //         let tableInfo = await system.getTableConfig(value)
-    //         if (tableInfo == null) {
-    //           return //
-    //         }
-    //         let currentBindData = config.form.getData() //
-    //         Object.entries(tableInfo).forEach(([key, value]) => {
-    //           //@ts-ignore//
-    //           currentBindData[key] = value
-    //         })
-    //       },
-    //     },
-    //     {
-    //       filed: 'eventMap',
-    //       label: '事件',
-    //       type: 'input',
-    //     },
-    //     {
-    //       field: 'tableType',
-    //       label: '表类型',
-    //       type: 'select', //
-    //       options: [
-    //         {
-    //           label: '主表',
-    //           value: 'main',
-    //         },
-    //         {
-    //           label: '子表',
-    //           value: 'detail', //
-    //         },
-    //         {
-    //           label: '关联表',
-    //           value: 'relate', //
-    //         },
-    //       ],
-    //     },
-    //   ],
-    //   data: computed(() => {
-    //     return this.state?.selected?.options //
-    //   }),
-    // }
-    // let _f1 = new Form(entityF)
-    // this.dFormMap['entity'] = _f1 //
-    // this.dFormMap['input'] = _f //
-    // this.curDForm = _f1 //
   }
   //打开编辑页面
   async openEditEntity() {
@@ -328,18 +250,69 @@ export class PageDesign extends Form {
     })
     return _items
   }
-  addEditTableRow() {
-    let rTableName = this.getRealTableName() //
+  async addEditTableRow() {
+    let nRow = await this.createDefaultRow()
+    let tableDataMap = this.tableDataMap
+    this.tableDataMap.curRow=nRow
+    console.log(nRow) //
+  }
+  setLayoutData(d) {
+    super.setLayoutData(d) //
+    let allFields = this.state.fields
+    let allEnFields = allFields.filter((f) => {
+      let type = f.type
+      if (type == 'entity') {
+        return true
+      }
+      return false
+    })
+    // debugger//
+    for (const en of allEnFields) {
+      let tableName = en.tableName
+      if (tableName != null) {
+        let tableConfigMap = this.tableConfigMap
+        tableConfigMap[tableName] = en
+        let tableDataMap = this.tableDataMap
+        tableDataMap[tableName] = {
+          curRow: null,
+          data: [],
+        }
+      }
+    } //
     let tableName = this.getTableName() //
-    let rTableConfig = {}
+    if (this.tableConfigMap[tableName] == null) {
+      this.tableConfigMap[tableName] = this.config //
+    }
   }
   async createDefaultRow(tableName = this.getTableName()) {
-    let rTableName = this.getRealTableName()
-    // let tableConfig=this.getTableConfig()
+    //
+    let tableConfig = this.getTableConfig()
+    let columns = tableConfig.columns
+    let obj = {}
+    for (const col of columns) {
+      let defaultValue = col['defaultValue'] //
+      if (defaultValue != null) {
+        let field = col.field //
+        let _obj = {
+          [field]: defaultValue, //
+        }
+        obj = { ...obj, ..._obj }
+      }
+    }
+    return obj
   }
   getTableConfig(tableName = this.getTableName()) {
     let tableConfigMap = this.tableConfigMap
     let _config = tableConfigMap[tableName]
-    return _config
+    if (_config == null) {
+      let _config = this.config
+      let _tableName = _config.tableName
+      if (_tableName == tableName) {
+        let _config1 = _config.tableConfig
+        tableConfigMap[tableName] = _config1
+        _config = _config1
+      }
+    } //
+    return _config //
   }
 }

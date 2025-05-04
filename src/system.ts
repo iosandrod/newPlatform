@@ -190,7 +190,7 @@ export class System extends Base {
                 },
               ],
               options: {
-                span: 24,//
+                span: 24, //
                 offset: 0,
                 push: 0,
                 pull: 0,
@@ -406,7 +406,8 @@ export class System extends Base {
       return _design //
     } //
     let layoutConfig = await this.getPageEditLayout(tableName) //
-    let _d = new PageDesign(layoutConfig)
+    let _d = new PageDesign(layoutConfig)//
+    _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
     this.tableEditMap[editTableName] = _d //

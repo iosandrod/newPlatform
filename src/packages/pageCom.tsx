@@ -144,7 +144,9 @@ export default defineComponent({
           let fn = c.fn
           if (typeof fn == 'function') {
             let _fn = fn.bind(formIns)
-            _fn(formIns) //
+            nextTick(() => {
+              _fn(formIns) //
+            })
           }
         }
       },
