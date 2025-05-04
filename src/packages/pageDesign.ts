@@ -22,6 +22,8 @@ export class PageDesign extends Form {
   pageType = 'pageDesign' //
   tableName
   tableType: 'main' | 'edit' | 'search' = 'main'
+  tableDataMap = {}
+  tableConfigMap = {}
   constructor(config) {
     super(config)
   }
@@ -97,7 +99,12 @@ export class PageDesign extends Form {
   }
   getTableName() {
     let tableName = this.tableName
-    return tableName
+    if (tableName == null) {
+      let config = this.config
+      tableName = config.tableName
+      this.tableName = tableName
+    } //
+    return tableName //
   }
   async getTableData(
     getDataConfig: any = {
@@ -293,6 +300,46 @@ export class PageDesign extends Form {
   async addMainTableRow(addConfig) {
     let system = this.getSystem()
     let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`) //
+    system.routeOpen(`${tableName}---edit`, (d) => {
+      // console.log('我执行了一些东西了') ////
+      //这里写新增逻辑
+    })
+  }
+  getRealTableName() {
+    let tableName = this.tableName //
+    let nameArr = tableName.split('---')
+    if (nameArr.length == 2) {
+      tableName = nameArr[0]
+    }
+    return tableName //
+  }
+  getAllDetailTable() {
+    let allTable = this.getAllTable()
+    let dTables = allTable.filter((t) => {
+      return t.getEntityType() == 'detail'
+    })
+    return dTables //
+  }
+  getAllTable() {
+    let items = this.items
+    let _items = items.filter((item) => {
+      let isEn = item.isEntity()
+      return isEn //
+    })
+    return _items
+  }
+  addEditTableRow() {
+    let rTableName = this.getRealTableName() //
+    let tableName = this.getTableName() //
+    let rTableConfig = {}
+  }
+  async createDefaultRow(tableName = this.getTableName()) {
+    let rTableName = this.getRealTableName()
+    // let tableConfig=this.getTableConfig()
+  }
+  getTableConfig(tableName = this.getTableName()) {
+    let tableConfigMap = this.tableConfigMap
+    let _config = tableConfigMap[tableName]
+    return _config
   }
 }

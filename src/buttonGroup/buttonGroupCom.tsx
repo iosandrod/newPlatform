@@ -46,7 +46,7 @@ export default defineComponent({
     let group = new itemGroup(props, props._class as any)
     const ns = group.hooks.useNamespace('buttonGroupCom')
     const btnG = group.hooks.useNamespace('buttonMenuCom')
-    let currentMainPage = inject('pageDesign')
+    let currentMainPage = inject('pageDesign', {}) //
     watch(
       () => {
         let items = props.items

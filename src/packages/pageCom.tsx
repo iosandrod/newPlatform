@@ -122,6 +122,36 @@ export default defineComponent({
     if (props.isDesign == true) {
       formIns.setCurrentDesign(true) //
     }
+    let system = formIns.getSystem()
+    watch(
+      () => {
+        let commandArr = system.commandArr
+        let length = commandArr.length
+        return [commandArr, length]
+      },
+      ([commandArr, length]) => {
+        let tableName = formIns.getTableName()
+        // debugger//
+        if (tableName == null) {
+          return
+        } //
+        let _command: any[] = commandArr as any
+        let myCommand = _command.filter((item) => item.name == tableName)
+        let _myCommand = myCommand
+        for (const c of _myCommand) {
+          let index = _command.findIndex((item) => item == c)
+          _command.splice(index, 1)
+          let fn = c.fn
+          if (typeof fn == 'function') {
+            let _fn = fn.bind(formIns)
+            _fn(formIns) //
+          }
+        }
+      },
+      {
+        immediate: true,
+      },
+    )
     let layout = formIns.layout
     let _state = formIns.state
     let state = _state
@@ -301,16 +331,6 @@ export default defineComponent({
       } //
       let com = (
         <div class="h-full w-full overflow-hidden bg-white">
-          {/* {dialogCom} */}
-          {/* <ElContainer class="container" direction="vertical">
-            <ElContainer>
-              {isFoldFields.value && <fieldCom></fieldCom>}
-              <ElContainer class="container">
-                {isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}
-              </ElContainer>
-              {isFoldConfig.value && <ConfigPanel />}
-            </ElContainer>
-          </ElContainer> */}
           <div class="flex h-full w-full bg-white overflow-hidden flex-row">
             {_fieldCom}
             <div class="flex-1 flex flex-col overflow-hidden">

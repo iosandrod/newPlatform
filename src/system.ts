@@ -12,6 +12,7 @@ import formCom from '@ER/formCom'
 import { Table } from './table/table'
 import tableCom from './table/tableCom'
 export class System extends Base {
+  commandArr = []
   activePage = ''
   systemConfig = {
     menuConfig: {
@@ -189,7 +190,7 @@ export class System extends Base {
                 },
               ],
               options: {
-                span: 24,
+                span: 24,//
                 offset: 0,
                 push: 0,
                 pull: 0,
@@ -355,7 +356,7 @@ export class System extends Base {
     let _tableName = p.split('/').pop()
     return _tableName //
   } //
-  routeOpen(config: any) {
+  routeOpen(config: any, fn?: any) {
     if (typeof config == 'string') {
       config = {
         tableName: config,
@@ -363,11 +364,12 @@ export class System extends Base {
     } //
     let router = this.getRouter()
     let tableName: string = config.tableName
-    // let _tableName = tableName.split('---')
-    // if (_tableName.length == 2) {
-    //   let _tableName1 = _tableName[0]
-    //   let type = _tableName[1] //
-    // }
+    if (typeof fn == 'function') {
+      this.addCommand({
+        name: tableName,
+        fn, //
+      })
+    }
     router.push(`/${tableName}`) //
   }
   async createPageDesign(config: { tableName: string } | string) {
@@ -495,6 +497,10 @@ export class System extends Base {
     }
     return obj
   }
+  addCommand(config) {
+    let _arr = this.commandArr //
+    _arr.push(config)
+  } //
 }
 
 export const system = reactive(new System()) //

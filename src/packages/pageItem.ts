@@ -57,4 +57,15 @@ export class PageDesignItem extends FormItem {
     //
     return false
   }
-} //
+  isEntity() {
+    let type = this.getType()
+    if (type == 'entity') {
+      return true
+    }
+  }
+  getEntityType() {
+    let config = this.config
+    let entityType = config?.options?.tableType
+    return entityType //
+  }
+}

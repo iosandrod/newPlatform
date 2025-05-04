@@ -2,6 +2,8 @@ import { computed } from 'vue'
 import { PageDesign } from './pageDesign'
 
 export const formitemTypeMap = (_this: PageDesign) => {
+  const tableOptions = _this.getRealTableName()
+  let detailTable=_this
   let obj = {
     string: {},
     entity: {
@@ -117,6 +119,25 @@ export const formitemTypeMap = (_this: PageDesign) => {
       ],
       data: computed(() => {
         return _this.state.selected?.options
+      }),
+    },
+    dform: {
+      itemSpan: 24,
+      items: [
+        {
+          field: 'tableName',
+          label: '标题',
+          type: 'select', //
+          options: [],
+        },
+        {
+          field: 'placeholder',
+          label: '提示',
+          type: 'input', //
+        },
+      ],
+      data: computed(() => {
+        return _this.state.selected?.options || {} //
       }),
     },
   }
