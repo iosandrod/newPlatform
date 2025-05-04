@@ -54,6 +54,7 @@ const layoutType = [
 ]
 const pName = [] //
 export class Form extends Base {
+  dTableName: string //
   dFormMap: any = shallowRef({})
   curDForm: any = null
   originalData = {}
@@ -491,7 +492,8 @@ export class Form extends Base {
     this.state = state //
   }
   getDesignFieldConfig() {
-    let value = createFieldConfig()
+    //@ts-ignore
+    let value = createFieldConfig(this)
     return value
   }
   initState() {
@@ -1586,6 +1588,17 @@ export class Form extends Base {
     }
     let _btns = buttons.map((btn) => btn) //
     return _btns //
+  }
+  getCurrentPageDesign() {
+    let system = this.getSystem()
+    let dTableName = this.dTableName
+    let tableMap = system.tableMap
+    let tableEditMap = system.tableEditMap
+    let design = tableMap[dTableName]
+    if (design == null) {
+      design = tableEditMap[dTableName]
+    }
+    return design
   }
 }
 //使用默认布局

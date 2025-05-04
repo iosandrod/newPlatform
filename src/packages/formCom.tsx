@@ -1,4 +1,14 @@
-import { nextTick, defineComponent, onMounted, onUnmounted, ref, withDirectives, provide, watch } from 'vue'
+import {
+  nextTick,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+  withDirectives,
+  provide,
+  watch,
+  inject,
+} from 'vue'
 import { Form } from './form'
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 export default defineComponent({
@@ -79,8 +89,13 @@ export default defineComponent({
       {
         //
         // immediate: true,//
-      }
+      },
     )
+    let pageDesign: any = inject('pageDesign', {}) //
+    let tableName = pageDesign?.tableName
+    if (fIns.dTableName == null) {
+      fIns.dTableName = tableName //
+    }
     onUnmounted(() => {
       fIns.onUnmounted() //
     }) //

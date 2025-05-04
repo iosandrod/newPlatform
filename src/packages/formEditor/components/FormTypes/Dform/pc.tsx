@@ -23,7 +23,7 @@ export default defineComponent({
       return _config
     })
     //@ts-ignore
-    let pageD: PageDesign = inject('pageDesign', {})
+    let pageD: PageDesign = inject('pageDesign', {}) //
     const registerRef = (el) => {
       formitem.registerRef('fieldCom', el) //
     }

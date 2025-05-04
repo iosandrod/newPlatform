@@ -643,10 +643,14 @@ export class FormItem extends Base {
   }
   async designForm() {
     let formConfig = this.getFormConfig()
+    // debugger //
     // let _config = cloneDeep(formConfig) //
     let _config = _.cloneDeep(formConfig) //
     let system = this.getSystem()
     let _f = new Form(_config) //
+    //@ts-ignore
+    let dTableName = this.form.dTableName || this.form.tableName
+    _f.dTableName = dTableName //
     let oldLayoutData = this.getRef('fieldCom').getLayoutData()
     _f.setLayoutData(oldLayoutData) //
     _f.setCurrentDesign(true) //
@@ -800,5 +804,8 @@ export class FormItem extends Base {
     let options = this.getOptions()
     let showTable = options.showTable //
     return showTable
+  }
+  getTableName() {
+    let form = this.form
   }
 }
