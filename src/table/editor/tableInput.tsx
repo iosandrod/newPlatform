@@ -109,6 +109,9 @@ export default defineComponent({
       if (type == 'baseinfo') {
         com = <div style={{ width: '100%', height: '100%' }}>参照表</div>
       }
+      if (type == 'code') {
+        com = <div>codeEditor</div> //
+      }
       return (
         <div
           style={{

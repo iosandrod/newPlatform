@@ -13,7 +13,7 @@ import './mainStyle.css'
 import './style.scss' //
 import 'vxe-table/lib/style.css'
 import 'vxe-pc-ui/styles/all.scss'
-import 'default-passive-events' //
+// import 'default-passive-events' //
 import VxeTable from 'vxe-table'
 import VxeUIAll from 'vxe-pc-ui' //
 import context from '@/contextM'
@@ -29,6 +29,29 @@ import buttonGroupCom from './buttonGroup/buttonGroupCom'
 import { http } from './service/client'
 import selectCom from './select/selectCom'
 import { Table } from './table/table'
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
+import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
+import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+//@ts-ignore
+self.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === 'json') {
+      return new jsonWorker()
+    }
+    if (label === 'css' || label === 'scss' || label === 'less') {
+      return new cssWorker()
+    }
+    if (label === 'html' || label === 'handlebars' || label === 'razor') {
+      return new htmlWorker()
+    }
+    if (label === 'typescript' || label === 'javascript') {
+      return new tsWorker()
+    }
+    return new editorWorker()
+  },
+}
 //@ts-ignore
 Base.prototype.system = system //
 //@ts-ignore

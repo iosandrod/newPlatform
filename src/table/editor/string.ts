@@ -59,7 +59,7 @@ export class InputEditor extends BaseEditor {
         e.preventDefault() //
       },
       column: column, //这是个函数
-      row: _row,
+      row: _row, //
       onChange: (v) => {},
       style: {
         width: '100%',

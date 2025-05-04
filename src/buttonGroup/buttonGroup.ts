@@ -28,6 +28,15 @@ export class itemGroup extends Base {
     let _b = new _class(b, this)
     this.items.push(_b) //
   }
+  delItem(item) {
+    let buttons = this.items
+    let _index = buttons.findIndex((item1) => {
+      return item1.config == item
+    })
+    if (_index != -1) {
+      this.items.splice(_index, 1) //
+    }
+  }
   setItems(items) {
     this.items.splice(0)
     for (const b of items) {

@@ -1,5 +1,5 @@
 import { itemGroup } from '@/buttonGroup/buttonGroup'
-import { defineComponent, toRaw } from 'vue'
+import { defineComponent, toRaw, watch } from 'vue'
 import tabCom from '@/buttonGroup/tabCom'
 import {
   ElButton,
@@ -32,6 +32,7 @@ export default defineComponent({
       default: 100,
     },
     items: {
+      type: Array,
       default: () => [],
     },
     _class: {
@@ -45,6 +46,35 @@ export default defineComponent({
     let group = new itemGroup(props, props._class as any)
     const ns = group.hooks.useNamespace('buttonGroupCom')
     const btnG = group.hooks.useNamespace('buttonMenuCom')
+    watch(
+      () => {
+        let items = props.items
+        let len = items.length
+        return [items, len]
+      },
+      ([items, len], [oldItems, oldLen]) => {
+        //
+        if (items !== oldItems) {
+          group.setItems(items)
+          return
+        } //
+        let _items: any[] = items as any
+        let _oldItems: any[] = group.items.map((row) => row.config) as any
+        let addItems = _items.filter((item) => {
+          return _oldItems.indexOf(item) === -1
+        })
+        let delItems = _oldItems.filter((item) => {
+          //
+          return _items.indexOf(item) === -1
+        })
+        for (const item of addItems) {
+          group.addItem(item)
+        }
+        for (const item of delItems) {
+          group.delItem(item)
+        }
+      },
+    )
     const runBtnFn = (el: Button) => {
       el.runFn({
         parent: props.parent,
@@ -65,7 +95,7 @@ export default defineComponent({
                 <div
                   class="v-contextmenu"
                   style={{
-                    width: `${btn.getButtonWidth()}px`,
+                    minWidth: `${btn.getButtonWidth()}px`,
                     position: 'relative',
                     zIndex: 0,
                   }}

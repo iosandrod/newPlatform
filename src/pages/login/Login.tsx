@@ -24,8 +24,10 @@ import { PageDesign } from '@ER/pageDesign'
 import FormEditor from '@ER/formEditor/formEditor'
 import { Button } from '@/buttonGroup/button'
 import { system } from '@/system'
+import codeEditorCom from '@/codeEditor/codeEditorCom'
 export default defineComponent({
   components: {
+    codeEditorCom,
     buttonCom, //
     pageCom, //
     erFormEditor,
@@ -143,6 +145,7 @@ export default defineComponent({
       //   </div>
       // )
       // com = <dialogCom ref={_reg2}></dialogCom>
+      com = <codeEditorCom></codeEditorCom>
       let _com = (
         <div
           style={{

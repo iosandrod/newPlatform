@@ -20,7 +20,6 @@ export default defineComponent({
     const formitem: FormItem = params.formitem
     let _value = computed(() => {
       let _config = formitem?.getPageButtonsProps()
-      console.log(_config, 'test_config') //
       return _config
     })
     return () => {

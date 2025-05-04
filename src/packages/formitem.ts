@@ -684,7 +684,7 @@ export class FormItem extends Base {
   }
   getPageButtons() {
     let options = this.getOptions()
-    let items = options.items //
+    let items = options.items || [] //
     return items
   }
   getPageButtonsProps() {
@@ -709,6 +709,7 @@ export class FormItem extends Base {
     return span //
   }
   openTableDialog() {
+    //
     let options = this.getOptions()
     let tableConfig = options.tableConfig || {} //
     let sys = this.getSystem()

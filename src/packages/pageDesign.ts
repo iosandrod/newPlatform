@@ -15,6 +15,7 @@ import {
 import { useOnce, useRunAfter } from './utils/decoration'
 import pageCom, { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
+import { formitemTypeMap } from './designNodeForm'
 
 export class PageDesign extends Form {
   static component = pageCom //
@@ -48,7 +49,7 @@ export class PageDesign extends Form {
     super.init()
     nextTick(() => {
       // debugger//
-      this.setLayoutData(testBtnData)//
+      this.setLayoutData(testBtnData) //
     })
   }
   getTabTitle() {
@@ -90,7 +91,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() { }
+  initDefaultTemplatePage() {}
   getValidateRules() {
     return []
   }
@@ -114,10 +115,10 @@ export class PageDesign extends Form {
     console.log(res, 'testRes') //
     return res
   }
-  buildQuery() { }
-  openSearchForm() { }
-  async createTableData() { }
-  async updateTableData() { }
+  buildQuery() {}
+  openSearchForm() {}
+  async createTableData() {}
+  async updateTableData() {}
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
     let obj1 = {}
@@ -134,7 +135,7 @@ export class PageDesign extends Form {
     let columns = tableIns.getColumns()
     return columns //
   }
-  getMainTableConfig() { }
+  getMainTableConfig() {}
   @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -196,92 +197,97 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() { }
+  getAllFormMap() {}
   @useOnce()
   initDefaultDForm() {
-    let allType = ['input', 'input', 'entity', 'form']
-    let inputF = {
-      itemSpan: 24,
-      items: [
-        {
-          field: 'title',
-          label: '标题',
-          type: 'input', //
-        },
-        {
-          field: 'placeholder',
-          label: '提示',
-          type: 'input', //
-        },
-      ],
-      data: computed(() => {
-        return this.state.selected?.options || {} //
-      }), //
-    }
-    let _f = new Form(inputF) //
-    let entityF = {
-      itemSpan: 24,
-      items: [
-        {
-          field: 'tableName',
-          label: '表名',
-          type: 'input', //
-          onBlur: async (config) => {
-            let value = config.value
-            let oldValue = config.oldValue
-            if (value == oldValue) {
-              return
-            }
-            let system = this.getSystem()
-            let tableInfo = await system.getTableConfig(value)
-            if (tableInfo == null) {
-              return //
-            }
-            let currentBindData = config.form.getData() //
-            Object.entries(tableInfo).forEach(([key, value]) => {
-              //@ts-ignore//
-              currentBindData[key] = value
-            })
-          },
-        },
-        {
-          filed: 'eventMap',
-          label: '事件',
-          type: 'input',
-        },
-        {
-          field: 'tableType',
-          label: '表类型',
-          type: 'select', //
-          options: [
-            {
-              label: '主表',
-              value: 'main',
-            },
-            {
-              label: '子表',
-              value: 'detail', //
-            },
-            {
-              label: '关联表',
-              value: 'relate', //
-            },
-          ],
-        },
-      ],
-      data: computed(() => {
-        return this.state?.selected?.options //
-      }),
-    }
-    let _f1 = new Form(entityF)
-    this.dFormMap['entity'] = _f1 //
-    this.dFormMap['input'] = _f //
-    this.curDForm = _f1 //
+    // let allType = ['input', 'input', 'entity', 'form']
+    let tm = formitemTypeMap(this)
+    Object.entries(tm).forEach(([key, value]) => {
+      let _f = new Form(value)
+      this.dFormMap[key] = _f
+    })
+    // let inputF = {
+    //   itemSpan: 24,
+    //   items: [
+    //     {
+    //       field: 'title',
+    //       label: '标题',
+    //       type: 'input', //
+    //     },
+    //     {
+    //       field: 'placeholder',
+    //       label: '提示',
+    //       type: 'input', //
+    //     },
+    //   ],
+    //   data: computed(() => {
+    //     return this.state.selected?.options || {} //
+    //   }), //
+    // }
+    // let _f = new Form(inputF) //
+    // let entityF = {
+    //   itemSpan: 24,
+    //   items: [
+    //     {
+    //       field: 'tableName',
+    //       label: '表名',
+    //       type: 'input', //
+    //       onBlur: async (config) => {
+    //         let value = config.value
+    //         let oldValue = config.oldValue
+    //         if (value == oldValue) {
+    //           return
+    //         }
+    //         let system = this.getSystem()
+    //         let tableInfo = await system.getTableConfig(value)
+    //         if (tableInfo == null) {
+    //           return //
+    //         }
+    //         let currentBindData = config.form.getData() //
+    //         Object.entries(tableInfo).forEach(([key, value]) => {
+    //           //@ts-ignore//
+    //           currentBindData[key] = value
+    //         })
+    //       },
+    //     },
+    //     {
+    //       filed: 'eventMap',
+    //       label: '事件',
+    //       type: 'input',
+    //     },
+    //     {
+    //       field: 'tableType',
+    //       label: '表类型',
+    //       type: 'select', //
+    //       options: [
+    //         {
+    //           label: '主表',
+    //           value: 'main',
+    //         },
+    //         {
+    //           label: '子表',
+    //           value: 'detail', //
+    //         },
+    //         {
+    //           label: '关联表',
+    //           value: 'relate', //
+    //         },
+    //       ],
+    //     },
+    //   ],
+    //   data: computed(() => {
+    //     return this.state?.selected?.options //
+    //   }),
+    // }
+    // let _f1 = new Form(entityF)
+    // this.dFormMap['entity'] = _f1 //
+    // this.dFormMap['input'] = _f //
+    // this.curDForm = _f1 //
   }
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() { }
+  async openAddEntity() {}
 }
