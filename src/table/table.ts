@@ -1605,6 +1605,6 @@ export class Table extends Base {
   getHeaderButtons() {
     let config = this.config //
     let buttons = config.buttons||[]
-    let defaultButtons=[]
+    return buttons
   }
 }

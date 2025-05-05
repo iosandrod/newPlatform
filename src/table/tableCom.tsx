@@ -40,6 +40,9 @@ export default defineComponent({
       type: Array,
       // default: () => [],
     },
+    buttons: {
+      type: Array,
+    },
     isFilterTable: {
       type: Boolean,
       default: false,
@@ -406,7 +409,7 @@ export default defineComponent({
             minHeight: '200px', //
             width: '100%',
             height: '100%',
-            display: 'flex',//
+            display: 'flex', //
             flexDirection: 'column',
             position: 'relative',
           }}

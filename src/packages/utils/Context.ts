@@ -337,7 +337,7 @@ export class Context {
     //删除节点
     const arr = this.arr
     const node = this.node //
-    let parent = this.parent//
+    let parent = this.parent //
     if (parent.type == 'inline') {
       let columns = parent.columns
       if (columns.length == 1) {
@@ -385,6 +385,7 @@ export class Context {
         push: 0,
       },
       type: 'col',
+      label: 'new tab', //
       list: [],
     })
     if (index == null) {

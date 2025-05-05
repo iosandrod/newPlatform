@@ -18,8 +18,10 @@ export default defineComponent({
   setup(props, { emit, slots, expose, attrs }) {
     let btn = new Button(props)
     let runBtnFn = (el: Button) => {
+      let p = el.group.config?.parent
       btn.runFn({
-        //
+        group: el.group,
+        parent: p,
       })
     }
     return () => {

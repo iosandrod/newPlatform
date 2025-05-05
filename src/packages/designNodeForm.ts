@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { PageDesign } from './pageDesign'
+import { Table } from '@/table/table'
 
 export const formitemTypeMap = (_this: PageDesign) => {
   const tableOptions = _this.getRealTableName()
@@ -142,17 +143,42 @@ export const formitemTypeMap = (_this: PageDesign) => {
     },
     tabs: {
       itemSpan: 24,
+
       items: [
         {
           field: 'items',
           label: '',
           type: 'stable', //
-          buttons: [
-            
-          ],
+
           options: {
             showTable: true,
             tableConfig: {
+              showSerialNumber: true, //
+              buttons: [
+                {
+                  label: '新增',
+                  key: 'add',
+                  fn: () => {
+                    let select = _this.state.selected
+                    let context = select.context
+                    context.appendCol() //
+                  },
+                },
+                {
+                  label: '删除',
+                  key: 'del',
+                  fn: (config) => {
+                    let select = _this.state.selected
+                    let columns = select.columns
+                    let table: Table = config.parent
+                    let crow = table.getCurRow()
+                    let _index = columns.indexOf(crow)
+                    if (_index > -1) {
+                      columns.splice(_index, 1) //
+                    }
+                  },
+                },
+              ],
               columns: [
                 {
                   field: 'label', //
