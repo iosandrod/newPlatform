@@ -170,6 +170,9 @@ export default defineComponent({
           formIns={formIns?.curDForm}
         ></FormCom>
       )
+      if (formIns?.curDForm == null) {
+        lF = null //
+      }
       if (formIns?.curDForm?.id == null) {
         lF = null
       }

@@ -896,6 +896,8 @@ export class Form extends Base {
       let _t = this.dFormMap[newType]
       if (_t) {
         this.curDForm = _t
+      } else {
+        this.curDForm = null
       }
     }
     this.isShowConfig = state.selected === result
