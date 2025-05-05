@@ -50,7 +50,6 @@ export class FormItem extends Base {
     return field
   }
   updateBindData(updateConfig: { value: any; [key: string]: any }) {
-    //
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -63,7 +62,14 @@ export class FormItem extends Base {
       if (oldValue == value) {
         return //
       }
-      _.set(data, field, value) //
+      let _field1 = `_${field}_set`
+      let dv = data?.[_field1]
+      if (typeof dv == 'function') {
+        dv(value) //
+      } else {
+        data[field] = value
+      }
+      // _.set(data, field, value) //
       //   data[field] = value //
     } catch (error) {
       console.log('更新数据报错了') //
@@ -283,7 +289,12 @@ export class FormItem extends Base {
   getBindValue(getConfig?: any) {
     let data = this.getData() //
     let field = this.getField()
-    let value = _.get(data, field) //
+    let _field = `_${field}_get`
+    let value1 = data[_field]
+    let value = data[field]
+    if (typeof value1 == 'function') {
+      value = value1()
+    } //
     if (getConfig) {
       return value
     }

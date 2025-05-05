@@ -26,21 +26,22 @@ export default defineComponent({
     const { state, setSelection } = hooks.useTarget()
     const addStore = (element) => {
       //添加一个layout
-      const newElement = reactive(ER.wrapElement(_.cloneDeep(element)))
+      let _el = _.cloneDeep(element)
+      let newElement = reactive(ER.wrapElement(_el, true, true, true, true))
       state.store.push(newElement)
       utils.addContext({ node: newElement, parent: state.store, form: formIns })
       nextTick(() => {})
     }
     const slots = {
       item: ({ element }) => {
+        let t1 = utils.fieldLabel(t, element)
+        if (t1 == '' || t1 == null) {
+          t1 = element.label //
+        }
         let _com = (
-          <li
-            class={[
-            ]}
-            onClick={() => addStore(element)}
-          >
+          <li class={[]} onClick={() => addStore(element)}>
             <Icon class={[ns.e('icon')]} icon={element.icon}></Icon>
-            <span>{utils.fieldLabel(t, element)}</span>
+            <span>{t1}</span>
           </li>
         )
         return _com

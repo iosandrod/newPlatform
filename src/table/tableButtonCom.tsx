@@ -15,6 +15,7 @@ export default defineComponent({
     const buttons = [
       {
         label: '新增',
+        key: 'add',
         fn: async () => {
           //添加行
           tableIns.addRows(1) //
@@ -22,6 +23,7 @@ export default defineComponent({
       },
       {
         label: '删除', //
+        key: 'del',
         fn: async () => {
           //添加行
           // console.log('执行到这里')//
@@ -30,6 +32,7 @@ export default defineComponent({
       },
       {
         label: '复制',
+        key: 'copy', //
         fn: async () => {
           //添加行
           let arr = [

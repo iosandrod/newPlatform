@@ -3,7 +3,7 @@ import { PageDesign } from './pageDesign'
 
 export const formitemTypeMap = (_this: PageDesign) => {
   const tableOptions = _this.getRealTableName()
-  let detailTable=_this
+  let detailTable = _this
   let obj = {
     string: {},
     entity: {
@@ -138,6 +138,44 @@ export const formitemTypeMap = (_this: PageDesign) => {
       ],
       data: computed(() => {
         return _this.state.selected?.options || {} //
+      }),
+    },
+    tabs: {
+      itemSpan: 24,
+      items: [
+        {
+          field: 'items',
+          label: '',
+          type: 'stable', //
+          buttons: [
+            
+          ],
+          options: {
+            showTable: true,
+            tableConfig: {
+              columns: [
+                {
+                  field: 'label', //
+                  title: '标题',
+                  type: 'string',
+                  editType: 'string',
+                },
+              ],
+            },
+          },
+        },
+        {
+          field: 'placeholder',
+          label: '提示',
+          type: 'input', //
+        },
+      ],
+      data: computed(() => {
+        let _d = _this.state.selected?.options || {} //
+        // debugger//
+        _d['_items_get'] = () => _this.state.selected.columns
+        _d['_items_set'] = (v) => {} //
+        return _d //
       }),
     },
   }

@@ -25,14 +25,42 @@ export const createGlobalConfig = () => {
   return JSON.parse(JSON.stringify(globalConfig))
 }
 export const createFieldConfig = (f: Form) => {
-  debugger//
-  let d = f.getCurrentPageDesign()
-  //
+  // debugger //
+  let d: PageDesign = f.getCurrentPageDesign()
+  let allFields = []
+  if (d != null) {
+    let columns = d.config.columns || [] //
+    for (const col of columns) {
+      let type = col.type
+      type = 'string'
+      allFields.push({
+        type: type,
+        label: col.title || col.field,
+        icon: 'input',
+        key: '',
+        id: '',
+        options: {
+          clearable: true,
+          isShowWordLimit: false,
+          renderType: 1,
+          disabled: false,
+          showPassword: false,
+          defaultValue: '',
+          placeholder: '',
+          labelWidth: 100,
+          isShowLabel: true,
+          required: false,
+          min: null,
+          max: null,
+        },
+      })
+    }
+  }
   const fieldsConfig = [
     {
       name: '预设字段',
       id: 'defaultField',
-      children: [],
+      children: [...allFields], //
     },
     {
       name: '基础字段',
@@ -59,26 +87,6 @@ export const createFieldConfig = (f: Form) => {
             max: null,
           },
         },
-        // {
-        //   type: 'textarea',
-        //   label: '多行文本',
-        //   icon: 'textarea',
-        //   key: '',
-        //   id: '',
-        //   options: {
-        //     clearable: true,
-        //     isShowWordLimit: false,
-        //     rows: 6,
-        //     defaultValue: '',
-        //     placeholder: '',
-        //     disabled: false,
-        //     labelWidth: 100,
-        //     isShowLabel: true,
-        //     required: false,
-        //     min: null,
-        //     max: null
-        //   }
-        // },
         {
           type: 'number',
           label: '数字',

@@ -1602,4 +1602,9 @@ export class Table extends Base {
   outClick(event, isIn = false) {
     this.clearEditCell() //
   } //
+  getHeaderButtons() {
+    let config = this.config //
+    let buttons = config.buttons||[]
+    let defaultButtons=[]
+  }
 }

@@ -472,15 +472,21 @@ function ControlInsertionPlugin(ER: Form) {
         }
       }
       if (inserRowIndex !== '') {
+        debugger//
         let store = []
         store = Array.isArray(prevSortable.options.parent)
           ? prevSortable.options.parent
           : prevSortable.options.parent.list
         // 在指定的索引位置插入新元素
         store.splice(inserRowIndex, 0, newElement)
+        let _node=store[inserRowIndex]
+        if(_node==null){
+          _node=store[inserRowIndex-1]
+        }
         // 关联新元素的上下文信息
         utils.addContext({
-          node: store[inserRowIndex],
+          // node: store[inserRowIndex],
+          node: _node,
           parent: prevSortable.options.parent,
           form: ER.formIns, //
         })

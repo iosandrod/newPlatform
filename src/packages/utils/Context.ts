@@ -337,6 +337,27 @@ export class Context {
     //删除节点
     const arr = this.arr
     const node = this.node //
+    let parent = this.parent//
+    if (parent.type == 'inline') {
+      let columns = parent.columns
+      if (columns.length == 1) {
+        //只有自己一个
+        let pParent = parent.context.parent
+        if (pParent.type == 'col') {
+          let ppParent = pParent.context.parent
+          if (ppParent.type == 'grid') {
+            let columns = ppParent.columns
+            if (columns.length == 1) {
+              let pppParent = ppParent.context.parent
+              if (pppParent.type == 'inline') {
+                let pppContext = pppParent.context
+                pppContext.delete() //
+              }
+            }
+          }
+        }
+      }
+    }
     if (node.type === 'inline') {
       arr.splice(arr.indexOf(node), 1)
     } else {
