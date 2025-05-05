@@ -13,11 +13,19 @@ import ControlInsertionPlugin from '@ER/formEditor/components/Layout/ControlInse
 import { nanoid } from 'nanoid'
 import { ElAside } from 'element-plus'
 import { fieldsConfig } from '@ER/formEditor/componentsConfig'
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
+import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 export default defineComponent({
   name: 'fieldCom',
   components: {
     menuCom,
     dragGableWrap,
+    buttonGroupCom,
+  },
+  props: {
+    buttons: {
+      type: Array,
+    },
   },
   setup(props) {
     const ER: any = inject('Everright')
@@ -68,14 +76,16 @@ export default defineComponent({
       formIns.registerRef('fieldMenu', el) //
     }
     const fieldsConfig = formIns.getDesignFieldConfig() //
+    // debugger //
     return () => {
       let com = (
         <ElAside class={[ns.b()]} width={ER.props.fieldsPanelWidth}>
           <el-scrollbar>
+            <ButtonGroupCom items={[]}></ButtonGroupCom>
             <menuCom
               items={fieldsConfig}
               ref={registerMenu}
-              defaultOpeneds={ER.props.fieldsPanelDefaultOpeneds}
+              defaultOpeneds={ER.config.fieldsPanelDefaultOpeneds}
               v-slots={{
                 subItemTitle: (item) => {
                   let config = item.config

@@ -30,7 +30,8 @@ export default defineComponent({
         show.value = true //
       })
     } else {
-      system.createPageDesign(tableName).then((res) => {//
+      system.createPageDesign(tableName).then((res) => {
+        //
         en = res
         show.value = true //
       })
@@ -39,7 +40,7 @@ export default defineComponent({
       if (show.value == false) {
         return <div>页面加载当中</div>
       }
-      return <PageCom isDesign={true} formIns={en}></PageCom>
+      return <PageCom isDesign={false} formIns={en}></PageCom>
     }
   },
 })

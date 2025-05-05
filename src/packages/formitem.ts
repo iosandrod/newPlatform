@@ -49,7 +49,7 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any; [key: string]: any }) {
+  updateBindData(updateConfig: { value: any;[key: string]: any }) {
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -75,8 +75,8 @@ export class FormItem extends Base {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() {}
-  async onValueChange() {}
+  getItemChange() { }
+  async onValueChange() { }
   getForm() {
     return this.form //
   }
@@ -127,7 +127,7 @@ export class FormItem extends Base {
     // console.log(options, 'options1111')//
     return options //
   }
-  getSubForm(id: string) {}
+  getSubForm(id: string) { }
   getData() {
     let form = this.form
     let data = form.getData()
@@ -366,7 +366,6 @@ export class FormItem extends Base {
     }
     const { options } = node
     let result1 = {
-      // label: this.getTitle(), //
       label: '',
       disabled: this.getDisabled(),
       placeholder: this.getPlaceholder(),
@@ -754,7 +753,7 @@ export class FormItem extends Base {
         if (Array.isArray(_value1)) {
           value = _value1 //
         }
-      } catch (error) {}
+      } catch (error) { }
     }
     if (!Array.isArray(value)) {
       value = [] //

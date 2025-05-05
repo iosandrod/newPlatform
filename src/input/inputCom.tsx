@@ -4,27 +4,7 @@ import { Input } from './inputClass'
 import { VxeInputPropTypes, getConfig } from 'vxe-table'
 export default defineComponent({
   name: 'InputCom',
-  emits: [
-    'update:modelValue',
-    'input',
-    'change',
-    'keydown',
-    'keyup',
-    'wheel',
-    'click',
-    'focus',
-    'blur',
-    'clear',
-    'search-click',
-    'toggle-visible',
-    'prev-number',
-    'next-number',
-    'prefix-click',
-    'suffix-click',
-    'date-prev',
-    'date-today',
-    'date-next',
-  ],
+  emits: ['update:modelValue', 'input', 'change', 'keydown', 'keyup', 'wheel', 'click', 'focus', 'blur', 'clear', 'search-click', 'toggle-visible', 'prev-number', 'next-number', 'prefix-click', 'suffix-click', 'date-prev', 'date-today', 'date-next'],
   props: {
     onUpdateModelValue: Function,
     onInput: Function,
@@ -45,9 +25,7 @@ export default defineComponent({
     onDatePrev: Function,
     onDateToday: Function,
     onDateNext: Function,
-    modelValue: [String, Number, Date] as PropType<
-      VxeInputPropTypes.ModelValue
-    >,
+    modelValue: [String, Number, Date] as PropType<VxeInputPropTypes.ModelValue>,
     immediate: {
       type: Boolean as PropType<VxeInputPropTypes.Immediate>,
       default: true,
@@ -196,8 +174,12 @@ export default defineComponent({
             ref={register}
             style={{
               flex: 1,
-              height: '100%',//
-            }}//
+              height: '100%', //
+              width: '100%',
+              minHeight: '36px',
+              paddingLeft: '3px',
+              paddingRight: '3px', //
+            }} //
             {...props} //
             modelValue={_input.getModelValue()}
           ></VxeInput>

@@ -29,9 +29,10 @@ import { Node } from './formEditor/node'
 import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
 import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
-import {} from 'vxe-table'
+import { } from 'vxe-table'
 import { PageDesignItem } from './pageItem'
 import formCom from './formCom'
+import { selectTypeMap } from './designNodeForm'
 //转换数据
 //
 let prevEl: any = ''
@@ -56,15 +57,17 @@ const pName = [] //
 export class Form extends Base {
   dTableName: string //
   dFormMap: any = shallowRef({})
+  sFormMap: any = shallowRef({})
   curDForm: any = null
+  curSForm: any = null
   originalData = {}
-  tableDataMap: {
+  tableDataMap: {//
     curRow: any
     data: any
   } = {
-    data: [],
-    curRow: null,
-  }
+      data: [],
+      curRow: null,
+    }
   tableConfigMap = {}
   static component = formCom
   pageType = 'form' //
@@ -262,7 +265,7 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-            sortableUtils.index(prevSortable.el.parentNode)
+          sortableUtils.index(prevSortable.el.parentNode)
           ],
         form: ER.formIns,
       })
@@ -355,8 +358,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-            ? newTarget.children[0]
-            : newTarget.parentNode
+              ? newTarget.children[0]
+              : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -458,7 +461,6 @@ export class Form extends Base {
 
     let config = this.config //
     if (!isReadonly(config)) {
-      //
       if (pageType == 'form') {
         let _props = getDefaultFormEditProps()
         let obj = {} //
@@ -579,7 +581,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() {}
+  closeCurSubForm() { }
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -713,7 +715,7 @@ export class Form extends Base {
   initPcLayout() {
     let pcLayout = this.pcLayout
   }
-  initMobileLayout() {}
+  initMobileLayout() { }
   addFormItem(config: Field) {
     let id = config.id
     let oldItems = this.items
@@ -770,7 +772,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) {}
+  setEditData(data) { }
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -894,10 +896,16 @@ export class Form extends Base {
     let newType = result?.type
     if (oldType != newType) {
       let _t = this.dFormMap[newType]
+      let _t1 = this.sFormMap[newType]
       if (_t) {
         this.curDForm = _t
       } else {
         this.curDForm = null
+      }
+      if (_t1) {
+        this.curSForm = _t1
+      } else {
+        this.curSForm = null//
       }
     }
     this.isShowConfig = state.selected === result
@@ -1570,18 +1578,13 @@ export class Form extends Base {
       item.designForm()
     }
   }
-  dragWidth(props: any) {}
+  dragWidth(props: any) { }
   initDefaultDForm() {
-    let allType = [
-      'input',
-      'select',
-      'radio',
-      'checkbox',
-      'cascader',
-      'uploadfile',
-      'signature',
-      'html',
-    ]
+    let tm1 = selectTypeMap(this as any)//
+    Object.entries(tm1).forEach(([key, value]) => {
+      let _f = new Form(value)
+      this.sFormMap[key] = _f////
+    })//
   }
   getHeaderButtons() {
     let buttons = this.config.buttons
@@ -1601,6 +1604,14 @@ export class Form extends Base {
       design = tableEditMap[dTableName]
     }
     return design
+  }
+  getFieldComButtons() {
+    let btns = [{
+      label: '添加默认字段',
+      fn: async () => {
+        console.log('添加默认字段')//
+      }
+    }]
   }
 }
 //使用默认布局

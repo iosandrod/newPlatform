@@ -15,6 +15,7 @@ export default {
       select: '下拉框',
       time: '时间',
       date: '日期',
+      string: '文本',
       rate: '评分',
       switch: '开关',
       dform: '表单',

@@ -29,9 +29,7 @@ export default defineComponent({
       formIns.registerRef('form', ref) //
     }
     return () => {
-      let TagComponent: any = resolveComponent(
-        unref(isPc) ? 'el-form' : 'van-form',
-      )
+      let TagComponent: any = resolveComponent(unref(isPc) ? 'vxe-form' : 'van-form')
       if (formIns.pageType !== 'form') {
         TagComponent = 'div' //
       } //
@@ -41,15 +39,7 @@ export default defineComponent({
       if (!unref(isEditModel)) {
         _class.push('flex flex-col')
       }
-      const Layout = (
-        <LayoutDragGable
-          data-layout-type={'root'}
-          class={[unref(isEditModel) && ns.e('wrap'), 'h-full', ..._class]}
-          data={state.store}
-          parent={state.store}
-          isRoot
-        ></LayoutDragGable>
-      )
+      const Layout = <LayoutDragGable data-layout-type={'root'} class={[unref(isEditModel) && ns.e('wrap'), 'h-full', ..._class]} data={state.store} parent={state.store} isRoot></LayoutDragGable>
       let bar = null
       if (formIns.getShowFormBar()) {
         bar = (
@@ -62,6 +52,7 @@ export default defineComponent({
         <div class="h-full w-full">
           {bar}
           <TagComponent
+            customLayout={true}
             class={['h-full w-full flex flex-col']} //
             ref={setFormRef}
             onClick={unref(isEditModel) && handleClick}

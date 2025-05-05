@@ -15,7 +15,7 @@ import {
 import { useOnce, useRunAfter } from './utils/decoration'
 import pageCom, { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
-import { formitemTypeMap } from './designNodeForm'
+import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 
 export class PageDesign extends Form {
   static component = pageCom //
@@ -92,7 +92,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() {}
+  initDefaultTemplatePage() { }
   getValidateRules() {
     return []
   }
@@ -103,6 +103,7 @@ export class PageDesign extends Form {
       tableName = config.tableName
       this.tableName = tableName
     } //
+    tableName = tableName || ''
     return tableName //
   }
   async getTableData(
@@ -121,10 +122,10 @@ export class PageDesign extends Form {
     console.log(res, 'testRes') //
     return res
   }
-  buildQuery() {}
-  openSearchForm() {}
-  async createTableData() {}
-  async updateTableData() {}
+  buildQuery() { }
+  openSearchForm() { }
+  async createTableData() { }
+  async updateTableData() { }
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
     let obj1 = {}
@@ -141,7 +142,7 @@ export class PageDesign extends Form {
     let columns = tableIns.getColumns()
     return columns //
   }
-  getMainTableConfig() {}
+  getMainTableConfig() { }
   @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -178,6 +179,9 @@ export class PageDesign extends Form {
     } else {
       await this.updateTableDesign()
     }
+    nextTick(() => {
+      this.setCurrentDesign(false)//
+    })
   }
   async createTableDesign() {
     let _data = this.getLayoutData()
@@ -203,22 +207,29 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() {}
+  getAllFormMap() { }
   @useOnce()
   initDefaultDForm() {
-    // let allType = ['input', 'input', 'entity', 'form']
     let tm = formitemTypeMap(this)
     Object.entries(tm).forEach(([key, value]) => {
       let _f = new Form(value)
       this.dFormMap[key] = _f
     })
+    let tm1 = selectTypeMap(this)
+    Object.entries(tm1).forEach(([key, value]) => {
+      let _f = new Form(value)
+      this.sFormMap[key] = _f////
+    })//
+  }//
+  initDefaultSForm() {
+
   }
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() {}
+  async openAddEntity() { }
   async addMainTableRow(addConfig) {
     let system = this.getSystem()
     let tableName = this.getTableName()
@@ -228,7 +239,7 @@ export class PageDesign extends Form {
     })
   }
   getRealTableName() {
-    let tableName = this.tableName //
+    let tableName = this.getTableName() //
     let nameArr = tableName.split('---')
     if (nameArr.length == 2) {
       tableName = nameArr[0]
@@ -253,7 +264,7 @@ export class PageDesign extends Form {
   async addEditTableRow() {
     let nRow = await this.createDefaultRow()
     let tableDataMap = this.tableDataMap
-    this.tableDataMap.curRow=nRow
+    this.tableDataMap.curRow = nRow
     console.log(nRow) //
   }
   setLayoutData(d) {

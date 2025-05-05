@@ -90,16 +90,17 @@ export const formitemTypeMap = (_this: PageDesign) => {
           type: 'stable', ////
           options: {
             showTable: true,
-            buttons: [
-              {
-                label: '添加子按钮',
-                fn: () => {
-                  console.log('添加子按钮') //
-                },
-              },
-            ],
+
             tableConfig: {
               tableState: 'edit',
+              buttons: [
+                {
+                  label: '添加子按钮',
+                  fn: () => {
+                    console.log('添加子按钮') //
+                  },
+                },
+              ],
               columns: [
                 {
                   field: 'label',
@@ -119,7 +120,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         }, //
       ],
       data: computed(() => {
-        return _this.state.selected?.options
+        return _this.state.selected?.options//
       }),
     },
     dform: {
@@ -127,15 +128,10 @@ export const formitemTypeMap = (_this: PageDesign) => {
       items: [
         {
           field: 'tableName',
-          label: '标题',
+          label: '关联表名',
           type: 'select', //
           options: [],
-        },
-        {
-          field: 'placeholder',
-          label: '提示',
-          type: 'input', //
-        },
+        },//
       ],
       data: computed(() => {
         return _this.state.selected?.options || {} //
@@ -200,10 +196,77 @@ export const formitemTypeMap = (_this: PageDesign) => {
         let _d = _this.state.selected?.options || {} //
         // debugger//
         _d['_items_get'] = () => _this.state.selected.columns
-        _d['_items_set'] = (v) => {} //
+        _d['_items_set'] = (v) => { } //
         return _d //
       }),
     },
   }
   return obj //
+}
+
+
+export const selectTypeMap = (_this: PageDesign) => {
+  let formitemTypeArr = [
+    'input',
+    'select',
+  ]
+  let createDSelect = (type) => {
+    let items = [{
+      field: "label",
+      label: '标题',
+      type: 'input'//
+    },
+    {
+      field: 'type',
+      label: '类型',
+      type: 'select',
+      options: [
+        {
+          label: '输入框',
+          value: 'input'
+        },
+        {
+          label: '下拉框',
+          value: 'select'
+        }
+      ]
+    },
+    ]
+    return items
+  }
+  let obj = {
+    input: {
+      itemSpan: 24,
+      items: [
+        ...createDSelect('input')
+      ],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    },
+    select: {
+      itemSpan: 24,
+      items: [
+        ...createDSelect('select')
+      ],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    },
+    string: {
+      itemSpan: 24,
+      items: [
+        ...createDSelect('string'),
+        {
+          field: 'placeholder',
+          label: '提示',
+          type: 'input', //
+        },
+      ],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    }
+  }
+  return obj
 }

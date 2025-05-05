@@ -5,7 +5,7 @@ export const globalConfig = {
   isSync: true,
   pc: {
     size: 'default',
-    labelPosition: 'left',
+    labelPosition: 'left',//
     completeButton: {
       text: '提交',
       color: '',
@@ -32,7 +32,7 @@ export const createFieldConfig = (f: Form) => {
     let columns = d.config.columns || [] //
     for (const col of columns) {
       let type = col.type
-      type = 'string'
+      type = 'string'//
       allFields.push({
         type: type,
         label: col.title || col.field,
@@ -55,13 +55,13 @@ export const createFieldConfig = (f: Form) => {
         },
       })
     }
-  }
+  }//
   const fieldsConfig = [
-    {
-      name: '预设字段',
-      id: 'defaultField',
-      children: [...allFields], //
-    },
+    // {
+    //   name: '预设字段',
+    //   id: 'defaultField',
+    //   children: [...allFields], //
+    // },
     {
       name: '基础字段',
       id: 'field',

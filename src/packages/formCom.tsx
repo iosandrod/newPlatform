@@ -1,19 +1,67 @@
-import {
-  nextTick,
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  ref,
-  withDirectives,
-  provide,
-  watch,
-  inject,
-} from 'vue'
+import { nextTick, defineComponent, onMounted, onUnmounted, ref, withDirectives, provide, watch, inject } from 'vue'
 import { Form } from './form'
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
+import defaultProps from './formEditor/defaultProps'
+const getDefaultFormEditProps = () => {
+  return {
+    itemSpan: {
+      type: Number,
+      default: 6,
+    }, //
+    fieldsPanelWidth: {
+      type: String,
+      default: '220px',
+    },
+    fieldsPanelDefaultOpeneds: {
+      type: Array,
+      default: () => ['defaultField', 'field', 'container'],
+    },
+    delHandle: {
+      type: Function,
+      default: () => () => {}, //
+    },
+    copyHandle: {
+      type: Function,
+      default: () => {},
+    },
+    inlineMax: {
+      type: Number,
+      default: 4,
+    },
+    isShowClear: {
+      type: Boolean,
+      default: true,
+    },
+    isShowI18n: {
+      type: Boolean,
+      default: true,
+    },
+    dragMode: {
+      type: String,
+      default: 'icon',
+      validator: (value: any) => ['full', 'icon'].includes(value),
+    },
+    checkFieldsForNewBadge: {
+      type: Function,
+      default: () => {},
+    },
+    formIns: {
+      type: Object,
+    },
+    ...defaultProps,
+    isDesign: {
+      type: Boolean,
+      default: true,
+    },
+    data: {
+      type: Object,
+    }, //
+  } ///
+}
 export default defineComponent({
   components: {},
   props: {
+    ...getDefaultFormEditProps(),
     buttons: {
       type: Array,
     },
@@ -51,7 +99,10 @@ export default defineComponent({
         fIns.setLayoutData(props.layoutData) //
       }
     }
-    fIns.setCurrentDesign(false) //
+    fIns.setCurrentDesign(false)
+    if (props.isDesign == true) {
+      fIns.setCurrentDesign(true) //
+    }
     onMounted(() => {
       nextTick(() => {
         fIns.onMounted() //
@@ -89,7 +140,7 @@ export default defineComponent({
       {
         //
         // immediate: true,//
-      },
+      }
     )
     let pageDesign: any = inject('pageDesign', {}) //
     let tableName = pageDesign?.tableName

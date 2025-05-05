@@ -16,7 +16,7 @@ import { staticData, testData1 } from './testData'
 import { validate } from 'uuid'
 import { Form } from '@ER/form'
 import fieldCom from '@/menu/fieldCom'
-export const  getDefaultFormEditProps=()=>{
+export const getDefaultFormEditProps = () => {
   return {
     itemSpan: {
       type: Number,
@@ -32,7 +32,7 @@ export const  getDefaultFormEditProps=()=>{
     },
     delHandle: {
       type: Function,
-      default: () => ()=>{},//
+      default: () => () => {}, //
     },
     copyHandle: {
       type: Function,
@@ -81,7 +81,7 @@ export default defineComponent({
     fieldCom,
   },
   name: 'Everright-form-editor',
-  props:getDefaultFormEditProps() ,
+  props: getDefaultFormEditProps(),
   emits: ['listener'],
   setup(props: any, { attrs, slots, emit, expose }) {
     const form = ref('')
@@ -198,7 +198,7 @@ export default defineComponent({
     //   setData,
     //   getData,
     // })
-    expose({_instance:formIns})////
+    expose({ _instance: formIns }) ////
     const handleOperation = (type, val?: any) => {
       switch (type) {
         case 1:
@@ -350,7 +350,7 @@ export default defineComponent({
         </div>
       )
       //如果是设计模式就使用面包屑
-      if (nextForm != null&&formIns.isDesign==true) {
+      if (nextForm != null && formIns.isDesign == true) {
         com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
       } //
       return com //

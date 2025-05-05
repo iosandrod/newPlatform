@@ -144,11 +144,11 @@ export default defineComponent({
       //     <tableCom {...tableConfig} tableState="edit"></tableCom>
       //   </div>
       // ) //
-      // com = (
-      //   <div style={{ width: '400px' }}>
-      //     <formCom {...formConfig}></formCom>
-      //   </div>
-      // )
+      com = (
+        <div class="w-full h-full">
+          <formCom isDesign={true} {...formConfig}></formCom>
+        </div>
+      )
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
       let _com = (

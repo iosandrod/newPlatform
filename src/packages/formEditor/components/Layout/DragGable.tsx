@@ -203,6 +203,7 @@ export default defineComponent({
                 const formitem: FormItem = typeProps?.formitem //
                 const prop = formitem?.getField()
                 let innerCom = null //
+                console.log(element, 'testEl') //
                 //@ts-ignore
                 if (formIns.pageType == 'pageDesign') {
                   let tCom = <div class="pl-10 h-30 flex align-center">{formitem.getTitle()}</div>
@@ -216,13 +217,39 @@ export default defineComponent({
                     </div>
                   )
                 } else {
+                  // innerCom = (
+                  //   <div class="flex flex-row">
+                  //     <div style={{ margin: '0px' }} class="pl-10 h-full items-center justify-center  flex">
+                  //       {formitem.getTitle()}
+                  //     </div>
+                  //     <div class="flex-1 overflow-hidden">
+                  //       {/* <vxe-form-item>
+                  //         <TypeComponent item={formitem} key={element.id} data={element} params={typeProps}></TypeComponent>
+                  //       </vxe-form-item> */}
+                  //       <vxe-form-item {...typeProps}>
+                  //         <TypeComponent item={formitem} key={element.id} data={element} params={typeProps}></TypeComponent>
+                  //       </vxe-form-item>
+                  //     </div>
+                  //   </div>
+                  // )
+                  // if (formitem.isShowTitle() == false) {
+                  //   tCom = null //
+                  // }
                   innerCom = (
-                    <div class="flex flex-row">
-                      <div class="pl-10 h-30 flex align-center">{formitem.getTitle()}</div>
-                      <div class="flex-1 overflow-hidden">
-                        <el-form-item c {...typeProps} prop={prop}>
-                          <TypeComponent item={formitem} key={element.id} data={element} params={typeProps}></TypeComponent>
-                        </el-form-item>
+                    <div class="flex flex-row h-full">
+                      <div class="flex-1 pl-5">
+                        <vxe-form-item
+                          v-slots={{
+                            default: () => {
+                              return <TypeComponent item={formitem} key={element.id} data={element} params={typeProps}></TypeComponent>
+                            },
+                            title: () => {
+                              // console.log(element, 'testEl')
+                              let tCom = <div class="  flex align-center">{element?.['label']}</div>
+                              return <div>{tCom}</div>
+                            },
+                          }}
+                        ></vxe-form-item>
                       </div>
                     </div>
                   )

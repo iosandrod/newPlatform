@@ -100,6 +100,9 @@ li {
   display: flex;
   flex-direction: row;
 }
+.items-center{
+  align-items: center;
+}
 .justify-center{
   justify-content: center;
 }
@@ -194,4 +197,10 @@ li {
 }
 .el-tabs{
   --el-tabs-header-height:30px;
+}
+
+.vxe-form--item-content{
+  padding: 0px !important;
+  height: 100%;
+  width: 100%;
 }
