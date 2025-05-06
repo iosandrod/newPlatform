@@ -11,6 +11,7 @@ import { Form } from '@ER/form'
 import formCom from '@ER/formCom'
 import { Table } from './table/table'
 import tableCom from './table/tableCom'
+import { VxeUI } from 'vxe-pc-ui'
 export class System extends Base {
   commandArr = []
   activePage = ''
@@ -24,7 +25,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() {}
+  async login() { }
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient()
@@ -32,17 +33,17 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = d //
     return d //
   }
-  getCurrentShowPage() {}
-  buildMenuTree(rows) {}
+  getCurrentShowPage() { }
+  buildMenuTree(rows) { }
   getClient(): myHttp {
     return http
   }
-  getMenuProps() {}
+  getMenuProps() { }
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) {}
+  _getCacheValue(key) { }
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap) //
@@ -56,7 +57,7 @@ export class System extends Base {
       },
     ] //
   }
-  openPageDesign(config) {} //
+  openPageDesign(config) { } //
   // async getDefaultPageLayout(name?: string) {
   //   let http = this.getHttp()
   //   let _data = await http.post(
@@ -340,7 +341,7 @@ export class System extends Base {
     // let http = this.getHttp() //
     // let _res = await http.patch('entity', { tableName, ...config })
   }
-  deletePageLayout(tableName, config) {}
+  deletePageLayout(tableName, config) { }
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -417,8 +418,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) {}
-  async confirmEntity(entityConfig: any) {} //
+  async confirm(config: any) { }
+  async confirmEntity(entityConfig: any) { } //
   async confirmForm(formConfig: any) {
     let _form = new Form(formConfig) //
     let component = formCom
@@ -502,6 +503,22 @@ export class System extends Base {
     let _arr = this.commandArr //
     _arr.push(config)
   } //
+  confirmMessage(msg: string | Object, type: any = 'success') {
+    if (typeof msg == 'string') {
+      msg = {
+        content: msg,
+        status: 'success',
+        type: type
+      }
+    }
+    let _msg: any = msg
+    if (!_msg.type) {//
+      _msg.status = type//
+    }
+    _msg.type = 'message'//
+    _msg.duration = _msg.duration || 1000//
+    VxeUI.modal.message(msg)
+  }
 }
 
 export const system = reactive(new System()) //

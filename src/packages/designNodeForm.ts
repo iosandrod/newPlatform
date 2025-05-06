@@ -204,7 +204,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         let _d = _this.state.selected?.options || {} //
         // debugger//
         _d['_items_get'] = () => _this.state.selected.columns
-        _d['_items_set'] = (v) => {} //
+        _d['_items_set'] = (v) => { } //
         return _d //
       }),
     },
@@ -216,6 +216,12 @@ export const selectTypeMap = (_this: PageDesign) => {
   let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
     let items = [
+      {
+        field: "field",
+        title: "绑定字段",
+        type: "input",//
+        label: "绑定字段",
+      },
       {
         field: 'label',
         label: '标题',

@@ -1,29 +1,6 @@
 import { defineComponent, withDirectives } from 'vue'
-import {
-  ClickOutside as vClickOutside,
-  ElMessage,
-  ElDialog,
-  ElScrollbar,
-  ElContainer,
-  ElHeader,
-  ElDropdown,
-  ElDropdownMenu,
-  ElDropdownItem,
-  ElButton,
-} from 'element-plus'
-import {
-  defineProps,
-  defineEmits,
-  ref,
-  reactive,
-  computed,
-  provide,
-  getCurrentInstance,
-  nextTick,
-  onMounted,
-  watch,
-  defineExpose,
-} from 'vue'
+import { ClickOutside as vClickOutside, ElMessage, ElDialog, ElScrollbar, ElContainer, ElHeader, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus'
+import { defineProps, defineEmits, ref, reactive, computed, provide, getCurrentInstance, nextTick, onMounted, watch, defineExpose } from 'vue'
 import fieldMenu from '@/menu/fieldCom'
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
@@ -175,7 +152,7 @@ export default defineComponent({
       () => props.data,
       (val) => {
         formIns.setData(val) //
-      },
+      }
     )
     provide('formIns', formIns)
     const isShowConfig = computed({
@@ -201,9 +178,7 @@ export default defineComponent({
     //   setData2(JSON.parse(JSON.stringify(testData1))); //
     // }, 100);
     const syncLayout = formIns.syncLayout.bind(formIns)
-    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(
-      formIns,
-    )
+    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(formIns)
     const switchPlatform = formIns.switchPlatform.bind(formIns)
     const canvesScrollRef = ref('')
     const fireEvent = (type, data) => {
@@ -267,14 +242,15 @@ export default defineComponent({
           //
           formIns.delFormItem(delField)
         }
-        for (const addField of addFields) {//
+        for (const addField of addFields) {
+          //
           let field = formIns.state.fields.find((e) => e.id === addField)
           formIns.addFormItem(field) //
         }
       },
       {
         immediate: true,
-      },
+      }
     )
     watch(
       () => state.selected,
@@ -284,7 +260,7 @@ export default defineComponent({
       {
         deep: true,
         immediate: true,
-      },
+      }
     )
     const onClickOutside = () => {}
     watch(
@@ -294,7 +270,7 @@ export default defineComponent({
       (newValue) => {},
       {
         deep: true,
-      },
+      }
     )
     const eve = formIns //
     provide('Everright', eve)
@@ -303,41 +279,45 @@ export default defineComponent({
     }
     return () => {
       let nextForm = formIns.nextForm //
-      // let dialogCom = (
-      //   <ElDialog destroyOnClose fullscreen class="previewDialog" v-model={state.previewVisible} onClosed={() => (previewPlatform.value = 'pc')}>
-      //     {{
-      //       header: () => <DeviceSwitch modelValue={previewPlatform.value} onUpdate:modelValue={(val) => handleOperation(7, val)} />,
-      //       default: () => (
-      //         <ElScrollbar>
-      //           <div class={{ previewDialogWrap: true, mobilePreview: previewPlatform.value === 'mobile' }}>
-      //             <ErFormPreview {...props} formIns={formIns} ref={setPreviewRef} />
-      //           </div>
-      //         </ElScrollbar>
-      //       ),
-      //     }}
-      //   </ElDialog>
-      // )
+      let _fieldCom = null
+      let _ConfigCom = null
+      if (formIns.isDesign == true) {
+        _fieldCom = (
+          <div //
+            style={{
+              minWidth: '200px',
+              height: '100%',
+              overflowY: 'auto',
+            }}
+          >
+            <fieldMenu></fieldMenu>
+          </div>
+        )
+        _ConfigCom = (
+          <div
+            style={{
+              minWidth: '300px',
+              height: '100%', //
+            }}
+          >
+            <ConfigPanel></ConfigPanel>
+          </div>
+        )
+      } //
       let com = (
-        <div class="h-full w-full">
-          {/* {dialogCom} */}
-          <ElContainer class="container" direction="vertical">
-            <ElContainer>
-              {isFoldFields.value && <fieldCom></fieldCom>}
-              <ElContainer class="container">
-                {isShow.value &&
-                  withDirectives(<CanvesPanel data={state.store} />, [
-                    [vClickOutside, onClickOutside],
-                  ])}
-              </ElContainer>
-              {isFoldConfig.value && <ConfigPanel />}
-            </ElContainer>
-          </ElContainer>
+        <div class="h-full w-full overflow-hidden bg-white">
+          <div class="flex h-full w-full bg-white overflow-hidden flex-row">
+            <div class="h-full overflow-auto">{_fieldCom}</div>
+            <div class="flex-1 flex flex-col overflow-hidden">{isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}</div>
+            {_ConfigCom}
+          </div>
+          {/* <Everright-form-editor></Everright-form-editor> */}
         </div>
       )
       //如果是设计模式就使用面包屑
       if (nextForm != null && formIns.isDesign == true) {
         com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
-      } //
+      } ////
       return com //
     }
   },

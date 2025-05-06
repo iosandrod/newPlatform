@@ -327,25 +327,38 @@ function ControlInsertionPlugin(ER: Form) {
     return ER.cachePlugin
   } //
   class ControlInsertionPlugin {
-    dragStart(e) {}
+    dragStart(e) { }
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       if (!prevEl || !e.activeSortable) {
         return false
       }
-      // 判断当前拖拽的元素是否是 'block' 类型
-      let isBlock =
-        _.get(e, 'activeSortable.options.dataSource', false) === 'block'
-      // 从事件对象中获取拖拽的元素 (dragEl) 和目标元素 (target)
       const { dragEl, target } = e //
       // 获取拖拽元素的真实DOM结构
       let oldEl = getDragElement(dragEl)
+      // 判断当前拖拽的元素是否是 'block' 类型
+      let isBlock =
+        _.get(e, 'activeSortable.options.dataSource', false) === 'block'
+      if (isBlock) {
+        let tItem = ER.items.find(item => {
+          let f = item.getField()
+          let _field = oldEl.field
+          return f != null && _field != null && f === _field
+        })
+        if (tItem != null) {
+          ER.getSystem().confirmMessage('该字段已经存在,请不要重复添加', 'error')//
+          resetStates()//
+          return
+        }
+      }
+      // 从事件对象中获取拖拽的元素 (dragEl) 和目标元素 (target)
+
       let isInRootDiv = false
       if (inserRowIndex !== '') {
         let store = []
-        store = Array.isArray(prevSortable.options.parent)
-          ? prevSortable.options.parent
-          : prevSortable.options.parent.list
+        store = Array.isArray(prevSortable?.options?.parent)
+          ? prevSortable?.options.parent
+          : prevSortable?.options?.parent?.list
         // 在指定的索引位置插入新元素
         let _store = ER.state.store
         if (_store == store) {
@@ -354,7 +367,7 @@ function ControlInsertionPlugin(ER: Form) {
       } //
       // let _oldEl1=_.cloneDeep(oldEl)
 
-      let _parent = prevSortable.options.parent //
+      let _parent = prevSortable?.options?.parent //
       let _oldEl1 = null //
       let nSpan: any = null
       let gColumns = null
@@ -424,7 +437,7 @@ function ControlInsertionPlugin(ER: Form) {
                   }
                 }
                 return
-               
+
               }
             }
           }
@@ -530,7 +543,7 @@ function ControlInsertionPlugin(ER: Form) {
         } = prevSortable
         let _parent2 =
           prevSortable.options.parent[
-            sortableUtils.index(prevSortable.el.parentNode)
+          sortableUtils.index(prevSortable.el.parentNode)
           ]
 
         // 在指定的索引位置插入新元素
@@ -629,8 +642,8 @@ function ControlInsertionPlugin(ER: Form) {
             target.dataset.layoutType === 'root'
               ? target
               : newTarget.__draggable_component__
-              ? newTarget.children[0]
-              : newTarget.parentNode
+                ? newTarget.children[0]
+                : newTarget.parentNode
           prevSortable = state._sortable
           inserRowIndex = 0
           setBorder(prevEl, 'drag-line-top')

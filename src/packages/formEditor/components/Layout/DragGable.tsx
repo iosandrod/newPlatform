@@ -1,15 +1,4 @@
-import {
-  defineComponent,
-  resolveComponent,
-  watch,
-  useAttrs,
-  useSlots,
-  unref,
-  nextTick,
-  ref,
-  inject,
-  reactive,
-} from 'vue'
+import { defineComponent, resolveComponent, watch, useAttrs, useSlots, unref, nextTick, ref, inject, reactive } from 'vue'
 import { isHTMLTag } from '@vue/shared'
 // import DragGable from 'vuedraggable'
 import DragGable from '@ER/vueDraggable/vuedraggable'
@@ -50,9 +39,7 @@ const dragGableWrap = defineComponent({
           </dragGable>
         )
       } else {
-        const _tag = isHTMLTag(attrs.tag)
-          ? attrs.tag
-          : resolveComponent(attrs.tag)
+        const _tag = isHTMLTag(attrs.tag) ? attrs.tag : resolveComponent(attrs.tag)
         const { item } = useSlots()
         node = (
           <_tag {...attrs.componentData}>
@@ -134,14 +121,13 @@ export default defineComponent({
         () => state.platform,
         () => {
           componentMap = {}
-        },
+        }
       )
       return {
         findComponent(type, element) {
           let info = componentMap[type + element]
           if (!info) {
-            componentMap[type + element] =
-              typeMap[element?.toLowerCase()]?.[state.platform]
+            componentMap[type + element] = typeMap[element?.toLowerCase()]?.[state.platform]
             if (!componentMap[type + element]) {
               console.log(Object.keys(typeMap), 'typeMap') ////
               console.error(element, '找不到组件') //
@@ -176,54 +162,19 @@ export default defineComponent({
         switch (element.type) {
           //这些都是布局控件
           case 'grid':
-            node = (
-              <LayoutGridLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutGridLayout>
-            )
+            node = <LayoutGridLayout style={_style} key={element.id} data={element} parent={props.data}></LayoutGridLayout>
             break
           case 'table':
-            node = (
-              <LayoutTableLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTableLayout>
-            )
+            node = <LayoutTableLayout style={_style} key={element.id} data={element} parent={props.data}></LayoutTableLayout>
             break
           case 'tabs':
-            node = (
-              <LayoutTabsLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTabsLayout>
-            )
+            node = <LayoutTabsLayout style={_style} key={element.id} data={element} parent={props.data}></LayoutTabsLayout>
             break
           case 'collapse':
-            node = (
-              <LayoutCollapseLayout
-                key={element.id}
-                style={_style}
-                data={element}
-                parent={props.data}
-              ></LayoutCollapseLayout>
-            )
+            node = <LayoutCollapseLayout key={element.id} style={_style} data={element} parent={props.data}></LayoutCollapseLayout>
             break
           case 'inline':
-            node = (
-              <LayoutInlineLayout
-                key={element.id}
-                style={_style}
-                data={element}
-                parent={props.data}
-              ></LayoutInlineLayout>
-            )
+            node = <LayoutInlineLayout key={element.id} style={_style} data={element} parent={props.data}></LayoutInlineLayout>
             break
           default:
             let formitem = formIns.items.find((item) => item.id === element.id)
@@ -236,14 +187,7 @@ export default defineComponent({
               }, 100)
             }
             let TypeComponent = ''
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
+            if (unref(isEditModel) || _.get(state.fieldsLogicState.get(element), 'visible', undefined) !== 0) {
               // if(element.type=='buttongroup'){
               //   debugger//
               // }
@@ -259,26 +203,16 @@ export default defineComponent({
                 const formitem: FormItem = typeProps?.formitem //
                 const prop = formitem?.getField()
                 let innerCom = null //
-                console.log(element, 'testEl') //
                 //@ts-ignore
                 if (formIns.pageType == 'pageDesign') {
-                  let tCom = (
-                    <div class="pl-10 h-30 flex align-center">
-                      {formitem.getTitle()}
-                    </div>
-                  )
+                  let tCom = <div class="pl-10 h-30 flex align-center">{formitem.getTitle()}</div>
                   if (formitem.isShowTitle() == false) {
                     tCom = null //
                   }
                   innerCom = (
                     <div class="flex flex-row h-full">
                       {tCom}
-                      <TypeComponent
-                        item={formitem}
-                        key={`${element.id}__${element.type}`}
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
+                      <TypeComponent item={formitem} key={`${element.id}__${element.type}`} data={element} params={typeProps}></TypeComponent>
                     </div>
                   )
                 } else {
@@ -288,22 +222,11 @@ export default defineComponent({
                         <vxe-form-item
                           v-slots={{
                             default: () => {
-                              return (
-                                <TypeComponent
-                                  item={formitem}
-                                  key={`${element.id}__${element.type}`}
-                                  data={element}
-                                  params={typeProps}
-                                ></TypeComponent>
-                              )
+                              return <TypeComponent item={formitem} key={`${element.id}__${element.type}`} data={element} params={typeProps}></TypeComponent>
                             },
                             title: () => {
                               // console.log(element, 'testEl')
-                              let tCom = (
-                                <div class="  flex align-center">
-                                  {element?.['label']}
-                                </div>
-                              )
+                              let tCom = <div class="  flex align-center">{element?.['label']}</div>
                               return <div>{tCom}</div>
                             },
                           }}
@@ -314,42 +237,15 @@ export default defineComponent({
                 }
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    {element.type !== 'divider' ? (
-                      innerCom
-                    ) : (
-                      <TypeComponent
-                        key={element.id}
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
-                    )}
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
+                    {element.type !== 'divider' ? innerCom : <TypeComponent key={element.id} data={element} params={typeProps}></TypeComponent>}
                   </Selection>
                 )
               } else {
                 node = (
                   //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    <TypeComponent
-                      item={formitem}
-                      key={element.id}
-                      data={element}
-                      params={typeProps}
-                    ></TypeComponent>
+                  <Selection hasWidthScale hasCopy hasDel hasDrag hasMask {...params}>
+                    <TypeComponent item={formitem} key={element.id} data={element} params={typeProps}></TypeComponent>
                   </Selection>
                 )
               }

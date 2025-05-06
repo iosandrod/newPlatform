@@ -122,10 +122,10 @@ export default defineComponent({
       // system.confirmForm({
       //   ...formConfig,//
       // })
-      let _ins = btn.getRef('page')
+      let _ins: PageDesign = btn.getRef('page')
       // let _d = _ins.getLayoutData()
-      // console.log(_d, 'testData') ////
-      console.log(_ins) //
+      // console.log(_ins) //、、
+      system.confirmMessage('我是消息') //
     }
     // let p = new PageDesign(getDefaultPageProps())
     let _data1 = Array(10000)
@@ -149,11 +149,15 @@ export default defineComponent({
           ></tableCom>
         </div>
       ) //
-      // com = (
-      //   <div class="w-full h-full">
-      //     <formCom ref={_reg3} isDesign={true} {...formConfig}></formCom>
-      //   </div>
-      // )
+      com = (
+        <div class="w-full h-full">
+          <formCom
+            ref={_reg3}
+            isDesign={true}
+            // {...formConfig}
+          ></formCom>
+        </div>
+      )
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
       let _com = (

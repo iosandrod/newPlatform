@@ -33,7 +33,7 @@ export default defineComponent({
     const { t } = hooks.useI18n()
     const { state, setSelection } = hooks.useTarget()
     const addStore = (element) => {
-      //添加一个layout
+      //
       let _el = _.cloneDeep(element)
       let newElement = reactive(ER.wrapElement(_el, true, true, true, true))
       state.store.push(newElement)
@@ -84,45 +84,43 @@ export default defineComponent({
       }
       let com = (
         <ElAside class={[ns.b()]} width={ER.props.fieldsPanelWidth}>
-          <el-scrollbar>
-            {btnCom}
-            <menuCom
-              items={fieldsConfig}
-              ref={registerMenu}
-              defaultOpeneds={ER.config.fieldsPanelDefaultOpeneds}
-              v-slots={{
-                subItemTitle: (item) => {
-                  let config = item.config //
-                  let id = config.id
-                  let value = t(`er.fields.${id}`)
-                  return <span>{value}</span>
-                },
-                drag: (item) => {
-                  let config = item.config
-                  let list = config.children || config.list || [] //
-                  let com1 = (
-                    <dragGableWrap
-                      class={[ns.e('dragContent')]}
-                      list={list}
-                      clone={handleClone}
-                      tag="ul"
-                      sort={false}
-                      move={handleMove}
-                      {...dragOptions}
-                      group={{
-                        name: `er-Canves-${id}`,
-                        pull: 'clone',
-                        put: false,
-                      }}
-                      item-key="null"
-                      v-slots={slots}
-                    ></dragGableWrap>
-                  )
-                  return com1
-                },
-              }}
-            ></menuCom>
-          </el-scrollbar>
+          {btnCom}
+          <menuCom
+            items={fieldsConfig}
+            ref={registerMenu}
+            defaultOpeneds={ER.config.fieldsPanelDefaultOpeneds}
+            v-slots={{
+              subItemTitle: (item) => {
+                let config = item.config //
+                let id = config.id
+                let value = t(`er.fields.${id}`)
+                return <span>{value}</span>
+              },
+              drag: (item) => {
+                let config = item.config
+                let list = config.children || config.list || [] //
+                let com1 = (
+                  <dragGableWrap
+                    class={[ns.e('dragContent')]}
+                    list={list}
+                    clone={handleClone}
+                    tag="ul"
+                    sort={false}
+                    move={handleMove}
+                    {...dragOptions}
+                    group={{
+                      name: `er-Canves-${id}`,
+                      pull: 'clone',
+                      put: false,
+                    }}
+                    item-key="null"
+                    v-slots={slots}
+                  ></dragGableWrap>
+                )
+                return com1
+              },
+            }}
+          ></menuCom>
         </ElAside>
       )
       return com

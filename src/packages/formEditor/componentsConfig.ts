@@ -38,6 +38,7 @@ export const createFieldConfig = (f: Form) => {
         label: col.title || col.field,
         icon: 'input',
         key: '',
+        field: col.field,//
         id: '',
         options: {
           clearable: true,
@@ -484,6 +485,11 @@ export const createFieldConfig = (f: Form) => {
         // }
       ],
     },
+    {
+      name: "主表字段",
+      id: "defaultField",
+      children: [...allFields]//
+    }
   ]
   return fieldsConfig
 }

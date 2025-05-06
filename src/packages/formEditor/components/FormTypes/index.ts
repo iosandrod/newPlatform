@@ -33,6 +33,8 @@ import stringPc from './String/pc'
 import stringMobile from './String/mobile'
 import buttonGroupPc from './ButtonGroup/pc'
 import buttonGroupMobile from './ButtonGroup/mobile'//
+import checkboxPc from './Checkbox/pc'
+import checkboxMobile from './Checkbox/mobile'
 export const typeMap = {
   buttongroup: {
     pc: buttonGroupPc,
@@ -94,5 +96,9 @@ export const typeMap = {
     pc: inputPc,
     mobile: inputMobile,
   }, //
+  checkbox: {
+    pc: checkboxPc,
+    mobile: checkboxMobile
+  }
 }
 export default {}

@@ -49,7 +49,7 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any; [key: string]: any }) {
+  updateBindData(updateConfig: { value: any;[key: string]: any }) {
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -75,8 +75,8 @@ export class FormItem extends Base {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() {}
-  async onValueChange() {}
+  getItemChange() { }
+  async onValueChange() { }
   getForm() {
     return this.form //
   }
@@ -129,7 +129,7 @@ export class FormItem extends Base {
     }
     return options //
   }
-  getSubForm(id: string) {}
+  getSubForm(id: string) { }
   getData() {
     let form = this.form
     let data = form.getData()
@@ -666,14 +666,12 @@ export class FormItem extends Base {
     let _onBlur = config.onBlur //
     if (typeof _onBlur == 'function') {
       _onBlur(_config) //
-    }
-  }
+    }//
+  }//
   async designForm() {
-    let formConfig = this.getFormConfig()
-    // debugger //
-    // let _config = cloneDeep(formConfig) //
+    let formConfig = this.getFormConfig()//
     let _config = _.cloneDeep(formConfig) //
-    let system = this.getSystem()
+    let system = this.getSystem()//
     let _f = new Form(_config) //
     //@ts-ignore
     let dTableName = this.form.dTableName || this.form.tableName
@@ -770,7 +768,7 @@ export class FormItem extends Base {
         if (Array.isArray(_value1)) {
           value = _value1 //
         }
-      } catch (error) {}
+      } catch (error) { }
     }
     if (!Array.isArray(value)) {
       value = [] //

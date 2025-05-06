@@ -2531,3 +2531,20 @@ const app = createApp({
 
         // let length = this.table.templateProps.data.length
       // let _length = length / 5
+
+
+
+      // let dialogCom = (
+      //   <ElDialog destroyOnClose fullscreen class="previewDialog" v-model={state.previewVisible} onClosed={() => (previewPlatform.value = 'pc')}>
+      //     {{
+      //       header: () => <DeviceSwitch modelValue={previewPlatform.value} onUpdate:modelValue={(val) => handleOperation(7, val)} />,
+      //       default: () => (
+      //         <ElScrollbar>
+      //           <div class={{ previewDialogWrap: true, mobilePreview: previewPlatform.value === 'mobile' }}>
+      //             <ErFormPreview {...props} formIns={formIns} ref={setPreviewRef} />
+      //           </div>
+      //         </ElScrollbar>
+      //       ),
+      //     }}
+      //   </ElDialog>
+      // )
