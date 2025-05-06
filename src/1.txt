@@ -2527,3 +2527,7 @@ const app = createApp({
         //   }
         //   return color
         // }, //
+
+
+        // let length = this.table.templateProps.data.length
+      // let _length = length / 5

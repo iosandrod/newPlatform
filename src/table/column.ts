@@ -440,7 +440,6 @@ export class Column extends Base {
         //   return _col
         // }, //
         borderColor: 'rgb(30,40,60)',
-       
       },
       headerCustomLayout: this.getHeaderCustomLayout(), //
       editor: edit, ////
@@ -453,6 +452,10 @@ export class Column extends Base {
       obj.disableColumnResize = true //
       obj.headerIcon = null
     }
+    //@ts-ignore
+    obj.isFrozen = this.getIsRightFrozen()
+    //@ts-ignore
+    obj.isLeftFrozen = this.getIsLeftFrozen()
     return obj //
   }
   getCalculateValue() {
@@ -830,17 +833,17 @@ export class Column extends Base {
     return 'RGB(30, 40, 60)' //
   }
   getCurrentRowColor() {
-    return 'RGB(200, 190, 230)'
+    return 'RGB(204, 224, 255)'
   }
   getCustomLayout() {
     let customLayout = (args) => {
       let { table, row, col, rect, value } = args
       let t1: VTable.ListTable = table
       let _value: string = value
-      const record = table.getCellOriginRecord(col, row)
+      let record = table.getCellOriginRecord(col, row)
       let bg = this.getIndexColor(row) //
       if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
-        bg = 'RGB(200, 190, 230)'
+        bg = this.getCurrentRowColor()
       }
       const { height, width } = rect ?? table.getCellRect(col, row)
       let _height = height
@@ -850,9 +853,15 @@ export class Column extends Base {
       }
       let _width = width
       let colCount = t1.colCount
-      // console.log(colCount,col)//
       if (colCount == col + 1) {
         _width = _width - 1
+      }
+      let lf = this.table.leftFrozen
+      if (lf && this.getIsLeftFrozen()) {
+        let field = this.getField()
+        if (lf == field) {
+          _width = _width - 1 //
+        }
       }
       const container = createGroup({
         height: _height,
@@ -971,15 +980,14 @@ export class Column extends Base {
         const record = table.getCellOriginRecord(col, row)
         let bg = _this.getIndexColor(row) //
         if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
-          bg = 'RGB(200, 190, 230)'
+          bg = _this.getCurrentRowColor() //
         }
         this.setAttribute('background', bg) //
         let formatFn = _this.getFormat()
         let _value = formatFn(record, row, col, table)
         locationName.setAttribute('text', _value) ////
       }.bind(container) //
-      // let length = this.table.templateProps.data.length
-      // let _length = length / 5
+
       let _length = 200 //
       rowStart = rowStart - _length
       if (rowStart < 0) {
@@ -1094,5 +1102,16 @@ export class Column extends Base {
       frozen = false
     }
     return frozen //
+  }
+  setNoFrozen() {
+    let config = this.config //
+    config.frozen = null
+  }
+  setFrozen(type) {
+    let config = this.config
+    if (!['left', 'right'].includes(type)) {
+      return
+    }
+    config.frozen = type ////
   }
 }

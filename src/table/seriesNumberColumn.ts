@@ -47,6 +47,12 @@ export class SeriesNumberColumn extends Column {
   getField() {
     return 'seriesNumber' //
   }
+  getIsLeftFrozen() {
+    return true
+  } //
+  getIsFrozen() {
+    return true
+  } //
   getColumnProps(isFooter = false) {
     let _this = this
     let _props: CheckboxColumnDefine = super.getColumnProps()
@@ -79,7 +85,7 @@ export class SeriesNumberColumn extends Column {
       _props.title = '汇总' //
       _props.headerCustomLayout = null //
     } //
-    _props.headerCustomLayout = null//
+    _props.headerCustomLayout = null //
     _props.customLayout = (args) => {
       const { table, row, col, rect, value } = args
       const { height, width } = rect ?? table.getCellRect(col, row)
@@ -88,7 +94,7 @@ export class SeriesNumberColumn extends Column {
       let curRow = _table.tableData.curRow
       let gb = this.getIndexColor(row)
       if (curRow == rows) {
-        gb = 'RGB(200, 190, 230)' //
+        gb = this.getCurrentRowColor() //
       }
       const container = createGroup({
         height: height - 2,
@@ -122,7 +128,7 @@ export class SeriesNumberColumn extends Column {
       container['updateCanvas'] = () => {
         let bg = this.getIndexColor(row)
         if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
-          bg = 'RGB(200, 190, 230)'
+          bg = this.getCurrentRowColor()
         } //
         container.setAttribute('background', bg) //
       }
@@ -150,6 +156,8 @@ export class SeriesNumberColumn extends Column {
         renderDefault: false, //
       }
     }
+    //@ts-ignore
+    _props.isLeftFrozen = this.getIsLeftFrozen()
     return _props //
   }
 }

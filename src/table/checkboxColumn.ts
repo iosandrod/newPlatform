@@ -35,6 +35,9 @@ import { nextTick } from 'vue' //
 import { Column } from './column'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class CheckboxColumn extends Column {
+  getIsLeftFrozen() {
+    return true
+  } //
   getEditType() {
     return 'checkbox'
   }
@@ -54,14 +57,14 @@ export class CheckboxColumn extends Column {
     //@ts-ignore
     _props.cellType = 'text' //
     _props.headerIcon = undefined //
-    _props.width = this.table.getCheckColumnWidth(),
-    _props.checked = (config) => {
-      //@ts-ignore
-      let table: VTable.ListTable = config.table
-      let row = table.getRecordByCell(config.col, config.row)
-      let checkboxField = row?.checkboxField //
-      return checkboxField //
-    } //
+    ;(_props.width = this.table.getCheckColumnWidth()),
+      (_props.checked = (config) => {
+        //@ts-ignore
+        let table: VTable.ListTable = config.table
+        let row = table.getRecordByCell(config.col, config.row)
+        let checkboxField = row?.checkboxField //
+        return checkboxField //
+      }) //
     _props.disable = (config) => {
       let table = config.table
       let row = table.getRecordByCell(config.col, config.row)
@@ -126,10 +129,10 @@ export class CheckboxColumn extends Column {
       let curRow = _table.tableData.curRow
       let gb = this.getIndexColor(row)
       if (curRow == rows) {
-        gb = 'RGB(200, 190, 230)' //
+        gb = this.getCurrentRowColor() ////
       }
       const container = createGroup({
-        height: height - 2,
+        height: height - 2, //
         width: width - 2,
         x: 1,
         y: 1, //
@@ -171,7 +174,7 @@ export class CheckboxColumn extends Column {
       container['updateCanvas'] = () => {
         let bg = this.getIndexColor(row) //
         if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
-          bg = 'RGB(200, 190, 230)'
+          bg = this.getCurrentRowColor()
         }
         let checkboxField = Boolean(record.checkboxField)
         checkbox1.setAttribute('checked', checkboxField) //

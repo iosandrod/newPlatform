@@ -51,6 +51,8 @@ import { SeriesNumberColumn } from './seriesNumberColumn'
 import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 export class Table extends Base {
+  leftFrozen?: any
+  curContextCol?: Column
   frozenColCount = 0
   rightFrozenColCount = 0
   controllerColumn?: ControllerColumn //
@@ -254,25 +256,16 @@ export class Table extends Base {
     }
   }
   getListTableOption() {}
+  getShowSeriesNumber() {
+    let config = this.config
+    let showRowSeriesNumber = config.showRowSeriesNumber
+    return showRowSeriesNumber
+  }
   createInstance(rootDiv) {
     let _this = this
-    let showRowSeriesNumber = this.config.showRowSeriesNumber
+    let showRowSeriesNumber = this.getShowSeriesNumber()
     let _sConfig: ColumnDefine = null
     if (showRowSeriesNumber) {
-      // _sConfig = {
-      //   style: (config) => {
-      //     const table = config.table
-      //     let record = table.getRecordByCell(config.col, config.row)
-      //     let obj = {}
-      //     if (record == _this.tableData.curRow) {
-      //       //@ts-ignore
-      //       obj.bgColor = 'RGB(200, 190, 230)'
-      //     }
-      //     return obj
-      //   },
-      //   disableColumnResize: true, //
-      //   width: this.getSerialNumberWidth(), //
-      // } as ColumnDefine
       _sConfig = this.seriesNumberColumn.getColumnProps() //
     }
     let table = new ListTable({
@@ -499,6 +492,10 @@ export class Table extends Base {
     let fro = instance.options.frozenColCount
     let right = instance.options.rightFrozenColCount //
     let myFro = this.frozenColCount
+    let showRowSeriesNumber = this.getShowSeriesNumber()
+    if (showRowSeriesNumber) {
+      myFro = myFro + 1
+    }
     let myRight = this.rightFrozenColCount
     if (myRight > 0 && myRight != right) {
       instance.options.rightFrozenColCount = myRight //
@@ -727,10 +724,17 @@ export class Table extends Base {
   }
   initCurrentContextItems() {
     initContextMenu(this) //
-  }
+  } //
   setCurTableSelect() {}
   openContextMenu(config) {
     let originData = config.originData
+    let field = config.field
+    let _col = this.getColumns().find((col) => col.getField() == field)
+    if (_col) {
+      this.curContextCol = _col
+    } else {
+      this.curContextCol = null //
+    }
     if (originData == null) {
       this.isHeaderContext = true
       this.curContextRow = null
@@ -738,12 +742,11 @@ export class Table extends Base {
       this.isHeaderContext = false
       this.curContextRow = originData
     }
-    nextTick(() => {
-      //
-      const event: PointerEvent = config.event
-      let contextmenu: BMenu = this.getRef('contextmenu')
-      contextmenu.open(event) //
-    })
+    const event: PointerEvent = config.event
+    let contextmenu: BMenu = this.getRef('contextmenu')
+    contextmenu.open(event) //
+    // nextTick(() => {
+    // })
   }
   getColumns() {
     const columns = this.columns //
@@ -784,10 +787,7 @@ export class Table extends Base {
     })
     //显示check
     let _show = this.config.showCheckboxColumn
-    if (_show) {
-      let cCol = this.checkboxColumn
-      _col1.unshift(cCol.getColumnProps())
-    }
+
     let _show1 = this.getShowControllerColumn()
     if (_show1 == true) {
       let cCol = this.controllerColumn
@@ -807,8 +807,17 @@ export class Table extends Base {
       }
       return 0
     })
-    let count = _col1.filter((col) => col.isFrozen).length //这个右侧冻结的//
-    let _count = _col1.filter((col) => col.isLeftFrozen).length //这个左侧冻结的//
+    if (_show) {
+      let cCol = this.checkboxColumn
+      _col1.unshift(cCol.getColumnProps())
+    } //
+    let countCols = _col1.filter((col) => col.isFrozen) //这个右侧冻结的//
+    let _countCols = _col1.filter((col) => col.isLeftFrozen) //这个左侧冻结的//
+    let leftEndF = _countCols.slice(-1).pop()?.field
+    //@ts-ignore
+    this.leftFrozen = leftEndF
+    let count = countCols.length
+    let _count = _countCols.length
     this.frozenColCount = _count
     this.rightFrozenColCount = count
     return _col1 ////

@@ -23,10 +23,21 @@ export const initContextMenu = (table: Table) => {
       key: 'rightFixed',
       visible: () => {
         let isHeaderContext = table.isHeaderContext //
-        if (isHeaderContext) {
+        if (!isHeaderContext) {
           return false
         }
         return true
+      },
+      fn: () => {
+        let curContext = table.curContextCol
+        if (curContext) {
+          let frozen = curContext.getIsFrozen()
+          if (frozen == true) {
+            curContext.setNoFrozen()
+          } else {
+            curContext.setFrozen('right')
+          }
+        }
       },
     },
     {
@@ -34,10 +45,21 @@ export const initContextMenu = (table: Table) => {
       key: 'leftFixed',
       visible: () => {
         let isHeaderContext = table.isHeaderContext //
-        if (isHeaderContext) {
+        if (!isHeaderContext) {
           return false
         }
         return true
+      },
+      fn: () => {
+        let curContext = table.curContextCol
+        if (curContext) {
+          let frozen = curContext.getIsFrozen()
+          if (frozen == true) {
+            curContext.setNoFrozen()
+          } else {
+            curContext.setFrozen('left') //
+          }
+        }
       },
     },
     {

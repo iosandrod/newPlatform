@@ -142,7 +142,11 @@ export default defineComponent({
       com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
       com = (
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
-          <tableCom {...tableConfig} showControllerButtons={true} tableState="edit"></tableCom>
+          <tableCom
+            {...tableConfig}
+            // showControllerButtons={true}
+            tableState="edit"
+          ></tableCom>
         </div>
       ) //
       // com = (
