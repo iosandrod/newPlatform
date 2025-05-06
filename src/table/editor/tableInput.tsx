@@ -31,8 +31,12 @@ export default defineComponent({
     const column: Column = props.column as any ////
     const table = column.table
     let row = props.row
+    let _f = column.getField()
+    if (props.row == column.config) {
+      _f = 'title' //
+    }
     let modelValue = computed(() => {
-      let _value = props.row[column.getField()]
+      let _value = props.row[_f] //
       return _value ////
     })
     let selectModelValue = computed(() => {
@@ -50,12 +54,12 @@ export default defineComponent({
     }
     const insRef = (ins: any) => {
       column.registerRef('input', ins)
-    }//
+    } //
     onMounted(() => {
       nextTick(() => {
         setTimeout(() => {
           column.focusInput() //
-        }, 0);
+        }, 0)
       })
     })
     let type = column.getEditType()

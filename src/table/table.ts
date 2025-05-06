@@ -581,7 +581,7 @@ export class Table extends Base {
           }
         },
       )
-      console.log(allRowIndex) //
+  
       // if (allContain.length == 0) {
       //   console.log('点击不生效') //
       //   console.log(this) //
@@ -1535,7 +1535,7 @@ export class Table extends Base {
       this.templateEditCell?.col == null
     ) {
       return null
-    }
+    } //
     let edit = ins.getEditor(
       this.templateEditCell.col,
       this.templateEditCell.row,

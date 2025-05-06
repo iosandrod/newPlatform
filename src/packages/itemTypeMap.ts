@@ -29,6 +29,7 @@ export const selectType = (item: FormItem) => {
   let options = item.getSelectOptions()
   obj.options = options
   obj.onChange = (config) => {
+    // debugger//
     let value = config.value
     item.updateBindData({ value }) //
   }

@@ -174,15 +174,21 @@ export class Column extends Base {
       let locationName = createText({
         text: value, //
         fontSize: 14,
-        fontWeight: 'bold',
         fill: 'black',
         overflow: 'hidden',
         boundsPadding: [0, 10, 0, 5],
         lineDashOffset: 0,
       })
       locationName.on('dblclick', (config) => {
-        // console.log(config, row, col) //
-        this.table.startEditCell(col, row, '') //
+        let title = this.getTitle()
+        if (this.table.templateEditCell != null) {
+          this.table.clearEditCell() //
+          setTimeout(() => {
+            this.table.startEditCell(col, row, title) //
+          }, 100)
+        } else {
+          this.table.startEditCell(col, row, title) //
+        }
       })
       _g.add(locationName)
       const g1 = this.createFilter({

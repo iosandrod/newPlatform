@@ -29,7 +29,7 @@ export default defineComponent({
       let com = (
         <div
           class="h-full w-full flex items-center"
-          style={{ minHeight: '30px' }}
+          style={{ minHeight: '36px', height: '36px' }}
         >
           <inputCom
             ref={registerRef}
@@ -37,15 +37,15 @@ export default defineComponent({
             v-slots={{
               buttons: () => {
                 let com = (
-                    <div
-                      onClick={() => {
-                        formitem.openCodeDialog() //
-                      }}
-                      class="h-full pointer"
-                    >
-                      <i class="vxe-icon-edit"></i>
-                    </div>
-                  )
+                  <div
+                    onClick={() => {
+                      formitem.openCodeDialog() //
+                    }}
+                    class="h-full pointer"
+                  >
+                    <i class="vxe-icon-edit"></i>
+                  </div>
+                )
                 return com
               },
             }}

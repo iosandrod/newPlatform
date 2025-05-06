@@ -130,6 +130,19 @@ export const initContextMenu = (table: Table) => {
                 ],
               },
             },
+            {
+              label: '编辑类型',
+              field: 'editType',
+              type: 'select',
+              options: {
+                options: [
+                  {
+                    label: '输入框',
+                    value: 'string',
+                  },
+                ],
+              },
+            },
           ],
           data: _config, //
           height: 500,

@@ -62,6 +62,7 @@ export const click_cell = (table: Table) => {
         table.isContainerClick = false
       }, 0)
       let field = config.field //
+      // debugger//
       let originData = config.originData //
       let tCol = table.getLastFlatColumns().find((col) => {
         return col.getField() === field

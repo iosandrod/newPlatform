@@ -219,3 +219,9 @@ li {
   height:"100%";
   width:"100%"
 }
+.vxe-form--item{
+  width: 100%;
+}
+.vxe-form--item-inner{
+  height: 100%;
+}

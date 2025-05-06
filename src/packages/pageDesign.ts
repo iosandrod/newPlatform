@@ -251,9 +251,15 @@ export class PageDesign extends Form {
   }
   async addEditTableRow() {
     let nRow = await this.createDefaultRow()
-    let tableDataMap = this.tableDataMap
     this.tableDataMap.curRow = nRow
-    console.log(nRow) //
+    let detailTables = this.getAllDetailTable()
+    let allTableNames = detailTables.map((t) => {
+      let tableName = t.getTableName()
+      return tableName
+    })
+    for (const name of allTableNames) {
+      await this.addDetailTableRow(name, 10) //
+    }
   }
   setLayoutData(d) {
     super.setLayoutData(d) //
@@ -332,5 +338,29 @@ export class PageDesign extends Form {
         rows: [row], //
       })
     }
+  }
+  getTableCnName() {
+    let config = this.getTableConfig()
+    let tableCnName = config.tableCnName || this.getTableName() //
+    return tableCnName //
+  }
+  getAllTableName() {
+    let tableName = this.getRealTableName()
+    let dTableName = this.getAllDetailTable().map((d) => d.getTableName())
+  }
+  async saveEditPageData() {
+    let realTableName = this.getRealTableName()
+    let curRow = this.getCurRow()
+  }
+  getCurRow() {
+    let tableName = this.getRealTableName()
+    let tRef: Table = this.getRef(tableName)
+    let curRow = null
+    if (tRef == null) {
+      curRow = this.tableDataMap.curRow ////
+    } else {
+      curRow = tRef.getCurRow()
+    }
+    return curRow //
   }
 }

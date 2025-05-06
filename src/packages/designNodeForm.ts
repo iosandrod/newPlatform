@@ -41,20 +41,22 @@ export const formitemTypeMap = (_this: PageDesign) => {
           field: 'tableType',
           label: '表类型',
           type: 'select', //
-          options: [
-            {
-              label: '主表',
-              value: 'main',
-            },
-            {
-              label: '子表',
-              value: 'detail', //
-            },
-            {
-              label: '关联表',
-              value: 'relate', //
-            },
-          ],
+          options: {
+            options: [
+              {
+                label: '主表',
+                value: 'main',
+              },
+              {
+                label: '子表',
+                value: 'detail', //
+              },
+              {
+                label: '关联表',
+                value: 'relate', //
+              },
+            ],
+          },
         },
       ],
       data: computed(() => {
@@ -304,8 +306,8 @@ export const selectTypeMap = (_this: PageDesign) => {
         type: 'code', //
       },
       {
-        filed:"sss",
-        label:''
+        filed: 'sss',
+        label: '',
       },
     ]
     return items
