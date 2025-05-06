@@ -76,19 +76,23 @@ export default defineComponent({
       formIns.registerRef('fieldMenu', el) //
     }
     const fieldsConfig = formIns.getDesignFieldConfig() //
-    let btng = formIns.getFieldComButtons() //
+    let btng = props.buttons
     return () => {
+      let btnCom = null
+      if (Array.isArray(btng) && btng.length > 0) {
+        btnCom = <ButtonGroupCom items={btng}></ButtonGroupCom> //
+      }
       let com = (
         <ElAside class={[ns.b()]} width={ER.props.fieldsPanelWidth}>
           <el-scrollbar>
-            <ButtonGroupCom items={btng}></ButtonGroupCom>
+            {btnCom}
             <menuCom
               items={fieldsConfig}
               ref={registerMenu}
               defaultOpeneds={ER.config.fieldsPanelDefaultOpeneds}
               v-slots={{
                 subItemTitle: (item) => {
-                  let config = item.config
+                  let config = item.config //
                   let id = config.id
                   let value = t(`er.fields.${id}`)
                   return <span>{value}</span>

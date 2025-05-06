@@ -1665,7 +1665,7 @@ export class Form extends Base {
         fn: async () => {
           let pageDesign = this.getCurrentPageDesign()
           let columns = pageDesign.getTableColumns()
-          console.log(columns, 'testColumns') //
+          // console.log(columns, 'testColumns') //
         },
       },
     ]
