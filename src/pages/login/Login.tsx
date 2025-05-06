@@ -149,15 +149,15 @@ export default defineComponent({
           ></tableCom>
         </div>
       ) //
-      com = (
-        <div class="w-full h-full">
-          <formCom
-            ref={_reg3}
-            isDesign={true}
-            // {...formConfig}
-          ></formCom>
-        </div>
-      )
+      // com = (
+      //   <div class="w-full h-full">
+      //     <formCom
+      //       ref={_reg3}
+      //       isDesign={true}
+      //       // {...formConfig}
+      //     ></formCom>
+      //   </div>
+      // )
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
       let _com = (

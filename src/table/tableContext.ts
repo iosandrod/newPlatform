@@ -91,8 +91,10 @@ export const initContextMenu = (table: Table) => {
       key: 'designColumn',
       disabled: false, //
       visible: true,
-      fn: () => {
-        let sys = table.getSystem() //
+      fn: async () => {
+        let curContextCol = table.curContextCol
+        let _config = curContextCol.config
+        let sys = table.getSystem()
         let fConfig = {
           itemSpan: 12,
           items: [
@@ -112,22 +114,29 @@ export const initContextMenu = (table: Table) => {
               type: 'code', //
             },
             {
-              label: 'defaultValueType',
+              label: '默认值类型',
               field: 'defaultValueType',
               type: 'select',
-              options: [
-                {
-                  label: '函数类型',
-                  value: 'function',
-                },
-                {
-                  label: '普通类型',
-                  value: 'normal',
-                },
-              ],
+              options: {
+                options: [
+                  {
+                    label: '函数类型',
+                    value: 'function',
+                  },
+                  {
+                    label: '普通类型',
+                    value: 'normal',
+                  },
+                ],
+              },
             },
           ],
+          data: _config, //
+          height: 500,
+          width: 900,
         }
+        let data1 = await sys.confirmForm(fConfig)
+        console.log(data1, 'testData1') //
       },
     },
     {

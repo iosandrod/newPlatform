@@ -146,23 +146,20 @@ export class Column extends Base {
     }
   } //
   getHeaderCustomLayout() {
-    //
     let hCustomLayout = (args) => {
       const { table, row, col, rect, value } = args
       let _value: string = value
-      const { height, width } = rect ?? table.getCellRect(col, row)
-      const container = createGroup({
+      let { height, width } = rect ?? table.getCellRect(col, row)
+      let container = createGroup({
         height: height,
         stroke: 'RGB(30, 40, 60)', //
         width: width,
-        // display: 'flex',
-        // flexDirection: 'row',
         flexWrap: 'nowrap',
         overflow: 'hidden',
-        alignItems: 'center',
-        // justifyContent: 'space-between',
+        alignItems: 'center', //
         boundsPadding: [0, 0, 0, 0],
       })
+
       let _g = createGroup({
         width: width,
         height,
@@ -182,6 +179,10 @@ export class Column extends Base {
         overflow: 'hidden',
         boundsPadding: [0, 10, 0, 5],
         lineDashOffset: 0,
+      })
+      locationName.on('dblclick', (config) => {
+        // console.log(config, row, col) //
+        this.table.startEditCell(col, row, '') //
       })
       _g.add(locationName)
       const g1 = this.createFilter({
@@ -391,25 +392,6 @@ export class Column extends Base {
       }
     }
     //@ts-ignore
-    let headerIcon: ColumnIconOption = {
-      // type: 'svg',
-      type: 'svg',
-      svg: `<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${hIconColor}"></path></svg>`,
-      width: 20,
-      height: 20,
-      positionType: VTable.TYPES.IconPosition.right,
-      cursor: 'pointer',
-      name: 'filter', //
-
-      //@ts-ignore
-      visibleTime: enterType, //
-    }
-    if (this.columns.length > 0) {
-      headerIcon = undefined //
-    }
-    if (this.table.config.showColumnFilterTable == false) {
-      headerIcon = undefined //
-    }
     let customLayout = undefined
     if (this.table.showCustomLayout == true) {
       customLayout = this.getCustomLayout() //
@@ -432,17 +414,12 @@ export class Column extends Base {
       /*
        */
       fieldFormat: _this.getFormat(),
-      headerIcon: headerIcon,
       style: {
-        // bgColor: (config) => {
-        //   let row = config.row
-        //   let _col = this.getIndexColor(row)
-        //   return _col
-        // }, //
         borderColor: 'rgb(30,40,60)',
       },
       headerCustomLayout: this.getHeaderCustomLayout(), //
       editor: edit, ////
+      // headerEditor: new InputEditor(() => this), //
       columns: _columns, //
       customLayout: customLayout, //
     }
@@ -580,9 +557,10 @@ export class Column extends Base {
     return width
   }
   async updateBindValue(config) {
+    // debugger//
     let value = config.value //值
     let row = config.row //行
-    let field = this.getField()
+    let field = config.field || this.getField()
     let table = this.table
     let _res = await this.validateValue({ ...config, table })
     if (_res == true) {

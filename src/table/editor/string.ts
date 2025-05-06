@@ -15,13 +15,15 @@ export interface OnStartParams {
   container: HTMLElement
   endEdit: () => void
 }
-import { createApp, isReactive } from 'vue' //
+import { createApp, isReactive, nextTick } from 'vue' //
 import {} from 'element-plus' //
 import { VxeInput } from 'vxe-pc-ui'
 import tableInput from './tableInput'
 import { ListTable } from '@visactor/vtable'
 import { Column } from '../column'
 export class InputEditor extends BaseEditor {
+  isEditHeader?: any = false
+  field?: any
   row?: any
   column?: Column
   app: any
@@ -51,6 +53,14 @@ export class InputEditor extends BaseEditor {
     this.column = column
     this.row = _row
     let field = column.getField()
+    if (_row == null) {
+      //
+      _row = column.config //
+      this.row = column.config
+      field = 'title' //
+      this.isEditHeader = true //
+    }
+    this.field = field
     let _value = _row[field]
     column.cacheValue = _value
     let app = createApp(tableInput, {
@@ -89,7 +99,7 @@ export class InputEditor extends BaseEditor {
   }
   getValue(): string {
     //@ts-ignore
-    return this.row[this.column.getField()] //
+    return this.row[this.field] //
   }
   //@ts-ignore
   exit?: () => void = () => {
@@ -118,12 +128,13 @@ export class InputEditor extends BaseEditor {
     }
     let column = this.column
     let value = column.cacheValue
-    if (column.isChangeValue == true && column.isChangeValue == true) {
-      let oldValue = this.row[column.getField()] ////
+    if (column.isChangeValue == true) {
+      let oldValue = this.row[this.field] //////
       if (value != oldValue) {
         column.updateBindValue({
           value: value,
           row: this.row, //
+          field: this.field,
         })
       }
     } //
@@ -132,6 +143,11 @@ export class InputEditor extends BaseEditor {
     this.element = undefined //
     this.column = null ////
     this.row = null //
+    if (this.isEditHeader) {
+      nextTick(() => {
+        column.table.updateColumns() //
+      })
+    }
   } //
   adjustPosition(rect: DOMRect): void {
     if (this.element) {

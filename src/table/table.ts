@@ -50,6 +50,7 @@ import { createGroup, createText } from '@visactor/vtable/es/vrender'
 import { SeriesNumberColumn } from './seriesNumberColumn'
 import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
+import { InputEditor } from './editor/string'
 export class Table extends Base {
   leftFrozen?: any
   curContextCol?: Column
@@ -65,7 +66,7 @@ export class Table extends Base {
   isHeaderContext: boolean = false
   contextItems: any[] = []
   disableColumnResize = true //
-  tableState: 'edit' | 'scan' = 'edit'
+  tableState: 'edit' | 'scan' = 'edit' //
   templateEditCell: { col?: number; row?: number; value?: any } = {}
   currentResizeField: string
   fatherScrollNum = 0
@@ -100,11 +101,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-      x: 0,
-      y: 0,
-      width: 0,
-      filterConfig: [],
-    }
+    x: 0,
+    y: 0,
+    width: 0,
+    filterConfig: [],
+  }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -246,7 +247,7 @@ export class Table extends Base {
     })
     this.tableData.data = data
   }
-  getTableName() { }
+  getTableName() {}
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
@@ -255,7 +256,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   getShowSeriesNumber() {
     let config = this.config
     let showRowSeriesNumber = config.showRowSeriesNumber
@@ -270,6 +271,20 @@ export class Table extends Base {
     }
     let table = new ListTable({
       padding: {},
+      //ts-ignore
+      headerEditor: (args) => {
+        //
+        let table = args.table
+        let row = args.row
+        let col = args.col
+        let f = table.getHeaderField(col, row)
+        let _col = this.columns.find((col) => col.getField() == f)
+        if (_col == null) {
+          return
+        }
+        return new InputEditor(() => _col) as any
+      },
+      // editCellTrigger: 'click',
       customMergeCell: (col, row, table) => {
         if (1 == 1) {
           return null
@@ -494,7 +509,7 @@ export class Table extends Base {
     let myFro = this.frozenColCount
     let showRowSeriesNumber = this.getShowSeriesNumber()
     if (showRowSeriesNumber) {
-      myFro = myFro + 1//
+      myFro = myFro + 1 //
     }
     let myRight = this.rightFrozenColCount
     if (myRight > 0 && myRight != right) {
@@ -725,7 +740,7 @@ export class Table extends Base {
   initCurrentContextItems() {
     initContextMenu(this) //
   } //
-  setCurTableSelect() { }
+  setCurTableSelect() {}
   openContextMenu(config) {
     let originData = config.originData
     let field = config.field
@@ -956,14 +971,14 @@ export class Table extends Base {
     console.log(this.scrollConfig) //
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   //@ts-ignore
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -978,7 +993,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) { }
+  setMergeConfig(config?: any) {}
   async addRows(rowsConfig?: { rows?: Array<any> } | number) {
     if (typeof rowsConfig === 'number') {
       let _rows = Array(rowsConfig).fill(null)
@@ -1496,10 +1511,13 @@ export class Table extends Base {
   }
   startEditCell(col, row, value) {
     this.templateEditCell = { col: col, row: row, value: value }
-    let ins = this.getInstance()
+    let ins = this.getInstance() //
     ins.startEditCell(col, row, value) //
   }
   clearEditCell() {
+    if (1 == 1) {
+      // return
+    }
     let currentEditCol = this.currentEditCol
     let disableHideCell = currentEditCol?.disableHideCell
     if (disableHideCell == true) {
@@ -1551,14 +1569,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) { }
+  async validateData(config) {}
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1566,7 +1584,7 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() { }
+  copyCurrentSelectCells() {}
   headerSortClick(config: any) {
     let sortState = this.sortCache
     let hasSort = sortState.findIndex((s) => s.field == config.field) //
@@ -1600,8 +1618,8 @@ export class Table extends Base {
     }
     this.dataMap[e._index] = e //
   }
-  designCurrentColumn() { }
-  getCacheContain(row) { }
+  designCurrentColumn() {}
+  getCacheContain(row) {}
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -1609,7 +1627,7 @@ export class Table extends Base {
         this.registerEvent({
           keyName: key,
           name: key, //
-          callback: (...args) => { },
+          callback: (...args) => {},
         })
       }
     })

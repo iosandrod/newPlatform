@@ -74,7 +74,7 @@ export const click_cell = (table: Table) => {
             table.clearEditCell() //
           }
           nextTick(() => {
-            table.currentEditCol=tCol
+            table.currentEditCol = tCol
             _this.startEditCell(config.col, config.row, config.value) //
           }) //
           return
@@ -247,9 +247,7 @@ export const mousedown_cell = (table: Table) => {
   table.registerEvent({
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
-    callback: (config) => {
-     
-    },
+    callback: (config) => {},
   })
 }
 

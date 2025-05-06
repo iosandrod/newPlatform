@@ -50,13 +50,18 @@ export default defineComponent({
     }
     const insRef = (ins: any) => {
       column.registerRef('input', ins)
-    }
+    }//
     onMounted(() => {
       nextTick(() => {
-        column.focusInput() //
+        setTimeout(() => {
+          column.focusInput() //
+        }, 0);
       })
     })
     let type = column.getEditType()
+    if (props.row == props.column.config) {
+      type = 'string' //
+    }
     return () => {
       let com = null
       if (type == 'string') {

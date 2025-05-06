@@ -175,8 +175,7 @@ export default defineComponent({
             style={{
               flex: 1,
               height: '100%', //
-              width: '100%',
-              minHeight: '36px',
+              width: '100%',//
               paddingLeft: '3px',
               paddingRight: '3px', //
             }} //

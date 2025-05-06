@@ -2555,3 +2555,9 @@ const app = createApp({
       // for (let r of _arr) {
       //   let _r = await this.createDefaultRow(tableName) //
       // }
+
+       // bgColor: (config) => {
+        //   let row = config.row
+        //   let _col = this.getIndexColor(row)
+        //   return _col
+        // }, //
