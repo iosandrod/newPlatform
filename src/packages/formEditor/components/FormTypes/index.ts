@@ -32,15 +32,15 @@ import dformMobile from './Dform/mobile' //
 import stringPc from './String/pc'
 import stringMobile from './String/mobile'
 import buttonGroupPc from './ButtonGroup/pc'
-import buttonGroupMobile from './ButtonGroup/mobile'
+import buttonGroupMobile from './ButtonGroup/mobile'//
 export const typeMap = {
   buttongroup: {
     pc: buttonGroupPc,
-    mobile: buttonGroupMobile//
+    mobile: buttonGroupMobile, //
   },
   string: {
     pc: stringPc,
-    mobile: stringMobile//
+    mobile: stringMobile, //
   },
   input: {
     pc: inputPc,
@@ -80,7 +80,19 @@ export const typeMap = {
   },
   code: {
     pc: codePc,
-    mobile:  codeMobile,
+    mobile: codeMobile,
   },
+  time: {
+    pc: inputPc,
+    mobile: inputMobile,
+  },
+  date: {
+    pc: inputPc,
+    mobile: inputMobile,
+  },
+  datetime: {
+    pc: inputPc,
+    mobile: inputMobile,
+  }, //
 }
 export default {}

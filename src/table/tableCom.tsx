@@ -35,6 +35,10 @@ export default defineComponent({
     TableFitlerCom,
   },
   props: {
+    showControllerButtons: {
+      type: Boolean,
+      default: true, //
+    },
     ...tableV2Props,
     columns: {
       type: Array,
@@ -228,17 +232,17 @@ export default defineComponent({
         } //
       },
     )
-    watch(
-      () => {
-        return tableIns.tableConfig
-      },
-      (e) => {
-        tableIns.updateOptions(e)
-      },
-      {
-        deep: true,
-      },
-    )
+    // watch(
+    //   () => {
+    //     return tableIns.tableConfig
+    //   },
+    //   (e) => {
+    //     tableIns.updateOptions(e)
+    //   },
+    //   {
+    //     deep: true,
+    //   },
+    // )
     watch(
       () => {
         return props.data

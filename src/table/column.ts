@@ -542,6 +542,9 @@ export class Column extends Base {
     }
     return this.templateCalValue
   }
+  getButtonColor(){
+    return 'RGB(22, 93, 255)'
+  }
   getFooterColumnProps() {
     let _this = this
     let props: ColumnDefine = this.getColumnProps(true) //

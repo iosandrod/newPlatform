@@ -248,7 +248,7 @@ export const mousedown_cell = (table: Table) => {
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
     callback: (config) => {
-      console.log('mouse down') //
+     
     },
   })
 }

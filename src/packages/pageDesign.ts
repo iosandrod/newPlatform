@@ -13,12 +13,11 @@ import {
   entityData,
 } from './formEditor/testData'
 import { useOnce, useRunAfter } from './utils/decoration'
-import pageCom, { getDefaultPageProps } from './pageCom'
+import  { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 
 export class PageDesign extends Form {
-  static component = pageCom //
   pageType = 'pageDesign' //
   tableName
   tableType: 'main' | 'edit' | 'search' = 'main'
@@ -92,7 +91,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() { }
+  initDefaultTemplatePage() {}
   getValidateRules() {
     return []
   }
@@ -122,10 +121,10 @@ export class PageDesign extends Form {
     console.log(res, 'testRes') //
     return res
   }
-  buildQuery() { }
-  openSearchForm() { }
-  async createTableData() { }
-  async updateTableData() { }
+  buildQuery() {}
+  openSearchForm() {}
+  async createTableData() {}
+  async updateTableData() {}
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
     let obj1 = {}
@@ -142,7 +141,7 @@ export class PageDesign extends Form {
     let columns = tableIns.getColumns()
     return columns //
   }
-  getMainTableConfig() { }
+  getMainTableConfig() {}
   @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -180,7 +179,7 @@ export class PageDesign extends Form {
       await this.updateTableDesign()
     }
     nextTick(() => {
-      this.setCurrentDesign(false)//
+      this.setCurrentDesign(false) //
     })
   }
   async createTableDesign() {
@@ -207,29 +206,18 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() { }
+  getAllFormMap() {}
   @useOnce()
   initDefaultDForm() {
-    let tm = formitemTypeMap(this)
-    Object.entries(tm).forEach(([key, value]) => {
-      let _f = new Form(value)
-      this.dFormMap[key] = _f
-    })
-    let tm1 = selectTypeMap(this)
-    Object.entries(tm1).forEach(([key, value]) => {
-      let _f = new Form(value)
-      this.sFormMap[key] = _f////
-    })//
-  }//
-  initDefaultSForm() {
-
-  }
+    super.initDefaultDForm()//
+  } //
+  initDefaultSForm() {}
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() { }
+  async openAddEntity() {}
   async addMainTableRow(addConfig) {
     let system = this.getSystem()
     let tableName = this.getTableName()

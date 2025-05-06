@@ -1,6 +1,29 @@
 import { defineComponent, withDirectives } from 'vue'
-import { ClickOutside as vClickOutside, ElMessage, ElDialog, ElScrollbar, ElContainer, ElHeader, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus'
-import { defineProps, defineEmits, ref, reactive, computed, provide, getCurrentInstance, nextTick, onMounted, watch, defineExpose } from 'vue'
+import {
+  ClickOutside as vClickOutside,
+  ElMessage,
+  ElDialog,
+  ElScrollbar,
+  ElContainer,
+  ElHeader,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElButton,
+} from 'element-plus'
+import {
+  defineProps,
+  defineEmits,
+  ref,
+  reactive,
+  computed,
+  provide,
+  getCurrentInstance,
+  nextTick,
+  onMounted,
+  watch,
+  defineExpose,
+} from 'vue'
 import fieldMenu from '@/menu/fieldCom'
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
@@ -152,7 +175,7 @@ export default defineComponent({
       () => props.data,
       (val) => {
         formIns.setData(val) //
-      }
+      },
     )
     provide('formIns', formIns)
     const isShowConfig = computed({
@@ -178,7 +201,9 @@ export default defineComponent({
     //   setData2(JSON.parse(JSON.stringify(testData1))); //
     // }, 100);
     const syncLayout = formIns.syncLayout.bind(formIns)
-    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(formIns)
+    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(
+      formIns,
+    )
     const switchPlatform = formIns.switchPlatform.bind(formIns)
     const canvesScrollRef = ref('')
     const fireEvent = (type, data) => {
@@ -242,14 +267,14 @@ export default defineComponent({
           //
           formIns.delFormItem(delField)
         }
-        for (const addField of addFields) {
-          let field = state.fields.find((e) => e.id === addField)
+        for (const addField of addFields) {//
+          let field = formIns.state.fields.find((e) => e.id === addField)
           formIns.addFormItem(field) //
         }
       },
       {
         immediate: true,
-      }
+      },
     )
     watch(
       () => state.selected,
@@ -259,7 +284,7 @@ export default defineComponent({
       {
         deep: true,
         immediate: true,
-      }
+      },
     )
     const onClickOutside = () => {}
     watch(
@@ -269,7 +294,7 @@ export default defineComponent({
       (newValue) => {},
       {
         deep: true,
-      }
+      },
     )
     const eve = formIns //
     provide('Everright', eve)
@@ -299,54 +324,14 @@ export default defineComponent({
             <ElContainer>
               {isFoldFields.value && <fieldCom></fieldCom>}
               <ElContainer class="container">
-                {isFoldFields.value && (
-                  <ElHeader class="operation" style="display: flex;flex-derection: row;justify-content: space-between;">
-                    <div>
-                      <Icon class="icon" icon="save" onClick={() => handleOperation(4)} />
-                      {props.isShowClear && <Icon class="icon" icon="clear0" onClick={() => handleOperation(2)} />}
-                      {slots['operation-left'] && slots['operation-left']()}
-                    </div>
-                    <div>
-                      <DeviceSwitch modelValue={state.platform} onUpdate:modelValue={switchPlatform} />
-                      <ElButton
-                        onClick={() => {
-                          formIns.runTestMethod() //
-                        }}
-                      >
-                        测试
-                      </ElButton>
-                    </div>
-                    <div>
-                      {slots['operation-right'] && slots['operation-right']()}
-                      {props.isShowI18n && (
-                        <ElDropdown onCommand={(command) => fireEvent('lang', command)}>
-                          <Icon class="icon" icon="language" />
-                          {{
-                            dropdown: () => (
-                              //
-                              <ElDropdownMenu>
-                                <ElDropdownItem command="zh-cn" disabled={lang.value === 'zh-cn'}>
-                                  中文
-                                </ElDropdownItem>
-                                <ElDropdownItem command="en" disabled={lang.value === 'en'}>
-                                  English
-                                </ElDropdownItem>
-                              </ElDropdownMenu>
-                            ),
-                          }}
-                        </ElDropdown>
-                      )}
-                      <Icon class="icon" icon="preview" onClick={() => handleOperation(3)} />
-                    </div>
-                  </ElHeader>
-                )}
-
-                {isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}
+                {isShow.value &&
+                  withDirectives(<CanvesPanel data={state.store} />, [
+                    [vClickOutside, onClickOutside],
+                  ])}
               </ElContainer>
               {isFoldConfig.value && <ConfigPanel />}
             </ElContainer>
           </ElContainer>
-          {/* <Everright-form-editor></Everright-form-editor> */}
         </div>
       )
       //如果是设计模式就使用面包屑

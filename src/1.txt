@@ -2340,3 +2340,139 @@ const app = createApp({
           ]
           let ins = tableIns.getInstance()
           ins.options.customMergeCell = arr //
+
+
+           {isFoldFields.value && (
+                  <ElHeader class="operation" style="display: flex;flex-derection: row;justify-content: space-between;">
+                    <div>
+                      <Icon class="icon" icon="save" onClick={() => handleOperation(4)} />
+                      {props.isShowClear && <Icon class="icon" icon="clear0" onClick={() => handleOperation(2)} />}
+                      {slots['operation-left'] && slots['operation-left']()}
+                    </div>
+                    <div>
+                      <DeviceSwitch modelValue={state.platform} onUpdate:modelValue={switchPlatform} />
+                      <ElButton
+                        onClick={() => {
+                          formIns.runTestMethod() //
+                        }}
+                      >
+                        测试
+                      </ElButton>
+                    </div>
+                    <div>
+                      {slots['operation-right'] && slots['operation-right']()}
+                      {props.isShowI18n && (
+                        <ElDropdown onCommand={(command) => fireEvent('lang', command)}>
+                          <Icon class="icon" icon="language" />
+                          {{
+                            dropdown: () => (
+                              //
+                              <ElDropdownMenu>
+                                <ElDropdownItem command="zh-cn" disabled={lang.value === 'zh-cn'}>
+                                  中文
+                                </ElDropdownItem>
+                                <ElDropdownItem command="en" disabled={lang.value === 'en'}>
+                                  English
+                                </ElDropdownItem>
+                              </ElDropdownMenu>
+                            ),
+                          }}
+                        </ElDropdown>
+                      )}
+                      <Icon class="icon" icon="preview" onClick={() => handleOperation(3)} />
+                    </div>
+                  </ElHeader>
+                )}
+
+
+                 // if (gColumns != null) {
+        //   list = gColumns
+        //   let _el = {
+        //     type: 'inline',
+        //     columns: [newElement],
+        //   }
+        //   newElement = _el //
+        //   _oldEl1.list.push(newElement) //
+        //   newElement = _oldEl1
+        //   newElement = ER.wrapElement(newElement, false, true, true) //
+        //   inserColIndex = _nIndex //
+        //   _parent2 = gColumns //
+        // }
+
+
+
+         // nSpan = _span - Number(_span1)
+                // //使用col进行包裹
+                // _nIndex = newIndex
+                // _oldEl1 = {
+                //   type: 'col',
+                //   list: [],
+                //   options: {
+                //     span: _span1,
+                //   },
+                // }
+
+
+                 // (col, row, table) => {
+      //   let obj= {
+      //     range: {
+      //       start: {
+      //         col: 3,
+      //         row: 8,
+      //       },
+      //       end: {
+      //         col: 7,
+      //         row: 10,
+      //       },
+      //     },
+      //     style: {
+      //       bgColor: '#ccc',
+      //     },
+      //   } //
+      //   return obj
+      // },
+      // multipleSort: true,
+
+
+      _props.headerCustomLayout = (args) => {
+      const { table, row, col, rect } = args
+      const { height, width } = rect ?? table.getCellRect(col, row)
+      // console.log(width,'testWidth')//
+      const container = createGroup({
+        height: height - 2,
+        width: width - 2,
+        x: 1,
+        y: 1, //
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      })
+      const checkboxGroup = createGroup({
+        display: 'flex',
+        flexDirection: 'column',
+        boundsPadding: [0, 0, 0, 0],
+        justifyContent: 'center', //
+      })
+      container.appendChild(checkboxGroup)
+      const checkbox1 = new CheckBox({
+        text: {
+          text: '', //
+        },
+        disabled: false, //
+        checked: _this.table.isCheckAll, //
+        boundsPadding: [0, 0, 0, 0],
+      }) //
+      checkbox1.render()
+      checkboxGroup.appendChild(checkbox1)
+      checkbox1.addEventListener('checkbox_state_change', (e) => {
+        const target = e.target ////
+        let attributes = target.attribute //
+        let checked = attributes.checked
+        _this.table.updateCheckboxAll(checked)
+      }) //
+      return {
+        rootContainer: container,
+        renderDefault: false,
+      }
+    }

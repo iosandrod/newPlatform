@@ -49,7 +49,7 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any;[key: string]: any }) {
+  updateBindData(updateConfig: { value: any; [key: string]: any }) {
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -75,8 +75,8 @@ export class FormItem extends Base {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() { }
-  async onValueChange() { }
+  getItemChange() {}
+  async onValueChange() {}
   getForm() {
     return this.form //
   }
@@ -122,12 +122,14 @@ export class FormItem extends Base {
     }
   } //
   getSelectOptions() {
-    const config = this.config
-    let options = config.options || []
-    // console.log(options, 'options1111')//
+    let _options = this.getOptions()
+    let options = _options?.options || []
+    if (!Array.isArray(options)) {
+      options = [] //
+    }
     return options //
   }
-  getSubForm(id: string) { }
+  getSubForm(id: string) {}
   getData() {
     let form = this.form
     let data = form.getData()
@@ -210,21 +212,36 @@ export class FormItem extends Base {
     this.rowIndex = rowIndex
     return rowIndex
   }
-
+  getDefaultOptions() {
+    return {} //
+  }
   getOptionField() {
     let config = this.config
-    let id = this.id
-    let obj: any = {
-      ...config,
-      id: id,
-      key: this.getKey(),
+    if (config.id == null) {
+      config.id = this.id
+      config.key = this.getKey()
     }
-    obj.options = obj.options || {}
-    const type = this.getType()
-    obj.type = obj.type || type
-    const style = this.getStyle()
-    obj.style = obj.style || style //
-    return obj
+    if (config.options == null) {
+      config.options = this.getDefaultOptions()
+    }
+    if (config.type == null) {
+      config.type = this.getType()
+    }
+    if (config.style == null) {
+      config.style = this.getStyle()
+    }
+    // let id = this.id
+    // let obj: any = {
+    //   id: id,
+    //   key: this.getKey(),
+    // }
+    // obj.options = obj.options || {}
+    // const type = this.getType()
+    // obj.type = obj.type || type
+    // const style = this.getStyle()
+    // obj.style = obj.style || style //
+    // config.options = config.options || {}
+    return config
   }
   getDisabled() {
     let disables = this.config?.options?.disabled
@@ -753,7 +770,7 @@ export class FormItem extends Base {
         if (Array.isArray(_value1)) {
           value = _value1 //
         }
-      } catch (error) { }
+      } catch (error) {}
     }
     if (!Array.isArray(value)) {
       value = [] //

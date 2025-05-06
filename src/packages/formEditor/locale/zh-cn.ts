@@ -26,6 +26,9 @@ export default {
       signature: '签名',
       region: '省市区',
       grid: '栅格布局',
+      stable: '表格',
+      sform: '子表单', //
+      code:"代码编辑",
       table: '表格布局',
       tabs: '标签页',
       collapse: '折叠面板',

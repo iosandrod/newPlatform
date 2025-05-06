@@ -29,10 +29,10 @@ import { Node } from './formEditor/node'
 import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
 import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
-import { } from 'vxe-table'
+import {} from 'vxe-table'
 import { PageDesignItem } from './pageItem'
 import formCom from './formCom'
-import { selectTypeMap } from './designNodeForm'
+import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 //转换数据
 //
 let prevEl: any = ''
@@ -53,6 +53,19 @@ const layoutType = [
   'divider',
   'inline',
 ]
+const excludes = [
+  'grid',
+  'col',
+  'table',
+  'tr',
+  'td',
+  'tabs',
+  'tabsCol',
+  'collapse',
+  'collapseCol',
+  'divider',
+  'inline',
+]
 const pName = [] //
 export class Form extends Base {
   dTableName: string //
@@ -61,13 +74,14 @@ export class Form extends Base {
   curDForm: any = null
   curSForm: any = null
   originalData = {}
-  tableDataMap: {//
+  tableDataMap: {
+    //
     curRow: any
     data: any
   } = {
-      data: [],
-      curRow: null,
-    }
+    data: [],
+    curRow: null,
+  }
   tableConfigMap = {}
   static component = formCom
   pageType = 'form' //
@@ -157,7 +171,7 @@ export class Form extends Base {
   setItems(items, setLayout = true) {
     this.items.splice(0) //
     for (const item of items) {
-      this.addFormItem(item) //
+      this.addFormItem(item)
     }
     if (setLayout == true) {
       let pcLayout = this.getPcLayout()
@@ -172,7 +186,7 @@ export class Form extends Base {
         layout,
         list: [], //
       } //
-      this.setLayoutData(obj) //
+      this.setLayoutData(obj)
     }
   }
   getDragElement(node) {
@@ -265,7 +279,7 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-          sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
           ],
         form: ER.formIns,
       })
@@ -358,8 +372,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-              ? newTarget.children[0]
-              : newTarget.parentNode
+            ? newTarget.children[0]
+            : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -581,7 +595,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() { }
+  closeCurSubForm() {}
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -715,8 +729,9 @@ export class Form extends Base {
   initPcLayout() {
     let pcLayout = this.pcLayout
   }
-  initMobileLayout() { }
+  initMobileLayout() {}
   addFormItem(config: Field) {
+    // debugger//
     let id = config.id
     let oldItems = this.items
     let index = oldItems.findIndex((item) => item.id === id)
@@ -772,7 +787,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) { }
+  setEditData(data) {}
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -833,6 +848,30 @@ export class Form extends Base {
     })
     this.state.store = _nodes //
   }
+  flatNodes(nodes, excludes, fn?: any, excludesFn?: any) {
+    return nodes.reduce((res, node, currentIndex) => {
+      //不是field的node
+      if (excludes.indexOf(node.type) === -1) {
+        res.push(node)
+        fn && fn(nodes, node, currentIndex)
+      } else {
+        excludesFn && excludesFn(nodes, node, currentIndex)
+      }
+      const children =
+        node.list || node.rows || node.columns || node.children || []
+      res = res.concat(this.flatNodes(children, excludes, fn, excludesFn))
+      return res
+    }, []) //
+  }
+  combinationData2(list, fields) {
+    const fn = (nodes, node, currentIndex) => {
+      let cur = fields.find((item) => item.id === node)
+      if (!_.isEmpty(cur)) {
+        nodes[currentIndex] = cur
+      }
+    }
+    this.flatNodes(list, excludes, fn)
+  }
   setLayoutData(data) {
     const state = this.state
     if (data == null) {
@@ -848,7 +887,7 @@ export class Form extends Base {
     this.isShow = false
     state.store = newData.list
     state.fields = newData.fields
-    const curLayout = _.cloneDeep(newData.layout[state.platform])
+    let curLayout = _.cloneDeep(newData.layout[state.platform])
     if (state.fields == null) {
       // debugger//
     }
@@ -905,7 +944,7 @@ export class Form extends Base {
       if (_t1) {
         this.curSForm = _t1
       } else {
-        this.curSForm = null//
+        this.curSForm = null //
       }
     }
     this.isShowConfig = state.selected === result
@@ -1578,13 +1617,27 @@ export class Form extends Base {
       item.designForm()
     }
   }
-  dragWidth(props: any) { }
+  dragWidth(props: any) {}
+  getRealTableName() {
+    return ''
+  }
   initDefaultDForm() {
-    let tm1 = selectTypeMap(this as any)//
+    // let tm1 = selectTypeMap(this as any) //
+    // Object.entries(tm1).forEach(([key, value]) => {
+    //   let _f = new Form(value)
+    //   this.sFormMap[key] = _f ////
+    // }) //
+    let _this: any = this //
+    let tm = formitemTypeMap(_this)
+    Object.entries(tm).forEach(([key, value]) => {
+      let _f = new Form(value)
+      this.dFormMap[key] = _f
+    })
+    let tm1 = selectTypeMap(_this)
     Object.entries(tm1).forEach(([key, value]) => {
       let _f = new Form(value)
-      this.sFormMap[key] = _f////
-    })//
+      this.sFormMap[key] = _f ////
+    }) //
   }
   getHeaderButtons() {
     let buttons = this.config.buttons
@@ -1606,12 +1659,17 @@ export class Form extends Base {
     return design
   }
   getFieldComButtons() {
-    let btns = [{
-      label: '添加默认字段',
-      fn: async () => {
-        console.log('添加默认字段')//
-      }
-    }]
+    let btns = [
+      {
+        label: '添加默认字段',
+        fn: async () => {
+          let pageDesign = this.getCurrentPageDesign()
+          let columns = pageDesign.getTableColumns()
+          console.log(columns, 'testColumns') //
+        },
+      },
+    ]
+    return btns
   }
 }
 //使用默认布局

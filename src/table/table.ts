@@ -49,7 +49,11 @@ import tableCom from './tableCom'
 import { createGroup, createText } from '@visactor/vtable/es/vrender'
 import { SeriesNumberColumn } from './seriesNumberColumn'
 import { initContextMenu } from './tableContext'
+import { ControllerColumn } from './controllerColumn'
 export class Table extends Base {
+  frozenColCount = 0
+  rightFrozenColCount = 0
+  controllerColumn?: ControllerColumn //
   currentEditCol?: Column
   isContainerClick = false
   isFilterTable = false
@@ -201,10 +205,15 @@ export class Table extends Base {
     this.setColumns(columns) //
     this.initSortState()
     this.initCheckboxColumn()
+    this.initControllerColumn()
     this.initSeriesNumberColumn()
     this.initGlobalSearch()
     this.initCurrentContextItems() //
     this.initTableState()
+  }
+  initControllerColumn() {
+    let _col = new ControllerColumn({}, this) //
+    this.controllerColumn = _col
   }
   initTableState() {
     let config = this.config
@@ -318,25 +327,7 @@ export class Table extends Base {
         }
         return null
       },
-      // (col, row, table) => {
-      //   let obj= {
-      //     range: {
-      //       start: {
-      //         col: 3,
-      //         row: 8,
-      //       },
-      //       end: {
-      //         col: 7,
-      //         row: 10,
-      //       },
-      //     },
-      //     style: {
-      //       bgColor: '#ccc',
-      //     },
-      //   } //
-      //   return obj
-      // },
-      // multipleSort: true,
+
       sortState: [],
       theme: createTheme() as any,
       defaultRowHeight: 30,
@@ -465,6 +456,11 @@ export class Table extends Base {
       let cCol = this.checkboxColumn
       _col1.unshift(cCol.getFooterColumnProps()) ////
     }
+    let _show1 = this.getShowControllerColumn()
+    if (_show1 == true) {
+      let cCol = this.controllerColumn
+      _col1.push(cCol.getFooterColumnProps()) //////
+    }
     return _col1 ////
   }
   loadFooterColumn() {
@@ -499,8 +495,17 @@ export class Table extends Base {
     let _columns = this.templateProps.columns || [] //
     let instance = this.getInstance()
     let n = Date.now().toString()
-    console.time(n)
-
+    console.time(n) //
+    let fro = instance.options.frozenColCount
+    let right = instance.options.rightFrozenColCount //
+    let myFro = this.frozenColCount
+    let myRight = this.rightFrozenColCount
+    if (myRight > 0 && myRight != right) {
+      instance.options.rightFrozenColCount = myRight //
+    }
+    if (myFro > 0 && myFro != fro) {
+      instance.options.frozenColCount = myFro //
+    }
     instance.updateColumns(_columns) //
     console.timeEnd(n) //
   }
@@ -776,11 +781,35 @@ export class Table extends Base {
     let _col1 = _cols.map((col) => {
       return col.getColumnProps()
     })
+    //显示check
     let _show = this.config.showCheckboxColumn
     if (_show) {
       let cCol = this.checkboxColumn
-      _col1.unshift(cCol.getColumnProps()) //
+      _col1.unshift(cCol.getColumnProps())
     }
+    let _show1 = this.getShowControllerColumn()
+    if (_show1 == true) {
+      let cCol = this.controllerColumn
+      _col1.push(cCol.getColumnProps())
+    }
+    _col1 = _col1.sort((a, b) => {
+      let isFrozen = b.isFrozen
+      if (isFrozen === true) {
+        return -1
+      }
+      return 0
+    })
+    _col1 = _col1.sort((a, b) => {
+      let isLeftFrozen = a.isLeftFrozen
+      if (isLeftFrozen === true) {
+        return -1
+      }
+      return 0
+    })
+    let count = _col1.filter((col) => col.isFrozen).length //这个右侧冻结的//
+    let _count = _col1.filter((col) => col.isLeftFrozen).length //这个左侧冻结的//
+    this.frozenColCount = _count
+    this.rightFrozenColCount = count
     return _col1 ////
   }
   //返回bool//
@@ -809,6 +838,12 @@ export class Table extends Base {
     const field = col.getField()
     this.columnsMap[field] = col
     this.columns.push(col)
+  }
+  getFrozenColCount() {
+    return this.frozenColCount
+  }
+  getFrozenColCountRight() {
+    return this.rightFrozenColCount //
   }
   loadColumns() {
     try {
@@ -1604,7 +1639,15 @@ export class Table extends Base {
   } //
   getHeaderButtons() {
     let config = this.config //
-    let buttons = config.buttons||[]
+    let buttons = config.buttons || []
     return buttons
+  }
+  getShowControllerColumn() {
+    let config = this.config //
+    let showControllerButtons = config.showControllerButtons
+    return showControllerButtons
+  }
+  getControllerColumnWidth() {
+    return 130
   }
 }

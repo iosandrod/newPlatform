@@ -76,12 +76,12 @@ export default defineComponent({
       formIns.registerRef('fieldMenu', el) //
     }
     const fieldsConfig = formIns.getDesignFieldConfig() //
-    // debugger //
+    let btng = formIns.getFieldComButtons() //
     return () => {
       let com = (
         <ElAside class={[ns.b()]} width={ER.props.fieldsPanelWidth}>
           <el-scrollbar>
-            <ButtonGroupCom items={[]}></ButtonGroupCom>
+            <ButtonGroupCom items={btng}></ButtonGroupCom>
             <menuCom
               items={fieldsConfig}
               ref={registerMenu}

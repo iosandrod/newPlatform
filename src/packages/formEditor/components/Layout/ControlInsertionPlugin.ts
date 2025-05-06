@@ -327,7 +327,7 @@ function ControlInsertionPlugin(ER: Form) {
     return ER.cachePlugin
   } //
   class ControlInsertionPlugin {
-    dragStart(e) { }
+    dragStart(e) {}
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       if (!prevEl || !e.activeSortable) {
@@ -424,16 +424,7 @@ function ControlInsertionPlugin(ER: Form) {
                   }
                 }
                 return
-                // nSpan = _span - Number(_span1)
-                // //使用col进行包裹
-                // _nIndex = newIndex
-                // _oldEl1 = {
-                //   type: 'col',
-                //   list: [],
-                //   options: {
-                //     span: _span1,
-                //   },
-                // }
+               
               }
             }
           }
@@ -472,10 +463,48 @@ function ControlInsertionPlugin(ER: Form) {
         }
       }
       if (inserRowIndex !== '') {
-        let store = []//
-        store = Array.isArray(prevSortable.options.parent)
-          ? prevSortable.options.parent
-          : prevSortable.options.parent.list
+        let store = [] //
+        if (Array.isArray(prevSortable.options.parent)) {
+          store = prevSortable.options.parent
+        } else {
+          store = prevSortable.options.parent.list
+        } //
+        //只有一个元素
+        let preP = prevSortable.options.parent
+        if (store.length == 1) {
+          let n0 = store[0]
+          let pContext = n0.context
+          let pp = pContext.parent
+          if (pp.type == 'col') {
+            let pp1 = pp.context.parent
+            if (pp1.type == 'grid') {
+              let pp1columns = pp1.columns
+              if (pp1columns.length == 1) {
+                let pp1Context = pp1?.context // is inline
+                let pppparent = pp1Context?.parent //is Array
+                let ppppContext = pppparent?.context
+                let ppppparent = ppppContext?.parent
+                if (ppppparent == ER.state.store) {
+                  //
+                  // debugger
+                  newElement = ER.wrapElement(
+                    _.cloneDeep(oldEl),
+                    inserRowIndex !== '',
+                    true,
+                    isBlock,
+                    true,
+                  )
+                  inserRowIndex = ppppparent.findIndex(
+                    (node) => node.id == pppparent.id,
+                  )
+                  store = ER.state.store //
+                  preP = ER.state.store //
+                  // ER.state.store.splice(inserRowIndex, 0, newElement) //
+                }
+              }
+            }
+          }
+        }
         // 在指定的索引位置插入新元素
         store.splice(inserRowIndex, 0, newElement)
         let _node = store[inserRowIndex]
@@ -486,7 +515,7 @@ function ControlInsertionPlugin(ER: Form) {
         utils.addContext({
           // node: store[inserRowIndex],
           node: _node,
-          parent: prevSortable.options.parent,
+          parent: preP,
           form: ER.formIns, //
         })
       }
@@ -501,21 +530,9 @@ function ControlInsertionPlugin(ER: Form) {
         } = prevSortable
         let _parent2 =
           prevSortable.options.parent[
-          sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
           ]
-        // if (gColumns != null) {
-        //   list = gColumns
-        //   let _el = {
-        //     type: 'inline',
-        //     columns: [newElement],
-        //   }
-        //   newElement = _el //
-        //   _oldEl1.list.push(newElement) //
-        //   newElement = _oldEl1
-        //   newElement = ER.wrapElement(newElement, false, true, true) //
-        //   inserColIndex = _nIndex //
-        //   _parent2 = gColumns //
-        // }
+
         // 在指定的索引位置插入新元素
         list.splice(inserColIndex, 0, newElement)
         // 关联新元素的上下文信息
@@ -612,8 +629,8 @@ function ControlInsertionPlugin(ER: Form) {
             target.dataset.layoutType === 'root'
               ? target
               : newTarget.__draggable_component__
-                ? newTarget.children[0]
-                : newTarget.parentNode
+              ? newTarget.children[0]
+              : newTarget.parentNode
           prevSortable = state._sortable
           inserRowIndex = 0
           setBorder(prevEl, 'drag-line-top')

@@ -19,16 +19,19 @@ export default defineComponent({
     const params = props.params
     const formitem: FormItem = params.formitem
     let _value = computed(() => {
+      // debugger//
       let _config = formitem?.getBindConfig()
-      console.log(_config, 'testConifg') //
       return _config
-    })
+    }) //
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
     }
     return () => {
       let com = (
-        <div class="h-full w-full flex items-center" style={{ minHeight: '36px' }}>
+        <div
+          class="h-full w-full flex items-center"
+          style={{ minHeight: '36px' }}
+        >
           <inputCom ref={registerRef} {..._value.value}></inputCom>
         </div>
       )

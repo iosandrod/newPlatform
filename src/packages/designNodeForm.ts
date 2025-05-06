@@ -6,8 +6,8 @@ export const formitemTypeMap = (_this: PageDesign) => {
   const tableOptions = _this.getRealTableName()
   let detailTable = _this
   let obj = {
-    string: {},
     entity: {
+      //
       itemSpan: 24,
       items: [
         {
@@ -65,11 +65,6 @@ export const formitemTypeMap = (_this: PageDesign) => {
       itemSpan: 24,
       items: [
         {
-          field: 'title',
-          label: '标题',
-          type: 'input', //
-        },
-        {
           field: 'placeholder',
           label: '提示',
           type: 'input', //
@@ -78,6 +73,19 @@ export const formitemTypeMap = (_this: PageDesign) => {
       data: computed(() => {
         return _this.state.selected?.options || {} //
       }), //
+    },
+    string: {
+      itemSpan: 24,
+      items: [
+        {
+          field: 'placeholder',
+          label: '提示',
+          type: 'input', //
+        },
+      ],
+      data: computed(() => {
+        return _this.state.selected?.options //
+      }),
     },
     buttongroup: {
       itemSpan: 24,
@@ -120,9 +128,10 @@ export const formitemTypeMap = (_this: PageDesign) => {
         }, //
       ],
       data: computed(() => {
-        return _this.state.selected?.options//
+        return _this.state.selected?.options //
       }),
     },
+
     dform: {
       itemSpan: 24,
       items: [
@@ -131,7 +140,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
           label: '关联表名',
           type: 'select', //
           options: [],
-        },//
+        }, //
       ],
       data: computed(() => {
         return _this.state.selected?.options || {} //
@@ -145,7 +154,6 @@ export const formitemTypeMap = (_this: PageDesign) => {
           field: 'items',
           label: '',
           type: 'stable', //
-
           options: {
             showTable: true,
             tableConfig: {
@@ -196,7 +204,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         let _d = _this.state.selected?.options || {} //
         // debugger//
         _d['_items_get'] = () => _this.state.selected.columns
-        _d['_items_set'] = (v) => { } //
+        _d['_items_set'] = (v) => {} //
         return _d //
       }),
     },
@@ -204,69 +212,114 @@ export const formitemTypeMap = (_this: PageDesign) => {
   return obj //
 }
 
-
 export const selectTypeMap = (_this: PageDesign) => {
-  let formitemTypeArr = [
-    'input',
-    'select',
-  ]
+  let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
-    let items = [{
-      field: "label",
-      label: '标题',
-      type: 'input'//
-    },
-    {
-      field: 'type',
-      label: '类型',
-      type: 'select',
-      options: [
-        {
-          label: '输入框',
-          value: 'input'
+    let items = [
+      {
+        field: 'label',
+        label: '标题',
+        type: 'input', //
+      },
+      {
+        field: 'type',
+        label: '类型',
+        type: 'select',
+        options: {
+          options: [
+            {
+              label: '输入框',
+              value: 'input',
+            },
+            {
+              label: '下拉框',
+              value: 'select',
+            },
+            {
+              label: '日期',
+              value: 'date',
+            },
+            {
+              label: '时间',
+              value: 'time',
+            },
+            {
+              label: '日期时间',
+              value: 'datetime',
+            },
+            {
+              label: '数字',
+              value: 'number',
+            },
+            {
+              label: '密码',
+              value: 'stable',
+            },
+            {
+              label: '代码',
+              value: 'code',
+            },
+            {
+              label: '开关',
+              value: 'switch',
+            },
+            {
+              label: '图片',
+              value: 'image',
+            },
+            {
+              label: '子表单', //
+              value: 'sform',
+            },
+          ],
         },
-        {
-          label: '下拉框',
-          value: 'select'
-        }
-      ]
-    },
+      },
     ]
     return items
-  }
+  } //
   let obj = {
     input: {
       itemSpan: 24,
-      items: [
-        ...createDSelect('input')
-      ],
+      items: [...createDSelect('input')],
       data: computed(() => {
         return _this.state.selected || {} //
       }),
     },
     select: {
       itemSpan: 24,
-      items: [
-        ...createDSelect('select')
-      ],
+      items: [...createDSelect('select')],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    },
+    code: {
+      itemSpan: 24,
+      items: [...createDSelect('code')],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    },
+    stable: {
+      itemSpan: 24,
+      items: [...createDSelect('stable')],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    },
+    sform: {
+      itemSpan: 24,
+      items: [...createDSelect('sform')],
       data: computed(() => {
         return _this.state.selected || {} //
       }),
     },
     string: {
       itemSpan: 24,
-      items: [
-        ...createDSelect('string'),
-        {
-          field: 'placeholder',
-          label: '提示',
-          type: 'input', //
-        },
-      ],
+      items: [...createDSelect('string')],
       data: computed(() => {
         return _this.state.selected || {} //
       }),
-    }
+    },
   }
   return obj
 }
