@@ -13,15 +13,15 @@ import {
   entityData,
 } from './formEditor/testData'
 import { useOnce, useRunAfter } from './utils/decoration'
-import  { getDefaultPageProps } from './pageCom'
+import { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
+import { Table } from '@/table/table'
 
 export class PageDesign extends Form {
   pageType = 'pageDesign' //
   tableName
-  tableType: 'main' | 'edit' | 'search' = 'main'
-
+  tableType: 'main' | 'edit' | 'search' = 'main' //
   constructor(config) {
     super(config)
   }
@@ -209,7 +209,7 @@ export class PageDesign extends Form {
   getAllFormMap() {}
   @useOnce()
   initDefaultDForm() {
-    super.initDefaultDForm()//
+    super.initDefaultDForm() //
   } //
   initDefaultSForm() {}
   //打开编辑页面
@@ -284,21 +284,20 @@ export class PageDesign extends Form {
     }
   }
   async createDefaultRow(tableName = this.getTableName()) {
-    //
-    let tableConfig = this.getTableConfig()
+    let tableConfig = this.getTableConfig(tableName) //
     let columns = tableConfig.columns
     let obj = {}
     for (const col of columns) {
       let defaultValue = col['defaultValue'] //
       if (defaultValue != null) {
-        let field = col.field //
+        let field = col.field
         let _obj = {
           [field]: defaultValue, //
         }
         obj = { ...obj, ..._obj }
       }
     }
-    return obj
+    return obj //
   }
   getTableConfig(tableName = this.getTableName()) {
     let tableConfigMap = this.tableConfigMap
@@ -313,5 +312,25 @@ export class PageDesign extends Form {
       }
     } //
     return _config //
+  }
+  async addDetailTableRow(tableName?: string, row?: any) {
+    let tTable: Table = this.getRef(tableName)
+    if (row == null) {
+      row = 1
+    } //
+    if (tTable == null) {
+      return
+    }
+    if (typeof row == 'number') {
+      await tTable.addRows(row)
+    } else if (Array.isArray(row)) {
+      await tTable.addRows({
+        rows: row,
+      })
+    } else {
+      await tTable.addRows({
+        rows: [row], //
+      })
+    }
   }
 }

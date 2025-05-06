@@ -140,7 +140,8 @@ export const formitemTypeMap = (_this: PageDesign) => {
           type: 'number', //
         },
       ],
-      data: computed(() => {//
+      data: computed(() => {
+        //
         return _this.state.selected?.options //
       }),
     },
@@ -153,6 +154,11 @@ export const formitemTypeMap = (_this: PageDesign) => {
           type: 'select', //
           options: [],
         }, //
+        {
+          filed: 'bindData',
+          label: '绑定变量',
+          type: 'code', //
+        },
       ],
       data: computed(() => {
         return _this.state.selected?.options || {} //
@@ -216,7 +222,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         let _d = _this.state.selected?.options || {} //
         // debugger//
         _d['_items_get'] = () => _this.state.selected.columns
-        _d['_items_set'] = (v) => { } //
+        _d['_items_set'] = (v) => {} //
         return _d //
       }),
     },
@@ -229,10 +235,10 @@ export const selectTypeMap = (_this: PageDesign) => {
   let createDSelect = (type) => {
     let items = [
       {
-        field: "field",
-        title: "绑定字段",
-        type: "input",//
-        label: "绑定字段",
+        field: 'field',
+        title: '绑定字段',
+        type: 'input', //
+        label: '绑定字段',
       },
       {
         field: 'label',
@@ -291,6 +297,15 @@ export const selectTypeMap = (_this: PageDesign) => {
             },
           ],
         },
+      },
+      {
+        field: 'itemChange',
+        label: '值更新事件',
+        type: 'code', //
+      },
+      {
+        filed:"sss",
+        label:''
       },
     ]
     return items

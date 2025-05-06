@@ -91,7 +91,44 @@ export const initContextMenu = (table: Table) => {
       key: 'designColumn',
       disabled: false, //
       visible: true,
-      fn: () => {},
+      fn: () => {
+        let sys = table.getSystem() //
+        let fConfig = {
+          itemSpan: 12,
+          items: [
+            {
+              label: '标题', //
+              field: 'title',
+              editType: 'string', //
+            },
+            {
+              label: '值更新事件',
+              filed: 'itemChange',
+              editType: 'code', //
+            },
+            {
+              label: '默认值',
+              field: 'defaultValue',
+              type: 'code', //
+            },
+            {
+              label: 'defaultValueType',
+              field: 'defaultValueType',
+              type: 'select',
+              options: [
+                {
+                  label: '函数类型',
+                  value: 'function',
+                },
+                {
+                  label: '普通类型',
+                  value: 'normal',
+                },
+              ],
+            },
+          ],
+        }
+      },
     },
     {
       label: '设计表格列', //

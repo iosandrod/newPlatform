@@ -29,7 +29,7 @@ import { Node } from './formEditor/node'
 import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
 import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
-import { } from 'vxe-table'
+import {} from 'vxe-table'
 import { PageDesignItem } from './pageItem'
 import formCom from './formCom'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
@@ -79,9 +79,9 @@ export class Form extends Base {
     curRow: any
     data: any
   } = {
-      data: [],
-      curRow: null,
-    }
+    data: [],
+    curRow: {}, //
+  }
   tableConfigMap = {}
   static component = formCom
   pageType = 'form' //
@@ -279,7 +279,7 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-          sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
           ],
         form: ER.formIns,
       })
@@ -372,8 +372,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-              ? newTarget.children[0]
-              : newTarget.parentNode
+            ? newTarget.children[0]
+            : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -595,7 +595,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() { }
+  closeCurSubForm() {}
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -729,7 +729,7 @@ export class Form extends Base {
   initPcLayout() {
     let pcLayout = this.pcLayout
   }
-  initMobileLayout() { }
+  initMobileLayout() {}
   addFormItem(config: Field) {
     // debugger//
     let id = config.id
@@ -787,7 +787,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) { }
+  setEditData(data) {}
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -1046,7 +1046,7 @@ export class Form extends Base {
                 ...this.createNodeIdKey('col'), //
                 list: [node],
                 options: {
-                  span: 6,//
+                  span: 6, //
                   offset: 0,
                   push: 0,
                   pull: 0,
@@ -1616,7 +1616,7 @@ export class Form extends Base {
       item.designForm()
     }
   }
-  dragWidth(props: any) { }
+  dragWidth(props: any) {}
   getRealTableName() {
     return ''
   }

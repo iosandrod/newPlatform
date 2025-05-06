@@ -27,11 +27,18 @@ export default defineComponent({
     const registerRef = (el) => {
       formitem.registerRef('fieldCom', el) //
     }
+    const data = computed(() => {
+      let _data = formitem.getdBindData()
+      return _data
+    })
     return () => {
-      //
       let _com = (
         <div class="h-full w-full border-red" style={{ minHeight: '100px' }}>
-          <FormCom ref={registerRef} {...fConfig.value}></FormCom>
+          <FormCom
+            ref={registerRef}
+            {...fConfig.value}
+            data={data.value}
+          ></FormCom>
         </div>
       )
       return _com

@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash'
 import { FormItem } from './formitem'
+import { PageDesign } from './pageDesign'
 
 export class PageDesignItem extends FormItem {
   //@ts-ignore
@@ -67,5 +68,10 @@ export class PageDesignItem extends FormItem {
     let config = this.config
     let entityType = config?.options?.tableType
     return entityType //
+  }
+  getdBindData() {
+    let design: PageDesign = this.form as any
+    let curRow = design.tableDataMap.curRow || {}
+    return curRow
   }
 }

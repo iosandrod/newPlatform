@@ -16,7 +16,7 @@ export default class CodeEditor extends Base {
   }
   getModelValue() {
     let config = this.config
-    let modelValue = config.modelValue || ''
+    let modelValue = config.modelValue || '' //
     return modelValue
   }
   //
@@ -43,7 +43,8 @@ export default class CodeEditor extends Base {
     }
     return language
   }
-  render() {//
+  render() {
+    //
     let root: HTMLDivElement = this.getRef('root')
     let modelValue = this.getModelValue()
     let editor = monaco.editor.create(root!, {

@@ -86,7 +86,10 @@ export default defineComponent({
       )
 
       return (
-        <div class={ns.b()} style={{ display: 'flex', width: '100vw', height: '100vh' }}>
+        <div
+          class={ns.b()}
+          style={{ display: 'flex', width: '100vw', height: '100vh' }}
+        >
           <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
           <div class="flex flex-col flex-1 h-full ">
             <div class="w-full bg-white tab-line">{tableTab}</div>
@@ -141,6 +144,7 @@ export default defineComponent({
                       let currentPage = systemIns.getCurrentPageDesign()
                       let layout = currentPage.getLayoutData()
                       console.log(layout) //
+                      console.log(currentPage, 'testPage') //
                     },
                   },
                 ]}
