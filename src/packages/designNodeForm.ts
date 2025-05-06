@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
-
+//处理内部options
 export const formitemTypeMap = (_this: PageDesign) => {
   const tableOptions = _this.getRealTableName()
   let detailTable = _this
@@ -131,7 +131,19 @@ export const formitemTypeMap = (_this: PageDesign) => {
         return _this.state.selected?.options //
       }),
     },
-
+    col: {
+      itemSpan: 24,
+      items: [
+        {
+          field: 'span',
+          label: '列宽',
+          type: 'number', //
+        },
+      ],
+      data: computed(() => {//
+        return _this.state.selected?.options //
+      }),
+    },
     dform: {
       itemSpan: 24,
       items: [

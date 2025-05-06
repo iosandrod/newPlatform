@@ -46,6 +46,10 @@ export default defineComponent({
         if (t1 == '' || t1 == null) {
           t1 = element.label //
         }
+        let fieldTitle = element.fieldTitle
+        if (fieldTitle != null) {
+          t1 = fieldTitle //
+        }
         let _com = (
           <li class={[]} onClick={() => addStore(element)}>
             <Icon class={[ns.e('icon')]} icon={element.icon}></Icon>

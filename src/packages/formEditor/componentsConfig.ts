@@ -25,12 +25,11 @@ export const createGlobalConfig = () => {
   return JSON.parse(JSON.stringify(globalConfig))
 }
 export const createFieldConfig = (f: Form) => {
-  // debugger //
   let d: PageDesign = f.getCurrentPageDesign()
   let allFields = []
   if (d != null) {
     let columns = d.config.columns || [] //
-    for (const col of columns) {
+    for (let col of columns) {
       let type = col.type
       type = 'string'//
       allFields.push({
@@ -39,6 +38,7 @@ export const createFieldConfig = (f: Form) => {
         icon: 'input',
         key: '',
         field: col.field,//
+        fieldTitle: col.title || col.field,///
         id: '',
         options: {
           clearable: true,
