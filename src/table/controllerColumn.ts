@@ -116,7 +116,7 @@ export class ControllerColumn extends Column {
       }
     }
     //@ts-ignore
-    _props.isFrozen = true
+    _props.isFrozen = this.getIsFrozen()
     _props.title = ''
     _props.headerCustomLayout = null
     return _props //

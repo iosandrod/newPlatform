@@ -598,6 +598,7 @@ export class Table extends Base {
     if (!Array.isArray(config)) {
       return
     }
+    this.timeout['updateCanvas__now'] = true //
     this.sortCache = config //
   }
   initSortState() {

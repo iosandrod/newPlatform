@@ -2476,3 +2476,54 @@ const app = createApp({
         renderDefault: false,
       }
     }
+
+     // borderColor: (config) => {
+        //   let _table = config.table
+        //   let record = _table.getRecordByCell(config.col, config.row)
+        //   let color = 'RGB(225, 228, 232)' //
+        //   let _index = record._index
+        //   let validateMap = table.validateMap
+        //   let errStr = validateMap[_index]
+        //   //报错了//
+        //   if (errStr) {
+        //     let allField = errStr.map((row) => row.field)
+        //     if (allField.includes(this.getField())) {
+        //       color = 'red'
+        //     } //
+        //   }
+        //   return color
+        // },
+        // borderLineWidth: (config) => {
+        //   let _table = config.table
+        //   let record = _table.getRecordByCell(config.col, config.row)
+        //   let color = 1 //
+        //   let _index = record._index
+        //   let validateMap = table.validateMap
+        //   let errStr = validateMap[_index]
+        //   //报错了//
+        //   if (errStr) {
+        //     let allField = errStr.map((row) => row.field)
+        //     if (allField.includes(this.getField())) {
+        //       color = 3
+        //     } //
+        //   }
+        //   return color
+        // }, //
+        // bgColor: (config) => {
+        //   //
+        //   let _table = config.table
+        //   let record = _table.getRecordByCell(config.col, config.row)
+        //   let gValue = table.globalConfig.value
+        //   let value = config.value
+        //   let color = null
+        //   if (record == table.tableData.curRow) {
+        //     color = 'RGB(200, 190, 230)'
+        //   }
+        //   if (gValue.length > 0) {
+        //     let reg = new RegExp(gValue, 'g')
+        //     if (reg.test(value)) {
+        //       color = 'RGB(230, 220, 230)' //
+        //     }
+        //   }
+        //   return color
+        // }, //

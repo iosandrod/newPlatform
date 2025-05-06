@@ -42,7 +42,7 @@ import { Dialog } from '@/dialog/dialog'
 import CodeEditor from '@/codeEditor/codeEditor'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
-  disableHideCell=false//
+  disableHideCell = false //
   isMousedownRecord = null
   tableState = 'edit' //
   templateCalValue = ''
@@ -440,56 +440,7 @@ export class Column extends Base {
         //   return _col
         // }, //
         borderColor: 'rgb(30,40,60)',
-        // borderColor: (config) => {
-        //   let _table = config.table
-        //   let record = _table.getRecordByCell(config.col, config.row)
-        //   let color = 'RGB(225, 228, 232)' //
-        //   let _index = record._index
-        //   let validateMap = table.validateMap
-        //   let errStr = validateMap[_index]
-        //   //报错了//
-        //   if (errStr) {
-        //     let allField = errStr.map((row) => row.field)
-        //     if (allField.includes(this.getField())) {
-        //       color = 'red'
-        //     } //
-        //   }
-        //   return color
-        // },
-        // borderLineWidth: (config) => {
-        //   let _table = config.table
-        //   let record = _table.getRecordByCell(config.col, config.row)
-        //   let color = 1 //
-        //   let _index = record._index
-        //   let validateMap = table.validateMap
-        //   let errStr = validateMap[_index]
-        //   //报错了//
-        //   if (errStr) {
-        //     let allField = errStr.map((row) => row.field)
-        //     if (allField.includes(this.getField())) {
-        //       color = 3
-        //     } //
-        //   }
-        //   return color
-        // }, //
-        // bgColor: (config) => {
-        //   //
-        //   let _table = config.table
-        //   let record = _table.getRecordByCell(config.col, config.row)
-        //   let gValue = table.globalConfig.value
-        //   let value = config.value
-        //   let color = null
-        //   if (record == table.tableData.curRow) {
-        //     color = 'RGB(200, 190, 230)'
-        //   }
-        //   if (gValue.length > 0) {
-        //     let reg = new RegExp(gValue, 'g')
-        //     if (reg.test(value)) {
-        //       color = 'RGB(230, 220, 230)' //
-        //     }
-        //   }
-        //   return color
-        // }, //
+       
       },
       headerCustomLayout: this.getHeaderCustomLayout(), //
       editor: edit, ////
@@ -542,7 +493,7 @@ export class Column extends Base {
     }
     return this.templateCalValue
   }
-  getButtonColor(){
+  getButtonColor() {
     return 'RGB(22, 93, 255)'
   }
   getFooterColumnProps() {
@@ -1077,7 +1028,7 @@ export class Column extends Base {
     return design
   }
   openCodeDialog(config) {
-    this.disableHideCell=true
+    this.disableHideCell = true
     let codeConfig = this.getCodeConfig() //
     let sys = this.getSystem() //
     let value = this.getBindValue() ////
@@ -1090,8 +1041,8 @@ export class Column extends Base {
           modelValue: value,
         },
       }
-    } 
-    this.disableHideCell=true
+    }
+    this.disableHideCell = true
     sys.openDialog({
       height: 600,
       width: 1200,
@@ -1100,15 +1051,15 @@ export class Column extends Base {
         let com: CodeEditor = dialog.getRef('innerCom')
         let bindValue = com.getBindValue() //
         let updateFn = config?.updateFn
-        this.disableHideCell=false
+        this.disableHideCell = false
         if (typeof updateFn == 'function') {
           // this.updateBindData({ value: bindValue }) ////
-          updateFn({ value: bindValue }) 
+          updateFn({ value: bindValue })
         }
       },
       closeFn: () => {
-        this.disableHideCell=false
-      }
+        this.disableHideCell = false
+      },
     })
   }
   getCodeConfig() {
@@ -1119,4 +1070,29 @@ export class Column extends Base {
     return cacheValue //
   }
   updateBindData() {}
+  getIsFrozen() {
+    let frozen = this.config.frozen
+    if (['left', 'right'].includes(frozen)) {
+      frozen = true
+    }
+    return frozen
+  }
+  getIsLeftFrozen() {
+    let frozen = this.config.frozen
+    if (frozen == 'left') {
+      frozen = true
+    } else {
+      frozen = false //
+    }
+    return frozen
+  }
+  getIsRightFrozen() {
+    let frozen = this.config.frozen
+    if (frozen == 'right') {
+      frozen = true
+    } else {
+      frozen = false
+    }
+    return frozen //
+  }
 }

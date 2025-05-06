@@ -19,6 +19,28 @@ export const initContextMenu = (table: Table) => {
       },
     },
     {
+      label: '右侧固定',
+      key: 'rightFixed',
+      visible: () => {
+        let isHeaderContext = table.isHeaderContext //
+        if (isHeaderContext) {
+          return false
+        }
+        return true
+      },
+    },
+    {
+      label: '左侧固定',
+      key: 'leftFixed',
+      visible: () => {
+        let isHeaderContext = table.isHeaderContext //
+        if (isHeaderContext) {
+          return false
+        }
+        return true
+      },
+    },
+    {
       label: '编辑',
       key: 'edit',
       disabled: () => {
@@ -47,9 +69,7 @@ export const initContextMenu = (table: Table) => {
       key: 'designColumn',
       disabled: false, //
       visible: true,
-      fn: () => {
-        
-      },
+      fn: () => {},
     },
     {
       label: '设计表格列', //

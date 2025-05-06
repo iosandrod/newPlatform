@@ -37,7 +37,7 @@ export default defineComponent({
   props: {
     showControllerButtons: {
       type: Boolean,
-      default: true, //
+      default: false, //
     },
     ...tableV2Props,
     columns: {
