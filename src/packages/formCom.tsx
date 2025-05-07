@@ -1,7 +1,18 @@
-import { nextTick, defineComponent, onMounted, onUnmounted, ref, withDirectives, provide, watch, inject } from 'vue'
+import {
+  nextTick,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  ref,
+  withDirectives,
+  provide,
+  watch,
+  inject,
+} from 'vue'
 import { Form } from './form'
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 import defaultProps from './formEditor/defaultProps'
+import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 const getDefaultFormEditProps = () => {
   return {
     itemSpan: {
@@ -15,7 +26,7 @@ const getDefaultFormEditProps = () => {
     fieldsPanelDefaultOpeneds: {
       type: Array,
       default: () => ['defaultField', 'field', 'container'],
-    },
+    }, //
     delHandle: {
       type: Function,
       default: () => () => {}, //
@@ -87,6 +98,10 @@ export default defineComponent({
     layoutData: {
       type: Object,
     },
+    showContextMenu: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { slots, expose }) {
     let fIns: Form = null as any
@@ -140,7 +155,7 @@ export default defineComponent({
       {
         //
         // immediate: true,//
-      }
+      },
     )
     let pageDesign: any = inject('pageDesign', {}) //
     let tableName = pageDesign?.tableName
@@ -151,6 +166,9 @@ export default defineComponent({
       fIns.onUnmounted() //
     }) //
     expose({ _instance: fIns }) //
+    const registerContext = (el) => {
+      fIns.registerRef('contextMenu', el) //
+    }
     return () => {
       let com = <erForm formIns={fIns}></erForm>
       let buttonG = null
@@ -158,12 +176,19 @@ export default defineComponent({
       if (hBtns.length > 0) {
         buttonG = <ButtonGroupCom buttons={hBtns}></ButtonGroupCom> //
       }
-      return (
+      let _context = null
+      if (props.showContextMenu == true) {
+        _context = <ContextmenuCom ref={registerContext}></ContextmenuCom>
+      }
+
+      let _com = (
         <div class="w-full h-full bg-white">
           {buttonG}
           {com}
+          {_context}
         </div>
       )
+      return _com
     }
   },
 })

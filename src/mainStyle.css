@@ -225,3 +225,7 @@ li {
 .vxe-form--item-inner{
   height: 100%;
 }
+
+.color-red{
+  color: red;
+}

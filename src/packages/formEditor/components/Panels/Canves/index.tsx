@@ -25,7 +25,7 @@ export default defineComponent({
     }
     let formIns: Form = inject('formIns')
     const setFormRef = (ref: any) => {
-      ER.form = ref
+      // ER.form = ref
       formIns.registerRef('form', ref) //
     }
     return () => {

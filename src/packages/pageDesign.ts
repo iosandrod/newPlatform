@@ -347,10 +347,26 @@ export class PageDesign extends Form {
   getAllTableName() {
     let tableName = this.getRealTableName()
     let dTableName = this.getAllDetailTable().map((d) => d.getTableName())
+    return [tableName, ...dTableName]
+  }
+  getAllTableNameOptions() {
+    let tableName = this.getRealTableName()
+    let tCnName = this.getTableCnName()
+    let dTableOptions = this.getAllDetailTable().map((t) => {
+      let tName = t.getTableName()
+      let tCnName = t.getTableCnName()
+      return {
+        label: tCnName,
+        value: tName,
+      }
+    })
+    let arr = [{ label: tableName, value: tCnName }, ...dTableOptions]
+    return arr //
   }
   async saveEditPageData() {
     let realTableName = this.getRealTableName()
-    let curRow = this.getCurRow()
+    let curRow = this.getCurRow() //
+    console.log(curRow, 'testCurRow') //
   }
   getCurRow() {
     let tableName = this.getRealTableName()

@@ -305,7 +305,17 @@ export default defineComponent({
                                   {element?.['label']}
                                 </div>
                               )
-                              return <div>{tCom}</div>
+                              let requireDiv = null
+                              let required = element.required
+                              if (required == true) {
+                                requireDiv = <div class="color-red">*</div>
+                              }
+                              return (
+                                <div class="flex flex-row">
+                                  {requireDiv}
+                                  {tCom}
+                                </div>
+                              )
                             },
                           }}
                         ></vxe-form-item>

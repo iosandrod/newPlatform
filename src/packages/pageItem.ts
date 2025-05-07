@@ -9,13 +9,13 @@ export class PageDesignItem extends FormItem {
     super(config, d) //
   }
   getTableConfig() {
-    let config = this.config
-    let columns = this.config?.columns || []
+    //
+    let options = this.getOptions()
     return {
-      columns: columns,
+      ...options,
+      // columns: columns,
     }
   }
-
   getTableColumns() {
     let columns = this.config?.options?.columns || [] //
     return columns
@@ -73,5 +73,9 @@ export class PageDesignItem extends FormItem {
     let design: PageDesign = this.form as any
     let curRow = design.tableDataMap.curRow || {}
     return curRow
+  }
+  getTableCnName() {
+    let tConfig = this.getTableConfig()
+    return tConfig.tableCnName
   }
 }

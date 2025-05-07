@@ -33,6 +33,7 @@ import {} from 'vxe-table'
 import { PageDesignItem } from './pageItem'
 import formCom from './formCom'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
+import { VxeFormInstance } from 'vxe-pc-ui'
 //转换数据
 //
 let prevEl: any = ''
@@ -429,7 +430,10 @@ export class Form extends Base {
   }
   async validate() {
     return new Promise(async (resolve, reject) => {
-      // let form = this.getRef('form')
+      let form: VxeFormInstance = this.getRef('form')
+      form.validate((err) => {
+        console.log(err, 'testErr') //
+      })
       // form.validate().catch(err => {
       //     reject(err)
       // })

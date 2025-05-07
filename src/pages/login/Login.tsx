@@ -65,18 +65,21 @@ export default defineComponent({
         {
           field: 'test',
           type: 'stable',
+          label: '表格', //
+          span: 24, //
           options: {
+            // showTable: true,
             tableConfig: {
               columns: [
                 {
                   field: 'name',
                   title: '姓名',
                   editType: 'string', //
-                },
+                }, //
                 {
                   field: 'age',
                   title: '年龄',
-                  editType: 'string', ////
+                  editType: 'string', //
                 },
               ],
             },
@@ -85,6 +88,7 @@ export default defineComponent({
         {
           field: 'test1',
           type: 'code', //
+          label: 'test1',
           options: {},
         },
       ],
@@ -123,9 +127,8 @@ export default defineComponent({
       //   ...formConfig,//
       // })
       let _ins: PageDesign = btn.getRef('page')
-      // let _d = _ins.getLayoutData()
-      // console.log(_ins) //、、
-      system.confirmMessage('我是消息') //
+      console.log(_ins, 'testIns') //
+      _ins.validate() //
     }
     // let p = new PageDesign(getDefaultPageProps())
     let _data1 = Array(10000)
@@ -149,15 +152,11 @@ export default defineComponent({
           ></tableCom>
         </div>
       ) //
-      // com = (
-      //   <div class="w-full h-full">
-      //     <formCom
-      //       ref={_reg3}
-      //       isDesign={true}
-      //       // {...formConfig}
-      //     ></formCom>
-      //   </div>
-      // )
+      com = (
+        <div class="w-full h-full">
+          <formCom ref={_reg3} isDesign={false} {...formConfig}></formCom>
+        </div>
+      )
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
       let _com = (

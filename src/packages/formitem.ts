@@ -825,7 +825,7 @@ export class FormItem extends Base {
       },
     })
   }
-  getShowTable() {
+   getShowTable() {
     let options = this.getOptions()
     let showTable = options.showTable //
     return showTable

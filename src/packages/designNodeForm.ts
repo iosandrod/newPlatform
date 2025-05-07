@@ -3,7 +3,7 @@ import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
 //处理内部options
 export const formitemTypeMap = (_this: PageDesign) => {
-  const tableOptions = _this.getRealTableName()
+  let tableOptions = _this.getAllTableName()
   let detailTable = _this
   let obj = {
     entity: {
