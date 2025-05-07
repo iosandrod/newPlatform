@@ -200,9 +200,19 @@ li {
 }
 
 .vxe-form--item-content{
-  padding: 0px !important;
+  padding-top: 0px !important;
+   padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 20px !important;
+  overflow: hidden;
   height: 100%;
   width: 100%;
+}
+.vxe-form--item-title{
+  padding-bottom: 20px !important;
+  padding-top: 0px !important;
+  padding-left: 3px !important;
+  padding-right: 3px !important;
 }
 .vxe-form--wrapper{
   display: block !important;
@@ -228,4 +238,15 @@ li {
 
 .color-red{
   color: red;
+}
+
+.vxe-form-item--valid-error-tip{
+  height: 20px;
+}
+.vxe-form-item--valid-error-wrapper {
+  height: 18px;
+  display: flex;
+  align-items: center;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }

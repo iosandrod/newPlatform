@@ -72,8 +72,8 @@ export class Form extends Base {
   dTableName: string //
   dFormMap: any = shallowRef({})
   sFormMap: any = shallowRef({})
-  curDForm: any = null
-  curSForm: any = null
+  curDForm: any = null //
+  curSForm: any = null //
   originalData = {}
   tableDataMap: {
     //
@@ -431,12 +431,32 @@ export class Form extends Base {
   async validate() {
     return new Promise(async (resolve, reject) => {
       let form: VxeFormInstance = this.getRef('form')
+      // let items = form.getItems()
       form.validate((err) => {
         console.log(err, 'testErr') //
-      })
-      // form.validate().catch(err => {
-      //     reject(err)
-      // })
+        let _arr = Object.values(err)
+        if (_arr.length == 0) {
+          resolve(true) //
+        }
+        let allItem = _arr
+          .flat(2)
+          .map((item) => {
+            let _r: any = item.rule
+            //@ts-ignore
+            _r.field = item.field
+            let _item = this.items.find((i) => {
+              return i.getField() == _r.field
+            })
+            let t = _item.getTitle()
+            _r.title = t
+            return _r
+          })
+          .map((r) => {
+            //@ts-ignore
+            return { field: r.field, message: r.content, title: r.title }
+          })
+        reject('校验出错') //
+      }) //
     }).catch((err) => {
       console.log(err, '报错了') //
     })
@@ -1673,6 +1693,15 @@ export class Form extends Base {
       },
     ]
     return btns
+  }
+  createFormRules() {
+    let items = this.items
+    let obj: any = {}
+    for (const item of items) {
+      let _rule = item.createFormRules()
+      obj = { ...obj, ..._rule }
+    }
+    return obj //
   }
 }
 //使用默认布局

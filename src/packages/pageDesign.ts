@@ -320,6 +320,7 @@ export class PageDesign extends Form {
     return _config //
   }
   async addDetailTableRow(tableName?: string, row?: any) {
+    //
     let tTable: Table = this.getRef(tableName)
     if (row == null) {
       row = 1
@@ -366,7 +367,18 @@ export class PageDesign extends Form {
   async saveEditPageData() {
     let realTableName = this.getRealTableName()
     let curRow = this.getCurRow() //
-    console.log(curRow, 'testCurRow') //
+    // console.log(curRow, 'testCurRow') //
+    let detailTable = this.getAllDetailTable()
+    let dRefs: Table[] = detailTable.map((d) => {
+      let fCom = d.getRef('fieldCom')
+      return fCom //
+    })
+    console.log(dRefs, 'testDefs') //
+    let _data = dRefs.map((t) => {
+      let d = t.getData()
+      return d
+    })
+    console.log(_data, 'testData')
   }
   getCurRow() {
     let tableName = this.getRealTableName()

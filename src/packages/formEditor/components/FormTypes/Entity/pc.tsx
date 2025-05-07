@@ -18,6 +18,7 @@ export default defineComponent({
       }
       return _cols //
     }) //
+    let fitem: PageDesignItem = props.item
     let data = computed(() => {
       return item.getTableData()
     })
@@ -28,6 +29,7 @@ export default defineComponent({
     const registerTable = (ins) => {
       pageDesign.registerRef(tableName, ins) //
       pageDesign.registerRef(`${tableType}__${tableName}`, ins) //
+      fitem.registerRef('fieldCom', ins) ////
     } //
     return () => {
       //

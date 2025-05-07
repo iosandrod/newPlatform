@@ -127,8 +127,12 @@ export default defineComponent({
       //   ...formConfig,//
       // })
       let _ins: PageDesign = btn.getRef('page')
-      console.log(_ins, 'testIns') //
-      _ins.validate() //
+      _ins
+        .validate()
+        .then(() => {})
+        .catch(() => {
+          console.log('报错了') //
+        })
     }
     // let p = new PageDesign(getDefaultPageProps())
     let _data1 = Array(10000)

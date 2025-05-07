@@ -1003,7 +1003,6 @@ export class Column extends Base {
     let field = this.getField()
     let config = this.config
     let defaultValue = config.defaultValue
-    let design = this.getCurrentDesign() //
     if (defaultValue == null) {
       return {} //
     }
@@ -1016,8 +1015,7 @@ export class Column extends Base {
     return obj
   }
   getCurrentDesign() {
-    let design = inject('pageDesign')
-    return design
+    return null //
   }
   openCodeDialog(config) {
     this.disableHideCell = true

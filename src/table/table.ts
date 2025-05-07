@@ -581,7 +581,7 @@ export class Table extends Base {
           }
         },
       )
-  
+
       // if (allContain.length == 0) {
       //   console.log('点击不生效') //
       //   console.log(this) //
@@ -1610,7 +1610,10 @@ export class Table extends Base {
         res += `${v}  ^^^`
         return res
       }, '')
-      e['_shtml'] = _v
+      Object.defineProperties(e, {
+        _shtml: { value: _v, enumerable: false, writable: true },
+      })
+      // e['_shtml'] = _v
     }
     let rowState = e['_rowState'] //
     if (rowState == null) {

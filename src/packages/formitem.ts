@@ -825,7 +825,7 @@ export class FormItem extends Base {
       },
     })
   }
-   getShowTable() {
+  getShowTable() {
     let options = this.getOptions()
     let showTable = options.showTable //
     return showTable
@@ -835,5 +835,29 @@ export class FormItem extends Base {
   }
   getdBindData() {
     return {}
+  }
+  createFormRules() {
+    let required = this.config.required
+    let rArr = [] //
+    if (required == true) {
+      let _fn = (config) => {
+        let { itemValue, rule, rules, data, field } = config
+        if (itemValue == null || itemValue === '') {
+          //
+          return Promise.reject(new Error('必填')) //
+        }
+        return true
+      }
+      let obj1 = {
+        validator: _fn,
+        // required: true,
+      }
+      rArr.push(obj1) //
+    }
+    let f = this.getField()
+    let obj = {
+      [f]: rArr,
+    }
+    return obj //
   }
 }

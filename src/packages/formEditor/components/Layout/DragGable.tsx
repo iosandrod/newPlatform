@@ -285,6 +285,7 @@ export default defineComponent({
                     <div class="flex flex-row h-full">
                       <div class="flex-1 pl-5">
                         <vxe-form-item
+                          field={formitem.getField()}
                           style={{}}
                           v-slots={{
                             default: () => {

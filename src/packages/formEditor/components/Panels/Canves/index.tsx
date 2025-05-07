@@ -29,17 +29,29 @@ export default defineComponent({
       formIns.registerRef('form', ref) //
     }
     return () => {
-      let TagComponent: any = resolveComponent(unref(isPc) ? 'vxe-form' : 'van-form')
+      let TagComponent: any = resolveComponent(
+        unref(isPc) ? 'vxe-form' : 'van-form',
+      )
       if (formIns.pageType !== 'form') {
         TagComponent = 'div' //
       } //
-      const typeProps = hooks.useProps(state, state, unref(isPc), true)
+      let typeProps = hooks.useProps(state, state, unref(isPc), true)
+      //@ts-ignore
+      console.log(typeProps.value.rules, 'testRules123123') //
       let _class = []
       //如果是编辑
       if (!unref(isEditModel)) {
         _class.push('flex flex-col')
       }
-      const Layout = <LayoutDragGable data-layout-type={'root'} class={[unref(isEditModel) && ns.e('wrap'), 'h-full', ..._class]} data={state.store} parent={state.store} isRoot></LayoutDragGable>
+      const Layout = (
+        <LayoutDragGable
+          data-layout-type={'root'}
+          class={[unref(isEditModel) && ns.e('wrap'), 'h-full', ..._class]}
+          data={state.store}
+          parent={state.store}
+          isRoot
+        ></LayoutDragGable>
+      )
       let bar = null
       if (formIns.getShowFormBar()) {
         bar = (
@@ -48,6 +60,8 @@ export default defineComponent({
           </div>
         )
       }
+      let rules = formIns.createFormRules()
+      console.log(rules, 'testRules12123') //
       let inCom = (
         <div class="h-full w-full">
           {bar}
@@ -58,9 +72,11 @@ export default defineComponent({
             onClick={unref(isEditModel) && handleClick}
             {...typeProps.value}
             model={formIns.data}
+            rules={rules}
+            data={formIns.getData()}
           >
             {Layout}
-          </TagComponent>
+          </TagComponent>     
         </div>
       )
       let _inCom = (
