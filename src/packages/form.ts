@@ -75,13 +75,7 @@ export class Form extends Base {
   curDForm: any = null //
   curSForm: any = null //
   originalData = {}
-  tableDataMap: {
-    //
-    curRow: any
-    data: any
-  } = {
-    data: [],
-    curRow: {}, //
+  tableDataMap: any = {
   }
   tableConfigMap = {}
   static component = formCom

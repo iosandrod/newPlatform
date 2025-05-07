@@ -36,6 +36,7 @@ export default defineComponent({
       let com = (
         <div class="h-full w-full" style={{ minHeight: '200px' }}>
           <erTable
+            tableName={tableName}
             showHeaderButtons={item.getShowHeaderButtons()}
             key={item.id}
             ref={registerTable}

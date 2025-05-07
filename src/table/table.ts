@@ -247,7 +247,10 @@ export class Table extends Base {
     })
     this.tableData.data = data
   }
-  getTableName() {}
+  getTableName() {
+    let tableName = this.config.tableName
+    return tableName //
+  }
   updateOptions(opt: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {

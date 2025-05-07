@@ -8,7 +8,6 @@ export type createConfig = {}
 export const createClient = (config) => {
   const socket = io('http://localhost:3031', {
     transports: ['websocket'],
-    
   })
   const client = socketio(socket)
   let app = feathers()
@@ -113,7 +112,7 @@ export class myHttp {
     })
   }
   async find(tableName, query = {}): Promise<any> {
-    let _data=await this.get(tableName, 'find', query) //
+    let _data = await this.get(tableName, 'find', query) //
     return _data
   }
   async get(tableName, method, query?: any): Promise<any> {
@@ -140,12 +139,12 @@ export class myHttp {
         'patch', //
         tableName,
         params, //
-        query,//
+        query, //
         (data, err) => {
           let isError = false
           let error = null //
           let _data = null
-          let method = 'patch'//
+          let method = 'patch' //
           if (defaultMethod.includes(method)) {
             if (err) {
               isError = false
@@ -183,7 +182,7 @@ export class myHttp {
           }
           let _data1 = _data
           resolve(_data1) //
-        },//
+        }, //
       )
     })
   }
@@ -195,9 +194,9 @@ export class myHttp {
     return data //
   }
   async create(tableName, data) {
-    let _res = await this.post('entity', 'create', data)
+    let _res = await this.post(tableName, 'create', data)
     return _res //
-  }
+  } //
 }
 
 export const http = new myHttp()

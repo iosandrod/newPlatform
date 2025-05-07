@@ -58,6 +58,32 @@ export const formitemTypeMap = (_this: PageDesign) => {
             ],
           },
         },
+        {
+          filed: 'relateKey',
+          label: '表关联字段',
+          type: 'select',
+          options: {
+            options: computed(() => {
+              debugger//
+              let tname = _this.state.selected?.options?.tableName
+              let tableName = _this.getTableConfig(tname)
+              return []
+            }),
+          },
+        },
+        {
+          field: 'mainRelateKey',
+          label: '主表关联字段',
+          type: 'select',
+          options: {
+            options: computed(() => {
+              let select = _this.getTableColumns()
+              console.log(select, 'tSelect')
+              // return select //
+              return [] //
+            }),
+          },
+        },
       ],
       data: computed(() => {
         return _this.state?.selected?.options //

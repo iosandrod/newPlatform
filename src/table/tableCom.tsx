@@ -35,6 +35,9 @@ export default defineComponent({
     TableFitlerCom,
   },
   props: {
+    tableName: {
+      type:String,
+    },
     showControllerButtons: {
       type: Boolean,
       default: false, //

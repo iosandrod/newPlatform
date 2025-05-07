@@ -47,10 +47,12 @@ export class PageDesign extends Form {
       })
     }
     super.init()
-    nextTick(() => {
-      // debugger//
-      // this.setLayoutData(testBtnData) //
-    })
+    let tableName = this.getTableName()
+    this.tableDataMap[tableName] = {
+      data: [],
+      curRow: {},
+    }
+    nextTick(() => {})
   }
   getTabTitle() {
     let config = this.config //
@@ -83,6 +85,16 @@ export class PageDesign extends Form {
   addFormItem(config): any {
     // console.log(config, 'test_config')//
     let _item = new PageDesignItem(config, this) //
+    if (config.type == 'entity') {
+      let options = config.options
+      let tableName = options?.tableName
+      if (tableName != null) {
+        let tableConfigMap = this.tableConfigMap
+        if (tableConfigMap[tableName] == null) {
+          tableConfigMap[tableName] = options
+        }
+      }
+    }
     //@ts-ignore
     this.items.push(_item)
     return _item //
@@ -138,7 +150,12 @@ export class PageDesign extends Form {
   }
   getTableColumns(tableName = this.getTableName()) {
     let tableIns = this.getRef(tableName)
-    let columns = tableIns.getColumns()
+    let columns = []
+    if (tableIns != null) {
+      columns = tableIns.getColumns()
+    } else {
+      columns = this.getTableConfig().columns
+    } //
     return columns //
   }
   getMainTableConfig() {}
@@ -251,7 +268,8 @@ export class PageDesign extends Form {
   }
   async addEditTableRow() {
     let nRow = await this.createDefaultRow()
-    this.tableDataMap.curRow = nRow
+    let tData = this.getTableRefData()
+    tData.curRow = nRow
     let detailTables = this.getAllDetailTable()
     let allTableNames = detailTables.map((t) => {
       let tableName = t.getTableName()
@@ -365,30 +383,53 @@ export class PageDesign extends Form {
     return arr //
   }
   async saveEditPageData() {
-    let realTableName = this.getRealTableName()
+    let realTableName = this.getRealTableName() //
     let curRow = this.getCurRow() //
-    // console.log(curRow, 'testCurRow') //
     let detailTable = this.getAllDetailTable()
     let dRefs: Table[] = detailTable.map((d) => {
       let fCom = d.getRef('fieldCom')
       return fCom //
     })
-    console.log(dRefs, 'testDefs') //
-    let _data = dRefs.map((t) => {
-      let d = t.getData()
-      return d
-    })
-    console.log(_data, 'testData')
+    let _data = dRefs
+      .map((t) => {
+        let tableName = t.getTableName()
+        let d = t.getData()
+        let obj = {
+          [tableName]: {
+            tableName,
+            data: d,
+          },
+        }
+        return obj
+      })
+      .reduce((a, b) => {
+        let obj = { ...a, ...b }
+        return obj //
+      }, {})
+    curRow['_relateData'] = _data
+    console.log(curRow, 'testCurRow') //
+    let http = this.getHttp()
+    try {
+      let _res = await http.create(realTableName, curRow)
+    } catch (error) {
+      console.log(error, '报错了') //
+    }
   }
-  getCurRow() {
-    let tableName = this.getRealTableName()
+  getCurRow(tableName = this.getRealTableName()) {
+    //
     let tRef: Table = this.getRef(tableName)
     let curRow = null
+    let _tableName = this.getTableName()
     if (tRef == null) {
-      curRow = this.tableDataMap.curRow ////
+      curRow = this.tableDataMap[_tableName]?.curRow ////
     } else {
       curRow = tRef.getCurRow()
     }
     return curRow //
+  }
+  getTableRefData(tableName = this.getTableName()) {
+    let tableDataMap = this.tableDataMap
+    let _data = tableDataMap[tableName]
+    return _data
   }
 }
