@@ -2,6 +2,7 @@ import io from 'socket.io-client'
 import socketio from '@feathersjs/socketio-client'
 import { feathers } from '@feathersjs/feathers'
 import auth from '@feathersjs/authentication-client'
+import { system } from '@/system'
 export class Client {}
 //
 export type createConfig = {}
@@ -48,8 +49,6 @@ export const createClient = (config) => {
   app.use('company', app.service('company'), {
     methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
   })
-  //   const allEntity = app.service('entity').find()
-  //   const allCompany = app.service('company').find() //
   return app //
 }
 let token =
@@ -195,6 +194,8 @@ export class myHttp {
   }
   async create(tableName, data) {
     let _res = await this.post(tableName, 'create', data)
+    let _system = system
+    _system.confirmMessage('新建成功') //
     return _res //
   } //
 }

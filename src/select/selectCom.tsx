@@ -191,7 +191,26 @@ export default defineComponent({
             onChange={_onChange}
             onInput={_onInput}
             onVisibleChange={_onVisibleChange}
-            v-slots={slots} //
+            v-slots={{
+              ...slots,
+              option: (config) => {
+                let _default = slots?.option
+                if (_default != null) {
+                  return _default(config)
+                }
+                let option = config.option
+                let label = option.label
+                let value = option.value
+                // console.log(config)
+                let com = (
+                  <div class="w-full flex flex-row justify-between pl-5 pr-5">
+                    <div>{label}</div>
+                    <div>{value}</div>
+                  </div>
+                )
+                return com //
+              },
+            }} //
             transfer
           ></Select>
         </div>

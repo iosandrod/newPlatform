@@ -7,9 +7,10 @@ import {
   ref,
 } from 'vue'
 import { Column } from '../column'
-import { VxeInput } from 'vxe-pc-ui'
+import { VxeCheckbox, VxeInput } from 'vxe-pc-ui'
 import SelectCom from '@/select/selectCom'
 import InputCom from '@/input/inputCom'
+import CheckboxCom from '@/checkbox/checkboxCom'
 // import { VxeSelect } from 'vxe-pc-ui'
 export default defineComponent({
   name: 'tableInput',
@@ -17,6 +18,8 @@ export default defineComponent({
     VxeInput,
     SelectCom,
     InputCom, //
+    VxeCheckbox,
+    CheckboxCom,
   },
   props: {
     row: {
@@ -37,6 +40,9 @@ export default defineComponent({
     }
     let modelValue = computed(() => {
       let _value = props.row[_f] //
+      if (column.isChangeValue == true) {
+        _value = column.cacheValue
+      } //
       return _value ////
     })
     let selectModelValue = computed(() => {
@@ -68,7 +74,8 @@ export default defineComponent({
     }
     return () => {
       let com = null
-      if (type == 'string') {
+      if (type == 'string' || type == 'input') {
+        //
         com = (
           <div style={{ width: '100%', height: '100%' }}>
             <InputCom
@@ -143,6 +150,22 @@ export default defineComponent({
                 },
               }}
             ></inputCom>
+          </div>
+        )
+      }
+      if (type == 'boolean') {
+        com = (
+          <div
+            style={{ width: '100%', height: '100%' }}
+            class="flex flex-row justify-center items-center"
+          >
+            <CheckboxCom
+              modelValue={modelValue.value}
+              onChange={(v) => {
+                updateValue(v)
+              }}
+              disabled={false}
+            ></CheckboxCom>
           </div>
         )
       }

@@ -1,0 +1,81 @@
+Date : 2025-05-07 18:03:41
+Directory : d:\share12\three-template-master\src\pages
+Total : 45 files,  -14205 codes, -59 comments, 65 blanks, all -14199 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| vue            |         10 |        644 |          0 |         47 |        691 |
+| TypeScript JSX |         17 |        352 |         97 |         73 |        522 |
+| TypeScript     |         18 |    -15,201 |       -156 |        -55 |    -15,412 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                    | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                       |         45 |    -14,205 |        -59 |         65 |    -14,199 |
+| . (Files)                                                               |          1 |        156 |         33 |          2 |        191 |
+| ..                                                                      |         17 |    -16,173 |       -192 |        -71 |    -16,436 |
+| ..\table                                                                |         17 |    -16,173 |       -192 |        -71 |    -16,436 |
+| ..\table (Files)                                                        |         14 |    -15,881 |       -180 |        -59 |    -16,120 |
+| ..\table\editor                                                         |          3 |       -292 |        -12 |        -12 |       -316 |
+| billing                                                                 |          3 |        122 |          0 |          5 |        127 |
+| design                                                                  |          1 |         44 |          1 |          2 |         47 |
+| home                                                                    |         12 |        645 |         90 |         82 |        817 |
+| login                                                                   |          5 |        603 |          9 |         16 |        628 |
+| personal                                                                |          6 |        398 |          0 |         29 |        427 |
++-------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                | language       | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| d:\share12\three-template-master\src\pages\billing\BankCard.vue         | vue            |         61 |          0 |          2 |         63 |
+| d:\share12\three-template-master\src\pages\billing\Billing.vue          | vue            |         59 |          0 |          2 |         61 |
+| d:\share12\three-template-master\src\pages\billing\index.ts             | TypeScript     |          2 |          0 |          1 |          3 |
+| d:\share12\three-template-master\src\pages\design\index.tsx             | TypeScript JSX |         44 |          1 |          2 |         47 |
+| d:\share12\three-template-master\src\pages\home\Config1.tsx             | TypeScript JSX |        137 |          2 |          0 |        139 |
+| d:\share12\three-template-master\src\pages\home\CustomShow.tsx          | TypeScript JSX |         84 |          0 |         17 |        101 |
+| d:\share12\three-template-master\src\pages\home\CustomTrigger.tsx       | TypeScript JSX |         70 |          0 |         10 |         80 |
+| d:\share12\three-template-master\src\pages\home\Dynamic.tsx             | TypeScript JSX |         89 |          0 |         10 |         99 |
+| d:\share12\three-template-master\src\pages\home\Group.tsx               | TypeScript JSX |         57 |          0 |          9 |         66 |
+| d:\share12\three-template-master\src\pages\home\Home.tsx                | TypeScript JSX |         37 |         87 |          1 |        125 |
+| d:\share12\three-template-master\src\pages\home\Multiple.tsx            | TypeScript JSX |         75 |          0 |         11 |         86 |
+| d:\share12\three-template-master\src\pages\home\Simple.tsx              | TypeScript JSX |         52 |          1 |         13 |         66 |
+| d:\share12\three-template-master\src\pages\home\TriggerBox.tsx          | TypeScript JSX |         18 |          0 |          4 |         22 |
+| d:\share12\three-template-master\src\pages\home\d.vue                   | vue            |         17 |          0 |          4 |         21 |
+| d:\share12\three-template-master\src\pages\home\index copy.ts           | TypeScript     |          7 |          0 |          2 |          9 |
+| d:\share12\three-template-master\src\pages\home\index.ts                | TypeScript     |          2 |          0 |          1 |          3 |
+| d:\share12\three-template-master\src\pages\index.tsx                    | TypeScript JSX |        156 |         33 |          2 |        191 |
+| d:\share12\three-template-master\src\pages\login\Login.tsx              | TypeScript JSX |        178 |          9 |          2 |        189 |
+| d:\share12\three-template-master\src\pages\login\LoginBox.vue           | vue            |         66 |          0 |          5 |         71 |
+| d:\share12\three-template-master\src\pages\login\LoginModal.vue         | vue            |         45 |          0 |          6 |         51 |
+| d:\share12\three-template-master\src\pages\login\data.ts                | TypeScript     |        311 |          0 |          2 |        313 |
+| d:\share12\three-template-master\src\pages\login\index.ts               | TypeScript     |          3 |          0 |          1 |          4 |
+| d:\share12\three-template-master\src\pages\personal\Conversation.vue    | vue            |         58 |          0 |          3 |         61 |
+| d:\share12\three-template-master\src\pages\personal\Personal.vue        | vue            |         65 |          0 |          5 |         70 |
+| d:\share12\three-template-master\src\pages\personal\PlatformSetting.vue | vue            |         68 |          0 |          2 |         70 |
+| d:\share12\three-template-master\src\pages\personal\ProfileInfo.vue     | vue            |         85 |          0 |          9 |         94 |
+| d:\share12\three-template-master\src\pages\personal\Projects.vue        | vue            |        120 |          0 |          9 |        129 |
+| d:\share12\three-template-master\src\pages\personal\index.ts            | TypeScript     |          2 |          0 |          1 |          3 |
+| d:\share12\three-template-master\src\table\calculate.ts                 | TypeScript     |       -205 |        -28 |        -15 |       -248 |
+| d:\share12\three-template-master\src\table\calculateType.ts             | TypeScript     |        -14 |          0 |         -2 |        -16 |
+| d:\share12\three-template-master\src\table\checkboxColumn.ts            | TypeScript     |       -153 |        -10 |         -1 |       -164 |
+| d:\share12\three-template-master\src\table\column.ts                    | TypeScript     |       -864 |        -35 |         -4 |       -903 |
+| d:\share12\three-template-master\src\table\columnConfig.ts              | TypeScript     |        -57 |         -2 |         -3 |        -62 |
+| d:\share12\three-template-master\src\table\editor\baseEdit.ts           | TypeScript     |        -29 |          0 |         -2 |        -31 |
+| d:\share12\three-template-master\src\table\editor\string.ts             | TypeScript     |       -138 |        -10 |         -9 |       -157 |
+| d:\share12\three-template-master\src\table\editor\tableInput.tsx        | TypeScript JSX |       -125 |         -2 |         -1 |       -128 |
+| d:\share12\three-template-master\src\table\registerEdit.ts              | TypeScript     |        -15 |         -1 |         -3 |        -19 |
+| d:\share12\three-template-master\src\table\table.ts                     | TypeScript     |     -1,338 |        -41 |         -2 |     -1,381 |
+| d:\share12\three-template-master\src\table\tableButtonCom.tsx           | TypeScript JSX |        -89 |         -5 |         -2 |        -96 |
+| d:\share12\three-template-master\src\table\tableCom.tsx                 | TypeScript JSX |       -294 |        -17 |         -1 |       -312 |
+| d:\share12\three-template-master\src\table\tableData.ts                 | TypeScript     |    -12,194 |        -14 |         -6 |    -12,214 |
+| d:\share12\three-template-master\src\table\tableEvent.ts                | TypeScript     |       -287 |        -15 |        -11 |       -313 |
+| d:\share12\three-template-master\src\table\tableFilterCom.tsx           | TypeScript JSX |       -122 |         -3 |         -2 |       -127 |
+| d:\share12\three-template-master\src\table\tableMenuCom.tsx             | TypeScript JSX |        -15 |         -9 |         -2 |        -26 |
+| d:\share12\three-template-master\src\table\tableTheme.ts                | TypeScript     |       -234 |          0 |         -5 |       -239 |
+| Total                                                                   |                |    -14,205 |        -59 |         65 |    -14,199 |
++-------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

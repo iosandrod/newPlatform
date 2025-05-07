@@ -925,7 +925,7 @@ export default defineComponent({
       //@ts-ignore
       dispatchEvent('input', {}, evnt)
     }
-   
+
     const blurEvent = (evnt: FocusEvent) => {
       reactData.isActivated = false
       dispatchEvent('blur', {}, evnt)
@@ -1367,7 +1367,7 @@ export default defineComponent({
         const $input = refInput.value
         reactData.isActivated = true
         // $input.blur()
-        $input.focus()//
+        $input.focus() //
         return nextTick()
       },
       blur() {

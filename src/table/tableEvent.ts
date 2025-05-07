@@ -63,6 +63,7 @@ export const click_cell = (table: Table) => {
       }, 0)
       let field = config.field //
       // debugger//
+      // debugger//
       let originData = config.originData //
       let tCol = table.getLastFlatColumns().find((col) => {
         return col.getField() === field
@@ -74,10 +75,13 @@ export const click_cell = (table: Table) => {
           if (curEdit != null) {
             table.clearEditCell() //
           }
-          nextTick(() => {
+          setTimeout(() => {
+            if (originData == null) {
+              return
+            }
             table.currentEditCol = tCol
-            _this.startEditCell(config.col, config.row, config.value) //
-          }) //
+            _this.startEditCell(config.col, config.row, config.value)
+          }, 10) //
           return
         }
       }

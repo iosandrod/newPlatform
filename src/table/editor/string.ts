@@ -66,7 +66,6 @@ export class InputEditor extends BaseEditor {
     let app = createApp(tableInput, {
       onClick: (e) => {
         e.stopPropagation()
-        e.preventDefault() //
       },
       column: column, //这是个函数
       row: _row, //
@@ -136,6 +135,7 @@ export class InputEditor extends BaseEditor {
           row: this.row, //
           field: this.field,
         })
+        this.row['_rowState'] = 'change' //
       }
     } //
     column.cacheValue = undefined //

@@ -179,7 +179,7 @@ export class Column extends Base {
         boundsPadding: [0, 10, 0, 5],
         lineDashOffset: 0,
       })
-      locationName.on('dblclick', (config) => {
+      container.on('dblclick', (config) => {
         let title = this.getTitle()
         if (this.table.templateEditCell != null) {
           this.table.clearEditCell() //
@@ -627,7 +627,7 @@ export class Column extends Base {
     if (required) {
       let _fn = (vConfig) => {
         let value = vConfig.value
-        if (value == null || value == '') {
+        if (value == null || value === '') {
           return '此项为必填项' //
         }
         return true
@@ -862,10 +862,6 @@ export class Column extends Base {
         alignItems: 'center',
         boundsPadding: [0, 0, 0, 0], //
       })
-      container.on('click', () => {
-        let _table = this.table
-        _table.setCurRow(record) //
-      }) //
       container.on('mouseover', () => {
         let oldColor = container.attribute.background
         container._oldColor = oldColor

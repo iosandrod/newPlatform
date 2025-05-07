@@ -96,6 +96,14 @@ export default defineComponent({
             <div class="" style={{ height: '30px' }}>
               <er-button-group
                 items={[
+                  {
+                    label: '当前真实表设计',
+                    fn: async () => {
+                      let currentPage = systemIns.getCurrentPageDesign()
+                      let rTName = currentPage.getRealTableName()
+                      await system.designTableColumns(rTName) //
+                    },
+                  },
                   //
                   {
                     label: '进入设计', //

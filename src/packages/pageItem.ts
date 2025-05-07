@@ -70,12 +70,21 @@ export class PageDesignItem extends FormItem {
     return entityType //
   }
   getdBindData() {
-    let design: PageDesign = this.form as any
-    let curRow = design.tableDataMap.curRow || {}
+    let design: PageDesign = this.form as any //
+    // let curRow = design.tableDataMap[tName]?.curRow || {}//
+    let curRow = design.getCurRow()
     return curRow
   }
   getTableCnName() {
     let tConfig = this.getTableConfig()
     return tConfig.tableCnName
+  }
+  getRelateKey() {
+    let options = this.getOptions()
+    return options.relateKey
+  }
+  getMainRelateKey() {
+    let options = this.getOptions()
+    return options.mainRelateKey
   }
 }

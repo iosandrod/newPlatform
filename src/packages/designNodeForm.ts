@@ -5,6 +5,7 @@ import { Table } from '@/table/table'
 export const formitemTypeMap = (_this: PageDesign) => {
   let tableOptions = _this.getAllTableName()
   let detailTable = _this
+  let allTableOptions = _this.getAllTableNameOptions()
   let obj = {
     entity: {
       //
@@ -59,15 +60,20 @@ export const formitemTypeMap = (_this: PageDesign) => {
           },
         },
         {
-          filed: 'relateKey',
+          field: 'relateKey', //
           label: '表关联字段',
           type: 'select',
           options: {
             options: computed(() => {
-              debugger//
               let tname = _this.state.selected?.options?.tableName
-              let tableName = _this.getTableConfig(tname)
-              return []
+              let tConfig = _this.getTableConfig(tname)
+              let columns = tConfig?.columns || []
+              let _cols = columns.map((col) => {
+                let f = col.field
+                let title = col.title || f
+                return { label: title, value: f } //
+              })
+              return _cols //
             }),
           },
         },
@@ -78,9 +84,12 @@ export const formitemTypeMap = (_this: PageDesign) => {
           options: {
             options: computed(() => {
               let select = _this.getTableColumns()
-              console.log(select, 'tSelect')
-              // return select //
-              return [] //
+              let _cols = select.map((col) => {
+                let f = col.field
+                let title = col.title || f
+                return { label: title, value: f } //
+              })
+              return _cols //
             }),
           },
         },
@@ -180,7 +189,12 @@ export const formitemTypeMap = (_this: PageDesign) => {
           field: 'tableName',
           label: '关联表名',
           type: 'select', //
-          options: [],
+          options: {
+            options: computed(() => {
+              let allTOptions = _this.getAllTableNameOptions()
+              return allTOptions //
+            }),
+          },
         }, //
         {
           filed: 'bindData',

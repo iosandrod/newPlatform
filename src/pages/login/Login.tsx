@@ -25,6 +25,8 @@ import FormEditor from '@ER/formEditor/formEditor'
 import { Button } from '@/buttonGroup/button'
 import { system } from '@/system'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
+import { VxeCheckbox } from 'vxe-pc-ui'
+import checkboxCom from '@/checkbox/checkboxCom'
 export default defineComponent({
   components: {
     codeEditorCom,
@@ -46,6 +48,8 @@ export default defineComponent({
     Simple,
     SelectCom,
     dialogCom,
+    VxeCheckbox,
+    checkboxCom
   },
   setup(props) {
     const formConfig = {
@@ -87,9 +91,24 @@ export default defineComponent({
         },
         {
           field: 'test1',
-          type: 'code', //
+          type: 'select', //
           label: 'test1',
-          options: {},
+          options: {
+            options: [
+              {
+                label: 'test1',
+                value: 'test2',
+              },
+              {
+                label: 'test13',
+                value: 'test22',
+              },
+              {
+                label: 'test4',
+                value: 'test24',
+              },
+            ],
+          },
         },
       ],
     }
@@ -156,13 +175,24 @@ export default defineComponent({
           ></tableCom>
         </div>
       ) //
-      com = (
-        <div class="w-full h-full">
-          <formCom ref={_reg3} isDesign={false} {...formConfig}></formCom>
-        </div>
-      )
+      // com = (
+      //   <div class="w-full h-full">
+      //     <formCom ref={_reg3} isDesign={false} {...formConfig}></formCom>
+      //   </div>
+      // )
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
+      // com = <VxeCheckbox
+      //   modelValue={true}
+      //   onChange={(value) => {
+      //   }}
+      // ></VxeCheckbox>
+      // com = (
+      //   <checkboxCom modelValue={true} onChange={(value) => {
+      //   }}></checkboxCom>
+      // )
+      // com=<input type="checkbox" class='vxe-checkbox--input' onChange={(value) => {
+      // }}></input>
       let _com = (
         <div
           style={{

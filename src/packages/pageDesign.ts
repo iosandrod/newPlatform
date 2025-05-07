@@ -386,33 +386,38 @@ export class PageDesign extends Form {
     let realTableName = this.getRealTableName() //
     let curRow = this.getCurRow() //
     let detailTable = this.getAllDetailTable()
-    let dRefs: Table[] = detailTable.map((d) => {
-      let fCom = d.getRef('fieldCom')
+    let dRefs = detailTable.map((d) => {
+      let fCom = { table: d.getRef('fieldCom'), item: d }
       return fCom //
     })
     let _data = dRefs
-      .map((t) => {
+      .map((t1) => {
+        let t: Table = t1.table
+        let item: PageDesignItem = t1.item
         let tableName = t.getTableName()
         let d = t.getData()
         let obj = {
           [tableName]: {
             tableName,
             data: d,
+            relateKey: item.getRelateKey(),
+            mainRelateKey: item.getMainRelateKey(),
           },
         }
         return obj
       })
       .reduce((a, b) => {
-        let obj = { ...a, ...b }
+        let obj = { ...a, ...b } //
         return obj //
       }, {})
     curRow['_relateData'] = _data
-    console.log(curRow, 'testCurRow') //
     let http = this.getHttp()
     try {
       let _res = await http.create(realTableName, curRow)
     } catch (error) {
       console.log(error, '报错了') //
+      let system = this.getSystem()
+      system.confirmMessage('保存失败', 'error')
     }
   }
   getCurRow(tableName = this.getRealTableName()) {
@@ -430,6 +435,30 @@ export class PageDesign extends Form {
   getTableRefData(tableName = this.getTableName()) {
     let tableDataMap = this.tableDataMap
     let _data = tableDataMap[tableName]
+    return _data
+  }
+  getTableMainKey(tableName = this.getTableName()) {
+    let tableConfig = this.getTableConfig(tableName) //
+    console.log(tableConfig, 'testTableConfig') //
+    let columns = tableConfig.columns || []
+    let mainCol = columns.find((col) => {
+      return col.primary != null //
+    })
+    return mainCol //
+  }
+  //获取编辑表格的数据
+  async getEditTableData(query) {
+    let mcol = this.getTableMainKey()
+    console.log(mcol, 'testMcol') //
+    let _query = query || {}
+    if (query == null) {
+      this.getSystem().confirmMessage('未设置查询条件', 'error') //
+      return null
+    }
+    let tableName = this.getRealTableName()
+    let http = this.getHttp()
+    let _data = await http.find(tableName, query) //
+    console.log(_data, 'testData') //
     return _data
   }
 }

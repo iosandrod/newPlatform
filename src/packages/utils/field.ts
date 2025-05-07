@@ -199,38 +199,38 @@ const syncWidthByPlatform = (
   syncFullplatform = false,
   value,
 ) => {
-  const isArray = _.isArray(node)
-  if (!isArray) {
-    if (_.isObject(node.style.width)) {
-      if (syncFullplatform) {
-        node.style.width.pc = node.style.width.mobile = value + '%'
-      } else {
-        node.style.width[platform] = value + '%'
-      }
-    } else {
-      node.style.width = value + '%'
-    }
-  }
-  const otherNodes = isArray
-    ? node
-    : node.context.parent.columns.filter((e) => e !== node)
-  const averageWidths = calculateAverage(
-    otherNodes.length,
-    isArray ? 100 : 100 - value,
-  )
-  otherNodes.forEach((node, index) => {
-    const isFieldWidth = _.isObject(node.style.width)
-    if (isFieldWidth) {
-      if (syncFullplatform) {
-        node.style.width.pc = node.style.width.mobile =
-          averageWidths[index] + '%'
-      } else {
-        node.style.width[platform] = averageWidths[index] + '%'
-      }
-    } else {
-      node.style.width = averageWidths[index] + '%'
-    }
-  })
+  // const isArray = _.isArray(node)
+  // if (!isArray) {
+  //   if (_.isObject(node.style.width)) {
+  //     if (syncFullplatform) {
+  //       node.style.width.pc = node.style.width.mobile = value + '%'
+  //     } else {
+  //       node.style.width[platform] = value + '%'
+  //     }
+  //   } else {
+  //     node.style.width = value + '%'
+  //   }
+  // }
+  // const otherNodes = isArray
+  //   ? node
+  //   : node.context.parent.columns.filter((e) => e !== node)
+  // const averageWidths = calculateAverage(
+  //   otherNodes.length,
+  //   isArray ? 100 : 100 - value,
+  // )
+  // otherNodes.forEach((node, index) => {
+  //   const isFieldWidth = _.isObject(node.style.width)
+  //   if (isFieldWidth) {
+  //     if (syncFullplatform) {
+  //       node.style.width.pc = node.style.width.mobile =
+  //         averageWidths[index] + '%'
+  //     } else {
+  //       node.style.width[platform] = averageWidths[index] + '%'
+  //     }
+  //   } else {
+  //     node.style.width = averageWidths[index] + '%'
+  //   }
+  // })
 }
 const transferLabelPath = (node) =>
   `er.fields.${node.type === 'input'

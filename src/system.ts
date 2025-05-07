@@ -25,7 +25,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient()
@@ -33,17 +33,17 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = d //
     return d //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap) //
@@ -57,7 +57,7 @@ export class System extends Base {
       },
     ] //
   }
-  openPageDesign(config) { } //
+  openPageDesign(config) {} //
   // async getDefaultPageLayout(name?: string) {
   //   let http = this.getHttp()
   //   let _data = await http.post(
@@ -341,7 +341,7 @@ export class System extends Base {
     // let http = this.getHttp() //
     // let _res = await http.patch('entity', { tableName, ...config })
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -407,7 +407,7 @@ export class System extends Base {
       return _design //
     } //
     let layoutConfig = await this.getPageEditLayout(tableName) //
-    let _d = new PageDesign(layoutConfig)//
+    let _d = new PageDesign(layoutConfig) //
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
@@ -418,8 +418,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     let _form = new Form(formConfig) //
     let component = formCom
@@ -458,6 +458,12 @@ export class System extends Base {
       createFn,
       width: 600,
       height: 400,
+      confirmFn: (dialog: Dialog) => {
+        let _confirmFn = tableConfig.confirmFn //
+        if (typeof _confirmFn == 'function') {
+          _confirmFn(dialog) //
+        }
+      },
     }
     let dialog = await this.openDialog(_config) //
     return dialog //
@@ -506,18 +512,56 @@ export class System extends Base {
   confirmMessage(msg: string | Object, type: any = 'success') {
     if (typeof msg == 'string') {
       msg = {
-        content: msg,
-        status: 'success',
-        type: type
+        content: msg, //
+        status: type,
       }
     }
     let _msg: any = msg
-    if (!_msg.type) {//
-      _msg.status = type//
+    if (!_msg.type) {
+      _msg.status = type //
     }
-    _msg.type = 'message'//
-    _msg.duration = _msg.duration || 1000//
+    _msg.type = 'message' //
+    _msg.duration = _msg.duration || 1000 //
     VxeUI.modal.message(msg)
+  }
+  async designTableColumn(tableName, columnName) {
+    let oldCol = {}
+  }
+  async designTableColumns(tableName) {
+    let oldCols = {} //
+    let tCols = await this.getHttp().find('columns', { tableName })
+    let tableConfig = {
+      tableState: 'edit',
+      columns: [
+        {
+          field: 'primary',
+          title: '是否主键',
+          editType: 'boolean',
+        }, //
+        {
+          field: 'title',
+          title: '标题',
+          editType: 'input', //
+        },
+        {
+          field: 'field',
+          title: '字段', //
+        },
+      ],
+      data: tCols,
+      confirmFn: async (dialog: Dialog) => {
+        let t = dialog.getRef('innerCom')
+        let d: any[] = t.getData()
+        let allChangeCol = d.filter((c) => {
+          return c['_rowState'] == 'change'
+        })
+        console.log(allChangeCol, 'testCol') //
+        let http = this.getHttp()
+        let res = await http.patch('columns', allChangeCol) //
+        console.log(res, 'testRes') //
+      },
+    }
+    await this.confirmTable(tableConfig) //
   }
 }
 

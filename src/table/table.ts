@@ -351,6 +351,7 @@ export class Table extends Base {
         headerSelectMode: 'cell', //
         highlightInRange: true, //
         disableHeaderSelect: true,
+        disableSelect: false,
         outsideClickDeselect: false, //
         blankAreaClickDeselect: false, //
       },
@@ -1620,7 +1621,11 @@ export class Table extends Base {
     }
     let rowState = e['_rowState'] //
     if (rowState == null) {
-      e['_rowState'] = 'unChange'
+      Object.defineProperty(e, '_rowState', {
+        value: 'unChange',
+        enumerable: false,
+        writable: true, //
+      }) //
     }
     this.dataMap[e._index] = e //
   }

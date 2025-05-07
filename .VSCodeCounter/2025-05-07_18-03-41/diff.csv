@@ -1,0 +1,47 @@
+"filename", "language", "TypeScript JSX", "TypeScript", "vue", "comment", "blank", "total"
+"d:\share12\three-template-master\src\pages\billing\BankCard.vue", "vue", 0, 0, 61, 0, 2, 63
+"d:\share12\three-template-master\src\pages\billing\Billing.vue", "vue", 0, 0, 59, 0, 2, 61
+"d:\share12\three-template-master\src\pages\billing\index.ts", "TypeScript", 0, 2, 0, 0, 1, 3
+"d:\share12\three-template-master\src\pages\design\index.tsx", "TypeScript JSX", 44, 0, 0, 1, 2, 47
+"d:\share12\three-template-master\src\pages\home\Config1.tsx", "TypeScript JSX", 137, 0, 0, 2, 0, 139
+"d:\share12\three-template-master\src\pages\home\CustomShow.tsx", "TypeScript JSX", 84, 0, 0, 0, 17, 101
+"d:\share12\three-template-master\src\pages\home\CustomTrigger.tsx", "TypeScript JSX", 70, 0, 0, 0, 10, 80
+"d:\share12\three-template-master\src\pages\home\Dynamic.tsx", "TypeScript JSX", 89, 0, 0, 0, 10, 99
+"d:\share12\three-template-master\src\pages\home\Group.tsx", "TypeScript JSX", 57, 0, 0, 0, 9, 66
+"d:\share12\three-template-master\src\pages\home\Home.tsx", "TypeScript JSX", 37, 0, 0, 87, 1, 125
+"d:\share12\three-template-master\src\pages\home\Multiple.tsx", "TypeScript JSX", 75, 0, 0, 0, 11, 86
+"d:\share12\three-template-master\src\pages\home\Simple.tsx", "TypeScript JSX", 52, 0, 0, 1, 13, 66
+"d:\share12\three-template-master\src\pages\home\TriggerBox.tsx", "TypeScript JSX", 18, 0, 0, 0, 4, 22
+"d:\share12\three-template-master\src\pages\home\d.vue", "vue", 0, 0, 17, 0, 4, 21
+"d:\share12\three-template-master\src\pages\home\index copy.ts", "TypeScript", 0, 7, 0, 0, 2, 9
+"d:\share12\three-template-master\src\pages\home\index.ts", "TypeScript", 0, 2, 0, 0, 1, 3
+"d:\share12\three-template-master\src\pages\index.tsx", "TypeScript JSX", 156, 0, 0, 33, 2, 191
+"d:\share12\three-template-master\src\pages\login\Login.tsx", "TypeScript JSX", 178, 0, 0, 9, 2, 189
+"d:\share12\three-template-master\src\pages\login\LoginBox.vue", "vue", 0, 0, 66, 0, 5, 71
+"d:\share12\three-template-master\src\pages\login\LoginModal.vue", "vue", 0, 0, 45, 0, 6, 51
+"d:\share12\three-template-master\src\pages\login\data.ts", "TypeScript", 0, 311, 0, 0, 2, 313
+"d:\share12\three-template-master\src\pages\login\index.ts", "TypeScript", 0, 3, 0, 0, 1, 4
+"d:\share12\three-template-master\src\pages\personal\Conversation.vue", "vue", 0, 0, 58, 0, 3, 61
+"d:\share12\three-template-master\src\pages\personal\Personal.vue", "vue", 0, 0, 65, 0, 5, 70
+"d:\share12\three-template-master\src\pages\personal\PlatformSetting.vue", "vue", 0, 0, 68, 0, 2, 70
+"d:\share12\three-template-master\src\pages\personal\ProfileInfo.vue", "vue", 0, 0, 85, 0, 9, 94
+"d:\share12\three-template-master\src\pages\personal\Projects.vue", "vue", 0, 0, 120, 0, 9, 129
+"d:\share12\three-template-master\src\pages\personal\index.ts", "TypeScript", 0, 2, 0, 0, 1, 3
+"d:\share12\three-template-master\src\table\calculate.ts", "TypeScript", 0, -205, 0, -28, -15, -248
+"d:\share12\three-template-master\src\table\calculateType.ts", "TypeScript", 0, -14, 0, 0, -2, -16
+"d:\share12\three-template-master\src\table\checkboxColumn.ts", "TypeScript", 0, -153, 0, -10, -1, -164
+"d:\share12\three-template-master\src\table\column.ts", "TypeScript", 0, -864, 0, -35, -4, -903
+"d:\share12\three-template-master\src\table\columnConfig.ts", "TypeScript", 0, -57, 0, -2, -3, -62
+"d:\share12\three-template-master\src\table\editor\baseEdit.ts", "TypeScript", 0, -29, 0, 0, -2, -31
+"d:\share12\three-template-master\src\table\editor\string.ts", "TypeScript", 0, -138, 0, -10, -9, -157
+"d:\share12\three-template-master\src\table\editor\tableInput.tsx", "TypeScript JSX", -125, 0, 0, -2, -1, -128
+"d:\share12\three-template-master\src\table\registerEdit.ts", "TypeScript", 0, -15, 0, -1, -3, -19
+"d:\share12\three-template-master\src\table\table.ts", "TypeScript", 0, -1338, 0, -41, -2, -1381
+"d:\share12\three-template-master\src\table\tableButtonCom.tsx", "TypeScript JSX", -89, 0, 0, -5, -2, -96
+"d:\share12\three-template-master\src\table\tableCom.tsx", "TypeScript JSX", -294, 0, 0, -17, -1, -312
+"d:\share12\three-template-master\src\table\tableData.ts", "TypeScript", 0, -12194, 0, -14, -6, -12214
+"d:\share12\three-template-master\src\table\tableEvent.ts", "TypeScript", 0, -287, 0, -15, -11, -313
+"d:\share12\three-template-master\src\table\tableFilterCom.tsx", "TypeScript JSX", -122, 0, 0, -3, -2, -127
+"d:\share12\three-template-master\src\table\tableMenuCom.tsx", "TypeScript JSX", -15, 0, 0, -9, -2, -26
+"d:\share12\three-template-master\src\table\tableTheme.ts", "TypeScript", 0, -234, 0, 0, -5, -239
+"Total", "-", 352, -15201, 644, -59, 65, -14199

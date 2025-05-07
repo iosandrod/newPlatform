@@ -75,8 +75,7 @@ export class Form extends Base {
   curDForm: any = null //
   curSForm: any = null //
   originalData = {}
-  tableDataMap: any = {
-  }
+  tableDataMap: any = {}
   tableConfigMap = {}
   static component = formCom
   pageType = 'form' //
@@ -1697,6 +1696,12 @@ export class Form extends Base {
     }
     return obj //
   }
+  getAllTableName() {
+    return []
+  }
+  getAllTableNameOptions() {
+    return []
+  } //
 }
 //使用默认布局
 
