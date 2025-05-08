@@ -65,8 +65,8 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   } //
-  setHidden(bool) {} //
-  getFormitem() {} //
+  setHidden(bool) { } //
+  getFormitem() { } //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -163,7 +163,9 @@ export class Column extends Base {
         alignItems: 'center', //
         boundsPadding: [0, 0, 0, 0],
       })
-
+      container.on('dragover', e => {
+        console.log('is drag')//
+      })
       let _g = createGroup({
         width: width,
         height,
@@ -396,9 +398,11 @@ export class Column extends Base {
     if (this.table.showCustomLayout == true) {
       customLayout = this.getCustomLayout() //
     }
-
+    //@ts-ignore
     let obj: ColumnDefine = {
-      ...config,
+      // ...config,
+      //@ts-ignore
+      order: this.getOrder(),
       disableColumnResize: this.getDisableColumnResize(), ////
       field: this.getField(),
       width: this.getColumnWidth(),
@@ -494,6 +498,7 @@ export class Column extends Base {
           alignItems: 'center',
           justifyContent: 'center',
         }) //
+
         let calValue = _this.getCalculateValue() //
         let text = createText({
           text: calValue, //
@@ -577,6 +582,13 @@ export class Column extends Base {
     return {
       ...config,
       type: editType,
+    }
+  }
+  getOrder() {
+    let config = this.config
+    let order = config.order
+    if (order == null) {
+      return 0
     }
   }
   focusInput() {
@@ -1048,7 +1060,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() {}
+  updateBindData() { }
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {

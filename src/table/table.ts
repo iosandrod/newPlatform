@@ -7,6 +7,7 @@ import {
   shallowRef,
   triggerRef,
   toRaw,
+  watch,
 } from 'vue'
 import { Column } from './column'
 import { CheckboxColumn } from './checkboxColumn' //
@@ -52,6 +53,7 @@ import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
 export class Table extends Base {
+  mouseWatch: any
   leftFrozen?: any
   curContextCol?: Column
   frozenColCount = 0
@@ -275,11 +277,33 @@ export class Table extends Base {
     let table = new ListTable({
       dragOrder: {
         dragHeaderMode: 'column',
-        validateDragOrderOnEnd: (args) => {
-          console.log(args, 'testArgs')//
+        validateDragOrderOnEnd: (start, end) => {
+          // debugger//
+          let col1 = start.col
+          let row1 = start.row
+          let col2 = end.col
+          let row2 = end.row
+          let f = this.getInstance().getHeaderField(col1, row1)
+          let f1 = this.getInstance().getHeaderField(col2, row2)
+          let f1C = this.getColumns().find(c => c.getField() == f)
+          let f2C = this.getColumns().find(c => c.getField() == f1)
+          if (f1C == f2C) {
+            return false//
+          }
+          let isFrozen = f2C.getIsFrozen()
+          let isFrozen1 = f1C.getIsFrozen()
+          if (isFrozen || isFrozen1) {//
+            return false
+          }
           nextTick(() => {
-            let fs = this.getInstance().columns.map(col => col.field)
-            console.log(fs, 'testFs')//
+            let fs = this.getInstance().columns.map((col, i) => {
+              let obj = {
+                field: col.field,
+                order: i + 1
+              }
+              return obj
+            })
+            this.changeSortOrder(fs)
           })
           return true
         },
@@ -349,7 +373,6 @@ export class Table extends Base {
         }
         return null
       },
-
       sortState: [],
       theme: createTheme() as any,
       defaultRowHeight: 30,
@@ -375,8 +398,16 @@ export class Table extends Base {
         createReactContainer: true, //
       },
       //头部的
-    }) //
+    }) ////
+    table.on('change_header_position_start', (e) => {
 
+    })
+    table.on('change_header_position', (e) => {
+
+    })
+    table.on('change_header_position_fail', () => {
+
+    })
     const emitEventArr = [
       'mouseleave_cell',
       'mouseenter_cell',
@@ -416,7 +447,8 @@ export class Table extends Base {
     if (showRowSeriesNumber) {
       _sConfig = this.seriesNumberColumn.getColumnProps(true) //
     }
-    let table = new ListTable({
+    let fListTable = ListTable
+    let table = new fListTable({
       autoFillHeight: true,
       multipleSort: true, //
       sortState: [],
@@ -819,24 +851,41 @@ export class Table extends Base {
     let _show = this.config.showCheckboxColumn
 
     let _show1 = this.getShowControllerColumn()
-    if (_show1 == true) {
-      let cCol = this.controllerColumn
-      _col1.push(cCol.getColumnProps())
-    }
-    _col1 = _col1.sort((a, b) => {
-      let isFrozen = b.isFrozen
-      if (isFrozen === true) {
-        return -1
-      }
-      return 0
+    let rfsCols = _col1.filter(c => {
+      let isFrozen = c.isFrozen
+      return isFrozen == true//右边的
     })
-    _col1 = _col1.sort((a, b) => {
-      let isLeftFrozen = a.isLeftFrozen
-      if (isLeftFrozen === true) {
-        return -1
-      }
-      return 0
+    let lfsCols = _col1.filter(c => {
+      let isLeftFrozen = c.isLeftFrozen
+      return isLeftFrozen == true//左边的
     })
+    let sCols = _col1.filter(c => {
+      let s1 = lfsCols.includes(c)
+      let s2 = rfsCols.includes(c)
+      return !s1 && !s2
+    })
+    sCols.sort((c1, c2) => {
+      let o1 = c1.order
+      let o2 = c2.order
+      return o1 - o2//
+    })
+    _col1 = [...lfsCols, ...sCols, ...rfsCols]
+    // _col1 = _col1.sort((a, b) => {
+    //   let isFrozen = b.isFrozen
+    //   if (isFrozen === true) {
+    //     return -1
+    //   }
+    //   return 0
+    // })
+    // _col1 = _col1.sort((a, b) => {
+    //   let isLeftFrozen = a.isLeftFrozen
+    //   if (isLeftFrozen === true) {
+    //     return -1
+    //   }
+    //   return 0
+    // })
+    // _col1=_col1.sort((a,b)=>{
+    // })
     if (_show) {
       let cCol = this.checkboxColumn
       _col1.unshift(cCol.getColumnProps())
@@ -848,8 +897,13 @@ export class Table extends Base {
     this.leftFrozen = leftEndF
     let count = countCols.length
     let _count = _countCols.length
+    if (_show1 == true) {
+      let cCol = this.controllerColumn
+      _col1.push(cCol.getColumnProps())
+      count += 1//
+    }
     this.frozenColCount = _count
-    this.rightFrozenColCount = count
+    this.rightFrozenColCount = count//
     return _col1 ////
   }
   //返回bool//
@@ -1056,6 +1110,7 @@ export class Table extends Base {
   }
   onUnmounted(): void {
     super.onUnmounted()
+    this.endWatchSystemMouseConfig()//
     let instance = this.getInstance()
     this.clearEditCell() //
     if (instance == null) {
@@ -1699,5 +1754,30 @@ export class Table extends Base {
   }
   getControllerColumnWidth() {
     return 130
+  }
+  changeSortOrder(orderFieldArr) {
+    console.log(orderFieldArr, 'testOrderFArr')//
+  }
+  startWatchSystemMouseConfig() {
+    let system = this.getSystem()
+    let mouseConfig = system.mouseConfig
+    let outDiv: HTMLDivElement = this.getRef('outDiv')
+    let bound = outDiv.getBoundingClientRect()
+    console.log(bound, 'testBound')//
+    this.mouseWatch = watch(() => {
+      return {
+        x: mouseConfig.clientX,
+        y: mouseConfig.clientY
+      }
+    }, (nv) => {
+      let x = nv.x
+      let y = nv.y
+    })
+  }
+  endWatchSystemMouseConfig() {
+    if (this.mouseWatch != null && typeof this.mouseWatch == 'function') {
+      this.mouseWatch()
+      this.mouseWatch = null
+    }
   }
 }

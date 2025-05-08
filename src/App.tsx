@@ -16,6 +16,12 @@ export default defineComponent({
       let arr = system.getAllDialog()
       return arr
     })
+    document.addEventListener('mousemove', (e) => {
+      let clientX = e.clientX
+      let clientY = e.clientY
+      system.mouseConfig.clientX = clientX
+      system.mouseConfig.clientY = clientY //
+    })
     return () => {
       //
       let dArr = diaArr.value.map((d) => {
