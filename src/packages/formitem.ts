@@ -890,6 +890,11 @@ export class FormItem extends Base {
     }
     for (let ev of eArr) {
       //
+      let callback = ev.callback
+      if (typeof callback == 'function') {
+        //
+        await callback(config) //
+      }
     }
   }
 }

@@ -132,7 +132,25 @@ export class PageDesign extends Form {
     let res = await http.get(tableName, 'find')
     let dataMap = this.getTableRefData(tableName)
     dataMap['data'] = res //
+    let evName = `${tableName}_getTableData` //
+    let _config = {
+      event: evName,
+      data: res,
+    }
     return res
+  }
+  //
+  async setCurRow(row, tableName = this.getTableName()) {
+    let dataMap = this.getTableRefData(tableName)
+    dataMap['curRow'] = row
+    let evName = `${tableName}_setCurRow`
+    let _config = {
+      data: row,
+      event: evName,
+    } //
+    console.log('我发布了一些事件了') //
+    await this.publishEvent(_config)
+    return row
   }
   buildQuery() {}
   openSearchForm() {}

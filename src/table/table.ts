@@ -159,6 +159,12 @@ export class Table extends Base {
     let oldIndex = oldCurRow._index || '' //
     let newIndex = row._index || ''
     this.timeout['updateRecords__now'] = true
+    let tableName = this.getTableName()
+    let design = this.getMainPageDesign()
+    if (design && tableName != null) {
+      //
+      design.setCurRow(row, tableName) //
+    }
     this.updateIndexArr.add(oldIndex) //
     this.updateIndexArr.add(newIndex) //
   } //
