@@ -44,8 +44,9 @@ function generateRandomBirthday() {
   const year = randomDate.getFullYear()
   const month = randomDate.getMonth() + 1
   const day = randomDate.getDate()
-  return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day
-    }`
+  return `${year}-${month < 10 ? '0' + month : month}-${
+    day < 10 ? '0' + day : day
+  }`
 }
 
 function generateRandomPhoneNumber() {
@@ -128,7 +129,7 @@ export const tableConfig: ListTableConstructorOptions = {
       field: 'email1',
       title: 'email',
       width: 250,
-      frozen: "right",
+      frozen: 'right',
       sort: false,
       fieldFormat: (config) => {
         let row = config.row //
@@ -140,6 +141,7 @@ export const tableConfig: ListTableConstructorOptions = {
     {
       field: 'full name',
       title: 'Full name',
+      editType: 'string',
       width: 200,
       // columns: [
       //   {
@@ -13130,7 +13132,7 @@ export const tableConfig: ListTableConstructorOptions = {
       work: 'front-end engineer',
       city: 'beijing',
     },
-  ].slice(0, 3),//
+  ].slice(0, 3), //
 }
 export const tablestaticData = {
   defaultRowHeight: 80,

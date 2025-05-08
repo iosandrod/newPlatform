@@ -170,6 +170,7 @@ export default defineComponent({
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
           <tableCom
             {...tableConfig}
+            showHeaderButtons={true}
             // showControllerButtons={true}
             tableState="edit"
           ></tableCom>

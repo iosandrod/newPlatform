@@ -65,8 +65,8 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   } //
-  setHidden(bool) { } //
-  getFormitem() { } //
+  setHidden(bool) {} //
+  getFormitem() {} //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -163,8 +163,8 @@ export class Column extends Base {
         alignItems: 'center', //
         boundsPadding: [0, 0, 0, 0],
       })
-      container.on('dragover', e => {
-        console.log('is drag')//
+      container.on('dragover', (e) => {
+        console.log('is drag') //
       })
       let _g = createGroup({
         width: width,
@@ -294,19 +294,23 @@ export class Column extends Base {
     let config = this.config
     let fieldFormat = config.fieldFormat
     if (typeof fieldFormat !== 'function') {
-      //
-      fieldFormat = (config) => {
-        let type = this.getEditType()
-        let row = config.row
-        let field = config.field
-        let value = row[field] //
-        if (type == 'select') {
-          let options = this.getSelectOptions()
-          let value = config.row[field]
-          let _label = options.find((item) => item.value == value)?.label
-          return _label || value //
-        } ////
-        return value
+      if (typeof fieldFormat == 'string') {
+        fieldFormat = stringToFunction(fieldFormat + '')
+      }
+      if (typeof fieldFormat !== 'function') {
+        fieldFormat = (config) => {
+          let type = this.getEditType()
+          let row = config.row
+          let field = config.field
+          let value = row[field] //
+          if (type == 'select') {
+            let options = this.getSelectOptions()
+            let value = config.row[field]
+            let _label = options.find((item) => item.value == value)?.label
+            return _label || value //
+          } ////
+          return value
+        }
       }
     } //
     let formatFn = (record, row, col, table) => {
@@ -317,12 +321,18 @@ export class Column extends Base {
           if (this.effectPool[_index] == null) {
             this.effectPool[`${_index}`] = watch(
               () => {
-                value = fieldFormat({
-                  row: record,
-                  col: this,
-                  table: _table,
-                  field: field,
-                })
+                let value = '' //
+                if (typeof fieldFormat == 'function') {
+                  let value1 = fieldFormat({
+                    row: record,
+                    col: this,
+                    table: _table,
+                    field: field,
+                  })
+                  if (value1 != null) {
+                    value = value1
+                  } //
+                } //
                 return value //
               },
               (newV) => {
@@ -587,9 +597,11 @@ export class Column extends Base {
   getOrder() {
     let config = this.config
     let order = config.order
-    if (order == null) {
+    if (order === null || order === undefined) {
+      //
       return 0
     }
+    return order //
   }
   focusInput() {
     //
@@ -1060,7 +1072,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() { }
+  updateBindData() {}
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {
@@ -1096,5 +1108,10 @@ export class Column extends Base {
       return
     }
     config.frozen = type ////
+  }
+  setOrder(n: number) {
+    //
+    let config = this.config
+    config.order = n
   }
 }

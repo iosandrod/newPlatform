@@ -72,7 +72,7 @@ export class Button extends Base {
     }
     return this
   }
-  runFn(_config) {
+  async runFn(_config) {
     try {
       let page = _config.page
       this.showDropdown() //
@@ -86,7 +86,7 @@ export class Button extends Base {
         let _fn = stringToFunction(fn) //
         if (typeof _fn == 'function') {
           _fn = _fn.bind(page) //
-          _fn(_config)
+          await _fn(_config)
         }
       }
       if (this.parent != null) {

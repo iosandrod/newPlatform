@@ -125,12 +125,13 @@ export class PageDesign extends Form {
     if (typeof getDataConfig == 'string') {
       getDataConfig = {
         tableName: getDataConfig,
-      }
+      } //
     }
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
     let res = await http.get(tableName, 'find')
-    console.log(res, 'testRes') //
+    let dataMap = this.getTableRefData(tableName)
+    dataMap['data'] = res //
     return res
   }
   buildQuery() {}
@@ -435,6 +436,10 @@ export class PageDesign extends Form {
   getTableRefData(tableName = this.getTableName()) {
     let tableDataMap = this.tableDataMap
     let _data = tableDataMap[tableName]
+    if (_data == null) {
+      tableDataMap[tableName] = {}
+      _data = tableDataMap[tableName] //
+    }
     return _data
   }
   getTableMainKey(tableName = this.getTableName()) {
@@ -468,11 +473,11 @@ export class PageDesign extends Form {
         fn: async () => {
           let currentDesignField = this.currentDField
           let system = this.getSystem()
-          let tName = this.getRealTableName()
-          await system.designTableColumn(tName, currentDesignField)
+          let tName = this.getRealTableName() //
+          await system.designTableColumns(tName, currentDesignField)
         },
         disabled: false,
-      },
+      }, //
     ]
   }
   openContextMenu(e) {

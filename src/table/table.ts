@@ -53,10 +53,12 @@ import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
 export class Table extends Base {
-  scorllRowInteral: any
+  scrollRowInteral: any
   scrollRowSpeed: number = 0
+  scrollRowSpeed1: number = 0
   scrollColInteral: any
   scrollColSpeed: number = 0
+  scrollColSpeed1: number = 0
   mouseWatch: any
   leftFrozen?: any
   curContextCol?: Column
@@ -107,11 +109,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-      x: 0,
-      y: 0,
-      width: 0,
-      filterConfig: [],
-    }
+    x: 0,
+    y: 0,
+    width: 0,
+    filterConfig: [],
+  }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -159,23 +161,6 @@ export class Table extends Base {
     this.timeout['updateRecords__now'] = true
     this.updateIndexArr.add(oldIndex) //
     this.updateIndexArr.add(newIndex) //
-    // let instance = this.getInstance()
-    // let _index1 = instance.records.findIndex(
-    //   (r) => r['_index'] == row['_index'],
-    // )
-    // let _index2 = instance.records.findIndex(
-    //   (r) => r['_index'] == oldCurRow['_index'],
-    // )
-    // let id = this.uuid()
-    // console.time(id)
-    // let bodyIndex = instance.getTableIndexByRecordIndex(_index1)
-    // let bodyIndex1 = instance.getTableIndexByRecordIndex(_index2)
-    // // console.log(bodyIndex, bodyIndex1) //
-    // // let _cell=instance.getCellInfo(null,bodyIndex)
-    // // let cells = instance.getAllCells(null, bodyIndex)
-    // // let cell1 = instance.getAllCells(null, bodyIndex1)
-    // // console.log(cells) //
-    // console.timeEnd(id) //
   } //
   getCurRow() {
     return this.tableData.curRow //
@@ -265,7 +250,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   getShowSeriesNumber() {
     let config = this.config
     let showRowSeriesNumber = config.showRowSeriesNumber
@@ -282,32 +267,32 @@ export class Table extends Base {
       dragOrder: {
         dragHeaderMode: 'column',
         validateDragOrderOnEnd: (start, end) => {
-          // debugger//
           let col1 = start.col
           let row1 = start.row
           let col2 = end.col
           let row2 = end.row
           let f = this.getInstance().getHeaderField(col1, row1)
           let f1 = this.getInstance().getHeaderField(col2, row2)
-          let f1C = this.getColumns().find(c => c.getField() == f)
-          let f2C = this.getColumns().find(c => c.getField() == f1)
+          let f1C = this.getColumns().find((c) => c.getField() == f)
+          let f2C = this.getColumns().find((c) => c.getField() == f1)
           if (f1C == f2C) {
-            return false//
+            return false //
           }
           let isFrozen = f2C.getIsFrozen()
           let isFrozen1 = f1C.getIsFrozen()
-          if (isFrozen || isFrozen1) {//
+          if (isFrozen || isFrozen1) {
+            //
             return false
           }
           nextTick(() => {
             let fs = this.getInstance().columns.map((col, i) => {
               let obj = {
                 field: col.field,
-                order: i + 1
+                order: i + 1,
               }
               return obj
             })
-            this.changeSortOrder(fs)
+            this.changeSortOrder(fs as any) //
           })
           return true
         },
@@ -410,7 +395,7 @@ export class Table extends Base {
       this.endWatchSystemMouseConfig()
     })
     table.on('change_header_position_fail', () => {
-      this.endWatchSystemMouseConfig()//
+      this.endWatchSystemMouseConfig() //
     })
     const emitEventArr = [
       'mouseleave_cell',
@@ -601,6 +586,7 @@ export class Table extends Base {
     let keys = tableIns.updateIndexArr.keys()
     let _iArr1 = []
     for (const k of keys) {
+      //
       //@ts-ignore
       let record = tableIns.dataMap[k]
       let index = records.indexOf(record)
@@ -791,7 +777,7 @@ export class Table extends Base {
   initCurrentContextItems() {
     initContextMenu(this) //
   } //
-  setCurTableSelect() { }
+  setCurTableSelect() {}
   openContextMenu(config) {
     let originData = config.originData
     let field = config.field
@@ -855,15 +841,15 @@ export class Table extends Base {
     let _show = this.config.showCheckboxColumn
 
     let _show1 = this.getShowControllerColumn()
-    let rfsCols = _col1.filter(c => {
+    let rfsCols = _col1.filter((c) => {
       let isFrozen = c.isFrozen
-      return isFrozen == true//右边的
+      return isFrozen == true //右边的
     })
-    let lfsCols = _col1.filter(c => {
+    let lfsCols = _col1.filter((c) => {
       let isLeftFrozen = c.isLeftFrozen
-      return isLeftFrozen == true//左边的
+      return isLeftFrozen == true //左边的
     })
-    let sCols = _col1.filter(c => {
+    let sCols = _col1.filter((c) => {
       let s1 = lfsCols.includes(c)
       let s2 = rfsCols.includes(c)
       return !s1 && !s2
@@ -871,8 +857,9 @@ export class Table extends Base {
     sCols.sort((c1, c2) => {
       let o1 = c1.order
       let o2 = c2.order
-      return o1 - o2//
+      return o1 - o2 //
     })
+    console.log(sCols.map((c) => c.field)) //
     _col1 = [...lfsCols, ...sCols, ...rfsCols]
     // _col1 = _col1.sort((a, b) => {
     //   let isFrozen = b.isFrozen
@@ -904,10 +891,10 @@ export class Table extends Base {
     if (_show1 == true) {
       let cCol = this.controllerColumn
       _col1.push(cCol.getColumnProps())
-      count += 1//
+      count += 1 //
     }
     this.frozenColCount = _count
-    this.rightFrozenColCount = count//
+    this.rightFrozenColCount = count //
     return _col1 ////
   }
   //返回bool//
@@ -929,7 +916,7 @@ export class Table extends Base {
     this.columns.splice(0) //
     for (const col of columns) {
       this.addColumn(col) //
-    }//
+    } //
   }
   addColumn(config) {
     let col = new Column(config, this)
@@ -988,7 +975,6 @@ export class Table extends Base {
         const field = item.field
         const type = item.type
         let order = item.order
-        // debugger//
         const colType: string = 'number' //类型//
         const _data4 = combineAdjacentEqualElements(
           res, //
@@ -1027,7 +1013,6 @@ export class Table extends Base {
       return
     }
     let records = instance.records
-    // debugger//
     let index = records.findIndex((item) => {
       return item == row
     })
@@ -1043,14 +1028,14 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   //@ts-ignore
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -1065,7 +1050,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) { }
+  setMergeConfig(config?: any) {}
   async addRows(rowsConfig?: { rows?: Array<any> } | number) {
     if (typeof rowsConfig === 'number') {
       let _rows = Array(rowsConfig).fill(null)
@@ -1113,7 +1098,7 @@ export class Table extends Base {
   }
   onUnmounted(): void {
     super.onUnmounted()
-    this.endWatchSystemMouseConfig()//
+    this.endWatchSystemMouseConfig() //
     let instance = this.getInstance()
     this.clearEditCell() //
     if (instance == null) {
@@ -1210,7 +1195,6 @@ export class Table extends Base {
     }
   }
   openColumnFilter(config) {
-    // debugger//
     let ins = this.getInstance()
     let _col = ins.getColAt(config.canvas.x)
     let _row = ins.getRowAt(config.canvas.y)
@@ -1548,7 +1532,6 @@ export class Table extends Base {
     let columnHeight = this.getInstance()
   }
   getCurrentResizeCol(col: number, tCol = null, i = 0) {
-    // debugger //
     let ins = this.getInstance()
     let field = ins.getHeaderField(col, i)
     let tf = null
@@ -1642,14 +1625,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) { }
+  async validateData(config) {}
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1657,7 +1640,7 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() { }
+  copyCurrentSelectCells() {}
   headerSortClick(config: any) {
     let sortState = this.sortCache
     let hasSort = sortState.findIndex((s) => s.field == config.field) //
@@ -1698,8 +1681,8 @@ export class Table extends Base {
     }
     this.dataMap[e._index] = e //
   }
-  designCurrentColumn() { }
-  getCacheContain(row) { }
+  designCurrentColumn() {}
+  getCacheContain(row) {}
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -1707,7 +1690,7 @@ export class Table extends Base {
         this.registerEvent({
           keyName: key,
           name: key, //
-          callback: (...args) => { },
+          callback: (...args) => {},
         })
       }
     })
@@ -1758,34 +1741,51 @@ export class Table extends Base {
   getControllerColumnWidth() {
     return 130
   }
-  changeSortOrder(orderFieldArr) {
-    console.log(orderFieldArr, 'testOrderFArr')//
+  changeSortOrder(orderFieldArr: { field: string; order: number }[]) {
+    let old1 = orderFieldArr.map((f) => f.field)
+    old1.forEach((f, i) => {
+      let columns = this.columns
+      let _col = columns.find((col) => col.getField() == f) //
+      if (_col) {
+        _col.setOrder(i) // _col.setOrder(i) //
+      }
+    }) ////
   }
   startWatchSystemMouseConfig() {
     let system = this.getSystem()
     let mouseConfig = system.mouseConfig
     let outDiv: HTMLDivElement = this.getRef('outDiv')
     let bound = outDiv.getBoundingClientRect()
-    console.log(bound, 'testBound')//
     let x = bound.x
     let endX = bound.width + x
-    this.mouseWatch = watch(() => {
-      return {
-        x: mouseConfig.clientX,
-        y: mouseConfig.clientY
-      }
-    }, (nv) => {
-      let _x = nv.x
-      if (_x < x) {
-        console.log('左侧滚动起来')
-      }
-      if (_x > endX) {
-        console.log('右侧滚动起来')//
-      }
-      if (_x > x && _x < endX) {
-        console.log('停止滚动')//
-      }
-    })
+    this.mouseWatch = watch(
+      () => {
+        return {
+          x: mouseConfig.clientX,
+          y: mouseConfig.clientY,
+        }
+      },
+      (nv) => {
+        let _x = nv.x
+        if (_x < x) {
+          let speed = 100 + (_x - x)
+          if (speed < 5) {
+            speed = 5
+          }
+          this.scrollInSpeed('col', -speed)
+        }
+        if (_x > endX) {
+          let speed = 100 - (_x - endX)
+          if (speed < 5) {
+            speed = 5
+          }
+          this.scrollInSpeed('col', speed) //
+        }
+        if (_x > x && _x < endX) {
+          this.scrollColSpeed = 0
+        }
+      },
+    )
   }
   endWatchSystemMouseConfig() {
     if (this.mouseWatch != null && typeof this.mouseWatch == 'function') {
@@ -1802,24 +1802,23 @@ export class Table extends Base {
       }
     }
     if (type == 'row') {
-      if (this.scorllRowInteral != null) {
-        clearInterval(this.scorllRowInteral)
-        this.scorllRowInteral = null
+      if (this.scrollRowInteral != null) {
+        clearInterval(this.scrollRowInteral)
+        this.scrollRowInteral = null
       }
-    }//
+    } //
     if (type == null) {
       if (this.scrollColInteral != null) {
         clearInterval(this.scrollColInteral)
         this.scrollColInteral = null
       }
-      if (this.scorllRowInteral != null) {
-        clearInterval(this.scorllRowInteral)
-        this.scorllRowInteral = null
+      if (this.scrollRowInteral != null) {
+        clearInterval(this.scrollRowInteral)
+        this.scrollRowInteral = null //
       }
     }
   }
   scrollInSpeed(type, number) {
-    let _this = this
     if (number == null || number == 0) {
       return
     }
@@ -1827,16 +1826,61 @@ export class Table extends Base {
     if (type == 'col') {
       _inter = this.scrollColInteral
       this.scrollColSpeed = number
-      if (_inter == null) {//
+      if (_inter == null) {
         this.scrollColInteral = setInterval(() => {
-          let speed = this.scrollColSpeed//
-        }, 10);
+          let speed = this.scrollColSpeed //
+          if (speed == 0) {
+            return //
+          }
+          let speed1 = this.scrollColSpeed1
+          let _speed = Math.abs(speed)
+          speed1++
+          this.scrollColSpeed1 = speed1
+          if (speed1 >= _speed) {
+            this.scrollColSpeed1 = 0
+            let sl = this.getInstance().getScrollLeft()
+            if (speed > 0) {
+              speed = 10
+            } else {
+              speed = -10
+            }
+            let s2 = sl + speed
+            if (s2 < 0) {
+              s2 = 0
+            }
+            this.getInstance().setScrollLeft(s2)
+          }
+        }, 2)
       }
     }
     if (type == 'row') {
-      _inter = this.scorllRowInteral
-      this.scorllRowInteral = number
+      _inter = this.scrollRowInteral
+      this.scrollRowSpeed = number
       if (_inter == null) {
+        this.scrollRowInteral = setInterval(() => {
+          let speed = this.scrollRowSpeed //
+          if (speed == 0) {
+            return //
+          }
+          let speed1 = this.scrollRowSpeed1
+          let _speed = Math.abs(speed)
+          speed1++
+          this.scrollRowSpeed1 = speed1
+          if (speed1 >= _speed) {
+            this.scrollRowSpeed1 = 0
+            let sl = this.getInstance().getScrollTop()
+            if (speed > 0) {
+              speed = 10
+            } else {
+              speed = -10
+            }
+            let s2 = sl + speed
+            if (s2 < 0) {
+              s2 = 0
+            }
+            this.getInstance().setScrollTop(s2)
+          }
+        }, 2) //
       }
     }
   }

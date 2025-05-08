@@ -2591,3 +2591,22 @@ const app = createApp({
         //   this.table.startEditCell(col, row, title) //
         // }
       })
+
+
+        // let instance = this.getInstance()
+    // let _index1 = instance.records.findIndex(
+    //   (r) => r['_index'] == row['_index'],
+    // )
+    // let _index2 = instance.records.findIndex(
+    //   (r) => r['_index'] == oldCurRow['_index'],
+    // )
+    // let id = this.uuid()
+    // console.time(id)
+    // let bodyIndex = instance.getTableIndexByRecordIndex(_index1)
+    // let bodyIndex1 = instance.getTableIndexByRecordIndex(_index2)
+    // // console.log(bodyIndex, bodyIndex1) //
+    // // let _cell=instance.getCellInfo(null,bodyIndex)
+    // // let cells = instance.getAllCells(null, bodyIndex)
+    // // let cell1 = instance.getAllCells(null, bodyIndex1)
+    // // console.log(cells) //
+    // console.timeEnd(id) //

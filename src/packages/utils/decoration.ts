@@ -206,3 +206,8 @@ export function useRunBefore(config?: any) {
     }
   }
 }
+
+
+export function useEmit(config){
+  
+}

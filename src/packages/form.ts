@@ -70,6 +70,13 @@ const excludes = [
 ]
 const pName = [] //
 export class Form extends Base {
+  eventManager: {
+    [key: string]: Array<{
+      callback?: Function
+      timeout?: number //
+      _timeout?: any //
+    }>
+  } = shallowRef({}) as any
   currentDField: string //
   tableName?: string //
   dTableName: string //
@@ -1724,6 +1731,19 @@ export class Form extends Base {
       ts = allTableName
     }
     return ts
+  }
+  //发布事件
+  async publishEvent(config: {
+    event: string
+    data: any
+    from?: any
+    to?: any
+  }) {
+    let items = this.items //
+    for (const item of items) {
+      //执行
+      item.executeEvent(config)
+    }
   }
 }
 //使用默认布局

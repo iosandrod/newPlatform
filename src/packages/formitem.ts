@@ -23,6 +23,7 @@ export type FormOptions = {
 }
 
 export class FormItem extends Base {
+  eventManager = {}
   tableName: string
   oldValue: any
   field: Field = {} as any
@@ -874,5 +875,21 @@ export class FormItem extends Base {
     }
     d.currentDField = f
     d.openContextMenu(e) //
+  }
+  async executeEvent(config) {
+    let eventManager = this.eventManager //
+    let event: string = config.event
+    if (event == null) {
+    } //
+    let eArr = eventManager[event]
+    if (eArr == null) {
+      return
+    }
+    if (!Array.isArray(eArr)) {
+      return
+    }
+    for (let ev of eArr) {
+      //
+    }
   }
 }

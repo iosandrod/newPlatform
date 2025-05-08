@@ -19,48 +19,53 @@ export const initContextMenu = (table: Table) => {
       },
     },
     {
-      label: '右侧固定',
-      key: 'rightFixed',
-      visible: () => {
-        let isHeaderContext = table.isHeaderContext //
-        if (!isHeaderContext) {
-          return false
-        }
-        return true
-      },
-      fn: () => {
-        let curContext = table.curContextCol
-        if (curContext) {
-          let frozen = curContext.getIsFrozen()
-          if (frozen == true) {
-            curContext.setNoFrozen()
-          } else {
-            curContext.setFrozen('right')
-          }
-        }
-      },
-    },
-    {
-      label: '左侧固定',
-      key: 'leftFixed',
-      visible: () => {
-        let isHeaderContext = table.isHeaderContext //
-        if (!isHeaderContext) {
-          return false
-        }
-        return true
-      },
-      fn: () => {
-        let curContext = table.curContextCol
-        if (curContext) {
-          let frozen = curContext.getIsFrozen()
-          if (frozen == true) {
-            curContext.setNoFrozen()
-          } else {
-            curContext.setFrozen('left') //
-          }
-        }
-      },
+      label: '固定设置',
+      items: [
+        {
+          label: '右侧固定',
+          key: 'rightFixed',
+          visible: () => {
+            let isHeaderContext = table.isHeaderContext //
+            if (!isHeaderContext) {
+              return false
+            }
+            return true
+          },
+          fn: () => {
+            let curContext = table.curContextCol
+            if (curContext) {
+              let frozen = curContext.getIsFrozen()
+              if (frozen == true) {
+                curContext.setNoFrozen()
+              } else {
+                curContext.setFrozen('right')
+              }
+            }
+          },
+        },
+        {
+          label: '左侧固定',
+          key: 'leftFixed',
+          visible: () => {
+            let isHeaderContext = table.isHeaderContext //
+            if (!isHeaderContext) {
+              return false
+            }
+            return true
+          },
+          fn: () => {
+            let curContext = table.curContextCol
+            if (curContext) {
+              let frozen = curContext.getIsFrozen()
+              if (frozen == true) {
+                curContext.setNoFrozen()
+              } else {
+                curContext.setFrozen('left') //
+              }
+            }
+          },
+        },
+      ],
     },
     {
       label: '编辑',

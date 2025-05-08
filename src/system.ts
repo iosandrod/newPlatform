@@ -15,7 +15,7 @@ import { VxeUI } from 'vxe-pc-ui'
 export class System extends Base {
   mouseConfig = {
     clientX: 0,
-    clientY: 0
+    clientY: 0,
   }
   commandArr = []
   activePage = ''
@@ -29,7 +29,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient()
@@ -37,17 +37,17 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = d //
     return d //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap) //
@@ -61,7 +61,7 @@ export class System extends Base {
       },
     ] //
   }
-  openPageDesign(config) { } //
+  openPageDesign(config) {} //
   // async getDefaultPageLayout(name?: string) {
   //   let http = this.getHttp()
   //   let _data = await http.post(
@@ -345,7 +345,7 @@ export class System extends Base {
     // let http = this.getHttp() //
     // let _res = await http.patch('entity', { tableName, ...config })
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -422,8 +422,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     let _form = new Form(formConfig) //
     let component = formCom
@@ -528,15 +528,23 @@ export class System extends Base {
     _msg.duration = _msg.duration || 1000 //
     VxeUI.modal.message(msg)
   }
-  async designTableColumn(tableName, columnName) {
-    let tCols = await this.getHttp().find('columns', {
-      tableName,
-      field: columnName,
-    })
-    console.log(tCols, 'testCColumns') //
-  }
-  async designTableColumns(tableName) {
-    let tCols = await this.getHttp().find('columns', { tableName })
+  // async designTableColumn(tableName, columnName) {
+  //   let tCols = await this.getHttp().find('columns', {
+  //     tableName,
+  //     field: columnName,
+  //   })
+  //   if (tCols != null && tCols.length > 0) {
+  //   }
+  // }
+  async designTableColumns(tableName, columnName?: any) {
+    let qObj = {
+      tableName: tableName,
+    }
+    if (columnName) {
+      //@ts-ignore
+      qObj.field = columnName
+    }
+    let tCols = await this.getHttp().find('columns', qObj) //
     let tableConfig = {
       tableState: 'edit',
       columns: [
@@ -553,6 +561,30 @@ export class System extends Base {
         {
           field: 'field',
           title: '字段', //
+        },
+        {
+          field: 'formatFn',
+          title: '格式化函数',
+          editType: 'code',
+        },
+        {
+          field: 'editType',
+          title: '编辑类型',
+          editType: 'select',
+          options: [
+            {
+              label: '文本',
+              value: 'input',
+            },
+            {
+              label: '下拉框',
+              value: 'select',
+            },
+            {
+              label: '日期',
+              value: 'date',
+            }, //
+          ],
         },
       ],
       data: tCols,

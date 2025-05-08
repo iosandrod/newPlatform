@@ -19,10 +19,12 @@ export default defineComponent({
       return _cols //
     }) //
     let fitem: PageDesignItem = props.item
-    let data = computed(() => {
-      return item.getTableData()
-    })
+    let _design: PageDesign = inject('mainPageDesign', {}) as any
     let tableName = item.getTableName()
+    let data = computed(() => {
+      let _data = _design.getTableRefData(tableName)?.data || []
+      return _data //
+    })
     const pageDesign: PageDesign = inject('pageDesign')
     let tableType = item.getTableType()
     //只能有个一个pageDesign//
