@@ -1763,7 +1763,6 @@ export class Table extends Base {
     let mouseConfig = system.mouseConfig
     let outDiv: HTMLDivElement = this.getRef('outDiv')
     let bound = outDiv.getBoundingClientRect()
-    console.log(bound, 'testBound')//
     this.mouseWatch = watch(() => {
       return {
         x: mouseConfig.clientX,
