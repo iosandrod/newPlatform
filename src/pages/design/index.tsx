@@ -35,7 +35,7 @@ export default defineComponent({
         en = res
         show.value = true //
       })
-    }
+    } //
     return () => {
       if (show.value == false) {
         return <div>页面加载当中</div>
