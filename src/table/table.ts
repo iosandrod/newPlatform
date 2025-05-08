@@ -585,11 +585,6 @@ export class Table extends Base {
           }
         },
       )
-
-      // if (allContain.length == 0) {
-      //   console.log('点击不生效') //
-      //   console.log(this) //
-      // }
       allContain.forEach((cArr) => {
         if (cArr == null) {
           return //
@@ -600,12 +595,16 @@ export class Table extends Base {
         })
       })
       nextTick(() => {
-        let _select = ins.getSelectedCellRanges()
-        ins.selectCells(_select) //
+        this.updateSelectRange()
       })
       // ins.changeCellValue(0, 0, '')//
       console.timeEnd(uuid) //
     }
+  }
+  updateSelectRange() {
+    let ins = this.getInstance() //
+    let _select = ins.getSelectedCellRanges()
+    ins.selectCells(_select) //
   }
   updateCheckboxRecords() {
     let ins = this.getInstance()

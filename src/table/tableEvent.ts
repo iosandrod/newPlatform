@@ -69,6 +69,7 @@ export const click_cell = (table: Table) => {
         return col.getField() === field
       })
       if (tCol != null) {
+        table.clearEditCell() //
         if (tCol.getIsEditField()) {
           //是编辑的列数据//
           let curEdit = table.getCurrentCellEdit()
@@ -100,7 +101,15 @@ export const click_cell = (table: Table) => {
     name: 'dblclick_cell',
     keyName: 'dblclick_cell',
     callback: (config) => {
-      console.log('我双击了') //
+      if (config.originData == null) {
+        let row = config.row
+        let col = config.col
+        let title = config.title
+        table.clearEditCell()
+        setTimeout(() => {
+          table.startEditCell(col, row, title) //
+        }, 10)
+      }
     },
   })
 }

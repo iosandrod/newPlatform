@@ -525,10 +525,13 @@ export class System extends Base {
     VxeUI.modal.message(msg)
   }
   async designTableColumn(tableName, columnName) {
-    let oldCol = {}
+    let tCols = await this.getHttp().find('columns', {
+      tableName,
+      field: columnName,
+    })
+    console.log(tCols, 'testCColumns') //
   }
   async designTableColumns(tableName) {
-    let oldCols = {} //
     let tCols = await this.getHttp().find('columns', { tableName })
     let tableConfig = {
       tableState: 'edit',
@@ -555,13 +558,25 @@ export class System extends Base {
         let allChangeCol = d.filter((c) => {
           return c['_rowState'] == 'change'
         })
-        console.log(allChangeCol, 'testCol') //
         let http = this.getHttp()
         let res = await http.patch('columns', allChangeCol) //
-        console.log(res, 'testRes') //
+        this.confirmMessage('更新列成功') //
       },
     }
     await this.confirmTable(tableConfig) //
+  }
+  getTargetDesign(tableName) {
+    let _obj = this.tableMap //
+    let editObj = this.tableEditMap
+    let obj = editObj[tableName] || _obj[tableName]
+    return obj
+  }
+  async updateTargetColumn(col) {
+    if (col.id == null) {
+      return
+    }
+    let http = this.getHttp()
+    await http.patch('columns', col) //
   }
 }
 

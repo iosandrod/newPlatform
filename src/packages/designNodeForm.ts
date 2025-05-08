@@ -9,7 +9,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
   let obj = {
     entity: {
       //
-      itemSpan: 24,
+      itemSpan: 24, //
       items: [
         {
           field: 'tableName',

@@ -34,6 +34,7 @@ import { PageDesignItem } from './pageItem'
 import formCom from './formCom'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 import { VxeFormInstance } from 'vxe-pc-ui'
+import { PageDesign } from './pageDesign'
 //转换数据
 //
 let prevEl: any = ''
@@ -69,6 +70,8 @@ const excludes = [
 ]
 const pName = [] //
 export class Form extends Base {
+  currentDField: string //
+  tableName?: string //
   dTableName: string //
   dFormMap: any = shallowRef({})
   sFormMap: any = shallowRef({})
@@ -1697,11 +1700,31 @@ export class Form extends Base {
     return obj //
   }
   getAllTableName() {
-    return []
+    let tableName = this.tableName
+    let system = this.getSystem() //
+    let tableMap = system.tableMap
+    let editMap = system.tableEditMap
+    let _table: PageDesign = tableMap[tableName] || editMap[tableName]
+    let ts = []
+    if (_table != null) {
+      let allTableName = _table.getAllTableName()
+      ts = allTableName
+    }
+    return ts
   }
   getAllTableNameOptions() {
-    return []
-  } //
+    let tableName = this.tableName
+    let system = this.getSystem() //
+    let tableMap = system.tableMap
+    let editMap = system.tableEditMap
+    let _table: PageDesign = tableMap[tableName] || editMap[tableName]
+    let ts = []
+    if (_table != null) {
+      let allTableName = _table.getAllTableNameOptions()
+      ts = allTableName
+    }
+    return ts
+  }
 }
 //使用默认布局
 

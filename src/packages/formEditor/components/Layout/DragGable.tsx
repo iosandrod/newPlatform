@@ -29,6 +29,7 @@ import { Form } from '@ER/form'
 import { dName } from '@ER/vueDraggable/vuedraggable'
 import Sortable from 'sortablejs'
 import { FormItem } from '@ER/formitem'
+import { PageDesign } from '@ER/pageDesign'
 const dragGableWrap = defineComponent({
   inheritAttrs: false,
   name: 'customDragGable',
@@ -112,6 +113,14 @@ export default defineComponent({
       return true
     }
     const formIns: Form = inject('formIns')
+    let mainPage: PageDesign = inject('mainPageDesign', null)
+    let tName = null
+    if (mainPage) {
+      let tableName = mainPage.getTableName()
+      if (tableName) {
+        tName = tableName
+      }
+    }
     //@ts-ignore
     const id = formIns.id
     let pluginName = formIns.getPluginName()
@@ -227,6 +236,11 @@ export default defineComponent({
             break
           default:
             let formitem = formIns.items.find((item) => item.id === element.id)
+            if (formitem == null) {
+              return null
+            }
+            //@ts-ignore
+            formitem.tableName = tName
             let typeProps = {} //
             try {
               typeProps = formitem?.getFormItemProps(element) || {} //
@@ -300,7 +314,6 @@ export default defineComponent({
                               )
                             },
                             title: () => {
-                              // console.log(element, 'testEl')
                               let tCom = (
                                 <div class="  flex align-center">
                                   {element?.['label']}
@@ -312,7 +325,13 @@ export default defineComponent({
                                 requireDiv = <div class="color-red">*</div>
                               }
                               return (
-                                <div class="flex flex-row">
+                                <div
+                                  class="flex flex-row"
+                                  onContextmenu={(e: MouseEvent) => {
+                                    e.preventDefault()
+                                    formitem.openMainMenu(e)
+                                  }}
+                                >
                                   {requireDiv}
                                   {tCom}
                                 </div>

@@ -17,10 +17,10 @@ import { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 import { Table } from '@/table/table'
+import { BMenu } from '@/buttonGroup/bMenu'
 
 export class PageDesign extends Form {
   pageType = 'pageDesign' //
-  tableName
   tableType: 'main' | 'edit' | 'search' = 'main' //
   constructor(config) {
     super(config)
@@ -460,5 +460,26 @@ export class PageDesign extends Form {
     let _data = await http.find(tableName, query) //
     console.log(_data, 'testData') //
     return _data
+  }
+  getMainContextItems() {
+    return [
+      {
+        label: '设计当前列',
+        fn: async () => {
+          let currentDesignField = this.currentDField
+          let system = this.getSystem()
+          let tName = this.getRealTableName()
+          await system.designTableColumn(tName, currentDesignField)
+        },
+        disabled: false,
+      },
+    ]
+  }
+  openContextMenu(e) {
+    let menu: BMenu = this.getRef('mainContextMenu')
+    if (menu == null) {
+      return //
+    }
+    menu.open(e) //
   }
 }

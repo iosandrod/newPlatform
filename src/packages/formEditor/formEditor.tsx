@@ -1,6 +1,29 @@
-import { defineComponent, withDirectives } from 'vue'
-import { ClickOutside as vClickOutside, ElMessage, ElDialog, ElScrollbar, ElContainer, ElHeader, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus'
-import { defineProps, defineEmits, ref, reactive, computed, provide, getCurrentInstance, nextTick, onMounted, watch, defineExpose } from 'vue'
+import { defineComponent, inject, withDirectives } from 'vue'
+import {
+  ClickOutside as vClickOutside,
+  ElMessage,
+  ElDialog,
+  ElScrollbar,
+  ElContainer,
+  ElHeader,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElButton,
+} from 'element-plus'
+import {
+  defineProps,
+  defineEmits,
+  ref,
+  reactive,
+  computed,
+  provide,
+  getCurrentInstance,
+  nextTick,
+  onMounted,
+  watch,
+  defineExpose,
+} from 'vue'
 import fieldMenu from '@/menu/fieldCom'
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
@@ -152,7 +175,7 @@ export default defineComponent({
       () => props.data,
       (val) => {
         formIns.setData(val) //
-      }
+      },
     )
     provide('formIns', formIns)
     const isShowConfig = computed({
@@ -178,7 +201,9 @@ export default defineComponent({
     //   setData2(JSON.parse(JSON.stringify(testData1))); //
     // }, 100);
     const syncLayout = formIns.syncLayout.bind(formIns)
-    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(formIns)
+    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(
+      formIns,
+    )
     const switchPlatform = formIns.switchPlatform.bind(formIns)
     const canvesScrollRef = ref('')
     const fireEvent = (type, data) => {
@@ -250,7 +275,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      }
+      },
     )
     watch(
       () => state.selected,
@@ -260,7 +285,7 @@ export default defineComponent({
       {
         deep: true,
         immediate: true,
-      }
+      },
     )
     const onClickOutside = () => {}
     watch(
@@ -270,12 +295,18 @@ export default defineComponent({
       (newValue) => {},
       {
         deep: true,
-      }
+      },
     )
     const eve = formIns //
     provide('Everright', eve)
-    const setPreviewRef = (ref: any) => {
-      EReditorPreviewRef.value = ref
+    // const setPreviewRef = (ref: any) => {
+    //   EReditorPreviewRef.value = ref
+    // }
+    let mainPage = inject('mainPageDesign', null)
+    if (mainPage != null) {
+      let tName = mainPage.getTableName()
+      //@ts-ignore
+      formIns.tableName = tName
     }
     return () => {
       let nextForm = formIns.nextForm //
@@ -308,7 +339,12 @@ export default defineComponent({
         <div class="h-full w-full overflow-hidden bg-white">
           <div class="flex h-full w-full bg-white overflow-hidden flex-row">
             <div class="h-full overflow-auto">{_fieldCom}</div>
-            <div class="flex-1 flex flex-col overflow-hidden">{isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}</div>
+            <div class="flex-1 flex flex-col overflow-hidden">
+              {isShow.value &&
+                withDirectives(<CanvesPanel data={state.store} />, [
+                  [vClickOutside, onClickOutside],
+                ])}
+            </div>
             {_ConfigCom}
           </div>
           {/* <Everright-form-editor></Everright-form-editor> */}

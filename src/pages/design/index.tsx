@@ -1,6 +1,6 @@
 import { System } from '@/system'
 import PageCom from '@ER/pageCom'
-import { computed, defineComponent, inject, ref } from 'vue'
+import { computed, defineComponent, inject, provide, ref } from 'vue'
 
 export default defineComponent({
   name: 'Design',
@@ -31,7 +31,6 @@ export default defineComponent({
       })
     } else {
       system.createPageDesign(tableName).then((res) => {
-        //
         en = res
         show.value = true //
       })
@@ -40,7 +39,7 @@ export default defineComponent({
       if (show.value == false) {
         return <div>页面加载当中</div>
       }
-      return <PageCom isDesign={false} formIns={en}></PageCom>
+      return <PageCom isMainPage isDesign={false} formIns={en}></PageCom>
     }
   },
 })

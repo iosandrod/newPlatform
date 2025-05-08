@@ -37,7 +37,7 @@ export default defineComponent({
       } //
       let typeProps = hooks.useProps(state, state, unref(isPc), true)
       //@ts-ignore
-      console.log(typeProps.value.rules, 'testRules123123') //
+     
       let _class = []
       //如果是编辑
       if (!unref(isEditModel)) {
@@ -61,7 +61,7 @@ export default defineComponent({
         )
       }
       let rules = formIns.createFormRules()
-      console.log(rules, 'testRules12123') //
+   
       let inCom = (
         <div class="h-full w-full">
           {bar}

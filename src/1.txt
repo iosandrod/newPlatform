@@ -2561,3 +2561,33 @@ const app = createApp({
         //   let _col = this.getIndexColor(row)
         //   return _col
         // }, //
+
+
+         container.on('dblclick', (config) => {
+        // console.log('我执行了') //
+        // if (this.isHeaderdown != false) {
+        //   //执行
+        //   let title = this.getTitle()
+        //   if (this.table.templateEditCell != null) {
+        //     this.table.clearEditCell() //
+        //     setTimeout(() => {
+        //       this.table.startEditCell(col, row, title) //
+        //     }, 100)
+        //   } else {
+        //     this.table.startEditCell(col, row, title) //
+        //   }
+        // }
+        // this.isHeaderdown = true
+        // setTimeout(() => {
+        //   this.isHeaderdown = false ////
+        // }, 300)
+        // let title = this.getTitle()
+        // if (this.table.templateEditCell != null) {
+        //   this.table.clearEditCell() //
+        //   setTimeout(() => {
+        //     this.table.startEditCell(col, row, title) //
+        //   }, 100)
+        // } else {
+        //   this.table.startEditCell(col, row, title) //
+        // }
+      })

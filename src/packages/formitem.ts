@@ -23,6 +23,7 @@ export type FormOptions = {
 }
 
 export class FormItem extends Base {
+  tableName: string
   oldValue: any
   field: Field = {} as any
   subForm?: Form
@@ -672,7 +673,9 @@ export class FormItem extends Base {
     let formConfig = this.getFormConfig() //
     let _config = _.cloneDeep(formConfig) //
     let system = this.getSystem() //
+    let tName = this.form.tableName
     let _f = new Form(_config) //
+    _f.tableName = tName
     //@ts-ignore
     let dTableName = this.form.dTableName || this.form.tableName
     _f.dTableName = dTableName //
@@ -831,7 +834,8 @@ export class FormItem extends Base {
     return showTable
   }
   getTableName() {
-    let form = this.form
+    let tableName = this.tableName
+    return tableName
   }
   getdBindData() {
     return {}
@@ -856,8 +860,19 @@ export class FormItem extends Base {
     }
     let f = this.getField()
     let obj = {
-      [f]: rArr,
+      [f]: rArr, //
     }
     return obj //
+  }
+  openMainMenu(e) {
+    let f = this.getField()
+    let tableName = this.getTableName() //
+    let sys = this.getSystem()
+    let d = sys.getTargetDesign(tableName)
+    if (d == null) {
+      return
+    }
+    d.currentDField = f
+    d.openContextMenu(e) //
   }
 }
