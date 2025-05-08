@@ -144,8 +144,8 @@ export class Base {
   }
   getMainPageDesign() {
     let _this: any = this
-    let tableName = _this.tableName
-    let system = this.getSystem() //
+    let tableName = _this.tableName //
+    let system = this.getSystem() ////
     let targetDesign =
       system.tableMap[tableName] || system.tableEditMap[tableName]
     return targetDesign //

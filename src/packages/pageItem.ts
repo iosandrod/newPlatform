@@ -8,6 +8,11 @@ export class PageDesignItem extends FormItem {
   constructor(config, d) {
     super(config, d) //
   }
+  init() {
+    super.init()
+    let eventArr = this.config.eventArr //
+    //注册到事件对象中
+  }
   getTableConfig() {
     //
     let options = this.getOptions()

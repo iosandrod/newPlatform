@@ -21,6 +21,7 @@ export default defineComponent({
     let fitem: PageDesignItem = props.item
     let _design: PageDesign = inject('mainPageDesign', {}) as any
     let tableName = item.getTableName()
+    let mainTableName=_design.getTableName()
     let data = computed(() => {
       let _data = _design.getTableRefData(tableName)?.data || []
       return _data //
@@ -39,6 +40,7 @@ export default defineComponent({
         <div class="h-full w-full" style={{ minHeight: '200px' }}>
           <erTable
             tableName={tableName}
+            mainTableName={mainTableName}
             showHeaderButtons={item.getShowHeaderButtons()}
             key={item.id}
             ref={registerTable}

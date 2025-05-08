@@ -83,7 +83,6 @@ export class PageDesign extends Form {
     }
   }
   addFormItem(config): any {
-    // console.log(config, 'test_config')//
     let _item = new PageDesignItem(config, this) //
     if (config.type == 'entity') {
       let options = config.options
@@ -96,7 +95,7 @@ export class PageDesign extends Form {
       }
     }
     //@ts-ignore
-    this.items.push(_item)
+    this.items.push(_item) //
     return _item //
   }
   getDesignFieldConfig() {

@@ -153,6 +153,7 @@ export class Table extends Base {
   @useRunAfter()
   @useTimeout({ number: 30, key: 'setCurRow' }) ////
   setCurRow(row, isDb = false) {
+    //
     let oldCurRow = this.tableData.curRow || {}
     if (toRaw(row) == toRaw(this.tableData.curRow)) return //
     this.tableData.curRow = row //

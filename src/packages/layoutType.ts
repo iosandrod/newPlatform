@@ -80,8 +80,9 @@ export type FieldOptions = {
 }
 
 export type Field = {
+  eventArr?: any
   required?: boolean
-  itemSpan?:any
+  itemSpan?: any
   items?: any[]
   tableName?: string
   columns?: any
