@@ -53,6 +53,10 @@ import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
 export class Table extends Base {
+  scorllRowInteral: any
+  scrollRowSpeed: number = 0
+  scrollColInteral: any
+  scrollColSpeed: number = 0
   mouseWatch: any
   leftFrozen?: any
   curContextCol?: Column
@@ -400,13 +404,13 @@ export class Table extends Base {
       //头部的
     }) ////
     table.on('change_header_position_start', (e) => {
-
+      this.startWatchSystemMouseConfig()
     })
     table.on('change_header_position', (e) => {
-
+      this.endWatchSystemMouseConfig()
     })
     table.on('change_header_position_fail', () => {
-
+      this.endWatchSystemMouseConfig()//
     })
     const emitEventArr = [
       'mouseleave_cell',
@@ -1037,7 +1041,6 @@ export class Table extends Base {
       this.scrollConfig.rowStart = 0
       this.scrollConfig.rowEnd = scrollRange //
     }
-    console.log(this.scrollConfig) //
     instance.scrollToRow(index) //
   }
   async runBefore(config?: any) { }
@@ -1764,20 +1767,77 @@ export class Table extends Base {
     let outDiv: HTMLDivElement = this.getRef('outDiv')
     let bound = outDiv.getBoundingClientRect()
     console.log(bound, 'testBound')//
+    let x = bound.x
+    let endX = bound.width + x
     this.mouseWatch = watch(() => {
       return {
         x: mouseConfig.clientX,
         y: mouseConfig.clientY
       }
     }, (nv) => {
-      let x = nv.x
-      let y = nv.y
+      let _x = nv.x
+      if (_x < x) {
+        console.log('左侧滚动起来')
+      }
+      if (_x > endX) {
+        console.log('右侧滚动起来')//
+      }
+      if (_x > x && _x < endX) {
+        console.log('停止滚动')//
+      }
     })
   }
   endWatchSystemMouseConfig() {
     if (this.mouseWatch != null && typeof this.mouseWatch == 'function') {
       this.mouseWatch()
       this.mouseWatch = null
+    }
+    this.endScrollInteral()
+  }
+  endScrollInteral(type?: any) {
+    if (type == 'col') {
+      if (this.scrollColInteral != null) {
+        clearInterval(this.scrollColInteral)
+        this.scrollColInteral = null
+      }
+    }
+    if (type == 'row') {
+      if (this.scorllRowInteral != null) {
+        clearInterval(this.scorllRowInteral)
+        this.scorllRowInteral = null
+      }
+    }//
+    if (type == null) {
+      if (this.scrollColInteral != null) {
+        clearInterval(this.scrollColInteral)
+        this.scrollColInteral = null
+      }
+      if (this.scorllRowInteral != null) {
+        clearInterval(this.scorllRowInteral)
+        this.scorllRowInteral = null
+      }
+    }
+  }
+  scrollInSpeed(type, number) {
+    let _this = this
+    if (number == null || number == 0) {
+      return
+    }
+    let _inter = null
+    if (type == 'col') {
+      _inter = this.scrollColInteral
+      this.scrollColSpeed = number
+      if (_inter == null) {//
+        this.scrollColInteral = setInterval(() => {
+          let speed = this.scrollColSpeed//
+        }, 10);
+      }
+    }
+    if (type == 'row') {
+      _inter = this.scorllRowInteral
+      this.scorllRowInteral = number
+      if (_inter == null) {
+      }
     }
   }
 }
