@@ -37,6 +37,7 @@ import { Form } from '@ER/form'
 import fieldCom from '@/menu/fieldCom'
 import defaultProps from './formEditor/defaultProps'
 import { PageDesign } from './pageDesign'
+import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 export const getDefaultPageProps = () => {
   return {
     itemSpan: {
@@ -49,6 +50,10 @@ export const getDefaultPageProps = () => {
     fieldsPanelWidth: {
       type: String,
       default: '220px',
+    },
+    isMainPage: {
+      type: Boolean,
+      default: false,
     },
     fieldsPanelDefaultOpeneds: {
       type: Array,
@@ -106,6 +111,7 @@ export default defineComponent({
   components: {
     fieldMenu,
     fieldCom,
+    ContextmenuCom,
   },
   name: 'Everright-form-editor',
   props: getDefaultPageProps(), //
@@ -201,7 +207,10 @@ export default defineComponent({
       },
     )
     provide('pageDesign', formIns) //
-    provide('formIns', formIns) //
+    provide('formIns', formIns)
+    if (props.isMainPage === true) {
+      provide('mainPageDesign', formIns)
+    } //
     const isShowConfig = computed({
       get: () => {
         return formIns.isShowConfig
@@ -307,7 +316,19 @@ export default defineComponent({
     //@ts-ignore
     formIns.hide = hide
     expose({ _instance: formIns }) //
+    const registerContextMenu = (ref) => {
+      formIns.registerRef('mainContextMenu', ref) //
+    }
     return () => {
+      let contextCom = null //右键菜单
+      if (props.isMainPage === true) {
+        contextCom = (
+          <ContextmenuCom
+            ref={registerContextMenu}
+            items={formIns.getMainContextItems()}
+          ></ContextmenuCom>
+        )
+      }
       let nextForm = formIns.nextForm //
       let _fieldCom = null
       let _ConfigCom = null
@@ -334,6 +355,7 @@ export default defineComponent({
       let com = (
         <div class="h-full w-full overflow-hidden bg-white">
           <div class="flex h-full w-full bg-white overflow-hidden flex-row">
+            {contextCom}
             {_fieldCom}
             <div class="flex-1 flex flex-col overflow-hidden">
               {isShow.value &&

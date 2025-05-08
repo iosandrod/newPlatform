@@ -24,7 +24,6 @@ export default defineComponent({
     })
     //@ts-ignore
     let pageD: PageDesign = inject('pageDesign', {}) //
-    console.log(pageD, 'testPageD') //
     const registerRef = (el) => {
       formitem.registerRef('fieldCom', el) //
     }

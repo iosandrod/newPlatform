@@ -136,18 +136,20 @@ export class InputEditor extends BaseEditor {
           field: this.field,
         })
         this.row['_rowState'] = 'change' //
+        if (this.isEditHeader) {
+          let _obj = { title: value, id: column.config.id }
+          column.getSystem().updateTargetColumn(_obj) //()
+        }
       }
     } //
+    nextTick(() => {
+      column.table.updateSelectRange() //
+    })
     column.cacheValue = undefined //
     column.isChangeValue = false //
     this.element = undefined //
     this.column = null ////
     this.row = null //
-    if (this.isEditHeader) {
-      nextTick(() => {
-        column.table.updateColumns() //
-      })
-    }
   } //
   adjustPosition(rect: DOMRect): void {
     if (this.element) {

@@ -42,6 +42,7 @@ import { Dialog } from '@/dialog/dialog'
 import CodeEditor from '@/codeEditor/codeEditor'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
+  isHeaderdown = false
   disableHideCell = false //
   isMousedownRecord = null
   tableState = 'edit' //
@@ -147,8 +148,11 @@ export class Column extends Base {
   } //
   getHeaderCustomLayout() {
     let hCustomLayout = (args) => {
-      const { table, row, col, rect, value } = args
+      let { table, row, col, rect, value } = args
       let _value: string = value
+      if (value == null || value === '') {
+        value = this.getTitle() //
+      }
       let { height, width } = rect ?? table.getCellRect(col, row)
       let container = createGroup({
         height: height,
@@ -179,17 +183,7 @@ export class Column extends Base {
         boundsPadding: [0, 10, 0, 5],
         lineDashOffset: 0,
       })
-      container.on('dblclick', (config) => {
-        let title = this.getTitle()
-        if (this.table.templateEditCell != null) {
-          this.table.clearEditCell() //
-          setTimeout(() => {
-            this.table.startEditCell(col, row, title) //
-          }, 100)
-        } else {
-          this.table.startEditCell(col, row, title) //
-        }
-      })
+
       _g.add(locationName)
       const g1 = this.createFilter({
         table,
@@ -944,7 +938,6 @@ export class Column extends Base {
         }
         this.isMousedownRecord = record
         setTimeout(() => {
-          //
           this.isMousedownRecord = null
         }, 130)
       })
