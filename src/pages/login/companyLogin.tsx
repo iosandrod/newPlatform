@@ -1,4 +1,6 @@
-import { defineComponent, reactive } from 'vue'
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
+import { system } from '@/system'
+import { defineComponent, reactive, ref } from 'vue'
 
 export default defineComponent({
   setup(props) {
@@ -40,15 +42,37 @@ export default defineComponent({
             password: true,
           },
         },
+        {
+          field: '_captcha',
+          label: '验证码',
+          type: 'string',
+        },
       ],
       itemSpan: 24,
     }
-    let buttons = []
+    let cdata = ref('')
+    let code = ref('')
+    let fn = async () => {
+      let _res = await system.createCaptcha('authentication_create')
+    }
+    let buttons = [
+      {
+        label: '登录',
+        fn: async () => {
+          let _data = data
+          let _res = await system.loginUser(_data)
+        },
+      },
+    ]
     return () => {
       let fc = <erForm {...loginFConfig}></erForm>
+      let btnCom = <ButtonGroupCom items={buttons}></ButtonGroupCom>
       let com = (
         <div class="flex flex-row h-full w-full justify-center items-center">
-          <div class="w-300">{fc}</div>
+          <div class="w-300 flex flex-col">
+            {fc}
+            {btnCom}
+          </div>
         </div>
       )
       return com

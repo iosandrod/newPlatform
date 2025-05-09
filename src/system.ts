@@ -649,6 +649,15 @@ export class System extends Base {
       this.confirmMessage(`注册失败,${message}`, 'error') //
     }
   }
+  async loginUser(data) {
+    try {
+      let http = this.getHttp() //
+      data.strategy = 'local' //
+      // let _res=await http
+      let _res = await http.create('authentication', data)
+      console.log(_res, 'testRes') //
+    } catch (error) {}
+  }
 }
 
 export const system = reactive(new System()) //
