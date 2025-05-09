@@ -132,6 +132,7 @@ export class myHttp {
     })
   }
   async patch(tableName, params = {}, query = {}): Promise<any> {
+    console.log('patch', params, query) //
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(

@@ -12,6 +12,7 @@ import formCom from '@ER/formCom'
 import { Table } from './table/table'
 import tableCom from './table/tableCom'
 import { VxeUI } from 'vxe-pc-ui'
+import { getDFConfig } from './table/colFConfig'
 export class System extends Base {
   mouseConfig = {
     clientX: 0,
@@ -395,6 +396,7 @@ export class System extends Base {
     let pageDesign = new PageDesign(obj)
     pageDesign.tableName = tableName //
     pageDesign.setLayoutData(layoutConfig)
+    await pageDesign.getTableData() //
     this.tableMap[tableName] = pageDesign //
     return pageDesign
   }
@@ -545,61 +547,75 @@ export class System extends Base {
       qObj.field = columnName
     }
     let tCols = await this.getHttp().find('columns', qObj) //
-    let tableConfig = {
-      tableState: 'edit',
-      columns: [
-        {
-          field: 'primary',
-          title: '是否主键',
-          editType: 'boolean',
-        }, //
-        {
-          field: 'title',
-          title: '标题',
-          editType: 'input', //
+    if (tCols?.length == 1) {
+      let fConfig = getDFConfig(this, tCols[0])
+      //@ts-ignore
+      fConfig.confirmFn = (dialog) => {
+        console.log('我可能需要校验一下') //
+      }
+      await this.confirmForm(fConfig)
+    } else {
+      let tableConfig = {
+        tableState: 'edit',
+        columns: [
+          {
+            field: 'primary',
+            title: '是否主键',
+            editType: 'boolean',
+          }, //
+          {
+            field: 'title',
+            title: '标题',
+            editType: 'input', //
+          },
+          {
+            field: 'field',
+            title: '字段', //
+          },
+          {
+            field: 'formatFn',
+            title: '格式化函数',
+            editType: 'code',
+          },
+          {
+            field: 'itemChange',
+            title: '值更新事件',
+            editType: 'code',
+          },
+          {
+            field: 'editType',
+            title: '编辑类型',
+            editType: 'select',
+            options: [
+              {
+                label: '文本',
+                value: 'input',
+              },
+              {
+                label: '下拉框',
+                value: 'select',
+              },
+              {
+                label: '日期',
+                value: 'date',
+              }, //
+            ],
+          },
+        ],
+        data: tCols,
+        confirmFn: async (dialog: Dialog) => {
+          let t = dialog.getRef('innerCom')
+          let d: any[] = t.getData()
+          let allChangeCol = d.filter((c) => {
+            return c['_rowState'] == 'change'
+          })
+          let http = this.getHttp()
+          let res = await http.patch('columns', allChangeCol) //
+          this.confirmMessage('更新列成功') //
         },
-        {
-          field: 'field',
-          title: '字段', //
-        },
-        {
-          field: 'formatFn',
-          title: '格式化函数',
-          editType: 'code',
-        },
-        {
-          field: 'editType',
-          title: '编辑类型',
-          editType: 'select',
-          options: [
-            {
-              label: '文本',
-              value: 'input',
-            },
-            {
-              label: '下拉框',
-              value: 'select',
-            },
-            {
-              label: '日期',
-              value: 'date',
-            }, //
-          ],
-        },
-      ],
-      data: tCols,
-      confirmFn: async (dialog: Dialog) => {
-        let t = dialog.getRef('innerCom')
-        let d: any[] = t.getData()
-        let allChangeCol = d.filter((c) => {
-          return c['_rowState'] == 'change'
-        })
-        let http = this.getHttp()
-        let res = await http.patch('columns', allChangeCol) //
-        this.confirmMessage('更新列成功') //
-      },
+      }
+      await this.confirmTable(tableConfig) //
     }
-    await this.confirmTable(tableConfig) //
   }
   getTargetDesign(tableName) {
     let _obj = this.tableMap //

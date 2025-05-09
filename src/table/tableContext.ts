@@ -20,6 +20,13 @@ export const initContextMenu = (table: Table) => {
     },
     {
       label: '固定设置',
+      visible: () => {
+        let isHeaderContext = table.isHeaderContext //
+        if (!isHeaderContext) {
+          return false
+        }
+        return true //
+      },
       items: [
         {
           label: '右侧固定',
@@ -40,6 +47,23 @@ export const initContextMenu = (table: Table) => {
               } else {
                 curContext.setFrozen('right')
               }
+            }
+          },
+        },
+        {
+          label: '取消固定',
+          key: 'noFixed',
+          visible: () => {
+            let isHeaderContext = table.isHeaderContext //
+            if (!isHeaderContext) {
+              return false
+            }
+            return true
+          },
+          fn: () => {
+            let curContext = table.curContextCol
+            if (curContext) {
+              curContext.setNoFrozen()
             }
           },
         },

@@ -10,8 +10,30 @@ export class PageDesignItem extends FormItem {
   }
   init() {
     super.init()
-    let eventArr = this.config.eventArr //
+    let eventArr = this.config.eventMap
+    if (this.config.type == 'entity') {
+    }
     //注册到事件对象中
+    let evManager = this.eventManager
+    if (Array.isArray(eventArr)) {
+      for (let ev of eventArr) {
+        let event = ev.event
+        if (event == null || event == '') {
+          continue
+        }
+        let tableName = ev.tableName
+        let key = event
+        if (tableName != null || tableName != '') {
+          key = `${tableName}_${event}` //
+        }
+        let eArr = evManager[key]
+        if (eArr == null) {
+          evManager[key] = []
+          eArr = evManager[key]
+        }
+        eArr.push(ev) //
+      }
+    }
   }
   getTableConfig() {
     //

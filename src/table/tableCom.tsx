@@ -283,7 +283,8 @@ export default defineComponent({
       ) //
       const menuCom = <TableMenuCom></TableMenuCom>
       let btnCom = <TableButtonCom></TableButtonCom>
-      if (props.showHeaderButtons == false) {
+      if (tableIns.config.showHeaderButtons == false) {
+        //
         btnCom = null
       }
       let filterTCom = null

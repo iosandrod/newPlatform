@@ -18,6 +18,7 @@ import { testBtnData } from './formEditor/testData1'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 import { Table } from '@/table/table'
 import { BMenu } from '@/buttonGroup/bMenu'
+import { getDFConfig } from '@/table/colFConfig'
 
 export class PageDesign extends Form {
   pageType = 'pageDesign' //
@@ -116,6 +117,40 @@ export class PageDesign extends Form {
     tableName = tableName || ''
     return tableName //
   }
+  async getDetailTableData(dTableName: any) {
+    if (typeof dTableName == 'string') {
+      dTableName = {
+        tableName: dTableName,
+      }
+    }
+    let curRow = dTableName['curRow']
+    if (curRow == null) {
+      //主表当前行
+      curRow = this.getCurRow()
+    }
+    let targetItem = this.items.find(
+      (item) => item.getTableName() == dTableName.tableName,
+    )
+    if (targetItem == null) {
+      return
+    }
+    let relateKey = targetItem.getRelateKey()
+    let mainRelateKey = targetItem.getMainRelateKey()
+    if (relateKey == null || mainRelateKey == null) {
+      //
+      this.getSystem().confirmMessage('未设置关联字段', 'error') //
+      return
+    }
+    let query = {
+      [relateKey]: curRow[mainRelateKey],
+    }
+    let tableName = dTableName.tableName ////
+    let res = await this.getTableData({
+      tableName,
+      query,
+    }) //
+    return res
+  }
   async getTableData(
     getDataConfig: any = {
       tableName: this.getTableName(),
@@ -128,7 +163,8 @@ export class PageDesign extends Form {
     }
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
-    let res = await http.get(tableName, 'find')
+    let query = getDataConfig.query || {}
+    let res = await http.get(tableName, 'find', query) //
     let dataMap = this.getTableRefData(tableName)
     dataMap['data'] = res //
     let evName = `${tableName}_getTableData` //
@@ -136,6 +172,7 @@ export class PageDesign extends Form {
       event: evName,
       data: res,
     }
+    await this.publishEvent(_config) //
     return res
   }
   //
@@ -147,7 +184,6 @@ export class PageDesign extends Form {
       data: row,
       event: evName,
     } //
-    console.log('我发布了一些事件了') //
     await this.publishEvent(_config)
     return row
   }
@@ -470,11 +506,10 @@ export class PageDesign extends Form {
   }
   //获取编辑表格的数据
   async getEditTableData(query) {
-    let mcol = this.getTableMainKey()
-    console.log(mcol, 'testMcol') //
+    let mcol = this.getTableMainKey() //
     let _query = query || {}
     if (query == null) {
-      this.getSystem().confirmMessage('未设置查询条件', 'error') //
+      // this.getSystem().confirmMessage('未设置查询条件', 'error') //
       return null
     }
     let tableName = this.getRealTableName()
@@ -492,6 +527,7 @@ export class PageDesign extends Form {
           let system = this.getSystem()
           let tName = this.getRealTableName() //
           await system.designTableColumns(tName, currentDesignField)
+          // let fConfig=getDFConfig(this,)
         },
         disabled: false,
       }, //

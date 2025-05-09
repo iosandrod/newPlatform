@@ -1,6 +1,7 @@
 import { computed } from 'vue'
 import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
+import { Column } from '@/table/column'
 //处理内部options
 export const formitemTypeMap = (_this: PageDesign) => {
   let tableOptions = _this.getAllTableName()
@@ -33,11 +34,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
             })
           },
         },
-        {
-          filed: 'eventMap',
-          label: '事件',
-          type: 'input',
-        },
+
         {
           field: 'tableType',
           label: '表类型',
@@ -83,13 +80,17 @@ export const formitemTypeMap = (_this: PageDesign) => {
           type: 'select',
           options: {
             options: computed(() => {
-              let select = _this.getTableColumns()
-              let _cols = select.map((col) => {
-                let f = col.field
-                let title = col.title || f
-                return { label: title, value: f } //
+              let select: Column[] = _this.getTableColumns(
+                _this.state.selected?.options?.tableName,
+              )
+              let _se = select.map((col) => {
+                let obj = {
+                  label: col.getTitle(),
+                  value: col.getField(),
+                }
+                return obj
               })
-              return _cols //
+              return _se
             }),
           },
         },
@@ -135,32 +136,29 @@ export const formitemTypeMap = (_this: PageDesign) => {
           type: 'stable', ////
           options: {
             showTable: true,
-
-            tableConfig: {
-              tableState: 'edit',
-              buttons: [
-                {
-                  label: '添加子按钮',
-                  fn: () => {
-                    console.log('添加子按钮') //
-                  },
+            tableState: 'edit',
+            buttons: [
+              {
+                label: '添加子按钮',
+                fn: () => {
+                  console.log('添加子按钮') //
                 },
-              ],
-              columns: [
-                {
-                  field: 'label',
-                  title: '标题', ////
-                  type: 'string',
-                  editType: 'string',
-                },
-                {
-                  field: 'fn',
-                  title: '执行脚本',
-                  type: 'code',
-                  editType: 'code', //
-                },
-              ],
-            },
+              },
+            ],
+            columns: [
+              {
+                field: 'label',
+                title: '标题', ////
+                type: 'string',
+                editType: 'string',
+              },
+              {
+                field: 'fn',
+                title: '执行脚本',
+                type: 'code',
+                editType: 'code', //
+              },
+            ],
           },
         }, //
       ],
@@ -215,43 +213,42 @@ export const formitemTypeMap = (_this: PageDesign) => {
           label: '',
           type: 'stable', //
           options: {
+            //
             showTable: true,
-            tableConfig: {
-              showSerialNumber: true, //
-              buttons: [
-                {
-                  label: '新增',
-                  key: 'add',
-                  fn: () => {
-                    let select = _this.state.selected
-                    let context = select.context
-                    context.appendCol() //
-                  },
+            showSerialNumber: true, //
+            buttons: [
+              {
+                label: '新增',
+                key: 'add',
+                fn: () => {
+                  let select = _this.state.selected
+                  let context = select.context
+                  context.appendCol() //
                 },
-                {
-                  label: '删除',
-                  key: 'del',
-                  fn: (config) => {
-                    let select = _this.state.selected
-                    let columns = select.columns
-                    let table: Table = config.parent
-                    let crow = table.getCurRow()
-                    let _index = columns.indexOf(crow)
-                    if (_index > -1) {
-                      columns.splice(_index, 1) //
-                    }
-                  },
+              },
+              {
+                label: '删除',
+                key: 'del',
+                fn: (config) => {
+                  let select = _this.state.selected
+                  let columns = select.columns
+                  let table: Table = config.parent
+                  let crow = table.getCurRow()
+                  let _index = columns.indexOf(crow)
+                  if (_index > -1) {
+                    columns.splice(_index, 1) //
+                  }
                 },
-              ],
-              columns: [
-                {
-                  field: 'label', //
-                  title: '标题',
-                  type: 'string',
-                  editType: 'string',
-                },
-              ],
-            },
+              },
+            ],
+            columns: [
+              {
+                field: 'label', //
+                title: '标题',
+                type: 'string',
+                editType: 'string',
+              },
+            ],
           },
         },
         {
@@ -279,7 +276,7 @@ export const selectTypeMap = (_this: PageDesign) => {
       {
         field: 'field',
         title: '绑定字段',
-        type: 'input', //
+        type: 'input',
         label: '绑定字段',
       },
       {
@@ -341,15 +338,47 @@ export const selectTypeMap = (_this: PageDesign) => {
         },
       },
       {
+        field: 'eventMap', //
+        label: '事件池',
+        type: 'stable',
+        options: {
+          showHeaderButtons: true, //
+          columns: [
+            {
+              field: 'event',
+              title: '事件名称',
+              editType: 'string',
+            },
+            {
+              field: 'tableName',
+              title: '关联表名', //
+              editType: 'string',
+            },
+            {
+              field: 'eventDesc',
+              title: '事件描述',
+              editType: 'string',
+            },
+            {
+              field: 'callback',
+              title: '事件代码',
+              editType: 'code', //
+            },
+          ],
+        },
+      },
+      {
         field: 'itemChange',
         label: '值更新事件',
         type: 'code', //
       },
-      {
-        filed: 'sss',
-        label: '',
-      },
     ]
+    if (type == 'entity') {
+      items = items.filter((item) => {
+        let arr = ['eventMap']
+        return arr.includes(item.field)
+      })
+    } ////
     return items
   } //
   let obj = {
@@ -363,6 +392,13 @@ export const selectTypeMap = (_this: PageDesign) => {
     select: {
       itemSpan: 24,
       items: [...createDSelect('select')],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    },
+    entity: {
+      itemSpan: 24,
+      items: [...createDSelect('entity')],
       data: computed(() => {
         return _this.state.selected || {} //
       }),

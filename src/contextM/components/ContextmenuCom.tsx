@@ -27,6 +27,10 @@ export const itemCom = defineComponent({
       let items = item.items
       let com = null
       if (items.length > 0) {
+        let visible = item.getVisible() //
+        if (visible == false) {
+          return null
+        }
         com = (
           <ContextmenuSubmenu title="测试3">
             {{

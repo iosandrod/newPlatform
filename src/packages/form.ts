@@ -1737,8 +1737,14 @@ export class Form extends Base {
     data: any
     from?: any
     to?: any
+    page?: any
   }) {
     let items = this.items //
+    let event = config.event
+    if (event == null) {
+      return
+    } //
+    config.page = this
     for (const item of items) {
       //执行
       item.executeEvent(config)

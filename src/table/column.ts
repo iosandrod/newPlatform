@@ -1100,7 +1100,7 @@ export class Column extends Base {
   }
   setNoFrozen() {
     let config = this.config //
-    config.frozen = null
+    config.frozen = null //
   }
   setFrozen(type) {
     let config = this.config

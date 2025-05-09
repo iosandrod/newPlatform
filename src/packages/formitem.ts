@@ -17,6 +17,7 @@ import { Table } from '@/table/table'
 import tableCom from '@/table/tableCom'
 import CodeEditor from '@/codeEditor/codeEditor'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
+import { stringToFunction } from './utils'
 
 export type FormOptions = {
   items: Field[]
@@ -37,7 +38,7 @@ export class FormItem extends Base {
     super()
     let id = config.id
     if (id != null) {
-      this.id = id //
+      this.id = id
     }
     this.form = form
     this.config = config
@@ -762,8 +763,9 @@ export class FormItem extends Base {
     return _config
   }
   openTableDialog() {
+    //
     let options = this.getOptions()
-    let tableConfig = options.tableConfig || {} //
+    let tableConfig = options //
     let sys = this.getSystem()
     let value = this.getBindValue() //
     if (typeof value == 'string') {
@@ -889,11 +891,16 @@ export class FormItem extends Base {
       return
     }
     for (let ev of eArr) {
-      //
+      let _config = { ...config, item: this }
       let callback = ev.callback
       if (typeof callback == 'function') {
-        //
-        await callback(config) //
+        await callback(_config) //
+      } //
+      if (typeof callback == 'string') {
+        let _callback = stringToFunction(callback)
+        if (typeof _callback == 'function') {
+          await _callback(_config)
+        }
       }
     }
   }

@@ -866,7 +866,6 @@ export class Table extends Base {
       let o2 = c2.order
       return o1 - o2 //
     })
-    console.log(sCols.map((c) => c.field)) //
     _col1 = [...lfsCols, ...sCols, ...rfsCols]
     // _col1 = _col1.sort((a, b) => {
     //   let isFrozen = b.isFrozen
@@ -1081,7 +1080,10 @@ export class Table extends Base {
       }
     }
     _arr.forEach((item) => {
-      item['_rowState'] = 'add' //
+      // item['_rowState'] = 'add' //
+      Object.defineProperties(item, {
+        _rowState: { value: 'add', enumerable: false, writable: true },
+      })
       this.initDataRow(item)
     })
     for (const row of _arr) {
