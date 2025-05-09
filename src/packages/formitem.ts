@@ -3,7 +3,7 @@ import { Base } from '@/base/base'
 import { Form } from './form'
 import { Field, TableCell, TableRow } from './layoutType'
 import { FormItemRule, InputProps } from 'element-plus'
-import { computed, isRef } from 'vue'
+import { computed, isProxy, isRef } from 'vue'
 import { FormProps } from './hooks/use-props'
 import dayjs from 'dayjs'
 import { showToast } from 'vant'
@@ -72,13 +72,32 @@ export class FormItem extends Base {
       } else {
         data[field] = value
       }
-      // _.set(data, field, value) //
-      //   data[field] = value //
+      let itemChange = this.getItemChange()
+      if (typeof itemChange == 'function') {
+        itemChange({
+          value: value,
+          form: this.form,
+          item: this,
+          data: data, //
+        }) //
+      }
     } catch (error) {
       console.log('更新数据报错了') //
     }
   }
-  getItemChange() {}
+  getItemChange() {
+    let config = this.config
+    let itemChange = config.itemChange
+    if (typeof itemChange == 'function') {
+      return itemChange
+    }
+    if (typeof itemChange == 'string') {
+      let _fn = stringToFunction(itemChange)
+      if (typeof _fn == 'function') {
+        return _fn
+      }
+    }
+  }
   async onValueChange() {}
   getForm() {
     return this.form //
@@ -752,14 +771,13 @@ export class FormItem extends Base {
   }
   getTableConfig() {
     let options = this.getOptions()
-    let tableConfig = options.tableConfig || {}
     let _config = {
-      ...tableConfig,
       showRowSeriesNumber: false,
       showCheckboxColumn: false,
       showFooter: false,
       showCalculate: false,
-    } //
+      ...options,
+    } ////
     return _config
   }
   openTableDialog() {

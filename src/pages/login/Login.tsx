@@ -27,6 +27,7 @@ import { system } from '@/system'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { VxeCheckbox } from 'vxe-pc-ui'
 import checkboxCom from '@/checkbox/checkboxCom'
+import { getDFConfig } from '@/table/colFConfig'
 export default defineComponent({
   components: {
     codeEditorCom,
@@ -49,7 +50,7 @@ export default defineComponent({
     SelectCom,
     dialogCom,
     VxeCheckbox,
-    checkboxCom
+    checkboxCom,
   },
   setup(props) {
     const formConfig = {
@@ -159,6 +160,7 @@ export default defineComponent({
       .map((row) => {
         return {}
       })
+    let d1 = reactive({ editType: 'date' })
     return () => {
       let com0 = null //
       let com = null
@@ -176,11 +178,19 @@ export default defineComponent({
           ></tableCom>
         </div>
       ) //
-      // com = (
-      //   <div class="w-full h-full">
-      //     <formCom ref={_reg3} isDesign={false} {...formConfig}></formCom>
-      //   </div>
-      // )
+      let _fConfig = getDFConfig(reactive({}), {
+        editType: 'date',
+      })
+      com = (
+        <div class="w-full h-full">
+          <formCom
+            ref={_reg3}
+            isDesign={false}
+            {..._fConfig}
+            data={d1}
+          ></formCom>
+        </div>
+      )
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
       // com = <VxeCheckbox

@@ -1,3 +1,5 @@
+import { Form } from '@ER/form'
+
 export const getDFConfig = (_this, data) => {
   let fConfig = {
     itemSpan: 12,
@@ -68,6 +70,28 @@ export const getDFConfig = (_this, data) => {
             },
           ],
         },
+        itemChange: (config) => {
+          //   console.log(config, 'testConfig') //
+          let form: Form = config.form
+          let items = form.items
+          let data = config.data
+          let t = items.find((t1) => t1.getField() == 'defaultValue')
+          if (t == null) {
+            return
+          }
+          let value = config.value
+          if (value == 'function') {
+            t.config.type = 'code'
+          }
+          if (value == 'normal') {
+            let type = data.editType || data.type
+            if (['select', 'date', 'string', 'input'].includes(type)) {
+              t.config.type = type
+            } else {
+              t.config.type = 'string' //
+            }
+          }
+        },
       },
       {
         field: 'itemChange',
@@ -76,7 +100,7 @@ export const getDFConfig = (_this, data) => {
       },
       {
         label: '编辑类型',
-        field: 'editType',
+        field: 'editType', //
         type: 'select',
         options: {
           options: getAllColTypes(),

@@ -12,7 +12,6 @@ export default defineComponent({
     params: Object,
   },
   setup(props) {
-    const data = props.data
     const params = props.params
     const formitem: FormItem = params.formitem
     const bindConfig = computed(() => {
@@ -21,7 +20,7 @@ export default defineComponent({
     })
     return () => {
       let com = (
-        <div class='w-full'>
+        <div class="w-full">
           <SelectCom {...bindConfig.value}></SelectCom>
         </div>
       )

@@ -11,6 +11,7 @@ export class Select extends Base {
     this.config = config //
   }
   getModelValue() {
+    //
     let searchValue = this.searchValue
     let showSearchValue = this.showSearchValue
     if (searchValue.length > 0 || showSearchValue) {

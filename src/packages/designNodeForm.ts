@@ -215,7 +215,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
           options: {
             //
             showTable: true,
-            showSerialNumber: true, //
+            showRowSeriesNumber: true, //
             buttons: [
               {
                 label: '新增',
@@ -248,7 +248,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
                 type: 'string',
                 editType: 'string',
               },
-            ],
+            ], //
           },
         },
         {
@@ -260,7 +260,9 @@ export const formitemTypeMap = (_this: PageDesign) => {
       data: computed(() => {
         let _d = _this.state.selected?.options || {} //
         // debugger//
-        _d['_items_get'] = () => _this.state.selected.columns
+        _d['_items_get'] = () => {
+          return _this.state.selected.columns
+        }
         _d['_items_set'] = (v) => {} //
         return _d //
       }),
