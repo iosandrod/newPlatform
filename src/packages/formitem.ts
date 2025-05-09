@@ -70,7 +70,7 @@ export class FormItem extends Base {
       if (typeof dv == 'function') {
         dv(value) //
       } else {
-        data[field] = value
+        data[field] = value //
       }
       let itemChange = this.getItemChange()
       if (typeof itemChange == 'function') {
