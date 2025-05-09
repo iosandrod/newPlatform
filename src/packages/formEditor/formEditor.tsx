@@ -223,7 +223,7 @@ export default defineComponent({
     //   setData,
     //   getData,
     // })
-    expose({ _instance: formIns }) ////
+    expose({ _instance: formIns, validate: formIns.validate.bind(formIns) }) ////
     const handleOperation = (type, val?: any) => {
       switch (type) {
         case 1:

@@ -22,7 +22,7 @@ import {
   createGlobalConfig,
   fieldsConfig,
 } from './formEditor/componentsConfig'
-import _ from 'lodash'
+import _, { reject } from 'lodash'
 import utils from '@ER/utils'
 import generatorData from './formEditor/generatorData'
 import { Node } from './formEditor/node'
@@ -436,7 +436,6 @@ export class Form extends Base {
       let form: VxeFormInstance = this.getRef('form')
       // let items = form.getItems()
       form.validate((err) => {
-        console.log(err, 'testErr') //
         let _arr = Object.values(err)
         if (_arr.length == 0) {
           resolve(true) //
@@ -460,8 +459,6 @@ export class Form extends Base {
           })
         reject('校验出错') //
       }) //
-    }).catch((err) => {
-      console.log(err, '报错了') //
     })
   }
   getPluginName() {

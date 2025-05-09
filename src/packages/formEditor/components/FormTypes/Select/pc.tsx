@@ -20,7 +20,7 @@ export default defineComponent({
     })
     return () => {
       let com = (
-        <div class="w-full">
+        <div class="w-full overflow-hidden">
           <SelectCom {...bindConfig.value}></SelectCom>
         </div>
       )

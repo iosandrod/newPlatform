@@ -630,6 +630,25 @@ export class System extends Base {
     let http = this.getHttp()
     await http.patch('columns', col) //
   }
+  async createCaptcha(k: string) {
+    if (k == null) {
+      return
+    } //
+    let http = await this.getHttp()
+    let code = http.create('captcha', k) //
+    return code //
+  }
+  async registerUser(data) {
+    try {
+      let http = this.getHttp() //
+      let _res = await http.create('users', data) //
+      let row = _res[0] //
+      return row //
+    } catch (error) {
+      const message = error.message || ''
+      this.confirmMessage(`注册失败,${message}`, 'error') //
+    }
+  }
 }
 
 export const system = reactive(new System()) //

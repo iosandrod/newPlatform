@@ -35,6 +35,8 @@ import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+import formCom from '@ER/formCom'
+import formEditor from '@ER/formEditor/formEditor'
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -66,7 +68,7 @@ Locale.use('en-US', enUS)
 app.use(Vant)
 app.component('erButton', buttonCom)
 app.component('erButtonGroup', buttonGroupCom)
-app.component('erForm', erFormEditor) //
+app.component('erForm', formEditor) ///
 app.component('erTable', tableCom) //
 app.component('erDropdown', dropdownCom)
 app.component('erSelect', selectCom) //
@@ -76,3 +78,4 @@ app.use(VxeUIAll)
 app.use(router)
 app.use(elementPlus) //
 app.mount('#app')
+//

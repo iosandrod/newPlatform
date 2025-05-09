@@ -40,6 +40,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/pages/login/companyLogin'),
   },
   {
+    path: '/companyRegister',
+    name: 'companyRegister',
+    component: () => import('@/pages/login/companyRegister'),
+  },
+  {
     path: '/config',
     name: 'config', //
     meta: {

@@ -193,7 +193,7 @@ export class myHttp {
     })
     return data //
   }
-  async create(tableName, data) {
+  async create(tableName, data = {}) {
     let _res = await this.post(tableName, 'create', data)
     let _system = system
     _system.confirmMessage('新建成功') //

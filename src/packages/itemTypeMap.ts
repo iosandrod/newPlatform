@@ -18,7 +18,7 @@ export const defaultType = (item: FormItem): any => {
 }
 export const inputType = (item: FormItem) => {
   let obj = defaultType(item)
-  let password = item.config.password
+  let password = item.getOptions()?.password
   if (password) {
     obj.type = 'password' //
   }

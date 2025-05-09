@@ -162,10 +162,10 @@ export default defineComponent({
     if (fIns.dTableName == null) {
       fIns.dTableName = tableName //
     }
-    onUnmounted(() => {
+    onUnmounted(() => { 
       fIns.onUnmounted() //
-    }) //
-    expose({ _instance: fIns }) //
+    }) ////
+    expose({ _instance: fIns, validate: fIns.validate.bind(fIns) }) //
     const registerContext = (el) => {
       fIns.registerRef('contextMenu', el) //
     }
