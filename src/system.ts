@@ -651,12 +651,15 @@ export class System extends Base {
   }
   async loginUser(data) {
     try {
+      //
       let http = this.getHttp() //
-      data.strategy = 'local' //
-      // let _res=await http
-      let _res = await http.create('authentication', data)
-      console.log(_res, 'testRes') //
-    } catch (error) {}
+      data.strategy = 'local' ////
+      let _res = await http.client.authenticate(data) //
+      this.confirmMessage('登录成功') //
+      return _res ////
+    } catch (error) {
+      this.confirmMessage(`登录失败,${error?.message}`, 'error') //
+    }
   }
 }
 

@@ -29,26 +29,26 @@ export const createClient = (config) => {
       }, //
     ],
   })
-  app.use('users', app.service('users'), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
-  })
-  app.use('navs', app.service('navs'), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
-  })
-  app.use('entity', app.service('entity'), {
-    methods: [
-      'find',
-      'get',
-      'create',
-      'patch',
-      'remove',
-      'update',
-      'getDefaultPageLayout',
-    ],
-  }) //
-  app.use('company', app.service('company'), {
-    methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
-  })
+  // app.use('users', app.service('users'), {
+  //   methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
+  // })
+  // app.use('navs', app.service('navs'), {
+  //   methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
+  // })
+  // app.use('entity', app.service('entity'), {
+  //   methods: [
+  //     'find',
+  //     'get',
+  //     'create',
+  //     'patch',
+  //     'remove',
+  //     'update',
+  //     'getDefaultPageLayout',
+  //   ],
+  // }) //
+  // app.use('company', app.service('company'), {
+  //   methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
+  // })
   return app //
 }
 let token =
