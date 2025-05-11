@@ -1089,6 +1089,14 @@ export class Column extends Base {
     }
     return frozen
   }
+  getHidden() {
+    let config = this.config
+    let hidden = config.hidden
+    if (hidden == true) {
+      return true
+    }
+    return false //
+  }
   getIsRightFrozen() {
     let frozen = this.config.frozen
     if (frozen == 'right') {

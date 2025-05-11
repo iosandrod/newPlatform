@@ -10,46 +10,37 @@ export default defineComponent({
     dialogCom, //
   },
   setup() {
-    // provide('globalConfig', globalConfig)
-    // provide('systemIns', system) //
-    // let diaArr = computed(() => {
-    //   let arr = system.getAllDialog()
-    //   return arr
-    // })
-    // document.addEventListener('mousemove', (e) => {
-    //   let clientX = e.clientX
-    //   let clientY = e.clientY
-    //   system.mouseConfig.clientX = clientX
-    //   system.mouseConfig.clientY = clientY //
-    // })
-    // return () => {
-    //   //
-    //   let dArr = diaArr.value.map((d) => {
-    //     return <dialogCom dialogIns={d}></dialogCom>
-    //   })
-    //   let com = <RouterView></RouterView>
-    //   return (
-    //     <div
-    //       style={{
-    //         height: '100vh',
-    //         width: '100vw',
-    //         overflow: 'hidden', //
-    //       }}
-    //     >
-    //       {com}
-    //       {dArr}
-    //     </div>
-    //   )
-    // }
-    return () => (
-      <div
-        style={{
-          height: '100vh',
-          width: '100vw',
-        }}
-      >
-        <div class="h-full w-full bg-black"></div>
-      </div>
-    )
+    provide('globalConfig', globalConfig)
+    provide('systemIns', system) //
+    let diaArr = computed(() => {
+      let arr = system.getAllDialog()
+      return arr
+    })
+    document.addEventListener('mousemove', (e) => {
+      let clientX = e.clientX
+      let clientY = e.clientY
+      system.mouseConfig.clientX = clientX
+      system.mouseConfig.clientY = clientY //
+    })
+    return () => {
+      //
+      let dArr = diaArr.value.map((d) => {
+        return <dialogCom dialogIns={d}></dialogCom>
+      })
+      let com = <RouterView></RouterView>
+      return (
+        <div
+          style={{
+            height: '100vh',
+            width: '100vw',
+            overflow: 'hidden', //
+          }}
+        >
+          {com}
+          {dArr}
+        </div>
+      )
+    }
+   
   },
 })

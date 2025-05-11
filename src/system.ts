@@ -64,7 +64,7 @@ export class System extends Base {
       {
         label: '表格', //
       },
-    ] //
+    ]
   }
   openPageDesign(config) {} //
   // async getDefaultPageLayout(name?: string) {

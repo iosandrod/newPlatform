@@ -2707,3 +2707,30 @@ const app = createApp({
       }, //
     ],
   })
+
+   return () => (
+      <div
+        style={{
+          height: '100vh',
+          width: '100vw',
+        }}
+      >
+        <div class="w-full h-full bg-black"></div>
+      </div>
+    )
+
+
+     // let _res = await systemIns.createPageEditDesign('t_SdOrder') //
+                        // systemIns.openDialog({
+                        //   title: '编辑页面',
+                        //   width: '1000px',
+                        //   height: '500px', //b
+                        //   createFn: () => {
+                        //     return {
+                        //       component: pageCom,
+                        //       props: {
+                        //         formIns: _res,
+                        //       }, //
+                        //     }//
+                        //   },
+                        // })

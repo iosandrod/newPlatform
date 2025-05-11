@@ -23,12 +23,14 @@ export default defineComponent({
       type: [String, Function] as PropType<VxePulldownPropTypes.ClassName>,
       default: getConfig().pulldown.className,
     },
-    popupClassName: [String, Function] as PropType<VxePulldownPropTypes.PopupClassName>,
+    popupClassName: [String, Function] as PropType<
+      VxePulldownPropTypes.PopupClassName
+    >,
     showPopupShadow: Boolean as PropType<VxePulldownPropTypes.ShowPopupShadow>,
     destroyOnClose: {
       type: Boolean as PropType<VxePulldownPropTypes.DestroyOnClose>,
       // default: getConfig().pulldown.destroyOnClose,
-      default : true//
+      default: true, //
     },
     transfer: {
       type: Boolean as PropType<VxePulldownPropTypes.Transfer>,
@@ -37,10 +39,13 @@ export default defineComponent({
     hiddenBefore: {
       type: Function,
     },
+    dropMode: {
+      type: String,
+    },
   },
   setup(props, { slots, emit, attrs, expose }) {
     const drop = new Dropdown(props)
-    expose(drop)
+    expose({ _instance: drop })
     return () => {
       let com = (
         <Pulldown
@@ -51,12 +56,46 @@ export default defineComponent({
           modelValue={drop.getModelValue()} //
           v-slots={{
             default: () => {
-              let com = slots.default({ dropdown: drop })
+              let dc = slots?.default({ dropdown: drop }) || null
+              let com = null
+              if (props.dropMode == 'hover') {
+                com = (
+                  <div
+                    onMouseenter={(e) => {
+                      drop.showDropdown() //
+                    }}
+                  >
+                    {dc}
+                  </div>
+                )
+              }
+              if (props.dropMode == 'click') {
+                com = <div>{dc}</div>
+              }
+              if (props.dropMode == null) {
+                com = <div>{dc}</div>
+              }
               return com
             },
             dropdown: () => {
               let com = slots?.dropdown({ dropdown: drop }) || null
-              return com //
+              let com1 = null
+              if (props.dropMode == 'hover') {
+                com1 = (
+                  <div
+                    onMouseleave={(e) => {
+                      drop.closeDropdown() //
+                    }}
+                  >
+                    {com}
+                  </div>
+                )
+              }
+              if (props.dropMode != 'hover') {
+                com1 = <div>{com}</div>
+              }
+              // return <div>{com}</div> //
+              return com1 //
             },
           }} //
           onVisibleChange={(v) => drop.onVisibleChange(v)} //

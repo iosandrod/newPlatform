@@ -25,3 +25,34 @@
     padding-right: #{$i}px;
   }
 }
+@for $i from 1 through 2000 {
+  .pt-#{$i} {
+    padding-top: #{$i}px;
+  }
+}
+@for $i from 1 through 2000 {
+  .pb-#{$i} {
+    padding-bottom: #{$i}px;
+  }
+}
+
+@for $i from 1 through 2000 {
+  .ml-#{$i} {
+    margin-left: #{$i}px;
+  }
+}
+@for $i from 1 through 2000 {
+  .mr-#{$i} {
+    margin-right: #{$i}px;
+  }
+}
+@for $i from 1 through 2000 {
+  .mt-#{$i} {
+    margin-top: #{$i}px;
+  }
+}
+@for $i from 1 through 2000 {
+  .mb-#{$i} {
+    margin-bottom: #{$i}px;
+  }
+}

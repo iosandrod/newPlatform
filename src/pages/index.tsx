@@ -12,7 +12,7 @@ import PageCom from '@ER/pageCom'
 import { tableConfig } from '@/table/tableData'
 import { PageDesign } from '@ER/pageDesign'
 import pageCom from '@ER/pageCom'
-import _header from './pageHeader.vue'
+import _header from './pageHeader'
 export default defineComponent({
   components: {
     erForm,
@@ -133,20 +133,6 @@ export default defineComponent({
                     {
                       label: '进入编辑页面',
                       fn: async () => {
-                        // let _res = await systemIns.createPageEditDesign('t_SdOrder') //
-                        // systemIns.openDialog({
-                        //   title: '编辑页面',
-                        //   width: '1000px',
-                        //   height: '500px', //b
-                        //   createFn: () => {
-                        //     return {
-                        //       component: pageCom,
-                        //       props: {
-                        //         formIns: _res,
-                        //       }, //
-                        //     }//
-                        //   },
-                        // })
                         systemIns.routeOpen('t_SdOrder---edit') //
                       },
                     },
