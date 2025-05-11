@@ -13,10 +13,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'home',
-        name: 'home',
-        // meta: {
-        //   view: 'blank',
-        // },
+        name: 'home', //
         component: () => import('@/pages/home/Home'),
       },
       {
@@ -43,14 +40,6 @@ const routes: RouteRecordRaw[] = [
     path: '/companyRegister',
     name: 'companyRegister',
     component: () => import('@/pages/login/companyRegister'),
-  },
-  {
-    path: '/config',
-    name: 'config', //
-    meta: {
-      view: 'blank',
-    },
-    component: () => import('@/pages/home/Config1'),
   },
 ]
 

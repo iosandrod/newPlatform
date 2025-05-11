@@ -14,6 +14,7 @@ import tableCom from './table/tableCom'
 import { VxeUI } from 'vxe-pc-ui'
 import { getDFConfig } from './table/colFConfig'
 export class System extends Base {
+  allApp: any = [] //
   mouseConfig = {
     clientX: 0,
     clientY: 0,
@@ -25,6 +26,7 @@ export class System extends Base {
       items: [],
     },
   } //
+  loginInfo = null
   pageLayout = [] //
   selectOptions = {}
   dialogArr: Dialog[] = []
@@ -33,10 +35,13 @@ export class System extends Base {
   async login() {}
   @cacheValue() //
   async getMenuData() {
-    let client = this.getClient()
-    let d = await client.get('navs', 'find') ////
+    let client = this.getClient() //
+    let d = await client.find('navs') //
     this.systemConfig.menuConfig.items = d //
     return d //
+  }
+  init() {
+    super.init() //
   }
   getCurrentShowPage() {}
   buildMenuTree(rows) {}
@@ -52,7 +57,6 @@ export class System extends Base {
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap) //
-    console.log(allT, 'testAllT') //
     return [
       {
         label: '首页',
@@ -636,6 +640,8 @@ export class System extends Base {
     } //
     let http = await this.getHttp()
     let code = http.create('captcha', k) //
+    let _system = this
+    _system.confirmMessage('获取验证码成功', 'success') //
     return code //
   }
   async registerUser(data) {
@@ -650,16 +656,52 @@ export class System extends Base {
     }
   }
   async loginUser(data) {
+    let h = this.getHttp()
+    let _res = await h.loginUser(data) //
+    return _res
+  }
+  getAllApp() {
+    //使用mock数据//
+    let data = [
+      {
+        name: 'erp',
+        image: '', //
+      },
+    ]
+    return data //
+  }
+  //安装app
+  async installApp(name) {
     try {
-      //
       let http = this.getHttp() //
-      data.strategy = 'local' ////
-      let _res = await http.client.authenticate(data) //
-      this.confirmMessage('登录成功') //
-      return _res ////
+      await http.create('company', { appName: name }) //
     } catch (error) {
-      this.confirmMessage(`登录失败,${error?.message}`, 'error') //
+      this.confirmErrorMessage('安装失败') //
     }
+  }
+  confirmErrorMessage(content) {
+    if (typeof content != 'string') {
+      //
+      return
+    }
+    this.confirmMessage(content, 'error')
+  }
+  async getAllApps() {
+    let userInfo = this.getUserInfo()
+    let user = userInfo.user
+    let id = user.id
+    let allCompany = await this.getHttp().find('company', {
+      userid: id,
+    })
+    this.allApp = allCompany //
+  }
+  getUserInfo() {
+    let loginInfo = this.loginInfo //
+    return loginInfo
+  }
+  enterApp(name) {
+    ////
+    window.open('localhost:3004') //
   }
 }
 

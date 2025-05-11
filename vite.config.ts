@@ -33,11 +33,11 @@ export default ({ command, mode }) => {
 
   return defineConfig({
     server: {
-      port: 3003,
+      port: Number(process.env.VITE_PORT) || 3003,
       hmr: true,
     },
     define: {
-      'process.env': {}
+      'process.env': {},
     },
     resolve: {
       alias: [

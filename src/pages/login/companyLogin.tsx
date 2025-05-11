@@ -8,6 +8,7 @@ export default defineComponent({
       loginType: 'email', //
       email: '1151685410@qq.com',
       password: '1',
+      _unUseCaptcha: true,
     })
     let loginFConfig = {
       data: data,
@@ -49,7 +50,7 @@ export default defineComponent({
           field: '_captcha',
           label: '验证码',
           type: 'string',
-          required: true, //
+          // required: true, //
         },
       ],
       itemSpan: 24,
@@ -74,7 +75,6 @@ export default defineComponent({
           await _f.validate() //
           let _data = data
           let _res = await system.loginUser(_data)
-          console.log(_res, 'test_res') //
         },
       },
       {

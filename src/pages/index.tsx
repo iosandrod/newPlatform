@@ -12,6 +12,7 @@ import PageCom from '@ER/pageCom'
 import { tableConfig } from '@/table/tableData'
 import { PageDesign } from '@ER/pageDesign'
 import pageCom from '@ER/pageCom'
+import _header from './pageHeader.vue'
 export default defineComponent({
   components: {
     erForm,
@@ -20,6 +21,7 @@ export default defineComponent({
     menuCom,
     fieldCom, //
     tabCom,
+    _header,
   },
   setup() {
     const systemIns = system //
@@ -84,93 +86,96 @@ export default defineComponent({
           }}
         ></tabCom>
       )
-
+      let pageHeader = <_header></_header>
       return (
         <div
-          class={ns.b()}
+          class={[ns.b(), 'flex-col']}
           style={{ display: 'flex', width: '100vw', height: '100vh' }}
         >
-          <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
-          <div class="flex flex-col flex-1 h-full ">
-            <div class="w-full bg-white tab-line">{tableTab}</div>
-            <div class="" style={{ height: '30px' }}>
-              <er-button-group
-                items={[
-                  {
-                    label: '当前真实表设计',
-                    fn: async () => {
-                      let currentPage = systemIns.getCurrentPageDesign()
-                      let rTName = currentPage.getRealTableName()
-                      await system.designTableColumns(rTName) //
+          {pageHeader}
+          <div class="h-full w-full flex flex-row">
+            <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
+            <div class="flex flex-col flex-1 h-full ">
+              <div class="w-full bg-white tab-line">{tableTab}</div>
+              <div class="" style={{ height: '30px' }}>
+                <er-button-group
+                  items={[
+                    {
+                      label: '当前真实表设计',
+                      fn: async () => {
+                        let currentPage = systemIns.getCurrentPageDesign()
+                        let rTName = currentPage.getRealTableName()
+                        await system.designTableColumns(rTName) //
+                      },
                     },
-                  },
-                  //
-                  {
-                    label: '进入设计', //
-                    fn: async () => {
-                      let currentPage = systemIns.getCurrentPageDesign()
-                      currentPage.setCurrentDesign(true) //
+                    //
+                    {
+                      label: '进入设计', //
+                      fn: async () => {
+                        let currentPage = systemIns.getCurrentPageDesign()
+                        currentPage.setCurrentDesign(true) //
+                      },
                     },
-                  },
-                  {
-                    label: '离开设计',
-                    fn: async () => {
-                      let cp = systemIns.getCurrentPageDesign()
-                      cp.setCurrentDesign(false) //
+                    {
+                      label: '离开设计',
+                      fn: async () => {
+                        let cp = systemIns.getCurrentPageDesign()
+                        cp.setCurrentDesign(false) //
+                      },
                     },
-                  },
-                  {
-                    label: '保存设计',
-                    fn: async () => {
-                      let currentPage = systemIns.getCurrentPageDesign()
-                      currentPage.saveTableDesign()
+                    {
+                      label: '保存设计',
+                      fn: async () => {
+                        let currentPage = systemIns.getCurrentPageDesign()
+                        currentPage.saveTableDesign()
+                      },
                     },
-                  },
-                  {
-                    label: '进入编辑页面',
-                    fn: async () => {
-                      // let _res = await systemIns.createPageEditDesign('t_SdOrder') //
-                      // systemIns.openDialog({
-                      //   title: '编辑页面',
-                      //   width: '1000px',
-                      //   height: '500px', //b
-                      //   createFn: () => {
-                      //     return {
-                      //       component: pageCom,
-                      //       props: {
-                      //         formIns: _res,
-                      //       }, //
-                      //     }//
-                      //   },
-                      // })
-                      systemIns.routeOpen('t_SdOrder---edit') //
+                    {
+                      label: '进入编辑页面',
+                      fn: async () => {
+                        // let _res = await systemIns.createPageEditDesign('t_SdOrder') //
+                        // systemIns.openDialog({
+                        //   title: '编辑页面',
+                        //   width: '1000px',
+                        //   height: '500px', //b
+                        //   createFn: () => {
+                        //     return {
+                        //       component: pageCom,
+                        //       props: {
+                        //         formIns: _res,
+                        //       }, //
+                        //     }//
+                        //   },
+                        // })
+                        systemIns.routeOpen('t_SdOrder---edit') //
+                      },
                     },
-                  },
-                  {
-                    label: '打印layout',
-                    fn: async () => {
-                      let currentPage = systemIns.getCurrentPageDesign()
-                      let layout = currentPage.getLayoutData()
-                      console.log(layout) //
-                      console.log(currentPage, 'testPage') //
+                    {
+                      label: '打印layout',
+                      fn: async () => {
+                        let currentPage = systemIns.getCurrentPageDesign()
+                        let layout = currentPage.getLayoutData()
+                        console.log(layout) //
+                        console.log(currentPage, 'testPage') //
+                      },
                     },
-                  },
-                ]}
-              ></er-button-group>
-            </div>
-            <div class="w-full h-full overflow-hidden">
-              <router-view
-                v-slots={{
-                  default: (config) => {
-                    const { Component, route } = config
-                    if (!Component) {
-                      return <div></div>
-                    }
-                    const FullPath = route.fullPath //
-                    return <Component key={FullPath} />
-                  },
-                }}
-              ></router-view>
+                  ]}
+                ></er-button-group>
+              </div>
+              <div class="w-full h-full overflow-hidden">
+                <router-view
+                  v-slots={{
+                    default: (config) => {
+                      const { Component, route } = config
+                      if (!Component) {
+                        return <div></div>
+                      }
+                      const FullPath = route.fullPath //
+                      return <Component key={FullPath} />
+                    },
+                  }}
+                ></router-view>
+              </div>
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:erp": "cross-env VITE_PORT=3004 vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
@@ -66,7 +67,6 @@
     "workerpool": "^9.2.0"
   },
   "devDependencies": {
-    "@tailwindcss/container-queries": "^0.1.0",
     "@types/dat.gui": "^0.7.10",
     "@types/howler": "^2.2.7",
     "@types/js-cookie": "^3.0.2",
@@ -94,7 +94,7 @@
     "postcss": "^8.4.14",
     "prettier": "^2.8.7",
     "sass": "^1.63.4",
-    "tailwindcss": "^3.2.4",
+    "tailwindcss": "^4.1.6",
     "typescript": "^5.0.2",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.3.9",

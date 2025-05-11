@@ -1,62 +1,138 @@
 import io from 'socket.io-client'
 import socketio from '@feathersjs/socketio-client'
-import { feathers } from '@feathersjs/feathers'
-import auth from '@feathersjs/authentication-client'
+import { feathers, Params } from '@feathersjs/feathers'
+import auth, {
+  AuthenticationClient,
+  AuthenticationClientOptions,
+  getDefaultStorage,
+} from '@feathersjs/authentication-client'
 import { system } from '@/system'
+import * as hooks from '@feathersjs/authentication-client/src/hooks/index'
+import {
+  AuthenticationRequest,
+  AuthenticationResult,
+} from '@feathersjs/authentication'
+export const defaultStorage: any = getDefaultStorage()
+const defaults: AuthenticationClientOptions = {
+  header: 'Authorization',
+  scheme: 'Bearer',
+  storageKey: 'feathers-jwt',
+  locationKey: 'access_token',
+  locationErrorKey: 'error',
+  jwtStrategy: 'jwt',
+  path: '/authentication',
+  Authentication: AuthenticationClient,
+  storage: defaultStorage,
+}
+class myAuth extends AuthenticationClient {
+  constructor(app: any, op: any) {
+    super(app, op)
+  }
+  authenticate(
+    authentication?: AuthenticationRequest,
+    params?: Params,
+  ): Promise<AuthenticationResult> {
+    if (!authentication) {
+      return this.reAuthenticate()
+    }
+    const promise = this.service
+      .create(authentication, params)
+      .then((_authResult: AuthenticationResult) => {
+        let authResult = _authResult.data //
+        const { accessToken } = authResult
+        this.authenticated = true
+        this.app.emit('login', authResult)
+        this.app.emit('authenticated', authResult)
+
+        return this.setAccessToken(accessToken).then(() => authResult)
+      })
+      .catch((error: any) => this.handleError(error, 'authenticate'))
+    this.app.set('authentication', promise)
+    return promise
+  }
+}
+const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
+  const options: AuthenticationClientOptions = Object.assign(
+    {},
+    defaults,
+    _options,
+  )
+  return (app: any) => {
+    const authentication = new myAuth(app, options)
+
+    app.authentication = authentication
+    app.authenticate = authentication.authenticate.bind(authentication)
+    app.reAuthenticate = authentication.reAuthenticate.bind(authentication)
+    app.logout = authentication.logout.bind(authentication)
+
+    app.hooks([hooks.authentication(), hooks.populateHeader()])
+  }
+}
 export class Client {}
 //
 export type createConfig = {}
 export const createClient = (config) => {
-  const socket = io('http://localhost:3031', {
+  let port = location.port
+  console.log(port, 'testPort') //
+  let _host = `http://localhost:3031`
+  if (port == '3004') {
+    _host = `${_host}/erp_1` //
+  }
+  const socket = io(_host, {
     transports: ['websocket'],
   })
   const client = socketio(socket)
   let app = feathers()
   app.configure(client)
   app.set('connection', socket)
-  app.configure(auth())
-  app.hooks({
-    // all: [
-    //   async (context, next) => {
-    //     console.log('这个是钩子') //
-    //     await next()
-    //   },
-    // ],
-    around: [
-      async (context, next) => {
-        console.log('这个是环绕钩子') //
-        await next()
-      }, //
-    ],
-  })
-  // app.use('users', app.service('users'), {
-  //   methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
-  // })
-  // app.use('navs', app.service('navs'), {
-  //   methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
-  // })
-  // app.use('entity', app.service('entity'), {
-  //   methods: [
-  //     'find',
-  //     'get',
-  //     'create',
-  //     'patch',
-  //     'remove',
-  //     'update',
-  //     'getDefaultPageLayout',
-  //   ],
-  // }) //
-  // app.use('company', app.service('company'), {
-  //   methods: ['find', 'get', 'create', 'patch', 'remove', 'update'], //
-  // })
+  app.configure(init())//
+
   return app //
 }
-let token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE3NDU5MjUzMzEsImV4cCI6MTc0NjAxMTczMSwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjEiLCJqdGkiOiJhOTYyM2ZlOS04NTQ5LTQxNWMtOTc5NS1iYTFiMmYyZjdjOGEifQ.SgpYPmb7Cuh_EKXn8IGOiFEUVN3atSguCnoxgIRi3rQ'
 export const client = createClient({})
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
+  constructor() {
+    this.init() //
+  }
+  async init() {
+    let token = localStorage.getItem('feathers-jwt')
+    if (token) {
+      try {
+        let res = await this.client.authenticate({
+          strategy: 'jwt',
+          accessToken: token, //
+          _unUseCaptcha: true,
+        }) //
+        system.loginInfo = res //
+        return res
+      } catch (error) {
+        console.error(error, '登录失败') //
+        localStorage.removeItem('feathers-jwt') //
+      }
+    }
+  }
+  async loginUser(data) {
+    try {
+      //
+      let http = this
+      data.strategy = 'local' ////
+      let _res = await http.client.authenticate(data) //
+      system.loginInfo = _res //
+      // console.log(_res, 'testRes') //
+      system.confirmMessage('登录成功') //
+      let router = system.getRouter()
+      router.push('/home') //
+      return _res ////
+    } catch (error) {
+      system.confirmMessage(`登录失败,${error?.message}`, 'error') //
+    }
+  }
+  redirectToLogin() {
+    let router = system.getRouter()
+    router.push('/companyLogin') //
+  }
   async post(tableName, method, params = {}, query = {}): Promise<any> {
     let connection = this.client.get('connection')
     return new Promise((resolve, reject) => {
@@ -64,7 +140,7 @@ export class myHttp {
         method, //
         tableName,
         params,
-        {},
+        query,
         (data, err) => {
           let isError = false
           let error = null //
@@ -83,8 +159,9 @@ export class myHttp {
               if (data?.code == '401') {
                 isError = true
                 error = data
+                system.confirmMessage('登录信息无效', 'error') //
+                this.redirectToLogin() //
               } else {
-                // _data = data?.data || {}
                 error = data //
               }
             }
@@ -195,8 +272,6 @@ export class myHttp {
   }
   async create(tableName, data = {}) {
     let _res = await this.post(tableName, 'create', data)
-    let _system = system
-    _system.confirmMessage('新建成功') //
     return _res //
   } //
 }

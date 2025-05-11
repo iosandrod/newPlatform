@@ -1,4 +1,4 @@
-import { defineComponent, provide } from 'vue'
+import { computed, defineComponent, provide } from 'vue'
 import erForm from '@ER/formCom'
 import erFormEditor from '@ER/formEditor/formEditor'
 import tableEditor from '@/table/tableCom'
@@ -9,6 +9,8 @@ import { fieldsConfig } from '@ER/formEditor/componentsConfig'
 import { system } from '@/system'
 import tabCom from '@/buttonGroup/tabCom'
 import PageCom from '@ER/pageCom'
+import ButtonCom from '@/buttonGroup/buttonCom'
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 export default defineComponent({
   components: {
     erForm,
@@ -17,6 +19,7 @@ export default defineComponent({
     menuCom,
     fieldCom, //
     tabCom,
+    ButtonCom,
   },
   setup() {
     const systemIns = system //
@@ -25,15 +28,48 @@ export default defineComponent({
     }
     const ns = systemIns.hooks.useNamespace('Home')
     const fn = async () => {
-      let menuData = await systemIns.getMenuData()
-      let menuData1 = await systemIns.getMenuData() //
+      systemIns.getAllApps()
     }
-    fn()
-    provide('systemIns', systemIns) //
+    fn() //
+    let appV = computed(() => {
+      let arr = systemIns.allApp
+      return arr
+    })
     return () => {
-      //
-      return <div>home</div>
-    }
-  
+      let appArr = appV.value.map((app) => {
+        //
+        const controllerBtns = [
+          {
+            label: '安装',
+            fn: () => {
+              systemIns.installApp(app.name) //
+            },
+          },
+          {
+            label: '进入',
+            fn: () => {
+              systemIns.enterApp(app.name)
+            },
+          },
+        ]
+        let _com = (
+          <div class="app-card">
+            <div
+              class="app-thumbnail"
+              // style="background-image: url('thumb1.jpg');"
+            ></div>
+            <div class="app-info">
+              <div class="app-title">{app.name}</div>
+              <div class="app-meta">下载次数：3</div>
+            </div>
+            <div class="flex flex-row items-center justify-center">
+              <ButtonGroupCom items={controllerBtns}></ButtonGroupCom>
+            </div>
+          </div>
+        )
+        return _com
+      })
+      return <div class="app-container">{appArr}</div>
+    } //
   },
 })

@@ -2698,3 +2698,12 @@ const app = createApp({
     //     </div>
     //   )
     // }
+
+     app.hooks({
+    around: [
+      async (context, next) => {
+        console.log('这个是环绕钩子') //
+        await next()
+      }, //
+    ],
+  })
