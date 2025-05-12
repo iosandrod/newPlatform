@@ -53,6 +53,7 @@ import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
 export class Table extends Base {
+  treeConfig: any = null
   scrollRowInteral: any
   scrollRowSpeed: number = 0
   scrollRowSpeed1: number = 0
@@ -201,7 +202,7 @@ export class Table extends Base {
     super.init() //
     let config = this.config
     let columns = config.columns || []
-    let data = config.data || []
+    let data = config.data || [] //
     this.setData(data)
     this.setColumns(columns) //
     this.initSortState()
@@ -577,6 +578,23 @@ export class Table extends Base {
     }
     instance.updateColumns(_columns) ////
   }
+  getTreeRecords(re?: any[]) {
+    let ins = this.getInstance()
+    let records = re || ins.records || []
+    let _arr = records.map((r) => {
+      let children = r?.['children'] || []
+      if (children && children.length > 0) {
+        let _m = children
+          .map((c) => {
+            return this.getTreeRecords([c])
+          })
+          .flat()
+        return [r, ..._m]
+      }
+      return [r] //
+    })
+    return _arr.flat()
+  }
   @useTimeout({
     number: 200, ////
     key: 'updateRecords',
@@ -586,7 +604,7 @@ export class Table extends Base {
     let tableIns = this
     let _arr = []
     let _iArr = []
-    let records = tableIns.getInstance()?.records
+    let records = this.getTreeRecords() //
     if (records == null) {
       return //
     }
@@ -606,7 +624,6 @@ export class Table extends Base {
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
       console.time(uuid) //
-      let ins = toRaw(tableIns.getInstance())
       let currentIndexContain = this.currentIndexContain
       let updateKeys = Object.keys(currentIndexContain) //
       let _keys = updateKeys.filter((key) => {
@@ -616,16 +633,16 @@ export class Table extends Base {
       let allContain = _keys.map((key) => {
         return currentIndexContain[key] //
       })
-      let allRowIndex = Object.entries(currentIndexContain).map(
-        ([keys, value]) => {
-          value = value || {} //
-          let _value = Object.values(value).map((row) => row['currentRowIndex'])
-          let _arr1 = _value.filter((v, i) => _value.indexOf(v) == i) //
-          if (_arr1.length == 1) {
-            return _arr1[0]
-          }
-        },
-      )
+      // let allRowIndex = Object.entries(currentIndexContain).map(
+      //   ([keys, value]) => {
+      //     value = value || {} //
+      //     let _value = Object.values(value).map((row) => row['currentRowIndex'])
+      //     let _arr1 = _value.filter((v, i) => _value.indexOf(v) == i) //
+      //     if (_arr1.length == 1) {
+      //       return _arr1[0]
+      //     }
+      //   },
+      // )
       allContain.forEach((cArr) => {
         if (cArr == null) {
           return //
@@ -941,16 +958,74 @@ export class Table extends Base {
       let columns = this.getShowColumns()
       this.templateProps.columns = columns //
     } catch (error) {
-      //
       console.log('加载列出错了')
     }
   } //
+  // filterChildren(children: any[], row: any) {
+  //   let globalValue = this.globalConfig.value
+  //   let _children = children
+  //   if (globalValue.length > 0) {
+  //     _children = _children.filter((v) => {
+  //       let _shtml = v['_shtml'] //
+  //       let reg = new RegExp(globalValue, 'gi') ////
+  //       if (reg.test(_shtml)) {
+  //         this.globalRowSet.add(v['_index'])
+  //         return true
+  //       }
+  //       this.globalRowSet.delete(v['_index']) ////
+  //       return false
+  //     })
+  //   }
+  //   let _data1 = _children
+  //   let sortState = this.sortCache
+  //   let _sortState = toRaw(sortState)
+  //   let sortconfig = _sortState //自定义的排序配置
+  //   //@ts-ignore
+  //   let _data3 = _sortConfig
+  //     ?.reduce((res, item, i) => {
+  //       const field = item.field
+  //       const type = item.type
+  //       let order = item.order
+  //       const colType: string = 'number' //类型//
+  //       const _data4 = combineAdjacentEqualElements(
+  //         res, //
+  //         field,
+  //         i, //
+  //         // colType,
+  //         // type,
+  //         type,
+  //         order,
+  //       )
+  //       return _data4
+  //     }, _data1)
+  //     .flat(sortconfig?.length) //
+  // }
+  filterTreeInPlace(nodes, predicate) {
+    return nodes.filter((node) => {
+      // 先把原始 children 备份到 _children
+      //第一次
+      if (node._children == null) {
+        Object.defineProperty(node, '_children', {
+          value: node.children,
+          enumerable: false,
+          writable: true,
+        })
+      } //
+      // 递归过滤子节点
+      if (Array.isArray(node._children)) {
+        node.children = this.filterTreeInPlace(node._children, predicate)
+      } else {
+        node.children = []
+      }
+      // 如果节点自己匹配，或有匹配的子节点，则保留它
+      return predicate(node) || (node.children && node.children.length > 0)
+    })
+  }
   loadData(loadConfig?: any) {
-    console.log('数据发生了更新') //
     let data = this.getShowData() //
-    let sortState = this.sortCache
     let _data = data
     let _data1 = toRaw(_data)
+    let sortState = this.sortCache
     let _sortState = toRaw(sortState)
     let globalValue = this.globalConfig.value
     let _filterConfig = toRaw(this.columnFilterConfig.filterConfig)
@@ -958,51 +1033,74 @@ export class Table extends Base {
     if (instance == null) {
       return
     }
-    if (globalValue.length > 0) {
-      _data1 = _data1.filter((v) => {
-        let _shtml = v['_shtml'] //
-        let reg = new RegExp(globalValue, 'gi') ////
-        if (reg.test(_shtml)) {
-          this.globalRowSet.add(v['_index'])
-          return true
+    let isTree = this.getIsTree()
+    if (isTree) {
+      //
+      let _data3 = this.filterTreeInPlace(_data1, (node) => {
+        let status = true
+        let globalValue = this.globalConfig.value
+        if (globalValue?.length > 0) {
+          let _shtml = node['_shtml'] //
+          let reg = new RegExp(globalValue, 'gi') ////
+          if (reg.test(_shtml)) {
+            this.globalRowSet.add(node['_index'])
+            status = true
+          } else {
+            status = false
+          }
+          this.globalRowSet.delete(node['_index']) ////
         }
-        this.globalRowSet.delete(v['_index']) ////
-        return false
-      })
-    }
-    const sortconfig = _sortState //自定义的排序配置
-    //@ts-ignore
-    const _sortConfig = sortconfig?.sort((s1, s2) => {
+        return status //
+      }) //
+      this.templateProps.data = _data3 //
+    } else {
+      if (globalValue.length > 0) {
+        _data1 = _data1.filter((v) => {
+          let _shtml = v['_shtml'] //
+          let reg = new RegExp(globalValue, 'gi') ////
+          if (reg.test(_shtml)) {
+            this.globalRowSet.add(v['_index'])
+            return true
+          }
+          this.globalRowSet.delete(v['_index']) ////
+          return false
+        })
+      } //
+      const sortconfig = _sortState //自定义的排序配置
       //@ts-ignore
-      return 0 //
-    })
-    let _data3 = _sortConfig
-      ?.reduce((res, item, i) => {
-        const field = item.field
-        const type = item.type
-        let order = item.order
-        const colType: string = 'number' //类型//
-        const _data4 = combineAdjacentEqualElements(
-          res, //
-          field,
-          i, //
-          // colType,
-          // type,
-          type,
-          order,
-        )
-        return _data4
-      }, _data1)
-      .flat(sortconfig?.length) //
-    if (_filterConfig.length > 0) {
-      for (const { field, indexArr } of _filterConfig) {
-        if (indexArr?.length > 0) {
-          const indexSet = new Set(indexArr)
-          _data3 = _data3.filter((item) => indexSet.has(item[field]))
+      const _sortConfig = sortconfig?.sort((s1, s2) => {
+        //@ts-ignore
+        return 0 //
+      })
+      let _data3 = _sortConfig
+        ?.reduce((res, item, i) => {
+          const field = item.field
+          const type = item.type
+          let order = item.order
+          const colType: string = 'number' //类型//
+          const _data4 = combineAdjacentEqualElements(
+            res, //
+            field,
+            i, //
+            // colType,
+            // type,
+            type,
+            order,
+          )
+          return _data4
+        }, _data1)
+        .flat(sortconfig?.length) //
+      if (_filterConfig.length > 0) {
+        for (const { field, indexArr } of _filterConfig) {
+          if (indexArr?.length > 0) {
+            const indexSet = new Set(indexArr)
+            _data3 = _data3.filter((item) => indexSet.has(item[field]))
+          }
         }
       }
+
+      this.templateProps.data = _data3 //
     }
-    this.templateProps.data = _data3 //
     //@ts-ignore
     nextTick(() => {
       //
@@ -1319,19 +1417,21 @@ export class Table extends Base {
       }
     }) //
     let resRow = this.getShowRecords()
-    if (
-      resRow.every((item) => {
-        return item.checkboxField
-      })
-    ) {
-      this.isCheckAll = true //
-    } else {
-      this.isCheckAll = false //
+    if (resRow.length > 0) {
+      if (
+        resRow.every((item) => {
+          return item.checkboxField
+        })
+      ) {
+        this.isCheckAll = true //
+      } else {
+        this.isCheckAll = false //
+      }
     }
     let allCheck = this.getData().filter((item) => item.checkboxField)
     if (isAllClick == true) {
       this.updateCanvas() //
-    }
+    } //
     this.emit('checkboxChange', {
       allRows: allCheck,
       table: this,
@@ -1663,7 +1763,7 @@ export class Table extends Base {
     let newState = [...sortState]
     this.setSortState(newState)
   }
-  initDataRow(row) {
+  initDataRow(row, i = 0) {
     let e = row
     if (e['_index'] == null) {
       e._index = this.uuid()
@@ -1689,6 +1789,21 @@ export class Table extends Base {
       }) //
     }
     this.dataMap[e._index] = e //
+    let children = e['children']
+    if (i > 0) {
+      Object.defineProperty(e, '_level', {
+        value: i,
+        enumerable: false,
+        writable: true, //
+      })
+    }
+    if (Array.isArray(children) && children.length > 0) {
+      //
+      children.forEach((e) => {
+        let i1 = i + 1
+        this.initDataRow(e, i1) //
+      })
+    } //
   }
   designCurrentColumn() {}
   getCacheContain(row) {}
@@ -1827,6 +1942,17 @@ export class Table extends Base {
       }
     }
   }
+  setTreeTable(config) {
+    //
+    let _config = null
+    let parentId = config?.parentId
+    let id = config?.id
+    if (parentId != null || id != null) {
+      _config = config
+      return
+    }
+    this.treeConfig = _config //
+  }
   scrollInSpeed(type, number) {
     if (number == null || number == 0) {
       return
@@ -1893,4 +2019,31 @@ export class Table extends Base {
       }
     }
   }
+  getIsTree() {
+    let treeConfig = this.treeConfig
+    let id = treeConfig?.id
+    let parentId = treeConfig?.parentId
+    if (id != null || parentId != null) {
+      return true
+    } //
+    return false
+  }
+  openTreeRow(col, row) {
+    //
+    // debugger //
+    let ins = this.getInstance() //
+    let record = ins.getRecordByCell(col, row) //
+    let _expanded = Boolean(record._expanded)
+    let _status = !_expanded
+    // Object.defineProperty(record, {
+    //   _expanded: { value: true, enumerable: _status },
+    // }) //
+    Object.defineProperty(record, '_expanded', {
+      value: _status,
+      enumerable: false,
+      writable: true,
+    }) //
+    ins.toggleHierarchyState(col, row) //
+  }
+  setRowDragAble(status) {}
 }

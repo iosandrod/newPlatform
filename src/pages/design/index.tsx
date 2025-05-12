@@ -21,25 +21,48 @@ export default defineComponent({
     }
     let show = ref(false)
     let _tableName = tableName.split('---')
-    let en = null
+    let l = _tableName.length
+    let en = computed(() => {
+      let map = null
+      if (l == 2) {
+        map = system.tableEditMap
+      } else {
+        map = system.tableMap
+      }
+      return map[tableName]
+    })
     if (_tableName.length == 2) {
       let _tableName1 = _tableName[0]
       tableName = _tableName1 //
       system.createPageEditDesign(tableName).then((res) => {
-        en = res
         show.value = true //
-      })
+      }) //
     } else {
       system.createPageDesign(tableName).then((res) => {
-        en = res
         show.value = true //
       })
     } //
+    let _show = computed(() => {
+      let map = null
+      if (l == 2) {
+        map = system.tableEditMap
+      } else {
+        map = system.tableMap
+      }
+      let obj = map[tableName]
+      if (obj == null) {
+        return false
+      }
+      return true
+    })
     return () => {
       if (show.value == false) {
         return <div>页面加载当中</div>
       }
-      return <PageCom isMainPage isDesign={false} formIns={en}></PageCom>
+      if (_show.value == false) {
+        return <div></div> //
+      }
+      return <PageCom isMainPage isDesign={false} formIns={en.value}></PageCom>
     }
   },
 })

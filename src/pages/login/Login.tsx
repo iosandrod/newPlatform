@@ -3,19 +3,16 @@ import { erFormEditor } from '@ER/formEditor'
 import buttonCom from '@/buttonGroup/buttonCom'
 import tabCom from '@/buttonGroup/tabCom'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
-import d from '../home/d.vue'
 import tableCom from '@/table/tableCom'
-import { tableConfig } from '@/table/tableData' //
+import { menuTConfig, tableConfig } from '@/table/tableData' //
 import dropdownCom from '@/menu/dropdownCom'
 import fieldCom from '@/menu/fieldCom'
 import menuCom from '@/menu/menuCom'
 import { ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
-import testCom from '../home/Simple'
 import { ContextmenuItem } from '@/contextM'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import formCom from '@ER/formCom'
 import FConfigPanel from '@ER/formEditor/components/Panels/Config/components/fConfigPanel'
-import { Simple } from '../home/index copy'
 import pageCom, { getDefaultPageProps } from '@ER/pageCom'
 import SelectCom from '@/select/selectCom'
 import dialogCom from '@/dialog/dialogCom'
@@ -36,17 +33,14 @@ export default defineComponent({
     erFormEditor,
     tabCom,
     buttonGroupCom,
-    d, //
     tableCom,
     dropdownCom,
     fieldCom,
     menuCom,
-    testCom,
     ContextmenuItem,
     ContextmenuCom,
     formCom,
     FConfigPanel,
-    Simple,
     SelectCom,
     dialogCom,
     VxeCheckbox,
@@ -171,26 +165,28 @@ export default defineComponent({
       com = (
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
           <tableCom
-            {...tableConfig}
+            // {...tableConfig}
+            {...menuTConfig}
+            showGlobalSearch={true}
             showHeaderButtons={true}
             // showControllerButtons={true}
-            tableState="edit"
+            // tableState="edit"
           ></tableCom>
         </div>
       ) //
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       })
-      com = (
-        <div class="w-full h-full">
-          <formCom
-            ref={_reg3}
-            isDesign={false}
-            {..._fConfig}
-            data={d1}
-          ></formCom>
-        </div>
-      )
+      // com = (
+      //   <div class="w-full h-full">
+      //     <formCom
+      //       ref={_reg3}
+      //       isDesign={false}
+      //       {..._fConfig}
+      //       data={d1}
+      //     ></formCom>
+      //   </div>
+      // )
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
       // com = <VxeCheckbox

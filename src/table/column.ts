@@ -42,6 +42,7 @@ import { Dialog } from '@/dialog/dialog'
 import CodeEditor from '@/codeEditor/codeEditor'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
+  templateBg: any = null
   isHeaderdown = false
   disableHideCell = false //
   isMousedownRecord = null
@@ -351,16 +352,26 @@ export class Column extends Base {
           //
         }
       }
+      if (value === 0) {
+        value = '0' //
+      }
       return value
     }
     return formatFn
   }
-  getIndexColor(row) {
+  getIndexColor(row, record?: any) {
     let color = 'RGB(248, 248, 248)'
     if (row % 2 == 0) {
       color = 'RGB(236, 241, 245)'
     } else {
       color = 'RGB(248, 248, 248)'
+    }
+    let bgColor = this.getBgColor()
+    if (typeof bgColor == 'function') {
+      let color1 = bgColor(record) //
+      if (color1 != null) {
+        color = color1 //
+      }
     }
     return color
   }
@@ -447,7 +458,21 @@ export class Column extends Base {
     obj.isFrozen = this.getIsRightFrozen()
     //@ts-ignore
     obj.isLeftFrozen = this.getIsLeftFrozen()
+    let _t = this.getIsTree()
+    if (_t == true) {
+      console.log('展开这个') //
+    }
+    obj.tree = _t //
     return obj //
+  }
+  getIsTree() {
+    let _t = false
+    let isTree = this.table.getIsTree()
+    let tree = this.config.tree
+    if (isTree == true && tree == true) {
+      _t = true //
+    }
+    return _t
   }
   getCalculateValue() {
     let _this = this
@@ -834,16 +859,19 @@ export class Column extends Base {
   getBorderColor() {
     return 'RGB(30, 40, 60)' //
   }
-  getCurrentRowColor() {
-    return 'RGB(204, 224, 255)'
+  getCurrentRowColor(_bg?: string) {
+    let bg = _bg || 'RGB(204, 224, 255)'
+    return bg
   }
   getCustomLayout() {
+    //
     let customLayout = (args) => {
       let { table, row, col, rect, value } = args
       let t1: VTable.ListTable = table
+
       let _value: string = value
       let record = table.getCellOriginRecord(col, row)
-      let bg = this.getIndexColor(row) //
+      let bg = this.getIndexColor(row, record) //
       if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
         bg = this.getCurrentRowColor()
       }
@@ -851,7 +879,7 @@ export class Column extends Base {
       let _height = height
       let _length1 = t1.records.length
       if (_length1 == row) {
-        _height = _height - 1
+        _height = _height - 1 //
       }
       let _width = width
       let colCount = t1.colCount
@@ -865,13 +893,11 @@ export class Column extends Base {
           _width = _width - 1 //
         }
       }
-      const container = createGroup({
+      let container = createGroup({
         height: _height,
         width: _width,
-        // x: 1,
-        // y: 1, //
-        display: 'flex',
-        flexDirection: 'row',
+        // display: 'flex',
+        // flexDirection: 'row',
         flexWrap: 'nowrap',
         background: bg, //
         overflow: 'hidden',
@@ -892,17 +918,38 @@ export class Column extends Base {
         }
         container.setAttribute('background', color) ////
       })
+      if (this.getField() == 'pid') {
+        // console.log(value, 'testValue') //
+      }
       let locationName = createText({
-        text: value, //
+        text: `${value}`, //
         fontSize: 16,
+        x: 0,
+        y: 0,
         // fontFamily: 'sans-serif',
         fill: 'black',
         boundsPadding: [0, 0, 0, 20],
         lineDashOffset: 0,
       })
+      let _g = createGroup({
+        width: width,
+        height,
+        x: 0,
+        y: 0,
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        overflow: 'hidden',
+        alignItems: 'center', //
+      })
+      if (this.getIsTree() == true) {
+        _g.attribute.x = width - 60
+      }
       let globalValue = this.table.globalConfig.value
       if (globalValue.length > 0) {
+        let container = _g
         let reg = new RegExp(globalValue, 'gi') //
+        _value = `${value}` //
         let vArr = _value.matchAll(reg)
         let _vArr = [...vArr]
         _vArr = _vArr
@@ -954,8 +1001,10 @@ export class Column extends Base {
           container.add(locationName) //
         }
       } else {
+        let container = _g
         container.add(locationName)
       }
+      container.add(_g) //
       container.on('mousedown', (args) => {
         if (this.isMousedownRecord != null) {
           this.table.emit('dblclick_cell', { originalData: record }) ////
@@ -965,7 +1014,7 @@ export class Column extends Base {
           this.isMousedownRecord = null
         }, 130)
       })
-      let _index = record['_index'] //
+      let _index = record['_index'] ////
       let _table = this.table //
       let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
       let rowStart = scrollConfig.rowStart
@@ -973,17 +1022,65 @@ export class Column extends Base {
       let _row = row
       container['currentRowIndex'] = row //
       let _this = this
-      container['updateCanvas'] = function () {
+      let isTree = this.getIsTree()
+      let treeIcon = null
+      if (isTree == true && record?.['children']?.length > 0) {
+        let _g = createGroup({
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          height: height,
+          width: 12,
+          overflow: 'hidden',
+          cursor: 'pointer',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boundsPadding: [0, 0, 0, 0],
+        })
+        //
+        let _level = record['_level'] || 0
+        let icon = createText({
+          text: '\u27A4',
+          // text: '\u25C4',
+          fontSize: 15,
+          cursor: 'pointer', //
+          x: 0,
+          y: 0, //
+          overflow: 'hidden',
+          fill: 'black',
+          boundsPadding: [0, 0, 0, 3 + _level * 15], //
+          lineDashOffset: 0,
+        })
+        _g.add(icon)
+        container.add(_g) //
+        _g.on('click', () => {
+          this.table.openTreeRow(col, row) //
+          nextTick(() => {
+            _this.table.updateIndexArr.add(_index)
+          })
+        })
+        treeIcon = icon
+      }
+      container['updateCanvas'] = () => {
         const record = table.getCellOriginRecord(col, row)
-        let bg = _this.getIndexColor(row) //
+        //基本的样式
+        let bg = _this.getIndexColor(row, record)
         if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
           bg = _this.getCurrentRowColor() //
-        }
-        this.setAttribute('background', bg) //
+        } //
+        container.setAttribute('background', bg)
         let formatFn = _this.getFormat()
         let _value = formatFn(record, row, col, table)
-        locationName.setAttribute('text', _value) ////
-      }.bind(container) //
+        locationName.setAttribute('text', _value)
+        if (treeIcon != null) {
+          let _expanded = record['_expanded']
+          if (_expanded == true) {
+            treeIcon.setAttribute('text', '\u25BC')
+          } else {
+            treeIcon.setAttribute('text', '\u27A4')
+          } //
+        }
+      } //
 
       let _length = 200 //
       rowStart = rowStart - _length
@@ -1005,6 +1102,7 @@ export class Column extends Base {
         let currentIndexContain = _table.currentIndexContain //
         delete currentIndexContain[_index] //
       }
+
       return {
         rootContainer: container,
         renderDefault: false, //
@@ -1026,6 +1124,24 @@ export class Column extends Base {
       [field]: defaultValue,
     }
     return obj
+  }
+  getBgColor() {
+    let bgColor = this.templateBg
+    if (bgColor != null) {
+      return bgColor //is Function
+    }
+    let bg = this.config.bgColor
+    if (typeof bg == 'function') {
+      this.templateBg = bg
+      return bg
+    }
+    if (typeof bg == 'string') {
+      bg = stringToFunction(bg)
+      if (typeof bg == 'function') {
+        this.templateBg = bg
+      }
+    }
+    return null //
   }
   getCurrentDesign() {
     return null //

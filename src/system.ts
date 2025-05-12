@@ -37,6 +37,7 @@ export class System extends Base {
   async getMenuData() {
     let client = this.getClient() //
     let d = await client.find('navs') //
+    console.log(d, 'd')//
     this.systemConfig.menuConfig.items = d //
     return d //
   }
@@ -56,15 +57,19 @@ export class System extends Base {
   _getCacheValue(key) {}
   getTabItems() {
     let tableMap = this.tableMap
-    let allT = Object.values(tableMap) //
-    return [
-      {
-        label: '首页',
-      },
-      {
-        label: '表格', //
-      },
-    ]
+    let allT = Object.values(tableMap).map((row) => {
+      return row.getHomeTabLabel()
+    })
+    let allEditT = Object.values(this.tableEditMap).map((row) => {
+      return row.getHomeTabLabel()
+    })
+    let allT2 = [...allT, ...allEditT]
+    allT2.sort((a, b) => {
+      let oa = a.order || 0
+      let ob = b.order || 0
+      return oa - ob
+    })
+    return allT2
   }
   openPageDesign(config) {} //
   // async getDefaultPageLayout(name?: string) {
@@ -431,23 +436,32 @@ export class System extends Base {
   async confirm(config: any) {}
   async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
-    let _form = new Form(formConfig) //
-    let component = formCom
-    let createFn = () => {
-      return {
-        component: component, //
-        props: {
-          formIns: _form,
-        },
+    return new Promise(async (resolve, reject) => {
+      let _form = new Form(formConfig) //
+      let component = formCom
+      let createFn = () => {
+        return {
+          component: component, //
+          props: {
+            formIns: _form,
+          },
+        }
       }
-    }
-    let _config = {
-      createFn,
-      width: 600,
-      height: 400,
-    }
-    let dialog = await this.openDialog(_config) //
-    return dialog
+      let _config = {
+        createFn,
+        confirmFn: (dialog: Dialog) => {
+          let _confirmFn = formConfig.confirmFn //
+          if (typeof _confirmFn == 'function') {
+            _confirmFn(dialog) //
+          }
+          resolve(formConfig?.data) //
+        },
+        width: 600,
+        height: 400,
+      }
+      let dialog = await this.openDialog(_config) //
+      return dialog
+    })
   }
   async openDialog(dialogConfig: any = {}) {
     let _dialog = new Dialog(dialogConfig) //
@@ -702,6 +716,90 @@ export class System extends Base {
   enterApp(name) {
     ////
     window.open('localhost:3004') //
+  }
+  async designCurrentPageConfig() {
+    let curPage = this.getCurrentPageDesign()
+    let _config = _.cloneDeep(curPage.config) //
+    let data = _config
+    let fConfig = {
+      itemSpan: 12,
+      items: [
+        {
+          field: 'tableCnName',
+          label: '表格中文名',
+          itemChange: (config) => {},
+        },
+        {
+          field: 'hooks',
+          label: '高级钩子函数编辑',
+          type: 'stable',
+          span: 24,
+          options: {
+            tableState: 'edit', //
+            columns: [
+              {
+                field: 'name',
+                title: '钩子名称',
+                editType: 'string',
+              },
+              {
+                field: 'desc',
+                title: '钩子描述',
+                editType: 'string',
+              },
+              {
+                field: 'code',
+                title: '钩子代码',
+                editType: 'code', //
+              },
+            ],
+            showTable: true,
+          },
+        }, //
+      ],
+      data,
+    }
+    await this.confirmForm(fConfig) //
+    await this.getHttp().patch('entity', { ..._config })
+    this.refreshPageDesign(_config.tableName) //
+  }
+  async refreshPageDesign(tableName) {
+    let pageDesign = this.tableMap[tableName] || this.tableEditMap[tableName] //
+    if (pageDesign == null) {
+      return
+    }
+    delete this.tableMap[tableName] //
+    delete this.tableEditMap[tableName] //
+    let isEdit = this.getIsEditTable(tableName)
+    if (isEdit) {
+      await this.createPageEditDesign(tableName)
+    }
+    let isNormal = this.getIsNormalTable(tableName)
+    if (isNormal) {
+      //
+      await this.createPageDesign(tableName)
+    }
+  }
+  getIsNormalTable(tableName: string) {
+    let type = this.getTableType(tableName)
+    return type == 'normal'
+  }
+  getIsEditTable(tableName: string) {
+    let type = this.getTableType(tableName)
+    return type == 'edit'
+  }
+  getTableType(tableName) {
+    let _names = tableName.split('---')
+    if (_names.length == 2 && _names[1] == 'edit') {
+      return 'edit'
+    }
+    if (_names.length == 2 && _names[1] == 'search') {
+      return 'search'
+    }
+    if (_names.length == 2 && _names[1] == 'import') {
+      return 'import' //
+    } //
+    return 'normal' //
   }
 }
 

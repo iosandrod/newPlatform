@@ -108,6 +108,9 @@ export default defineComponent({
     mainTableName: {
       type: String,
     },
+    treeConfig: {
+      type: Object, //
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any

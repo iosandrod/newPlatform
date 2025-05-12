@@ -153,9 +153,12 @@ export class SeriesNumberColumn extends Column {
       }
       return {
         rootContainer: container,
-        renderDefault: false, //
+        renderDefault: true, //
       }
     }
+    // _props
+    //@ts-ignore
+    _props.dragOrder = true
     //@ts-ignore
     _props.isLeftFrozen = this.getIsLeftFrozen()
     return _props //

@@ -21,6 +21,7 @@ import { BMenu } from '@/buttonGroup/bMenu'
 import { getDFConfig } from '@/table/colFConfig'
 
 export class PageDesign extends Form {
+  tabOrder: number = 0
   pageType = 'pageDesign' //
   tableType: 'main' | 'edit' | 'search' = 'main' //
   constructor(config) {
@@ -114,7 +115,7 @@ export class PageDesign extends Form {
       tableName = config.tableName
       this.tableName = tableName
     } //
-    tableName = tableName || ''
+    tableName = tableName || '' //
     return tableName //
   }
   async getDetailTableData(dTableName: any) {
@@ -539,5 +540,15 @@ export class PageDesign extends Form {
       return //
     }
     menu.open(e) //
+  }
+  getHomeTabLabel() {
+    let tName = this.tableName
+    let cnName = this.getTableCnName() //
+    return {
+      label: cnName,
+      value: tName,
+      tableName: tName,
+      order: this.tabOrder,
+    } //
   }
 }
