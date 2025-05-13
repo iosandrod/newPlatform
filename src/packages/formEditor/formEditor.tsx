@@ -93,6 +93,10 @@ export const getDefaultFormEditProps = () => {
     data: {
       type: Object,
     }, //
+    labelWidth: {
+      type: Number,
+      default: 50,
+    },
   }
 }
 export default defineComponent({

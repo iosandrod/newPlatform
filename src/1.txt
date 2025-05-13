@@ -2734,3 +2734,21 @@ const app = createApp({
                         //     }//
                         //   },
                         // })
+
+                        {/* <div class="flex items-center justify-center flex-grow">
+                <img
+                  src="illustration.png"
+                  alt="Illustration"
+                  class="object-contain w-full"
+                />
+              </div>
+              <div class="flex mt-6 space-x-6">
+                <div class="flex items-center space-x-2">
+                  <img src="windows-icon.png" alt="Windows" class="w-5 h-5" />
+                  <span class="text-sm">Windows</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <img src="mac-icon.png" alt="Mac" class="w-5 h-5" />
+                  <span class="text-sm">Mac</span>
+                </div>
+              </div> */}

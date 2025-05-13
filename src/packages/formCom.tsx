@@ -102,6 +102,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    labelWidth: {
+      type: Number,
+      default: 50,
+    },
   },
   setup(props, { slots, expose }) {
     let fIns: Form = null as any //
@@ -162,7 +166,7 @@ export default defineComponent({
     if (fIns.dTableName == null) {
       fIns.dTableName = tableName //
     }
-    onUnmounted(() => { 
+    onUnmounted(() => {
       fIns.onUnmounted() //
     }) ////
     expose({ _instance: fIns, validate: fIns.validate.bind(fIns) }) //

@@ -4,7 +4,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'index',
-    component: () => import('@/pages/index'), //
+    component: () => import('@/pages/companyPage'), //
     meta: {
       title: '首页',
       renderMenu: false,
@@ -40,6 +40,11 @@ const routes: RouteRecordRaw[] = [
     path: '/companyRegister',
     name: 'companyRegister',
     component: () => import('@/pages/login/companyRegister'),
+  },
+  {
+    path: '/companyUserInfo',
+    name: 'companyUserInfo',
+    component: () => import('@/pages/user/userInfo'), //
   },
 ]
 

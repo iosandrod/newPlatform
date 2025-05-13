@@ -109,6 +109,7 @@ export default defineComponent({
       type: String,
     },
     treeConfig: {
+      //
       type: Object, //
     },
   },

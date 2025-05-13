@@ -62,6 +62,7 @@ export default defineComponent({
                 com = (
                   <div
                     onMouseenter={(e) => {
+                      drop.dropdownout = false
                       drop.showDropdown() //
                     }}
                   >
@@ -84,7 +85,12 @@ export default defineComponent({
                 com1 = (
                   <div
                     onMouseleave={(e) => {
-                      drop.closeDropdown() //
+                      drop.dropdownout = true
+                      setTimeout(() => {
+                        if (drop.dropdownout == true) {
+                          drop.closeDropdown() //
+                        }
+                      }, 100)
                     }}
                   >
                     {com}

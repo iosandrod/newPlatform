@@ -1089,7 +1089,8 @@ export class Form extends Base {
     return node
   }
   getLabelWidth() {
-    return 20
+    let labelWidth=this.config.labelWidth
+    return labelWidth
   }
   getLayoutDataByplatform(platform) {
     const isPc = platform === 'pc'

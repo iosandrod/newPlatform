@@ -15,6 +15,7 @@ import { VxeUI } from 'vxe-pc-ui'
 import { getDFConfig } from './table/colFConfig'
 export class System extends Base {
   allApp: any = [] //
+  systemApp: any = []
   mouseConfig = {
     clientX: 0,
     clientY: 0,
@@ -37,7 +38,7 @@ export class System extends Base {
   async getMenuData() {
     let client = this.getClient() //
     let d = await client.find('navs') //
-    console.log(d, 'd')//
+    console.log(d, 'd') //
     this.systemConfig.menuConfig.items = d //
     return d //
   }
@@ -545,17 +546,18 @@ export class System extends Base {
       _msg.status = type //
     }
     _msg.type = 'message' //
-    _msg.duration = _msg.duration || 1000 //
+    _msg.duration = _msg.duration || 3000 //
     VxeUI.modal.message(msg)
   }
-  // async designTableColumn(tableName, columnName) {
-  //   let tCols = await this.getHttp().find('columns', {
-  //     tableName,
-  //     field: columnName,
-  //   })
-  //   if (tCols != null && tCols.length > 0) {
-  //   }
-  // }
+  async confirmDialog(mes) {
+    if (typeof mes == 'string') {
+      mes = {
+        message: mes,
+      }
+    }
+    let dConfig = {}
+    // this.openDialog()
+  }
   async designTableColumns(tableName, columnName?: any) {
     let qObj = {
       tableName: tableName,
@@ -660,10 +662,12 @@ export class System extends Base {
   }
   async registerUser(data) {
     try {
-      let http = this.getHttp() //
-      let _res = await http.create('users', data) //
-      let row = _res[0] //
-      return row //
+      // let http = this.getHttp() //
+      // let _res = await http.create('users', data) //
+      // let row = _res[0] //
+      // return row //
+      let http = this.getHttp()
+      await http.registerUser(data) //
     } catch (error) {
       const message = error.message || ''
       this.confirmMessage(`注册失败,${message}`, 'error') //
@@ -676,13 +680,21 @@ export class System extends Base {
   }
   getAllApp() {
     //使用mock数据//
-    let data = [
-      {
-        name: 'erp',
-        image: '', //
-      },
-    ]
-    return data //
+    let allApp = this.systemApp
+    if (allApp == null || !Array.isArray(allApp)) {
+      return []
+    }
+    return allApp
+  }
+  async initAllApp() {
+    try {
+      let http = this.getHttp()
+      let _data = await http.post('company', 'getAllApp')
+      // console.log(_data, '所有应用') //
+      this.systemApp = _data //
+    } catch (error) {
+      this.confirmErrorMessage('获取应用失败') //
+    }
   }
   //安装app
   async installApp(name) {
@@ -693,6 +705,12 @@ export class System extends Base {
       this.confirmErrorMessage('安装失败') //
     }
   }
+  async openApp(name) {
+    try {
+      //
+      //打开app
+    } catch (error) {}
+  }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
       //
@@ -701,6 +719,10 @@ export class System extends Base {
     this.confirmMessage(content, 'error')
   }
   async getAllApps() {
+    if ((await this.getIsLogin()) == false) {
+      this.allApp = []
+      return //
+    }
     let userInfo = this.getUserInfo()
     let user = userInfo.user
     let id = user.id
@@ -714,7 +736,7 @@ export class System extends Base {
     return loginInfo
   }
   enterApp(name) {
-    ////
+    //
     window.open('localhost:3004') //
   }
   async designCurrentPageConfig() {
@@ -800,6 +822,39 @@ export class System extends Base {
       return 'import' //
     } //
     return 'normal' //
+  }
+  async designSystemNavs() {
+    //
+    let tableConfig = {
+      columns: [],
+      data: [],
+    }
+  }
+  async enterCurrentPageDesign() {
+    let curd = this.getCurrentPageDesign()
+    if (curd == null) {
+      return
+    }
+    curd.setCurrentDesign(true) //
+  }
+  async logout() {
+    let http = this.getClient()
+    await http.logoutUser() //
+  }
+  getIsLogin() {
+    //
+    let loginConfig = this.loginInfo
+    if (loginConfig == null) {
+      return false
+    }
+    return true //
+  }
+  routeTo(path) {
+    if (typeof path !== 'string') {
+      return
+    }
+    let r = this.getRouter()
+    r.push(path)
   }
 }
 

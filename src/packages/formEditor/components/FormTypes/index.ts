@@ -32,10 +32,16 @@ import dformMobile from './Dform/mobile' //
 import stringPc from './String/pc'
 import stringMobile from './String/mobile'
 import buttonGroupPc from './ButtonGroup/pc'
-import buttonGroupMobile from './ButtonGroup/mobile'//
+import buttonGroupMobile from './ButtonGroup/mobile' //
 import checkboxPc from './Checkbox/pc'
 import checkboxMobile from './Checkbox/mobile'
+import imagePc from './Image/pc'
+import imageMobile from './Image/mobile' //
 export const typeMap = {
+  image: {
+    pc: imagePc,
+    mobile: imageMobile,
+  },
   buttongroup: {
     pc: buttonGroupPc,
     mobile: buttonGroupMobile, //
@@ -98,7 +104,7 @@ export const typeMap = {
   }, //
   checkbox: {
     pc: checkboxPc,
-    mobile: checkboxMobile
-  }
+    mobile: checkboxMobile,
+  },
 }
 export default {}

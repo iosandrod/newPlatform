@@ -2,6 +2,7 @@ import { Base } from '@/base/base'
 import { watch, nextTick } from 'vue'
 
 export class Dropdown extends Base {
+  dropdownout=false
   config: any
   modelValue: any = false
   constructor(config) {

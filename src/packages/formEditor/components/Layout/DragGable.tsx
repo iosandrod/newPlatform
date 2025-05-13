@@ -295,12 +295,15 @@ export default defineComponent({
                     </div>
                   )
                 } else {
+                  let style = formitem.getStyle()
                   innerCom = (
-                    <div class="flex flex-row h-full">
+                    <div style={style} class="flex flex-row h-full">
                       <div class="flex-1 pl-5">
                         <vxe-form-item
                           field={formitem.getField()}
-                          style={{}}
+                          style={{
+                            height: '100%', //
+                          }}
                           v-slots={{
                             default: () => {
                               return (
@@ -324,8 +327,10 @@ export default defineComponent({
                               if (required == true) {
                                 requireDiv = <div class="color-red">*</div>
                               }
+                              let label = formitem.getLabelWidth()
                               return (
                                 <div
+                                  style={{ minWidth: label }} //
                                   class="flex flex-row"
                                   onContextmenu={(e: MouseEvent) => {
                                     e.preventDefault()

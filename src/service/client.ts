@@ -85,7 +85,7 @@ export const createClient = (config) => {
   let app = feathers()
   app.configure(client)
   app.set('connection', socket)
-  app.configure(init())//
+  app.configure(init()) //
 
   return app //
 }
@@ -113,6 +113,15 @@ export class myHttp {
       }
     }
   }
+  async registerUser(data) {
+    try {
+      let _res = await this.create('users', data)
+      console.log(_res, 'test_res') //
+      system.confirmMessage('注册成功')
+      let r = system.getRouter()
+      r.push('companyLogin') //
+    } catch (error) {}
+  } //
   async loginUser(data) {
     try {
       //
@@ -123,10 +132,21 @@ export class myHttp {
       // console.log(_res, 'testRes') //
       system.confirmMessage('登录成功') //
       let router = system.getRouter()
-      router.push('/home') //
+      router.push('/companyHome') // //
       return _res ////
     } catch (error) {
       system.confirmMessage(`登录失败,${error?.message}`, 'error') //
+    }
+  }
+  async logoutUser() {
+    try {
+      let client = this.client //
+      await client.logout() //
+      let router = system.getRouter()
+      router.push('/companyLogin') //
+      system.loginInfo = null //
+    } catch (error) {
+      console.error('登出信息报错') //
     }
   }
   redirectToLogin() {

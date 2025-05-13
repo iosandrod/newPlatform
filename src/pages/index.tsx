@@ -13,6 +13,8 @@ import { tableConfig } from '@/table/tableData'
 import { PageDesign } from '@ER/pageDesign'
 import pageCom from '@ER/pageCom'
 import _header from './pageHeader'
+
+
 export default defineComponent({
   components: {
     erForm,
@@ -177,21 +179,3 @@ export default defineComponent({
     }
   },
 })
-/* 
-    <router-view
-                v-slots={{
-                  default: (config) => {
-                    const { Component, route } = config
-                    if (!Component) {
-                      return <div></div>
-                    }
-                    const FullPath = route.fullPath//
-                    return (
-                      <KeepAlive>
-                        <Component key={FullPath} />
-                      </KeepAlive>
-                    )
-                  },
-                }}
-              ></router-view>
-*/

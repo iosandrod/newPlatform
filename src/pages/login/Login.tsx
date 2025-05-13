@@ -25,8 +25,10 @@ import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { VxeCheckbox } from 'vxe-pc-ui'
 import checkboxCom from '@/checkbox/checkboxCom'
 import { getDFConfig } from '@/table/colFConfig'
+import uploadCom from '@/input/uploadCom'
 export default defineComponent({
   components: {
+    uploadCom,
     codeEditorCom,
     buttonCom, //
     pageCom, //
@@ -177,16 +179,17 @@ export default defineComponent({
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       })
-      // com = (
-      //   <div class="w-full h-full">
-      //     <formCom
-      //       ref={_reg3}
-      //       isDesign={false}
-      //       {..._fConfig}
-      //       data={d1}
-      //     ></formCom>
-      //   </div>
-      // )
+      com = (
+        <div class="w-full h-full">
+          <formCom
+            ref={_reg3}
+            isDesign={false}
+            {..._fConfig}
+            data={d1}
+          ></formCom>
+        </div>
+      )
+      com = <uploadCom></uploadCom>
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
       // com = <VxeCheckbox

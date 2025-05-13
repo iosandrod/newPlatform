@@ -14,23 +14,25 @@ const router = createRouter(
     routes,
   }),
 ) //
+// let unAuthPath = ['companyLogin', 'companyRegister', 'companyHome'] //
+let unAuthPath = /companyLogin|companyRegister|companyHome/g
 router.beforeEach(async (to, from, next) => {
   //
   let p = to.fullPath
-  if (/companyLogin|companyRegister/.test(p)) {
-    console.log('去登录页面') //
+  if (unAuthPath.test(p)) {
     next() //
   } //
   const isLogin = system.loginInfo
   if (isLogin == null) {
-    let res = await http.init()
+    // let res = await http.init()
+    let res = null
     if (res != null) {
       next()
     } else {
-      //
-      next({
-        name: 'companyLogin', //
-      })
+      next()
+      // next({
+      //   // name: 'companyLogin', //
+      // })
     }
   } else {
     next() //

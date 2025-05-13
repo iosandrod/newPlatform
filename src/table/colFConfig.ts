@@ -6,6 +6,15 @@ export const getDFConfig = (_this, data) => {
     data: data,
     items: [
       {
+        field: 'image',
+        label: '图标',
+        type: 'image', //
+        span: 24,
+        style: {
+          height: '200px',
+        },
+      },
+      {
         field: 'title', //
         label: '标题',
         type: 'string',
