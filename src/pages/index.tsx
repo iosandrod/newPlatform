@@ -1,4 +1,4 @@
-import { defineComponent, KeepAlive, provide } from 'vue'
+import { defineComponent, KeepAlive, provide, ref } from 'vue'
 import erForm from '@ER/formCom'
 import erFormEditor from '@ER/formEditor/formEditor'
 import tableEditor from '@/table/tableCom'
@@ -13,7 +13,7 @@ import { tableConfig } from '@/table/tableData'
 import { PageDesign } from '@ER/pageDesign'
 import pageCom from '@ER/pageCom'
 import _header from './pageHeader'
-
+import TableCom from '@/table/tableCom'
 
 export default defineComponent({
   components: {
@@ -37,7 +37,20 @@ export default defineComponent({
     }
     fn()
     provide('systemIns', systemIns) //
+    let show = ref(false)
+    let _config = null
+    systemIns.designSystemNavs().then((res) => {
+      _config = res
+      show.value = true
+    })
     return () => {
+      if (show.value == false) {
+        return null
+      }
+      if (1 == 1) {
+        let com = <TableCom {..._config}></TableCom>
+        return com //
+      }
       let leftMenu = (
         <menuCom
           items={systemIns.getMenuItems()}
@@ -79,86 +92,141 @@ export default defineComponent({
           items={systemIns.getTabItems()}
           v-slots={{
             item: (item) => {
-              return (
-                <div class="home-tab-item">
-                  <div class="home-tab-item-label">{item.getLabel()}</div>
+              let com = (
+                <div class="cursor-pointer pl-10 pr-10 -mb-px text-blue-500  border-b-2 border-blue-500 focus:outline-none">
+                  <div>{item.getLabel()}</div>
                 </div>
               )
+              return com
             },
           }}
         ></tabCom>
       )
-      let pageHeader = <_header></_header>
+      let pageHeader = (
+        <header class="page-header h-50 flex items-center">
+          <div class="container flex items-center justify-between">
+            <div class="ml-40">
+              <er-dropdown
+                dropMode="hover"
+                v-slots={{
+                  default: () => {
+                    let com = (
+                      <div class="flex items-center space-x-1 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-pink-600">
+                        <span>系统功能</span>
+                      </div>
+                    )
+                    return com
+                  },
+                  dropdown: () => {
+                    let btnArr = [
+                      {
+                        label: '设计菜单',
+                        fn: async () => {
+                          await system.designSystemNavs()
+                        },
+                      },
+                      {
+                        label: '当前页面设计',
+                        fn: async () => {},
+                      },
+                      {
+                        label: '设计表格',
+                        fn: async () => {},
+                      },
+                      {
+                        label: '页面高级配置',
+                        fn: async () => {}, //
+                      },
+                    ]
+                    let bsComs = btnArr.map((item) => {
+                      let c = (
+                        <div class="py-1">
+                          <div
+                            class="cursor-pointer block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                            onClick={() => {
+                              let fn = item.fn
+                              fn() //
+                            }}
+                          >
+                            {item.label}
+                          </div>
+                        </div>
+                      )
+                      return c
+                    })
+                    let com = (
+                      <div class="  mt-2 w-120 bg-white border border-gray-200 rounded-lg shadow-lg transition-opacity">
+                        {bsComs}
+                      </div>
+                    )
+                    return com //
+                  },
+                }}
+              ></er-dropdown>
+            </div>
+            <div class="flex-1 mx-8 flex items-center justify-center">
+              <input
+                placeholder="全局查询"
+                class="w-400 h-35 px-3 border border-gray-300 rounded-l-md outline-none"
+              />
+            </div>
+
+            <div class="flex items-center space-x-4">
+              <img
+                src="https://via.placeholder.com/32"
+                alt="avatar"
+                class="w-8 h-8 rounded-full cursor-pointer"
+              />
+              <er-dropdown
+                dropMode="hover"
+                v-slots={{
+                  default: () => {
+                    let com = (
+                      <div class="flex items-center space-x-1 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-pink-600">
+                        <span>
+                          {system.getUserInfo()?.user?.username || '登录'}
+                        </span>
+                      </div>
+                    )
+                    return com
+                  },
+                  dropdown: () => {
+                    let com = (
+                      <div
+                        class="  mt-2 w-120 bg-white border border-gray-200 rounded-lg shadow-lg
+            transition-opacity
+           "
+                      >
+                        <div class="py-1">
+                          <div
+                            href="#"
+                            class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                          >
+                            回复我的
+                          </div>
+                        </div>
+                      </div>
+                    )
+                    return com
+                  },
+                }}
+              ></er-dropdown>
+            </div>
+          </div>
+        </header>
+      )
       return (
         <div
           class={[ns.b(), 'flex-col']}
           style={{ display: 'flex', width: '100vw', height: '100vh' }}
         >
-          {' '}
-          <div class="" style={{ height: '30px' }}>
-            <er-button-group
-              items={[
-                {
-                  label: '当前真实表设计',
-                  fn: async () => {
-                    let currentPage = systemIns.getCurrentPageDesign()
-                    let rTName = currentPage.getRealTableName()
-                    await system.designTableColumns(rTName) //
-                  },
-                },
-                //
-                {
-                  label: '进入设计', //
-                  fn: async () => {
-                    let currentPage = systemIns.getCurrentPageDesign()
-                    currentPage.setCurrentDesign(true) //
-                  },
-                },
-                {
-                  label: '离开设计',
-                  fn: async () => {
-                    let cp = systemIns.getCurrentPageDesign()
-                    cp.setCurrentDesign(false) //
-                  },
-                },
-                {
-                  label: '保存设计',
-                  fn: async () => {
-                    let currentPage = systemIns.getCurrentPageDesign()
-                    currentPage.saveTableDesign()
-                  },
-                },
-                {
-                  label: '进入编辑页面',
-                  fn: async () => {
-                    systemIns.routeOpen('t_SdOrder---edit') //
-                  },
-                },
-                {
-                  label: '打印layout', //
-                  fn: async () => {
-                    let currentPage = systemIns.getCurrentPageDesign()
-                    let layout = currentPage.getLayoutData()
-                    console.log(layout) //
-                    console.log(currentPage, 'testPage') //
-                  },
-                },
-                {
-                  label: '当前页面设计',
-                  fn: async () => {
-                    await systemIns.designCurrentPageConfig() //
-                  },
-                },
-              ]}
-            ></er-button-group>
-          </div>
           {pageHeader}
           <div class="h-full w-full flex flex-row">
-            <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
+            {/* <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div> */}
             <div class="flex flex-col flex-1 h-full ">
               <div class="w-full bg-white tab-line">{tableTab}</div>
 
-              <div class="w-full h-full overflow-hidden">
+              {/* <div class="w-full h-full overflow-hidden">
                 <router-view
                   v-slots={{
                     default: (config) => {
@@ -171,7 +239,7 @@ export default defineComponent({
                     },
                   }}
                 ></router-view>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

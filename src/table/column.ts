@@ -459,9 +459,6 @@ export class Column extends Base {
     //@ts-ignore
     obj.isLeftFrozen = this.getIsLeftFrozen()
     let _t = this.getIsTree()
-    if (_t == true) {
-      console.log('展开这个') //
-    }
     obj.tree = _t //
     return obj //
   }
@@ -814,6 +811,23 @@ export class Column extends Base {
     group.add(bottomImage) //
     return group //
   }
+  getExpandIcon(status = false) {
+    let t = null
+    if (status) {
+      //
+      t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <rect width="24" height="24" rx="4" fill="#007AFF" />
+  <path d="M12 16L6 10H18L12 16Z" fill="#FFFFFF" />
+</svg>`
+    } else {
+      t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <rect width="24" height="24" rx="4" fill="#007AFF" />
+  <path d="M9 6L15 12L9 18V6Z" fill="#FFFFFF" />
+</svg>
+`
+    }
+    return t
+  }
   createFilter(config: any) {
     let height = config.height
     let hIconColor = '#1890ff' //
@@ -921,6 +935,7 @@ export class Column extends Base {
       if (this.getField() == 'pid') {
         // console.log(value, 'testValue') //
       }
+      let _bounds = [0, 0, 0, 20]
       let locationName = createText({
         text: `${value}`, //
         fontSize: 16,
@@ -928,7 +943,7 @@ export class Column extends Base {
         y: 0,
         // fontFamily: 'sans-serif',
         fill: 'black',
-        boundsPadding: [0, 0, 0, 20],
+        boundsPadding: _bounds, //
         lineDashOffset: 0,
       })
       let _g = createGroup({
@@ -943,7 +958,12 @@ export class Column extends Base {
         alignItems: 'center', //
       })
       if (this.getIsTree() == true) {
-        _g.attribute.x = width - 60
+        // _g.attribute.x = width - 60
+        let level = record._level
+        if (level > 0) {
+          let num = level * 20
+          _g.attribute.x =  num //
+        }
       }
       let globalValue = this.table.globalConfig.value
       if (globalValue.length > 0) {
@@ -1025,44 +1045,55 @@ export class Column extends Base {
       let isTree = this.getIsTree()
       let treeIcon = null
       if (isTree == true && record?.['children']?.length > 0) {
-        let _g = createGroup({
+        container.removeChild(_g)
+        let _g1 = createGroup({
           display: 'flex',
           flexDirection: 'row',
-          flexWrap: 'wrap',
+          flexWrap: 'nowrap',
           height: height,
-          width: 12,
+          width: width,
           overflow: 'hidden',
           cursor: 'pointer',
           alignItems: 'center',
-          justifyContent: 'center',
           boundsPadding: [0, 0, 0, 0],
         })
         //
         let _level = record['_level'] || 0
-        let icon = createText({
-          text: '\u27A4',
-          // text: '\u25C4',
-          fontSize: 15,
-          cursor: 'pointer', //
+        // let t = `\u27A4`
+        let t = null
+        // console.log(record['_expanded'], 'record')
+        t = this.getExpandIcon(record['_expanded'])
+
+        let _g2 = createGroup({
+          width: 10,
+          height: height / 2,
           x: 0,
-          y: 0, //
+          y: 0,
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          overflow: 'hidden',
+          alignItems: 'center',
+        })
+        let icon = createImage({
+          image: t,
+          cursor: 'pointer', //
+          height: height / 2,
           overflow: 'hidden',
           fill: 'black',
-          boundsPadding: [0, 0, 0, 3 + _level * 15], //
+          boundsPadding: [0, 0, 0, 3 + _level * 16], //
           lineDashOffset: 0,
-        })
-        _g.add(icon)
-        container.add(_g) //
-        _g.on('click', () => {
-          this.table.openTreeRow(col, row) //
-          nextTick(() => {
-            _this.table.updateIndexArr.add(_index)
-          })
-        })
+        }) //
+        _bounds[3] = 0 //
+        _g2.add(icon)
+        _g1.add(_g2) //
+        _g1.add(locationName) //
+        container.add(_g1) //
+
         treeIcon = icon
       }
       container['updateCanvas'] = () => {
-        const record = table.getCellOriginRecord(col, row)
+        // let record = table.getCellOriginRecord(col, row)
         //基本的样式
         let bg = _this.getIndexColor(row, record)
         if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
@@ -1074,11 +1105,8 @@ export class Column extends Base {
         locationName.setAttribute('text', _value)
         if (treeIcon != null) {
           let _expanded = record['_expanded']
-          if (_expanded == true) {
-            treeIcon.setAttribute('text', '\u25BC')
-          } else {
-            treeIcon.setAttribute('text', '\u27A4')
-          } //
+          let t = this.getExpandIcon(_expanded)
+          treeIcon.setAttribute('image', t) //
         }
       } //
 
@@ -1102,9 +1130,13 @@ export class Column extends Base {
         let currentIndexContain = _table.currentIndexContain //
         delete currentIndexContain[_index] //
       }
-
+      // let _isTree = this.getIsTree()
+      // if (_isTree == true) {
+      //   container = null //
+      // }
       return {
         rootContainer: container,
+        // renderDefault: _isTree, //
         renderDefault: false, //
       }
     }

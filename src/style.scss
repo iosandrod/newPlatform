@@ -1,58 +1,58 @@
-.w-full {
-  width: 100%;
-}
+  .w-full {
+    width: 100%;
+  }
 
-@for $i from 1 through 2000 {
-  .w-#{$i} {
-    width: #{$i}px;
+  @for $i from 1 through 2000 {
+    .w-#{$i} {
+      width: #{$i}px;
+    }
   }
-}
-.h-full {
-  height: 100%;
-}
-@for $i from 1 through 2000 {
-  .h-#{$i} {
-    height: #{$i}px;
+  .h-full {
+    height: 100%;
   }
-}
-@for $i from 1 through 2000 {
-  .pl-#{$i} {
-    padding-left: #{$i}px;
+  @for $i from 1 through 2000 {
+    .h-#{$i} {
+      height: #{$i}px !important;
+    }
   }
-}
-@for $i from 1 through 2000 {
-  .pr-#{$i} {
-    padding-right: #{$i}px;
+  @for $i from 1 through 2000 {
+    .pl-#{$i} {
+      padding-left: #{$i}px !important;
+    }
+  } 
+  @for $i from 1 through 2000 {
+    .pr-#{$i} {
+      padding-right: #{$i}px !important;
+    }
   }
-}
-@for $i from 1 through 2000 {
-  .pt-#{$i} {
-    padding-top: #{$i}px;
+  @for $i from 1 through 2000 {
+    .pt-#{$i} {
+      padding-top: #{$i}px !important;
+    }
   }
-}
-@for $i from 1 through 2000 {
-  .pb-#{$i} {
-    padding-bottom: #{$i}px;
+  @for $i from 1 through 2000 {
+    .pb-#{$i} {
+      padding-bottom: #{$i}px !important;
+    }
   }
-}
 
-@for $i from 1 through 2000 {
-  .ml-#{$i} {
-    margin-left: #{$i}px;
+  @for $i from 1 through 2000 {
+    .ml-#{$i} {
+      margin-left: #{$i}px !important;
+    }
   }
-}
-@for $i from 1 through 2000 {
-  .mr-#{$i} {
-    margin-right: #{$i}px;
+  @for $i from 1 through 2000 {
+    .mr-#{$i} {
+      margin-right: #{$i}px !important;
+    }
   }
-}
-@for $i from 1 through 2000 {
-  .mt-#{$i} {
-    margin-top: #{$i}px;
+  @for $i from 1 through 2000 {
+    .mt-#{$i} {
+      margin-top: #{$i}px !important;
+    }
   }
-}
-@for $i from 1 through 2000 {
-  .mb-#{$i} {
-    margin-bottom: #{$i}px;
+  @for $i from 1 through 2000 {
+    .mb-#{$i} {
+      margin-bottom: #{$i}px !important;
+    }
   }
-}

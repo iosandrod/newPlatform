@@ -60,6 +60,7 @@ export class Table extends Base {
   scrollColInteral: any
   scrollColSpeed: number = 0
   scrollColSpeed1: number = 0
+  expandRowSet = new Set()
   mouseWatch: any
   leftFrozen?: any
   curContextCol?: Column
@@ -203,6 +204,7 @@ export class Table extends Base {
     let config = this.config
     let columns = config.columns || []
     let data = config.data || [] //
+    this.initTreeConfig()
     this.setData(data)
     this.setColumns(columns) //
     this.initSortState()
@@ -264,6 +266,61 @@ export class Table extends Base {
     let showRowSeriesNumber = config.showRowSeriesNumber
     return showRowSeriesNumber
   }
+  getDragMode() {
+    let dOrder: any = {}
+    let config = this.config
+    let enableDragRow = config.enableDragRow
+    if (enableDragRow) {
+      dOrder.dragHeaderMode = 'row'
+    }
+    let enableDragColumn = config.enableDragColumn
+    if (enableDragColumn) {
+      dOrder.dragHeaderMode = 'column'
+    }
+    if (enableDragRow && enableDragColumn) {
+      dOrder.dragHeaderMode = 'all' //
+    }
+    let dragFn = this.getDragFn()
+    if (dOrder.dragHeaderMode != null) {
+      dOrder.validateDragOrderOnEnd = dragFn
+    } else {
+      dOrder = null
+    }
+    return dOrder
+  }
+  getDragFn() {
+    let fn = (start, end) => {
+      let col1 = start.col
+      let row1 = start.row
+      let col2 = end.col
+      let row2 = end.row
+      let f = this.getInstance().getHeaderField(col1, row1)
+      let f1 = this.getInstance().getHeaderField(col2, row2)
+      let f1C = this.getColumns().find((c) => c.getField() == f)
+      let f2C = this.getColumns().find((c) => c.getField() == f1)
+      if (f1C == f2C) {
+        return false //
+      }
+      let isFrozen = f2C.getIsFrozen()
+      let isFrozen1 = f1C.getIsFrozen()
+      if (isFrozen || isFrozen1) {
+        //
+        return false
+      }
+      nextTick(() => {
+        let fs = this.getInstance().columns.map((col, i) => {
+          let obj = {
+            field: col.field,
+            order: i + 1,
+          }
+          return obj
+        })
+        this.changeSortOrder(fs as any) //
+      })
+      return true
+    }
+    return fn
+  }
   createInstance(rootDiv) {
     let _this = this
     let showRowSeriesNumber = this.getShowSeriesNumber()
@@ -271,40 +328,10 @@ export class Table extends Base {
     if (showRowSeriesNumber) {
       _sConfig = this.seriesNumberColumn.getColumnProps() //
     }
+    let dragMode = this.getDragMode()
+    // console.log(dragMode) //
     let table = new ListTable({
-      dragOrder: {
-        dragHeaderMode: 'column',
-        validateDragOrderOnEnd: (start, end) => {
-          let col1 = start.col
-          let row1 = start.row
-          let col2 = end.col
-          let row2 = end.row
-          let f = this.getInstance().getHeaderField(col1, row1)
-          let f1 = this.getInstance().getHeaderField(col2, row2)
-          let f1C = this.getColumns().find((c) => c.getField() == f)
-          let f2C = this.getColumns().find((c) => c.getField() == f1)
-          if (f1C == f2C) {
-            return false //
-          }
-          let isFrozen = f2C.getIsFrozen()
-          let isFrozen1 = f1C.getIsFrozen()
-          if (isFrozen || isFrozen1) {
-            //
-            return false
-          }
-          nextTick(() => {
-            let fs = this.getInstance().columns.map((col, i) => {
-              let obj = {
-                field: col.field,
-                order: i + 1,
-              }
-              return obj
-            })
-            this.changeSortOrder(fs as any) //
-          })
-          return true
-        },
-      },
+      dragOrder: dragMode, //
       padding: {},
       //ts-ignore
       headerEditor: (args) => {
@@ -433,6 +460,15 @@ export class Table extends Base {
     this.loadColumns()
     this.loadData()
     this.setCurRow(this.templateProps.data[0])
+  }
+  initTreeConfig() {
+    let treeConfig = this.config.treeConfig || {}
+    let id = treeConfig.id
+    let parentId = treeConfig.parentId
+    if (id == null || parentId == null) {
+      return //
+    }
+    this.treeConfig = treeConfig //
   }
   createFooterInstance(rootDiv) {
     if (rootDiv == null) {
@@ -643,6 +679,11 @@ export class Table extends Base {
       //     }
       //   },
       // )
+      if (this.getIsTree()) {
+        // let c = this.instance.records
+        // this.instance.setRecords(c) //
+        // return
+      }
       allContain.forEach((cArr) => {
         if (cArr == null) {
           return //
@@ -654,15 +695,27 @@ export class Table extends Base {
       })
       nextTick(() => {
         this.updateSelectRange()
-      })
+      }) //
       // ins.changeCellValue(0, 0, '')//
       console.timeEnd(uuid) //
     }
   }
+  getDragRow() {
+    let config = this.config
+    let enableDragRow = config.enableDragRow
+    return enableDragRow
+  }
   updateSelectRange() {
     let ins = this.getInstance() //
+    console.time('updateSelectRange') //
     let _select = ins.getSelectedCellRanges()
+    let t = this.templateEditCell
+    if (t) {
+      ins.clearSelected() //
+      return
+    }
     ins.selectCells(_select) //
+    console.timeEnd('updateSelectRange') ////
   }
   updateCheckboxRecords() {
     let ins = this.getInstance()
@@ -1688,10 +1741,14 @@ export class Table extends Base {
     if (disableHideCell == true) {
       return //
     }
+    if (this.templateEditCell == null) {
+      return //
+    }
     this.currentEditCol = null
     this.templateEditCell = null ////
     let ins = this.getInstance()
     ins.completeEditCell() ////
+    ins.clearSelected() //
   }
   getCurrentCellEdit() {
     let ins = this.getInstance()
@@ -2030,20 +2087,28 @@ export class Table extends Base {
   }
   openTreeRow(col, row) {
     //
-    // debugger //
     let ins = this.getInstance() //
     let record = ins.getRecordByCell(col, row) //
+    let f = ins.getBodyField(col, row)
+    let _c = this.getColumns().find((c) => c.getField() == f)
+    if (_c?.getIsTree() != true) {
+      //
+      return
+    }
+    if (record == null) {
+      return //
+    }
+    let _index = record._index
+    this.updateIndexArr.add(_index) //
     let _expanded = Boolean(record._expanded)
     let _status = !_expanded
-    // Object.defineProperty(record, {
-    //   _expanded: { value: true, enumerable: _status },
-    // }) //
+    // let _row=ins
     Object.defineProperty(record, '_expanded', {
       value: _status,
       enumerable: false,
       writable: true,
     }) //
-    ins.toggleHierarchyState(col, row) //
+    ins.toggleHierarchyState(col, row) ////
   }
   setRowDragAble(status) {}
 }

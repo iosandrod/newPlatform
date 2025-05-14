@@ -299,15 +299,15 @@ export default defineComponent({
       },
     )
     const onClickOutside = () => {}
-    watch(
-      () => {
-        return state.store
-      },
-      (newValue) => {},
-      {
-        deep: true,
-      },
-    )
+    // watch(
+    //   () => {
+    //     return state.store
+    //   },
+    //   (newValue) => {},
+    //   {
+    //     deep: true,
+    //   },
+    // )
     const eve = formIns //
     provide('Everright', eve)
     let hide = () => {

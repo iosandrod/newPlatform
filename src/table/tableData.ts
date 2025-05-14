@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { ListTableConstructorOptions } from '@visactor/vtable'
 function generateRandomString(length) {
   let result = ''

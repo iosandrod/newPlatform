@@ -9,36 +9,41 @@ import tailwindcss from '@tailwindcss/vite'
 const resolve = path.resolve
 const isProduction = process.env.NODE_ENV === 'production'
 
-//认输
 const timestamp = new Date().getTime()
 const prodRollupOptions = {
   output: {
-    chunkFileNames: (chunk) => {
-      return 'assets/' + chunk.name + '.[hash]' + '.' + timestamp + '.js'
-    },
-    assetFileNames: (asset) => {
-      const name = asset.name
-      if (name && (name.endsWith('.css') || name.endsWith('.js'))) {
-        const names = name.split('.')
-        const extname = names.splice(names.length - 1, 1)[0]
-        return `assets/${names.join('.')}.[hash].${timestamp}.${extname}`
-      }
-      return 'assets/' + asset.name
-    },
+    // chunkFileNames: (chunk) => {
+    //   return 'assets/' + chunk.name + '.[hash]' + '.' + timestamp + '.js'
+    // },
+    // assetFileNames: (asset) => {
+    //   const name = asset.name
+    //   if (name && (name.endsWith('.css') || name.endsWith('.js'))) {
+    //     const names = name.split('.')
+    //     const extname = names.splice(names.length - 1, 1)[0]
+    //     return `assets/${names.join('.')}.[hash].${timestamp}.${extname}`
+    //   }
+    //   return 'assets/' + asset.name
+    // },
   },
 }
 // vite 配置
 export default ({ command, mode }) => {
   // 获取环境变量
   const env = loadEnv(mode, process.cwd())
-
+  const isAppBuild = env.VITE_APP_BUILD === 'true'
   return defineConfig({
     server: {
+      proxy: {
+        '/images': {
+          target: 'http://127.0.0.1:3031', //
+          changeOrigin: true,
+        },
+      },
       port: Number(process.env.VITE_PORT) || 3003,
       hmr: true,
     },
     define: {
-      'process.env': {},
+      'process.env': {}, // 👈 避免浏览器端找不到 process
     },
     resolve: {
       alias: [
@@ -65,30 +70,31 @@ export default ({ command, mode }) => {
       jsxFragment: 'Fragment',
     },
     build: {
-      sourcemap: true,
+      sourcemap: false,
       chunkSizeWarningLimit: 2048,
       rollupOptions: mode === 'production' ? prodRollupOptions : {},
+      outDir: isAppBuild ? 'dist_app' : 'dist',
     },
     plugins: [
       vue({
-        template: {
-          transformAssetUrls: {
-            img: ['src'],
-            'a-avatar': ['src'],
-            'stepin-view': ['logo-src', 'presetThemeList'],
-            'a-card': ['cover'],
-          },
-        },
+        // template: {
+        //   transformAssetUrls: {
+        //     img: ['src'],
+        //     'a-avatar': ['src'],
+        //     'stepin-view': ['logo-src', 'presetThemeList'],
+        //     'a-card': ['cover'],
+        //   },
+        // },
       }),
       tailwindcss(),
       vueJsx(),
-      Components({
-        resolvers: [
-          AntDesignVueResolver({
-            importStyle: mode === 'development' ? false : 'less',
-          }),
-        ],
-      }),
+      // Components({
+      //   resolvers: [
+      //     AntDesignVueResolver({
+      //       importStyle: mode === 'development' ? false : 'less',
+      //     }),
+      //   ],
+      // }),
       svgLoader(),
     ],
     css: {
@@ -102,6 +108,7 @@ export default ({ command, mode }) => {
         },
       },
     },
-    base: env.VITE_BASE_URL,
+    // base: env.VITE_BASE_URL,
+    base: isAppBuild ? '/app1/' : '/',
   })
 }

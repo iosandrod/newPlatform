@@ -824,11 +824,33 @@ export class System extends Base {
     return 'normal' //
   }
   async designSystemNavs() {
-    //
+    let _data = await this.getHttp().find('navs')
     let tableConfig = {
-      columns: [],
-      data: [],
+      columns: [
+        {
+          field: 'id',
+          title: 'id',
+          tree: true,
+        },
+        {
+          field: 'navname', //
+          title: '导航名称',
+          editType: 'string', //
+        },
+        {
+          field: 'tableName',
+          title: '表格或者视图名称',
+        },
+      ],
+      data: _data,
+      treeConfig: {
+        id: 'id',
+        parentId: 'pid',
+      }, //
+      showRowSeriesNumber: true,
     }
+    // let _data1 = await this.confirmTable(tableConfig) //
+    return tableConfig
   }
   async enterCurrentPageDesign() {
     let curd = this.getCurrentPageDesign()
@@ -855,6 +877,15 @@ export class System extends Base {
     }
     let r = this.getRouter()
     r.push(path)
+  }
+  async updateUserInfo() {
+    let user = this.loginInfo.user //
+    if (user == null) {
+      return //
+    }
+    let http = this.getHttp()
+    await http.patch('users', user) //
+    this.confirmMessage('更新成功') //
   }
 }
 

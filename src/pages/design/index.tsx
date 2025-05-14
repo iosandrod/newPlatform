@@ -52,7 +52,7 @@ export default defineComponent({
       let obj = map[tableName]
       if (obj == null) {
         return false
-      }
+      } 
       return true
     })
     return () => {

@@ -76,7 +76,7 @@ export default defineComponent({
       const item = slots.item
       const tabCom = (
         <div ref={register}>
-          <ElTabs
+          <ElTabs  
             style={{ height: `${tabIns.getTabHeight()}` }}
             class={ns.b()}
             {...tabIns.getBindConfig()}

@@ -181,16 +181,18 @@ export default defineComponent({
       type: String as PropType<VxeUploadPropTypes.Size>,
       default: () => getConfig().upload.size || getConfig().size,
     },
-  },
+    onChange: Function as PropType<any>,
+  }, 
   setup(props, ctx) {
     let _upload = new UpLoad(props)
     return () => {
       let com = (
         <VxeUpload
+          v-slots={ctx.slots}
           {..._upload.config}
           uploadMethod={(config) => {
             return _upload.upload(config)
-          }}
+          }} //
           mode="image"
         ></VxeUpload>
       ) //

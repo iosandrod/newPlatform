@@ -73,9 +73,12 @@ export default defineComponent({
         )
         if (isIns == true) {
           btn1 = (
-            <button onClick={()=>{
+            <button
+              onClick={() => {
                 system.enterApp(config.appName)
-            }} class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded transition-colors">
+              }}
+              class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded transition-colors"
+            >
               启动应用
             </button>
           )
@@ -135,17 +138,18 @@ export default defineComponent({
               dropMode={'hover'}
               v-slots={{
                 default: () => {
+                  let user = systemIns.getUserInfo().user
                   let com = (
                     <button
                       id="user-menu-button"
                       class="flex items-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-2 rounded-md transition-colors"
                     >
                       <img
-                        src="https://i.pravatar.cc/32"
+                        src={user.avatar} //
                         alt="用户头像"
                         class="h-40 w-40 rounded-full mr-2"
                       />
-                      <span>用户名</span>
+                      <span>{user.username}</span>
                       <svg
                         class="h-40 w-5 ml-1 text-gray-500"
                         fill="currentColor"
@@ -169,7 +173,8 @@ export default defineComponent({
                     >
                       <div
                         onClick={() => {
-                          curNav.value = 'profile'
+                          // curNav.value = 'profile'
+                          systemIns.routeTo('/companyUserinfo') //
                         }}
                         href="#profile"
                         class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 cursor-pointer dark:hover:bg-gray-700"
@@ -224,20 +229,21 @@ export default defineComponent({
           </div>
         )
       }
+      let name = systemIns.getUserInfo()?.user?.companyCnName
       let headerCom = (
         <div class="bg-gray-100 dark:bg-gray-900">
           <header class="bg-white dark:bg-gray-800 shadow-md">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div class="flex justify-between h-60 items-center">
                 <div class="flex items-center">
-                  <img alt="公司Logo" class="h-50 w-50 mr-3" />
+                  <img alt="" class="h-50 w-50 mr-3" />
                   <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                    YourCompany
+                    {name}
                   </span>
                 </div>
 
                 <div class="flex items-center space-x-4">
-                  <button
+                  {/* <button
                     class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     aria-label="系统设置"
                   >
@@ -255,7 +261,7 @@ export default defineComponent({
                         d="M11.049 2.927c.3-.921 1.603-.921 1.902 0a1.724 1.724 0 002.592 1.027 1.724 1.724 0 012.168.628c.58.784.196 1.853-.794 2.012a1.724 1.724 0 00-1.244 1.596v2.062c0 .833-.673 1.506-1.506 1.506h-2.062a1.724 1.724 0 00-1.596 1.244c-.159.99-1.228 1.374-2.012.794a1.724 1.724 0 00-1.027-2.592c-.921-.3-.921-1.603 0-1.902a1.724 1.724 0 001.244-1.596V6.833c0-.833.673-1.506 1.506-1.506h2.062a1.724 1.724 0 001.596-1.244c.159-.99 1.228-1.374 2.012-.794z"
                       />
                     </svg>
-                  </button>
+                  </button> */}
                   {userCom}
                 </div>
               </div>

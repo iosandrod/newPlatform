@@ -2752,3 +2752,122 @@ const app = createApp({
                   <span class="text-sm">Mac</span>
                 </div>
               </div> */}
+
+
+               let btnGText = (
+        <div class="" style={{ height: '30px' }}>
+          <er-button-group
+            items={[
+              {
+                label: '当前真实表设计',
+                fn: async () => {
+                  let currentPage = systemIns.getCurrentPageDesign()
+                  let rTName = currentPage.getRealTableName()
+                  await system.designTableColumns(rTName) //
+                },
+              },
+              //
+              {
+                label: '进入设计', //
+                fn: async () => {
+                  let currentPage = systemIns.getCurrentPageDesign()
+                  currentPage.setCurrentDesign(true) //
+                },
+              },
+              {
+                label: '离开设计',
+                fn: async () => {
+                  let cp = systemIns.getCurrentPageDesign()
+                  cp.setCurrentDesign(false) //
+                },
+              },
+              {
+                label: '保存设计',
+                fn: async () => {
+                  let currentPage = systemIns.getCurrentPageDesign()
+                  currentPage.saveTableDesign()
+                },
+              },
+              {
+                label: '进入编辑页面',
+                fn: async () => {
+                  systemIns.routeOpen('t_SdOrder---edit') //
+                },
+              },
+              {
+                label: '打印layout', //
+                fn: async () => {
+                  let currentPage = systemIns.getCurrentPageDesign()
+                  let layout = currentPage.getLayoutData()
+                  console.log(layout) //
+                  console.log(currentPage, 'testPage') //
+                },
+              },
+              {
+                label: '当前页面设计',
+                fn: async () => {
+                  await systemIns.designCurrentPageConfig() //
+                },
+              },
+            ]}
+          ></er-button-group>
+        </div>
+      )
+
+      {
+        dragHeaderMode: 'column',
+        validateDragOrderOnEnd: (start, end) => {
+          let col1 = start.col
+          let row1 = start.row
+          let col2 = end.col
+          let row2 = end.row
+          let f = this.getInstance().getHeaderField(col1, row1)
+          let f1 = this.getInstance().getHeaderField(col2, row2)
+          let f1C = this.getColumns().find((c) => c.getField() == f)
+          let f2C = this.getColumns().find((c) => c.getField() == f1)
+          if (f1C == f2C) {
+            return false //
+          }
+          let isFrozen = f2C.getIsFrozen()
+          let isFrozen1 = f1C.getIsFrozen()
+          if (isFrozen || isFrozen1) {
+            //
+            return false
+          }
+          nextTick(() => {
+            let fs = this.getInstance().columns.map((col, i) => {
+              let obj = {
+                field: col.field,
+                order: i + 1,
+              }
+              return obj
+            })
+            this.changeSortOrder(fs as any) //
+          })
+          return true
+        },
+      }
+
+
+      // let icon = createText({
+        //   text: t,
+        //   fontSize: 15,
+        //   cursor: 'pointer', //
+        //   x: 0,
+        //   y: 0, //
+        //   overflow: 'hidden',
+        //   fill: 'black',
+        //   boundsPadding: [0, 0, 0, 3 + _level * 15], //
+        //   lineDashOffset: 0,
+        // })
+        // let _g2=createGroup({
+
+        // })
+
+        _g1.on('click', () => {
+          // this.table.openTreeRow(col, row) //
+          // // nextTick(() => {
+          // //   _this.table.updateIndexArr.add(_index)
+          // // })
+          // console.log(args, 'sfjsdklfsdlfsd') //
+        })

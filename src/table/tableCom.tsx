@@ -112,6 +112,14 @@ export default defineComponent({
       //
       type: Object, //
     },
+    enableDragRow: {
+      type: Boolean,
+      default: false,
+    },
+    enableDragColumn: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any

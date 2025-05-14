@@ -50,6 +50,143 @@ export class CheckboxColumn extends Column {
   getField() {
     return 'checkboxField' //
   }
+  getCustomLayout() {
+    //
+    let customLayout = (args) => {
+      let { table, row, col, rect, value } = args
+      let t1: VTable.ListTable = table
+
+      let _value: string = value
+      let record = table.getCellOriginRecord(col, row)
+      let bg = this.getIndexColor(row, record) //
+      if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
+        bg = this.getCurrentRowColor()
+      }
+      const { height, width } = rect ?? table.getCellRect(col, row)
+      let _height = height
+      let _length1 = t1.records.length
+      if (_length1 == row) {
+        _height = _height - 1 //
+      }
+      let _width = width
+      let colCount = t1.colCount
+      if (colCount == col + 1) {
+        _width = _width - 1
+      }
+      let lf = this.table.leftFrozen
+      if (lf && this.getIsLeftFrozen()) {
+        let field = this.getField()
+        if (lf == field) {
+          _width = _width - 1 //
+        }
+      }
+      let container = createGroup({
+        height: _height,
+        width: _width,
+        // display: 'flex',
+        // flexDirection: 'row',
+        flexWrap: 'nowrap',
+        background: bg, //
+        overflow: 'hidden',
+        lineWidth: 1,
+        stroke: this.getBorderColor(), //
+        alignItems: 'center',
+        boundsPadding: [0, 0, 0, 0], //
+      })
+      container.on('mouseover', () => {
+        let oldColor = container.attribute.background
+        container._oldColor = oldColor
+        container.setAttribute('background', this.getHoverColor()) ///
+      })
+      container.on('mouseout', () => {
+        let color = container._oldColor
+        if (record == this.table.tableData.curRow) {
+          color = this.getCurrentRowColor() //
+        }
+        container.setAttribute('background', color) ////
+      })
+
+      container.on('mousedown', (args) => {
+        if (this.isMousedownRecord != null) {
+          this.table.emit('dblclick_cell', { originalData: record }) ////
+        }
+        this.isMousedownRecord = record
+        setTimeout(() => {
+          this.isMousedownRecord = null
+        }, 130)
+      })
+      //处理checkbox
+      const checkboxGroup = createGroup({
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center', //
+        boundsPadding: [0, 0, 0, 0],
+        justifyContent: 'center', //
+        height: _height,
+        width: _width, //
+      })
+      container.add(checkboxGroup)
+      const checkbox1 = new CheckBox({
+        text: {
+          text: '', //
+        },
+        disabled: false, //
+        checked: Boolean(record.checkboxField), //
+        boundsPadding: [0, 0, 0, 0],
+      }) //
+      checkbox1.render()
+      checkboxGroup.add(checkbox1)
+
+      let _index = record['_index'] ////
+      let _table = this.table //
+      let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
+      let rowStart = scrollConfig.rowStart
+      let rowEnd = scrollConfig.rowEnd
+      let _row = row
+      container['currentRowIndex'] = row //
+      let _this = this
+      container['updateCanvas'] = () => {
+        // let record = table.getCellOriginRecord(col, row)
+        //基本的样式
+        let bg = _this.getIndexColor(row, record)
+        if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+          bg = _this.getCurrentRowColor() //
+        } //
+        container.setAttribute('background', bg)
+      } //
+
+      let _length = 200 //
+      rowStart = rowStart - _length
+      if (rowStart < 0) {
+        rowStart = 0 //
+      }
+      rowEnd = rowEnd + _length
+      if (_row >= rowStart && _row <= rowEnd) {
+        let currentIndexContain = _table.currentIndexContain
+        //显示在视图上
+        let _arr = currentIndexContain[_index]
+        if (_arr == null) {
+          currentIndexContain[_index] = {}
+          _arr = currentIndexContain[_index] //
+        }
+        let field = this.getField()
+        _arr[field] = container //
+      } else {
+        let currentIndexContain = _table.currentIndexContain //
+        delete currentIndexContain[_index] //
+      }
+      // let _isTree = this.getIsTree()
+      // if (_isTree == true) {
+      //   container = null //
+      // }
+      return {
+        rootContainer: container,
+        // renderDefault: _isTree, //
+        renderDefault: false, //
+      }
+    }
+    return customLayout
+  }
   getColumnProps(isFooter = false) {
     let _this = this
     let _props: CheckboxColumnDefine = super.getColumnProps()
@@ -121,90 +258,100 @@ export class CheckboxColumn extends Column {
     if (isFooter) {
       _props.headerCustomLayout = null //
     } //
-    _props.customLayout = (args) => {
-      const { table, row, col, rect } = args
-      const { height, width } = rect ?? table.getCellRect(col, row)
-      let rows = table.getRecordByCell(col, row)
-      let _table = this.table
-      let curRow = _table.tableData.curRow
-      let gb = this.getIndexColor(row)
-      if (curRow == rows) {
-        gb = this.getCurrentRowColor() ////
-      }
-      const container = createGroup({
-        height: height - 2, //
-        width: width - 2,
-        x: 1,
-        y: 1, //
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: gb,
-      })
-      const checkboxGroup = createGroup({
-        display: 'flex',
-        flexDirection: 'column',
-        boundsPadding: [0, 0, 0, 0],
-        justifyContent: 'center', //
-      })
-      container.appendChild(checkboxGroup)
-      const checkbox1 = new CheckBox({
-        text: {
-          text: '', //
-        },
-        disabled: false, //
-        checked: Boolean(rows.checkboxField), //
-        boundsPadding: [0, 0, 0, 0],
-      }) //
-      checkbox1.render()
-      checkboxGroup.appendChild(checkbox1)
-      checkbox1.addEventListener('checkbox_state_change', (e) => {}) //
-      /* 
-      
-      */
-      const record = table.getCellOriginRecord(col, row)
-      let _index = record['_index'] //
-      let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
-      let rowStart = scrollConfig.rowStart
-      let rowEnd = scrollConfig.rowEnd
-      let _row = row
-      let currentIndexContain = _table.currentIndexContain
-      container['currentRowIndex'] = row //
-      container['updateCanvas'] = () => {
-        let bg = this.getIndexColor(row) //
-        if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
-          bg = this.getCurrentRowColor()
-        }
-        let checkboxField = Boolean(record.checkboxField)
-        checkbox1.setAttribute('checked', checkboxField) //
-        container.setAttribute('background', bg) //
-      }
-      let length = this.table.templateProps.data.length
-      let _length = length / 5
-      rowStart = rowStart - _length
-      if (rowStart < 0) {
-        rowStart = 0 //
-      }
-      rowEnd = rowEnd + _length //
-      if (_row >= rowStart && _row <= rowEnd) {
-        //显示在视图上
-        let _arr = currentIndexContain[_index]
-        if (_arr == null) {
-          currentIndexContain[_index] = {}
-          _arr = currentIndexContain[_index] //
-        }
-        // _arr.push(container)
-        let field = this.getField()
-        _arr[field] = container //
-      } else {
-        currentIndexContain[_index] = null
-      }
-      return {
-        rootContainer: container,
-        renderDefault: false, //
-      }
-    }
+    _props.customLayout = this.getCustomLayout()
+    // _props.customLayout = (args) => {
+    //   const { table, row, col, rect } = args
+    //   const { height, width } = rect ?? table.getCellRect(col, row)
+    //   let rows = table.getRecordByCell(col, row)
+    //   let _table = this.table
+    //   let curRow = _table.tableData.curRow
+    //   let gb = this.getIndexColor(row)
+    //   if (curRow == rows) {
+    //     gb = this.getCurrentRowColor() ////
+    //   }
+    //   const container = createGroup({
+    //     height: height - 2, //
+    //     width: width - 2,
+    //     x: 1,
+    //     y: 1, //
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     background: gb,
+    //   })
+    //   const checkboxGroup = createGroup({
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     boundsPadding: [0, 0, 0, 0],
+    //     justifyContent: 'center', //
+    //   })
+    //   container.appendChild(checkboxGroup)
+    //   const checkbox1 = new CheckBox({
+    //     text: {
+    //       text: '', //
+    //     },
+    //     disabled: false, //
+    //     checked: Boolean(rows.checkboxField), //
+    //     boundsPadding: [0, 0, 0, 0],
+    //   }) //
+    //   checkbox1.render()
+    //   checkboxGroup.appendChild(checkbox1)
+    //   checkbox1.addEventListener('checkbox_state_change', (e) => {}) //
+    //   /*
+
+    //   */
+    //   const record = table.getCellOriginRecord(col, row)
+    //   let _index = record['_index'] //
+    //   let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
+    //   let rowStart = scrollConfig.rowStart
+    //   let rowEnd = scrollConfig.rowEnd
+    //   let _row = row
+    //   let currentIndexContain = _table.currentIndexContain
+    //   container['currentRowIndex'] = row //
+    //   container['updateCanvas'] = () => {
+    //     // let bg = this.getIndexColor(row) //
+    //     // if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
+    //     //   bg = this.getCurrentRowColor()
+    //     // }
+    //     // container.setAttribute('background', bg) //
+    //     // const record = table.getCellOriginRecord(col, row)
+    //     //基本的样式
+    //     let bg = _this.getIndexColor(row, record)
+    //     if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+    //       bg = _this.getCurrentRowColor() //
+    //     } //
+    //     container.setAttribute('background', bg)
+    //     // let formatFn = _this.getFormat()
+    //     // let _value = formatFn(record, row, col, table)
+    //     let checkboxField = Boolean(record.checkboxField)
+    //     checkbox1.setAttribute('checked', checkboxField) //
+    //   }
+    //   let length = this.table.templateProps.data.length
+    //   let _length = length / 5
+    //   rowStart = rowStart - _length
+    //   if (rowStart < 0) {
+    //     rowStart = 0 //
+    //   }
+    //   rowEnd = rowEnd + _length //
+    //   if (_row >= rowStart && _row <= rowEnd) {
+    //     //显示在视图上
+    //     let _arr = currentIndexContain[_index]
+    //     if (_arr == null) {
+    //       currentIndexContain[_index] = {}
+    //       _arr = currentIndexContain[_index] //
+    //     }
+    //     // _arr.push(container)
+    //     let field = this.getField()
+    //     _arr[field] = container //
+    //   } else {
+    //     currentIndexContain[_index] = null
+    //   }
+    //   return {
+    //     rootContainer: container,
+    //     renderDefault: false, //
+    //   }
+    // }
     return _props //
   }
 }

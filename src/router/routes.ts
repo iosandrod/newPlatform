@@ -16,11 +16,11 @@ const routes: RouteRecordRaw[] = [
         name: 'home', //
         component: () => import('@/pages/home/Home'),
       },
-      {
-        path: ':tableName',
-        name: 'entity', //
-        component: () => import('@/pages/design/index'), //
-      },
+      // {
+      //   path: ':tableName',
+      //   name: 'entity', //
+      //   component: () => import('@/pages/design/index'), //
+      // },
     ],
   },
   {
@@ -45,6 +45,18 @@ const routes: RouteRecordRaw[] = [
     path: '/companyUserInfo',
     name: 'companyUserInfo',
     component: () => import('@/pages/user/userInfo'), //
+  },
+  {
+    path: '/',
+    name: 'entity', //
+    component: () => import('@/pages/index'), //
+    children: [
+      {
+        path: ':tableName',
+        name: 'entityTable', //
+        component: () => import('@/pages/design/index'), //
+      },
+    ],
   },
 ]
 

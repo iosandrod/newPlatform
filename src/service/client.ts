@@ -120,7 +120,9 @@ export class myHttp {
       system.confirmMessage('注册成功')
       let r = system.getRouter()
       r.push('companyLogin') //
-    } catch (error) {}
+    } catch (error) {
+      system.confirmMessage(`注册失败,${error?.message}`, 'error') //
+    }
   } //
   async loginUser(data) {
     try {
@@ -294,6 +296,27 @@ export class myHttp {
     let _res = await this.post(tableName, 'create', data)
     return _res //
   } //
+  async uploadFile(file: File) {
+    let fileName = file.name
+    let uri = await this.fileToDataURL(file)
+    let obj = {
+      uri: uri,
+      fileName: fileName,
+    } //
+    let _res = await this.post('uploads', 'create', obj)
+    return _res
+  }
+  fileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        // reader.result 就是完整的 data URI
+        resolve(reader.result)
+      }
+      reader.onerror = (err) => reject(err)
+      reader.readAsDataURL(file)
+    })
+  }
 }
 
 export const http = new myHttp()
