@@ -177,8 +177,7 @@ export const initContextMenu = (table: Table) => {
           height: 500,
           width: 900,
         }
-        let data1 = await sys.confirmForm(fConfig)
-        console.log(data1, 'testData1') //
+        let data1 = await sys.confirmForm(fConfig) //
       },
     },
     {

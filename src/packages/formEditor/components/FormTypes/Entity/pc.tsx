@@ -21,7 +21,7 @@ export default defineComponent({
     let fitem: PageDesignItem = props.item
     let _design: PageDesign = inject('mainPageDesign', {}) as any
     let tableName = item.getTableName()
-    let mainTableName=_design.getTableName()
+    let mainTableName = _design.getTableName()
     let data = computed(() => {
       let _data = _design.getTableRefData(tableName)?.data || []
       return _data //
@@ -34,17 +34,24 @@ export default defineComponent({
       pageDesign.registerRef(`${tableType}__${tableName}`, ins) //
       fitem.registerRef('fieldCom', ins) ////
     } //
+    let openDesignHeader = (config) => {
+      if (_design == null) {
+        return //
+      }
+    }
     return () => {
       //
       let com = (
         <div class="h-full w-full" style={{ minHeight: '200px' }}>
           <erTable
+            showHeaderContext={false}
             tableName={tableName}
             mainTableName={mainTableName}
             showHeaderButtons={item.getShowHeaderButtons()}
             key={item.id}
             ref={registerTable}
             data={data.value}
+            onHeaderContextmenu={openDesignHeader}
             columns={columns.value}
           ></erTable>
         </div>

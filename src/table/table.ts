@@ -901,9 +901,24 @@ export class Table extends Base {
     }
     const event: PointerEvent = config.event
     let contextmenu: BMenu = this.getRef('contextmenu')
-    contextmenu.open(event) //
-    // nextTick(() => {
-    // })
+    if (contextmenu == null) {
+    } else {
+      let showHeaderContext = this.config.showHeaderContext
+      if (showHeaderContext == false) {
+      } else {
+        contextmenu.open(event) //
+      }
+    } //
+    let onHeaderContextmenu = this.config.onHeaderContextmenu
+    if (
+      typeof onHeaderContextmenu == 'function' &&
+      this.isHeaderContext == true
+    ) {
+      onHeaderContextmenu({
+        table: this,
+        column: _col, //
+      }) //
+    }
   }
   getColumns() {
     const columns = this.columns //

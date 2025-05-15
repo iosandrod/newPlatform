@@ -126,6 +126,13 @@ export default defineComponent({
     dragRowAfterFn: {
       type: Function, //
     },
+    showHeaderContext: {
+      type: Boolean,
+      default: true,
+    },
+    onHeaderContextmenu: {
+      type: Function,
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any
@@ -299,7 +306,10 @@ export default defineComponent({
         ></div>,
         [],
       ) //
-      const menuCom = <TableMenuCom></TableMenuCom>
+      let menuCom = <TableMenuCom></TableMenuCom>
+      // if (props.showHeaderContext === false) {
+      //   menuCom = null //
+      // }
       let btnCom = <TableButtonCom></TableButtonCom>
       if (tableIns.config.showHeaderButtons == false) {
         //
@@ -356,18 +366,7 @@ export default defineComponent({
         </div>,
         [[vShow, tableIns.globalConfig.show]],
       )
-      /* 
-        {
-                flex: 1,
-                width: '100%',
-                overflow: 'hidden', //
-                borderLeft: '1px solid RGB(225, 228, 232)',
-                borderRight: '1px solid RGB(225, 228, 232)',
-                borderTop: '1px solid RGB(225, 228, 232)',
-                boxSizing: 'border-box',
-              }
-      
-      */
+
       let calCom = withDirectives(
         <div
           style={{
