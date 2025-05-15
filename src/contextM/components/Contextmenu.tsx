@@ -1,24 +1,7 @@
-import {
-  computed,
-  defineComponent,
-  watch,
-  ref,
-  reactive,
-  onBeforeUnmount,
-  provide,
-  Teleport,
-  nextTick,
-  withDirectives,
-  vShow,
-} from 'vue'
+import { computed, defineComponent, watch, ref, reactive, onBeforeUnmount, provide, Teleport, nextTick, withDirectives, vShow } from 'vue'
 import type { PropType } from 'vue'
 
-import type {
-  TriggerEventType,
-  ReferenceOptions,
-  ShowOptions,
-  AddReferenceOptions,
-} from '../types'
+import type { TriggerEventType, ReferenceOptions, ShowOptions, AddReferenceOptions } from '../types'
 
 import { CLASSES } from '../constants'
 
@@ -64,6 +47,9 @@ const Contextmenu = defineComponent({
       type: Boolean,
       default: false,
     },
+    beforeHidden: {
+      type: Function,
+    },
     // destroyOnHide: {
     //   type: Boolean,
     //   default: false,
@@ -101,8 +87,7 @@ const Contextmenu = defineComponent({
         //@ts-ignore
         evt.left = evt.x
       }
-      const autoAdjustPlacement =
-        targetOptions?.autoAdjustPlacement || props.autoAdjustPlacement
+      const autoAdjustPlacement = targetOptions?.autoAdjustPlacement || props.autoAdjustPlacement
       const targetPosition = {
         top: targetOptions?.top || 0,
         left: targetOptions?.left || 0,
@@ -125,10 +110,7 @@ const Contextmenu = defineComponent({
           const width = el.clientWidth
           const height = el.clientHeight
 
-          if (
-            height + targetPosition.top >=
-            window.innerHeight + window.scrollY
-          ) {
+          if (height + targetPosition.top >= window.innerHeight + window.scrollY) {
             const targetTop = targetPosition.top - height
 
             if (targetTop > window.scrollY) {
@@ -136,10 +118,7 @@ const Contextmenu = defineComponent({
             }
           }
 
-          if (
-            width + targetPosition.left >=
-            window.innerWidth + window.scrollX
-          ) {
+          if (width + targetPosition.left >= window.innerWidth + window.scrollX) {
             const targetWidth = targetPosition.left - width
 
             if (targetWidth > window.scrollX) {
@@ -163,15 +142,11 @@ const Contextmenu = defineComponent({
     //
     const references = reactive(new Map<Element, ReferenceOptions>())
     const currentReference = ref<Element>()
-    const currentReferenceOptions = computed(
-      () => currentReference.value && references.get(currentReference.value),
-    )
+    const currentReferenceOptions = computed(() => currentReference.value && references.get(currentReference.value))
     const addReference = (el: Element, options?: AddReferenceOptions) => {
       const triggers = (() => {
         if (options?.trigger) {
-          return Array.isArray(options.trigger)
-            ? options.trigger
-            : [options.trigger]
+          return Array.isArray(options.trigger) ? options.trigger : [options.trigger]
         }
         return DEFAULT_REFERENCE_OPTIONS.trigger
       })()
@@ -211,11 +186,7 @@ const Contextmenu = defineComponent({
       )
         return
 
-      const notOutside =
-        contextmenuRef.value.contains(evt.target as Node) ||
-        (currentReferenceOptions.value &&
-          currentReferenceOptions.value.triggers.includes('click') &&
-          currentReference.value.contains(evt.target as Node))
+      const notOutside = contextmenuRef.value.contains(evt.target as Node) || (currentReferenceOptions.value && currentReferenceOptions.value.triggers.includes('click') && currentReference.value.contains(evt.target as Node))
       if (!notOutside) {
         toggle(false)
       }
@@ -279,7 +250,7 @@ const Contextmenu = defineComponent({
             })}
           </ul>
         </div>,
-        [[vShow, _show.value]],
+        [[vShow, _show.value]]
       )
       let com1 = null
       if (props.teleport && props.isTeleport) {

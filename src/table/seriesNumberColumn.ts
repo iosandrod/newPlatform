@@ -149,7 +149,6 @@ export class SeriesNumberColumn extends Column {
             let t = createText({
               text: v[0], //
               fontSize: 16,
-              fill: 'red',
               boundsPadding: [0, 0, 0, 0],
               lineDashOffset: 0,
             })
@@ -195,7 +194,7 @@ export class SeriesNumberColumn extends Column {
         let container = _g
         container.add(locationName)
       }
-      container.add(_g) //
+      // container.add(_g) //
       container.on('mousedown', (args) => {
         if (this.isMousedownRecord != null) {
           this.table.emit('dblclick_cell', { originalData: record }) ////

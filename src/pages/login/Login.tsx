@@ -159,7 +159,7 @@ export default defineComponent({
     let d1 = reactive({ editType: 'date' })
     return () => {
       let com0 = null //
-      let com = null
+      let com = null //
       com = <pageCom></pageCom> //
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       let com2 = <button onClick={fn1}>123123</button>
@@ -179,17 +179,12 @@ export default defineComponent({
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       })
-      com = (
-        <div class="w-full h-full">
-          <formCom
-            ref={_reg3}
-            isDesign={false}
-            {..._fConfig}
-            data={d1}
-          ></formCom>
-        </div>
-      )
-      com = <uploadCom></uploadCom>
+      // com = (
+      //   <div class="w-full h-full">
+      //     <formCom ref={_reg3} isDesign={false} {..._fConfig} data={d1}></formCom>
+      //   </div>
+      // )
+      // com = <uploadCom></uploadCom>
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>
       // com = <VxeCheckbox

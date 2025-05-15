@@ -2931,21 +2931,3 @@ const app = createApp({
               }
       
       */
-
-
-      {
-        field: 'image',
-        label: '图标',
-        type: 'image', //
-        span: 24,
-        style: {
-          height: '200px',
-        },
-      },
-
-       // let tableName = config.tableName
-          // let f = config.field //
-          // await system.designTableColumns(tableName, f) //
-          // let tName = this.getRealTableName() //
-          // await system.designTableColumns(tName, currentDesignField) //
-      
