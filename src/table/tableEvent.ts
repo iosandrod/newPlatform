@@ -82,7 +82,7 @@ export const click_cell = (table: Table) => {
             }
             table.currentEditCol = tCol
             _this.startEditCell(config.col, config.row, config.value)
-          }, 10) //
+          }, 50) //
           return
         }
       }
@@ -90,6 +90,7 @@ export const click_cell = (table: Table) => {
       } //
       if (originData == null) {
       } else {
+        let curEdit = table.getCurrentCellEdit()
         table.clearEditCell()
         table.setCurRow(originData) ////
       } //
@@ -101,15 +102,15 @@ export const click_cell = (table: Table) => {
     name: 'dblclick_cell',
     keyName: 'dblclick_cell',
     callback: (config) => {
-      if (config.originData == null) {
-        let row = config.row
-        let col = config.col
-        let title = config.title
-        table.clearEditCell()
-        setTimeout(() => {
-          table.startEditCell(col, row, title) //
-        }, 10)
-      }
+      // if (config.originData == null) {
+      //   let row = config.row
+      //   let col = config.col
+      //   let title = config.title
+      //   table.clearEditCell()
+      //   setTimeout(() => {
+      //     table.startEditCell(col, row, title) //
+      //   }, 10)
+      // }
     },
   })
 }
@@ -207,6 +208,7 @@ export const checkbox_state_change = (table: Table) => {
     name: 'checkbox_state_change',
     keyName: 'checkbox_state_change',
     callback: (config) => {
+      console.log(config, 'testConfig')//
       nextTick(() => {
         let originData = config.originData //
         if (originData == null) {
@@ -216,7 +218,23 @@ export const checkbox_state_change = (table: Table) => {
         if (table.permission.canChangecheckbox == false) {
           return //
         }
-        table.updateCheckboxField([originData]) ////
+
+        if (config.field == 'checkboxField') {
+          table.updateCheckboxField([originData]) ////
+        } else {
+          let _col = table.columns.find(col => {
+            let f = col.getField()//
+            return config.field == f
+          })
+          let checked = config.chekced
+          if (_col != null) {
+            _col.updateBindValue({
+              value: checked,
+              row: originData,
+              field: config.field//
+            })
+          }
+        }
       })
     },
   })
@@ -227,7 +245,7 @@ export const checkboxChange = (table: Table) => {
   table.registerEvent({
     name: 'checkboxChange',
     keyName: 'checkboxChange',
-    callback: (config) => {},
+    callback: (config) => { },
   })
 }
 
@@ -261,7 +279,7 @@ export const mousedown_cell = (table: Table) => {
   table.registerEvent({
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
-    callback: (config) => {},
+    callback: (config) => { },
   })
 }
 

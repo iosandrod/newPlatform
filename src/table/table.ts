@@ -111,11 +111,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-    x: 0,
-    y: 0,
-    width: 0,
-    filterConfig: [],
-  }
+      x: 0,
+      y: 0,
+      width: 0,
+      filterConfig: [],
+    }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -260,7 +260,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() {}
+  getListTableOption() { }
   getShowSeriesNumber() {
     let config = this.config
     let showRowSeriesNumber = config.showRowSeriesNumber
@@ -882,7 +882,7 @@ export class Table extends Base {
   initCurrentContextItems() {
     initContextMenu(this) //
   } //
-  setCurTableSelect() {}
+  setCurTableSelect() { }
   openContextMenu(config) {
     let originData = config.originData
     let field = config.field
@@ -1202,14 +1202,14 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) {}
+  async runBefore(config?: any) { }
   //@ts-ignore
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
     }
   }
-  registerHooks(hConfig?: any) {}
+  registerHooks(hConfig?: any) { }
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -1224,7 +1224,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) {}
+  setMergeConfig(config?: any) { }
   async addRows(rowsConfig?: { rows?: Array<any> } | number) {
     if (typeof rowsConfig === 'number') {
       let _rows = Array(rowsConfig).fill(null)
@@ -1468,6 +1468,7 @@ export class Table extends Base {
     let records = instance.records //
     return records
   }
+
   updateCheckboxField(rows, status = null, isAllClick = false) {
     if (!Array.isArray(rows)) {
       return
@@ -1744,10 +1745,27 @@ export class Table extends Base {
     }
     return tf //
   }
+  getTargetColumn(col, row) {
+    let ins = this.getInstance()
+    let f = ins.getBodyField(col, row)
+    let columns = this.getFlatColumns()
+    let _col = columns.find(c => {
+      return c.getField() == f
+    })
+    return _col
+  }
   startEditCell(col, row, value) {
-    this.templateEditCell = { col: col, row: row, value: value }
     let ins = this.getInstance() //
+    // debugger
+    // let f = ins.getBodyField(col, row)
+    let tCol = this.getTargetColumn(col, row)
+    if (tCol.getEditType() == 'boolean') {
+      ins.clearSelected()//
+      return
+    }
+    this.templateEditCell = { col: col, row: row, value: value }
     ins.startEditCell(col, row, value) //
+    ins.clearSelected()////
   }
   clearEditCell() {
     let currentEditCol = this.currentEditCol
@@ -1763,8 +1781,10 @@ export class Table extends Base {
     this.templateEditCell = null ////
     let ins = this.getInstance()
     ins.completeEditCell() ////
-    ins.selectCell(_templateEditCell.col, _templateEditCell.row) //
-    // ins.clearSelected() //
+    // ins.selectCell(_templateEditCell.col, _templateEditCell.row) //
+    // setTimeout(() => {
+    //   ins.clearSelected() //
+    // }, 50)
   }
   getCurrentCellEdit() {
     let ins = this.getInstance()
@@ -1807,14 +1827,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) {}
+  async validateData(config) { }
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1822,7 +1842,7 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() {}
+  copyCurrentSelectCells() { }
   headerSortClick(config: any) {
     let sortState = this.sortCache
     let hasSort = sortState.findIndex((s) => s.field == config.field) //
@@ -1878,8 +1898,8 @@ export class Table extends Base {
       })
     } //
   }
-  designCurrentColumn() {}
-  getCacheContain(row) {}
+  designCurrentColumn() { }
+  getCacheContain(row) { }
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -1887,7 +1907,7 @@ export class Table extends Base {
         this.registerEvent({
           keyName: key,
           name: key, //
-          callback: (...args) => {},
+          callback: (...args) => { },
         })
       }
     })
@@ -2107,8 +2127,7 @@ export class Table extends Base {
     let record = ins.getRecordByCell(col, row) //
     let f = ins.getBodyField(col, row)
     let _c = this.getColumns().find((c) => c.getField() == f)
-    if (_c?.getIsTree() != true) {
-      //
+    if (_c?.getIsTree() != true) {//
       return
     }
     if (record == null) {
@@ -2126,7 +2145,7 @@ export class Table extends Base {
     }) //
     ins.toggleHierarchyState(col, row) ////
   }
-  setRowDragAble(status) {}
+  setRowDragAble(status) { }
   getTreeDataByPid(pid) {
     //
     let treeConfig = this.treeConfig
@@ -2158,6 +2177,6 @@ export class Table extends Base {
     if (typeof dragRowAfterFn == 'function') {
       dragRowAfterFn({ startRow: r1, endRow: r2, data })
     }
-    return
+    return//
   }
 }

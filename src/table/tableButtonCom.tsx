@@ -44,6 +44,8 @@ export default defineComponent({
           fn: async () => {
             //添加行
             tableIns.updateCanvas() //
+            // let ins = tableIns.getInstance()
+            // ins.clearSelected() //
           },
         },
       ] //
@@ -64,16 +66,7 @@ export default defineComponent({
       return buttons //
     })
     return () => {
-      return (
-        <div>
-          {
-            <buttonGroupCom
-              parent={tableIns}
-              items={buttons.value}
-            ></buttonGroupCom>
-          }
-        </div>
-      )
+      return <div>{<buttonGroupCom parent={tableIns} items={buttons.value}></buttonGroupCom>}</div>
     }
   },
 })

@@ -45,9 +45,8 @@ function generateRandomBirthday() {
   const year = randomDate.getFullYear()
   const month = randomDate.getMonth() + 1
   const day = randomDate.getDate()
-  return `${year}-${month < 10 ? '0' + month : month}-${
-    day < 10 ? '0' + day : day
-  }`
+  return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day
+    }`
 }
 
 function generateRandomPhoneNumber() {
@@ -23918,10 +23917,10 @@ export const menuTConfig = {
   columns: [
     {
       field: 'id',
-      tree: true,
       title: 'ID',
       width: 80,
       sort: true,
+      editType: "boolean",//
       // bgColor:(record)=>{
       //   if(record['id']==98){
       //     return 'red'
