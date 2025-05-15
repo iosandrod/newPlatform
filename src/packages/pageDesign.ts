@@ -559,6 +559,7 @@ export class PageDesign extends Form {
       {
         label: '设计按钮',
         fn: async () => {
+          let currentContextItem = this.currentContextItem //
           this.currentContextItem = null //
         },
         visible: computed(() => {
