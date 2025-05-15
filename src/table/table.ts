@@ -914,9 +914,12 @@ export class Table extends Base {
       typeof onHeaderContextmenu == 'function' &&
       this.isHeaderContext == true
     ) {
+      //
       onHeaderContextmenu({
         table: this,
         column: _col, //
+        event: config.event, //
+        config: config,
       }) //
     }
   }

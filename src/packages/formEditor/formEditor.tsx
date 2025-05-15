@@ -340,10 +340,10 @@ export default defineComponent({
         )
       } //
       let com = (
-        <div class="h-full w-full overflow-hidden bg-white">
-          <div class="flex h-full w-full bg-white overflow-hidden flex-row">
+        <div class="h-full w-full overflow-x-hidden overflow-y-auto bg-white">
+          <div class="flex h-full w-full bg-white overflow-x-hidden overflow-y-auto flex-row">
             <div class="h-full overflow-auto">{_fieldCom}</div>
-            <div class="flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
               {isShow.value &&
                 withDirectives(<CanvesPanel data={state.store} />, [
                   [vClickOutside, onClickOutside],

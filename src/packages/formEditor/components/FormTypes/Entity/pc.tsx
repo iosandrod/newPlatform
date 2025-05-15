@@ -4,6 +4,8 @@ import { PageDesign } from '@ER/pageDesign'
 import { PageDesignItem } from '@ER/pageItem'
 import _ from 'lodash'
 import { tableConfig } from '@/table/tableData'
+import { Column } from '@/table/column'
+import { system } from '@/system'
 export default defineComponent({
   name: 'entityPc', //
   props: ['data', 'params', 'item'], //
@@ -35,10 +37,18 @@ export default defineComponent({
       fitem.registerRef('fieldCom', ins) ////
     } //
     let openDesignHeader = (config) => {
+      console.log(config, 'testConfig') //
       if (_design == null) {
         return //
       }
-    }
+      let column: Column = config.column
+      if (column == null) {
+        return //
+      } //
+      let event = config.event
+      // console.log(config, 'testEvent') ///
+      _design.openContextMenu(event, item) // 
+    } //
     return () => {
       //
       let com = (

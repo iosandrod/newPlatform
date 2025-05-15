@@ -6,15 +6,6 @@ export const getDFConfig = (_this, data) => {
     data: data,
     items: [
       {
-        field: 'image',
-        label: '图标',
-        type: 'image', //
-        span: 24,
-        style: {
-          height: '200px',
-        },
-      },
-      {
         field: 'title', //
         label: '标题',
         type: 'string',
@@ -113,6 +104,29 @@ export const getDFConfig = (_this, data) => {
         type: 'select',
         options: {
           options: getAllColTypes(),
+        },
+      },
+      {
+        label: '选择项',
+        field: 'options',
+        type: 'stable',
+        span: 24, //
+        options: {
+          showTable: true,
+          tableTitle: '选择项',
+          tableState: 'edit',
+          columns: [
+            {
+              field: 'label',
+              title: '名称',
+              editType: 'string',
+            },
+            {
+              field: 'value',
+              title: '值',
+              editType: 'string',
+            },
+          ],
         },
       },
     ],

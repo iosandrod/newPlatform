@@ -19,6 +19,7 @@ import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 import { Table } from '@/table/table'
 import { BMenu } from '@/buttonGroup/bMenu'
 import { getDFConfig } from '@/table/colFConfig'
+import _ from 'lodash'
 
 export class PageDesign extends Form {
   currentContextItem: PageDesignItem = null
@@ -527,10 +528,32 @@ export class PageDesign extends Form {
         fn: async () => {
           let currentDesignField = this.currentDField
           let system = this.getSystem()
-          let tName = this.getRealTableName() //
-          await system.designTableColumns(tName, currentDesignField)
-          // let fConfig=getDFConfig(this,)
+          let currentContextItem = this.currentContextItem
+          let config = currentContextItem.config
+          let id = config.id
+          if (id == null) {
+            return
+          } //
+          let fCom: Table = currentContextItem.getRef('fieldCom')
+          // console.log(fCom, 'fCom') ////
+          let currentContextCol = fCom.curContextCol
+          let f = currentContextCol.getField()
+          let tName = currentContextCol.getTableName()
+          if (tName == this.getTableName()) {
+            await system.designTableColumns(tName, f) //批量修改//
+          } else {
+            let _config = _.cloneDeep(config) //
+            await system.designTargetColumn(_config) //
+          }
         },
+        visible: computed(() => {
+          let currentItem = this.currentContextItem
+          let _type = currentItem?.config?.type
+          if (_type == 'entity') {
+            return true
+          }
+          return false //
+        }),
         disabled: false,
       }, //
       {

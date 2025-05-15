@@ -33,6 +33,9 @@ const Contextmenu = defineComponent({
 
   props: {
     items: {},
+    beforeHidden: {
+      type: Function,
+    },
     modelValue: {
       type: Boolean,
       default: false,

@@ -562,6 +562,59 @@ export class System extends Base {
     let dConfig = {}
     // this.openDialog()
   }
+  async designTargetColumn(config) {
+    // let fConfig = {
+    //   data: config,
+    //   itemSpan: 12,
+    //   items: [
+    //     {
+    //       field: 'title',
+    //       label: '标题',
+    //       type: 'string',
+    //     },
+    //     {
+    //       field: 'field',
+    //       label: '字段',
+    //       type: 'string',
+    //     },
+    //     {
+    //       field: 'editType',
+    //       label: '编辑类型',
+    //       type: 'string',
+    //     },
+    //     {
+    //       field: 'defaultValue',
+    //       label: '默认值',
+    //       type: 'string',
+    //     },
+    //     {
+    //       field: 'options',
+    //       label: '下拉选项',
+    //       type: 'stable',
+    //       span: 24, //
+    //       options: {
+    //         showTable: true,
+    //         tableState: 'edit', //
+    //         columns: [
+    //           {
+    //             field: 'label',
+    //             label: '标题',
+    //             type: 'string',
+    //           },
+    //           {
+    //             field: 'value',
+    //             label: '值',
+    //             type: 'string',
+    //           },
+    //         ],
+    //       },
+    //     },
+    //   ],
+    // }
+    let fConfig = getDFConfig(this, config) //
+    let _data = await this.confirmForm(fConfig)
+    return _data //
+  }
   async designTableColumns(tableName, columnName?: any) {
     let qObj = {
       tableName: tableName,
@@ -574,8 +627,15 @@ export class System extends Base {
     if (tCols?.length == 1) {
       let fConfig = getDFConfig(this, tCols[0])
       //@ts-ignore
-      fConfig.confirmFn = (dialog) => {
-        console.log('我可能需要校验一下') //
+      fConfig.confirmFn = async (dialog) => {
+        let t = dialog.getRef('innerCom')
+        let d: any = t.getData()
+        d = [d]
+        let http = this.getHttp()
+        let res = await http.patch('columns', d) //
+        this.confirmMessage('更新列成功') //
+        let tName = this.getCurrentPageName()
+        this.refreshPageDesign(tName) ////
       }
       await this.confirmForm(fConfig)
     } else {

@@ -87,6 +87,14 @@ export class Column extends Base {
     }
     return disableColumnResize
   }
+  getTableName() {
+    let _config = this.config
+    let tableName = _config.tableName
+    if (tableName == null) {
+      tableName = this.table.getTableName()
+    }
+    return tableName //
+  }
   getTitle() {
     let config = this.config
     let title = config.title
@@ -962,7 +970,7 @@ export class Column extends Base {
         let level = record._level
         if (level > 0) {
           let num = level * 20
-          _g.attribute.x =  num //
+          _g.attribute.x = num //
         }
       }
       let globalValue = this.table.globalConfig.value
