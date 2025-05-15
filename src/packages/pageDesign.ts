@@ -15,7 +15,7 @@ import {
 import { useOnce, useRunAfter } from './utils/decoration'
 import { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
-import { formitemTypeMap, selectTypeMap } from './designNodeForm'
+import { formitemTypeMap, getButtonGroupTableConfig, selectTypeMap } from './designNodeForm'
 import { Table } from '@/table/table'
 import { BMenu } from '@/buttonGroup/bMenu'
 import { getDFConfig } from '@/table/colFConfig'
@@ -55,7 +55,7 @@ export class PageDesign extends Form {
       data: [],
       curRow: {},
     }
-    nextTick(() => {})
+    nextTick(() => { })
   }
   getTabTitle() {
     let config = this.config //
@@ -105,7 +105,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() {}
+  initDefaultTemplatePage() { }
   getValidateRules() {
     return []
   }
@@ -189,10 +189,10 @@ export class PageDesign extends Form {
     await this.publishEvent(_config)
     return row
   }
-  buildQuery() {}
-  openSearchForm() {}
-  async createTableData() {}
-  async updateTableData() {}
+  buildQuery() { }
+  openSearchForm() { }
+  async createTableData() { }
+  async updateTableData() { }
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
     let obj1 = {}
@@ -214,7 +214,7 @@ export class PageDesign extends Form {
     } //
     return columns //
   }
-  getMainTableConfig() {}
+  getMainTableConfig() { }
   @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -279,18 +279,18 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() {}
+  getAllFormMap() { }
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() {}
+  initDefaultSForm() { }
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() {}
+  async openAddEntity() { }
   async addMainTableRow(addConfig) {
     let system = this.getSystem()
     let tableName = this.getTableName()
@@ -536,7 +536,7 @@ export class PageDesign extends Form {
       {
         label: '设计按钮',
         fn: async () => {
-          this.currentContextItem = null //
+          this.designMainButtons(this.currentContextItem)//
         },
         visible: computed(() => {
           let currentItem = this.currentContextItem
@@ -549,10 +549,24 @@ export class PageDesign extends Form {
       },
     ]
   }
-  // designMainButtons(e, item) {
-  //   this.currentContextItem = item
-  //   this.openContextMenu(e) //
-  // }
+  async designMainButtons(item) {//
+    let _item: PageDesignItem = item
+    if (item == null) {
+      return
+    }
+    let options = _item.getOptions()
+    let items = options?.items
+    if (!Array.isArray(items)) {
+      options.items = []//
+      items = options.items
+    }
+    let tableConfig: any = getButtonGroupTableConfig()//
+    tableConfig.data = items
+    tableConfig.height = 500
+    tableConfig.width = 800
+    let sys = this.getSystem()
+    await sys.confirmTable(tableConfig)//
+  }
   openContextMenu(e, _item?: any) {
     this.currentContextItem = _item //
     let menu: BMenu = this.getRef('mainContextMenu')

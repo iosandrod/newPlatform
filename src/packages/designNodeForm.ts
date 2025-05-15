@@ -2,7 +2,64 @@ import { computed } from 'vue'
 import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
 import { Column } from '@/table/column'
+
+export const getButtonGroupTableConfig = (_this?: PageDesign) => {
+  let obj = {
+    showTable: true,
+    tableState: 'edit',
+    buttons: [
+      {
+        label: '添加子按钮',
+        fn: () => {
+          console.log('添加子按钮') //
+        },
+      },
+    ],
+    columns: [{
+      field: "id",
+      title: "按钮ID",
+      defaultValue: (config) => {
+        let item = config.item
+        let dValue = item?.uuid()
+        return dValue
+      },
+    },
+    {
+      field: 'label',
+      title: '标题', ////
+      type: 'string',
+      editType: 'string',
+    },
+    {
+      field: 'fn',
+      title: '执行脚本',
+      type: 'code',
+      editType: 'code', //
+    },
+    ],
+    treeConfig: {
+      id: 'id',
+      parentId: "pid"
+    }
+  }
+  return obj
+}
 //处理内部options
+export const getButtonGroupFConfig = (_this: PageDesign) => {
+  let tableConfig = {
+    itemSpan: 24,//
+    items: [
+      {
+        title: '按钮',
+        field: 'items',
+        label: '',
+        type: 'stable', ////
+        options: getButtonGroupTableConfig(_this),//
+      }, //
+    ],
+  }
+  return tableConfig
+}
 export const formitemTypeMap = (_this: PageDesign) => {
   let tableOptions = _this.getAllTableName()
   let detailTable = _this
@@ -126,42 +183,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
       }),
     },
     buttongroup: {
-      itemSpan: 24,
-
-      items: [
-        {
-          title: '按钮',
-          field: 'items',
-          label: '',
-          type: 'stable', ////
-          options: {
-            showTable: true,
-            tableState: 'edit',
-            buttons: [
-              {
-                label: '添加子按钮',
-                fn: () => {
-                  console.log('添加子按钮') //
-                },
-              },
-            ],
-            columns: [
-              {
-                field: 'label',
-                title: '标题', ////
-                type: 'string',
-                editType: 'string',
-              },
-              {
-                field: 'fn',
-                title: '执行脚本',
-                type: 'code',
-                editType: 'code', //
-              },
-            ],
-          },
-        }, //
-      ],
+      ...getButtonGroupFConfig(_this),
       data: computed(() => {
         return _this.state.selected?.options //
       }),
@@ -263,7 +285,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => {} //
+        _d['_items_set'] = (v) => { } //
         return _d //
       }),
     },
