@@ -38,7 +38,7 @@ export class System extends Base {
   async getMenuData() {
     let client = this.getClient() //
     let d = await client.find('navs') //
-    console.log(d, 'd') //
+    // console.log(d, 'd') ////
     this.systemConfig.menuConfig.items = d //
     return d //
   }
@@ -92,6 +92,7 @@ export class System extends Base {
       { tableName: name },
     ) //
     let row = data[0]
+    row.tableName = name
     return row //
   }
   async getPageEditLayout(name?: string) {
@@ -369,7 +370,7 @@ export class System extends Base {
     let router = this.getRouter()
     let currentRoute = router.currentRoute
     let p = currentRoute.path
-    let _tableName = p.split('/').pop()
+    let _tableName = p.split('/').pop() //
     return _tableName //
   } //
   routeOpen(config: any, fn?: any) {
@@ -389,6 +390,7 @@ export class System extends Base {
     router.push(`/${tableName}`) //
   }
   async createPageDesign(config: { tableName: string } | string) {
+    //
     if (typeof config == 'string') {
       config = {
         tableName: config,
@@ -479,10 +481,12 @@ export class System extends Base {
         },
       }
     }
+    let _height = tableConfig.height
+    let _width = tableConfig.width
     let _config = {
       createFn,
-      width: 600,
-      height: 400,
+      width: _width || 600,
+      height: _height || 400, //
       confirmFn: (dialog: Dialog) => {
         let _confirmFn = tableConfig.confirmFn //
         if (typeof _confirmFn == 'function') {
@@ -740,9 +744,12 @@ export class System extends Base {
     window.open('localhost:3004') //
   }
   async designCurrentPageConfig() {
+    //
     let curPage = this.getCurrentPageDesign()
-    let _config = _.cloneDeep(curPage.config) //
-    let data = _config
+    // let _config = _.cloneDeep(curPage.config) //
+    let tableName = curPage.getTableName() //
+    let _config = await this.getPageLayout(tableName)
+    let data = _config //
     let fConfig = {
       itemSpan: 12,
       items: [
@@ -753,10 +760,11 @@ export class System extends Base {
         },
         {
           field: 'hooks',
-          label: '高级钩子函数编辑',
+          // label: '高级钩子函数编辑',
           type: 'stable',
           span: 24,
           options: {
+            tableTitle: '高级钩子函数编辑', //
             tableState: 'edit', //
             columns: [
               {
@@ -781,7 +789,8 @@ export class System extends Base {
       ],
       data,
     }
-    await this.confirmForm(fConfig) //
+    let _data = await this.confirmForm(fConfig) //
+    // console.log(_data, 'test_data') //
     await this.getHttp().patch('entity', { ..._config })
     this.refreshPageDesign(_config.tableName) //
   }
@@ -826,16 +835,42 @@ export class System extends Base {
   async designSystemNavs() {
     let _data = await this.getHttp().find('navs')
     let tableConfig = {
+      showHeaderButtons: true, //
+      enableDragRow: true,
+      treeConfig: {
+        id: 'id',
+        parentId: 'pid',
+        rootId: 0,
+      }, //
+      buttons: [
+        {
+          label: '保存',
+          fn: async (config) => {
+            let p: Table = config.parent
+            let d = p.getFlatTreeData()
+            let changeData = d.filter((item) => {
+              let _rowState = item['_rowState']
+              return _rowState == 'change'
+            })
+            await this.getHttp().patch('navs', changeData) //
+            this.confirmMessage('更新菜单成功') ////
+            this.clearCacheValue('getMenuData') //
+            await this.getMenuData() //
+          },
+        },
+      ],
       columns: [
         {
           field: 'id',
           title: 'id',
           tree: true,
+          frozen: 'left', //
         },
         {
           field: 'navname', //
           title: '导航名称',
           editType: 'string', //
+          width: 200, //
         },
         {
           field: 'tableName',
@@ -843,13 +878,22 @@ export class System extends Base {
         },
       ],
       data: _data,
-      treeConfig: {
-        id: 'id',
-        parentId: 'pid',
-      }, //
+      height: 600,
+      width: 800, //
+      dragRowFn: (config) => {
+        return true //
+      },
+      dragRowAfterFn: (config) => {
+        //
+        let data = config.data
+        data.forEach((item, i) => {
+          item['_rowState'] = 'change'
+          item['sort'] = Number(i) + 1 ////
+        })
+      },
       showRowSeriesNumber: true,
     }
-    // let _data1 = await this.confirmTable(tableConfig) //
+    await this.confirmTable(tableConfig) //
     return tableConfig
   }
   async enterCurrentPageDesign() {
@@ -864,7 +908,6 @@ export class System extends Base {
     await http.logoutUser() //
   }
   getIsLogin() {
-    //
     let loginConfig = this.loginInfo
     if (loginConfig == null) {
       return false
@@ -885,7 +928,18 @@ export class System extends Base {
     }
     let http = this.getHttp()
     await http.patch('users', user) //
-    this.confirmMessage('更新成功') //
+    this.confirmMessage('更新成功')
+  }
+  getTabContextItems() {
+    let _items = [
+      {
+        label: '页面配置',
+        fn: async () => {
+          await this.designCurrentPageConfig()
+        },
+      },
+    ]
+    return _items //
   }
 }
 

@@ -22,7 +22,7 @@ export default defineComponent({
     MenuCom,
     ContextmenuItem,
     ContextmenuCom,
-  },
+  },  
   directives: {
     ClickOutside,
   },

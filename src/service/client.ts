@@ -73,7 +73,7 @@ export class Client {}
 export type createConfig = {}
 export const createClient = (config) => {
   let port = location.port
-  console.log(port, 'testPort') //
+  // console.log(port, 'testPort') //
   let _host = `http://localhost:3031`
   if (port == '3004') {
     _host = `${_host}/erp_1` //
@@ -258,6 +258,8 @@ export class myHttp {
               if (data?.code == '401') {
                 isError = true
                 error = data
+                system.confirmMessage('登录信息无效', 'error') //
+                this.redirectToLogin() //
               } else {
                 // _data = data?.data || {}
                 error = data //

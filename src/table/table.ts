@@ -294,6 +294,34 @@ export class Table extends Base {
       let row1 = start.row
       let col2 = end.col
       let row2 = end.row
+      if (col1 == col2 && col1 == 0) {
+        let status = false
+        //行拖动
+        let dragRowFn = this.config.dragRowFn
+        let ins = this.getInstance()
+        let r1 = ins.getRecordByCell(col1, row1)
+        let r2 = ins.getRecordByCell(col2, row2)
+        if (typeof dragRowFn == 'function') {
+          if (r1 != r2) {
+            status = dragRowFn({
+              startRow: r1,
+              endRow: r2,
+              table: this,
+              treeConfig: this.treeConfig,
+            }) ////
+          }
+        } else {
+        }
+        let isTree = this.getIsTree()
+        if (isTree && status == true) {
+          //
+          nextTick(() => {
+            let _pid = r1[this.treeConfig.parentId]
+            this.swapTwoRow(r1, r2, _pid)
+          })
+        }
+        return status //
+      }
       let f = this.getInstance().getHeaderField(col1, row1)
       let f1 = this.getInstance().getHeaderField(col2, row2)
       let f1C = this.getColumns().find((c) => c.getField() == f)
@@ -980,6 +1008,18 @@ export class Table extends Base {
     let showCalculate = config.showCalculate
     return showCalculate
   }
+  getFlatTreeData(_data?: any) {
+    let data = _data || this.getData()
+    return data
+      .map((row) => {
+        let children = row.children
+        if (children && children?.length > 0) {
+          return [row, ...this.getFlatTreeData(children)]
+        }
+        return [row]
+      })
+      .flat()
+  }
   getData() {
     let tableData = this.tableData
     let data = tableData.data || []
@@ -1014,45 +1054,7 @@ export class Table extends Base {
       console.log('加载列出错了')
     }
   } //
-  // filterChildren(children: any[], row: any) {
-  //   let globalValue = this.globalConfig.value
-  //   let _children = children
-  //   if (globalValue.length > 0) {
-  //     _children = _children.filter((v) => {
-  //       let _shtml = v['_shtml'] //
-  //       let reg = new RegExp(globalValue, 'gi') ////
-  //       if (reg.test(_shtml)) {
-  //         this.globalRowSet.add(v['_index'])
-  //         return true
-  //       }
-  //       this.globalRowSet.delete(v['_index']) ////
-  //       return false
-  //     })
-  //   }
-  //   let _data1 = _children
-  //   let sortState = this.sortCache
-  //   let _sortState = toRaw(sortState)
-  //   let sortconfig = _sortState //自定义的排序配置
-  //   //@ts-ignore
-  //   let _data3 = _sortConfig
-  //     ?.reduce((res, item, i) => {
-  //       const field = item.field
-  //       const type = item.type
-  //       let order = item.order
-  //       const colType: string = 'number' //类型//
-  //       const _data4 = combineAdjacentEqualElements(
-  //         res, //
-  //         field,
-  //         i, //
-  //         // colType,
-  //         // type,
-  //         type,
-  //         order,
-  //       )
-  //       return _data4
-  //     }, _data1)
-  //     .flat(sortconfig?.length) //
-  // }
+
   filterTreeInPlace(nodes, predicate) {
     return nodes.filter((node) => {
       // 先把原始 children 备份到 _children
@@ -1733,9 +1735,6 @@ export class Table extends Base {
     ins.startEditCell(col, row, value) //
   }
   clearEditCell() {
-    if (1 == 1) {
-      // return
-    }
     let currentEditCol = this.currentEditCol
     let disableHideCell = currentEditCol?.disableHideCell
     if (disableHideCell == true) {
@@ -1744,11 +1743,13 @@ export class Table extends Base {
     if (this.templateEditCell == null) {
       return //
     }
+    let _templateEditCell = this.templateEditCell
     this.currentEditCol = null
     this.templateEditCell = null ////
     let ins = this.getInstance()
     ins.completeEditCell() ////
-    ins.clearSelected() //
+    ins.selectCell(_templateEditCell.col, _templateEditCell.row) //
+    // ins.clearSelected() //
   }
   getCurrentCellEdit() {
     let ins = this.getInstance()
@@ -2047,7 +2048,7 @@ export class Table extends Base {
     }
     if (type == 'row') {
       _inter = this.scrollRowInteral
-      this.scrollRowSpeed = number
+      this.scrollRowSpeed = number //
       if (_inter == null) {
         this.scrollRowInteral = setInterval(() => {
           let speed = this.scrollRowSpeed //
@@ -2111,4 +2112,37 @@ export class Table extends Base {
     ins.toggleHierarchyState(col, row) ////
   }
   setRowDragAble(status) {}
+  getTreeDataByPid(pid) {
+    //
+    let treeConfig = this.treeConfig
+    let idKey = treeConfig.id
+    let rootId = treeConfig.rootId
+    if (pid == rootId) {
+      return { isRoot: true, children: this.getData() }
+    } //
+    let _d = this.getFlatTreeData()
+    let _d1 = _d.filter((d) => {
+      return d[idKey] == pid
+    })
+    return _d1.pop() //
+  }
+  swapTwoRow(r1, r2, pid) {
+    let data = this.getData()
+    if (pid == null) {
+      data = data
+    } else {
+      let _d = this.getTreeDataByPid(pid)
+      data = _d.children
+    }
+    let index1 = data.indexOf(r1)
+    let index2 = data.indexOf(r2)
+    data.splice(index1, 1)
+    data.splice(index2, 0, r1) //
+    let config = this.config
+    let dragRowAfterFn = config.dragRowAfterFn
+    if (typeof dragRowAfterFn == 'function') {
+      dragRowAfterFn({ startRow: r1, endRow: r2, data })
+    }
+    return
+  }
 }

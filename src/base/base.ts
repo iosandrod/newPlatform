@@ -42,6 +42,14 @@ export class Base {
       Object.keys(cacheTemplateProps).forEach((key) => {
         delete cacheTemplateProps[key] //
       })
+    } else {
+      let allKeys = Object.keys(cacheTemplateProps)
+      let reg = new RegExp(`^${key}`)
+      allKeys.forEach((key) => {
+        if (reg.test(key)) {
+          delete cacheTemplateProps[key] //
+        }
+      })
     }
   }
   async runPoolFn(fn, ...args) {

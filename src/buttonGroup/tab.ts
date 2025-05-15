@@ -1,8 +1,10 @@
 import { Base } from '@/base/base'
 import { TabItem } from './tabitem'
 import { toRaw } from 'vue'
+import { BMenu } from './bMenu'
 
 export class Tab extends Base {
+  currentItem?: any //
   scrollLeft = 0
   config: any
   isDesign = false
@@ -96,4 +98,45 @@ export class Tab extends Base {
     tabitems[index1] = item2
     tabitems[index2] = item1 //
   }
+  openContextMenu(e, el) {
+    this.currentItem = el //
+    let menu: BMenu = this.getRef('contextMenu')
+    if (menu == null) {
+      return //
+    }
+    menu.open(e) //
+  }
+  getContextItems() {
+    let config = this.config
+    let _items = config.contextItems || []
+    let oldItems = [
+      {
+        label: '关闭左侧',
+        type: 'closeLeft',
+        icon: 'closeLeft',
+        fn: async () => {
+          this.closeByCurrent('left')
+        },
+      },
+      {
+        label: '关闭右侧',
+        type: 'closeRight',
+        icon: 'closeRight',
+        fn: async () => {
+          this.closeByCurrent('right')
+        },
+      },
+      {
+        label: '关闭其他',
+        type: 'closeOther',
+        icon: 'closeOther',
+        fn: async () => {
+          this.closeByCurrent('other')
+        },
+      },
+    ]
+    let rItems = [...oldItems, ..._items]
+    return rItems //
+  }
+  closeByCurrent(type) {}
 }

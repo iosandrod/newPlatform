@@ -15,8 +15,12 @@ export default defineComponent({
     let tableName = props.tableName //
     if (tableName == null) {
       let currentTable = router.currentRoute
-      let p = currentTable.path
-      let _tableName = p.split('/').pop()
+      let p = currentTable.path //
+      let pArr = p.split('/')
+      let _tableName = pArr.pop()
+      if (_tableName === '') {
+        _tableName = pArr.pop() //
+      }
       tableName = _tableName
     }
     let show = ref(false)
@@ -52,7 +56,7 @@ export default defineComponent({
       let obj = map[tableName]
       if (obj == null) {
         return false
-      } 
+      }
       return true
     })
     return () => {

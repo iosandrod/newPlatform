@@ -112,7 +112,7 @@ export default defineComponent({
   },
   setup(props, { expose, slots }) {
     const menuIns = new Menu(props) //
-    provide('menuIns', menuIns)
+    provide('menuIns', { _instance: menuIns })
     watch(
       () => props.items,
       (newValue, oldValue) => {

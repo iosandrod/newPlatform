@@ -120,6 +120,12 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    dragRowFn: {
+      type: Function, //
+    },
+    dragRowAfterFn: {
+      type: Function, //
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any

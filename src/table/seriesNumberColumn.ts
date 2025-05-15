@@ -119,7 +119,7 @@ export class SeriesNumberColumn extends Column {
         y: 0,
         // fontFamily: 'sans-serif',
         fill: 'black',
-        boundsPadding: [0, 0, 0, 20],
+        boundsPadding: [0, 0, 0, 30],
         lineDashOffset: 0,
       })
       let _g = createGroup({
@@ -312,7 +312,7 @@ export class SeriesNumberColumn extends Column {
       return {
         rootContainer: container,
         // renderDefault: _isTree, //
-        renderDefault: false, //
+        renderDefault: true, //
       }
     }
     return customLayout
@@ -427,6 +427,7 @@ export class SeriesNumberColumn extends Column {
     // _props
     //@ts-ignore
     let dragOrder = this.table.getDragRow()
+    // debugger//
     if (dragOrder) {
       //@ts-ignore
       _props.dragOrder = true //

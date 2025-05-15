@@ -18,7 +18,16 @@ const router = createRouter(
 let unAuthPath = /companyLogin|companyRegister|companyHome/g
 router.beforeEach(async (to, from, next) => {
   //
-  let p = to.fullPath
+  let p = to.path
+  let fp = to.fullPath
+  if (/\/$/.test(p)) {
+    p = p.slice(0, -1)
+    to.path = p //
+  }
+  if (/\/$/.test(fp)) {
+    fp = fp.slice(0, -1)
+    to.fullPath = fp //
+  }
   if (unAuthPath.test(p)) {
     next() //
   } //

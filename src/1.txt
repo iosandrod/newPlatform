@@ -2871,3 +2871,49 @@ const app = createApp({
           // // })
           // console.log(args, 'sfjsdklfsdlfsd') //
         })
+
+
+         // filterChildren(children: any[], row: any) {
+  //   let globalValue = this.globalConfig.value
+  //   let _children = children
+  //   if (globalValue.length > 0) {
+  //     _children = _children.filter((v) => {
+  //       let _shtml = v['_shtml'] //
+  //       let reg = new RegExp(globalValue, 'gi') ////
+  //       if (reg.test(_shtml)) {
+  //         this.globalRowSet.add(v['_index'])
+  //         return true
+  //       }
+  //       this.globalRowSet.delete(v['_index']) ////
+  //       return false
+  //     })
+  //   }
+  //   let _data1 = _children
+  //   let sortState = this.sortCache
+  //   let _sortState = toRaw(sortState)
+  //   let sortconfig = _sortState //自定义的排序配置
+  //   //@ts-ignore
+  //   let _data3 = _sortConfig
+  //     ?.reduce((res, item, i) => {
+  //       const field = item.field
+  //       const type = item.type
+  //       let order = item.order
+  //       const colType: string = 'number' //类型//
+  //       const _data4 = combineAdjacentEqualElements(
+  //         res, //
+  //         field,
+  //         i, //
+  //         // colType,
+  //         // type,
+  //         type,
+  //         order,
+  //       )
+  //       return _data4
+  //     }, _data1)
+  //     .flat(sortconfig?.length) //
+  // }
+
+   // systemIns.designSystemNavs().then((res) => {
+    //   _config = res
+    //   show.value = true
+    // })

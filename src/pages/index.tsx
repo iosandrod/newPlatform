@@ -14,6 +14,7 @@ import { PageDesign } from '@ER/pageDesign'
 import pageCom from '@ER/pageCom'
 import _header from './pageHeader'
 import TableCom from '@/table/tableCom'
+import { Table } from '@/table/table'
 
 export default defineComponent({
   components: {
@@ -39,18 +40,38 @@ export default defineComponent({
     provide('systemIns', systemIns) //
     let show = ref(false)
     let _config = null
-    systemIns.designSystemNavs().then((res) => {
-      _config = res
-      show.value = true
-    })
+   
     return () => {
-      if (show.value == false) {
-        return null
-      }
-      if (1 == 1) {
-        let com = <TableCom {..._config}></TableCom>
-        return com //
-      }
+      // if (show.value == false) {
+      //   return null
+      // }
+      // if (1 == 1) {
+      //   let com = (
+      //     <div class="h-400 w-400">
+      //       <TableCom
+      //         {..._config}
+      //         showHeaderButtons={true}
+      //         buttons={[
+      //           {
+      //             label: '更新',
+      //             fn: async (config) => {
+      //               console.log('更新') //
+      //               let table: Table = config.parent //
+      //               // console.log(config) ////
+      //               let fData = table.getFlatTreeData()
+      //               let _data = fData.filter((item) => {
+      //                 let _rowState = item['_rowState']
+      //                 return _rowState == 'change'
+      //               })
+      //               console.log(_data) //
+      //             },
+      //           },
+      //         ]}
+      //       ></TableCom>
+      //     </div>
+      //   )
+      //   return com //
+      // }
       let leftMenu = (
         <menuCom
           items={systemIns.getMenuItems()}
@@ -90,7 +111,10 @@ export default defineComponent({
         <tabCom
           height={30}
           items={systemIns.getTabItems()}
+          showContextMenu={true}
+          contextItems={systemIns.getTabContextItems()}
           v-slots={{
+            //
             item: (item) => {
               let com = (
                 <div class="cursor-pointer pl-10 pr-10 -mb-px text-blue-500  border-b-2 border-blue-500 focus:outline-none">
@@ -172,11 +196,7 @@ export default defineComponent({
             </div>
 
             <div class="flex items-center space-x-4">
-              <img
-                src="https://via.placeholder.com/32"
-                alt="avatar"
-                class="w-8 h-8 rounded-full cursor-pointer"
-              />
+              <img alt="avatar" class="w-8 h-8 rounded-full cursor-pointer" />
               <er-dropdown
                 dropMode="hover"
                 v-slots={{
@@ -222,11 +242,10 @@ export default defineComponent({
         >
           {pageHeader}
           <div class="h-full w-full flex flex-row">
-            {/* <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div> */}
+            <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
             <div class="flex flex-col flex-1 h-full ">
               <div class="w-full bg-white tab-line">{tableTab}</div>
-
-              {/* <div class="w-full h-full overflow-hidden">
+              <div class="w-full h-full overflow-hidden">
                 <router-view
                   v-slots={{
                     default: (config) => {
@@ -239,7 +258,7 @@ export default defineComponent({
                     },
                   }}
                 ></router-view>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
