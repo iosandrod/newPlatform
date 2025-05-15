@@ -53,6 +53,7 @@ export class FormItem extends Base {
     return field
   }
   updateBindData(updateConfig: { value: any; [key: string]: any }) {
+    // debugger//
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -307,7 +308,11 @@ export class FormItem extends Base {
         mobile: '100%', //
       },
     }
-    return style
+    let _style = {
+      padding: '1px',
+      ...style,
+    }
+    return _style //
   }
   getKey() {
     let config = this.config
@@ -676,9 +681,23 @@ export class FormItem extends Base {
     specialHandling && specialHandling(node.type, result)
     return result
   }
-
+  isHiddenTitle() {
+    //@ts-ignore
+    let hiddenTitle = this.config.hiddenTitle
+    let status = false
+    if (Boolean(hiddenTitle) == true) {
+      status = true
+    }
+    return status
+  }
   isShowTitle() {
-    return false
+    //@ts-ignore
+    let hiddenTitle = this.config.hiddenTitle
+    let status = true
+    if (hiddenTitle == true) {
+      status = false
+    }
+    return status
   }
   onFocus(config) {
     let oldValue = this.getBindValue()

@@ -297,7 +297,7 @@ export default defineComponent({
                 } else {
                   let style = formitem.getStyle()
                   innerCom = (
-                    <div style={style} class="flex flex-row h-full">
+                    <div style={style} class="flex flex-row h-full" >
                       <div class="flex-1 pl-5">
                         <vxe-form-item
                           field={formitem.getField()}
@@ -317,6 +317,10 @@ export default defineComponent({
                               )
                             },
                             title: () => {
+                              let ht = formitem.isHiddenTitle()
+                              if (ht == true) {
+                                return null //
+                              }
                               let tCom = (
                                 <div class="  flex align-center">
                                   {element?.['label']}

@@ -35,6 +35,7 @@ export const selectType = (item: FormItem) => {
   }
   return obj
 }
+
 export const stableType = (item: FormItem) => {
   let obj = defaultType(item) //
   obj.onChange = (config) => {}
@@ -53,6 +54,17 @@ export const codeType = (item: FormItem) => {
   obj.modelValue = item.getBindShowValue()
   return obj
 }
+export const booleanType = (item: FormItem) => {
+  let obj = defaultType(item) //
+  obj.onChange = (config) => {
+    let value = config.value
+    item.updateBindData({ value }) //
+  }
+  obj.onInput = (config) => {} //
+  obj.readonly = true //
+  obj.clearable = false //
+  return obj
+}
 export const itemTypeMap = {
   input: inputType,
   string: inputType,
@@ -60,4 +72,5 @@ export const itemTypeMap = {
   select: selectType,
   stable: stableType,
   code: codeType,
+  boolean: booleanType,
 }

@@ -80,6 +80,7 @@ export type FieldOptions = {
 }
 
 export type Field = {
+  showTitle?: boolean
   itemChange?: any
   eventMap?: any //
   eventArr?: any

@@ -66,8 +66,8 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   } //
-  setHidden(bool) { } //
-  getFormitem() { } //
+  setHidden(bool) {} //
+  getFormitem() {} //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -400,9 +400,9 @@ export class Column extends Base {
         } //
         container.setAttribute('background', bg)
         let f = this.getField()
-        let c = record[f]//
-        checkbox1.attribute.checked = Boolean(c)//
-        checkbox1.render()//
+        let c = record[f] //
+        checkbox1.attribute.checked = Boolean(c) //
+        checkbox1.render() //
       } //
 
       let _length = 200 //
@@ -467,7 +467,6 @@ export class Column extends Base {
           if (this.effectPool[_index] == null) {
             this.effectPool[`${_index}`] = watch(
               () => {
-
                 let value = '' //
                 if (typeof fieldFormat == 'function') {
                   let value1 = fieldFormat({
@@ -1028,7 +1027,7 @@ export class Column extends Base {
     let editType = this.getEditType()
     if (editType == 'boolean' && this.table.tableState == 'edit') {
       let _layout = this.getCheckboxCustomLayout()
-      return _layout//
+      return _layout //
     }
     let customLayout = (args) => {
       let { table, row, col, rect, value } = args
@@ -1301,7 +1300,11 @@ export class Column extends Base {
       return {} //
     }
     if (typeof defaultValue == 'function') {
-      defaultValue = await defaultValue()
+      defaultValue = await defaultValue({
+        column: this,
+        table: this.table,
+        item: this,
+      })
     }
     let obj = {
       [field]: defaultValue,
@@ -1371,7 +1374,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() { }
+  updateBindData() {}
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {

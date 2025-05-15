@@ -106,5 +106,9 @@ export const typeMap = {
     pc: checkboxPc,
     mobile: checkboxMobile,
   },
+  boolean: {
+    pc: checkboxPc,
+    mobile: checkboxMobile,
+  },
 }
 export default {}

@@ -20,6 +20,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         field: 'id',
         title: '按钮ID',
         defaultValue: (config) => {
+          //
           let item = config.item
           let dValue = item?.uuid()
           return dValue
@@ -93,6 +94,7 @@ export const getButtonGroupFConfig = (_this: PageDesign) => {
   }
   return tableConfig
 }
+//编辑options
 export const formitemTypeMap = (_this: PageDesign) => {
   let tableOptions = _this.getAllTableName()
   let detailTable = _this
@@ -325,7 +327,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
   }
   return obj //
 }
-
+//编辑普通层的//
 export const selectTypeMap = (_this: PageDesign) => {
   let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
@@ -335,6 +337,11 @@ export const selectTypeMap = (_this: PageDesign) => {
         title: '绑定字段',
         type: 'input',
         label: '绑定字段',
+      },
+      {
+        field: 'hiddenTitle',
+        label: '隐藏标题', //
+        type: 'boolean', //
       },
       {
         field: 'label',
@@ -439,6 +446,13 @@ export const selectTypeMap = (_this: PageDesign) => {
     return items
   } //
   let obj = {
+    buttongroup: {
+      itemSpan: 24,
+      items: [...createDSelect('buttongroup')], //
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }), //
+    },
     input: {
       itemSpan: 24,
       items: [...createDSelect('input')],

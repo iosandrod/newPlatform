@@ -22,7 +22,12 @@ const subMenu = defineComponent({
       const _config = item?.getProps()
       let menuitems = item?.menuitems || []
       let _com: any = null
-      if (menuitems.length == 0) {
+      let children = item.config.children
+      let status = true
+      if (Array.isArray(children)) {
+        status = false //
+      }
+      if (menuitems.length == 0 && status == true) {
         _com = (
           <ElMenuItem
             {..._config}

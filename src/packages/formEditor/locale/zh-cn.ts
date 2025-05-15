@@ -16,7 +16,10 @@ export default {
       time: '时间',
       date: '日期',
       string: '文本',
+      buttonGroup: '按钮组',
+      other: '其他',
       rate: '评分',
+      defaultField: '主表字段', //
       switch: '开关',
       dform: '表单',
       slider: '滑块',
@@ -28,7 +31,7 @@ export default {
       grid: '栅格布局',
       stable: '表格',
       sform: '子表单', //
-      code:"代码编辑",
+      code: '代码编辑',
       table: '表格布局',
       tabs: '标签页',
       collapse: '折叠面板',

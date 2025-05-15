@@ -60,7 +60,10 @@ export class PageDesign extends Form {
       data: [],
       curRow: {},
     }
-    nextTick(() => {})
+    this.initSearchDialog()
+  }
+  initSearchDialog() {
+    //
   }
   getTabTitle() {
     let config = this.config //
@@ -612,14 +615,17 @@ export class PageDesign extends Form {
       value: tName,
       tableName: tName,
       order: this.tabOrder,
-    } //
-  } //
+    }
+  }
   async designPageDialog() {
     let config = this.config //
     let dialog = config.dialog // is Array
     if (!Array.isArray(dialog)) {
       dialog = []
       config.dialog = dialog
-    } //
+    }
+  } //
+  async openSearchDialog() {
+    //
   }
 }

@@ -322,7 +322,7 @@ export default defineComponent({
             style={{
               minWidth: '200px',
               height: '100%',
-              overflowY: 'auto',
+              overflowY: 'hidden',
             }}
           >
             <fieldMenu></fieldMenu>
@@ -342,7 +342,7 @@ export default defineComponent({
       let com = (
         <div class="h-full w-full overflow-x-hidden overflow-y-auto bg-white">
           <div class="flex h-full w-full bg-white overflow-x-hidden overflow-y-auto flex-row">
-            <div class="h-full overflow-auto">{_fieldCom}</div>
+            <div class="h-full overflow-hidden">{_fieldCom}</div>
             <div class="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
               {isShow.value &&
                 withDirectives(<CanvesPanel data={state.store} />, [

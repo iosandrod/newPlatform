@@ -20,7 +20,7 @@ import hooks from '@ER/hooks'
 import {
   createFieldConfig,
   createGlobalConfig,
-  fieldsConfig,
+  // fieldsConfig,
 } from './formEditor/componentsConfig'
 import _, { reject } from 'lodash'
 import utils from '@ER/utils'
@@ -586,8 +586,8 @@ export class Form extends Base {
     return [...parentArr, this, ...nextForm] //
   }
   getFieldsDesignConfig() {
-    let _fieldConfig = JSON.parse(JSON.stringify(fieldsConfig))
-    return _fieldConfig
+    // let _fieldConfig = JSON.parse(JSON.stringify(fieldsConfig))
+    // return _fieldConfig
   }
   getNextFormArr() {
     let arr = []
@@ -1648,18 +1648,13 @@ export class Form extends Base {
     return ''
   }
   initDefaultDForm() {
-    // let tm1 = selectTypeMap(this as any) //
-    // Object.entries(tm1).forEach(([key, value]) => {
-    //   let _f = new Form(value)
-    //   this.sFormMap[key] = _f ////
-    // }) //
     let _this: any = this //
     let tm = formitemTypeMap(_this)
     Object.entries(tm).forEach(([key, value]) => {
       let _f = new Form(value)
       this.dFormMap[key] = _f
     })
-    let tm1 = selectTypeMap(_this)
+    let tm1 = selectTypeMap(_this)//编辑options的
     Object.entries(tm1).forEach(([key, value]) => {
       let _f = new Form(value)
       this.sFormMap[key] = _f ////

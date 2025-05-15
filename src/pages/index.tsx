@@ -40,7 +40,7 @@ export default defineComponent({
     provide('systemIns', systemIns) //
     let show = ref(false)
     let _config = null
-   
+
     return () => {
       // if (show.value == false) {
       //   return null
@@ -151,7 +151,10 @@ export default defineComponent({
                       },
                       {
                         label: '当前页面设计',
-                        fn: async () => {},
+                        fn: async () => {
+                          let currentPageDesign = system.getCurrentPageDesign()
+                          currentPageDesign.setCurrentDesign(true) //
+                        },
                       },
                       {
                         label: '设计表格',
@@ -160,6 +163,14 @@ export default defineComponent({
                       {
                         label: '页面高级配置',
                         fn: async () => {}, //
+                      },
+                      {
+                        label: '打印页面',
+                        fn: async () => {
+                          let pageDesign = system.getCurrentPageDesign()
+                          let layout = pageDesign.getLayoutData()
+                          console.log(layout)//
+                        },
                       },
                     ]
                     let bsComs = btnArr.map((item) => {
