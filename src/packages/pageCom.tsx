@@ -324,6 +324,9 @@ export default defineComponent({
       if (props.isMainPage === true) {
         contextCom = (
           <ContextmenuCom
+            beforeHidden={() => {
+              formIns.currentContextItem = null //
+            }}
             ref={registerContextMenu}
             items={formIns.getMainContextItems()}
           ></ContextmenuCom>

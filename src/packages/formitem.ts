@@ -117,15 +117,25 @@ export class FormItem extends Base {
     //处理列
     this.getTdColumn()
     //不影响form的属性
-    // this.columns = tdRow//做一个缓存
     this.getRowIndex()
     //处理字段
-    // let field = this.createField()
-    // this.field = field
     let mobileRow = this.createMobileRow()
     this.mobileColumns = mobileRow //
     this.setSubForm()
+    this.initSTable()
   } //
+  initSTable() {
+    let form = this.form
+    let type = this.getType()
+    if (type == 'stable') {
+      let data = form.getData()
+      let field = this.getField()
+      let _s = data[field]
+      if (!Array.isArray(_s)) {
+        data[field] = [] //
+      }
+    }
+  }
   setSubForm() {
     let type = this.getType()
     let config = this.config

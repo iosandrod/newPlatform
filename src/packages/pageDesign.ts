@@ -21,6 +21,7 @@ import { BMenu } from '@/buttonGroup/bMenu'
 import { getDFConfig } from '@/table/colFConfig'
 
 export class PageDesign extends Form {
+  currentContextItem: PageDesignItem = null
   tabOrder: number = 0
   pageType = 'pageDesign' //
   tableType: 'main' | 'edit' | 'search' = 'main' //
@@ -532,13 +533,32 @@ export class PageDesign extends Form {
         },
         disabled: false,
       }, //
+      {
+        label: '设计按钮',
+        fn: async () => {
+          this.currentContextItem = null //
+        },
+        visible: computed(() => {
+          let currentItem = this.currentContextItem
+          let _type = currentItem?.config?.type
+          if (_type == 'buttonGroup') {
+            return true
+          }
+          return false //
+        }),
+      },
     ]
   }
-  openContextMenu(e) {
+  // designMainButtons(e, item) {
+  //   this.currentContextItem = item
+  //   this.openContextMenu(e) //
+  // }
+  openContextMenu(e, _item?: any) {
+    this.currentContextItem = _item //
     let menu: BMenu = this.getRef('mainContextMenu')
     if (menu == null) {
-      return //
-    }
+      return
+    } //
     menu.open(e) //
   }
   getHomeTabLabel() {

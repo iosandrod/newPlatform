@@ -790,8 +790,7 @@ export class System extends Base {
       data,
     }
     let _data = await this.confirmForm(fConfig) //
-    // console.log(_data, 'test_data') //
-    await this.getHttp().patch('entity', { ..._config })
+    await this.getHttp().patch('entity', { ..._config }) //
     this.refreshPageDesign(_config.tableName) //
   }
   async refreshPageDesign(tableName) {

@@ -128,6 +128,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    beforeHidden: {
+      type: Function,
+    }
   },
   setup(props, { slots, attrs, emit, expose }) {
     let mIns = new BMenu(props) //

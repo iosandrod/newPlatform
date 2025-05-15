@@ -1,7 +1,8 @@
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { FormItem } from '@ER/formitem'
+import { PageDesign } from '@ER/pageDesign'
 import { ElInput } from 'element-plus'
-import { computed, defineComponent } from 'vue' //
+import { computed, defineComponent, inject } from 'vue' //
 //
 export default defineComponent({
   name: 'buttonGroupPc',
@@ -22,9 +23,20 @@ export default defineComponent({
       let _config = formitem?.getPageButtonsProps()
       return _config
     })
+    let mainPage: PageDesign = inject('mainPageDesign', null)
+    let _context = (e) => {
+      if (mainPage == null) {
+        return
+      } //
+      mainPage.openContextMenu(e, formitem)
+    }
     return () => {
       let com = (
-        <div class="w-full h-full bg-white" style={{ minHeight: '30px' }}>
+        <div
+          onContextmenu={_context}
+          class="w-full h-full bg-white"
+          style={{ minHeight: '30px' }}
+        >
           <ButtonGroupCom {..._value.value}></ButtonGroupCom>
         </div>
       )

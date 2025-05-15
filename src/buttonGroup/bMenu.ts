@@ -57,9 +57,14 @@ export class BMenuItem extends Base {
     const menu = this.menu
     const config = menu.config
     const _config = this.config
+    let beforeHidden = config.beforeHidden
     const fn = _config.fn
     if (typeof fn == 'function') fn(this)
     // const onItemClick=config.onItemClick()
+    if (typeof beforeHidden == 'function') {
+      //
+      beforeHidden()
+    }
   }
   getDisabled() {
     let config = this.config //
