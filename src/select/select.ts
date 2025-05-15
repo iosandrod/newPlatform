@@ -1604,6 +1604,9 @@ export default defineComponent({
           h(
             VxeInputComponent,
             {
+              style: {
+                height: '100%', //
+              },
               ref: refInput,
               clearable: props.clearable,
               placeholder: inpPlaceholder,

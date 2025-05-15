@@ -613,5 +613,13 @@ export class PageDesign extends Form {
       tableName: tName,
       order: this.tabOrder,
     } //
+  } //
+  async designPageDialog() {
+    let config = this.config //
+    let dialog = config.dialog // is Array
+    if (!Array.isArray(dialog)) {
+      dialog = []
+      config.dialog = dialog
+    } //
   }
 }
