@@ -33,7 +33,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient() //
@@ -45,17 +45,17 @@ export class System extends Base {
   init() {
     super.init() //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap).map((row) => {
@@ -72,7 +72,7 @@ export class System extends Base {
     })
     return allT2
   }
-  openPageDesign(config) { } //
+  openPageDesign(config) {} //
   // async getDefaultPageLayout(name?: string) {
   //   let http = this.getHttp()
   //   let _data = await http.post(
@@ -353,11 +353,14 @@ export class System extends Base {
     )
     return data //
   }
-  async updatePageLayout(tableName, config) {
-    // let http = this.getHttp() //
-    // let _res = await http.patch('entity', { tableName, ...config })
+  async updateCurrentPageDesign() {
+    let cPage = this.getCurrentPageDesign()
+    let layout = cPage.getLayoutData() //
+    let http = this.getHttp()
+    await http.patch('entity', layout) //
+    await this.refreshPageDesign() //
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -436,8 +439,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     return new Promise(async (resolve, reject) => {
       let _form = new Form(formConfig) //
@@ -471,31 +474,35 @@ export class System extends Base {
     this.dialogArr.push(_dialog) //
   }
   async confirmTable(tableConfig: any) {
-    let _table = new Table(tableConfig)
-    let component = tableCom
-    let createFn = () => {
-      return {
-        component: component, //
-        props: {
-          tableIns: _table,
+    return new Promise(async (resolve, reject) => {
+      let _table = new Table(tableConfig)
+      let component = tableCom
+      let createFn = () => {
+        return {
+          component: component, //
+          props: {
+            tableIns: _table,
+          },
+        }
+      }
+      let _height = tableConfig.height
+      let _width = tableConfig.width
+      let _config = {
+        createFn,
+        width: _width || 600,
+        height: _height || 400, //
+        confirmFn: (dialog: Dialog) => {
+          let _data = _table.getData()
+          let _confirmFn = tableConfig.confirmFn //
+          if (typeof _confirmFn == 'function') {
+            _confirmFn(dialog) //
+          }
+          resolve(_data) //
         },
       }
-    }
-    let _height = tableConfig.height
-    let _width = tableConfig.width
-    let _config = {
-      createFn,
-      width: _width || 600,
-      height: _height || 400, //
-      confirmFn: (dialog: Dialog) => {
-        let _confirmFn = tableConfig.confirmFn //
-        if (typeof _confirmFn == 'function') {
-          _confirmFn(dialog) //
-        }
-      },
-    }
-    let dialog = await this.openDialog(_config) //
-    return dialog //
+      let dialog = await this.openDialog(_config) //
+      return dialog //
+    })
   }
   getAllDialog() {
     let _this = this
@@ -773,7 +780,7 @@ export class System extends Base {
     try {
       //
       //打开app
-    } catch (error) { }
+    } catch (error) {}
   }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
@@ -816,7 +823,7 @@ export class System extends Base {
         {
           field: 'tableCnName',
           label: '表格中文名',
-          itemChange: (config) => { },
+          itemChange: (config) => {},
         },
         {
           field: 'hooks',
@@ -853,7 +860,11 @@ export class System extends Base {
     await this.getHttp().patch('entity', { ..._config }) //
     this.refreshPageDesign(_config.tableName) //
   }
-  async refreshPageDesign(tableName) {
+  async refreshPageDesign(tableName?: any) {
+    //
+    if (tableName == null) {
+      tableName = this.getCurrentPageName()
+    }
     let pageDesign = this.tableMap[tableName] || this.tableEditMap[tableName] //
     if (pageDesign == null) {
       return
@@ -934,11 +945,12 @@ export class System extends Base {
         {
           field: 'tableName',
           title: '表格或者视图名称',
-        }, {
-          field: "status",
-          title: "使用启用",
-          editType: "boolean"//
-        }
+        },
+        {
+          field: 'status',
+          title: '使用启用',
+          editType: 'boolean', //
+        },
       ],
       data: _data,
       height: 600,

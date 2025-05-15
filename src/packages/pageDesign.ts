@@ -15,7 +15,11 @@ import {
 import { useOnce, useRunAfter } from './utils/decoration'
 import { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
-import { formitemTypeMap, selectTypeMap } from './designNodeForm'
+import {
+  formitemTypeMap,
+  getButtonGroupTableConfig,
+  selectTypeMap,
+} from './designNodeForm'
 import { Table } from '@/table/table'
 import { BMenu } from '@/buttonGroup/bMenu'
 import { getDFConfig } from '@/table/colFConfig'
@@ -262,7 +266,7 @@ export class PageDesign extends Form {
     _data.tableName = this.getMainTableName()
     let http = this.getHttp()
     let _res = await http.create('entity', _data) // //
-    console.log(_res)
+    // console.log(_res)
   }
   async updateTableDesign() {
     let _data = this.getLayoutData() //
@@ -293,12 +297,10 @@ export class PageDesign extends Form {
   //打开添加页面
   async openAddEntity() {}
   async addMainTableRow(addConfig) {
+    let config = this.config //
     let system = this.getSystem()
     let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`, (d) => {
-      // console.log('我执行了一些东西了') ////
-      //这里写新增逻辑
-    })
+    system.routeOpen(`${tableName}---edit`, (d) => {})
   }
   getRealTableName() {
     let tableName = this.getTableName() //
@@ -559,8 +561,7 @@ export class PageDesign extends Form {
       {
         label: '设计按钮',
         fn: async () => {
-          let currentContextItem = this.currentContextItem //
-          this.currentContextItem = null //
+          this.designMainButtons(this.currentContextItem) //
         },
         visible: computed(() => {
           let currentItem = this.currentContextItem
@@ -573,10 +574,28 @@ export class PageDesign extends Form {
       },
     ]
   }
-  // designMainButtons(e, item) {
-  //   this.currentContextItem = item
-  //   this.openContextMenu(e) //
-  // }
+  async designMainButtons(item) {
+    //
+    let _item: PageDesignItem = item
+    if (item == null) {
+      return
+    }
+    let options = _item.getOptions()
+    let items = options?.items
+    if (!Array.isArray(items)) {
+      options.items = [] //
+      items = options.items
+    }
+    items = _.cloneDeep(items)
+    let tableConfig: any = getButtonGroupTableConfig() //
+    tableConfig.data = items
+    tableConfig.height = 500
+    tableConfig.width = 800
+    let sys = this.getSystem()
+    let _data = await sys.confirmTable(tableConfig) //
+    options.items = _data
+    await this.getSystem().updateCurrentPageDesign()
+  }
   openContextMenu(e, _item?: any) {
     this.currentContextItem = _item //
     let menu: BMenu = this.getRef('mainContextMenu')
