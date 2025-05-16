@@ -74,6 +74,7 @@ import type {
 import { Dialog } from './dialog'
 import { PageDesign } from '@ER/pageDesign'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
+import { dialogMap } from './_dialogCom' //
 export const getDialogDefaultProps = () => {
   return {
     modelValue: Boolean as PropType<VxeModalPropTypes.ModelValue>,
@@ -330,7 +331,12 @@ export default defineComponent({
                 let props = null
                 if (insConfig != null) {
                   component = insConfig.component
-                  props = insConfig.props
+                  props = insConfig.props || {}
+                  let dialogName = insConfig.dialogName
+                  if (dialogName) {
+                    //
+                    component = dialogMap[dialogName] //
+                  }
                 }
                 if (_com == null) {
                   if (component) {

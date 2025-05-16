@@ -31,13 +31,13 @@ export default defineComponent({
     const ns = hooks.useNamespace('Fields')
     const { t } = hooks.useI18n()
     const { state, setSelection } = hooks.useTarget()
+    let formIns: Form = inject('formIns')
     const addStore = (element) => {
-      //
+      //在根部进行控制
       let _el = _.cloneDeep(element)
       let newElement = reactive(ER.wrapElement(_el, true, true, true, true))
-      state.store.push(newElement)
+      state.store.push(newElement) //
       utils.addContext({ node: newElement, parent: state.store, form: formIns })
-      nextTick(() => {})
     }
     const slots = {
       item: ({ element }) => {
@@ -65,7 +65,6 @@ export default defineComponent({
     const handleMove = (evt, originalEvent) => {
       return true
     }
-    let formIns: Form = inject('formIns')
     let pluginName = formIns.getPluginName()
     let id = formIns.id
     const dragOptions = {
@@ -88,7 +87,7 @@ export default defineComponent({
       let com = (
         <ElAside class={[ns.b()]} width={ER.props.fieldsPanelWidth}>
           {btnCom}
-          <div class='overflow-y-auto'>
+          <div class="overflow-y-auto">
             <menuCom
               items={fieldsConfig}
               ref={registerMenu}

@@ -66,7 +66,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
           },
           {
             label: '查询',
-            value: 'getTableData', //
+            value: 'openSearchDialog', //
           }, //
         ],
       }, //

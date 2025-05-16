@@ -1161,7 +1161,7 @@ export class Form extends Base {
     state.fields.splice(0)
     state.store.splice(0)
   }
-  getLayoutData() {
+  getLayoutData():any {
     let layout = this.layout
     let state = this.state
     const fields = utils.processField(_.cloneDeep(state.store))

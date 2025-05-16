@@ -353,9 +353,12 @@ export class System extends Base {
     )
     return data //
   }
-  async updateCurrentPageDesign() {
+  async updateCurrentPageDesign(config?: any) {
     let cPage = this.getCurrentPageDesign()
-    let layout = cPage.getLayoutData() //
+    let layout = config || cPage.getLayoutData() //
+    if (layout.id == null) {
+      return //
+    }
     let http = this.getHttp()
     await http.patch('entity', layout) //
     await this.refreshPageDesign() //

@@ -1,5 +1,6 @@
 import { Base } from '@/base/base'
 import { Dropdown } from '@/menu/dropdown'
+import { PageDesign } from '@ER/pageDesign'
 import { stringToFunction } from '@ER/utils'
 
 export class Button extends Base {
@@ -72,6 +73,16 @@ export class Button extends Base {
     }
     return this
   }
+  getDefaultFnRun() {
+    let page = this.getMainPageDesign()
+    let obj = {
+      openSearchDialog: (config) => {
+        let page: PageDesign = config.page
+        page.openSearchDialog() //
+      },
+    }
+    return obj //
+  }
   async runFn(_config) {
     try {
       let page = _config.page
@@ -87,6 +98,15 @@ export class Button extends Base {
         if (typeof _fn == 'function') {
           _fn = _fn.bind(page) //
           await _fn(_config)
+        }
+      } else {
+        let defaultFn = config.defaultFn
+        if (typeof defaultFn == 'string') {
+          let drun = this.getDefaultFnRun()
+          let _fn = drun[defaultFn]
+          if (typeof _fn == 'function') {
+            await _fn(_config) //
+          }
         }
       }
       if (this.parent != null) {

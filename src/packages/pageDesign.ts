@@ -24,6 +24,7 @@ import { Table } from '@/table/table'
 import { BMenu } from '@/buttonGroup/bMenu'
 import { getDFConfig } from '@/table/colFConfig'
 import _ from 'lodash'
+import searchDialog from '@/dialog/_dialogCom/searchDialog'
 
 export class PageDesign extends Form {
   currentContextItem: PageDesignItem = null
@@ -626,7 +627,28 @@ export class PageDesign extends Form {
     }
   } //
   async openSearchDialog() {
-    //
+    let _searchDialog = this.config.searchDialog
+    if (_searchDialog == null) {
+      _searchDialog = {} //
+    }
+    let dialogConfig = {
+      width: '800px',
+      height: '600px',
+      createFn: () => {
+        return {
+          component: searchDialog,
+          props: {
+            pageDesign: this,
+          },
+        }
+      },
+      confirmFn: (dialog) => {
+        return true
+      }, //
+    }
+    let sys = this.getSystem()
+    let _data = await sys.openDialog(dialogConfig)
+    console.log(_data, 'testData') //
   }
   async designSearchForm() {
     let searchDialog = this.config.searchDialog
@@ -635,6 +657,8 @@ export class PageDesign extends Form {
     }
     let sys = this.getSystem()
     let _data = await sys.confirmDesignForm(searchDialog) //
-    console.log(_data, 'test_data')
+    let _data1 = this.getLayoutData()
+    _data1.searchDialog = _data
+    await this.getSystem().updateCurrentPageDesign(_data1) //
   }
 }
