@@ -28,6 +28,10 @@ export default defineComponent({
       type: Array,
       default: (): any[] => [],
     },
+    useDefaultClass: {
+      type: Boolean,
+      default: true,
+    },
   },
   components: {
     // erFormEditor,
@@ -73,7 +77,7 @@ export default defineComponent({
         immediate: true,
       },
     )
-    const ns = tabIns.hooks.useNamespace('tabCom')
+    let ns = tabIns.hooks.useNamespace('tabCom')
     const register = (el) => {
       if (el) {
         tabIns.registerRef('root', el)
@@ -95,6 +99,11 @@ export default defineComponent({
             items={tabIns.getContextItems()}
           ></ContextmenuCom>
         )
+      }
+      let _class = ns.b()
+      if (props.useDefaultClass == true) {
+        //@ts-ignore
+        _class = [] ////
       }
       const tabCom = (
         <div ref={register}>

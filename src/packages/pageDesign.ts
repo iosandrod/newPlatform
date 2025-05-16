@@ -31,6 +31,9 @@ export class PageDesign extends Form {
   tabOrder: number = 0
   pageType = 'pageDesign' //
   tableType: 'main' | 'edit' | 'search' = 'main' //
+  pageData: any = {
+    searchBindData: {},
+  }
   constructor(config) {
     super(config)
   }
@@ -634,6 +637,7 @@ export class PageDesign extends Form {
     let dialogConfig = {
       width: '800px',
       height: '600px',
+      title: '查询弹框',
       createFn: () => {
         return {
           component: searchDialog,
@@ -660,5 +664,14 @@ export class PageDesign extends Form {
     let _data1 = this.getLayoutData()
     _data1.searchDialog = _data
     await this.getSystem().updateCurrentPageDesign(_data1) //
+  }
+  getSearchBindData() {
+    let _d=this.pageData
+    let sbd=_d.searchBindData
+    if(sbd==null){
+      _d.searchBindData={}
+      sbd=_d.searchBindData
+    }
+    return _d//
   }
 }

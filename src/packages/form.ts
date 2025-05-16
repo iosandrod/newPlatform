@@ -905,6 +905,9 @@ export class Form extends Base {
     } //
     let newData = data
     let layout = this.layout
+    if (newData.layout == null) {
+      return //
+    }
     layout.pc = newData.layout.pc
     layout.mobile = newData.layout.mobile
     this.isShow = false
@@ -1089,7 +1092,7 @@ export class Form extends Base {
     return node
   }
   getLabelWidth() {
-    let labelWidth=this.config.labelWidth
+    let labelWidth = this.config.labelWidth
     return labelWidth
   }
   getLayoutDataByplatform(platform) {
@@ -1161,13 +1164,13 @@ export class Form extends Base {
     state.fields.splice(0)
     state.store.splice(0)
   }
-  getLayoutData():any {
+  getLayoutData(): any {
     let layout = this.layout
     let state = this.state
     const fields = utils.processField(_.cloneDeep(state.store))
     layout.pc = this.getLayoutDataByplatform('pc')
     layout.mobile = this.getLayoutDataByplatform('mobile')
-    let id=this.config.id
+    let id = this.config.id
     return _.cloneDeep({
       id,
       layout,
@@ -1654,7 +1657,7 @@ export class Form extends Base {
       let _f = new Form(value)
       this.dFormMap[key] = _f
     })
-    let tm1 = selectTypeMap(_this)//编辑options的
+    let tm1 = selectTypeMap(_this) //编辑options的
     Object.entries(tm1).forEach(([key, value]) => {
       let _f = new Form(value)
       this.sFormMap[key] = _f ////
