@@ -62,7 +62,7 @@ const getDefaultFormEditProps = () => {
     ...defaultProps,
     isDesign: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     data: {
       type: Object,

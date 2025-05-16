@@ -138,17 +138,19 @@ export default defineComponent({
     let _reg3 = (el) => {
       btn.registerRef('page', el)
     }
-    let fn1 = () => {
+    let fn1 = async () => {
       // system.confirmForm({
       //   ...formConfig,//
       // })
-      let _ins: PageDesign = btn.getRef('page')
-      _ins
-        .validate()
-        .then(() => {})
-        .catch(() => {
-          console.log('报错了') //
-        })
+      // let _ins: PageDesign = btn.getRef('page')
+      // _ins
+      //   .validate()
+      //   .then(() => {})
+      //   .catch(() => {
+      //     console.log('报错了') //
+      //   })
+      let _d = await system.confirmDesignForm({}) //
+      console.log(_d, 'test_data') //
     }
     // let p = new PageDesign(getDefaultPageProps())
     let _data1 = Array(10000)
@@ -163,19 +165,19 @@ export default defineComponent({
       com = <pageCom></pageCom> //
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       let com2 = <button onClick={fn1}>123123</button>
-      com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
-      com = (
-        <div style={{ height: `${_data.height}px`, width: `100%` }}>
-          <tableCom
-            // {...tableConfig}
-            {...menuTConfig}
-            showGlobalSearch={true}
-            showHeaderButtons={true}
-            // showControllerButtons={true}
-            // tableState="edit"
-          ></tableCom>
-        </div>
-      ) //
+      // com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
+      // com = (
+      //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
+      //     <tableCom
+      //       // {...tableConfig}
+      //       {...menuTConfig}
+      //       showGlobalSearch={true}
+      //       showHeaderButtons={true}
+      //       // showControllerButtons={true}
+      //       // tableState="edit"
+      //     ></tableCom>
+      //   </div>
+      // ) //
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       })
@@ -183,7 +185,7 @@ export default defineComponent({
         <div class="w-full h-full">
           <formCom
             ref={_reg3}
-            isDesign={true}
+            isDesign={true} 
             //  {..._fConfig}
             data={d1}
           ></formCom>

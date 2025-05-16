@@ -628,4 +628,13 @@ export class PageDesign extends Form {
   async openSearchDialog() {
     //
   }
+  async designSearchForm() {
+    let searchDialog = this.config.searchDialog
+    if (searchDialog == null) {
+      searchDialog = {} //
+    }
+    let sys = this.getSystem()
+    let _data = await sys.confirmDesignForm(searchDialog) //
+    console.log(_data, 'test_data')
+  }
 }

@@ -479,7 +479,7 @@ export class System extends Base {
       let component = tableCom
       let createFn = () => {
         return {
-          component: component, //
+          component: component,
           props: {
             tableIns: _table,
           },
@@ -1013,8 +1013,43 @@ export class System extends Base {
           await this.designCurrentPageConfig()
         },
       },
+      {
+        label: '查询表单设计',
+        fn: async () => {
+          let pageDesign = this.getCurrentPageDesign()
+          await pageDesign.designSearchForm()
+        },
+      },
     ]
     return _items //
+  }
+  designCustomForm(config) {
+    //
+  }
+  async confirmDesignForm(config = {}) {
+    //
+    return new Promise(async (resolve, reject) => {
+      let _f = new Form(config)
+      let createFn = () => {
+        return {
+          component: formCom,
+          props: {
+            formIns: _f,
+            isDesign: true,
+          },
+        }
+      }
+      let dialogConfig = {
+        width: '1200px',
+        height: '800px',
+        createFn,
+        confirmFn: (dialog: Dialog) => {
+          let layoutData = _f.getLayoutData()
+          resolve(layoutData) //
+        },
+      }
+      this.openDialog(dialogConfig) //
+    })
   }
 }
 

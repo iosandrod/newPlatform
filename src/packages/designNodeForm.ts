@@ -88,6 +88,7 @@ export const getButtonGroupFConfig = (_this: PageDesign) => {
         field: 'items',
         label: '',
         type: 'stable', ////
+        hiddenTitle: true,
         options: getButtonGroupTableConfig(_this), //
       }, //
     ],
