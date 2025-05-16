@@ -1,3 +1,4 @@
+import { Dropdown } from '@/menu/dropdown'
 import { Base } from '@ER/base'
 import { VxeInputInstance } from 'vxe-pc-ui'
 
@@ -8,10 +9,10 @@ export class Input extends Base {
     this.config = config //
   }
   getDatePanelVisible() {
-      let input: VxeInputInstance = this.getRef('input')
-      if (input) {
-        return input.reactData.isAniVisible //
-      }
+    let input: VxeInputInstance = this.getRef('input')
+    if (input) {
+      return input.reactData.isAniVisible //
+    }
   }
   getModelValue() {
     let config = this.config
@@ -30,4 +31,11 @@ export class Input extends Base {
       input.blur() //
     } //
   } //
+  showDropdown(e) {
+    //
+    let drop: Dropdown = this.getRef('dropdown')
+    if (drop) {
+      drop.showDropdown() //
+    }
+  }
 }

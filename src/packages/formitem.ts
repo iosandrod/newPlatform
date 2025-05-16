@@ -18,6 +18,7 @@ import tableCom from '@/table/tableCom'
 import CodeEditor from '@/codeEditor/codeEditor'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { stringToFunction } from './utils'
+import { Input } from '@/input/inputClass'
 
 export type FormOptions = {
   items: Field[]
@@ -701,7 +702,11 @@ export class FormItem extends Base {
   }
   onFocus(config) {
     let oldValue = this.getBindValue()
-    this.oldValue = oldValue
+    this.oldValue = oldValue //
+    let isShowS = this.getIsShowSearchIcon()
+    if (isShowS) {
+      this
+    }
   }
   onBlur(value?: any) {
     let nValue = this.getBindValue()
@@ -925,6 +930,19 @@ export class FormItem extends Base {
     d.currentDField = f
     d.openContextMenu(e) //
   }
+  getIsShowSearchIcon() {
+    let options = this.getOptions()
+    let isShowSearchIcon = options.isShowSearchIcon
+    let s = isShowSearchIcon
+    s = Boolean(s)
+    // let type = this.getType()
+    let columnSelect = options.columnSelect
+    if (columnSelect == true) {
+      //
+      s = true
+    }
+    return s //
+  }
   async executeEvent(config) {
     let eventManager = this.eventManager //
     let event: string = config.event
@@ -950,5 +968,21 @@ export class FormItem extends Base {
         }
       }
     }
+  }
+  onSearchClick(e) {
+    let input: Input = this.getRef('fieldCom')
+    // input.showDropdown() //
+    // console.log(input, 'fieldCom') //
+    if (input == null) {
+      return
+    }
+    // input.showDropdown(e)
+  }
+  showDropdown(config?: any) {
+    let input: Input = this.getRef('fieldCom')
+    if (input == null) {
+      return
+    }
+    input.showDropdown(config) //
   }
 }

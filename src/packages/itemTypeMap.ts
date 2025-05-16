@@ -15,12 +15,22 @@ export const defaultType = (item: FormItem): any => {
     },
     clearable: item.getClearable(), //
   }
-}
+} //
 export const inputType = (item: FormItem) => {
   let obj = defaultType(item)
   let password = item.getOptions()?.password
   if (password) {
     obj.type = 'password' //
+  }
+  let isShowSearchIcon = item.getIsShowSearchIcon()
+  if (isShowSearchIcon) {
+    obj.type = 'search' //
+  }
+  if (obj.type == 'search') {
+    //
+    obj.onSearchClick=(e)=>{
+      item.onSearchClick(e)
+    }
   }
   return obj //
 }

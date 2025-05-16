@@ -71,10 +71,10 @@ export default defineComponent({
                 )
               }
               if (props.dropMode == 'click') {
-                com = <div>{dc}</div>
+                com = <div class='w-full'>{dc}</div>
               }
               if (props.dropMode == null) {
-                com = <div>{dc}</div>
+                com = <div class='w-full'>{dc}</div>
               }
               return com
             },

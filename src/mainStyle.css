@@ -260,3 +260,9 @@ li {
     padding: 0;
     height: 100%;
   }
+  .vxe-pulldown{
+    width:'100%';
+  }
+  .vxe-pulldown--content{
+    width:'100%';
+  }

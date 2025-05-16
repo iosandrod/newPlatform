@@ -42,7 +42,7 @@ export class PageDesignItem extends FormItem {
       ...options,
       // columns: columns,
     }
-  }
+  } //
   getTableColumns() {
     let columns = this.config?.options?.columns || [] //
     return columns

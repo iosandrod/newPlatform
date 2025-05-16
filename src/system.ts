@@ -33,7 +33,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient() //
@@ -46,31 +46,31 @@ export class System extends Base {
         }
         return true
       })
-      d.forEach(c => {
+      d.forEach((c) => {
         let children = c.children
         if (Array.isArray(children)) {
           c.children = filFn(children)
         }
       })
       return d
-    }//
+    } //
     this.systemConfig.menuConfig.items = filFn(d) //
     return d //
   }
   init() {
     super.init() //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap).map((row) => {
@@ -87,7 +87,7 @@ export class System extends Base {
     })
     return allT2
   }
-  openPageDesign(config) { } //
+  openPageDesign(config) {} //
 
   async getPageLayout(name?: string) {
     let http = this.getHttp()
@@ -368,7 +368,7 @@ export class System extends Base {
     await http.patch('entity', layout) //
     await this.refreshPageDesign() //
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -421,10 +421,16 @@ export class System extends Base {
     pageDesign.tableName = tableName //
     pageDesign.setLayoutData(layoutConfig)
     pageDesign.use('getTableData', async (context, next) => {
-      console.log('getTableData之前', context)
+      // console.log('getTableData之前', context)//
       let fArg = context.args[0]
       let instance: PageDesign = context.instance
       let query = fArg.query
+      let tableName = fArg.tableName
+      let _tName = instance.getTableName()
+      if (tableName == _tName) {
+        let _d = instance.getSearchBindData() //
+        // console.log(_d, 'test_d') //
+      }
       //获取全局的查询条件
       await next()
       console.log('getTableData之后')
@@ -457,8 +463,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     return new Promise(async (resolve, reject) => {
       let _form = new Form(formConfig) //
@@ -800,7 +806,7 @@ export class System extends Base {
     try {
       //
       //打开app
-    } catch (error) { }
+    } catch (error) {}
   }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
@@ -843,18 +849,19 @@ export class System extends Base {
         {
           field: 'tableCnName',
           label: '表格中文名',
-          itemChange: (config) => { },
-        }, {
-          label: "显示分页",
-          field: "showPagination",
-          type: "boolean",
+          itemChange: (config) => {},
+        },
+        {
+          label: '显示分页',
+          field: 'showPagination',
+          type: 'boolean',
         },
         {
           field: 'hooks',
           // label: '高级钩子函数编辑',
           type: 'stable',
           span: 24,
-          hiddenTitle: true,//
+          hiddenTitle: true, //
           options: {
             tableTitle: '高级钩子函数编辑', //
             tableState: 'edit', //
@@ -974,7 +981,7 @@ export class System extends Base {
         },
         {
           field: 'status',
-          title: '是否启用',//
+          title: '是否启用', //
           editType: 'boolean', //
         },
       ],
@@ -992,10 +999,10 @@ export class System extends Base {
         })
         // console.log(_data1)//
         let http = this.getHttp()
-        await http.patch('navs', _data1)//
+        await http.patch('navs', _data1) //
         this.confirmMessage('更新菜单成功') ////
         this.clearCacheValue('getMenuData') //
-        await this.getMenuData() // 
+        await this.getMenuData() //
       },
       dragRowAfterFn: (config) => {
         //
@@ -1058,14 +1065,14 @@ export class System extends Base {
           let pageDesign = this.getCurrentPageDesign()
           await pageDesign.designSearchForm()
         },
-      },//
+      }, //
       {
         label: '同步列',
         fn: async () => {
           let pageDesign = this.getCurrentPageDesign()
           await pageDesign.syncRealColumns()
         },
-      }
+      },
     ]
     return _items //
   }
@@ -1094,9 +1101,9 @@ export class System extends Base {
       this.openDialog(dialogConfig) //
     })
   }
-  getSystemControll() {//
-
-  }
+  getSystemController() {
+    //
+  } 
 }
 
 export const system = reactive(new System()) //

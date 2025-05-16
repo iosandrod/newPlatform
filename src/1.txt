@@ -2943,3 +2943,8 @@ const app = createApp({
   //   ) //
   //   return _data //
   // }
+
+   // getFieldsDesignConfig() {
+  //   // let _fieldConfig = JSON.parse(JSON.stringify(fieldsConfig))
+  //   // return _fieldConfig
+  // }

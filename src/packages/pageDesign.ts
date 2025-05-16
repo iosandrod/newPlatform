@@ -27,7 +27,7 @@ import _ from 'lodash'
 import searchDialog from '@/dialog/_dialogCom/searchDialog'
 
 export class PageDesign extends Form {
-  hooksMetaData: Record<string, any[]> = {};//
+  hooksMetaData: Record<string, any[]> = {} //
   currentContextItem: PageDesignItem = null
   tabOrder: number = 0
   pageType = 'pageDesign' //
@@ -64,11 +64,16 @@ export class PageDesign extends Form {
     this.tableDataMap[tableName] = {
       data: [],
       curRow: {},
-    }
-    this.initSearchDialog()
+    } //
   }
-  initSearchDialog() {
-    //
+  initSearchForm() {
+    let _config = this.config //
+    let searchDialog = _config.searchDialog
+    if (searchDialog == null) {
+      _config.searchDialog = searchDialog //
+      searchDialog = _config.searchDialog
+    } //
+    // let _f=new Form(searchDialog)
   }
   getTabTitle() {
     let config = this.config //
@@ -118,7 +123,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() { }
+  initDefaultTemplatePage() {}
   getValidateRules() {
     return []
   }
@@ -172,7 +177,7 @@ export class PageDesign extends Form {
     if (args.length == 0) {
       args[0] = {
         tableName: ctx.getTableName(),
-        query: {},//
+        query: {}, //
       }
     }
     if (typeof args[0] == 'string') {
@@ -182,11 +187,11 @@ export class PageDesign extends Form {
       }
     }
     return config
-  })//
+  }) //
   async getTableData(
     getDataConfig: any = {
       tableName: this.getTableName(),
-      query: {}//
+      query: {}, //
     },
   ) {
     if (typeof getDataConfig == 'string') {
@@ -194,7 +199,7 @@ export class PageDesign extends Form {
         tableName: getDataConfig,
       }
     }
-    console.log(getDataConfig, 'testGetDataConfig')//
+    console.log(getDataConfig, 'testGetDataConfig') //
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
     let query = getDataConfig.query || {}
@@ -221,10 +226,10 @@ export class PageDesign extends Form {
     await this.publishEvent(_config)
     return row
   }
-  buildQuery() { }
-  openSearchForm() { }
-  async createTableData() { }
-  async updateTableData() { }
+  buildQuery() {}
+  openSearchForm() {}
+  async createTableData() {}
+  async updateTableData() {}
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
     let obj1 = {}
@@ -240,13 +245,16 @@ export class PageDesign extends Form {
     let tableIns = this.getRef(tableName)
     let columns = []
     if (tableIns != null) {
-      columns = tableIns.getColumns()
+      columns = tableIns.getColumns().map((col) => {
+        let config = col.config
+        return config //
+      })
     } else {
       columns = this.getTableConfig().columns
     } //
     return columns //
   }
-  getMainTableConfig() { }
+  getMainTableConfig() {}
   @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -311,23 +319,23 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() { }
+  getAllFormMap() {}
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() { }
+  initDefaultSForm() {}
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() { }
+  async openAddEntity() {}
   async addMainTableRow(addConfig) {
     let config = this.config //
     let system = this.getSystem()
     let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`, (d) => { })
+    system.routeOpen(`${tableName}---edit`, (d) => {})
   }
   getRealTableName() {
     let tableName = this.getTableName() //
@@ -396,9 +404,9 @@ export class PageDesign extends Form {
   }
   public use(method: string, fn: any) {
     if (!this.hooksMetaData[method]) {
-      this.hooksMetaData[method] = [];
+      this.hooksMetaData[method] = []
     }
-    this.hooksMetaData[method].push(fn);
+    this.hooksMetaData[method].push(fn)
   }
   async createDefaultRow(tableName = this.getTableName()) {
     let tableConfig = this.getTableConfig(tableName) //
@@ -679,7 +687,7 @@ export class PageDesign extends Form {
     }
     let sys = this.getSystem()
     let _data = await sys.openDialog(dialogConfig)
-    console.log(_data, 'testData') //
+    // console.log(_data, 'testData') //
   }
   async designSearchForm() {
     let searchDialog = this.config.searchDialog
@@ -691,7 +699,7 @@ export class PageDesign extends Form {
     _data = _data || {}
     _data = { ...searchDialog, ..._data } ////
     let _data1 = this.getLayoutData()
-    _data1.searchDialog = _data
+    _data1.searchDialog = _data //
     await this.getSystem().updateCurrentPageDesign(_data1) //
   }
   getSearchBindData() {
@@ -701,7 +709,7 @@ export class PageDesign extends Form {
       _d.searchBindData = {}
       sbd = _d.searchBindData
     }
-    return _d //
+    return sbd
   }
   async syncRealColumns() {
     let tRef = this.getRef(this.getTableName())
@@ -712,21 +720,71 @@ export class PageDesign extends Form {
     // let tConfig = this.getTableConfig(tableName)
     // console.log(tConfig, 'test_config')//
     let cols = this.getTableColumns(tableName)
-    // console.log(cols, 'testCols')//
     let columns = cols.map((col) => {
-      return col.config
+      return col?.config || col //
     })
     // let columns = tConfig.columns
     let tCols = await this.getHttp().find('columns', { tableName })
-    let addCols = columns.filter((c) => {
-      return tCols.findIndex((tc) => {
-        return tc.field == c.field
-      }) == -1
-    }).map(row => {
-      row.id = null
-      return row
-    })//
+    let addCols = columns
+      .filter((c) => {
+        return (
+          tCols.findIndex((tc) => {
+            return tc.field == c.field
+          }) == -1
+        )
+      })
+      .map((row) => {
+        row.id = null
+        return row
+      }) //
     await this.getHttp().create('columns', addCols)
-    this.getSystem().confirmMessage('同步成功', 'success')//
+    this.getSystem().confirmMessage('同步成功', 'success') //
+  }
+  getSearchWhere(data) {
+    let columns = this.getTableColumns()
+    let _arr = []
+    for (const col of columns) {
+      let obj = {}
+      let searchF = col.searchField || col.field //
+      let searchOperator = col.searchOperator //查询操作符
+      //查询条件
+      if (searchOperator == null) {
+        let _v = data[searchF]
+        if (_v != null) {
+          obj[searchF] = _v //
+          _arr.push(obj) //
+        }
+      } else {
+        let _value = data[searchF]
+        if (_value != null) {
+          let _obj = this.buildWhereInOperator({
+            value: _value,
+            field: searchF,
+            operator: searchOperator,
+          })
+          _arr.push(_obj)
+        }
+      }
+    }
+    return _arr //
+  } //
+  buildWhereInOperator(config: any) {
+    return {}
+  }
+  setCurrentDesignState(state) {
+    if (['scan', 'edit'].indexOf(state) == -1) {
+      return
+    }
+    let allTableName = this.getAllTableName()
+    allTableName.forEach((tableName) => {
+      let table = this.getRef(tableName)
+      if (table == null) {
+        return
+      } //
+      table.setTableState(state) //
+    })
+  }
+  confirmFieldSelect() {
+    //
   }
 }

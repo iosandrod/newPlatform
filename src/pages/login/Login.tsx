@@ -27,8 +27,10 @@ import checkboxCom from '@/checkbox/checkboxCom'
 import { getDFConfig } from '@/table/colFConfig'
 import uploadCom from '@/input/uploadCom'
 import SearchDialog from '@/dialog/_dialogCom/searchDialog'
+import inputCom from '@/input/inputCom'
 export default defineComponent({
   components: {
+    inputCom, //
     uploadCom,
     codeEditorCom,
     buttonCom, //
@@ -190,14 +192,29 @@ export default defineComponent({
       // ) //
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
-      })
+      }) //
       com = (
         <div class="w-full h-full">
           <formCom
             ref={_reg3}
             // isDesign={true}
-            {..._fConfig}
-            data={d1}
+            // {..._fConfig}
+            {...{
+              items: [
+                {
+                  field: 'height',
+                  label: '邮箱',
+                  options: {
+                    columnSelect: true, //
+                  },
+                },
+                {
+                  field: 'width',
+                  label: '密码',
+                },
+              ],
+            }}
+            data={d1} //
           ></formCom>
         </div>
       )
@@ -213,6 +230,11 @@ export default defineComponent({
       // com = (
       //   <checkboxCom modelValue={true} onChange={(value) => {
       //   }}></checkboxCom>
+      // )//
+      // com = (
+      //   <div class="h-30">
+      //     <inputCom columnSelect={true}></inputCom>
+      //   </div>
       // )
       // com=<input type="checkbox" class='vxe-checkbox--input' onChange={(value) => {
       // }}></input>

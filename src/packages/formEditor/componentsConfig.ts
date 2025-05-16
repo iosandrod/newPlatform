@@ -512,7 +512,7 @@ export const createFieldConfig = (f: Form) => {
             isShowLabel: true,
             required: false,
             min: null,
-            max: null, 
+            max: null,
           },
         },
       ],

@@ -2,6 +2,7 @@ import { defineComponent, PropType } from 'vue'
 import VxeInput from 'vxe-pc-ui/packages/input'
 import { Input } from './inputClass'
 import { VxeInputPropTypes, getConfig } from 'vxe-table'
+import dropdownCom from '@/menu/dropdownCom'
 export default defineComponent({
   name: 'InputCom',
   emits: [
@@ -174,6 +175,9 @@ export default defineComponent({
       type: Boolean as PropType<VxeInputPropTypes.Transfer>,
       default: null,
     },
+    columnSelect: {
+      type: Boolean,
+    },
 
     // 已废弃
     maxlength: [String, Number] as PropType<VxeInputPropTypes.Maxlength>,
@@ -181,14 +185,18 @@ export default defineComponent({
     autocomplete: String as PropType<VxeInputPropTypes.Autocomplete>,
   },
   components: {
+    dropdownCom,
     VxeInput,
   },
   setup(props, { emit, slots, attrs, expose }) {
     let _input = new Input(props) //
     let register = (el) => {
       _input.registerRef('input', el) //
+    } //
+    let registerDropdown = (el) => {
+      _input.registerRef('dropdown', el) //
     }
-    expose(_input)
+    expose({ _instance: _input })
     return () => {
       let com = (
         <div class="h-full w-full flex">
@@ -207,7 +215,29 @@ export default defineComponent({
           {slots?.buttons?.()}
         </div>
       ) //
-      return com //
+      let _com = null
+      let type = props.type
+      if (type == 'search') {
+        _com = (
+          <dropdownCom
+            class='h-full'
+            ref={registerDropdown}
+            v-slots={{
+              default: () => {
+                console.log('我渲染了下拉框')//
+                return com //
+              },
+              dropdown: () => {
+                let com = <div class="h-100 w-100 bg-red"></div>
+                return com
+              },
+            }}
+          ></dropdownCom>
+        )
+      } else {
+        _com = com //
+      }
+      return _com //
     }
-  },
+  }, //
 })

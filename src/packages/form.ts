@@ -587,10 +587,7 @@ export class Form extends Base {
     let nextForm = this.getNextFormArr()
     return [...parentArr, this, ...nextForm] //
   }
-  getFieldsDesignConfig() {
-    // let _fieldConfig = JSON.parse(JSON.stringify(fieldsConfig))
-    // return _fieldConfig
-  }
+
   getNextFormArr() {
     let arr = []
     let nextForm = this.nextForm

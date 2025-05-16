@@ -28,16 +28,15 @@ export default defineComponent({
     }
     let allTabPlan = computed(() => {
       let searchPlan = dialogConfig.searchPlan
-      if(!Array.isArray(searchPlan)){
+      if (!Array.isArray(searchPlan)) {
         return []
       }
-      let _s=searchPlan.map((s) => {
+      let _s = searchPlan.map((s) => {
         return s
-      })//
+      }) //
       return _s
-    })
+    }) //
     return () => (
-      //
       <div class="h-full w-full ">
         <div class="w-full flex flex-col justify-between">
           <div class="mt-4 mb-4">
