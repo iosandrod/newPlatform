@@ -28,21 +28,19 @@ export default defineComponent({
     }
     let allTabPlan = computed(() => {
       let searchPlan = dialogConfig.searchPlan
-      if (searchPlan == null) {
-        searchPlan = []
+      if(!Array.isArray(searchPlan)){
+        return []
       }
-      return searchPlan
+      let _s=searchPlan.map((s) => {
+        return s
+      })//
+      return _s
     })
     return () => (
       //
-      <div class="h-full w-full w-500">
-        <div class="w-full flex flex-row justify-between">
-          <div>
-            <TabCom
-              items={allTabPlan.value} //
-            ></TabCom>
-          </div>
-          <div>
+      <div class="h-full w-full ">
+        <div class="w-full flex flex-col justify-between">
+          <div class="mt-4 mb-4">
             <ButtonGroupCom
               items={[
                 {
@@ -69,7 +67,8 @@ export default defineComponent({
                       data: _data, //
                     }
                     newObj = _.cloneDeep(newObj) //
-                    sPlan.push(newObj) //
+                    sPlan.push(newObj) ////
+                    await system.updateCurrentPageDesign(pageDesign.config) //
                   },
                 },
                 {
@@ -88,6 +87,11 @@ export default defineComponent({
                 },
               ]}
             ></ButtonGroupCom>
+          </div>
+          <div class="mt-4 mb-4">
+            <TabCom
+              items={allTabPlan.value} //
+            ></TabCom>
           </div>
         </div>
         <div class="flex-1">

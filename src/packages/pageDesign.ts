@@ -173,7 +173,7 @@ export class PageDesign extends Form {
     if (typeof getDataConfig == 'string') {
       getDataConfig = {
         tableName: getDataConfig,
-      } //
+      }
     }
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
@@ -647,7 +647,7 @@ export class PageDesign extends Form {
         }
       },
       confirmFn: (dialog) => {
-        return true
+        this.getTableData() //
       }, //
     }
     let sys = this.getSystem()

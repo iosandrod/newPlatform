@@ -35,6 +35,7 @@ import formCom from './formCom'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 import { VxeFormInstance } from 'vxe-pc-ui'
 import { PageDesign } from './pageDesign'
+import { Dialog } from 'vant'
 //转换数据
 //
 let prevEl: any = ''
@@ -70,6 +71,7 @@ const excludes = [
 ]
 const pName = [] //
 export class Form extends Base {
+  dialogArr = []
   eventManager: {
     [key: string]: Array<{
       callback?: Function
@@ -1747,6 +1749,10 @@ export class Form extends Base {
       //执行
       item.executeEvent(config)
     }
+  }
+  openDialog(dConfig) {
+    let _dialog = new Dialog(dConfig)
+    this.dialogArr.push(_dialog) //
   }
 }
 //使用默认布局
