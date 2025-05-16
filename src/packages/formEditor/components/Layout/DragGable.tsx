@@ -322,7 +322,7 @@ export default defineComponent({
                                 return null //
                               }
                               let tCom = (
-                                <div class="  flex align-center">
+                                <div class="flex align-center">
                                   {element?.['label']}
                                 </div>
                               )

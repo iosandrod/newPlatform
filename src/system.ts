@@ -463,10 +463,12 @@ export class System extends Base {
           if (typeof _confirmFn == 'function') {
             _confirmFn(dialog) //
           }
-          resolve(formConfig?.data) //
+          let _d = dialog.getRef('innerCom').getData()
+          resolve(_d) //
         },
-        width: 600,
-        height: 400,
+        width: formConfig.width || 400,
+        height: formConfig.height || 600,
+        title: formConfig.title || '数据表单',
       }
       let dialog = await this.openDialog(_config) //
       return dialog
@@ -1025,19 +1027,15 @@ export class System extends Base {
       },
     ]
     return _items //
-  }
-  designCustomForm(config) {
-    //
-  }
+  } 
   async confirmDesignForm(config = {}) {
     //
     return new Promise(async (resolve, reject) => {
-      let _f = new Form(config)
       let createFn = () => {
         return {
-          component: formCom,
+          component: formCom, //
           props: {
-            formIns: _f,
+            layoutData: config,
             isDesign: true,
           },
         }
@@ -1047,6 +1045,7 @@ export class System extends Base {
         height: '800px',
         createFn,
         confirmFn: (dialog: Dialog) => {
+          let _f = dialog.getRef('innerCom')
           let layoutData = _f.getLayoutData()
           resolve(layoutData) //
         },

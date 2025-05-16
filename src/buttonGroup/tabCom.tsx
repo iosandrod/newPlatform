@@ -110,7 +110,7 @@ export default defineComponent({
           {context}
           <ElTabs
             style={{ height: `${tabIns.getTabHeight()}` }}
-            class={ns.b()}
+            class={_class}
             {...tabIns.getBindConfig()}
             v-slots={{
               default: () => {
@@ -156,7 +156,19 @@ export default defineComponent({
                       if (item != null) {
                         _itemCom = item(el)
                       } else {
-                        let label = <div>{el.getLabel()}</div>
+                        let label = (
+                          <div
+                            style={{
+                              // margin: '3px',
+                              boxSizing: 'border-box',
+                            }}
+                            class="cursor-pointer flex items-center h-30 px-3 bg-white text-blue-600 font-medium leading-none
+         box-border rounded-md shadow-sm border border-blue-300
+         hover:bg-blue-50 transition"
+                          >
+                            {el.getLabel()}
+                          </div>
+                        )
                         _itemCom = label //
                       }
                       let dragCom = (

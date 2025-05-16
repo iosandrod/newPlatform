@@ -207,6 +207,7 @@ li {
   width: 100%;
 }
 .vxe-form--item-title{
+  height: 30px !important;
   padding-bottom: 20px !important;
   padding-top: 0px !important;
   padding-left: 3px !important;
@@ -247,3 +248,15 @@ li {
   padding-top: 0px !important;
   padding-bottom: 0px !important;
 }
+
+/* .el-tabs__nav-wrap:after{
+    display: none;
+  }
+  .el-tabs__nav:last-child{
+    margin-right: 0!important;
+  } */
+
+  .el-tabs__item{
+    padding: 0;
+    height: 100%;
+  }

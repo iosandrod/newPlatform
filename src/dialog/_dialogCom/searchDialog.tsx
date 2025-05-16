@@ -1,6 +1,9 @@
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 import TabCom from '@/buttonGroup/tabCom'
+import { system } from '@/system'
 import FormCom from '@ER/formCom'
 import { PageDesign } from '@ER/pageDesign'
+import _ from 'lodash'
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
@@ -12,28 +15,80 @@ export default defineComponent({
   },
   setup(props) {
     let pageDesign: PageDesign = props.pageDesign as any
-    let dialogConfig = pageDesign?.config?.searchDialog||{}
-    let d = pageDesign?.getSearchBindData()||{}
+    let dialogConfig = pageDesign?.config?.searchDialog || {}
+    let d = pageDesign?.getSearchBindData() || {}
+    let sPlan = dialogConfig.searchPlan
+    if (sPlan == null) {
+      dialogConfig.searchPlan = [
+        {
+          label: '默认方案', //
+          data: d, //
+        },
+      ]
+    }
     let allTabPlan = computed(() => {
-      let arr = []
-      return arr
+      let searchPlan = dialogConfig.searchPlan
+      if (searchPlan == null) {
+        searchPlan = []
+      }
+      return searchPlan
     })
     return () => (
       //
-      <div class="h-full w-full">
-        <div class="w-full">
-          <TabCom
-            items={[
-              {
-                label: '默认方案',
-                key: 'query',
-              },
-              {
-                label: '方案1',
-                key: 'result',
-              },
-            ]}
-          ></TabCom>
+      <div class="h-full w-full w-500">
+        <div class="w-full flex flex-row justify-between">
+          <div>
+            <TabCom
+              items={allTabPlan.value} //
+            ></TabCom>
+          </div>
+          <div>
+            <ButtonGroupCom
+              items={[
+                {
+                  label: '另存方案',
+                  fn: async () => {
+                    let fConfig = {
+                      itemSpan: 24, //
+                      title: '方案名称',
+                      height: 200,
+                      width: 300, //
+                      items: [
+                        {
+                          type: 'input',
+                          label: '方案名称',
+                          field: 'label', //
+                        },
+                      ],
+                    }
+                    let res: any = await system.confirmForm(fConfig) //
+                    let label = res.label //
+                    let _data = d
+                    let newObj = {
+                      label: label,
+                      data: _data, //
+                    }
+                    newObj = _.cloneDeep(newObj) //
+                    sPlan.push(newObj) //
+                  },
+                },
+                {
+                  label: '删除方案',
+                  fn: () => {},
+                },
+                {
+                  label: '设为默认方案',
+                  fn: () => {},
+                },
+                {
+                  label: '设计表单',
+                  fn: async () => {
+                    await pageDesign.designSearchForm() //
+                  },
+                },
+              ]}
+            ></ButtonGroupCom>
+          </div>
         </div>
         <div class="flex-1">
           <FormCom layoutData={dialogConfig} data={d}></FormCom>

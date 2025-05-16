@@ -87,6 +87,7 @@ export default defineComponent({
     return () => {
       let com = (
         <tabCom
+          useDefaultClass={false}
           class={`${ns.b()}`} //
           isDesign={group.isDesign}
           {...group.getTabProps()}

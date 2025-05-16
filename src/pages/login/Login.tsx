@@ -160,7 +160,16 @@ export default defineComponent({
         return {}
       })
     let d1 = reactive({ editType: 'date' })
+    let show = ref(false)
+    let pd = null
+    system.createPageDesign('permissions').then((res) => {
+      pd = res
+      show.value = true //
+    })
     return () => {
+      if (show.value == false) {
+        return null
+      }
       let com0 = null //
       let com = null //
       com = <pageCom></pageCom> //
@@ -189,10 +198,10 @@ export default defineComponent({
             isDesign={true}
             //  {..._fConfig}
             data={d1}
-          ></formCom> 
+          ></formCom>
         </div>
       )
-      com = <SearchDialog></SearchDialog>
+      com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>

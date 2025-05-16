@@ -660,18 +660,20 @@ export class PageDesign extends Form {
       searchDialog = {} //
     }
     let sys = this.getSystem()
-    let _data = await sys.confirmDesignForm(searchDialog) //
+    let _data: any = await sys.confirmDesignForm(searchDialog) //
+    _data = _data || {}
+    _data = { ...searchDialog, ..._data } ////
     let _data1 = this.getLayoutData()
     _data1.searchDialog = _data
     await this.getSystem().updateCurrentPageDesign(_data1) //
   }
   getSearchBindData() {
-    let _d=this.pageData
-    let sbd=_d.searchBindData
-    if(sbd==null){
-      _d.searchBindData={}
-      sbd=_d.searchBindData
+    let _d = this.pageData
+    let sbd = _d.searchBindData
+    if (sbd == null) {
+      _d.searchBindData = {}
+      sbd = _d.searchBindData
     }
-    return _d//
+    return _d //
   }
 }

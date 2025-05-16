@@ -1,11 +1,11 @@
 @use '../base.scss' as *;
 @include b(tabCom) {
-  // .el-tabs__active-bar{
-  //   display: none;
-  // }
-  // .el-tabs__nav-wrap:after{
-  //   display: none;
-  // }
+  .el-tabs__active-bar{
+    display: none;
+  }
+  .el-tabs__nav-wrap:after{
+    display: none;
+  }
   .el-tabs__nav:last-child{
     margin-right: 0!important;
   }
@@ -13,9 +13,9 @@
     padding: 0;
     height: 100%;
   }
-  // .el-tabs__item.is-active{
-  //   color: unset !important;
-  // }
+  .el-tabs__item.is-active{
+    color: unset !important;
+  }
   .el-tabs__nav-prev{
     height: 100% !important;
     display: flex;
@@ -55,14 +55,14 @@
   .el-tabs__nav{
     height: 100%;
   }
-  // .is-active{
-  //   color: none !important;
-  // }
-  // .el-tabs__item is-top is-active{
-  //   color: none !important;
-  // }
-  // .el-tabs__item {
-  //   background: none !important;
-  // }
+  .is-active{
+    color: none !important;
+  }
+  .el-tabs__item is-top is-active{
+    color: none !important;
+  }
+  .el-tabs__item {
+    background: none !important;
+  }
 }
   
