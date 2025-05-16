@@ -1,4 +1,6 @@
 import inputCom from '@/input/inputCom'
+import selectCom from '@/select/selectCom'
+import SelectCom from '@/select/selectCom'
 import { FormItem } from '@ER/formitem'
 import { ElInput } from 'element-plus'
 import { computed, defineComponent } from 'vue'
@@ -9,6 +11,7 @@ export default defineComponent({
   customOptions: {},
   components: {
     inputCom,
+    selectCom,
   },
   props: {
     data: Object,
@@ -19,22 +22,42 @@ export default defineComponent({
     const params = props.params
     const formitem: FormItem = params.formitem
     let _value = computed(() => {
-      let _config = formitem?.getBindConfig() //
+      let _config = formitem?.getBindConfig()
       return _config
     })
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
     }
+    // let showSearchIcon = computed(() => {
+    //   let s = formitem.getIsShowSearchIcon()
+    //   return s
+    // })
+    let isColumnSelect = computed(() => {
+      let s = formitem.getIsColumnSelect()
+      return s
+    })
     return () => {
       let com = (
         <div
           class="h-full w-full flex items-center"
-          style={{ minHeight: '36px', height: '36px' }}
+          style={{ minHeight: '36px', height: '36px' }} //
         >
           <inputCom ref={registerRef} {..._value.value}></inputCom>
         </div>
-      )
-      return com //
+      ) //
+      let _com = null
+      if (isColumnSelect.value == true) {
+        //
+        _com = (
+          <SelectCom
+            {..._value.value}
+            options={formitem.getColumnSelectOptions()}
+          ></SelectCom>
+        )
+      } else {
+        _com = com
+      }
+      return _com //
     }
-  }, //
-}) //
+  },
+})

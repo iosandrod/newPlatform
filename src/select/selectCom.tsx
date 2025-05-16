@@ -183,7 +183,7 @@ export default defineComponent({
       let _com = (
         <div class="h-full w-full overflow-hidden">
           <Select
-            style={{ width: '100%', height: '100%' }} //
+            style={{ width: '100%', }} //
             ref={registerRef}
             {...props}
             modelValue={_select.getModelValue()}

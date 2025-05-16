@@ -297,8 +297,8 @@ export default defineComponent({
       const hiddenBefore = props.hiddenBefore
       if (typeof hiddenBefore == 'function') {
         let flag = await hiddenBefore(evnt)
+        console.log(flag, 'testis Flag') //
         if (flag === false) {
-          //
           return
         }
       }

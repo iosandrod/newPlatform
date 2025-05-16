@@ -27,6 +27,7 @@ export class System extends Base {
       items: [],
     },
   } //
+  columnSelectOptions: any = {} //
   loginInfo = null
   pageLayout = [] //
   selectOptions = {}
@@ -1103,7 +1104,16 @@ export class System extends Base {
   }
   getSystemController() {
     //
-  } 
+  } //
+  async createColumnSelect(tableName) {
+    if (tableName == null) {
+      return
+    } //
+    let columnSelect = this.columnSelectOptions
+    let arr = columnSelect[tableName] //
+    if (arr == null) {
+    }
+  }
 }
 
 export const system = reactive(new System()) //

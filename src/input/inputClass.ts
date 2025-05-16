@@ -32,10 +32,21 @@ export class Input extends Base {
     } //
   } //
   showDropdown(e) {
-    //
-    let drop: Dropdown = this.getRef('dropdown')
+    let drop: Dropdown = this.getRef('dropdown') //
     if (drop) {
       drop.showDropdown() //
+    }
+  }
+  getIsFormInput() {
+    let formitem = this.config.formitem
+    if (formitem) {
+      return true
+    }
+    return false //
+  }
+  onFocus(config) {
+    if (this.getIsFormInput()) {
+      return
     }
   }
 }

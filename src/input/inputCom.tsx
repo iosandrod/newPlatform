@@ -178,7 +178,9 @@ export default defineComponent({
     columnSelect: {
       type: Boolean,
     },
-
+    formitem: {
+      type: Object,
+    },
     // 已废弃
     maxlength: [String, Number] as PropType<VxeInputPropTypes.Maxlength>,
     // 已废弃
@@ -210,6 +212,9 @@ export default defineComponent({
               paddingRight: '3px', //
             }} //
             {...props} //
+            onFocus={(config) => {
+              console.log('focus') //
+            }}
             modelValue={_input.getModelValue()}
           ></VxeInput>
           {slots?.buttons?.()}
@@ -220,15 +225,15 @@ export default defineComponent({
       if (type == 'search') {
         _com = (
           <dropdownCom
-            class='h-full'
+            class="h-full"
             ref={registerDropdown}
             v-slots={{
               default: () => {
-                console.log('我渲染了下拉框')//
+                //
                 return com //
               },
               dropdown: () => {
-                let com = <div class="h-100 w-100 bg-red"></div>
+                let com = <div class="h-100 w-full bg-red"></div>
                 return com
               },
             }}

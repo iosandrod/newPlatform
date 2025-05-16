@@ -50,6 +50,10 @@ export default defineComponent({
       let com = (
         <Pulldown
           {...props}
+          hiddenBefore={async ()=>{
+            let s=await drop.onBeforeHidden()
+            return s
+          }}
           transfer={true}
           ref={(e) => drop.registerRef('dropdown', e)}
           destroyOnClose={props.destroyOnClose}

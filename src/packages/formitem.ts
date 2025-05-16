@@ -125,7 +125,16 @@ export class FormItem extends Base {
     this.mobileColumns = mobileRow //
     this.setSubForm()
     this.initSTable()
+    this.initColumnSelect()
   } //
+  initColumnSelect() {
+    let columnSelect = this.getIsColumnSelect()
+    if (columnSelect !== true) {
+      return //
+    }
+    let tableName = this.getTableName()
+    this.getSystem().createColumnSelect(tableName)
+  }
   initSTable() {
     let form = this.form
     let type = this.getType()
@@ -705,7 +714,7 @@ export class FormItem extends Base {
     this.oldValue = oldValue //
     let isShowS = this.getIsShowSearchIcon()
     if (isShowS) {
-      this
+      this.showDropdown()
     }
   }
   onBlur(value?: any) {
@@ -889,7 +898,12 @@ export class FormItem extends Base {
     return showTable
   }
   getTableName() {
-    let tableName = this.tableName
+    let _options = this.getOptions()
+    let tableName = _options.tableName
+    if (tableName == null) {
+      tableName = this.tableName
+    }
+    //  tableName = this.tableName
     return tableName
   }
   getdBindData() {
@@ -969,6 +983,12 @@ export class FormItem extends Base {
       }
     }
   }
+  getIsColumnSelect() {
+    let options = this.getOptions()
+    let columnSelect = options.columnSelect
+    console.log(columnSelect, 'testSelect') //
+    return columnSelect //
+  }
   onSearchClick(e) {
     let input: Input = this.getRef('fieldCom')
     // input.showDropdown() //
@@ -984,5 +1004,15 @@ export class FormItem extends Base {
       return
     }
     input.showDropdown(config) //
+  }
+  getColumnSelectOptions() {
+    let tableName = this.getTableName()
+    console.log(tableName, 'tableName') //
+    return [
+      {
+        label: '1',
+        value: '1', //
+      },
+    ]
   }
 }
