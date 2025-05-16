@@ -16,11 +16,11 @@ const routes: RouteRecordRaw[] = [
         name: 'home', //
         component: () => import('@/pages/home/Home'),
       },
-      // {
-      //   path: ':tableName',
-      //   name: 'entity', //
-      //   component: () => import('@/pages/design/index'), //
-      // },
+      {
+        path: 'companyHome',
+        name: 'companyHome', //
+        component: () => import('@/pages/companyPage'), //
+      },
     ],
   },
   {
