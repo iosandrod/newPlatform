@@ -102,15 +102,15 @@ export const click_cell = (table: Table) => {
     name: 'dblclick_cell',
     keyName: 'dblclick_cell',
     callback: (config) => {
-      // if (config.originData == null) {
-      //   let row = config.row
-      //   let col = config.col
-      //   let title = config.title
-      //   table.clearEditCell()
-      //   setTimeout(() => {
-      //     table.startEditCell(col, row, title) //
-      //   }, 10)
-      // }
+      if (config.originData == null) {
+        let row = config.row
+        let col = config.col
+        let title = config.title
+        table.clearEditCell()
+        setTimeout(() => {
+          table.startEditCell(col, row, title) //
+        }, 10)
+      }
     },
   })
 }
@@ -208,8 +208,7 @@ export const checkbox_state_change = (table: Table) => {
     name: 'checkbox_state_change',
     keyName: 'checkbox_state_change',
     callback: (config) => {
-      console.log(config, 'testConfig')//
-      nextTick(() => {
+      nextTick(async () => {
         let originData = config.originData //
         if (originData == null) {
           //点击了上面的全选按钮
@@ -226,13 +225,22 @@ export const checkbox_state_change = (table: Table) => {
             let f = col.getField()//
             return config.field == f
           })
-          let checked = config.chekced
+          let checked = config.checked//
           if (_col != null) {
-            _col.updateBindValue({
+            // debugger//
+            if (checked == true) {
+              checked = 1
+            } else {
+              checked = 0//
+            }
+            let s = await _col.updateBindValue({
               value: checked,
               row: originData,
               field: config.field//
             })
+            if (s == true) {
+              originData['_rowState'] = 'change'//
+            }
           }
         }
       })

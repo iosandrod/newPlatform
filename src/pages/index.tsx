@@ -5,7 +5,6 @@ import tableEditor from '@/table/tableCom'
 import { formConfig } from '@ER/formEditor/testData'
 import menuCom from '@/menu/menuCom'
 import fieldCom from '@/menu/fieldCom'
-import { fieldsConfig } from '@ER/formEditor/componentsConfig'
 import { system } from '@/system'
 import tabCom from '@/buttonGroup/tabCom'
 import PageCom from '@ER/pageCom'
@@ -169,7 +168,7 @@ export default defineComponent({
                         fn: async () => {
                           let pageDesign = system.getCurrentPageDesign()
                           let layout = pageDesign.getLayoutData()
-                          console.log(layout)//
+                          console.log(layout) //
                         },
                       },
                     ]
@@ -189,21 +188,14 @@ export default defineComponent({
                       )
                       return c
                     })
-                    let com = (
-                      <div class="  mt-2 w-120 bg-white border border-gray-200 rounded-lg shadow-lg transition-opacity">
-                        {bsComs}
-                      </div>
-                    )
+                    let com = <div class="  mt-2 w-120 bg-white border border-gray-200 rounded-lg shadow-lg transition-opacity">{bsComs}</div>
                     return com //
                   },
                 }}
               ></er-dropdown>
             </div>
             <div class="flex-1 mx-8 flex items-center justify-center">
-              <input
-                placeholder="全局查询"
-                class="w-400 h-35 px-3 border border-gray-300 rounded-l-md outline-none"
-              />
+              <input placeholder="全局查询" class="w-400 h-35 px-3 border border-gray-300 rounded-l-md outline-none" />
             </div>
 
             <div class="flex items-center space-x-4">
@@ -214,9 +206,7 @@ export default defineComponent({
                   default: () => {
                     let com = (
                       <div class="flex items-center space-x-1 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-pink-600">
-                        <span>
-                          {system.getUserInfo()?.user?.username || '登录'}
-                        </span>
+                        <span>{system.getUserInfo()?.user?.username || '登录'}</span>
                       </div>
                     )
                     return com
@@ -229,10 +219,7 @@ export default defineComponent({
            "
                       >
                         <div class="py-1">
-                          <div
-                            href="#"
-                            class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                          >
+                          <div href="#" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
                             回复我的
                           </div>
                         </div>
@@ -247,10 +234,7 @@ export default defineComponent({
         </header>
       )
       return (
-        <div
-          class={[ns.b(), 'flex-col']}
-          style={{ display: 'flex', width: '100vw', height: '100vh' }}
-        >
+        <div class={[ns.b(), 'flex-col']} style={{ display: 'flex', width: '100vw', height: '100vh' }}>
           {pageHeader}
           <div class="h-full w-full flex flex-row">
             <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>

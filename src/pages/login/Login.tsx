@@ -195,13 +195,13 @@ export default defineComponent({
         <div class="w-full h-full">
           <formCom
             ref={_reg3}
-            isDesign={true}
-            //  {..._fConfig}
+            // isDesign={true}
+            {..._fConfig}
             data={d1}
           ></formCom>
         </div>
       )
-      com = <SearchDialog pageDesign={pd}></SearchDialog>
+      // com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>
       // com = <dialogCom ref={_reg2}></dialogCom>
       // com = <codeEditorCom></codeEditorCom>

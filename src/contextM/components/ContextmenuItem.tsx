@@ -31,14 +31,11 @@ const ContextmenuItem = defineComponent({
     }))
     const handleClick = (evt: Event) => {
       emit('click', evt)
-
       if (props.disabled) return
-
       props.hideOnClick && rootHide?.()
     }
     const handleContextmenu = (evt: Event) => {
       emit('contextmenu', evt)
-
       if (props.contextmenuAsClick) {
         if (props.disabled) return
 
@@ -75,13 +72,7 @@ const ContextmenuItem = defineComponent({
 
   render() {
     return (
-      <li
-        class={this.classes}
-        onClick={this.handleClick}
-        onContextmenu={this.handleContextmenu}
-        onMouseenter={this.handleMouseenter}
-        onMouseleave={this.handleMouseleave}
-      >
+      <li class={[this.classes, 'h-30']} onClick={this.handleClick} onContextmenu={this.handleContextmenu} onMouseenter={this.handleMouseenter} onMouseleave={this.handleMouseleave}>
         {this.$slots.default?.()}
       </li>
     )

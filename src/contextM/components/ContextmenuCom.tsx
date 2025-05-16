@@ -71,7 +71,7 @@ export const itemCom = defineComponent({
                 }
                 return (
                   <div
-                    class={_class}
+                    class={[..._class, 'h-full w-full flex items-center ']}
                     onClick={() => {
                       item.onClick()
                     }}
@@ -130,7 +130,7 @@ export default defineComponent({
     },
     beforeHidden: {
       type: Function,
-    }
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let mIns = new BMenu(props) //
@@ -141,7 +141,7 @@ export default defineComponent({
       (newV) => {
         if (!Array.isArray(newV)) newV = [] //
         mIns.setItems(newV) //
-      },
+      }
     )
     expose({ _instance: mIns })
     return () => {

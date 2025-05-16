@@ -1,7 +1,7 @@
 import { System } from '@/system'
 import PageCom from '@ER/pageCom'
 import { computed, defineComponent, inject, provide, ref } from 'vue'
-
+import { VxePager } from 'vxe-pc-ui'
 export default defineComponent({
   name: 'Design',
   props: {
@@ -66,7 +66,19 @@ export default defineComponent({
       if (_show.value == false) {
         return <div></div> //
       }
-      return <PageCom isMainPage isDesign={false} formIns={en.value}></PageCom>
+      let _com = <PageCom isMainPage isDesign={false} formIns={en.value}></PageCom>
+      //分页
+      let pagin = (
+        <div class="h-40">
+          <VxePager></VxePager>
+        </div>
+      )
+      return (
+        <div class="h-full w-full flex flex-col">
+          {_com}
+          {pagin}
+        </div>
+      )
     }
   },
 })

@@ -42,7 +42,7 @@ export const getDFConfig = (_this, data) => {
       {
         label: '默认值',
         field: 'defaultValue',
-        type: 'string',
+        type: 'number',//
       },
       {
         label: '格式化',

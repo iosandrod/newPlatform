@@ -117,7 +117,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() {}
+  initDefaultTemplatePage() { }
   getValidateRules() {
     return []
   }
@@ -201,10 +201,10 @@ export class PageDesign extends Form {
     await this.publishEvent(_config)
     return row
   }
-  buildQuery() {}
-  openSearchForm() {}
-  async createTableData() {}
-  async updateTableData() {}
+  buildQuery() { }
+  openSearchForm() { }
+  async createTableData() { }
+  async updateTableData() { }
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
     let obj1 = {}
@@ -226,7 +226,7 @@ export class PageDesign extends Form {
     } //
     return columns //
   }
-  getMainTableConfig() {}
+  getMainTableConfig() { }
   @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -291,23 +291,23 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() {}
+  getAllFormMap() { }
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() {}
+  initDefaultSForm() { }
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() {}
+  async openAddEntity() { }
   async addMainTableRow(addConfig) {
     let config = this.config //
     let system = this.getSystem()
     let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`, (d) => {})
+    system.routeOpen(`${tableName}---edit`, (d) => { })
   }
   getRealTableName() {
     let tableName = this.getTableName() //
@@ -371,6 +371,7 @@ export class PageDesign extends Form {
     let tableName = this.getTableName() //
     if (this.tableConfigMap[tableName] == null) {
       this.tableConfigMap[tableName] = this.config //
+      // this.config.columns=this.getTableColumns(tableName)
     }
   }
   async createDefaultRow(tableName = this.getTableName()) {
@@ -675,5 +676,31 @@ export class PageDesign extends Form {
       sbd = _d.searchBindData
     }
     return _d //
+  }
+  async syncRealColumns() {
+    let tRef = this.getRef(this.getTableName())
+    if (tRef == null) {
+      return
+    }
+    let tableName = this.getTableName()
+    // let tConfig = this.getTableConfig(tableName)
+    // console.log(tConfig, 'test_config')//
+    let cols = this.getTableColumns(tableName)
+    // console.log(cols, 'testCols')//
+    let columns = cols.map((col) => {
+      return col.config
+    })
+    // let columns = tConfig.columns
+    let tCols = await this.getHttp().find('columns', { tableName })
+    let addCols = columns.filter((c) => {
+      return tCols.findIndex((tc) => {
+        return tc.field == c.field
+      }) == -1
+    }).map(row => {
+      row.id = null
+      return row
+    })//
+    await this.getHttp().create('columns', addCols)
+    this.getSystem().confirmMessage('同步成功', 'success')//
   }
 }

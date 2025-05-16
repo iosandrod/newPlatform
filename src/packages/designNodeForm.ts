@@ -10,60 +10,92 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
     buttons: [
       {
         label: '添加子按钮',
-        fn: (config) => {
-          let t: Table = config.parent
-          let curRow = t.getCurRow()
-          console.log(curRow, 'testCurRow')//
-          // console.log('添加子按钮') //
-
+        fn: () => {
+          console.log('添加子按钮') //
         },
       },
     ],
-    columns: [{
-      field: "id",
-      title: "按钮ID",
-      defaultValue: (config) => {
-        let item = config.item
-        let dValue = item?.uuid()
-        return dValue
+    columns: [
+      {
+        field: 'id',
+        title: '按钮ID',
+        defaultValue: (config) => {
+          //
+          let item = config.item
+          let dValue = item?.uuid()
+          return dValue
+        },
       },
-    },
-    {
-      field: 'label',
-      title: '标题', ////
-      type: 'string',
-      editType: 'string',
-    },
-    {
-      field: 'fn',
-      title: '执行脚本',
-      type: 'code',
-      editType: 'code', //
-    },
+      {
+        field: 'label',
+        title: '标题', ////
+        type: 'string',
+        editType: 'string',
+      },
+      {
+        field: 'fn',
+        title: '执行脚本',
+        type: 'code',
+        editType: 'code', //
+      },
+      {
+        field: 'defaultFn',
+        title: '通用函数',
+        type: 'select',
+        editType: 'select', //
+        options: [
+          {
+            label: '新增',
+            value: 'addTableRows',
+          },
+          {
+            label: '编辑',
+            value: 'editTableRows', //
+          },
+          {
+            label: '删除',
+            value: 'deleteTableRows', //
+          },
+          {
+            label: '导出',
+            value: 'exportTableRows',
+          },
+          {
+            label: '导入',
+            value: 'importTableRows',
+          },
+          {
+            label: '查询',
+            value: 'openSearchDialog', //
+          }, //
+        ],
+      }, //
     ],
     treeConfig: {
       id: 'id',
-      parentId: "pid"
-    }
+      parentId: 'pid',
+    },
   }
   return obj
 }
 //处理内部options
 export const getButtonGroupFConfig = (_this: PageDesign) => {
   let tableConfig = {
-    itemSpan: 24,//
+    itemSpan: 24, //
     items: [
       {
         title: '按钮',
         field: 'items',
         label: '',
         type: 'stable', ////
-        options: getButtonGroupTableConfig(_this),//
+        hiddenTitle: true,
+        options: getButtonGroupTableConfig(_this), //
       }, //
     ],
   }
   return tableConfig
 }
+//编辑options
 export const formitemTypeMap = (_this: PageDesign) => {
   let tableOptions = _this.getAllTableName()
   let detailTable = _this
@@ -289,14 +321,14 @@ export const formitemTypeMap = (_this: PageDesign) => {
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => { } //
+        _d['_items_set'] = (v) => {} //
         return _d //
       }),
     },
   }
   return obj //
 }
-
+//编辑普通层的//
 export const selectTypeMap = (_this: PageDesign) => {
   let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
@@ -306,6 +338,11 @@ export const selectTypeMap = (_this: PageDesign) => {
         title: '绑定字段',
         type: 'input',
         label: '绑定字段',
+      },
+      {
+        field: 'hiddenTitle',
+        label: '隐藏标题', //
+        type: 'boolean', //
       },
       {
         field: 'label',
@@ -410,6 +447,13 @@ export const selectTypeMap = (_this: PageDesign) => {
     return items
   } //
   let obj = {
+    buttongroup: {
+      itemSpan: 24,
+      items: [...createDSelect('buttongroup')], //
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }), //
+    },
     input: {
       itemSpan: 24,
       items: [...createDSelect('input')],
@@ -462,3 +506,4 @@ export const selectTypeMap = (_this: PageDesign) => {
   }
   return obj
 }
+//

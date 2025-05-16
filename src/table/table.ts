@@ -904,24 +904,24 @@ export class Table extends Base {
     if (contextmenu == null) {
     } else {
       let showHeaderContext = this.config.showHeaderContext
+      contextmenu.open(event) //
       if (showHeaderContext == false) {
       } else {
-        contextmenu.open(event) //
       }
     } //
     let onHeaderContextmenu = this.config.onHeaderContextmenu
-    if (
-      typeof onHeaderContextmenu == 'function' &&
-      this.isHeaderContext == true
-    ) {
-      //
-      onHeaderContextmenu({
-        table: this,
-        column: _col, //
-        event: config.event, //
-        config: config,
-      }) //
-    }
+    // if (
+    //   typeof onHeaderContextmenu == 'function' &&
+    //   this.isHeaderContext == true
+    // ) {
+    //   //
+    //   onHeaderContextmenu({
+    //     table: this,
+    //     column: _col, //
+    //     event: config.event, //
+    //     config: config,
+    //   }) //
+    // }
   }
   getColumns() {
     const columns = this.columns //

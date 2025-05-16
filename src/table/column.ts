@@ -66,8 +66,8 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   } //
-  setHidden(bool) {} //
-  getFormitem() {} //
+  setHidden(bool) { } //
+  getFormitem() { } //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -371,13 +371,14 @@ export class Column extends Base {
         height: _height,
         width: _width, //
       })
+      let _c = this.getIsChecked(record)
       container.add(checkboxGroup)
       let checkbox1 = new CheckBox({
         text: {
           text: '', //
         },
         disabled: false, //
-        checked: Boolean(record[this.getField()]), //
+        checked: _c, //
         boundsPadding: [0, 0, 0, 0],
       }) //
       checkbox1.render()
@@ -401,6 +402,8 @@ export class Column extends Base {
         container.setAttribute('background', bg)
         let f = this.getField()
         let c = record[f] //
+        c = this.getIsChecked(record)
+        // console.log(record, c, 'record') ////
         checkbox1.attribute.checked = Boolean(c) //
         checkbox1.render() //
       } //
@@ -607,6 +610,19 @@ export class Column extends Base {
     obj.tree = _t //
     return obj //
   }
+  getIsChecked(r,) {
+    let f = this.getField()
+    let v = r[f]
+    console.log(v, r)//
+    if (v === '1') {
+      v = true
+    }
+    if (v === '0') {
+      v = false
+    }
+    v = Boolean(v)
+    return v
+  }
   getIsTree() {
     let _t = false
     let isTree = this.table.getIsTree()
@@ -747,6 +763,7 @@ export class Column extends Base {
     let _res = await this.validateValue({ ...config, table })
     if (_res == true) {
       row[field] = value //
+      return true
     } else {
       let table = this.table //
       //@ts-ignore
@@ -1374,7 +1391,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() {}
+  updateBindData() { }
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {
