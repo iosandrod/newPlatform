@@ -12,7 +12,7 @@ import {
   _testData,
   entityData,
 } from './formEditor/testData'
-import { useOnce, useRunAfter } from './utils/decoration'
+import { useHooks, useOnce, useRunAfter } from './utils/decoration'
 import { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
 import {
@@ -27,6 +27,7 @@ import _ from 'lodash'
 import searchDialog from '@/dialog/_dialogCom/searchDialog'
 
 export class PageDesign extends Form {
+  hooksMetaData: Record<string, any[]> = {};//
   currentContextItem: PageDesignItem = null
   tabOrder: number = 0
   pageType = 'pageDesign' //
@@ -165,9 +166,27 @@ export class PageDesign extends Form {
     }) //
     return res
   }
+  @useHooks((config) => {
+    let ctx: PageDesign = config.instance
+    let args = config.args
+    if (args.length == 0) {
+      args[0] = {
+        tableName: ctx.getTableName(),
+        query: {},//
+      }
+    }
+    if (typeof args[0] == 'string') {
+      args[0] = {
+        tableName: args[0],
+        query: {},
+      }
+    }
+    return config
+  })//
   async getTableData(
     getDataConfig: any = {
       tableName: this.getTableName(),
+      query: {}//
     },
   ) {
     if (typeof getDataConfig == 'string') {
@@ -175,6 +194,7 @@ export class PageDesign extends Form {
         tableName: getDataConfig,
       }
     }
+    console.log(getDataConfig, 'testGetDataConfig')//
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
     let query = getDataConfig.query || {}
@@ -373,6 +393,12 @@ export class PageDesign extends Form {
       this.tableConfigMap[tableName] = this.config //
       // this.config.columns=this.getTableColumns(tableName)
     }
+  }
+  public use(method: string, fn: any) {
+    if (!this.hooksMetaData[method]) {
+      this.hooksMetaData[method] = [];
+    }
+    this.hooksMetaData[method].push(fn);
   }
   async createDefaultRow(tableName = this.getTableName()) {
     let tableConfig = this.getTableConfig(tableName) //

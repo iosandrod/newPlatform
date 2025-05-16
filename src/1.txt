@@ -2931,3 +2931,15 @@ const app = createApp({
               }
       
       */
+
+      // async getDefaultPageLayout(name?: string) {
+  //   let http = this.getHttp()
+  //   let _data = await http.post(
+  //     'entity',
+  //     'getDefaultPageLayout',
+  //     {
+  //       tableName: name,
+  //     }, //
+  //   ) //
+  //   return _data //
+  // }

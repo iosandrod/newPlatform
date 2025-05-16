@@ -46,7 +46,6 @@ export class System extends Base {
         }
         return true
       })
-      console.log(d)//
       d.forEach(c => {
         let children = c.children
         if (Array.isArray(children)) {
@@ -89,17 +88,7 @@ export class System extends Base {
     return allT2
   }
   openPageDesign(config) { } //
-  // async getDefaultPageLayout(name?: string) {
-  //   let http = this.getHttp()
-  //   let _data = await http.post(
-  //     'entity',
-  //     'getDefaultPageLayout',
-  //     {
-  //       tableName: name,
-  //     }, //
-  //   ) //
-  //   return _data //
-  // }
+
   async getPageLayout(name?: string) {
     let http = this.getHttp()
     let data = await http.get(
@@ -411,6 +400,7 @@ export class System extends Base {
     }
     router.push(`/${tableName}`) //
   }
+
   async createPageDesign(config: { tableName: string } | string) {
     //
     if (typeof config == 'string') {
@@ -430,6 +420,15 @@ export class System extends Base {
     let pageDesign = new PageDesign(obj)
     pageDesign.tableName = tableName //
     pageDesign.setLayoutData(layoutConfig)
+    pageDesign.use('getTableData', async (context, next) => {
+      console.log('getTableData之前', context)
+      let fArg = context.args[0]
+      let instance: PageDesign = context.instance
+      let query = fArg.query
+      //获取全局的查询条件
+      await next()
+      console.log('getTableData之后')
+    })
     await pageDesign.getTableData() //
     this.tableMap[tableName] = pageDesign //
     return pageDesign
@@ -445,7 +444,7 @@ export class System extends Base {
     let _design = this.tableEditMap[editTableName] //
     if (_design) {
       return _design //
-    } //
+    }
     let layoutConfig = await this.getPageEditLayout(tableName) //
     let _d = new PageDesign(layoutConfig) //
     _d.tableName = tableName //

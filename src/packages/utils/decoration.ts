@@ -208,6 +208,45 @@ export function useRunBefore(config?: any) {
 }
 
 
-export function useEmit(config){
-  
+export function useEmit(config) {
+
+}
+
+
+export function useHooks(config?: Function): any {//
+  return function hookable(
+    target: any,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
+    const original = descriptor.value;
+
+    descriptor.value = async function (...args: any[]) {
+      // 从实例的 hooksMetaData 上读取中间件
+      let middlewares: any[] = this.hooksMetaData?.[propertyKey] || [];
+      let ctx = { instance: this, args };
+      let _config = config
+      if (typeof _config === 'function') {
+        let config1 = _config(ctx)//
+        ctx = { ...ctx, ...config1 }//
+      }
+      let index = -1;
+
+      async function dispatch(i: number): Promise<any> {
+        if (i <= index) {
+          throw new Error('next() called multiple times');
+        }
+        index = i;
+        const fn = middlewares[i];
+        if (fn) {
+          return fn(ctx, () => dispatch(i + 1));
+        }
+        // 所有中间件执行完，调用原方法
+        return original.apply(ctx.instance, ctx.args);
+      }
+      return dispatch(0);
+    };
+
+    return descriptor;
+  }
 }

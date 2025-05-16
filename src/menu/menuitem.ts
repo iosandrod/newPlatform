@@ -6,6 +6,7 @@ export class MenuItem extends Base {
   config: any
   menu: Menu
   menuitems: MenuItem[] = []
+  parent?: MenuItem
   constructor(config, menu: any) {
     super()
     this.config = config
@@ -20,11 +21,12 @@ export class MenuItem extends Base {
   setMenuItems(items) {
     this.menuitems.splice(0)
     for (const item of items) {
-      this.addMenuItem(item)
+      this.addMenuItem(item)//
     }
   }
   addMenuItem(itemConfig: any) {
     let item = new MenuItem(itemConfig, this.menu)
+    item.parent = this//
     let menuitems = this.menuitems
     menuitems.push(item) //
   }

@@ -1,7 +1,6 @@
 import { defineComponent, provide, watch } from 'vue'
 import { ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
 import { Menu } from './menu'
-import { fieldsConfig } from '@ER/formEditor/componentsConfig'
 import { MenuItem } from './menuitem'
 import {} from 'vue'
 import { menuProps } from 'element-plus'
@@ -24,7 +23,8 @@ const subMenu = defineComponent({
       let _com: any = null
       let children = item.config.children
       let status = true
-      if (Array.isArray(children)) {
+      if (Array.isArray(children) && item.parent == null) {
+        //
         status = false //
       }
       if (menuitems.length == 0 && status == true) {
@@ -71,13 +71,7 @@ const subMenu = defineComponent({
                     let c = dragSlot(item)
                     return c
                   }
-                  return (
-                    <subMenu
-                      key={item.id}
-                      item={item}
-                      v-slots={slots}
-                    ></subMenu>
-                  ) //
+                  return <subMenu key={item.id} item={item} v-slots={slots}></subMenu> //
                 })
                 return items
               },
@@ -122,13 +116,13 @@ export default defineComponent({
       () => props.items,
       (newValue, oldValue) => {
         menuIns.setMenuItems(newValue) //
-      },
+      }
     )
     watch(
       () => menuIns.searchValue,
       (newValue, oldValue) => {
         menuIns.resetItemShow()
-      },
+      }
     )
     let btns = [
       {
