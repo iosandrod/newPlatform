@@ -685,8 +685,10 @@ export class PageDesign extends Form {
         this.getTableData() //
       }, //
     }
-    let sys = this.getSystem()
-    let _data = await sys.openDialog(dialogConfig)
+    //打开查询弹框//
+    this.openDialog(dialogConfig)
+    // let sys = this.getSystem()
+    // let _data = await sys.openDialog(dialogConfig)
     // console.log(_data, 'testData') //
   }
   async designSearchForm() {
@@ -694,6 +696,7 @@ export class PageDesign extends Form {
     if (searchDialog == null) {
       searchDialog = {} //
     }
+    searchDialog.tableName = this.getRealTableName()
     let sys = this.getSystem()
     let _data: any = await sys.confirmDesignForm(searchDialog) //
     _data = _data || {}
@@ -786,5 +789,45 @@ export class PageDesign extends Form {
   }
   confirmFieldSelect() {
     //
+  }
+  getSaveData() {
+    let tableName = this.getTableName() //
+    let tRef: Table = this.getRef(tableName)
+    let d = tRef.getData()
+    let addData = d.filter((row) => {
+      let rowState = row['_rowState']
+      return rowState == 'add'
+    })
+    let updateData = d.filter((row) => {
+      let rowState = row['_rowState']
+      return rowState == 'change' //
+    })
+    let delData = tRef.deleteArr
+    return {
+      addData: addData,
+      patchData: updateData,
+      delData: delData, //
+    }
+  }
+  @useHooks((config) => {
+    let ctx: PageDesign = config.instance //
+    let args = config.args
+    if ((args.length = 0)) {
+      args[0] = ctx.getSaveData()
+    } //
+  })
+  async saveTableData(config = this.getSaveData()) {
+    console.log(config, 'testConfig') //
+  }
+  async updateTableColumn(config) {
+    //
+    let id = config.id
+    if (id == null) {
+      return //
+    } //
+    let http = this.getHttp()
+    await http.patch('columns', config) //
+    this.getSystem().confirmMessage('列数据更新成功', 'success') ////
+    this.getSystem().refreshPageDesign() //
   }
 }

@@ -67,6 +67,9 @@ const getDefaultFormEditProps = () => {
     data: {
       type: Object,
     }, //
+    tableName: {
+      type: String,
+    },
   } ///
 }
 export default defineComponent({
@@ -165,6 +168,9 @@ export default defineComponent({
     let tableName = pageDesign?.tableName
     if (fIns.dTableName == null) {
       fIns.dTableName = tableName //
+    }
+    if (props.tableName != null) {
+      fIns.dTableName = props.tableName //
     }
     onUnmounted(() => {
       fIns.onUnmounted() //

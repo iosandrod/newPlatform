@@ -63,6 +63,9 @@ export default defineComponent({
             data={data.value}
             onHeaderContextmenu={openDesignHeader}
             columns={columns.value}
+            onDesignColumn={(config) => {
+              _design.updateTableColumn(config)
+            }}
           ></erTable>
         </div>
       )

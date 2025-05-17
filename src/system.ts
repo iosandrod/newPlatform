@@ -499,7 +499,7 @@ export class System extends Base {
   async openDialog(dialogConfig: any = {}) {
     let _dialog = new Dialog(dialogConfig) //
     this.dialogArr.push(_dialog) //
-  }
+  } //
   async confirmTable(tableConfig: any) {
     return new Promise(async (resolve, reject) => {
       let _table = new Table(tableConfig)
@@ -1086,6 +1086,7 @@ export class System extends Base {
           props: {
             layoutData: config,
             isDesign: true,
+            ...config, //
           },
         }
       }
@@ -1109,11 +1110,26 @@ export class System extends Base {
     if (tableName == null) {
       return
     } //
+    let _key = `${tableName}_columns`
+    if (this.columnSelectOptions[_key]) {
+      return //
+    }
     let columnSelect = this.columnSelectOptions
     let arr = columnSelect[tableName] //
+    let _cols = null
     if (arr == null) {
+      _cols = await this.getHttp().find('columns', { tableName }) //
     }
+    let _cols1 = _cols.map((item) => {
+      return {
+        value: item.field,
+        label: item.title || item.field,
+      }
+    })
+    columnSelect[tableName] = _cols1 //
+    columnSelect[_key] = true //
   }
+  clearSelectColumns() {} //
 }
 
 export const system = reactive(new System()) //

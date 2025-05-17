@@ -66,8 +66,8 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   } //
-  setHidden(bool) { } //
-  getFormitem() { } //
+  setHidden(bool) {} //
+  getFormitem() {} //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -610,10 +610,10 @@ export class Column extends Base {
     obj.tree = _t //
     return obj //
   }
-  getIsChecked(r,) {
+  getIsChecked(r) {
     let f = this.getField()
     let v = r[f]
-    console.log(v, r)//
+    console.log(v, r) //
     if (v === '1') {
       v = true
     }
@@ -1391,7 +1391,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() { }
+  updateBindData() {}
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {
@@ -1441,4 +1441,5 @@ export class Column extends Base {
     let config = this.config
     config.order = n
   }
+   //
 }

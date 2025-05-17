@@ -98,7 +98,7 @@ export class FormItem extends Base {
       if (typeof _fn == 'function') {
         return _fn
       }
-    }
+    } //
   }
   async onValueChange() {}
   getForm() {
@@ -986,7 +986,6 @@ export class FormItem extends Base {
   getIsColumnSelect() {
     let options = this.getOptions()
     let columnSelect = options.columnSelect
-    console.log(columnSelect, 'testSelect') //
     return columnSelect //
   }
   onSearchClick(e) {
@@ -1007,12 +1006,9 @@ export class FormItem extends Base {
   }
   getColumnSelectOptions() {
     let tableName = this.getTableName()
-    console.log(tableName, 'tableName') //
-    return [
-      {
-        label: '1',
-        value: '1', //
-      },
-    ]
+    let sys = this.getSystem() //
+    let selectop = sys.columnSelectOptions
+    let arr = selectop[tableName] || []
+    return arr //
   }
 }

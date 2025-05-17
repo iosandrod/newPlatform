@@ -53,6 +53,10 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
             value: 'editTableRows', //
           },
           {
+            label: '保存',
+            value: 'saveTableData', ////
+          },
+          {
             label: '删除',
             value: 'deleteTableRows', //
           },
@@ -332,12 +336,17 @@ export const formitemTypeMap = (_this: PageDesign) => {
 export const selectTypeMap = (_this: PageDesign) => {
   let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
+    let rTableName = _this.getRealTableName()
     let items = [
       {
         field: 'field',
         title: '绑定字段',
-        type: 'input',
+        type: 'string',
         label: '绑定字段',
+        options: {
+          columnSelect: true, //
+          tableName: rTableName, //
+        },
       },
       {
         field: 'hiddenTitle',
