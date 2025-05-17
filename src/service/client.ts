@@ -68,7 +68,7 @@ const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
     app.hooks([hooks.authentication(), hooks.populateHeader()])
   }
 }
-export class Client {}
+export class Client { }
 //
 export type createConfig = {}
 export const createClient = (config) => {
@@ -209,6 +209,10 @@ export class myHttp {
       )
     })
   }
+  async runCustomMethod(tableName, me, data) {
+    let _res = await this.post(tableName, me, data)
+    return _res//
+  }
   async find(tableName, query = {}): Promise<any> {
     let _data = await this.get(tableName, 'find', query) //
     return _data
@@ -287,7 +291,7 @@ export class myHttp {
       )
     })
   }
-  async delete(tableName, params = {}, query = {}) {}
+  async delete(tableName, params = {}, query = {}) { }
   async getPageLayout(navName) {
     let data = await this.get('entity', 'find', {
       tableName: navName,

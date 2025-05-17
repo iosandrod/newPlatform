@@ -27,6 +27,7 @@ export class System extends Base {
       items: [],
     },
   } //
+  columnSelectOptions: any = {} //
   loginInfo = null
   pageLayout = [] //
   selectOptions = {}
@@ -46,14 +47,14 @@ export class System extends Base {
         }
         return true
       })
-      d.forEach(c => {
+      d.forEach((c) => {
         let children = c.children
         if (Array.isArray(children)) {
           c.children = filFn(children)
         }
       })
       return d
-    }//
+    } //
     this.systemConfig.menuConfig.items = filFn(d) //
     return d //
   }
@@ -421,11 +422,16 @@ export class System extends Base {
     pageDesign.tableName = tableName //
     pageDesign.setLayoutData(layoutConfig)
     pageDesign.use('getTableData', async (context, next) => {
-      console.log('getTableData之前', context)
+      // console.log('getTableData之前', context)//
       let fArg = context.args[0]
       let instance: PageDesign = context.instance
       let query = fArg.query
-      //获取分页
+      let tableName = fArg.tableName
+      let _tName = instance.getTableName()
+      if (tableName == _tName) {
+        let _d = instance.getSearchBindData() //
+        // console.log(_d, 'test_d') //
+      }
       //获取全局的查询条件
       await next()
       console.log('getTableData之后')
@@ -845,17 +851,18 @@ export class System extends Base {
           field: 'tableCnName',
           label: '表格中文名',
           itemChange: (config) => { },
-        }, {
-          label: "显示分页",
-          field: "showPagination",
-          type: "boolean",
+        },
+        {
+          label: '显示分页',
+          field: 'showPagination',
+          type: 'boolean',
         },
         {
           field: 'hooks',
           // label: '高级钩子函数编辑',
           type: 'stable',
           span: 24,
-          hiddenTitle: true,//
+          hiddenTitle: true, //
           options: {
             tableTitle: '高级钩子函数编辑', //
             tableState: 'edit', //
@@ -975,7 +982,7 @@ export class System extends Base {
         },
         {
           field: 'status',
-          title: '是否启用',//
+          title: '是否启用', //
           editType: 'boolean', //
         },
       ],
@@ -993,10 +1000,10 @@ export class System extends Base {
         })
         // console.log(_data1)//
         let http = this.getHttp()
-        await http.patch('navs', _data1)//
+        await http.patch('navs', _data1) //
         this.confirmMessage('更新菜单成功') ////
         this.clearCacheValue('getMenuData') //
-        await this.getMenuData() // 
+        await this.getMenuData() //
       },
       dragRowAfterFn: (config) => {
         //
@@ -1059,14 +1066,14 @@ export class System extends Base {
           let pageDesign = this.getCurrentPageDesign()
           await pageDesign.designSearchForm()
         },
-      },//
+      }, //
       {
         label: '同步列',
         fn: async () => {
           let pageDesign = this.getCurrentPageDesign()
           await pageDesign.syncRealColumns()
         },
-      }
+      },
     ]
     return _items //
   }
@@ -1123,6 +1130,6 @@ export class System extends Base {
     columnSelect[_key] = true //
   }
   clearSelectColumns() { } //
-}
+}//
 
 export const system = reactive(new System()) //
