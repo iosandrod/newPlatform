@@ -1,9 +1,31 @@
 import { Form } from '@ER/form'
-
+const enableTypes = [
+  'string',
+  'number',
+  'date',
+  'datetime',
+  'time',
+  'boolean',
+  'code',
+  'select',
+  'cascader',
+  'region',
+]
 export const getDFConfig = (_this, data) => {
+  let dType = data['defaultValueType']
+  let fType = 'string'
+  if (dType == 'code') {
+    fType = 'code'
+  }
+  let editType = data['editType']
+  if (enableTypes.includes(editType)) {
+    fType = editType //
+  }
   let fConfig = {
     itemSpan: 12,
     data: data,
+    height: 800,
+    width: 1200,
     items: [
       {
         field: 'title', //
@@ -42,7 +64,7 @@ export const getDFConfig = (_this, data) => {
       {
         label: '默认值',
         field: 'defaultValue',
-        type: 'number',//
+        type: fType, //
       },
       {
         label: '格式化',
@@ -71,7 +93,6 @@ export const getDFConfig = (_this, data) => {
           ],
         },
         itemChange: (config) => {
-          //   console.log(config, 'testConfig') //
           let form: Form = config.form
           let items = form.items
           let data = config.data
@@ -104,6 +125,21 @@ export const getDFConfig = (_this, data) => {
         type: 'select',
         options: {
           options: getAllColTypes(),
+        },
+        itemChange: (config) => {
+          let form: Form = config.form
+          let items = form.items
+          let data = config.data
+          let t = items.find((t1) => t1.getField() == 'defaultValue')
+          if (t == null) {
+            return
+          }
+          let value = config.value
+          if (value == 'code') {
+            t.config.type = 'code'
+          } else {
+            t.config.type = value // 
+          }
         },
       },
       {

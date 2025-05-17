@@ -35,7 +35,7 @@ import formCom from './formCom'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 import { VxeFormInstance } from 'vxe-pc-ui'
 import { PageDesign } from './pageDesign'
-import { Dialog } from 'vant'
+import { Dialog } from '@/dialog/dialog'
 //转换数据
 //
 let prevEl: any = ''
@@ -175,6 +175,7 @@ export class Form extends Base {
     return buttons
   }
   setItems(items, setLayout = true) {
+    // debugger//
     this.items.splice(0) //
     for (const item of items) {
       this.addFormItem(item)
@@ -1566,6 +1567,7 @@ export class Form extends Base {
     const copyData = props.parent[index + 1]
     this.setSelection(copyData)
     utils.deepTraversal(copyData, (node) => {
+      //
       ER.addFieldData(node, true)
       if (utils.checkIsField(node)) {
         ER.addField(node)
@@ -1647,7 +1649,8 @@ export class Form extends Base {
   }
   dragWidth(props: any) {}
   getRealTableName() {
-    return ''
+    let tableName = this.config.tableName || this.dTableName || this.tableName
+    return tableName ////
   }
   initDefaultDForm() {
     let _this: any = this //
@@ -1748,7 +1751,7 @@ export class Form extends Base {
     }
   }
   openDialog(dConfig) {
-    let _dialog = new Dialog(dConfig)
+    let _dialog = new Dialog(dConfig) //
     this.dialogArr.push(_dialog) //
   }
 }

@@ -158,4 +158,15 @@ export class Base {
       system.tableMap[tableName] || system.tableEditMap[tableName]
     return targetDesign //
   }
+  changeRowState(re, state = 'change') {
+    if (state == 'delete') {
+      re['_rowState'] = 'delete'
+      return //
+    }
+    let rowState = re['_rowState']
+    if (rowState == 'add' || rowState == 'delete') {
+      return
+    }
+    re['_rowState'] = state
+  } //
 }

@@ -1,5 +1,6 @@
 import { Base } from '@/base/base'
 import { Dropdown } from '@/menu/dropdown'
+import { Table } from '@/table/table'
 import { PageDesign } from '@ER/pageDesign'
 import { stringToFunction } from '@ER/utils'
 
@@ -80,6 +81,21 @@ export class Button extends Base {
         let page: PageDesign = config.page
         page.openSearchDialog() //
       },
+      addTableRows: (config) => {
+        let page: PageDesign = config.page
+        //新增一行数据
+        let tableName = page.getTableName() //
+        let tRef: Table = page.getRef(tableName) //
+        if (tRef == null) {
+          return
+        }
+        tRef.addRows(1) //
+      },
+      saveTableData: async (config) => {
+        //
+        let page: PageDesign = config.page
+        await page.saveTableData() //
+      }, //
     }
     return obj //
   }

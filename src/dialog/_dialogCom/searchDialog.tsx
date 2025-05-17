@@ -94,7 +94,11 @@ export default defineComponent({
           </div>
         </div>
         <div class="flex-1">
-          <FormCom layoutData={dialogConfig} data={d}></FormCom>
+          <FormCom
+            tableName={pageDesign.getRealTableName()}
+            layoutData={dialogConfig}
+            data={d}
+          ></FormCom>
         </div>
       </div>
     )

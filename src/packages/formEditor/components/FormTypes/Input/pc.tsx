@@ -28,10 +28,7 @@ export default defineComponent({
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
     }
-    // let showSearchIcon = computed(() => {
-    //   let s = formitem.getIsShowSearchIcon()
-    //   return s
-    // })
+
     let isColumnSelect = computed(() => {
       let s = formitem.getIsColumnSelect()
       return s
@@ -42,7 +39,11 @@ export default defineComponent({
           class="h-full w-full flex items-center"
           style={{ minHeight: '36px', height: '36px' }} //
         >
-          <inputCom ref={registerRef} {..._value.value}></inputCom>
+          <inputCom
+            ref={registerRef}
+            {..._value.value}
+            type={formitem.getType()}
+          ></inputCom>
         </div>
       )
       let _com = null

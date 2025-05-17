@@ -2948,3 +2948,8 @@ const app = createApp({
   //   // let _fieldConfig = JSON.parse(JSON.stringify(fieldsConfig))
   //   // return _fieldConfig
   // }
+
+  // let showSearchIcon = computed(() => {
+    //   let s = formitem.getIsShowSearchIcon()
+    //   return s
+    // })

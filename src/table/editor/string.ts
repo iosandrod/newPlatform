@@ -134,8 +134,8 @@ export class InputEditor extends BaseEditor {
           value: value,
           row: this.row, //
           field: this.field,
-        })
-        this.row['_rowState'] = 'change' //
+        }) //
+        column.changeRowState(this.row) //
         if (this.isEditHeader) {
           let _obj = { title: value, id: column.config.id }
           column.getSystem().updateTargetColumn(_obj) //()

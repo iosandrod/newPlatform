@@ -28,10 +28,7 @@ export default defineComponent({
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
     }
-    // let showSearchIcon = computed(() => {
-    //   let s = formitem.getIsShowSearchIcon()
-    //   return s
-    // })
+
     let isColumnSelect = computed(() => {
       let s = formitem.getIsColumnSelect()
       return s
@@ -52,6 +49,11 @@ export default defineComponent({
           <SelectCom
             {..._value.value}
             options={formitem.getColumnSelectOptions()}
+            onChange={(config) => {
+              // debugger//
+              let value = config.value
+              formitem.updateBindData({ value }) //
+            }}
           ></SelectCom>
         )
       } else {

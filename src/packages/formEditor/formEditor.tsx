@@ -265,14 +265,13 @@ export default defineComponent({
     watch(
       () => state.fields.map((e) => e.id), //
       (newV = [], old = []) => {
+        //
         const deleteFields = old.filter((item) => !newV.includes(item))
         const addFields = newV.filter((item) => !old.includes(item))
         for (const delField of deleteFields) {
-          //
           formIns.delFormItem(delField)
         }
         for (const addField of addFields) {
-          //
           let field = formIns.state.fields.find((e) => e.id === addField)
           formIns.addFormItem(field) //
         }

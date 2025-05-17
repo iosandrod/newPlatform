@@ -1,0 +1,364 @@
+"filename", "language", "TypeScript", "TypeScript JSX", "JavaScript", "vue", "XML", "SCSS", "comment", "blank", "total"
+"d:\share12\three-template-master\src\packages\base.ts", "TypeScript", 7, 0, 0, 0, 0, 0, 0, 1, 8
+"d:\share12\three-template-master\src\packages\ckeditor\__index.jsx", "JavaScript", 0, 0, 112, 0, 0, 0, 54, 29, 195
+"d:\share12\three-template-master\src\packages\ckeditor\index.jsx", "JavaScript", 0, 0, 219, 0, 0, 0, 9, 10, 238
+"d:\share12\three-template-master\src\packages\ckeditor\style\index.js", "JavaScript", 0, 0, 2, 0, 0, 0, 0, 1, 3
+"d:\share12\three-template-master\src\packages\designNodeForm.ts", "TypeScript", 501, 0, 0, 0, 0, 0, 10, 4, 515
+"d:\share12\three-template-master\src\packages\form.ts", "TypeScript", 1664, 0, 0, 0, 0, 0, 75, 22, 1761
+"d:\share12\three-template-master\src\packages\formCom.tsx", "TypeScript JSX", 0, 197, 0, 0, 0, 0, 6, 2, 205
+"d:\share12\three-template-master\src\packages\formEditor\componentsConfig.ts", "TypeScript", 439, 0, 0, 0, 0, 0, 619, 4, 1062
+"d:\share12\three-template-master\src\packages\formEditor\components\CompleteButton.tsx", "TypeScript JSX", 0, 61, 0, 0, 0, 0, 2, 1, 64
+"d:\share12\three-template-master\src\packages\formEditor\components\DeviceSwitch.vue", "vue", 0, 0, 0, 34, 0, 0, 2, 3, 39
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Baseinfo\mobile.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Baseinfo\mobile.vue", "vue", 0, 0, 0, 36, 0, 0, 0, 3, 39
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Baseinfo\pc.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Baseinfo\pc.vue", "vue", 0, 0, 0, 21, 0, 0, 0, 3, 24
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\ButtonGroup\mobile.tsx", "TypeScript JSX", 0, 24, 0, 0, 0, 0, 0, 2, 26
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\ButtonGroup\pc.tsx", "TypeScript JSX", 0, 45, 0, 0, 0, 0, 1, 1, 47
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Cascader\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Cascader\mobile.vue", "vue", 0, 0, 0, 36, 0, 0, 0, 3, 39
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Cascader\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Cascader\pc.vue", "vue", 0, 0, 0, 21, 0, 0, 0, 3, 24
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Checkbox\pc.tsx", "TypeScript JSX", 0, 37, 0, 0, 0, 0, 0, 2, 39
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Code\mobile.tsx", "TypeScript JSX", 0, 7, 0, 0, 0, 0, 0, 2, 9
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Code\pc.tsx", "TypeScript JSX", 0, 57, 0, 0, 0, 0, 0, 2, 59
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Dform\mobile.tsx", "TypeScript JSX", 0, 20, 0, 0, 0, 0, 1, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Dform\pc.tsx", "TypeScript JSX", 0, 44, 0, 0, 0, 0, 2, 2, 48
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\Other\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\Other\mobile.vue", "vue", 0, 0, 0, 42, 0, 0, 10, 2, 54
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\Other\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\Other\pc.vue", "vue", 0, 0, 0, 41, 0, 0, 0, 2, 43
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\mobile.vue", "vue", 0, 0, 0, 29, 0, 0, 0, 3, 32
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Divider\pc.vue", "vue", 0, 0, 0, 20, 0, 0, 0, 3, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Entity\mobile.tsx", "TypeScript JSX", 0, 7, 0, 0, 0, 0, 0, 1, 8
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Entity\pc.tsx", "TypeScript JSX", 0, 69, 0, 0, 0, 0, 3, 1, 73
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\Other\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\Other\mobile.vue", "vue", 0, 0, 0, 42, 0, 0, 10, 2, 54
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\Other\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\Other\pc.vue", "vue", 0, 0, 0, 41, 0, 0, 0, 2, 43
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\mobile.vue", "vue", 0, 0, 0, 67, 0, 0, 1, 3, 71
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Html\pc.vue", "vue", 0, 0, 0, 28, 0, 0, 0, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Image\mobile.tsx", "TypeScript JSX", 0, 39, 0, 0, 0, 0, 0, 2, 41
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Image\pc.tsx", "TypeScript JSX", 0, 42, 0, 0, 0, 0, 0, 2, 44
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Input\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Input\pc.tsx", "TypeScript JSX", 0, 52, 0, 0, 0, 0, 4, 2, 58
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\Other\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\Other\mobile.vue", "vue", 0, 0, 0, 42, 0, 0, 10, 2, 54
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\Other\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\Other\pc.vue", "vue", 0, 0, 0, 41, 0, 0, 0, 2, 43
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Number\pc.tsx", "TypeScript JSX", 0, 36, 0, 0, 0, 0, 0, 2, 38
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Other\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Other\mobile.vue", "vue", 0, 0, 0, 42, 0, 0, 10, 2, 54
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Other\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Other\pc.vue", "vue", 0, 0, 0, 41, 0, 0, 0, 2, 43
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Radio\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Radio\mobile.vue", "vue", 0, 0, 0, 39, 0, 0, 0, 3, 42
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Radio\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Radio\pc.vue", "vue", 0, 0, 0, 30, 0, 0, 0, 2, 32
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Rate\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Rate\pc.tsx", "TypeScript JSX", 0, 39, 0, 0, 0, 0, 1, 2, 42
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Region\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Region\mobile.vue", "vue", 0, 0, 0, 79, 0, 0, 0, 3, 82
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Region\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Region\pc.vue", "vue", 0, 0, 0, 22, 0, 0, 0, 3, 25
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Select\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Select\pc.tsx", "TypeScript JSX", 0, 29, 0, 0, 0, 0, 0, 2, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Sform\mobile.tsx", "TypeScript JSX", 0, 20, 0, 0, 0, 0, 1, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Sform\mobile.vue", "vue", 0, 0, 0, 3, 0, 0, 0, 0, 3
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Sform\pc.tsx", "TypeScript JSX", 0, 20, 0, 0, 0, 0, 0, 2, 22
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Sform\pc.vue", "vue", 0, 0, 0, 3, 0, 0, 0, 0, 3
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Signature\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Signature\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Slider\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Slider\mobile.vue", "vue", 0, 0, 0, 31, 0, 0, 0, 3, 34
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Slider\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Slider\pc.vue", "vue", 0, 0, 0, 19, 0, 0, 0, 3, 22
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Stable\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Stable\pc.tsx", "TypeScript JSX", 0, 76, 0, 0, 0, 0, 1, 2, 79
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\String\mobile.tsx", "TypeScript JSX", 0, 24, 0, 0, 0, 0, 0, 2, 26
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\String\pc.tsx", "TypeScript JSX", 0, 61, 0, 0, 0, 0, 2, 3, 66
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Switch\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Switch\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Textarea\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Textarea\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Time\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Time\pc.tsx", "TypeScript JSX", 0, 43, 0, 0, 0, 0, 0, 2, 45
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Uploadfile\mobile.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 7, 3, 31
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Uploadfile\mobile.vue", "vue", 0, 0, 0, 69, 0, 0, 0, 1, 70
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Uploadfile\pc.tsx", "TypeScript JSX", 0, 21, 0, 0, 0, 0, 0, 2, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\Uploadfile\pc.vue", "vue", 0, 0, 0, 93, 0, 0, 0, 3, 96
+"d:\share12\three-template-master\src\packages\formEditor\components\FormTypes\index.ts", "TypeScript", 103, 0, 0, 0, 0, 0, 10, 2, 115
+"d:\share12\three-template-master\src\packages\formEditor\components\Icon.vue", "vue", 0, 0, 0, 32, 0, 0, 0, 2, 34
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\CollapseLayout.tsx", "TypeScript JSX", 0, 46, 0, 0, 0, 0, 0, 1, 47
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\ControlInsertionPlugin.ts", "TypeScript", 639, 0, 0, 0, 0, 0, 51, 17, 707
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\DragGable.tsx", "TypeScript JSX", 0, 414, 0, 0, 0, 0, 15, 3, 432
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\DragGableWrap.tsx", "TypeScript JSX", 0, 58, 0, 0, 0, 0, 1, 0, 59
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\GridLayout.tsx", "TypeScript JSX", 0, 92, 0, 0, 0, 0, 9, 1, 102
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\InlineLayout.tsx", "TypeScript JSX", 0, 89, 0, 0, 0, 0, 0, 2, 91
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\SubformLayout.tsx", "TypeScript JSX", 0, 149, 0, 0, 0, 0, 3, 1, 153
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\TableLayout.tsx", "TypeScript JSX", 0, 105, 0, 0, 0, 0, 0, 1, 106
+"d:\share12\three-template-master\src\packages\formEditor\components\Layout\TabsLayout.tsx", "TypeScript JSX", 0, 77, 0, 0, 0, 0, 3, 1, 81
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Canves\index.tsx", "TypeScript JSX", 0, 90, 0, 0, 0, 0, 4, 3, 97
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\AllsidesComponent.vue", "vue", 0, 0, 0, 81, 0, 0, 0, 1, 82
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\BackgroundComponent.vue", "vue", 0, 0, 0, 295, 0, 0, 1, 2, 298
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\BorderComponent.vue", "vue", 0, 0, 0, 163, 0, 0, 0, 1, 164
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\CheckboxComponent.vue", "vue", 0, 0, 0, 39, 0, 0, 0, 1, 40
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\CollapseComponent.vue", "vue", 0, 0, 0, 45, 0, 0, 0, 1, 46
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\DataComponent1.jsx", "JavaScript", 0, 0, 212, 0, 0, 0, 2, 1, 215
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\DataComponent2.jsx", "JavaScript", 0, 0, 184, 0, 0, 0, 15, 1, 200
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\DataComponent3.vue", "vue", 0, 0, 0, 91, 0, 0, 0, 1, 92
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\GlobalConfigPanel.tsx", "TypeScript JSX", 0, 16, 0, 0, 0, 0, 0, 1, 17
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\GlobalConfigPanel.vue", "vue", 0, 0, 0, 218, 0, 0, 0, 1, 219
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\LimitComponent.vue", "vue", 0, 0, 0, 55, 0, 0, 0, 1, 56
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\LogicComponent.vue", "vue", 0, 0, 0, 299, 0, 0, 0, 2, 301
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\PropsPanel.tsx", "TypeScript JSX", 0, 23, 0, 0, 0, 0, 0, 0, 23
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\PropsPanel.vue", "vue", 0, 0, 0, 2, 0, 0, 0, 1, 3
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\SubformDefaultValue.vue", "vue", 0, 0, 0, 121, 0, 0, 0, 1, 122
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\TypeComponent.vue", "vue", 0, 0, 0, 86, 0, 0, 0, 1, 87
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\fConfigPanel.tsx", "TypeScript JSX", 0, 76, 0, 0, 0, 0, 9, 1, 86
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\components\generateFilterdata.js", "JavaScript", 0, 0, 394, 0, 0, 0, 32, 1, 427
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\configPanel.tsx", "TypeScript JSX", 0, 180, 0, 0, 0, 0, 6, 1, 187
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Config\index.vue", "vue", 0, 0, 0, 185, 0, 0, 0, 2, 187
+"d:\share12\three-template-master\src\packages\formEditor\components\Panels\Fields\index.tsx", "TypeScript JSX", 0, 106, 0, 0, 0, 0, 12, 2, 120
+"d:\share12\three-template-master\src\packages\formEditor\components\Selection\selectElement.tsx", "TypeScript JSX", 0, 477, 0, 0, 0, 0, 9, 3, 489
+"d:\share12\three-template-master\src\packages\formEditor\config.tsx", "TypeScript JSX", 0, 106, 0, 0, 0, 0, 0, 1, 107
+"d:\share12\three-template-master\src\packages\formEditor\defaultProps.ts", "TypeScript", 64, 0, 0, 0, 0, 0, 0, 1, 65
+"d:\share12\three-template-master\src\packages\formEditor\fieldFormConfig.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 1, 1
+"d:\share12\three-template-master\src\packages\formEditor\formEditor.tsx", "TypeScript JSX", 0, 335, 0, 0, 0, 0, 28, 2, 365
+"d:\share12\three-template-master\src\packages\formEditor\formTab.tsx", "TypeScript JSX", 0, 25, 0, 0, 0, 0, 0, 1, 26
+"d:\share12\three-template-master\src\packages\formEditor\formType.ts", "TypeScript", 18, 0, 0, 0, 0, 0, 0, 1, 19
+"d:\share12\three-template-master\src\packages\formEditor\generatorData.ts", "TypeScript", 26, 0, 0, 0, 0, 0, 2, 1, 29
+"d:\share12\three-template-master\src\packages\formEditor\index.ts", "TypeScript", 15, 0, 0, 0, 0, 0, 6, 1, 22
+"d:\share12\three-template-master\src\packages\formEditor\locale\en.ts", "TypeScript", 289, 0, 0, 0, 0, 0, 0, 1, 290
+"d:\share12\three-template-master\src\packages\formEditor\locale\index.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 1, 1, 10
+"d:\share12\three-template-master\src\packages\formEditor\locale\zh-cn.ts", "TypeScript", 266, 0, 0, 0, 0, 0, 0, 1, 267
+"d:\share12\three-template-master\src\packages\formEditor\node.ts", "TypeScript", 135, 0, 0, 0, 0, 0, 2, 1, 138
+"d:\share12\three-template-master\src\packages\formEditor\preview.tsx", "TypeScript JSX", 0, 214, 0, 0, 0, 0, 11, 4, 229
+"d:\share12\three-template-master\src\packages\formEditor\style\index.js", "JavaScript", 0, 0, 3, 0, 0, 0, 1, 1, 5
+"d:\share12\three-template-master\src\packages\formEditor\testData.ts", "TypeScript", 2398, 0, 0, 0, 0, 0, 865, 12, 3275
+"d:\share12\three-template-master\src\packages\formEditor\testData1.ts", "TypeScript", 113, 0, 0, 0, 0, 0, 0, 1, 114
+"d:\share12\three-template-master\src\packages\formitem.ts", "TypeScript", 960, 0, 0, 0, 0, 0, 52, 3, 1015
+"d:\share12\three-template-master\src\packages\hooks\index.ts", "TypeScript", 20, 0, 0, 0, 0, 0, 1, 0, 21
+"d:\share12\three-template-master\src\packages\hooks\use-css\index.ts", "TypeScript", 173, 0, 0, 0, 0, 0, 1, 1, 175
+"d:\share12\three-template-master\src\packages\hooks\use-fetch\index.ts", "TypeScript", 30, 0, 0, 0, 0, 0, 2, 1, 33
+"d:\share12\three-template-master\src\packages\hooks\use-history\index.ts", "TypeScript", 79, 0, 0, 0, 0, 0, 8, 1, 88
+"d:\share12\three-template-master\src\packages\hooks\use-i18n\index.ts", "TypeScript", 16, 0, 0, 0, 0, 0, 9, 2, 27
+"d:\share12\three-template-master\src\packages\hooks\use-logic\index.ts", "TypeScript", 267, 0, 0, 0, 0, 0, 16, 3, 286
+"d:\share12\three-template-master\src\packages\hooks\use-namespace\index.ts", "TypeScript", 36, 0, 0, 0, 0, 0, 0, 1, 37
+"d:\share12\three-template-master\src\packages\hooks\use-props\index.ts", "TypeScript", 384, 0, 0, 0, 0, 0, 13, 5, 402
+"d:\share12\three-template-master\src\packages\hooks\use-target\index.ts", "TypeScript", 45, 0, 0, 0, 0, 0, 0, 5, 50
+"d:\share12\three-template-master\src\packages\icon\__index.vue", "vue", 0, 0, 0, 32, 0, 0, 0, 3, 35
+"d:\share12\three-template-master\src\packages\icon\index.js", "JavaScript", 0, 0, 2, 0, 0, 0, 1, 1, 4
+"d:\share12\three-template-master\src\packages\icon\index.vue", "vue", 0, 0, 0, 49, 0, 0, 0, 3, 52
+"d:\share12\three-template-master\src\packages\icon\svg\ID.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\PC.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\Rank.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowDown.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowDownBold.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowLeft.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowLeftBold.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowRight.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowRightBold.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowUp.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowUpBold .svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\arrowUpBold.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\back.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\bottom.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\bottomLeft .svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\bottomRight.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\calendar.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\cascader.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\cellphone.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\checkbox.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\circleClose.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\circleMinus.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\circlePlus.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\clear0.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\clear1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\collapse.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\copy.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\delete.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\divider.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\dividerLocationP1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\dividerLocationP2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\dividerLocationP3.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\doubleArrowLeft.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\doubleArrowRight.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\drag.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\dragHeight.svg", "XML", 0, 0, 0, 0, 6, 0, 0, 1, 7
+"d:\share12\three-template-master\src\packages\icon\svg\dragWidth.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\dropUp0.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\dropdown0.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\email.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\grid.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP3.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP4.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\horizontalLayoutP5.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\html.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\index.js", "JavaScript", 0, 0, 8, 0, 0, 0, 0, 1, 9
+"d:\share12\three-template-master\src\packages\icon\svg\input.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\label.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\labelStructureP1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\labelStructureP2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\labelStructureP3.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\language.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\lineThickness.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\location.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\minus.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\minusBold.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\move1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\numberButtonP1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\numberButtonP2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\numbers.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\plus.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\plusBold.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\preview.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\radio.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\radius.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\rating.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\redo.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\right.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\save.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\search.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\signature.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\slider.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\sort.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\spaceBottom.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\spaceLeft.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\spaceRight.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\spaceTop.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\subform.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 1, 2
+"d:\share12\three-template-master\src\packages\icon\svg\switch.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tabStyleP1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tabStyleP2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tabStyleP3.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\table.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableInsertCol.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableInsertRow.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableOperation.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableStokeP1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableStokeP2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableStokeP3.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableStokeP4.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableStokeP5.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableStokeP6.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableStokeP7.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tableStokeP8.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tabsLocationP1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tabsLocationP2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tabsLocationP3.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\tabsLocationP4.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\textarea.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\time.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\title.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\top.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\topLeft.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\topRight.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\undo.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\upload.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\url.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\widthRatioP1.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\widthRatioP2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\widthRatioP3.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\widthRatioP4.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\widthRatioP5.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\widthRatioP6.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\zoomIn.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\icon\svg\zoomOut.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1
+"d:\share12\three-template-master\src\packages\itemTypeMap.ts", "TypeScript", 83, 0, 0, 0, 0, 0, 2, 2, 87
+"d:\share12\three-template-master\src\packages\layoutType.ts", "TypeScript", 142, 0, 0, 0, 0, 0, 0, 15, 157
+"d:\share12\three-template-master\src\packages\pageCom.tsx", "TypeScript JSX", 0, 368, 0, 0, 0, 0, 17, 3, 388
+"d:\share12\three-template-master\src\packages\pageDesign.ts", "TypeScript", 760, 0, 0, 0, 0, 0, 32, 2, 794
+"d:\share12\three-template-master\src\packages\pageDesignConfig.ts", "TypeScript", 213, 0, 0, 0, 0, 0, 15, 3, 231
+"d:\share12\three-template-master\src\packages\pageDesignFn.ts", "TypeScript", 217, 0, 0, 0, 0, 0, 0, 2, 219
+"d:\share12\three-template-master\src\packages\pageItem.ts", "TypeScript", 107, 0, 0, 0, 0, 0, 8, 3, 118
+"d:\share12\three-template-master\src\packages\region\Region.js", "JavaScript", 0, 0, 72, 0, 0, 0, 0, 5, 77
+"d:\share12\three-template-master\src\packages\region\index.js", "JavaScript", 0, 0, 5, 0, 0, 0, 0, 1, 6
+"d:\share12\three-template-master\src\packages\region\index.vue", "vue", 0, 0, 0, 429, 0, 0, 0, 10, 439
+"d:\share12\three-template-master\src\packages\region\node.js", "JavaScript", 0, 0, 51, 0, 0, 0, 0, 7, 58
+"d:\share12\three-template-master\src\packages\region\store.js", "JavaScript", 0, 0, 131, 0, 0, 0, 8, 19, 158
+"d:\share12\three-template-master\src\packages\region\style\index.js", "JavaScript", 0, 0, 2, 0, 0, 0, 1, 1, 4
+"d:\share12\three-template-master\src\packages\theme\base.scss", "SCSS", 0, 0, 0, 0, 0, 45, 0, 1, 46
+"d:\share12\three-template-master\src\packages\theme\ckeditor\index.scss", "SCSS", 0, 0, 0, 0, 0, 48, 1, 1, 50
+"d:\share12\three-template-master\src\packages\theme\formEditor\Canves.scss", "SCSS", 0, 0, 0, 0, 0, 69, 7, 1, 77
+"d:\share12\three-template-master\src\packages\theme\formEditor\CollapseLayout.scss", "SCSS", 0, 0, 0, 0, 0, 6, 0, 1, 7
+"d:\share12\three-template-master\src\packages\theme\formEditor\Config.scss", "SCSS", 0, 0, 0, 0, 0, 85, 22, 1, 108
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigAllsides.scss", "SCSS", 0, 0, 0, 0, 0, 18, 0, 1, 19
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigBackground.scss", "SCSS", 0, 0, 0, 0, 0, 87, 4, 1, 92
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigBorder.scss", "SCSS", 0, 0, 0, 0, 0, 23, 0, 1, 24
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigCheckboxComponent.scss", "SCSS", 0, 0, 0, 0, 0, 17, 7, 1, 25
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigCollapseComponent.scss", "SCSS", 0, 0, 0, 0, 0, 23, 28, 1, 52
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigData1.scss", "SCSS", 0, 0, 0, 0, 0, 54, 0, 2, 56
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigData2.scss", "SCSS", 0, 0, 0, 0, 0, 71, 11, 1, 83
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigData3.scss", "SCSS", 0, 0, 0, 0, 0, 33, 3, 1, 37
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigGridLayoutComponent.scss", "SCSS", 0, 0, 0, 0, 0, 3, 0, 1, 4
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigLogicComponent.scss", "SCSS", 0, 0, 0, 0, 0, 65, 0, 1, 66
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigSubformDefaultValueComponent.scss", "SCSS", 0, 0, 0, 0, 0, 15, 0, 1, 16
+"d:\share12\three-template-master\src\packages\theme\formEditor\ConfigTypeComponent.scss", "SCSS", 0, 0, 0, 0, 0, 64, 7, 1, 72
+"d:\share12\three-template-master\src\packages\theme\formEditor\DeviceSwitch.scss", "SCSS", 0, 0, 0, 0, 0, 26, 29, 1, 56
+"d:\share12\three-template-master\src\packages\theme\formEditor\DragGableLayout.scss", "SCSS", 0, 0, 0, 0, 0, 17, 3, 1, 21
+"d:\share12\three-template-master\src\packages\theme\formEditor\Fields.scss", "SCSS", 0, 0, 0, 0, 0, 67, 0, 1, 68
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Cascader.scss", "SCSS", 0, 0, 0, 0, 0, 22, 0, 1, 23
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Checkbox.scss", "SCSS", 0, 0, 0, 0, 0, 13, 0, 1, 14
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Date.scss", "SCSS", 0, 0, 0, 0, 0, 6, 0, 2, 8
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Divider.scss", "SCSS", 0, 0, 0, 0, 0, 7, 2, 1, 10
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Html.scss", "SCSS", 0, 0, 0, 0, 0, 7, 1, 1, 9
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Number.scss", "SCSS", 0, 0, 0, 0, 0, 6, 0, 1, 7
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Other.scss", "SCSS", 0, 0, 0, 0, 0, 14, 0, 1, 15
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Radio.scss", "SCSS", 0, 0, 0, 0, 0, 12, 0, 1, 13
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Region.scss", "SCSS", 0, 0, 0, 0, 0, 6, 0, 1, 7
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Select.scss", "SCSS", 0, 0, 0, 0, 0, 21, 0, 1, 22
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Signature.scss", "SCSS", 0, 0, 0, 0, 0, 52, 0, 1, 53
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Slider.scss", "SCSS", 0, 0, 0, 0, 0, 16, 0, 1, 17
+"d:\share12\three-template-master\src\packages\theme\formEditor\FormTypes\Time.scss", "SCSS", 0, 0, 0, 0, 0, 6, 0, 1, 7
+"d:\share12\three-template-master\src\packages\theme\formEditor\GlobalConfigPanel.scss", "SCSS", 0, 0, 0, 0, 0, 90, 12, 1, 103
+"d:\share12\three-template-master\src\packages\theme\formEditor\GridLayout.scss", "SCSS", 0, 0, 0, 0, 0, 5, 1, 1, 7
+"d:\share12\three-template-master\src\packages\theme\formEditor\Home.scss", "SCSS", 0, 0, 0, 0, 0, 22, 3, 1, 26
+"d:\share12\three-template-master\src\packages\theme\formEditor\Icon.scss", "SCSS", 0, 0, 0, 0, 0, 7, 0, 1, 8
+"d:\share12\three-template-master\src\packages\theme\formEditor\IconFont.scss", "SCSS", 0, 0, 0, 0, 0, 143, 0, 41, 184
+"d:\share12\three-template-master\src\packages\theme\formEditor\InlineLayout.scss", "SCSS", 0, 0, 0, 0, 0, 7, 1, 1, 9
+"d:\share12\three-template-master\src\packages\theme\formEditor\Main.scss", "SCSS", 0, 0, 0, 0, 0, 147, 4, 1, 152
+"d:\share12\three-template-master\src\packages\theme\formEditor\PropsPanel.scss", "SCSS", 0, 0, 0, 0, 0, 31, 0, 1, 32
+"d:\share12\three-template-master\src\packages\theme\formEditor\SelectElement.scss", "SCSS", 0, 0, 0, 0, 0, 79, 12, 1, 92
+"d:\share12\three-template-master\src\packages\theme\formEditor\SubformLayout.scss", "SCSS", 0, 0, 0, 0, 0, 53, 6, 1, 60
+"d:\share12\three-template-master\src\packages\theme\formEditor\TableLayout.scss", "SCSS", 0, 0, 0, 0, 0, 11, 1, 1, 13
+"d:\share12\three-template-master\src\packages\theme\formEditor\TabsLayout.scss", "SCSS", 0, 0, 0, 0, 0, 9, 3, 1, 13
+"d:\share12\three-template-master\src\packages\theme\formEditor\buttonGroupCom.scss", "SCSS", 0, 0, 0, 0, 0, 29, 0, 1, 30
+"d:\share12\three-template-master\src\packages\theme\formEditor\index.scss", "SCSS", 0, 0, 0, 0, 0, 44, 0, 1, 45
+"d:\share12\three-template-master\src\packages\theme\formEditor\tabCom.scss", "SCSS", 0, 0, 0, 0, 0, 66, 1, 1, 68
+"d:\share12\three-template-master\src\packages\theme\icon.scss", "SCSS", 0, 0, 0, 0, 0, 18, 0, 1, 19
+"d:\share12\three-template-master\src\packages\theme\region\Main.scss", "SCSS", 0, 0, 0, 0, 0, 104, 2, 1, 107
+"d:\share12\three-template-master\src\packages\theme\region\index.scss", "SCSS", 0, 0, 0, 0, 0, 2, 1, 1, 4
+"d:\share12\three-template-master\src\packages\type.ts", "TypeScript", 88, 0, 0, 0, 0, 0, 1, 6, 95
+"d:\share12\three-template-master\src\packages\utils\Context.ts", "TypeScript", 997, 0, 0, 0, 0, 0, 24, 2, 1023
+"d:\share12\three-template-master\src\packages\utils\addContext.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 4, 1, 24
+"d:\share12\three-template-master\src\packages\utils\decoration.ts", "TypeScript", 233, 0, 0, 0, 0, 0, 7, 12, 252
+"d:\share12\three-template-master\src\packages\utils\device.js", "JavaScript", 0, 0, 4, 0, 0, 0, 0, 1, 5
+"d:\share12\three-template-master\src\packages\utils\equal.ts", "TypeScript", 56, 0, 0, 0, 0, 0, 5, 7, 68
+"d:\share12\three-template-master\src\packages\utils\field.ts", "TypeScript", 273, 0, 0, 0, 0, 0, 39, 3, 315
+"d:\share12\three-template-master\src\packages\utils\fileData.ts", "TypeScript", 31, 0, 0, 0, 0, 0, 0, 1, 32
+"d:\share12\three-template-master\src\packages\utils\generateOptions.js", "JavaScript", 0, 0, 26, 0, 0, 0, 0, 1, 27
+"d:\share12\three-template-master\src\packages\utils\index.ts", "TypeScript", 27, 0, 0, 0, 0, 0, 16, 1, 44
+"d:\share12\three-template-master\src\packages\utils\logic.js", "JavaScript", 0, 0, 47, 0, 0, 0, 0, 2, 49
+"d:\share12\three-template-master\src\packages\utils\nanoid.js", "JavaScript", 0, 0, 5, 0, 0, 0, 0, 1, 6
+"d:\share12\three-template-master\src\packages\utils\test.js", "JavaScript", 0, 0, 23, 0, 0, 0, 0, 1, 24
+"d:\share12\three-template-master\src\packages\utils\utils.ts", "TypeScript", 104, 0, 0, 0, 0, 0, 16, 3, 123
+"d:\share12\three-template-master\src\packages\vueDraggable\core\componentBuilderHelper.js", "JavaScript", 0, 0, 42, 0, 0, 0, 0, 6, 48
+"d:\share12\three-template-master\src\packages\vueDraggable\core\componentStructure.js", "JavaScript", 0, 0, 60, 0, 0, 0, 0, 10, 70
+"d:\share12\three-template-master\src\packages\vueDraggable\core\renderHelper.js", "JavaScript", 0, 0, 51, 0, 0, 0, 0, 6, 57
+"d:\share12\three-template-master\src\packages\vueDraggable\core\sortableEvents.js", "JavaScript", 0, 0, 15, 0, 0, 0, 0, 4, 19
+"d:\share12\three-template-master\src\packages\vueDraggable\util\console.js", "JavaScript", 0, 0, 8, 0, 0, 0, 0, 2, 10
+"d:\share12\three-template-master\src\packages\vueDraggable\util\htmlHelper.js", "JavaScript", 0, 0, 13, 0, 0, 0, 0, 3, 16
+"d:\share12\three-template-master\src\packages\vueDraggable\util\string.js", "JavaScript", 0, 0, 10, 0, 0, 0, 0, 3, 13
+"d:\share12\three-template-master\src\packages\vueDraggable\util\tags.js", "JavaScript", 0, 0, 134, 0, 0, 0, 0, 5, 139
+"d:\share12\three-template-master\src\packages\vueDraggable\vuedraggable.d.ts", "TypeScript", 74, 0, 0, 0, 0, 0, 0, 1, 75
+"d:\share12\three-template-master\src\packages\vueDraggable\vuedraggable.ts", "TypeScript", 285, 0, 0, 0, 0, 0, 16, 36, 337
+"Total", "-", 12404, 4830, 1835, 3234, 121, 1891, 2558, 678, 27551

@@ -38,6 +38,7 @@ import fieldCom from '@/menu/fieldCom'
 import defaultProps from './formEditor/defaultProps'
 import { PageDesign } from './pageDesign'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
+import DialogCom from '@/dialog/dialogCom'
 export const getDefaultPageProps = () => {
   return {
     itemSpan: {
@@ -332,6 +333,10 @@ export default defineComponent({
           ></ContextmenuCom>
         )
       }
+      let dialogArr = formIns.dialogArr
+      let _arr = dialogArr.map((d) => {
+        return <DialogCom dialogIns={d}></DialogCom>
+      })
       let nextForm = formIns.nextForm //
       let _fieldCom = null
       let _ConfigCom = null
@@ -368,6 +373,7 @@ export default defineComponent({
             </div>
             {_ConfigCom}
           </div>
+          {_arr}
           {/* <Everright-form-editor></Everright-form-editor> */}
         </div>
       )

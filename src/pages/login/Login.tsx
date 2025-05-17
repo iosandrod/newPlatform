@@ -206,6 +206,7 @@ export default defineComponent({
                   label: '邮箱',
                   options: {
                     columnSelect: true, //
+                    tableName: 'permissions', //
                   },
                 },
                 {
