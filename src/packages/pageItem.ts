@@ -63,7 +63,7 @@ export class PageDesignItem extends FormItem {
     }
     return tableType
   }
-  async addNewRow() {} //
+  async addNewRow() { } //
 
   getShowHeaderButtons() {
     // debugger //
@@ -115,7 +115,16 @@ export class PageDesignItem extends FormItem {
     return options.mainRelateKey
   }
   onColumnResize(_config) {
-    let f=this.form
-    f.onColumnResize(_config)
+    let f = this.form
+    f.onColumnResize(_config)//
+  }
+  onColumnHidden(config: any): void {
+    // debugger//
+    let f = this.form
+    f.onColumnHidden(config)//
+  }
+  onColumnsDesign(config: any): void {
+    let f = this.form
+    f.onColumnsDesign(config)
   }
 }

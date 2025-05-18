@@ -47,12 +47,15 @@ export default defineComponent({
             // let ins = tableIns.getInstance()
             // ins.clearSelected() //
           },
-        },{
-          label:'启用加载状态',
+        },
+        {
+          label: '启用加载状态',
           fn: async () => {
+            //
             // tableIns.setCurrentLoading(true)
-          }
-        }
+            tableIns.expandAllTreeRow() //
+          },
+        },
       ] //
       let newButtons = tableIns.getHeaderButtons()
       let mergeButtons = [...newButtons, ...dbuttons] //

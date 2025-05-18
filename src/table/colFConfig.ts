@@ -21,6 +21,10 @@ export const getDFConfig = (_this, data) => {
   if (enableTypes.includes(editType)) {
     fType = editType //
   }
+  let tableName = null
+  if (_this && _this.getRealTableName) {
+    tableName = _this.getRealTableName()
+  }
   let titles = ['基本信息', '编辑信息']
   let fConfig = {
     itemSpan: 12,
@@ -28,6 +32,7 @@ export const getDFConfig = (_this, data) => {
     isTabForm: true, //
     height: 800,
     width: 1200,
+    tableName: tableName,//
     items: [
       {
         field: 'field',

@@ -113,11 +113,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-    x: 0,
-    y: 0,
-    width: 0,
-    filterConfig: [],
-  }
+      x: 0,
+      y: 0,
+      width: 0,
+      filterConfig: [],
+    }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -262,7 +262,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() {}
+  getListTableOption() { }
   getShowSeriesNumber() {
     let config = this.config
     let showRowSeriesNumber = config.showRowSeriesNumber
@@ -593,7 +593,6 @@ export class Table extends Base {
     }
   }
   render() {
-    console.log('我渲染了') //
     const rootDiv = this.getRef('root')
     let footDiv = this.getRef('footerDiv')
     let _instance = this.instance
@@ -606,6 +605,15 @@ export class Table extends Base {
     } else {
       this.createFooterInstance(footDiv) //
     }
+    nextTick(() => {
+      let tree = this.getIsTree()
+      if (tree == true) {
+        let expandAll = this.config.expandAll
+        if (expandAll == true) {
+          this.expandAllTreeRow(true)//
+        }
+      }
+    })
   }
   @useTimeout({
     number: 100, //
@@ -892,7 +900,7 @@ export class Table extends Base {
   initCurrentContextItems() {
     initContextMenu(this) //
   } //
-  setCurTableSelect() {}
+  setCurTableSelect() { }
   openContextMenu(config) {
     let originData = config.originData
     let field = config.field
@@ -993,22 +1001,7 @@ export class Table extends Base {
       return o1 - o2 //
     })
     _col1 = [...lfsCols, ...sCols, ...rfsCols]
-    // _col1 = _col1.sort((a, b) => {
-    //   let isFrozen = b.isFrozen
-    //   if (isFrozen === true) {
-    //     return -1
-    //   }
-    //   return 0
-    // })
-    // _col1 = _col1.sort((a, b) => {
-    //   let isLeftFrozen = a.isLeftFrozen
-    //   if (isLeftFrozen === true) {
-    //     return -1
-    //   }
-    //   return 0
-    // })
-    // _col1=_col1.sort((a,b)=>{
-    // })
+
     if (_show) {
       let cCol = this.checkboxColumn
       _col1.unshift(cCol.getColumnProps())
@@ -1215,14 +1208,14 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) {}
+  async runBefore(config?: any) { }
   //@ts-ignore
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
     }
   }
-  registerHooks(hConfig?: any) {}
+  registerHooks(hConfig?: any) { }
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -1237,7 +1230,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) {}
+  setMergeConfig(config?: any) { }
   async addRows(rowsConfig?: { rows?: Array<any> } | number) {
     if (typeof rowsConfig === 'number') {
       let _rows = Array(rowsConfig).fill(null)
@@ -1867,14 +1860,14 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) {}
+  async validateData(config) { }
   blur() {
     nextTick(() => {
       this.clearValidate()
       this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1882,7 +1875,7 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() {}
+  copyCurrentSelectCells() { }
   headerSortClick(config: any) {
     let sortState = this.sortCache
     let hasSort = sortState.findIndex((s) => s.field == config.field) //
@@ -1932,14 +1925,20 @@ export class Table extends Base {
     }
     if (Array.isArray(children) && children.length > 0) {
       //
-      children.forEach((e) => {
+      children.forEach((e1) => {
         let i1 = i + 1
-        this.initDataRow(e, i1) //
+        let _index = e['_index']
+        Object.defineProperty(e1, '_parentIndex', {
+          value: _index,
+          enumerable: false,
+          writable: true,//
+        })
+        this.initDataRow(e1, i1)
       })
     } //
   }
-  designCurrentColumn() {}
-  getCacheContain(row) {}
+  designCurrentColumn() { }
+  getCacheContain(row) { }
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -1947,7 +1946,7 @@ export class Table extends Base {
         this.registerEvent({
           keyName: key,
           name: key, //
-          callback: (...args) => {},
+          callback: (...args) => { },
         })
       }
     })
@@ -2185,8 +2184,11 @@ export class Table extends Base {
       writable: true,
     }) //
     ins.toggleHierarchyState(col, row) ////
+    setTimeout(() => {
+      console.log(record, 'testRecords')//
+    }, 100);
   }
-  setRowDragAble(status) {}
+  setRowDragAble(status) { }
   getTreeDataByPid(pid) {
     //
     let treeConfig = this.treeConfig
@@ -2228,4 +2230,108 @@ export class Table extends Base {
       onColumnResize(_config) //
     }
   }
-} //
+  hiddenColumn(field) {
+    let columns = this.getFlatColumns()
+    let _col = columns.find((col) => {
+      return col.getField() == field
+    })
+    if (field == 'checkboxField') {
+      return//
+    }//
+    if (_col == null) {//
+      return//
+    }//
+    _col.setHidden(true)//
+    let ccnfig = this.config//
+    let onHiddenColumn = ccnfig.onColumnHidden//
+    if (typeof onHiddenColumn == 'function') {
+      onHiddenColumn({
+        column: _col,//
+        table: this,//
+        originColumn: _col.config,//
+        tableName: this.getTableName()
+      })//
+    }//
+  }//
+  onColumnsDesign(cols: any[]) {
+    let updateCols = cols.filter((col) => {
+      let rowState = col['_rowState']
+      return rowState == 'change'
+    })
+    let addCols = cols.filter((col) => {
+      let rowState = col['_rowState']
+      return rowState == 'add'
+    })
+    let config = {
+      addCols: addCols,
+      updateCols: updateCols,
+      tableName: this.getTableName()
+    }
+    let ccnfig = this.config
+    let onColumnsDesign = ccnfig.onColumnsDesign
+    if (typeof onColumnsDesign == 'function') {
+      onColumnsDesign(config)//
+    }
+  }
+  expandTargetRows(rows, hiddenOther = true) {
+    let setExpand = (row: any, status = true) => {
+      let _expanded = row['_expanded']
+      if (_expanded == null) {
+        Object.defineProperty(row, '_expanded', {
+          value: true,
+          enumerable: false,
+          writable: true,
+        })
+      }
+      row['_expanded'] = status//
+      let col = 'collapse'
+      if (status == true) {
+        col = 'expand'
+      }
+      row['hierarchyState'] = col//
+    }
+    let allRows = this.getFlatTreeData()
+    if (hiddenOther == true) {
+      allRows.forEach(row => {
+        setExpand(row, false)
+      })
+    }
+    let dMap = this.dataMap
+    let getFlatParent = (row, arr = []) => {
+      let pIndex = row['_parentIndex']
+      if (pIndex == null) {
+        arr.push(row)
+      } else {
+        let pRow = dMap[pIndex]
+        getFlatParent(pRow, arr)//
+      }
+      return arr//
+    }
+    for (let row of rows) {
+      let farr = getFlatParent(row)
+      for (let r of farr) {
+        setExpand(r, true)//
+      }
+    }
+  }
+  expandAllTreeRow(status = true) {
+    let allRows = this.getFlatTreeData()
+    allRows.forEach(row => {
+      let hierarchyState = row.hierarchyState
+      if (hierarchyState != 'expand') {
+        row.hierarchyState = 'expand'
+      }//
+      let _expanded = row['_expanded']
+      if (_expanded == null) {
+        Object.defineProperty(row, '_expanded', {
+          value: status,
+          enumerable: false,
+          writable: true,
+        })
+      } else {
+        row['_expanded'] = status//
+      }//
+    })
+    this.updateCanvas()//
+  }
+} 

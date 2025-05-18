@@ -40,4 +40,34 @@ export class MainPageDesign extends PageDesign {
       // this.updateTableColumn()
     }
   }
+  onColumnHidden(c: any): void {
+    let tName = c.tableName
+    let curTName = this.getTableName()
+    if (tName == curTName) {
+      let originColumn = c.originColumn
+      let id = originColumn.id
+      let obj1 = {
+        id: id,//
+        hidden: originColumn.hidden,//
+      }//
+      this.updateTableColumn(obj1, false)//
+    }//Offense is the best defense
+  }//
+  async onColumnsDesign(cols: any): Promise<any> {
+    let tName = cols.tableName
+    let curTName = this.getTableName()
+    if (tName == curTName) {
+      // console.log(cols, 'testCols')///
+      let addCols = cols.addCols
+      let updateCols = cols.updateCols
+      let config = {
+        addData: addCols,
+        patchData: updateCols,//
+      }
+      let http = this.getHttp()//
+      await http.runCustomMethod('columns', 'batchUpdate', config)//
+      this.getSystem().confirmMessage('列数据更新成功', 'success')////
+      this.getSystem().refreshPageDesign()//
+    }
+  }
 }

@@ -3013,3 +3013,20 @@ const app = createApp({
         //   height: 500,
         //   width: 900,
         // }
+
+        // _col1 = _col1.sort((a, b) => {
+    //   let isFrozen = b.isFrozen
+    //   if (isFrozen === true) {
+    //     return -1
+    //   }
+    //   return 0
+    // })
+    // _col1 = _col1.sort((a, b) => {
+    //   let isLeftFrozen = a.isLeftFrozen
+    //   if (isLeftFrozen === true) {
+    //     return -1
+    //   }
+    //   return 0
+    // })
+    // _col1=_col1.sort((a,b)=>{
+    // })

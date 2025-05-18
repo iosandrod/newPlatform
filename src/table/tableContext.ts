@@ -128,7 +128,8 @@ export const initContextMenu = (table: Table) => {
           return //
         }
         let f = curContextCol.getField()
-        console.log(f, 'testF') //
+        // console.log(f, 'testF') //
+        table.hiddenColumn(f)//
         //
       },
     },
@@ -142,8 +143,8 @@ export const initContextMenu = (table: Table) => {
         let _config = curContextCol.config
         _config = _.cloneDeep(_config) //
         let sys = table.getSystem()
-       
-        let fConfig = getDFConfig(null, _config)
+        let mainD = table.getMainPageDesign()
+        let fConfig = getDFConfig(mainD, _config)
         let data1 = await sys.confirmForm(fConfig) //
         let _dFn = table.config.onDesignColumn
         if (typeof _dFn == 'function') {
@@ -156,19 +157,28 @@ export const initContextMenu = (table: Table) => {
       key: 'designAllColumns',
       disabled: false, //
       visible: true,
-      fn: () => {
+      fn: async () => {//
         let system = table.getSystem()
         let originColumns = table.getColumns().map((col) => {
           return col.config
-        })
-        system.confirmTable({
+        })//
+        let tableName = table.getTableName()
+        originColumns = _.cloneDeep(originColumns)//
+        let _d: any = await system.confirmTable({
           tableState: 'edit',
           columns: [
             {
-              field: 'title',
-              title: '标题',
-              editType: 'string',
+              field: 'title',//
+              title: '标题',//
+              editType: 'string',//
               type: 'string', //
+            },
+            {
+              field: "tableName",
+              title: '表名',
+              defaultValue: table.getTableName(),//
+              type: 'string',
+              disabled: true,
             },
             {
               field: 'field', //
@@ -205,7 +215,9 @@ export const initContextMenu = (table: Table) => {
             },
           ],
           data: originColumns,
-        })
+        })//
+        table.onColumnsDesign(_d)
+
       },
     },
   ]

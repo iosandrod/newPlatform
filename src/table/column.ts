@@ -66,8 +66,10 @@ export class Column extends Base {
     let options = this.config.options || []
     return options //
   } //
-  setHidden(bool) {} //
-  getFormitem() {} //
+  setHidden(bool) {
+    this.config.hidden = bool//
+  } //
+  getFormitem() { } //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -613,12 +615,11 @@ export class Column extends Base {
   getIsChecked(r) {
     let f = this.getField()
     let v = r[f]
-    console.log(v, r) //
     if (v === '1') {
       v = true
     }
     if (v === '0') {
-      v = false
+      v = false//
     }
     v = Boolean(v)
     return v
@@ -1004,6 +1005,7 @@ export class Column extends Base {
       }
     }
     const image = createImage({
+
       image: `<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${hIconColor}"></path></svg>`,
       width: 16,
       height: 16, //
@@ -1391,7 +1393,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() {}
+  updateBindData() { }
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {
@@ -1441,5 +1443,5 @@ export class Column extends Base {
     let config = this.config
     config.order = n
   }
-   //
+  //
 }
