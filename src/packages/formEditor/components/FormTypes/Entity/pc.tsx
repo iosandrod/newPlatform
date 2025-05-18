@@ -47,13 +47,22 @@ export default defineComponent({
       } //
       let event = config.event
       // console.log(config, 'testEvent') ///
-      _design.openContextMenu(event, item) // 
+      _design.openContextMenu(event, item) //
     } //
     return () => {
       //
       let com = (
         <div class="h-full w-full" style={{ minHeight: '200px' }}>
           <erTable
+            onBeforeEditCell={(config) => {
+              //
+              let s = _design.onBeforeEditCell({
+                ...config,
+                tableName,
+                item: item,
+              })
+              return s //
+            }}
             showHeaderContext={false}
             tableName={tableName}
             mainTableName={mainTableName}
@@ -65,6 +74,10 @@ export default defineComponent({
             columns={columns.value}
             onDesignColumn={(config) => {
               _design.updateTableColumn(config)
+            }}
+            disableColumnResize={false}
+            onColumnResize={(config) => {
+              item.onColumnResize(config)
             }}
           ></erTable>
         </div>

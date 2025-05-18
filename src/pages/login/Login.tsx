@@ -178,18 +178,18 @@ export default defineComponent({
       // let com2 = <buttonCom fn={fn1}></buttonCom> //
       let com2 = <button onClick={fn1}>123123</button>
       // com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
-      // com = (
-      //   <div style={{ height: `${_data.height}px`, width: `100%` }}>
-      //     <tableCom
-      //       // {...tableConfig}
-      //       {...menuTConfig}
-      //       showGlobalSearch={true}
-      //       showHeaderButtons={true}
-      //       // showControllerButtons={true}
-      //       // tableState="edit"
-      //     ></tableCom>
-      //   </div>
-      // ) //
+      com = (
+        <div style={{ height: `${_data.height}px`, width: `100%` }}>
+          <tableCom
+            // {...tableConfig}
+            {...menuTConfig}
+            showGlobalSearch={true}
+            showHeaderButtons={true}
+            // showControllerButtons={true}
+            // tableState="edit"
+          ></tableCom>
+        </div>
+      ) //
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       }) //
@@ -199,19 +199,23 @@ export default defineComponent({
             ref={_reg3}
             // isDesign={true}
             // {..._fConfig}
+            isTabForm={true}
             {...{
               items: [
                 {
                   field: 'height',
                   label: '邮箱',
+                  span: 24,
                   options: {
                     columnSelect: true, //
                     tableName: 'permissions', //
                   },
+                  tabTitle: '权限',
                 },
                 {
                   field: 'width',
                   label: '密码',
+                  span: 24,
                 },
               ],
             }}

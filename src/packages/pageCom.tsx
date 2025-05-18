@@ -39,6 +39,7 @@ import defaultProps from './formEditor/defaultProps'
 import { PageDesign } from './pageDesign'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import DialogCom from '@/dialog/dialogCom'
+import { VxeLoading } from 'vxe-pc-ui'
 export const getDefaultPageProps = () => {
   return {
     itemSpan: {
@@ -359,9 +360,13 @@ export default defineComponent({
             <ConfigPanel></ConfigPanel>
           </div>
         )
-      } //
+      }
+      let loadingCom = (
+        <VxeLoading modelValue={formIns.pageLoading}></VxeLoading>
+      )
       let com = (
         <div class="h-full w-full overflow-hidden bg-white">
+          {loadingCom}
           <div class="flex h-full w-full bg-white overflow-hidden flex-row">
             {contextCom}
             {_fieldCom}

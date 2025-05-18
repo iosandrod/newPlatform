@@ -237,6 +237,9 @@ export const getDialogDefaultProps = () => {
       type: Boolean as PropType<VxeModalPropTypes.Animat>,
       default: () => getConfig().modal.animat,
     },
+    buttons: {
+      type: Array, //
+    },
     /*
      */
     onShow: {
@@ -395,21 +398,7 @@ export default defineComponent({
                 let btnG = (
                   <buttonGroupCom
                     buttonWidth={50}
-                    items={[
-                      {
-                        label: '取消',
-                        fn: () => {
-                          // console.log('取消')
-                          dialog.close() //
-                        },
-                      },
-                      {
-                        label: '确定',
-                        fn: () => {
-                          dialog.confirm() //
-                        },
-                      },
-                    ]}
+                    items={dialog.getFooterButtons()} //
                   ></buttonGroupCom>
                 )
                 let com = <div class="flex-row justify-end">{btnG}</div> //

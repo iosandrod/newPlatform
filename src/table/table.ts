@@ -53,6 +53,7 @@ import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
 export class Table extends Base {
+  runClearSelect = false
   treeConfig: any = null
   scrollRowInteral: any
   scrollRowSpeed: number = 0
@@ -77,7 +78,7 @@ export class Table extends Base {
   contextItems: any[] = []
   disableColumnResize = true //
   tableState: 'edit' | 'scan' = 'edit' //
-  templateEditCell: { col?: number; row?: number; value?: any } = {}
+  templateEditCell: { col?: number; row?: number; value?: any }
   currentResizeField: string
   fatherScrollNum = 0
   childScrollNum = 0
@@ -474,8 +475,9 @@ export class Table extends Base {
       'click_cell',
       'checkbox_state_change',
       'dblclick_cell',
-      'resize_column',
+      'resize_column_end',
     ]
+    // table.on('')
     emitEventArr.forEach((item) => {
       //@ts-ignore//
       table.on(item, (config) => {
@@ -724,6 +726,10 @@ export class Table extends Base {
       })
       nextTick(() => {
         this.updateSelectRange()
+        // if (this.runClearSelect == true) {
+        //   this.getInstance().clearSelected()
+        //   this.runClearSelect = false //
+        // }
       }) //
       // ins.changeCellValue(0, 0, '')//
       console.timeEnd(uuid) //
@@ -739,8 +745,11 @@ export class Table extends Base {
     console.time('updateSelectRange') //
     let _select = ins.getSelectedCellRanges()
     let t = this.templateEditCell
-    if (t) {
-      ins.clearSelected() //
+    let t1 = this.runClearSelect
+    // debugger//
+    if (t || t1) {
+      // ins.clearSelected() //
+      this.runClearSelect = false //
       return
     }
     ins.selectCells(_select) //
@@ -1763,18 +1772,33 @@ export class Table extends Base {
   }
   startEditCell(col, row, value) {
     let ins = this.getInstance() //
-    // debugger
-    // let f = ins.getBodyField(col, row)
     let tCol = this.getTargetColumn(col, row)
     if (tCol.getEditType() == 'boolean') {
       ins.clearSelected() //
       return
+    }
+    // debugger//
+    let config = this.config
+    let beforeEditCell = config.onBeforeEditCell
+    if (typeof beforeEditCell == 'function') {
+      let re = ins.getRecordByCell(col, row)
+      let f = ins.getBodyField(col, row)
+      // debugger
+      let _status = beforeEditCell({
+        row: re,
+        field: f,
+        value: value,
+      })
+      if (_status == false) {
+        return false
+      }
     }
     this.templateEditCell = { col: col, row: row, value: value }
     ins.startEditCell(col, row, value) //
     ins.clearSelected() ////
   }
   clearEditCell() {
+    // debugger//
     let currentEditCol = this.currentEditCol
     let disableHideCell = currentEditCol?.disableHideCell
     if (disableHideCell == true) {
@@ -1787,7 +1811,16 @@ export class Table extends Base {
     this.currentEditCol = null
     this.templateEditCell = null ////
     let ins = this.getInstance()
-    ins.completeEditCell() ////
+    ins.completeEditCell()
+    this.runClearSelect = true
+    setTimeout(() => {
+      ins.clearSelected()
+    }, 300)
+    // setTimeout(() => {
+    //   console.time('setColWidth')
+    //   // ins.clearSelected()//
+    //   console.timeEnd('setColWidth')//
+    // }, 1000)
     // ins.selectCell(_templateEditCell.col, _templateEditCell.row) //
     // setTimeout(() => {
     //   ins.clearSelected() //
@@ -2186,5 +2219,13 @@ export class Table extends Base {
       dragRowAfterFn({ startRow: r1, endRow: r2, data })
     }
     return //
+  }
+  onColumnResize(_config) {
+    //
+    let config = this.config
+    let onColumnResize = config.onColumnResize
+    if (typeof onColumnResize == 'function') {
+      onColumnResize(_config) //
+    }
   }
 } //

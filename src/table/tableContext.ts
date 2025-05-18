@@ -142,59 +142,7 @@ export const initContextMenu = (table: Table) => {
         let _config = curContextCol.config
         _config = _.cloneDeep(_config) //
         let sys = table.getSystem()
-        // let fConfig = {
-        //   itemSpan: 12,
-        //   items: [
-        //     {
-        //       label: '标题', //
-        //       field: 'title',
-        //       editType: 'string', //
-        //     },
-        //     {
-        //       label: '值更新事件',
-        //       filed: 'itemChange',
-        //       editType: 'code', //
-        //     },
-        //     {
-        //       label: '默认值',
-        //       field: 'defaultValue',
-        //       type: 'code', //
-        //     },
-        //     {
-        //       label: '默认值类型',
-        //       field: 'defaultValueType',
-        //       type: 'select',
-        //       options: {
-        //         options: [
-        //           {
-        //             label: '函数类型',
-        //             value: 'function',
-        //           },
-        //           {
-        //             label: '普通类型',
-        //             value: 'normal',
-        //           },
-        //         ],
-        //       },
-        //     },
-        //     {
-        //       label: '编辑类型',
-        //       field: 'editType',
-        //       type: 'select',
-        //       options: {
-        //         options: [
-        //           {
-        //             label: '输入框',
-        //             value: 'string',
-        //           },
-        //         ],
-        //       },
-        //     },
-        //   ],
-        //   data: _config, //
-        //   height: 500,
-        //   width: 900,
-        // }
+       
         let fConfig = getDFConfig(null, _config)
         let data1 = await sys.confirmForm(fConfig) //
         let _dFn = table.config.onDesignColumn

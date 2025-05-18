@@ -71,6 +71,7 @@ const excludes = [
 ]
 const pName = [] //
 export class Form extends Base {
+  tableState = 'scan' //
   dialogArr = []
   eventManager: {
     [key: string]: Array<{
@@ -176,7 +177,7 @@ export class Form extends Base {
   }
   setItems(items, setLayout = true) {
     // debugger//
-    this.items.splice(0) //
+    this.items.splice(0)
     for (const item of items) {
       this.addFormItem(item)
     }
@@ -672,22 +673,64 @@ export class Form extends Base {
   }
   getPcLayout() {
     let items = this.items
-    let _pcLayout = this._pcLayout
-    if (_pcLayout != null) {
-      return _pcLayout //
+    if (items.length == 0) {
+      return [] //
     }
+    let isTabForm = this.config.isTabForm
+    if (isTabForm === true) {
+      let obj = items.reduce((res: any, item) => {
+        let title = item.getTabTitle()
+        let _arr = res[title]
+        if (_arr == null) {
+          _arr = []
+          res[title] = _arr
+        }
+        _arr.push(item)
+        return res //
+      }, {})
+      let items1 = Object.values(obj)
+      // let a1 = []
+      // for (const itemArr of items1) {
+      //   let _r = this.createRootItems(itemArr)
+      //   a1.push(_r)
+      // }
+      let _tabCols = items1.map((item) => {
+        let _r = this.createRootItems(item)
+        let _t = item[0]
+        let t = _t.getTabTitle()
+        let ob = {
+          ...this.createNodeIdKey('tabCol'),
+          label: t, //
+          list: _r,
+        }
+        return ob
+      }) //
+      let _root = {
+        ...this.createNodeIdKey('inline'),
+        columns: [
+          {
+            ...this.createNodeIdKey('tabs'),
+            columns: _tabCols,
+          },
+        ],
+        style: {},
+      }
+      return [_root] //
+    } else {
+      let root = this.createRootItems(items)
+      return root //
+    }
+  }
+  createRootItems(items) {
     let rootInline = {
       ...this.createNodeIdKey('inline'),
       columns: [],
       style: {},
     }
-    let _index = 0
+    // let _index = 0
     let _rows = rootInline.columns
-    if (items.length == 0) {
-      return [] //
-    }
     for (const item of items) {
-      let index = item.getRowIndex()
+      let index = item.getRowIndex(items)
       let _row = _rows[index]
       if (_row == null) {
         _row = {
@@ -703,7 +746,6 @@ export class Form extends Base {
           },
         } //
         _rows[index] = _row //
-        _index = 0
       }
       let span = item.getSpan()
       let colLayout = {
@@ -719,10 +761,10 @@ export class Form extends Base {
             ...this.createNodeIdKey('inline'),
             columns: [item.id],
           },
-        ], //
+        ],
       }
       _row.columns.push(colLayout)
-    } //
+    }
     return [rootInline] //
   }
   createNodeIdKey(type) {
@@ -732,6 +774,7 @@ export class Form extends Base {
       id,
       key,
       type,
+      options: {},
     }
     return obj
   }
@@ -755,7 +798,6 @@ export class Form extends Base {
   }
   initMobileLayout() {}
   addFormItem(config: Field) {
-    // debugger//
     let id = config.id
     let oldItems = this.items
     let index = oldItems.findIndex((item) => item.id === id)

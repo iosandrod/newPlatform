@@ -13,6 +13,8 @@ import { Table } from './table/table'
 import tableCom from './table/tableCom'
 import { VxeUI } from 'vxe-pc-ui'
 import { getDFConfig } from './table/colFConfig'
+import { editPageDesign } from '@ER/editPageDesign'
+import { MainPageDesign } from '@ER/mainPageDesign'
 export class System extends Base {
   allApp: any = [] //
   systemApp: any = []
@@ -34,7 +36,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient() //
@@ -61,17 +63,17 @@ export class System extends Base {
   init() {
     super.init() //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap).map((row) => {
@@ -88,7 +90,7 @@ export class System extends Base {
     })
     return allT2
   }
-  openPageDesign(config) { } //
+  openPageDesign(config) {} //
 
   async getPageLayout(name?: string) {
     let http = this.getHttp()
@@ -369,7 +371,7 @@ export class System extends Base {
     await http.patch('entity', layout) //
     await this.refreshPageDesign() //
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -418,7 +420,7 @@ export class System extends Base {
     let obj = layoutConfig
     //@ts-ignore
     obj.tableName = tableName
-    let pageDesign = new PageDesign(obj)
+    let pageDesign = new MainPageDesign(obj) //
     pageDesign.tableName = tableName //
     pageDesign.setLayoutData(layoutConfig)
     pageDesign.use('getTableData', async (context, next) => {
@@ -428,13 +430,25 @@ export class System extends Base {
       let query = fArg.query
       let tableName = fArg.tableName
       let _tName = instance.getTableName()
+      let _d1 = {}
       if (tableName == _tName) {
         let _d = instance.getSearchBindData() //
-        // console.log(_d, 'test_d') //
-      }
+        let _dn = Object.entries(_d)
+        if (_dn.length > 0 && _dn.map((d) => d[1]).some((d) => d != null)) {
+          _d1 = _d
+        }
+      } //
+      let searchWhere = instance.getSearchWhere(_d1) //
+      let result = _.merge({}, query, searchWhere)
+      fArg.query = result //
+      instance.setCurrentLoading(true)
       //获取全局的查询条件
-      await next()
-      console.log('getTableData之后')
+      await next().finally(() => {
+        setTimeout(() => {
+          instance.setCurrentLoading(false) //
+        }, 1000)
+      }) //
+      instance.setCurrentView() //
     })
     await pageDesign.getTableData() //
     this.tableMap[tableName] = pageDesign //
@@ -453,7 +467,7 @@ export class System extends Base {
       return _design //
     }
     let layoutConfig = await this.getPageEditLayout(tableName) //
-    let _d = new PageDesign(layoutConfig) //
+    let _d = new editPageDesign(layoutConfig)
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
@@ -464,8 +478,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     return new Promise(async (resolve, reject) => {
       let _form = new Form(formConfig) //
@@ -807,7 +821,7 @@ export class System extends Base {
     try {
       //
       //打开app
-    } catch (error) { }
+    } catch (error) {}
   }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
@@ -850,7 +864,7 @@ export class System extends Base {
         {
           field: 'tableCnName',
           label: '表格中文名',
-          itemChange: (config) => { },
+          itemChange: (config) => {},
         },
         {
           label: '显示分页',
@@ -968,7 +982,7 @@ export class System extends Base {
           field: 'id',
           title: 'id',
           tree: true,
-          frozen: 'left', //
+          frozen: 'left',
         },
         {
           field: 'navname', //
@@ -978,6 +992,7 @@ export class System extends Base {
         },
         {
           field: 'tableName',
+          editType: 'string', //
           title: '表格或者视图名称',
         },
         {
@@ -1120,6 +1135,7 @@ export class System extends Base {
     if (arr == null) {
       _cols = await this.getHttp().find('columns', { tableName }) //
     }
+    //
     let _cols1 = _cols.map((item) => {
       return {
         value: item.field,
@@ -1129,7 +1145,7 @@ export class System extends Base {
     columnSelect[tableName] = _cols1 //
     columnSelect[_key] = true //
   }
-  clearSelectColumns() { } //
-}//
+  clearSelectColumns() {} //
+} //
 
 export const system = reactive(new System()) //

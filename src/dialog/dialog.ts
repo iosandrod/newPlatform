@@ -87,4 +87,28 @@ export class Dialog extends Base {
     }
     this.close() //
   }
+  getFooterButtons() {
+    let dialog = this
+    let defaultBtns = [
+      {
+        label: '取消',
+        fn: () => {
+          // console.log('取消')
+          dialog.close() //
+        },
+      },
+      {
+        label: '确定',
+        fn: () => {
+          dialog.confirm() //
+        },
+      },
+    ]
+    let extendButtons = this.config.buttons
+    if (Array.isArray(extendButtons) && extendButtons.length > 0) {
+      // defaultBtns=defaultBtns.concat(extendButtons)
+      defaultBtns.push(...extendButtons)
+    }
+    return defaultBtns//
+  }
 }

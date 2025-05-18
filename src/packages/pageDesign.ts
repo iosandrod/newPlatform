@@ -25,7 +25,23 @@ import { BMenu } from '@/buttonGroup/bMenu'
 import { getDFConfig } from '@/table/colFConfig'
 import _ from 'lodash'
 import searchDialog from '@/dialog/_dialogCom/searchDialog'
-
+interface Filter {
+  /** 字段名 */
+  field: string
+  /** 操作符，默认 '$eq'（等于） */
+  operator?:
+    | '$eq'
+    | '$ne'
+    | '$gt'
+    | '$gte'
+    | '$lt'
+    | '$lte'
+    | '$in'
+    | '$nin'
+    | '$like'
+  /** 值 */
+  value: any
+}
 export class PageDesign extends Form {
   hooksMetaData: Record<string, any[]> = {} //
   currentContextItem: PageDesignItem = null
@@ -123,7 +139,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() { }
+  initDefaultTemplatePage() {}
   getValidateRules() {
     return []
   }
@@ -171,23 +187,7 @@ export class PageDesign extends Form {
     }) //
     return res
   }
-  @useHooks((config) => {
-    let ctx: PageDesign = config.instance
-    let args = config.args
-    if (args.length == 0) {
-      args[0] = {
-        tableName: ctx.getTableName(),
-        query: {}, //
-      }
-    }
-    if (typeof args[0] == 'string') {
-      args[0] = {
-        tableName: args[0],
-        query: {},
-      }
-    }
-    return config
-  }) //
+
   async getTableData(
     getDataConfig: any = {
       tableName: this.getTableName(),
@@ -226,10 +226,33 @@ export class PageDesign extends Form {
     await this.publishEvent(_config)
     return row
   }
-  buildQuery() { }
-  openSearchForm() { }
-  async createTableData() { }
-  async updateTableData() { }
+  buildQuery(filters: Filter[]): Record<string, any> {
+    // 没有条件，返回空对象
+    if (!filters || filters.length === 0) {
+      return {}
+    }
+
+    // 辅助：把单条 Filter 转成 { field: { $op: value } } 或 { field: value }
+    const buildCond = (f: Filter) => {
+      const op = f.operator || '$eq'
+      // 如果是等于，用直接赋值；其它操作符用 {$op: value}
+      if (op === '$eq') {
+        return { [f.field]: f.value }
+      }
+      return { [f.field]: { [op]: f.value } }
+    }
+    // 只有一条条件，直接返回
+    if (filters.length === 1) {
+      return buildCond(filters[0])
+    }
+    // 多条条件，默认用 AND 连接
+    return {
+      //
+      $and: filters.map(buildCond),
+    }
+  } //
+  async createTableData() {}
+  async updateTableData() {}
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
     let obj1 = {}
@@ -254,7 +277,7 @@ export class PageDesign extends Form {
     } //
     return columns //
   }
-  getMainTableConfig() { }
+  getMainTableConfig() {}
   @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -319,23 +342,23 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() { }
+  getAllFormMap() {}
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() { }
+  initDefaultSForm() {}
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() { }
+  async openAddEntity() {}
   async addMainTableRow(addConfig) {
     let config = this.config //
     let system = this.getSystem()
     let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`, (d) => { })
+    system.routeOpen(`${tableName}---edit`, (d) => {})
   }
   getRealTableName() {
     let tableName = this.getTableName() //
@@ -383,7 +406,6 @@ export class PageDesign extends Form {
       }
       return false
     })
-    // debugger//
     for (const en of allEnFields) {
       let tableName = en.tableName
       if (tableName != null) {
@@ -523,14 +545,16 @@ export class PageDesign extends Form {
   }
   getCurRow(tableName = this.getRealTableName()) {
     //
-    let tRef: Table = this.getRef(tableName)
-    let curRow = null
-    let _tableName = this.getTableName()
-    if (tRef == null) {
-      curRow = this.tableDataMap[_tableName]?.curRow ////
-    } else {
-      curRow = tRef.getCurRow()
-    }
+    // let tRef: Table = this.getRef(tableName)
+    // let curRow = null
+    // let _tableName = this.getTableName()
+    // if (tRef == null) {
+    //   curRow = this.tableDataMap[_tableName]?.curRow ////
+    // } else {
+    //   curRow = tRef.getCurRow()
+    // }
+    // return curRow //
+    let curRow = this.tableDataMap[tableName]?.curRow
     return curRow //
   }
   getTableRefData(tableName = this.getTableName()) {
@@ -673,6 +697,14 @@ export class PageDesign extends Form {
       width: '800px',
       height: '600px',
       title: '查询弹框',
+      buttons: [
+        {
+          label: '重置条件',
+          fn: () => {
+            console.log('重置条件')
+          },
+        },
+      ],
       createFn: () => {
         return {
           component: searchDialog,
@@ -750,34 +782,65 @@ export class PageDesign extends Form {
       let obj = {}
       let searchF = col.searchField || col.field //
       let searchOperator = col.searchOperator //查询操作符
+      let eArr = [
+        '$eq',
+        '$neq',
+        '$gt',
+        '$gte',
+        '$lt',
+        '$lte',
+        '$in',
+        '$nin',
+        '$like',
+      ]
+      if (eArr.indexOf(searchOperator) == -1) {
+        searchOperator = '$eq'
+      }
       //查询条件
-      if (searchOperator == null) {
-        let _v = data[searchF]
-        if (_v != null) {
-          obj[searchF] = _v //
-          _arr.push(obj) //
-        }
-      } else {
-        let _value = data[searchF]
-        if (_value != null) {
-          let _obj = this.buildWhereInOperator({
-            value: _value,
-            field: searchF,
-            operator: searchOperator,
-          })
-          _arr.push(_obj)
-        }
+      // if (searchOperator == null) {
+      //   searchOperator='$eq'
+      //   let _v = data[searchF]
+      //   if (_v != null) {
+      //     obj[searchF] = _v //
+      //     _arr.push(obj) //
+      //   }
+      // } else {
+      // let _value = data[searchF]
+      // if (_value != null) {
+      //   let _obj = this.buildWhereInOperator({
+      //     value: _value,
+      //     field: searchF,
+      //     operator: searchOperator,
+      //   })
+      //   _arr.push(_obj)
+      // }
+      // }
+      let obj1 = {
+        field: searchF,
+        operator: searchOperator,
+        value: data[searchF],
+      }
+      if (obj1.value != null) {
+        _arr.push(obj1)
       }
     }
-    return _arr //
+    let q = this.buildQuery(_arr)
+    return q //
   } //
   buildWhereInOperator(config: any) {
     return {}
+  }
+  setCurrentEdit() {
+    this.setCurrentDesignState('edit')
+  }
+  setCurrentView() {
+    this.setCurrentDesignState('scan')
   }
   setCurrentDesignState(state) {
     if (['scan', 'edit'].indexOf(state) == -1) {
       return
     }
+    this.tableState = state
     let allTableName = this.getAllTableName()
     allTableName.forEach((tableName) => {
       let table = this.getRef(tableName)
@@ -820,11 +883,12 @@ export class PageDesign extends Form {
     // console.log(config, 'testConfig') ////
     let tName = this.getRealTableName()
     let http = this.getHttp()
-    await http.runCustomMethod(tName, 'batchUpdate', config)//批量更新//
+    await http.runCustomMethod(tName, 'batchUpdate', config) //批量更新//
     this.getSystem().confirmMessage('数据保存成功', 'success') //
-    this.getTableData()//
+    this.getTableData() //
+    this.setCurrentView() //
   }
-  async updateTableColumn(config) {
+  async updateTableColumn(config, refresh = true) {
     //
     let id = config.id
     if (id == null) {
@@ -832,7 +896,19 @@ export class PageDesign extends Form {
     } //
     let http = this.getHttp()
     await http.patch('columns', config) //
-    this.getSystem().confirmMessage('列数据更新成功', 'success') ////
-    this.getSystem().refreshPageDesign() //
+    if (refresh == true) {
+      this.getSystem().confirmMessage('列数据更新成功', 'success') ////
+      this.getSystem().refreshPageDesign() //
+    }
+  } //
+  onBeforeEditCell(config) {
+    let tableState = this.tableState
+    // console.log('编辑之前我做了这些处理') //
+    if (tableState == 'scan') {
+      return false //
+    }
+  }
+  onColumnResize(config) {
+    //
   }
 }

@@ -24,6 +24,7 @@ import { useResizeObserver } from '@vueuse/core'
 import TableFitlerCom from './tableFilterCom'
 import InputCom from '@/input/inputCom'
 import { Table } from './table'
+import { VxeLoading } from 'vxe-pc-ui'
 
 // new ListTable()
 //核心表格组件
@@ -130,12 +131,25 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    disableColumnResize: {
+      type: Boolean,
+      default: false,
+    },
+    onColumnResize: {
+      type: Function,
+    },
     onHeaderContextmenu: {
       type: Function,
     },
     onDesignColumn: {
       type: Function,
     }, //
+    onBeforeEditCell: {
+      type: Function,
+    },
+    onAfterEditCell: {
+      type: Function,
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any
@@ -438,6 +452,9 @@ export default defineComponent({
           ],
         ],
       )
+      let loadingCom = (
+        <VxeLoading modelValue={tableIns.pageLoading}></VxeLoading>
+      )
       let outCom = (
         <div
           style={{
@@ -449,6 +466,7 @@ export default defineComponent({
             position: 'relative',
           }}
         >
+          {loadingCom}
           {filterTCom}
           {menuCom}
           {btnCom}

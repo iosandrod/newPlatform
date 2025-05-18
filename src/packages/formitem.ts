@@ -234,10 +234,10 @@ export class FormItem extends Base {
     ] as any
     return obj
   }
-  getRowIndex() {
+  getRowIndex(_items1?: any[]) {
     let form = this.form
-    let items = form.items
-    let curIndex = items.findIndex((item) => item === this)
+    let items = _items1 || form.items
+    let curIndex = items.findIndex((item: any) => item === this)
     if (curIndex === -1) {
       curIndex = items.length //
     }
@@ -287,7 +287,7 @@ export class FormItem extends Base {
     return config
   }
   getDisabled() {
-    let disables = this.config?.options?.disabled
+    let disables = this.config?.disabled
     return disables //
   }
   getClearable() {
@@ -1011,4 +1011,13 @@ export class FormItem extends Base {
     let arr = selectop[tableName] || []
     return arr //
   }
+  getTabTitle() {
+    let config = this.config
+    let tabTitle = config.tabTitle
+    if (tabTitle == null) {
+      return '表单'
+    }
+    return tabTitle
+  } //
+  onColumnResize(config) {}
 }

@@ -23949,6 +23949,8 @@ export const menuTConfig = {
       width: 150,
       sort: true,
       type: 'string',
+      editType:'string',
+
     },
     { field: 'url', title: '链接', width: 200, sort: false, type: 'string' },
     { field: 'icon', title: '图标', width: 100, sort: false, type: 'string' },

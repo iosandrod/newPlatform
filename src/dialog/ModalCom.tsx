@@ -81,6 +81,7 @@ const lockScrollCssWidthKey = '--vxe-ui-modal-lock-scroll-view-width'
 export default defineComponent({
   name: 'VxeModal',
   props: {
+    buttons: {},
     createDefaultFn: {
       type: Function, //
     },

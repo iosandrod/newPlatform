@@ -114,4 +114,8 @@ export class PageDesignItem extends FormItem {
     let options = this.getOptions()
     return options.mainRelateKey
   }
+  onColumnResize(_config) {
+    let f=this.form
+    f.onColumnResize(_config)
+  }
 }

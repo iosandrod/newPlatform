@@ -2,6 +2,7 @@ import { Base } from '@/base/base'
 import { Button } from './button'
 
 export class itemGroup extends Base {
+  tableName?:any
   config
   items: Button[] = []
   _class: any

@@ -165,7 +165,7 @@ export class Column extends Base {
       let { height, width } = rect ?? table.getCellRect(col, row)
       let container = createGroup({
         height: height,
-        stroke: 'RGB(30, 40, 60)', //
+        stroke: this.getBorderColor(), //
         width: width,
         flexWrap: 'nowrap',
         overflow: 'hidden',
@@ -508,11 +508,11 @@ export class Column extends Base {
     return formatFn
   }
   getIndexColor(row, record?: any) {
-    let color = 'RGB(248, 248, 248)'
+    let color = 'rgb(255,255,255)'
     if (row % 2 == 0) {
-      color = 'RGB(236, 241, 245)'
+      color = 'rgb(255,255,255)'
     } else {
-      color = 'RGB(248, 248, 248)'
+      color = 'rgb(249,250,251)'
     }
     let bgColor = this.getBgColor()
     if (typeof bgColor == 'function') {
@@ -579,7 +579,7 @@ export class Column extends Base {
       title: this.getTitle(), //
       cellType: this.getType(),
       headerStyle: {
-        borderColor: 'rgb(30,40,60)', //
+        borderColor: this.getBorderColor(), //
       },
       sort: () => {
         return 0
@@ -588,7 +588,7 @@ export class Column extends Base {
        */
       fieldFormat: _this.getFormat(),
       style: {
-        borderColor: 'rgb(30,40,60)',
+        borderColor: this.getBorderColor(),
       },
       headerCustomLayout: this.getHeaderCustomLayout(), //
       editor: edit, ////
@@ -1033,10 +1033,10 @@ export class Column extends Base {
     return 'RGB(204, 224, 255)'
   }
   getBorderColor() {
-    return 'RGB(30, 40, 60)' //
+    return 'rgb(229,231,235)' //
   }
   getCurrentRowColor(_bg?: string) {
-    let bg = _bg || 'RGB(204, 224, 255)'
+    let bg = _bg || 'rgb(239,246,255)'
     return bg
   }
   getCustomLayout() {

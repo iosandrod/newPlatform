@@ -13,6 +13,7 @@ export const defaultType = (item: FormItem): any => {
     onFocus: (config) => {
       item.onFocus(config)
     },
+    disabled: item.getDisabled(), //
     clearable: item.getClearable(), //
   }
 } //
@@ -28,7 +29,7 @@ export const inputType = (item: FormItem) => {
   }
   if (obj.type == 'search') {
     //
-    obj.onSearchClick=(e)=>{
+    obj.onSearchClick = (e) => {
       item.onSearchClick(e)
     }
   }

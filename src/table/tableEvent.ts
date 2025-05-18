@@ -56,7 +56,7 @@ export const click_cell = (table: Table) => {
   table.registerEvent({
     name: 'click_cell',
     keyName: 'click_cell',
-    callback: (config) => {
+    callback: async (config) => {
       table.isContainerClick = true
       setTimeout(() => {
         table.isContainerClick = false
@@ -68,23 +68,40 @@ export const click_cell = (table: Table) => {
       let tCol = table.getLastFlatColumns().find((col) => {
         return col.getField() === field
       })
-      if (tCol != null) {
-        table.clearEditCell() //
+      if (tCol != null && table.tableState == 'edit') {
+        //
+        table.clearEditCell()
         if (tCol.getIsEditField()) {
           //是编辑的列数据//
           let curEdit = table.getCurrentCellEdit()
           if (curEdit != null) {
             table.clearEditCell() //
           }
-          setTimeout(() => {
-            if (originData == null) {
-              return
-            }
-            table.currentEditCol = tCol
-            _this.startEditCell(config.col, config.row, config.value)
-          }, 50) //
-          return
+          let p = new Promise((resolve, reject) => {
+            setTimeout(() => {
+              if (originData == null) {
+                resolve(true) //
+              }
+              table.currentEditCol = tCol
+              let s = _this.startEditCell(config.col, config.row, config.value)
+              if (s == false) {
+                resolve(false)
+              }
+              resolve(true)
+            }, 50) //
+          })
+          let _p = await p
+          if (_p == false) {
+            //
+            table.setCurRow(originData) ////
+          }
+        } else {
+          if (originData == null) {
+            return //
+          }
+          table.setCurRow(originData)
         }
+        return //
       }
       if (field == 'checkboxField') {
       } //
@@ -221,25 +238,24 @@ export const checkbox_state_change = (table: Table) => {
         if (config.field == 'checkboxField') {
           table.updateCheckboxField([originData]) ////
         } else {
-          let _col = table.columns.find(col => {
-            let f = col.getField()//
+          let _col = table.columns.find((col) => {
+            let f = col.getField() //
             return config.field == f
           })
-          let checked = config.checked//
+          let checked = config.checked //
           if (_col != null) {
-            // debugger//
             if (checked == true) {
               checked = 1
             } else {
-              checked = 0//
+              checked = 0 //
             }
             let s = await _col.updateBindValue({
               value: checked,
               row: originData,
-              field: config.field//
+              field: config.field, //
             })
             if (s == true) {
-              originData['_rowState'] = 'change'//
+              originData['_rowState'] = 'change' //
             }
           }
         }
@@ -253,7 +269,7 @@ export const checkboxChange = (table: Table) => {
   table.registerEvent({
     name: 'checkboxChange',
     keyName: 'checkboxChange',
-    callback: (config) => { },
+    callback: (config) => {},
   })
 }
 
@@ -281,13 +297,34 @@ export const resize_column = (table: Table) => {
       rowCols.config.width = colWidth //
     },
   })
+  table.registerEvent({
+    name: 'resize_column_end',
+    keyName: 'resize_column_end',
+    callback: (config) => {
+      let _col = table.currentResizeField
+      let _col1 = table.getFlatColumns().find((col) => {
+        return col.getField() == _col
+      })
+      if (_col1 == null) {
+        return
+      } //
+      let w = _col1.getColumnWidth()
+      table.currentResizeField = null //
+      table.onColumnResize({
+        column: _col,
+        width: w,
+        originColumn: _col1.config, //
+        tableName: table.getTableName(), //
+      }) //
+    },
+  })
 } //
 export const mousedown_cell = (table: Table) => {
   const _this = table
   table.registerEvent({
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
-    callback: (config) => { },
+    callback: (config) => {},
   })
 }
 

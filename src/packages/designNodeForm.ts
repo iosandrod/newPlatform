@@ -72,8 +72,26 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
             label: '查询',
             value: 'openSearchDialog', //
           }, //
+          {
+            label: '进入编辑',
+            value: 'setCurrentEdit',
+          },
+          {
+            label: '退出编辑',
+            value: 'setCurrentView',
+          },
+          {
+            label: '刷新',
+            value: 'getTableData',
+          },
         ],
       }, //
+      {
+        field: 'disabledFn',
+        title: '禁用脚本',
+        type: 'code',
+        editType: 'code',
+      },
     ],
     treeConfig: {
       id: 'id',
@@ -325,7 +343,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => { } //
+        _d['_items_set'] = (v) => {} //
         return _d //
       }),
     },

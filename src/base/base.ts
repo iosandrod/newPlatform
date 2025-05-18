@@ -11,6 +11,7 @@ import { Router } from 'vue-router'
 import { PageDesign } from '@ER/pageDesign'
 export const workerPool = pool.pool()
 export class Base {
+  pageLoading = false
   _once: { [key: string]: boolean } = {}
   cacheMethod: {
     [key: string]: { before?: Array<any>; after?: Array<any> }
@@ -169,4 +170,7 @@ export class Base {
     }
     re['_rowState'] = state
   } //
+  setCurrentLoading(loading: boolean) {
+    this.pageLoading = loading ////
+  }
 }

@@ -19,6 +19,7 @@ export default defineComponent({
   },
   setup(props) {
     const ns = hooks.useNamespace('TabsLayout')
+    // debugger//
     if (!props.data.options.defaultValue) {
       props.data.options.defaultValue = props.data.columns[0].id
     }

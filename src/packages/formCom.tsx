@@ -15,6 +15,10 @@ import defaultProps from './formEditor/defaultProps'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 const getDefaultFormEditProps = () => {
   return {
+    isTabForm: {
+      type: Boolean,
+      default: false,
+    },
     itemSpan: {
       type: Number,
       default: 6,

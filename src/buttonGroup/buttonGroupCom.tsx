@@ -14,6 +14,7 @@ import dropdownCom from '@/menu/dropdownCom'
 import { VxeTable } from 'vxe-table'
 import { Contextmenu, ContextmenuItem } from '@/contextM'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
+import { PageDesign } from '@ER/pageDesign'
 export default defineComponent({
   name: 'buttonGroupCom',
   components: {
@@ -76,6 +77,11 @@ export default defineComponent({
         }
       },
     )
+    let mainPage:PageDesign = inject('mainPageDesign', null)
+    if(mainPage!=null){
+      let tName=mainPage.getTableName()
+      group.tableName=tName
+    }
     const runBtnFn = (el: Button) => {
       //
       el.runFn({
@@ -94,10 +100,15 @@ export default defineComponent({
           height={27}
           v-slots={{
             item: (el: Button) => {
-              let btn = el.config.button
+              let btn = el.config.button//
+              let disabled = btn.getDisabled()
               let com = (
                 <div
-                  class="v-contextmenu"
+                  class={{
+                   'v-contextmenu': true,
+                    'is-disabled': disabled,
+                    // 'cursor-pointer': true,//
+                  }}
                   style={{
                     minWidth: `${btn.getButtonWidth()}px`,
                     position: 'relative',

@@ -55,9 +55,47 @@ export class Button extends Base {
       return obj
     })
   }
+  //@ts-ignore
+  getMainPageDesign() {
+    let g = this.group
+    let tName = g.tableName
+    let sys = this.getSystem()
+    let targetDesign = sys.tableMap[tName] || sys.tableEditMap[tName]
+    return targetDesign
+  }
   getDisabled() {
     let config = this.config
     let disabled = Boolean(config.disabled === true)
+    let disabledFn = config.disabledFn
+    if (typeof disabledFn == 'function') {
+      try {
+        let _d = disabledFn()
+        if (_d == true) {
+          disabled = true
+        }
+      } catch (error) {
+        console.error('禁用脚本报错')
+      }
+    }
+    if (typeof disabledFn == 'string') {
+      //
+      let _fn = stringToFunction(disabledFn)
+      if (typeof _fn == 'function') {
+        try {
+          let _d = _fn({
+            page: this.getMainPageDesign(),
+            curRow: this.getMainPageDesign()?.getCurRow(),
+            parent: this.getParent(), //
+          })
+          if (_d == true) {
+            disabled = true
+          }
+        } catch (error) {
+          console.error('按钮禁用脚本报错') //
+          console.error(error) //
+        }
+      }
+    }
     return disabled
   }
   hiddenDropdown() {
@@ -96,6 +134,21 @@ export class Button extends Base {
         let page: PageDesign = config.page
         await page.saveTableData() //
       }, //
+      setCurrentEdit: async (config) => {
+        //
+        let page: PageDesign = config.page
+        await page.setCurrentEdit() //
+      },
+      setCurrentView: async (config) => {
+        //
+        let page: PageDesign = config.page
+        await page.setCurrentView() //
+      }, //
+      getTableData: async (config) => {
+        //
+        let page: PageDesign = config.page
+        await page.getTableData() ////
+      },
     }
     return obj //
   }

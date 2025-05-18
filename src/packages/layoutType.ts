@@ -80,6 +80,8 @@ export type FieldOptions = {
 }
 
 export type Field = {
+  tabTitle?: string
+  disabled?: boolean
   showTitle?: boolean
   itemChange?: any
   eventMap?: any //

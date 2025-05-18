@@ -99,7 +99,10 @@ export function stringToFunction<T extends (...args: any[]) => any>(
 ): T | null {
   try {
     if (!str.trim()) {
-      throw new Error('函数字符串不能为空')
+      return null
+    }
+    if (Boolean(str) == false) {
+      return null //
     }
     // 检测是否是一个箭头函数
     const isArrowFunction = str.includes('=>')
