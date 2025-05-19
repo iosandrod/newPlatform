@@ -122,6 +122,22 @@ export class TabItem extends Base {
     console.log(index, 'testDindex')
     this.dragConfig.dragIndex = index
   }
+  getTabName() {
+    let config = this.config
+    let name = config.name
+    if (name == null) {
+      name = this.id
+    }
+    return name
+  }
+  getItemProp() {
+    //
+    let name = this.getTabName()//
+    let obj = {//
+      name,
+    }
+    return obj
+  }
   getSlotItemStyle() {
     let style: any = {
       width: '100%',

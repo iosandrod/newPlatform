@@ -123,9 +123,9 @@ export const click_cell = (table: Table) => {
         let row = config.row
         let col = config.col
         let title = config.title
-        table.clearEditCell()
-        setTimeout(() => {
-          table.startEditCell(col, row, title) //
+        table.clearEditCell()//
+        setTimeout(() => {////
+          table.startEditCell(col, row, title, true) //
         }, 10)
       }
     },
@@ -269,7 +269,7 @@ export const checkboxChange = (table: Table) => {
   table.registerEvent({
     name: 'checkboxChange',
     keyName: 'checkboxChange',
-    callback: (config) => {},
+    callback: (config) => { },
   })
 }
 
@@ -324,7 +324,7 @@ export const mousedown_cell = (table: Table) => {
   table.registerEvent({
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
-    callback: (config) => {},
+    callback: (config) => { },
   })
 }
 

@@ -750,18 +750,19 @@ export class Table extends Base {
   }
   updateSelectRange() {
     let ins = this.getInstance() //
-    console.time('updateSelectRange') //
+    let _id = this.uuid()
+    console.time(_id) //
     let _select = ins.getSelectedCellRanges()
     let t = this.templateEditCell
     let t1 = this.runClearSelect
-    // debugger//
     if (t || t1) {
-      // ins.clearSelected() //
       this.runClearSelect = false //
       return
     }
+    console.log(_select, 'test_selelct')//
     ins.selectCells(_select) //
-    console.timeEnd('updateSelectRange') ////
+    console.timeEnd(_id) //
+    console.log('消耗时间')//
   }
   updateCheckboxRecords() {
     let ins = this.getInstance()
@@ -1317,6 +1318,7 @@ export class Table extends Base {
     this.currentIndexContain = shallowRef({}) //
     instance.setRecords(records)
     console.timeEnd(id)
+    console.log('视图更新时间')//
   }
   addAfterMethod(config) {
     config.type = 'after' //
@@ -1763,35 +1765,40 @@ export class Table extends Base {
     })
     return _col
   }
-  startEditCell(col, row, value) {
-    let ins = this.getInstance() //
-    let tCol = this.getTargetColumn(col, row)
-    if (tCol.getEditType() == 'boolean') {
-      ins.clearSelected() //
-      return
-    }
-    // debugger//
-    let config = this.config
-    let beforeEditCell = config.onBeforeEditCell
-    if (typeof beforeEditCell == 'function') {
-      let re = ins.getRecordByCell(col, row)
-      let f = ins.getBodyField(col, row)
-      // debugger
-      let _status = beforeEditCell({
-        row: re,
-        field: f,
-        value: value,
-      })
-      if (_status == false) {
-        return false
+  startEditCell(col, row, value, isTitle = false) {
+    try {
+
+
+      let ins = this.getInstance() //
+      let tCol = this.getTargetColumn(col, row)
+      if (tCol.getEditType() == 'boolean') {
+        ins.clearSelected() //
+        return
       }
+      let config = this.config
+      let beforeEditCell = config.onBeforeEditCell
+      if (typeof beforeEditCell == 'function') {
+        let re = ins.getRecordByCell(col, row)
+        let f = ins.getBodyField(col, row)
+        let _status = beforeEditCell({
+          row: re,
+          field: f,
+          value: value,
+        })
+        if (_status == false && isTitle == false) {
+          return false
+        }
+      }
+      this.templateEditCell = { col: col, row: row, value: value }
+      ins.startEditCell(col, row, value) //
+      ins.clearSelected() ////
+    } catch (error) {
+      console.error(error)
+      console.log(row, col, '编辑报错')//
     }
-    this.templateEditCell = { col: col, row: row, value: value }
-    ins.startEditCell(col, row, value) //
-    ins.clearSelected() ////
   }
   clearEditCell() {
-    // debugger//
+    // debugger////
     let currentEditCol = this.currentEditCol
     let disableHideCell = currentEditCol?.disableHideCell
     if (disableHideCell == true) {
@@ -1806,9 +1813,9 @@ export class Table extends Base {
     let ins = this.getInstance()
     ins.completeEditCell()
     this.runClearSelect = true
-    setTimeout(() => {
-      ins.clearSelected()
-    }, 300)
+    // setTimeout(() => {
+    //   ins.clearSelected()
+    // }, 300)
     // setTimeout(() => {
     //   console.time('setColWidth')
     //   // ins.clearSelected()//
@@ -1864,7 +1871,7 @@ export class Table extends Base {
   blur() {
     nextTick(() => {
       this.clearValidate()
-      this.clearEditCell() //
+      // this.clearEditCell() //
     })
   }
   showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }

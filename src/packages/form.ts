@@ -1023,6 +1023,10 @@ export class Form extends Base {
   }
   addField(node) {
     let state = this.state
+    let type = node.type
+    if (type == 'buttonGroup') {
+      node.type = 'buttongroup'//
+    }
     if (utils.checkIsField(node)) {
       const findIndex = _.findIndex(state.fields, {
         id: node.id,

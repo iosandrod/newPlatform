@@ -57,7 +57,7 @@ export class Menu extends Base {
     })
     this.isOpenAll = true
   }
-  openItem(keys: any) {} //
+  openItem(keys: any) { } //
   getMenuDefaultOpeneds() {
     let _items = null
     _items = this.config.defaultOpeneds || []
@@ -81,6 +81,13 @@ export class Menu extends Base {
       this.addMenuItem(item)
     }
   }
+  onItemClick(item: any) {
+    let config = this.config
+    let onItemClick = config.onItemClick
+    if (typeof onItemClick == 'function') {
+      onItemClick(item.config)//
+    }
+  }
   getLastMenuItems() {
     let items = this.menuitems.map((item) => item.getLastMenuItems()).flat()
     return items
@@ -90,5 +97,5 @@ export class Menu extends Base {
     let menuitems = this.menuitems
     menuitems.push(item) //
   }
-  removeMenuItem(id: any) {}
+  removeMenuItem(id: any) { }
 }

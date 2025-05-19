@@ -37,8 +37,8 @@ export default defineComponent({
     })
     if (_tableName.length == 2) {
       let _tableName1 = _tableName[0]
-      tableName = _tableName1 //
-      system.createPageEditDesign(tableName).then((res) => {
+      let tableName1 = _tableName1 //
+      system.createPageEditDesign(tableName1).then((res) => {
         show.value = true //
       }) //
     } else {
@@ -48,11 +48,13 @@ export default defineComponent({
     } //
     let _show = computed(() => {
       let map = null
-      if (l == 2) {
-        map = system.tableEditMap
-      } else {
-        map = system.tableMap
-      }
+      let _map = { ...system.tableMap, ...system.tableEditMap }
+      map = _map //
+      // if (l == 2) {
+      //   map = system.tableEditMap
+      // } else {
+      //   map = system.tableMap
+      // }
       let obj = map[tableName]
       if (obj == null) {
         return false

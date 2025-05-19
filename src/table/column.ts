@@ -1352,6 +1352,7 @@ export class Column extends Base {
     return null //
   }
   openCodeDialog(config) {
+    let tableName = this.getTableName()
     this.disableHideCell = true
     let codeConfig = this.getCodeConfig() //
     let sys = this.getSystem() //
@@ -1363,6 +1364,7 @@ export class Column extends Base {
         props: {
           ...codeConfig,
           modelValue: value,
+          tableName,
         },
       }
     }
@@ -1382,7 +1384,7 @@ export class Column extends Base {
         }
       },
       closeFn: () => {
-        this.disableHideCell = false
+        this.disableHideCell = false//
       },
     })
   }

@@ -4,6 +4,7 @@ import { Table } from '@/table/table'
 import { Column } from '@/table/column'
 
 export const getButtonGroupTableConfig = (_this?: PageDesign) => {
+  let tableName = _this.getRealTableName()
   let obj = {
     showTable: true,
     tableState: 'edit',
@@ -36,6 +37,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         field: 'fn',
         title: '执行脚本',
         type: 'code',
+        tableName: tableName,//
         editType: 'code', //
       },
       {
@@ -343,7 +345,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => {} //
+        _d['_items_set'] = (v) => { } //
         return _d //
       }),
     },

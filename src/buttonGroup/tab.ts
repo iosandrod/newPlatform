@@ -71,7 +71,21 @@ export class Tab extends Base {
   getModelValue() {
     let config = this.config
     let modelValue = config.modelValue
+    // debugger////
     return modelValue
+  }
+  onTabChange(id) {
+    let items = this.tabitems
+    let item = items.find(item => item.getTabName() == id)
+    let _config = this.config
+    let onTabChange = _config.onTabChange
+    this.currentItem = item//
+    if (typeof onTabChange == 'function') {
+      let config = item.config
+      onTabChange({
+        item: config//
+      })//
+    }
   }
   getDragProps() {
     let obj: any = {}
@@ -138,5 +152,5 @@ export class Tab extends Base {
     let rItems = [...oldItems, ..._items]
     return rItems //
   }
-  closeByCurrent(type) {}
+  closeByCurrent(type) { }
 }

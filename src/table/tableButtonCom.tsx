@@ -52,8 +52,23 @@ export default defineComponent({
           label: '启用加载状态',
           fn: async () => {
             //
-            // tableIns.setCurrentLoading(true)
-            tableIns.expandAllTreeRow() //
+            tableIns.setCurrentLoading(true)
+            // tableIns.expandAllTreeRow() //
+          },
+        },
+        {
+          label: '禁用加载状态',
+          fn: async () => {
+            //
+            tableIns.setCurrentLoading(false)
+            // tableIns.expandAllTreeRow() //
+          },
+        },
+        {
+          label: '刷新',
+          fn: async () => {
+            //
+            tableIns.updateCanvas()
           },
         },
       ] //

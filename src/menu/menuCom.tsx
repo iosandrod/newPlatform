@@ -4,7 +4,6 @@ import { Menu } from './menu'
 import { MenuItem } from './menuitem'
 import {} from 'vue'
 import { menuProps } from 'element-plus'
-import { el } from 'element-plus/es/locale'
 const subMenu = defineComponent({
   name: 'subMenu',
   components: {},
@@ -32,6 +31,7 @@ const subMenu = defineComponent({
           <ElMenuItem
             {..._config}
             teleported={true}
+            onClick={(config) => item.onClick(config)}
             v-slots={{
               title: () => {
                 let itemSlots = slots.itemTitle
@@ -107,6 +107,9 @@ export default defineComponent({
     isShowSearch: {
       type: Boolean,
       default: false,
+    },
+    onItemClick: {
+      type: Function,
     },
   },
   setup(props, { expose, slots }) {

@@ -120,6 +120,10 @@ export class PageDesign extends Form {
     }
   }
   addFormItem(config): any {
+    let type = config.type
+    if (type == 'buttonGroup') {
+      config.type = 'buttongroup'//
+    }
     let _item = new PageDesignItem(config, this) //
     if (config.type == 'entity') {
       let options = config.options
@@ -199,7 +203,6 @@ export class PageDesign extends Form {
         tableName: getDataConfig,
       }
     }
-    console.log(getDataConfig, 'testGetDataConfig') //
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
     let query = getDataConfig.query || {}
@@ -311,7 +314,7 @@ export class PageDesign extends Form {
     let id = config.id
     if (id == null) {
       await this.createTableDesign()
-    } else {
+    } else {//
       await this.updateTableDesign()
     }
     nextTick(() => {
@@ -482,6 +485,7 @@ export class PageDesign extends Form {
     }
   }
   getTableCnName() {
+    // debugger//
     let config = this.getTableConfig()
     let tableCnName = config.tableCnName || this.getTableName() //
     return tableCnName //
@@ -623,16 +627,22 @@ export class PageDesign extends Form {
           return false //
         }),
         disabled: false,
-      }, //
+      }, {
+        label: "设计其他",
+        fn: async () => {
+          console.log('设计其他')//
+        }
+      },
       {
         label: '设计按钮',
         fn: async () => {
           this.designMainButtons(this.currentContextItem) //
         },
         visible: computed(() => {
+          // debugger//
           let currentItem = this.currentContextItem
           let _type = currentItem?.config?.type
-          if (_type == 'buttonGroup') {
+          if (_type == 'buttongroup') {//
             return true
           }
           return false //
@@ -649,11 +659,11 @@ export class PageDesign extends Form {
     let options = _item.getOptions()
     let items = options?.items
     if (!Array.isArray(items)) {
-      options.items = [] //
+      options.items = [] // 
       items = options.items
     }
     items = _.cloneDeep(items)
-    let tableConfig: any = getButtonGroupTableConfig() //
+    let tableConfig: any = getButtonGroupTableConfig(this) //
     tableConfig.data = items
     tableConfig.height = 500
     tableConfig.width = 800
@@ -663,6 +673,8 @@ export class PageDesign extends Form {
     await this.getSystem().updateCurrentPageDesign()
   }
   openContextMenu(e, _item?: any) {
+    // debugger//
+    // debugger//
     this.currentContextItem = _item //
     let menu: BMenu = this.getRef('mainContextMenu')
     if (menu == null) {
@@ -676,7 +688,8 @@ export class PageDesign extends Form {
     return {
       label: cnName,
       value: tName,
-      tableName: tName,
+      tableName: tName,//
+      name: tName,
       order: this.tabOrder,
     }
   }

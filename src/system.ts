@@ -74,6 +74,17 @@ export class System extends Base {
     return _items
   }
   _getCacheValue(key) { }
+  getTabModelValue() {
+    let route = this.getRouter()
+    let r = route.currentRoute
+    let path = r.fullPath
+    let _p = path.split('/')
+    let p1 = _p.pop()
+    if (Boolean(p1) == false) {
+      p1 = _p.pop()
+    }//
+    return p1//
+  }
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap).map((row) => {
@@ -87,8 +98,19 @@ export class System extends Base {
       let oa = a.order || 0
       let ob = b.order || 0
       return oa - ob
-    })
-    return allT2
+    })//
+    let _allT2 = [//
+      {
+        label: '首页',
+        value: 'home',
+        tableName: 'home',
+      }, {
+        label: '登录',
+        value: 'login',
+        tableName: 'login',//
+      }
+    ]
+    return _allT2//
   }
   openPageDesign(config) { } //
 
@@ -454,6 +476,9 @@ export class System extends Base {
     this.tableMap[tableName] = pageDesign //
     return pageDesign
   }
+  async onMainTabChange(config) {
+    console.log(config, 'testConfig')//
+  }
   async createPageEditDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {
       config = {
@@ -461,7 +486,12 @@ export class System extends Base {
       }
     }
     let tableName = config.tableName
-    let editTableName = `${tableName}---edit` //
+    let editTableName = tableName
+    if (!/edit$/.test(tableName)) {
+      editTableName = `${tableName}---edit` //
+    } else {
+      tableName = editTableName.split('---')[0]
+    }
     let _design = this.tableEditMap[editTableName] //
     if (_design) {
       return _design //
@@ -908,7 +938,7 @@ export class System extends Base {
     this.refreshPageDesign(_config.tableName) //
   }
   async refreshPageDesign(tableName?: any) {
-    //
+    // debugger//
     if (tableName == null) {
       tableName = this.getCurrentPageName()
     }
@@ -1045,6 +1075,18 @@ export class System extends Base {
     let http = this.getClient()
     await http.logoutUser() //
   }
+  async onMenuItemClick(item) {
+    // console.log('左侧菜单点击', item)//
+    let tableName = item.tableName
+    if (Boolean(tableName) == false) {//
+      return
+    }//
+    let _d = await this.getHttp().hTable(tableName)
+    if (_d == false) {
+      return
+    }//
+    this.routeOpen(tableName)//
+  }
   getIsLogin() {
     let loginConfig = this.loginInfo
     if (loginConfig == null) {
@@ -1075,7 +1117,7 @@ export class System extends Base {
         fn: async () => {
           await this.designCurrentPageConfig()
         },
-      },
+      },//
       {
         label: '查询表单设计',
         fn: async () => {

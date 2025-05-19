@@ -12,6 +12,9 @@ export default defineComponent({
     height: {
       type: Number,
     },
+    onTabChange: {
+      type: Function, //
+    },
     items: {
       type: Array,
       default: (): any[] => [],
@@ -65,7 +68,7 @@ export default defineComponent({
         } else {
           tabIns.setItems(newValue) //
         }
-      },
+      }
     )
     watch(
       //
@@ -75,7 +78,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      },
+      }
     )
     let ns = tabIns.hooks.useNamespace('tabCom')
     const register = (el) => {
@@ -93,12 +96,7 @@ export default defineComponent({
       let context = null
       if (props.showContextMenu == true) {
         //
-        context = (
-          <ContextmenuCom
-            ref={registerContext}
-            items={tabIns.getContextItems()}
-          ></ContextmenuCom>
-        )
+        context = <ContextmenuCom ref={registerContext} items={tabIns.getContextItems()}></ContextmenuCom>
       }
       let _class = ns.b()
       if (props.useDefaultClass == true) {
@@ -112,6 +110,9 @@ export default defineComponent({
             style={{ height: `${tabIns.getTabHeight()}` }}
             class={_class}
             {...tabIns.getBindConfig()}
+            onTabChange={(el) => {
+              tabIns.onTabChange(el)
+            }}
             v-slots={{
               default: () => {
                 let comArr = tabIns.tabitems.map((el, index) => {
@@ -181,11 +182,7 @@ export default defineComponent({
                           style={{
                             position: 'relative',
                             height: '100%',
-                            width: `${
-                              el.dragConfig.rootWidth
-                                ? `${el.dragConfig.rootWidth}px`
-                                : ''
-                            }`,
+                            width: `${el.dragConfig.rootWidth ? `${el.dragConfig.rootWidth}px` : ''}`,
                           }}
                         >
                           <div
@@ -211,12 +208,11 @@ export default defineComponent({
                   let com = null
                   com = (
                     <div>
-                      <ElTabPane v-slots={_slots}></ElTabPane>
+                      <ElTabPane {...el.getItemProp()} v-slots={_slots}></ElTabPane>
                     </div>
                   )
                   return com
-                })
-
+                }) //
                 return comArr
               },
             }}

@@ -44,9 +44,16 @@ export class MenuItem extends Base {
     const obj = {
       index: `${id}`, //
       teleported: true, //
+
     }
     return obj
   }
+  onClick(config) {
+    //
+    let _config = this.config//
+    let menu = this.menu//
+    menu.onItemClick(this)//
+  }//
   getLabel() {
     let config = this.config
     let label = config.label //

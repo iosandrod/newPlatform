@@ -24001,7 +24001,9 @@ export const menuTConfig1 = {
     width: 200,
     sort: true,
     type: 'string',
+    editType: "string",
   }],
+  tableState: "edit",
   data: [
     {
       "title": "permissions",
