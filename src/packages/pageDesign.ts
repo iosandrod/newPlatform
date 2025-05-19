@@ -910,6 +910,9 @@ export class PageDesign extends Form {
   onColumnResize(config) {
     //
   }
+  printCurrentPage() {
+    console.log('开始打印')//
+  }
   getColumnSelectTreeData() {//
     let allTableConfig = this.tableConfigMap
     let allCols = Object.values(allTableConfig).map((t: any) => {

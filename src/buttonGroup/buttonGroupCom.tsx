@@ -1,13 +1,7 @@
 import { itemGroup } from '@/buttonGroup/buttonGroup'
 import { defineComponent, inject, toRaw, watch } from 'vue'
 import tabCom from '@/buttonGroup/tabCom'
-import {
-  ElButton,
-  ClickOutside,
-  ElMenu,
-  ElMenuItem,
-  ElSubMenu,
-} from 'element-plus'
+import { ElButton, ClickOutside, ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
 import { Button } from './button'
 import MenuCom from '@/menu/menuCom'
 import dropdownCom from '@/menu/dropdownCom'
@@ -23,7 +17,7 @@ export default defineComponent({
     MenuCom,
     ContextmenuItem,
     ContextmenuCom,
-  },  
+  },
   directives: {
     ClickOutside,
   },
@@ -75,12 +69,12 @@ export default defineComponent({
         for (const item of delItems) {
           group.delItem(item)
         }
-      },
+      }
     )
-    let mainPage:PageDesign = inject('mainPageDesign', null)
-    if(mainPage!=null){
-      let tName=mainPage.getTableName()
-      group.tableName=tName
+    let mainPage: PageDesign = inject('mainPageDesign', null)
+    if (mainPage != null) {
+      let tName = mainPage.getTableName()
+      group.tableName = tName
     }
     const runBtnFn = (el: Button) => {
       //
@@ -100,12 +94,12 @@ export default defineComponent({
           height={27}
           v-slots={{
             item: (el: Button) => {
-              let btn = el.config.button//
+              let btn = el.config.button //
               let disabled = btn.getDisabled()
               let com = (
                 <div
                   class={{
-                   'v-contextmenu': true,
+                    'v-contextmenu': true,
                     'is-disabled': disabled,
                     // 'cursor-pointer': true,//
                   }}
@@ -122,7 +116,7 @@ export default defineComponent({
                 </div>
               )
               let com1 = null
-              if (btn.buttons.length > 0) {
+              if (btn?.buttons?.length > 0) {
                 com = (
                   <dropdownCom
                     ref={(el) => btn.registerRef('dropdown', el)}
@@ -160,11 +154,7 @@ export default defineComponent({
                                 const btn = item.button
                                 let disabled = btn.getDisabled()
                                 return (
-                                  <div
-                                    class={[{ 'is-disabled': disabled }]}
-                                    style={{ width: '100%' }}
-                                    onClick={() => runBtnFn(btn)}
-                                  >
+                                  <div class={[{ 'is-disabled': disabled }]} style={{ width: '100%' }} onClick={() => runBtnFn(btn)}>
                                     {btn.getLabel()}
                                   </div>
                                 ) //

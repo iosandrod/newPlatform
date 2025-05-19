@@ -1,16 +1,4 @@
-import {
-  defineComponent,
-  h,
-  Teleport,
-  ref,
-  onUnmounted,
-  reactive,
-  inject,
-  computed,
-  nextTick,
-  watch,
-  createCommentVNode,
-} from 'vue'
+import { defineComponent, h, Teleport, ref, onUnmounted, reactive, inject, computed, nextTick, watch, createCommentVNode } from 'vue'
 import XEUtils from 'xe-utils'
 import { getConfig, globalEvents, createEvent, useSize } from 'vxe-pc-ui/es/ui'
 import { getAbsolutePos, getEventTargetNode } from 'vxe-pc-ui/es/ui/src/dom'
@@ -45,14 +33,7 @@ export default defineComponent({
       type: Function,
     },
   },
-  emits: [
-    'update:modelValue',
-    'click',
-    'option-click',
-    'show-panel',
-    'hide-panel',
-    'visible-change',
-  ],
+  emits: ['update:modelValue', 'click', 'option-click', 'show-panel', 'hide-panel', 'visible-change'],
   setup(props, context) {
     const { slots, emit } = context
     const $xeModal = inject('$xeModal', null)
@@ -129,12 +110,7 @@ export default defineComponent({
             const panelStyle: any = {
               zIndex: panelIndex,
             }
-            const {
-              boundingTop,
-              boundingLeft,
-              visibleHeight,
-              visibleWidth,
-            } = getAbsolutePos(targetElem)
+            const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = getAbsolutePos(targetElem)
             let panelPlacement = 'bottom'
             if (btnTransfer) {
               let left = boundingLeft
@@ -297,17 +273,14 @@ export default defineComponent({
       const hiddenBefore = props.hiddenBefore
       if (typeof hiddenBefore == 'function') {
         let flag = await hiddenBefore(evnt)
-        console.log(flag, 'testis Flag') //
         if (flag === false) {
           return
-        }
+        } //
       }
       const el = refElem.value
       const panelElem = refPulldownPanel.value
       if (!disabled) {
-        reactData.isActivated =
-          getEventTargetNode(evnt, el).flag ||
-          getEventTargetNode(evnt, panelElem).flag
+        reactData.isActivated = getEventTargetNode(evnt, el).flag || getEventTargetNode(evnt, panelElem).flag
         if (visiblePanel && !reactData.isActivated) {
           hidePanel()
           dispatchEvent('hide-panel', {}, evnt)
@@ -341,7 +314,7 @@ export default defineComponent({
         } else {
           hidePanel()
         }
-      },
+      }
     )
     nextTick(() => {
       if (props.modelValue) {
@@ -373,31 +346,15 @@ export default defineComponent({
                     handleOptionEvent(evnt, item)
                   },
                 },
-                optionSlot
-                  ? optionSlot({ $pulldown: $xePulldown, option: item })
-                  : `${item.label || ''}`,
+                optionSlot ? optionSlot({ $pulldown: $xePulldown, option: item }) : `${item.label || ''}`
               )
             })
-          : [],
+          : []
       )
     }
     const renderVN = () => {
-      const {
-        className,
-        options,
-        popupClassName,
-        showPopupShadow,
-        destroyOnClose,
-        disabled,
-      } = props
-      const {
-        initialized,
-        isActivated,
-        isAniVisible,
-        visiblePanel,
-        panelStyle,
-        panelPlacement,
-      } = reactData
+      const { className, options, popupClassName, showPopupShadow, destroyOnClose, disabled } = props
+      const { initialized, isActivated, isAniVisible, visiblePanel, panelStyle, panelPlacement } = reactData
       const btnTransfer = computeBtnTransfer.value
       const vSize = computeSize.value
       const defaultSlot = slots.default
@@ -411,11 +368,7 @@ export default defineComponent({
           class: [
             'vxe-pulldown',
             'w-full', //
-            className
-              ? XEUtils.isFunction(className)
-                ? className({ $pulldown: $xePulldown })
-                : className
-              : '',
+            className ? (XEUtils.isFunction(className) ? className({ $pulldown: $xePulldown }) : className) : '',
             {
               [`size--${vSize}`]: vSize,
               'is--visible': visiblePanel,
@@ -432,7 +385,7 @@ export default defineComponent({
               class: 'vxe-pulldown--content',
               onClick: clickTargetEvent,
             },
-            defaultSlot ? defaultSlot({ $pulldown: $xePulldown }) : [],
+            defaultSlot ? defaultSlot({ $pulldown: $xePulldown }) : []
           ),
           h(
             Teleport,
@@ -447,11 +400,7 @@ export default defineComponent({
                   ref: refPulldownPanel,
                   class: [
                     'vxe-table--ignore-clear vxe-pulldown--panel',
-                    popupClassName
-                      ? XEUtils.isFunction(popupClassName)
-                        ? popupClassName({ $pulldown: $xePulldown })
-                        : popupClassName
-                      : '',
+                    popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $pulldown: $xePulldown }) : popupClassName) : '',
                     {
                       [`size--${vSize}`]: vSize,
                       'is--shadow': showPopupShadow,
@@ -469,8 +418,7 @@ export default defineComponent({
                     {
                       class: 'vxe-pulldown--panel-wrapper',
                     },
-                    initialized &&
-                      (destroyOnClose ? visiblePanel || isAniVisible : true)
+                    initialized && (destroyOnClose ? visiblePanel || isAniVisible : true)
                       ? [
                           headerSlot
                             ? h(
@@ -478,7 +426,7 @@ export default defineComponent({
                                 {
                                   class: 'vxe-pulldown--panel-header',
                                 },
-                                headerSlot({ $pulldown: $xePulldown }),
+                                headerSlot({ $pulldown: $xePulldown })
                               )
                             : createCommentVNode(),
                           h(
@@ -486,9 +434,7 @@ export default defineComponent({
                             {
                               class: 'vxe-pulldown--panel-body',
                             },
-                            dropdownSlot
-                              ? dropdownSlot({ $pulldown: $xePulldown })
-                              : [renderDefaultPanel(options)],
+                            dropdownSlot ? dropdownSlot({ $pulldown: $xePulldown }) : [renderDefaultPanel(options)]
                           ),
                           footerSlot
                             ? h(
@@ -496,17 +442,17 @@ export default defineComponent({
                                 {
                                   class: 'vxe-pulldown--panel-footer',
                                 },
-                                footerSlot({ $pulldown: $xePulldown }),
+                                footerSlot({ $pulldown: $xePulldown })
                               )
                             : createCommentVNode(),
                         ]
-                      : [],
+                      : []
                   ),
-                ],
+                ]
               ),
-            ],
+            ]
           ),
-        ],
+        ]
       )
     }
     $xePulldown.renderVN = renderVN
