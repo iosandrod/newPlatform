@@ -70,7 +70,6 @@ export default defineComponent({
               <span class="text-gray-700">欢迎</span>
               <span class="font-medium">13798134216</span>
               <img
-                src="https://via.placeholder.com/32"
                 alt="头像"
                 class="h-32 w-32 rounded-full"
               />

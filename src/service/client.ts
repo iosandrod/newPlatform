@@ -68,7 +68,7 @@ const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
     app.hooks([hooks.authentication(), hooks.populateHeader()])
   }
 }
-export class Client { }
+export class Client {}
 //
 export type createConfig = {}
 export const createClient = (config) => {
@@ -211,7 +211,7 @@ export class myHttp {
   }
   async runCustomMethod(tableName, me, data) {
     let _res = await this.post(tableName, me, data)
-    return _res//
+    return _res //
   }
   async find(tableName, query = {}): Promise<any> {
     let _data = await this.get(tableName, 'find', query) //
@@ -291,7 +291,7 @@ export class myHttp {
       )
     })
   }
-  async delete(tableName, params = {}, query = {}) { }
+  async delete(tableName, params = {}, query = {}) {}
   async getPageLayout(navName) {
     let data = await this.get('entity', 'find', {
       tableName: navName,
@@ -304,12 +304,16 @@ export class myHttp {
   } //
   async uploadFile(file: File) {
     let fileName = file.name
+    console.time('uploadFile')
     let uri = await this.fileToDataURL(file)
+    console.timeEnd('uploadFile')
+    console.log('转化时间分析') //
     let obj = {
       uri: uri,
       fileName: fileName,
     } //
-    let _res = await this.post('uploads', 'create', obj)
+    console.log(obj, 'testObj') //
+    let _res = await this.create('uploads', obj) //
     return _res
   }
   fileToDataURL(file) {
