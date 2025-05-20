@@ -37,7 +37,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         field: 'fn',
         title: '执行脚本',
         type: 'code',
-        tableName: tableName,//
+        tableName: tableName, //
         editType: 'code', //
       },
       {
@@ -94,6 +94,12 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         type: 'code',
         editType: 'code',
       },
+      {
+        field: 'disabledDefaultFn',
+        title: '通用禁用脚本',
+        type: 'code',
+        editType: 'code',
+      }, //
     ],
     treeConfig: {
       id: 'id',
@@ -197,14 +203,14 @@ export const formitemTypeMap = (_this: PageDesign) => {
           type: 'select',
           options: {
             options: computed(() => {
-              let select: Column[] = _this.getTableColumns(
+              let select = _this.getTableColumns(
                 _this.state.selected?.options?.tableName,
               )
               let _se = select.map((col) => {
                 let obj = {
-                  label: col.getTitle(),
-                  value: col.getField(),
-                }
+                  label: col.title,
+                  value: col.field,
+                } //
                 return obj
               })
               return _se
@@ -345,7 +351,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => { } //
+        _d['_items_set'] = (v) => {} //
         return _d //
       }),
     },

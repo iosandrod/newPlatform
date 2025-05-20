@@ -280,18 +280,18 @@ export class PageDesign extends Form {
     }
     if (Array.isArray(columns)) {
       return columns
-    }//
+    } //
     return [] //
   }
   getMainTableConfig() {}
-  @useRunAfter()
+  // @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
       data = await this.getDefaultValue(tableName)
     }
     return data
   } //
-  @useRunAfter()
+  // @useRunAfter()
   async addTableRows(
     rows: number | Array<any> = 1, //
     tableName = this.getTableName(),
@@ -489,7 +489,6 @@ export class PageDesign extends Form {
     }
   }
   getTableCnName() {
-    // debugger//
     let config = this.getTableConfig()
     let tableCnName = config.tableCnName || this.getTableName() //
     return tableCnName //
@@ -644,7 +643,6 @@ export class PageDesign extends Form {
           this.designMainButtons(this.currentContextItem) //
         },
         visible: computed(() => {
-          // debugger//
           let currentItem = this.currentContextItem
           let _type = currentItem?.config?.type
           if (_type == 'buttongroup') {
@@ -680,7 +678,6 @@ export class PageDesign extends Form {
   }
   openContextMenu(e, _item?: any) {
     // debugger//
-    // debugger//
     this.currentContextItem = _item //
     let menu: BMenu = this.getRef('mainContextMenu')
     if (menu == null) {
@@ -689,7 +686,7 @@ export class PageDesign extends Form {
     menu.open(e) //
   }
   getHomeTabLabel() {
-    let tName = this.tableName
+    let tName = this.getTableName() //
     let cnName = this.getTableCnName() //
     return {
       label: cnName,

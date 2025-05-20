@@ -124,6 +124,9 @@ export class System extends Base {
       { tableName: name },
     ) //
     let row = data[0]
+    if (row == null) {
+      return null
+    }
     row.tableName = name
     return row //
   }
@@ -441,6 +444,10 @@ export class System extends Base {
       return _design //
     }
     let layoutConfig = await this.getPageLayout(tableName) //
+    if (layoutConfig == null) {
+      this.confirmErrorMessage('找不到模块') //
+      return Promise.reject('找不到模块') //
+    }
     let obj = layoutConfig
     //@ts-ignore
     obj.tableName = tableName
@@ -480,11 +487,12 @@ export class System extends Base {
   }
   async onMainTabChange(config) {
     // console.log(config, 'testConfig')//
-    let tableName = config.tableName
+    let _config=config.item
+    let tableName = _config.tableName
     this.onMenuItemClick({
       //
       tableName,
-    })
+    })//
   }
   async createPageEditDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {
@@ -909,6 +917,27 @@ export class System extends Base {
           type: 'boolean',
         },
         {
+          field: 'pageEditType',
+          label: '页面编辑类型',
+          type: 'select',//
+          options: {
+            options: [
+              {
+                label: '普通增行',
+                value: 'default',
+              },
+              {
+                label: '弹出窗口',
+                value: 'dialog',
+              },
+              {
+                label: '另开页面',
+                value: 'page',
+              },
+            ],
+          },
+        }, //
+        {
           field: 'hooks',
           // label: '高级钩子函数编辑',
           type: 'stable',
@@ -945,7 +974,6 @@ export class System extends Base {
     this.refreshPageDesign(_config.tableName) //
   }
   async refreshPageDesign(tableName?: any) {
-    // debugger//
     if (tableName == null) {
       tableName = this.getCurrentPageName()
     }
@@ -1091,7 +1119,6 @@ export class System extends Base {
     await http.logoutUser() //
   }
   async onMenuItemClick(item) {
-    // debugger//
     // console.log('左侧菜单点击', item)//
     let tableName = item.tableName
     if (Boolean(tableName) == false) {
