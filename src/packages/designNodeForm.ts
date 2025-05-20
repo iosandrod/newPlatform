@@ -48,7 +48,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         options: [
           {
             label: '新增',
-            value: 'addTableRows',
+            value: 'addMainTableRow',
           },
           {
             label: '编辑',

@@ -119,15 +119,21 @@ export class Button extends Base {
         let page: PageDesign = config.page
         page.openSearchDialog() //
       },
-      addTableRows: (config) => {
+      addMainTableRow: async (config) => {
+        //
         let page: PageDesign = config.page
+        await page.addMainTableRow() //
+      },
+      addTableRows: async (config) => {
+        let page: PageDesign = config.page
+        await page.addTableRows() //
         //新增一行数据
-        let tableName = page.getTableName() //
-        let tRef: Table = page.getRef(tableName) //
-        if (tRef == null) {
-          return
-        }
-        tRef.addRows(1) //
+        // let tableName = page.getTableName() //
+        // let tRef: Table = page.getRef(tableName) //
+        // if (tRef == null) {
+        //   return
+        // }
+        // tRef.addRows(1) //
       },
       saveTableData: async (config) => {
         //
@@ -162,7 +168,8 @@ export class Button extends Base {
         fn = fn.bind(page)
         fn(_config)
       }
-      if (typeof fn == 'string') {
+      if (typeof fn == 'string' && Boolean(fn)) {
+        //
         let _fn = stringToFunction(fn) //
         if (typeof _fn == 'function') {
           _fn = _fn.bind(page) //

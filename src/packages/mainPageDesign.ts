@@ -1,3 +1,4 @@
+import { editPageDesign } from './editPageDesign'
 import { PageDesign } from './pageDesign'
 import { useHooks } from './utils/decoration'
 //
@@ -47,12 +48,12 @@ export class MainPageDesign extends PageDesign {
       let originColumn = c.originColumn
       let id = originColumn.id
       let obj1 = {
-        id: id,//
-        hidden: originColumn.hidden,//
-      }//
-      this.updateTableColumn(obj1, false)//
-    }//Offense is the best defense
-  }//
+        id: id, //
+        hidden: originColumn.hidden, //
+      } //
+      this.updateTableColumn(obj1, false) //
+    } //Offense is the best defense
+  } //
   async onColumnsDesign(cols: any): Promise<any> {
     let tName = cols.tableName
     let curTName = this.getTableName()
@@ -62,12 +63,24 @@ export class MainPageDesign extends PageDesign {
       let updateCols = cols.updateCols
       let config = {
         addData: addCols,
-        patchData: updateCols,//
+        patchData: updateCols, //
       }
-      let http = this.getHttp()//
-      await http.runCustomMethod('columns', 'batchUpdate', config)//
-      this.getSystem().confirmMessage('列数据更新成功', 'success')////
-      this.getSystem().refreshPageDesign()//
+      let http = this.getHttp() //
+      await http.runCustomMethod('columns', 'batchUpdate', config) //
+      this.getSystem().confirmMessage('列数据更新成功', 'success') ////
+      this.getSystem().refreshPageDesign() //
     }
+  }
+  async addTableRows() {
+    console.log('add config') //
+  }
+  async addMainTableRow(addConfig) {
+    let config = this.config //
+    let system = this.getSystem()
+    let tableName = this.getTableName()
+    system.routeOpen(`${tableName}---edit`, (d: editPageDesign) => {
+      // console.log(d, 'testData')//
+      d.addMainTableRow() //
+    })
   }
 }

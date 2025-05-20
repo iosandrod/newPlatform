@@ -257,7 +257,7 @@ export class PageDesign extends Form {
   async createTableData() {}
   async updateTableData() {}
   async getDefaultValue(tableName: string) {
-    let columns = this.getTableColumns(tableName)
+    let columns = this.getTableColumns(tableName, true) //
     let obj1 = {}
     for (const col of columns) {
       let defaultValue = await col.getDefaultValue()
@@ -267,11 +267,14 @@ export class PageDesign extends Form {
     } //
     return obj1
   }
-  getTableColumns(tableName = this.getTableName()) {
+  getTableColumns(tableName = this.getTableName(), isClass = false) {
     let tableIns = this.getRef(tableName)
     let columns = []
     if (tableIns != null) {
       columns = tableIns.getColumns().map((col) => {
+        if (isClass) {
+          return col //
+        }
         let config = col.config
         return config //
       })
@@ -281,7 +284,7 @@ export class PageDesign extends Form {
     if (Array.isArray(columns)) {
       return columns
     } //
-    return [] //
+    return []
   }
   getMainTableConfig() {}
   // @useRunAfter()
@@ -293,6 +296,7 @@ export class PageDesign extends Form {
   } //
   // @useRunAfter()
   async addTableRows(
+    //
     rows: number | Array<any> = 1, //
     tableName = this.getTableName(),
   ) {
@@ -305,7 +309,7 @@ export class PageDesign extends Form {
       arr1.push(d) //
     }
     let tableIns = this.getTableRef(tableName)
-    tableIns.addRows({ rows: arr1 }) ////
+    tableIns.addRows({ rows: arr1 })
   }
   getTableRef(tableName = this.getTableName()) {
     let tableIns = this.getRef(tableName)
@@ -361,11 +365,9 @@ export class PageDesign extends Form {
   }
   //打开添加页面
   async openAddEntity() {}
-  async addMainTableRow(addConfig) {
-    let config = this.config //
-    let system = this.getSystem()
-    let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`, (d) => {})
+  async addMainTableRow(addConfig?: any) {
+    //
+    //
   }
   getRealTableName() {
     let tableName = this.getTableName() //

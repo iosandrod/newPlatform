@@ -1111,10 +1111,12 @@ export class Table extends Base {
       return
     }
     let isTree = this.getIsTree()
-    if (isTree) {//
+    if (isTree) {
+      //
       let _data3 = this.filterTreeInPlace(_data1, (node) => {
         let status = true
         let globalValue = this.globalConfig.value
+        //处理全局的
         if (globalValue?.length > 0) {
           let _shtml = node['_shtml'] //
           let reg = new RegExp(globalValue, 'gi') ////
@@ -1125,6 +1127,20 @@ export class Table extends Base {
             status = false
           }
           this.globalRowSet.delete(node['_index']) ////
+        }
+        let _filterConfig = this.columnFilterConfig.filterConfig
+        if (_filterConfig.length > 0) {
+          for (const { field, indexArr } of _filterConfig) {
+            if (indexArr?.length > 0) {
+              let indexSet = new Set(indexArr) //
+              status = false //
+              if (indexSet.has(node[field])) {
+                //
+                status = true //
+                break
+              }
+            }
+          }
         }
         return status //
       }) //
@@ -1173,8 +1189,7 @@ export class Table extends Base {
             _data3 = _data3.filter((item) => indexSet.has(item[field]))
           }
         }
-      }
-
+      } //
       this.templateProps.data = _data3 //
     }
     //@ts-ignore
@@ -1415,7 +1430,9 @@ export class Table extends Base {
         let _config = [tColumn].map((col) => {
           return col.config
         })
-        let _data = this.getInstance().records //
+        let _data = this.getInstance().records
+        let _d = this.getFlatTreeData(_data) //
+        _data = _d //
         if (oldColumnFilter != null && oldColumnFilter === tColumn) {
           return //
         }
@@ -1897,7 +1914,12 @@ export class Table extends Base {
   initDataRow(row, i = 0) {
     let e = row
     if (e['_index'] == null) {
-      e._index = this.uuid()
+      let id = this.uuid()
+      Object.defineProperty(e, '_index', {
+        value: id, //
+        enumerable: false,
+        writable: true,
+      })
       this.dataMap[e._index] = e
     }
     if (e['_shtml'] == null) {

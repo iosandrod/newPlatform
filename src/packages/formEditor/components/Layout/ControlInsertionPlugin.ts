@@ -327,7 +327,7 @@ function ControlInsertionPlugin(ER: Form) {
     return ER.cachePlugin
   } //
   class ControlInsertionPlugin {
-    dragStart(e) { }
+    dragStart(e) {}
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       if (!prevEl || !e.activeSortable) {
@@ -340,14 +340,17 @@ function ControlInsertionPlugin(ER: Form) {
       let isBlock =
         _.get(e, 'activeSortable.options.dataSource', false) === 'block'
       if (isBlock) {
-        let tItem = ER.items.find(item => {
+        let tItem = ER.items.find((item) => {
           let f = item.getField()
           let _field = oldEl.field
           return f != null && _field != null && f === _field
         })
         if (tItem != null) {
-          ER.getSystem().confirmMessage('该字段已经存在,请不要重复添加', 'error')//
-          resetStates()//
+          ER.getSystem().confirmMessage(
+            '该字段已经存在,请不要重复添加',
+            'error',
+          ) //
+          resetStates() //
           return
         }
       }
@@ -366,15 +369,28 @@ function ControlInsertionPlugin(ER: Form) {
         }
       } //
       // let _oldEl1=_.cloneDeep(oldEl)
-
       let _parent = prevSortable?.options?.parent //
+      if (_parent == ER.state.store && inserColIndex !== '') {
+        let {
+          el: {
+            __draggable_component__: { list },
+          }, //
+          el, //
+          constructor: { utils: sortableUtils }, //
+        } = prevSortable
+        if (list.length == 1 && list[0].type == 'grid') {
+          //
+          resetStates() //
+          return
+        }
+      } //
       let _oldEl1 = null //
       let nSpan: any = null
       let gColumns = null
       let oldCol = null
       let _nIndex = null //
       if (inserColIndex !== '') {
-        // debugger //
+        //
         if (Array.isArray(_parent)) {
           let inLineNode = _parent[0]
           if (inLineNode?.type == 'inline') {
@@ -387,23 +403,24 @@ function ControlInsertionPlugin(ER: Form) {
               _span1 = Number(_span1) as any //
               if (_parent2?.type == 'grid') {
                 gColumns = _parent2.columns // is Array
-                let totalSpan = gColumns.map(col => {
-                  let span = col?.options?.span
-                  return span
-                }).reduce((pre, cur) => {
-                  return pre + cur
-                }, 0)
+                let totalSpan = gColumns
+                  .map((col) => {
+                    let span = col?.options?.span
+                    return span
+                  })
+                  .reduce((pre, cur) => {
+                    return pre + cur
+                  }, 0)
                 if (totalSpan < 24) {
                   _span1 = 24 - totalSpan
                   if (_span1 > 6) {
                     _span1 = 6
                   }
-                }
-
-
+                } //
                 oldCol = _parent1 //
                 let newIndex = gColumns.findIndex((col) => col.id == oldCol.id)
-                if (totalSpan == 24) {//
+                if (totalSpan == 24) {
+                  //
                   _parent1.options.span = _span - _span1 ////
                 }
                 //@ts-ignore
@@ -431,7 +448,6 @@ function ControlInsertionPlugin(ER: Form) {
                 _node.context.appendBlockNode(newElement) ////
                 if (!isBlock) {
                   //
-                  // debugger //
                   if (oldEl.context) {
                     let _context = oldEl.context
                     if (_context.parent?.type == 'inline') {
@@ -453,7 +469,6 @@ function ControlInsertionPlugin(ER: Form) {
                   }
                 }
                 return
-
               }
             }
           }
@@ -559,7 +574,7 @@ function ControlInsertionPlugin(ER: Form) {
         } = prevSortable
         let _parent2 =
           prevSortable.options.parent[
-          sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
           ]
 
         // 在指定的索引位置插入新元素
@@ -658,8 +673,8 @@ function ControlInsertionPlugin(ER: Form) {
             target.dataset.layoutType === 'root'
               ? target
               : newTarget.__draggable_component__
-                ? newTarget.children[0]
-                : newTarget.parentNode
+              ? newTarget.children[0]
+              : newTarget.parentNode
           prevSortable = state._sortable
           inserRowIndex = 0
           setBorder(prevEl, 'drag-line-top')
@@ -699,7 +714,7 @@ function ControlInsertionPlugin(ER: Form) {
     pluginName: name, //
     initializeByDefault: true,
   })
-  let _formIns = ER//
+  let _formIns = ER //
   _formIns.cachePlugin = _obj
   return _obj
 }
