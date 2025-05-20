@@ -338,8 +338,7 @@ export class PageDesign extends Form {
     let _res = await http.create('entity', _data) // //
     // console.log(_res)
   }
-  async updateTableDesign() {
-    debugger//
+  async updateTableDesign() {//
     let _data = this.getLayoutData() //
     let http = this.getHttp()
     let _config = this.config

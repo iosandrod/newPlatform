@@ -3933,3 +3933,12 @@ const app = createApp({
       return row2 //
       //转换
     }
+
+     // let _cols1 = _cols.map((item) => {
+    //   return {
+    //     value: item.field,
+    //     label: item.title || item.field,
+    //   }
+    // })
+    // columnSelect[tableName] = _cols1 //
+    // columnSelect[_key] = true //

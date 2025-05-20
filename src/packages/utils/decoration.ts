@@ -250,3 +250,53 @@ export function useHooks(config?: Function): any {//
     return descriptor;
   }
 }
+
+export function useDelay(config?: { delay?: number }): any {
+  const delay = config?.delay ?? 200;
+
+  return function (target: any, key: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+    // 参数缓存
+    let argsQueue: any[] = [];
+    let timer: NodeJS.Timeout | null = null;
+    if (isAsyncFunction(originalMethod)) {
+      descriptor.value = async function (...args: any[]) {
+        return new Promise(async (resolve, reject) => {
+          argsQueue.push(args); // 缓存每一次调用的参数
+
+          if (timer) {
+            clearTimeout(timer); // 重置延迟
+          }
+
+          timer = setTimeout(async () => {
+            const queuedArgs = argsQueue.slice(); // 拷贝数组
+            argsQueue = []; // 清空缓存
+
+            // 调用原函数，传入缓存数组
+            let _res = await originalMethod.call(this, queuedArgs);
+            resolve(_res)//
+          }, delay);
+        })
+
+      }
+    } else {
+
+      descriptor.value = function (...args: any[]) {
+        argsQueue.push(args); // 缓存每一次调用的参数
+
+        if (timer) {
+          clearTimeout(timer); // 重置延迟
+        }
+
+        timer = setTimeout(() => {
+          const queuedArgs = argsQueue.slice(); // 拷贝数组
+          argsQueue = []; // 清空缓存
+
+          // 调用原函数，传入缓存数组
+          originalMethod.call(this, queuedArgs);
+        }, delay);
+      }
+    };
+    return descriptor;
+  };
+}
