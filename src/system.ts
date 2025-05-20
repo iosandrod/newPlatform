@@ -487,12 +487,12 @@ export class System extends Base {
   }
   async onMainTabChange(config) {
     // console.log(config, 'testConfig')//
-    let _config=config.item
+    let _config = config.item
     let tableName = _config.tableName
     this.onMenuItemClick({
       //
       tableName,
-    })//
+    }) //
   }
   async createPageEditDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {
@@ -919,7 +919,7 @@ export class System extends Base {
         {
           field: 'pageEditType',
           label: '页面编辑类型',
-          type: 'select',//
+          type: 'select', //
           options: {
             options: [
               {
@@ -1122,10 +1122,10 @@ export class System extends Base {
     // console.log('左侧菜单点击', item)//
     let tableName = item.tableName
     if (Boolean(tableName) == false) {
-      //
       return
-    } //
-    let _d = await this.getHttp().hTable(tableName)
+    }
+    let
+     _d = await this.getHttp().hTable(tableName)
     if (_d == false) {
       return
     } //
