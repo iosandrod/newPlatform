@@ -25,7 +25,7 @@ import entityPc from './Entity/pc'
 import entityMobile from './Entity/mobile'
 import dividerPc from './Divider/pc.vue'
 import dividerMobile from './Divider/mobile.vue' //
-import sformPc from './Sform/pc'
+import sformPc from './Sform/pc'//
 import sformMobile from './Sform/mobile'
 import dformPc from './Dform/pc'
 import dformMobile from './Dform/mobile' //

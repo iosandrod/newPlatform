@@ -1,11 +1,4 @@
-import {
-  defineComponent,
-  resolveComponent,
-  watch,
-  useAttrs,
-  inject,
-  unref,
-} from 'vue'
+import { defineComponent, resolveComponent, watch, useAttrs, inject, unref } from 'vue'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable from './DragGable'
 import hooks from '@ER/hooks'
@@ -18,8 +11,7 @@ export default defineComponent({
     parent: Array,
   },
   setup(props) {
-    const ns = hooks.useNamespace('TabsLayout')
-    // debugger//
+    const ns = hooks.useNamespace('TabsLayout') //
     if (!props.data.options.defaultValue) {
       props.data.options.defaultValue = props.data.columns[0].id
     }
@@ -36,40 +28,14 @@ export default defineComponent({
       }
       return (
         //@ts-ignore
-        <Selection
-          {...useAttrs()}
-          data={props.data}
-          parent={props.parent}
-          hasCopy
-          hasDel
-          hasDrag
-          hasWidthScale
-        >
-          <el-tabs
-            class={[ns.b(), 'h-full']}
-            vModel={props.data.options.defaultValue}
-            type={props.data.options.type}
-            tabPosition={props.data.options.tabPosition}
-          >
+        <Selection {...useAttrs()} data={props.data} parent={props.parent} hasCopy hasDel hasDrag hasWidthScale>
+          <el-tabs class={[ns.b(), 'h-full']} vModel={props.data.options.defaultValue} type={props.data.options.type} tabPosition={props.data.options.tabPosition}>
             {props.data.columns.map((element, index0) => {
               //@ts-ignore
               return (
                 //@ts-ignore
-                <Selection
-                  class={[ns.e('area'), 'h-full']}
-                  tag="el-tab-pane"
-                  label={element.label}
-                  name={element.id}
-                  data={element}
-                  parent={props.data}
-                >
-                  <LayoutDragGable
-                    class={['h-full', ..._class]}
-                    data-layout-type={'tabs-col'}
-                    data={element.list}
-                    {...opt}
-                    parent={element}
-                  />
+                <Selection class={[ns.e('area'), 'h-full']} tag="el-tab-pane" label={element.label} name={element.id} data={element} parent={props.data}>
+                  <LayoutDragGable class={['h-full', ..._class]} data-layout-type={'tabs-col'} data={element.list} {...opt} parent={element} />
                 </Selection>
               )
             })}

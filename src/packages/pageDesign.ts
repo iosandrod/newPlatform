@@ -30,15 +30,15 @@ interface Filter {
   field: string
   /** 操作符，默认 '$eq'（等于） */
   operator?:
-    | '$eq'
-    | '$ne'
-    | '$gt'
-    | '$gte'
-    | '$lt'
-    | '$lte'
-    | '$in'
-    | '$nin'
-    | '$like'
+  | '$eq'
+  | '$ne'
+  | '$gt'
+  | '$gte'
+  | '$lt'
+  | '$lte'
+  | '$in'
+  | '$nin'
+  | '$like'
   /** 值 */
   value: any
 }
@@ -143,7 +143,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() {}
+  initDefaultTemplatePage() { }
   getValidateRules() {
     return []
   }
@@ -254,8 +254,8 @@ export class PageDesign extends Form {
       $and: filters.map(buildCond),
     }
   } //
-  async createTableData() {}
-  async updateTableData() {}
+  async createTableData() { }
+  async updateTableData() { }
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName, true) //
     let obj1 = {}
@@ -286,7 +286,7 @@ export class PageDesign extends Form {
     } //
     return []
   }
-  getMainTableConfig() {}
+  getMainTableConfig() { }
   // @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -327,6 +327,7 @@ export class PageDesign extends Form {
     }
     nextTick(() => {
       this.setCurrentDesign(false) //
+      this.getSystem().refreshPageDesign()//
     })
   }
   async createTableDesign() {
@@ -338,11 +339,13 @@ export class PageDesign extends Form {
     // console.log(_res)
   }
   async updateTableDesign() {
+    debugger//
     let _data = this.getLayoutData() //
     let http = this.getHttp()
     let _config = this.config
     let _config1 = { ..._config, ..._data, id: _config.id } //
-    let _res = await http.patch(`entity/${_config.id}`, _config1.id, _config1) //
+    await http.patch(`entity`, _config1) //
+    this.getSystem().confirmMessage('保存成功', 'success')//
     console.log('保存成功') //
   }
   getMainTableName() {
@@ -353,18 +356,18 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() {}
+  getAllFormMap() { }
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() {}
+  initDefaultSForm() { }
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() {}
+  async openAddEntity() { }
   async addMainTableRow(addConfig?: any) {
     //
     //
@@ -490,7 +493,8 @@ export class PageDesign extends Form {
       })
     }
   }
-  getTableCnName() {
+  getTableCnName() {//
+    // debugger////
     let config = this.getTableConfig()
     let tableCnName = config.tableCnName || this.getTableName() //
     return tableCnName //

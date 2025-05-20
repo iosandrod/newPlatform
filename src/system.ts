@@ -36,7 +36,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() {}
+  async login() { }
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient() //
@@ -63,17 +63,17 @@ export class System extends Base {
   init() {
     super.init() //
   }
-  getCurrentShowPage() {}
-  buildMenuTree(rows) {}
+  getCurrentShowPage() { }
+  buildMenuTree(rows) { }
   getClient(): myHttp {
     return http
   }
-  getMenuProps() {}
+  getMenuProps() { }
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) {}
+  _getCacheValue(key) { }
   getTabModelValue() {
     let route = this.getRouter()
     let r = route.currentRoute
@@ -114,7 +114,7 @@ export class System extends Base {
     // ]
     return allT2 //
   } //
-  openPageDesign(config) {} //
+  openPageDesign(config) { } //
 
   async getPageLayout(name?: string) {
     let http = this.getHttp()
@@ -132,16 +132,15 @@ export class System extends Base {
   }
   async getPageEditLayout(name?: string) {
     let http = this.getHttp()
-    let _name1 = `${name}---edit`
-    let data = await http.find('entity', { tableName: _name1 }) //
-    let row = data[0] //
-    if (row == null) {
-      let _data1 = await http.find('entity', { tableName: name })
-      let _row = _data1[0]
-      let row2 = this.generateEditPageLayout(_row)
-      return row2 //
-      //转换
+    let reg = /edit$/
+    let name1: any = null
+    if (reg.test(name)) {
+      name1 = name
+    } else {
+      name1 = `${name}---edit`
     }
+    let data = await http.find('entity', { tableName: name1 }) //
+    let row = data[0] //
     return row //
   }
   createNodeIdKey(type) {
@@ -154,231 +153,7 @@ export class System extends Base {
     }
     return obj
   }
-  generateEditPageLayout(row) {
-    let oldFields = row.fields //
-    let dEnF = oldFields
-      .filter((row) => {
-        //
-        return row.type == 'entity' && row?.options?.tableType == 'detail'
-      }) //
-      .map((row) => {
-        let _row = _.cloneDeep(row)
-        return _row
-      })
-    let dEnF2 = dEnF.map((row) => {
-      let fIns = row.id
-      if (fIns == null) {
-        row.id = this.uuid()
-        fIns = row.id //
-      }
-      let obj = {
-        ...this.createNodeIdKey('tabsCol'),
-        label: 'Tab 1',
-        list: [
-          {
-            ...this.createNodeIdKey('inline'),
-            style: {},
-            columns: [fIns],
-          },
-        ],
-        style: {},
-        options: {},
-        innerId: fIns,
-      }
-      return obj
-    })
-    let fId = this.uuid()
-    let fField = {
-      id: fId,
-      key: `dform_${fId}`,
-      type: 'dform',
-      options: {},
-    }
-    let detailLayout = {
-      id: 'f6qNjbhckRKxcgbyzimpA',
-      key: 'inline_f6qNjbhckRKxcgbyzimpA',
-      type: 'inline',
-      columns: [
-        {
-          id: 'NFcD7gLoRJ0UQJcRGAP1I',
-          key: 'grid_NFcD7gLoRJ0UQJcRGAP1I',
-          type: 'grid',
-          options: {
-            gutter: 0,
-            justify: 'start',
-            align: 'top',
-          },
-          style: {
-            width: '100%',
-          },
-          columns: [
-            {
-              id: '0Ifq8JGCuqIYsIEJEcOE4',
-              key: 'col_0Ifq8JGCuqIYsIEJEcOE4',
-              type: 'col',
-              list: [
-                {
-                  type: 'inline',
-                  columns: [
-                    {
-                      id: 'mJp7crngSZBQiiMhqIJ1N',
-                      key: 'tabs_mJp7crngSZBQiiMhqIJ1N',
-                      icon: 'label',
-                      type: 'tabs',
-                      label: '标签页',
-                      style: {
-                        width: '100%',
-                      },
-                      columns: [...dEnF2],
-                      options: {
-                        type: '',
-                        align: 'top',
-                        hidden: false,
-                        tabPosition: 'top',
-                        defaultValue: dEnF2[0]?.id, //
-                      },
-                    },
-                  ],
-                },
-              ],
-              options: {
-                span: 24, //
-                offset: 0,
-                push: 0,
-                pull: 0,
-                style: {},
-              },
-            },
-          ],
-        },
-      ],
-    }
-    if (dEnF2.length == 0) {
-      detailLayout = null
-    }
-    const editLayout = {
-      layout: {
-        pc: [
-          {
-            id: 'yWTdNJ14jZVhBpu1kiSHB',
-            key: 'inline_yWTdNJ14jZVhBpu1kiSHB',
-            type: 'inline',
-            columns: [
-              {
-                id: 'LFhDBVgwITtxF-8qbD1Sk',
-                key: 'grid_LFhDBVgwITtxF-8qbD1Sk',
-                type: 'grid',
-                options: {
-                  gutter: 0,
-                  justify: 'start',
-                  align: 'top',
-                },
-                style: {
-                  width: '100%',
-                },
-                columns: [
-                  {
-                    id: 'S9B-oByUkfc2LoAISnY3H',
-                    key: 'col_S9B-oByUkfc2LoAISnY3H',
-                    type: 'col',
-                    list: [
-                      {
-                        type: 'inline',
-                        columns: [
-                          {
-                            type: 'tabs',
-                            label: '标签页',
-                            icon: 'label',
-                            id: 'nWcXBEOYl2M980Eg8OyJj',
-                            columns: [
-                              {
-                                id: '_yNuSux3VBlbqnoWdXvYb',
-                                type: 'tabsCol',
-                                label: 'Tab 1',
-                                list: [
-                                  {
-                                    type: 'inline',
-                                    columns: [fId],
-                                    style: {},
-                                    id: 'n5BkoBMEBOeokN55IDx-M',
-                                    key: 'inline_n5BkoBMEBOeokN55IDx-M',
-                                  },
-                                ],
-                                style: {},
-                                options: {},
-                                key: 'tabsCol__yNuSux3VBlbqnoWdXvYb',
-                              },
-                            ],
-                            options: {
-                              type: '',
-                              tabPosition: 'top',
-                              align: 'top',
-                              hidden: false,
-                              defaultValue: '_yNuSux3VBlbqnoWdXvYb',
-                            },
-                            style: {
-                              width: '100%',
-                            },
-                            key: 'tabs_nWcXBEOYl2M980Eg8OyJj',
-                          },
-                        ],
-                      },
-                    ],
-                    options: {
-                      span: 24,
-                      offset: 0,
-                      push: 0,
-                      pull: 0,
-                      style: {},
-                    },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-        mobile: [
-          // {
-          //   type: 'inline',
-          //   columns: ['61fuq2KoXI-LXZ-d_ep95'],
-          // },
-          // {
-          //   type: 'inline',
-          //   columns: ['KRg51faFSk3H2piRFbrQg'],
-          // },
-        ],
-      },
-      data: {},
-      config: {
-        isSync: true,
-        pc: {
-          size: 'default',
-          labelPosition: 'left',
-          completeButton: {
-            text: '提交',
-            color: '',
-            backgroundColor: '',
-          },
-        },
-        mobile: {
-          labelPosition: 'left',
-          completeButton: {
-            text: '提交',
-            color: '',
-            backgroundColor: '',
-          },
-        },
-        id: '3H1haKaSUMIocpYwWqD4z',
-        type: 'root',
-      },
-      fields: [fField, ...dEnF],
-      logic: {},
-    }
-    if (detailLayout != null) {
-      editLayout.layout.pc.push(detailLayout) //
-    }
-    return editLayout //
-  }
+
   async addPageLayout(tableName, config) {
     let http = this.getHttp()
     let data = await http.post(
@@ -398,7 +173,7 @@ export class System extends Base {
     await http.patch('entity', layout) //
     await this.refreshPageDesign() //
   }
-  deletePageLayout(tableName, config) {}
+  deletePageLayout(tableName, config) { }
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -494,12 +269,12 @@ export class System extends Base {
       tableName,
     }) //
   }
-  async createPageEditDesign(config: { tableName: string } | string) {
+  async createPageEditDesign(config: { tableName: string } | string) {//
     if (typeof config == 'string') {
       config = {
         tableName: config,
       }
-    }
+    }//
     let tableName = config.tableName
     let editTableName = tableName
     if (!/edit$/.test(tableName)) {
@@ -511,8 +286,8 @@ export class System extends Base {
     if (_design) {
       return _design //
     }
-    let layoutConfig = await this.getPageEditLayout(tableName) //
-    let _d = new editPageDesign(layoutConfig)
+    let layoutConfig = await this.getPageEditLayout(editTableName) //
+    let _d = new editPageDesign(layoutConfig)//
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
@@ -523,8 +298,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) {}
-  async confirmEntity(entityConfig: any) {} //
+  async confirm(config: any) { }
+  async confirmEntity(entityConfig: any) { } //
   async confirmForm(formConfig: any) {
     return new Promise(async (resolve, reject) => {
       let _form = new Form(formConfig) //
@@ -866,7 +641,7 @@ export class System extends Base {
     try {
       //
       //打开app
-    } catch (error) {}
+    } catch (error) { }
   }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
@@ -909,7 +684,7 @@ export class System extends Base {
         {
           field: 'tableCnName',
           label: '表格中文名',
-          itemChange: (config) => {},
+          itemChange: (config) => { },
         },
         {
           label: '显示分页',
@@ -1125,7 +900,7 @@ export class System extends Base {
       return
     }
     let
-     _d = await this.getHttp().hTable(tableName)
+      _d = await this.getHttp().hTable(tableName)
     if (_d == false) {
       return
     } //
@@ -1232,7 +1007,7 @@ export class System extends Base {
     columnSelect[tableName] = _cols1 //
     columnSelect[_key] = true //
   }
-  clearSelectColumns() {} //
+  clearSelectColumns() { } //
   getDesignByTableName(tableName) {
     let _obj = this.tableMap //
     let editObj = this.tableEditMap
