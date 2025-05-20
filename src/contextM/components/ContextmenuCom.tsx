@@ -116,6 +116,9 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    parent: {
+      type: Object,
+    },
     items: {
       type: Array,
       default: () => [],
@@ -141,7 +144,7 @@ export default defineComponent({
       (newV) => {
         if (!Array.isArray(newV)) newV = [] //
         mIns.setItems(newV) //
-      }
+      },
     )
     expose({ _instance: mIns })
     return () => {

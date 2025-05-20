@@ -65,10 +65,13 @@ export default defineComponent({
           },
         },
         {
-          label: '刷新',
+          label: '刷新', //
           fn: async () => {
             //
-            tableIns.updateCanvas()
+            // tableIns.updateCanvas()
+            tableIns.validateData({}) //
+            let _res = await tableIns.validate() //
+            console.log(_res, 'test_row') //
           },
         },
       ] //
@@ -89,7 +92,16 @@ export default defineComponent({
       return buttons //
     })
     return () => {
-      return <div>{<buttonGroupCom parent={tableIns} items={buttons.value}></buttonGroupCom>}</div>
+      return (
+        <div>
+          {
+            <buttonGroupCom
+              parent={tableIns}
+              items={buttons.value}
+            ></buttonGroupCom>
+          }
+        </div>
+      )
     }
   },
 })

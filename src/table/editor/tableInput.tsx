@@ -114,6 +114,7 @@ export default defineComponent({
               onChange={(v) => {
                 updateValue(v)
               }} //
+              clearable
               options={column.getSelectOptions()} //
               transfer
               type={type} //

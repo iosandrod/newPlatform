@@ -67,9 +67,9 @@ export class Column extends Base {
     return options //
   } //
   setHidden(bool) {
-    this.config.hidden = bool//
+    this.config.hidden = bool //
   } //
-  getFormitem() { } //
+  getFormitem() {} //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -134,7 +134,6 @@ export class Column extends Base {
         return true
       }
     }
-    // debugger //
     if (type == 'select') {
       let isAniVisible = input?.getSelectPanelVisible() //
       if (isAniVisible == true) {
@@ -188,11 +187,14 @@ export class Column extends Base {
         overflow: 'hidden',
         alignItems: 'center', //
       })
+      // let required = this.getRequired()
+      let tColor = this.getHeaderTextColor() //
       let locationName = createText({
         text: value, //
         fontSize: 14,
-        fill: 'black',
+        fill: tColor,
         overflow: 'hidden',
+        // textureColor: 'blue',
         boundsPadding: [0, 10, 0, 5],
         lineDashOffset: 0,
       })
@@ -619,7 +621,7 @@ export class Column extends Base {
       v = true
     }
     if (v === '0') {
-      v = false//
+      v = false //
     }
     v = Boolean(v)
     return v
@@ -737,7 +739,6 @@ export class Column extends Base {
     let config = this.config
     let width = config.width
     if (isFilterTable == true) {
-      // debugger//
       // let sW = table.getSerialNumberWidth()
       let sW = 0
       let checkWidth = table.getCheckColumnWidth()
@@ -756,7 +757,7 @@ export class Column extends Base {
     return width
   }
   async updateBindValue(config) {
-    // debugger//
+    //
     let value = config.value //值
     let row = config.row //行
     let field = config.field || this.getField()
@@ -827,9 +828,12 @@ export class Column extends Base {
     let config = this.config
     let required = config.required
     let _arr = []
-    if (required) {
+    if (required==true) {
       let _fn = (vConfig) => {
-        let value = vConfig.value
+        // let f=this.getField()
+        // let row=vConfig.row
+        // let _d=row[f]
+        let value = vConfig.value//
         if (value == null || value === '') {
           return '此项为必填项' //
         }
@@ -869,6 +873,7 @@ export class Column extends Base {
               _res = {
                 message: _res1,
                 field: this.getField(),
+                row: vConfig?.row,
               }
               break
             }
@@ -1005,7 +1010,6 @@ export class Column extends Base {
       }
     }
     const image = createImage({
-
       image: `<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${hIconColor}"></path></svg>`,
       width: 16,
       height: 16, //
@@ -1038,7 +1042,7 @@ export class Column extends Base {
     return 'rgb(229,231,235)' //
   }
   getCurrentRowColor(_bg?: string) {
-    let bg = _bg || 'rgb(239,246,255)'
+    let bg = _bg || 'rgb(220,232,240)'
     return bg
   }
   getCustomLayout() {
@@ -1384,7 +1388,7 @@ export class Column extends Base {
         }
       },
       closeFn: () => {
-        this.disableHideCell = false//
+        this.disableHideCell = false //
       },
     })
   }
@@ -1395,7 +1399,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() { }
+  updateBindData() {}
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {
@@ -1446,4 +1450,15 @@ export class Column extends Base {
     config.order = n
   }
   //
+  getRequired() {
+    return this.config.required
+  }
+  getHeaderTextColor() {
+    let required = this.getRequired()
+    let color = 'black'
+    if (required) {
+      color = 'blue' //
+    }
+    return color
+  }
 }

@@ -59,8 +59,9 @@ export class BMenuItem extends Base {
     const _config = this.config
     let beforeHidden = config.beforeHidden
     const fn = _config.fn
-    if (typeof fn == 'function') fn(this)
-    // const onItemClick=config.onItemClick()
+    let p = this.menu
+    let _parent = p.config.parent
+    if (typeof fn == 'function') fn({ item: this, parent: _parent }) //
     if (typeof beforeHidden == 'function') {
       //
       beforeHidden()

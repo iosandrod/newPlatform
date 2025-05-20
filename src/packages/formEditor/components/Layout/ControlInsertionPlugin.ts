@@ -699,7 +699,7 @@ function ControlInsertionPlugin(ER: Form) {
     pluginName: name, //
     initializeByDefault: true,
   })
-  let _formIns = ER
+  let _formIns = ER//
   _formIns.cachePlugin = _obj
   return _obj
 }

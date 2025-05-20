@@ -68,6 +68,7 @@ export const click_cell = (table: Table) => {
       let tCol = table.getLastFlatColumns().find((col) => {
         return col.getField() === field
       })
+
       if (tCol != null && table.tableState == 'edit') {
         //
         table.clearEditCell()
@@ -79,8 +80,10 @@ export const click_cell = (table: Table) => {
           }
           let p = new Promise((resolve, reject) => {
             setTimeout(() => {
+              // debugger//
               if (originData == null) {
                 resolve(true) //
+                return
               }
               table.currentEditCol = tCol
               let s = _this.startEditCell(config.col, config.row, config.value)
@@ -92,12 +95,12 @@ export const click_cell = (table: Table) => {
           })
           let _p = await p
           if (_p == false) {
-            //
             table.setCurRow(originData) ////
           }
         } else {
           if (originData == null) {
             return //
+          } else {
           }
           table.setCurRow(originData)
         }
@@ -123,8 +126,9 @@ export const click_cell = (table: Table) => {
         let row = config.row
         let col = config.col
         let title = config.title
-        table.clearEditCell()//
-        setTimeout(() => {////
+        table.clearEditCell() //
+        setTimeout(() => {
+          ////
           table.startEditCell(col, row, title, true) //
         }, 10)
       }
@@ -269,7 +273,7 @@ export const checkboxChange = (table: Table) => {
   table.registerEvent({
     name: 'checkboxChange',
     keyName: 'checkboxChange',
-    callback: (config) => { },
+    callback: (config) => {},
   })
 }
 
@@ -324,7 +328,7 @@ export const mousedown_cell = (table: Table) => {
   table.registerEvent({
     name: 'mousedown_cell',
     keyName: 'mousedown_cell',
-    callback: (config) => { },
+    callback: (config) => {},
   })
 }
 
@@ -354,6 +358,7 @@ export const mouseenter_cell = (table: Table) => {
         if (_err) {
           //
           let fMes = _err.message || '数据校验失败' //
+          console.log(rect, 'testRect') //
           tableInstance.showTooltip(col, row, {
             content: fMes,
             referencePosition: { rect, placement: VTable.TYPES.Placement.top }, //TODO

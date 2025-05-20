@@ -12,6 +12,7 @@ export default defineComponent({
       const items = tableIns.getContextItems()
       let com = (
         <ContextmenuCom
+          parent={tableIns}
           ref={(e) => tableIns.registerRef('contextmenu', e)}
           items={items}
         ></ContextmenuCom>

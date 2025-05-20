@@ -129,7 +129,7 @@ export const initContextMenu = (table: Table) => {
         }
         let f = curContextCol.getField()
         // console.log(f, 'testF') //
-        table.hiddenColumn(f)//
+        table.hiddenColumn(f) //
         //
       },
     },
@@ -157,26 +157,27 @@ export const initContextMenu = (table: Table) => {
       key: 'designAllColumns',
       disabled: false, //
       visible: true,
-      fn: async () => {//
+      fn: async () => {
+        //
         let system = table.getSystem()
         let originColumns = table.getColumns().map((col) => {
           return col.config
-        })//
+        }) //
         let tableName = table.getTableName()
-        originColumns = _.cloneDeep(originColumns)//
+        originColumns = _.cloneDeep(originColumns) //
         let _d: any = await system.confirmTable({
           tableState: 'edit',
           columns: [
             {
-              field: 'title',//
-              title: '标题',//
-              editType: 'string',//
+              field: 'title', //
+              title: '标题', //
+              editType: 'string', //
               type: 'string', //
             },
             {
-              field: "tableName",
+              field: 'tableName',
               title: '表名',
-              defaultValue: table.getTableName(),//
+              defaultValue: table.getTableName(), //
               type: 'string',
               disabled: true,
             },
@@ -215,11 +216,14 @@ export const initContextMenu = (table: Table) => {
             },
           ],
           data: originColumns,
-        })//
+        }) //
         table.onColumnsDesign(_d)
-
       },
     },
   ]
+  let contextItems = table.config.contextItems
+  if (Array.isArray(contextItems) && contextItems.length > 0) {
+    items = [...items, ...contextItems] //
+  }
   table.contextItems = items
 }

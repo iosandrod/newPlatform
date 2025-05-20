@@ -30,15 +30,15 @@ interface Filter {
   field: string
   /** 操作符，默认 '$eq'（等于） */
   operator?:
-  | '$eq'
-  | '$ne'
-  | '$gt'
-  | '$gte'
-  | '$lt'
-  | '$lte'
-  | '$in'
-  | '$nin'
-  | '$like'
+    | '$eq'
+    | '$ne'
+    | '$gt'
+    | '$gte'
+    | '$lt'
+    | '$lte'
+    | '$in'
+    | '$nin'
+    | '$like'
   /** 值 */
   value: any
 }
@@ -122,7 +122,7 @@ export class PageDesign extends Form {
   addFormItem(config): any {
     let type = config.type
     if (type == 'buttonGroup') {
-      config.type = 'buttongroup'//
+      config.type = 'buttongroup' //
     }
     let _item = new PageDesignItem(config, this) //
     if (config.type == 'entity') {
@@ -143,7 +143,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() { }
+  initDefaultTemplatePage() {}
   getValidateRules() {
     return []
   }
@@ -254,8 +254,8 @@ export class PageDesign extends Form {
       $and: filters.map(buildCond),
     }
   } //
-  async createTableData() { }
-  async updateTableData() { }
+  async createTableData() {}
+  async updateTableData() {}
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName)
     let obj1 = {}
@@ -277,10 +277,13 @@ export class PageDesign extends Form {
       })
     } else {
       columns = this.getTableConfig().columns
-    } //
-    return columns //
+    }
+    if (Array.isArray(columns)) {
+      return columns
+    }//
+    return [] //
   }
-  getMainTableConfig() { }
+  getMainTableConfig() {}
   @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -314,7 +317,8 @@ export class PageDesign extends Form {
     let id = config.id
     if (id == null) {
       await this.createTableDesign()
-    } else {//
+    } else {
+      //
       await this.updateTableDesign()
     }
     nextTick(() => {
@@ -345,23 +349,23 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() { }
+  getAllFormMap() {}
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() { }
+  initDefaultSForm() {}
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() { }
+  async openAddEntity() {}
   async addMainTableRow(addConfig) {
     let config = this.config //
     let system = this.getSystem()
     let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`, (d) => { })
+    system.routeOpen(`${tableName}---edit`, (d) => {})
   }
   getRealTableName() {
     let tableName = this.getTableName() //
@@ -627,11 +631,12 @@ export class PageDesign extends Form {
           return false //
         }),
         disabled: false,
-      }, {
-        label: "设计其他",
+      },
+      {
+        label: '设计其他',
         fn: async () => {
-          console.log('设计其他')//
-        }
+          console.log('设计其他') //
+        },
       },
       {
         label: '设计按钮',
@@ -642,7 +647,8 @@ export class PageDesign extends Form {
           // debugger//
           let currentItem = this.currentContextItem
           let _type = currentItem?.config?.type
-          if (_type == 'buttongroup') {//
+          if (_type == 'buttongroup') {
+            //
             return true
           }
           return false //
@@ -659,7 +665,7 @@ export class PageDesign extends Form {
     let options = _item.getOptions()
     let items = options?.items
     if (!Array.isArray(items)) {
-      options.items = [] // 
+      options.items = [] //
       items = options.items
     }
     items = _.cloneDeep(items)
@@ -688,7 +694,7 @@ export class PageDesign extends Form {
     return {
       label: cnName,
       value: tName,
-      tableName: tName,//
+      tableName: tName, //
       name: tName,
       order: this.tabOrder,
     }
@@ -924,9 +930,10 @@ export class PageDesign extends Form {
     //
   }
   printCurrentPage() {
-    console.log('开始打印')//
+    console.log('开始打印') //
   }
-  getColumnSelectTreeData() {//
+  getColumnSelectTreeData() {
+    //
     let allTableConfig = this.tableConfigMap
     let allCols = Object.values(allTableConfig).map((t: any) => {
       let columns = t.columns
@@ -934,14 +941,14 @@ export class PageDesign extends Form {
       //
       let _obj = {
         title: t.tableName,
-        children: _cols//
-      }//
+        children: _cols, //
+      } //
       // let obj = {
       //   tableName: t.tableName,
       //   columns: columns
       // }
       return _obj
     })
-    return allCols//
+    return allCols //
   }
 }

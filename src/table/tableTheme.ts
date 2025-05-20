@@ -39,8 +39,10 @@ export const createTheme = () => {
         inlineRowBgColor: '#F3F8FF',
       },
       select: {
-        inlineColumnBgColor: 'rgba(26, 26, 255, 0.1)',
-        inlineRowBgColor: 'rgba(26, 26, 255, 0.1)',
+        // inlineColumnBgColor: 'rgba(26, 26, 255, 0.1)',
+        // inlineRowBgColor: 'rgba(26, 26, 255, 0.1)',
+        inlineColumnBgColor: 'rgba(0, 0, 0, 0)',
+        inlineRowBgColor: 'rgba(0, 0, 0, 0)',
       },
       padding: [10, 16, 10, 16],
       textAlign: 'left',
@@ -64,8 +66,10 @@ export const createTheme = () => {
       borderLineWidth: 1,
       borderLineDash: [],
       select: {
-        inlineColumnBgColor: 'rgba(26, 26, 255, 0.1)',
-        inlineRowBgColor: 'rgba(26, 26, 255, 0.1)',
+        // inlineColumnBgColor: 'rgba(26, 26, 255, 0.1)',
+        // inlineRowBgColor: 'rgba(26, 26, 255, 0.1)',
+         inlineColumnBgColor: 'rgba(26, 26, 255, 0)',
+        inlineRowBgColor: 'rgba(26, 26, 255, 0)',
       },
       padding: [10, 16, 10, 16],
       textAlign: 'left',
@@ -129,8 +133,8 @@ export const createTheme = () => {
         inlineRowBgColor: '#F3F8FF',
       },
       select: {
-        inlineColumnBgColor: 'rgba(26, 26, 255, 0.1)',
-        inlineRowBgColor: 'rgba(26, 26, 255, 0.1)',
+        inlineColumnBgColor: 'rgba(26, 26, 255, 0.0)',
+        inlineRowBgColor: 'rgba(26, 26, 255, 0.0)',
       },
       padding: [10, 16, 10, 16], //
       textAlign: 'left',
@@ -195,8 +199,9 @@ export const createTheme = () => {
       },
     },
     selectionStyle: {
-      cellBgColor: 'rgba(0, 0, 255,0.1)',
-      cellBorderColor: '#0000ff',
+      cellBgColor: 'rgba(0, 0, 255,0.0)',
+      // cellBorderColor: '#0000ff',
+      cellBorderColor:'rgba(0, 0, 255, 0)',
       cellBorderLineWidth: 2,
       selectionFillMode: 'overlay',
     },

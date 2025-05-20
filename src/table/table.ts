@@ -52,6 +52,7 @@ import { SeriesNumberColumn } from './seriesNumberColumn'
 import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
+import { Row } from 'vant'
 export class Table extends Base {
   runClearSelect = false
   treeConfig: any = null
@@ -113,11 +114,11 @@ export class Table extends Base {
       indexArr: Array<any> //
     }>
   } = {
-      x: 0,
-      y: 0,
-      width: 0,
-      filterConfig: [],
-    }
+    x: 0,
+    y: 0,
+    width: 0,
+    filterConfig: [],
+  }
   dataMap = {}
   updateIndexArr = new Set() //
   effectPool = shallowRef({})
@@ -262,7 +263,7 @@ export class Table extends Base {
       instance.updateOption(oldOptions) //
     }
   }
-  getListTableOption() { }
+  getListTableOption() {}
   getShowSeriesNumber() {
     let config = this.config
     let showRowSeriesNumber = config.showRowSeriesNumber
@@ -610,7 +611,7 @@ export class Table extends Base {
       if (tree == true) {
         let expandAll = this.config.expandAll
         if (expandAll == true) {
-          this.expandAllTreeRow(true)//
+          this.expandAllTreeRow(true) //
         }
       }
     })
@@ -759,10 +760,10 @@ export class Table extends Base {
       this.runClearSelect = false //
       return
     }
-    console.log(_select, 'test_selelct')//
+    console.log(_select, 'test_selelct') //
     ins.selectCells(_select) //
     console.timeEnd(_id) //
-    console.log('消耗时间')//
+    console.log('消耗时间') //
   }
   updateCheckboxRecords() {
     let ins = this.getInstance()
@@ -901,7 +902,7 @@ export class Table extends Base {
   initCurrentContextItems() {
     initContextMenu(this) //
   } //
-  setCurTableSelect() { }
+  setCurTableSelect() {}
   openContextMenu(config) {
     let originData = config.originData
     let field = config.field
@@ -1030,7 +1031,7 @@ export class Table extends Base {
     let showCalculate = config.showCalculate
     return showCalculate
   }
-  getFlatTreeData(_data?: any) {
+  getFlatTreeData(_data?: any): any[] {
     let data = _data || this.getData()
     return data
       .map((row) => {
@@ -1209,14 +1210,14 @@ export class Table extends Base {
     }
     instance.scrollToRow(index) //
   }
-  async runBefore(config?: any) { }
+  async runBefore(config?: any) {}
   //@ts-ignore
   getRunMethod(getConfig: any) {
     if (getConfig == null) {
       return null
     }
   }
-  registerHooks(hConfig?: any) { }
+  registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
     if (instance == null) {
@@ -1231,7 +1232,7 @@ export class Table extends Base {
     }
     return instance //
   }
-  setMergeConfig(config?: any) { }
+  setMergeConfig(config?: any) {}
   async addRows(rowsConfig?: { rows?: Array<any> } | number) {
     if (typeof rowsConfig === 'number') {
       let _rows = Array(rowsConfig).fill(null)
@@ -1318,7 +1319,7 @@ export class Table extends Base {
     this.currentIndexContain = shallowRef({}) //
     instance.setRecords(records)
     console.timeEnd(id)
-    console.log('视图更新时间')//
+    console.log('视图更新时间') //
   }
   addAfterMethod(config) {
     config.type = 'after' //
@@ -1767,8 +1768,6 @@ export class Table extends Base {
   }
   startEditCell(col, row, value, isTitle = false) {
     try {
-
-
       let ins = this.getInstance() //
       let tCol = this.getTargetColumn(col, row)
       if (tCol.getEditType() == 'boolean') {
@@ -1794,11 +1793,11 @@ export class Table extends Base {
       ins.clearSelected() ////
     } catch (error) {
       console.error(error)
-      console.log(row, col, '编辑报错')//
+      console.log(row, col, '编辑报错') //
     }
   }
   clearEditCell() {
-    // debugger////
+    //
     let currentEditCol = this.currentEditCol
     let disableHideCell = currentEditCol?.disableHideCell
     if (disableHideCell == true) {
@@ -1867,14 +1866,15 @@ export class Table extends Base {
     this.validateMap = {} //
     this.updateCanvas() //
   }
-  async validateData(config) { }
+  async validateData(config) {}
+
   blur() {
     nextTick(() => {
       this.clearValidate()
       // this.clearEditCell() //
     })
   }
-  showErrorTopTool(showConfig: { row: number; col: number; content: string }) { }
+  showErrorTopTool(showConfig: { row: number; col: number; content: string }) {}
   getIsEditTable() {
     let editType = this.tableState
     if (editType == 'edit') {
@@ -1882,7 +1882,7 @@ export class Table extends Base {
     }
     return false
   }
-  copyCurrentSelectCells() { }
+  copyCurrentSelectCells() {}
   headerSortClick(config: any) {
     let sortState = this.sortCache
     let hasSort = sortState.findIndex((s) => s.field == config.field) //
@@ -1938,14 +1938,14 @@ export class Table extends Base {
         Object.defineProperty(e1, '_parentIndex', {
           value: _index,
           enumerable: false,
-          writable: true,//
+          writable: true, //
         })
         this.initDataRow(e1, i1)
       })
     } //
   }
-  designCurrentColumn() { }
-  getCacheContain(row) { }
+  designCurrentColumn() {}
+  getCacheContain(row) {}
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -1953,7 +1953,7 @@ export class Table extends Base {
         this.registerEvent({
           keyName: key,
           name: key, //
-          callback: (...args) => { },
+          callback: (...args) => {},
         })
       }
     })
@@ -2192,10 +2192,10 @@ export class Table extends Base {
     }) //
     ins.toggleHierarchyState(col, row) ////
     setTimeout(() => {
-      console.log(record, 'testRecords')//
-    }, 100);
+      console.log(record, 'testRecords') //
+    }, 100)
   }
-  setRowDragAble(status) { }
+  setRowDragAble(status) {}
   getTreeDataByPid(pid) {
     //
     let treeConfig = this.treeConfig
@@ -2243,23 +2243,24 @@ export class Table extends Base {
       return col.getField() == field
     })
     if (field == 'checkboxField') {
-      return//
-    }//
-    if (_col == null) {//
-      return//
-    }//
-    _col.setHidden(true)//
-    let ccnfig = this.config//
-    let onHiddenColumn = ccnfig.onColumnHidden//
+      return //
+    } //
+    if (_col == null) {
+      //
+      return //
+    } //
+    _col.setHidden(true) //
+    let ccnfig = this.config //
+    let onHiddenColumn = ccnfig.onColumnHidden //
     if (typeof onHiddenColumn == 'function') {
       onHiddenColumn({
-        column: _col,//
-        table: this,//
-        originColumn: _col.config,//
-        tableName: this.getTableName()
-      })//
-    }//
-  }//
+        column: _col, //
+        table: this, //
+        originColumn: _col.config, //
+        tableName: this.getTableName(),
+      }) //
+    } //
+  } //
   onColumnsDesign(cols: any[]) {
     let updateCols = cols.filter((col) => {
       let rowState = col['_rowState']
@@ -2272,12 +2273,12 @@ export class Table extends Base {
     let config = {
       addCols: addCols,
       updateCols: updateCols,
-      tableName: this.getTableName()
+      tableName: this.getTableName(),
     }
     let ccnfig = this.config
     let onColumnsDesign = ccnfig.onColumnsDesign
     if (typeof onColumnsDesign == 'function') {
-      onColumnsDesign(config)//
+      onColumnsDesign(config) //
     }
   }
   expandTargetRows(rows, hiddenOther = true) {
@@ -2290,44 +2291,44 @@ export class Table extends Base {
           writable: true,
         })
       }
-      row['_expanded'] = status//
+      row['_expanded'] = status //
       let col = 'collapse'
       if (status == true) {
         col = 'expand'
       }
-      row['hierarchyState'] = col//
+      row['hierarchyState'] = col //
     }
     let allRows = this.getFlatTreeData()
     if (hiddenOther == true) {
-      allRows.forEach(row => {
+      allRows.forEach((row) => {
         setExpand(row, false)
       })
     }
-    let dMap = this.dataMap
-    let getFlatParent = (row, arr = []) => {
-      let pIndex = row['_parentIndex']
-      if (pIndex == null) {
-        arr.push(row)
-      } else {
-        let pRow = dMap[pIndex]
-        getFlatParent(pRow, arr)//
-      }
-      return arr//
-    }
+   
     for (let row of rows) {
-      let farr = getFlatParent(row)
+      let farr = this.getFlatParent(row) //
       for (let r of farr) {
-        setExpand(r, true)//
+        setExpand(r, true) //
       }
     }
   }
+  getFlatParent(row, arr = []) {
+    let pIndex = row['_parentIndex']
+    if (pIndex == null) {
+      arr.push(row)
+    } else {
+      let pRow = this.dataMap[pIndex]
+      this.getFlatParent(pRow, arr)
+    }
+    return arr
+  }
   expandAllTreeRow(status = true) {
     let allRows = this.getFlatTreeData()
-    allRows.forEach(row => {
+    allRows.forEach((row) => {
       let hierarchyState = row.hierarchyState
       if (hierarchyState != 'expand') {
         row.hierarchyState = 'expand'
-      }//
+      } //
       let _expanded = row['_expanded']
       if (_expanded == null) {
         Object.defineProperty(row, '_expanded', {
@@ -2336,9 +2337,183 @@ export class Table extends Base {
           writable: true,
         })
       } else {
-        row['_expanded'] = status//
-      }//
+        row['_expanded'] = status //
+      } //
     })
-    this.updateCanvas()//
+    this.updateCanvas() //
   }
-} 
+  getCurrentContextRow() {
+    return this.curContextRow //
+  }
+  async _addChildrenRow() {
+    let cRow = this.getCurrentContextRow()
+    // console.log(cRow, 'testR') //
+    let nRow = await this.getDefaultValue()
+    let tConfig = this.treeConfig
+    let pKey = tConfig.parentId
+    let iKey = tConfig.id
+    nRow[pKey] = cRow[iKey] //
+    this.addChildrenRow(cRow, nRow) //
+  }
+  addChildrenRow(parentRow, newRow) {
+    let children = parentRow.children
+    this.initDataRow(newRow)
+    let _index = parentRow['_index'] //
+    Object.defineProperty(newRow, '_parentIndex', {
+      value: _index,
+      enumerable: false,
+      writable: true,
+    })
+    children.push(newRow)
+    this.updateCanvas() //
+  }
+  async validate(config?: any) {
+    return new Promise(async (resolve, reject) => {
+      let data = config?.data //
+      data = data || this.getFlatTreeData() //
+      if (config?.change == true) {
+        let changeData = data.filter((d) => {
+          let rowState = d['_rowState']
+          if (rowState == 'add' || rowState == 'change') {
+            return true
+          }
+          return false
+        }) //
+        data = changeData //
+      }
+      let columns = this.getFlatColumns() //
+      let _cols = columns.filter((col) => {
+        let isEdit = col.getIsEditField()
+        if (isEdit == true) {
+          return true
+        }
+        return false
+      })
+      let err = null
+      let _row = null
+      let _col = null
+      for (let row of data) {
+        //
+        for (let col of _cols) {
+          if (err != null) {
+            break //
+          }
+          let _v = row[col.getField()]
+          let status = await col.validateValue({
+            row: row, //
+            value: _v, //
+            table: this,
+          })
+          if (status == true) {
+            continue
+          }
+
+          err = status
+          _row = row
+          _col = col
+        }
+        if (err != null) {
+          break
+        }
+        let _index = row['_index'] //
+        delete this.validateMap[_index] //
+      }
+      if (err == null) {
+        resolve(true) //
+      } else {
+        let _index = _row['_index']
+        this.validateMap[_index] = [err] //
+        this.showErrorTopTip() //
+        reject(err)
+      }
+    })
+  }
+  showErrorTopTip() {
+    // debugger//
+    let validateMap = this.validateMap
+    if (Object.keys(validateMap).length == 0) {
+      return
+    }
+    let _index = Object.keys(validateMap)[0]
+    let err = validateMap[_index][0] //
+    // console.log(err) ////
+    let ins = this.getInstance()
+    let field = err.field
+    let row = err.row
+    // let addR = ins.getCellAddress((row) => {
+    //   return row['_index'] == _index //
+    // }, field) //
+    let _index1 = this.getFlatTreeData().findIndex((r) => r['_index'] == _index)
+    // let _rowIndex = row['_index']
+    // let addR = ins.getCellAddrByFieldRecord(field, _index1) //
+    let addR = ins.getCellAddress((r) => r['_index'] == _index, field)
+    let sumRow = (rows, _index, config = { i: 0, complete: false }) => {
+      for (let row of rows) {
+        config.i++
+        let children = row.children
+        let hierarchyState = row.hierarchyState
+        if (row['_index'] == _index) {
+          config.complete = true
+          return config //
+        }
+        if (config.complete == true) {
+          return config
+        }
+        if (hierarchyState == 'expand' && children.length > 0) {
+          //
+          return sumRow(children, _index, config) //
+        }
+      }
+      return config //
+    }
+    if (addR.row == null) {
+      //就是树表格
+      let tempData = this.templateProps.data
+      let _index11 = sumRow(tempData, _index) //
+      // console.log(_index11, 'test_index') //
+      addR.row = _index11.i //
+    }
+    // console.log(addR, 'addR') //
+
+    let fMes = err.message || '数据校验失败' //
+    // debugger//
+    let sCol = addR.col - 2
+    let sRow = addR.row - 2
+    if (sCol < 0) {
+      sCol = 0
+    }
+    if (sRow < 0) {
+      sRow = 0
+    }
+    this.getInstance().scrollToCell({
+      row: sRow,
+      col: sCol,
+    })
+    // this.getInstance().scrollToCell({
+    //   row: addR.row,
+    //   col: addR.col, //
+    // })
+    //
+    setTimeout(() => {
+      let _r2 = ins.getVisibleCellRangeRelativeRect({
+        col: addR.col,
+        row: addR.row,
+      })
+      ins.showTooltip(addR.col, addR.row, {
+        content: fMes, //
+        referencePosition: { rect: _r2, placement: VTable.TYPES.Placement.top }, //TODO
+        className: 'defineTooltip',
+        disappearDelay: 100,
+        style: {
+          bgColor: 'red',
+          //@ts-ignore
+          borderColor: 'red',
+          color: 'white', //
+          //@ts-ignore
+          font: 'normal bold normal 14px/1 STKaiti',
+          arrowMark: true,
+        },
+      }) //
+    }, 100)
+  }
+}

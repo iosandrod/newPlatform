@@ -182,7 +182,7 @@ export default defineComponent({
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
           <tableCom
             // {...tableConfig}
-            {...menuTConfig1} //
+            {...menuTConfig} ////
             showGlobalSearch={true}
             showHeaderButtons={true}
             // showControllerButtons={true}

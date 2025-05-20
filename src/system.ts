@@ -36,7 +36,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient() //
@@ -63,17 +63,17 @@ export class System extends Base {
   init() {
     super.init() //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabModelValue() {
     let route = this.getRouter()
     let r = route.currentRoute
@@ -82,8 +82,8 @@ export class System extends Base {
     let p1 = _p.pop()
     if (Boolean(p1) == false) {
       p1 = _p.pop()
-    }//
-    return p1//
+    } //
+    return p1 //
   }
   getTabItems() {
     let tableMap = this.tableMap
@@ -98,21 +98,23 @@ export class System extends Base {
       let oa = a.order || 0
       let ob = b.order || 0
       return oa - ob
-    })//
-    let _allT2 = [//
-      {
-        label: '首页',
-        value: 'home',
-        tableName: 'home',
-      }, {
-        label: '登录',
-        value: 'login',
-        tableName: 'login',//
-      }
-    ]
-    return _allT2//
-  }
-  openPageDesign(config) { } //
+    }) //
+    // let _allT2 = [
+    //   //
+    //   {
+    //     label: '首页',
+    //     value: 'home',
+    //     tableName: 'home',
+    //   },
+    //   {
+    //     label: '登录',
+    //     value: 'login',
+    //     tableName: 'login', //
+    //   },
+    // ]
+    return allT2 //
+  } //
+  openPageDesign(config) {} //
 
   async getPageLayout(name?: string) {
     let http = this.getHttp()
@@ -393,7 +395,7 @@ export class System extends Base {
     await http.patch('entity', layout) //
     await this.refreshPageDesign() //
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -468,7 +470,7 @@ export class System extends Base {
       await next().finally(() => {
         setTimeout(() => {
           instance.setCurrentLoading(false) //
-        }, 1000)
+        }, 200)
       }) //
       instance.setCurrentView() //
     })
@@ -477,7 +479,12 @@ export class System extends Base {
     return pageDesign
   }
   async onMainTabChange(config) {
-    console.log(config, 'testConfig')//
+    // console.log(config, 'testConfig')//
+    let tableName = config.tableName
+    this.onMenuItemClick({
+      //
+      tableName,
+    })
   }
   async createPageEditDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {
@@ -508,8 +515,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     return new Promise(async (resolve, reject) => {
       let _form = new Form(formConfig) //
@@ -851,7 +858,7 @@ export class System extends Base {
     try {
       //
       //打开app
-    } catch (error) { }
+    } catch (error) {}
   }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
@@ -894,7 +901,7 @@ export class System extends Base {
         {
           field: 'tableCnName',
           label: '表格中文名',
-          itemChange: (config) => { },
+          itemChange: (config) => {},
         },
         {
           label: '显示分页',
@@ -982,13 +989,21 @@ export class System extends Base {
   async designSystemNavs() {
     let _data = await this.getHttp().find('navs')
     let tableConfig = {
-      showHeaderButtons: true, //
+      showHeaderButtons: false, //
       enableDragRow: true,
       treeConfig: {
         id: 'id',
         parentId: 'pid',
         rootId: 0,
-      }, //
+      },
+      contextItems: [
+        {
+          label: '添加菜单',
+        },
+        {
+          label: '添加子菜单',
+        },
+      ],
       buttons: [
         // {
         //   label: '保存',
@@ -1076,16 +1091,18 @@ export class System extends Base {
     await http.logoutUser() //
   }
   async onMenuItemClick(item) {
+    // debugger//
     // console.log('左侧菜单点击', item)//
     let tableName = item.tableName
-    if (Boolean(tableName) == false) {//
+    if (Boolean(tableName) == false) {
+      //
       return
-    }//
+    } //
     let _d = await this.getHttp().hTable(tableName)
     if (_d == false) {
       return
-    }//
-    this.routeOpen(tableName)//
+    } //
+    this.routeOpen(tableName) //
   }
   getIsLogin() {
     let loginConfig = this.loginInfo
@@ -1117,7 +1134,7 @@ export class System extends Base {
         fn: async () => {
           await this.designCurrentPageConfig()
         },
-      },//
+      }, //
       {
         label: '查询表单设计',
         fn: async () => {
@@ -1188,7 +1205,7 @@ export class System extends Base {
     columnSelect[tableName] = _cols1 //
     columnSelect[_key] = true //
   }
-  clearSelectColumns() { } //
+  clearSelectColumns() {} //
   getDesignByTableName(tableName) {
     let _obj = this.tableMap //
     let editObj = this.tableEditMap

@@ -3668,3 +3668,34 @@ const app = createApp({
         tableName: 'login',//
       }
     ]
+
+     // console.log(_r2, '_r2') //
+    // let _r=ins.getCellRelativeRect(addR.col, addR.row)
+    // console.log(_r,'_r')//
+    // console.log(rect, 'testRect') ////
+    // let _rect = {
+    //   bounds: {
+    //     x1: 930,
+    //     y1: 70,
+    //     x2: 1030,
+    //     y2: 100,
+    //   },
+    //   bottom: 100,
+    //   height: 30,
+    //   left: 930,//
+    //   right: 1030,
+    //   top: 70,
+    //   width: 100,
+    // }
+
+
+     // let getFlatParent = (row, arr = []) => {
+    //   let pIndex = row['_parentIndex']
+    //   if (pIndex == null) {
+    //     arr.push(row)
+    //   } else {
+    //     let pRow = dMap[pIndex]
+    //     getFlatParent(pRow, arr) //
+    //   }
+    //   return arr //
+    // }
