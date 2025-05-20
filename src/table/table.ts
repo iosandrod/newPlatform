@@ -1081,7 +1081,6 @@ export class Table extends Base {
   filterTreeInPlace(nodes, predicate) {
     return nodes.filter((node) => {
       // 先把原始 children 备份到 _children
-      //第一次
       if (node._children == null) {
         Object.defineProperty(node, '_children', {
           value: node.children,
@@ -1112,8 +1111,7 @@ export class Table extends Base {
       return
     }
     let isTree = this.getIsTree()
-    if (isTree) {
-      //
+    if (isTree) {//
       let _data3 = this.filterTreeInPlace(_data1, (node) => {
         let status = true
         let globalValue = this.globalConfig.value
@@ -2269,7 +2267,7 @@ export class Table extends Base {
     let addCols = cols.filter((col) => {
       let rowState = col['_rowState']
       return rowState == 'add'
-    })
+    }) //
     let config = {
       addCols: addCols,
       updateCols: updateCols,
@@ -2304,7 +2302,7 @@ export class Table extends Base {
         setExpand(row, false)
       })
     }
-   
+
     for (let row of rows) {
       let farr = this.getFlatParent(row) //
       for (let r of farr) {

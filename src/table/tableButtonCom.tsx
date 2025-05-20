@@ -42,10 +42,8 @@ export default defineComponent({
         {
           label: '导出',
           fn: async () => {
-            //添加行
+            //添加行//
             tableIns.updateCanvas() //
-            // let ins = tableIns.getInstance()
-            // ins.clearSelected() //
           },
         },
         {
