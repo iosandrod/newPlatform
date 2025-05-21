@@ -711,6 +711,7 @@ export class Column extends Base {
         }
       }
     }
+    let obj: any = props //
     return props //
   }
   getCalculateType() {
@@ -828,12 +829,12 @@ export class Column extends Base {
     let config = this.config
     let required = config.required
     let _arr = []
-    if (required==true) {
+    if (required == true) {
       let _fn = (vConfig) => {
         // let f=this.getField()
         // let row=vConfig.row
         // let _d=row[f]
-        let value = vConfig.value//
+        let value = vConfig.value //
         if (value == null || value === '') {
           return '此项为必填项' //
         }

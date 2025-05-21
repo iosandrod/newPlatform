@@ -124,6 +124,12 @@ export default defineComponent({
     dragRowAfterFn: {
       type: Function, //
     },
+    dragColumnFn: {
+      type: Function,
+    },
+    dragColumnAfterFn: {
+      type: Function, //
+    },
     showHeaderContext: {
       type: Boolean,
       default: true,

@@ -317,10 +317,9 @@ export class Table extends Base {
         }
         let isTree = this.getIsTree()
         if (isTree && status == true) {
-          //
           nextTick(() => {
             let _pid = r1[this.treeConfig.parentId]
-            this.swapTwoRow(r1, r2, _pid)
+            this.swapTwoRow(r1, r2, _pid) //
           })
         }
         return status //
@@ -570,19 +569,42 @@ export class Table extends Base {
       return col.getIsShow()
     })
     let _col1 = _cols.map((col) => {
-      return col.getFooterColumnProps()
+      return col.getFooterColumnProps() //
     })
+    //显示check
     let _show = this.config.showCheckboxColumn
+
+    let _show1 = this.getShowControllerColumn()
+    let rfsCols = _col1.filter((c) => {
+      let isFrozen = c.isFrozen
+      return isFrozen == true //右边的
+    })
+    let lfsCols = _col1.filter((c) => {
+      let isLeftFrozen = c.isLeftFrozen
+      return isLeftFrozen == true //左边的
+    })
+    let sCols = _col1.filter((c) => {
+      let s1 = lfsCols.includes(c)
+      let s2 = rfsCols.includes(c)
+      return !s1 && !s2
+    })
+    sCols.sort((c1, c2) => {
+      let o1 = c1.order
+      let o2 = c2.order
+      return o1 - o2 //
+    })
+    _col1 = [...lfsCols, ...sCols, ...rfsCols]
+
     if (_show) {
       let cCol = this.checkboxColumn
-      _col1.unshift(cCol.getFooterColumnProps()) ////
-    }
-    let _show1 = this.getShowControllerColumn()
+      _col1.unshift(cCol.getFooterColumnProps())
+    } //
     if (_show1 == true) {
+      //
       let cCol = this.controllerColumn
-      _col1.push(cCol.getFooterColumnProps()) //////
+      _col1.push(cCol.getFooterColumnProps())
     }
-    return _col1 ////
+    return _col1
   }
   loadFooterColumn() {
     try {
@@ -633,13 +655,21 @@ export class Table extends Base {
       myFro = myFro + 1 //
     }
     let myRight = this.rightFrozenColCount
+    let footerInstance = this.getFooterInstance()
     if (myRight > 0 && myRight != right) {
       instance.options.rightFrozenColCount = myRight //
+      if (footerInstance != null) {
+        footerInstance.options.rightFrozenColCount = myRight
+      }
     }
     if (myFro > 0 && myFro != fro) {
       instance.options.frozenColCount = myFro //
+      if (footerInstance != null) {
+        footerInstance.options.frozenColCount = myFro
+      } //
     }
     instance.updateColumns(_columns) //
+    let footerIns = this.getFooterInstance()
     console.timeEnd(n) //
   }
   @useTimeout({
@@ -2027,12 +2057,22 @@ export class Table extends Base {
   changeSortOrder(orderFieldArr: { field: string; order: number }[]) {
     let old1 = orderFieldArr.map((f) => f.field)
     old1.forEach((f, i) => {
-      let columns = this.columns
+      let columns = this.getFlatColumns()
       let _col = columns.find((col) => col.getField() == f) //
       if (_col) {
         _col.setOrder(i) // _col.setOrder(i) //
       }
-    }) ////
+    }) //
+    let config = this.config
+    let dragColumnAfterFn = config.dragColumnAfterFn
+    if (typeof dragColumnAfterFn == 'function') {
+      let columns = this.getFlatColumns()
+      dragColumnAfterFn(
+        columns.map((col) => {
+          return col.config //
+        }),
+      )
+    }
   }
   startWatchSystemMouseConfig() {
     let system = this.getSystem()
