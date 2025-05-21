@@ -94,12 +94,34 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         type: 'code',
         editType: 'code',
       },
-      {
+      {//
         field: 'disabledDefaultFn',
         title: '通用禁用脚本',
-        type: 'code',
-        editType: 'code',
-      }, //
+        type: 'select',
+        editType: 'select',
+        options: [
+          {
+            label: '编辑状态禁用',
+            value: 'editDisabled',
+          },
+          {
+            label: '新增状态禁用',
+            value: 'addDisabled',
+          },
+          {
+            label: '产看状态禁用',
+            value: 'scanDisabled',
+          },
+          {
+            label: '删除',
+            value: 'deleteTableRows',
+          },
+          {
+            label: '导出',
+            value: 'exportTableRows',
+          }, //
+        ],
+      },
     ],
     treeConfig: {
       id: 'id',

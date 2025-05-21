@@ -42,7 +42,8 @@ interface Filter {
   /** 值 */
   value: any
 }
-export class PageDesign extends Form {
+export class PageDesign extends Form {//
+  tabHidden = false//
   hooksMetaData: Record<string, any[]> = {} //
   currentContextItem: PageDesignItem = null
   tabOrder: number = 0
@@ -294,12 +295,25 @@ export class PageDesign extends Form {
     }
     return data
   } //
-  // @useRunAfter()
+  getAddRowsArgs() {
+    return {
+      rows: 1,
+      tableName: this.getTableName()
+    } as any
+  }//
+  @useHooks((config) => {
+    let ctx: PageDesign = config.instance //
+    let args = config.args
+    if ((args.length = 0)) {
+      args[0] = ctx.getAddRowsArgs()
+    } //
+  })
   async addTableRows(
     //
-    rows: number | Array<any> = 1, //
-    tableName = this.getTableName(),
+    config = this.getAddRowsArgs()
   ) {
+    let rows = config.rows
+    let tableName = config.tableName
     if (typeof rows == 'number') {
       rows = Array(rows).fill(null)
     }
@@ -309,7 +323,10 @@ export class PageDesign extends Form {
       arr1.push(d) //
     }
     let tableIns = this.getTableRef(tableName)
-    tableIns.addRows({ rows: arr1 })
+    if (tableIns == null) {
+      return
+    }//
+    tableIns.addRows({ rows: arr1 })//
   }
   getTableRef(tableName = this.getTableName()) {
     let tableIns = this.getRef(tableName)
@@ -693,8 +710,11 @@ export class PageDesign extends Form {
   getHomeTabLabel() {
     let tName = this.getTableName() //
     let cnName = this.getTableCnName() //
+    let rTableName = this.getRealTableName()
     return {
       label: cnName,
+      realTableName: rTableName,
+      hidden: this.tabHidden,
       value: tName,
       tableName: tName, //
       name: tName,

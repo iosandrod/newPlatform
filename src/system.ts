@@ -88,11 +88,23 @@ export class System extends Base {
   getTabItems() {
     let tableMap = this.tableMap
     let allT = Object.values(tableMap).map((row) => {
-      return row.getHomeTabLabel()
+      return row.getHomeTabLabel()//
+    }).filter((row) => {
+      let hidden = row.hidden
+      if (hidden) {
+        return false
+      }
+      return true
     })
     let allEditT = Object.values(this.tableEditMap).map((row) => {
       return row.getHomeTabLabel()
-    })
+    }).filter((row) => {
+      let hidden = row.hidden
+      if (hidden) {
+        return false
+      }
+      return true
+    })//
     let allT2 = [...allT, ...allEditT]
     allT2.sort((a, b) => {
       let oa = a.order || 0

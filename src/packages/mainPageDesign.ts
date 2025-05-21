@@ -71,16 +71,44 @@ export class MainPageDesign extends PageDesign {
       this.getSystem().refreshPageDesign() //
     }
   }
-  async addTableRows() {
-    console.log('add config') //
+  @useHooks((config) => {
+    let ctx: PageDesign = config.instance //
+    let args = config.args
+    if ((args.length = 0)) {
+      args[0] = ctx.getAddRowsArgs()
+    } //
+  })
+  async addTableRows(config = this.getAddRowsArgs()) {//
+    let rows = config.rows
+    let tableName = config.tableName
+    if (typeof rows == 'number') {
+      rows = Array(rows).fill(null)
+    }
+    let arr1 = []
+    for (let i = 0; i < rows.length; i++) {
+      let d = await this.addTableRow(rows[i], tableName)
+      arr1.push(d) //
+    }
+    let tableIns = this.getTableRef(tableName)
+    if (tableIns == null) {
+      return
+    }//
+    tableIns.addRows({ rows: arr1 })//
   }
   async addMainTableRow(addConfig) {
     let config = this.config //
     let system = this.getSystem()
     let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`, (d: editPageDesign) => {
-      // console.log(d, 'testData')//
-      d.addMainTableRow() //
-    })
+    // debugger////
+    let pageEditType = config.pageEditType
+    if (pageEditType == 'page') {
+      system.routeOpen(`${tableName}---edit`, (d: editPageDesign) => {
+        // console.log(d, 'testData')//
+        d.addMainTableRow() //
+      })
+    }//
+    if (pageEditType == 'default') {
+      this.addTableRows()//
+    }//
   }
 }

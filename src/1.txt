@@ -3942,3 +3942,22 @@ const app = createApp({
     // })
     // columnSelect[tableName] = _cols1 //
     // columnSelect[_key] = true //
+
+
+    //新增一行数据
+        // let tableName = page.getTableName() //
+        // let tRef: Table = page.getRef(tableName) //
+        // if (tRef == null) {
+        //   return
+        // }
+        // tRef.addRows(1) //
+
+
+           if (disabledDefaultFn == 'scanDisabled') {
+          }
+
+
+            {
+            label: '新增状态禁用',
+            value: 'addDisabled',
+          },

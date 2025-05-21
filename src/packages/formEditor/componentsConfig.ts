@@ -422,7 +422,6 @@ export const createFieldConfig = (f: Form) => {
           id: '',
           style: {
             width: '100%',
-            minHeight: '50px',
           },
           options: {
             items: [],

@@ -32,11 +32,7 @@ export default defineComponent({
     }
     return () => {
       let com = (
-        <div
-          onContextmenu={_context}
-          class="w-full h-full bg-white"
-          style={{ minHeight: '30px' }}
-        >
+        <div onContextmenu={_context} class="w-full h-full bg-white flex items-center " style={{ minHeight: '30px' }}>
           <ButtonGroupCom {..._value.value}></ButtonGroupCom>
         </div>
       )
