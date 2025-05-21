@@ -72,15 +72,21 @@ export class MainPageDesign extends PageDesign {
     }
   }
   async addTableRows() {
-    console.log('add config') //
+    await super.addTableRows() //
   }
   async addMainTableRow(addConfig) {
     let config = this.config //
-    let system = this.getSystem()
-    let tableName = this.getTableName()
-    system.routeOpen(`${tableName}---edit`, (d: editPageDesign) => {
-      // console.log(d, 'testData')//
-      d.addMainTableRow() //
-    })
+    // console.log(config, 'testConfig') //
+    let pageEditType = config.pageEditType //
+    if (pageEditType == 'page') {
+      let system = this.getSystem()
+      let tableName = this.getTableName()
+      system.routeOpen(`${tableName}---edit`, (d: editPageDesign) => {
+        d.addMainTableRow() //
+      }) //
+    }
+    if (pageEditType == 'default') {//
+      this.addTableRows() //
+    }
   }
 }

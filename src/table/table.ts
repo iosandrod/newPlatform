@@ -2040,6 +2040,7 @@ export class Table extends Base {
   //外部点击事件
   outClick(event, isIn = false) {
     this.clearEditCell() //
+    this.getInstance().clearSelected() //
   } //
   getHeaderButtons() {
     let config = this.config //

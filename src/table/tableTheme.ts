@@ -200,8 +200,8 @@ export const createTheme = () => {
     },
     selectionStyle: {
       cellBgColor: 'rgba(0, 0, 255,0.0)',
-      // cellBorderColor: '#0000ff',
-      cellBorderColor:'rgba(0, 0, 255, 0)',
+      cellBorderColor: '#0000ff',
+      // cellBorderColor:'rgba(0, 0, 255, 0)',
       cellBorderLineWidth: 2,
       selectionFillMode: 'overlay',
     },
