@@ -27,6 +27,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    showCloseIcon: {
+      type: Boolean,
+      default: false,
+    },
     contextItems: {
       type: Array,
       default: (): any[] => [],
@@ -172,16 +176,28 @@ export default defineComponent({
                         )
                         _itemCom = label //
                       }
+                      let closeIcon = null
+                      if (props.showCloseIcon == true) {
+                        //
+                        closeIcon = (
+                          <div class="cursor-pointer h-full flex items-center">
+                            <div>X</div>
+                          </div>
+                        )
+                      }
+                      let height = el.tab.getTabHeight()
+                      let mHeight = el.tab.getTabMinHeight()
                       let dragCom = (
                         <div
                           key={el.id}
-                          class={'move'}
+                          class={['move flex flex-row items-center']}
                           ref={(el1) => {
                             el.registerRef('root', el1)
                           }}
                           style={{
-                            position: 'relative',
-                            height: '100%',
+                            position: 'relative', //
+                            minHeight: mHeight, //
+                            height: `${height}`,
                             width: `${el.dragConfig.rootWidth ? `${el.dragConfig.rootWidth}px` : ''}`,
                           }}
                         >
@@ -190,15 +206,16 @@ export default defineComponent({
                               e.preventDefault()
                               tabIns.openContextMenu(e, el)
                             }}
-                            class={'no-select'}
+                            class={'no-select flex items-center h-full'}
                             style={el.getSlotItemStyle()}
                           >
                             {dCom}
                             {mCom}
                             {_itemCom}
+                            {closeIcon}
                           </div>
                         </div>
-                      )
+                      ) //
                       return dragCom
                     }, //
                     default: () => {

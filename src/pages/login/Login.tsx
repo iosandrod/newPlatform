@@ -183,7 +183,9 @@ export default defineComponent({
           <tableCom
             // {...tableConfig}
             {...menuTConfig} ////
+            treeConfig={null}
             showGlobalSearch={true}
+            enableDragColumn={true} //
             showHeaderButtons={true}
             // showControllerButtons={true}
             // tableState="edit"

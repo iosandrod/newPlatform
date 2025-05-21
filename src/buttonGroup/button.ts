@@ -1,6 +1,7 @@
 import { Base } from '@/base/base'
 import { Dropdown } from '@/menu/dropdown'
 import { Table } from '@/table/table'
+import { runObj, stateObj } from '@ER/diabledFn'
 import { PageDesign } from '@ER/pageDesign'
 import { stringToFunction } from '@ER/utils'
 
@@ -66,6 +67,9 @@ export class Button extends Base {
   getDisabled() {
     let config = this.config
     let disabled = Boolean(config.disabled === true)
+    if (disabled) {
+      return disabled//
+    }
     let disabledFn = config.disabledFn
     if (typeof disabledFn == 'function') {
       try {
@@ -76,26 +80,47 @@ export class Button extends Base {
       } catch (error) {
         console.error('禁用脚本报错')
       }
-    }
-    if (typeof disabledFn == 'string') {
-      //
-      let _fn = stringToFunction(disabledFn)
-      if (typeof _fn == 'function') {
-        try {
-          let _d = _fn({
-            page: this.getMainPageDesign(),
-            curRow: this.getMainPageDesign()?.getCurRow(),
-            parent: this.getParent(), //
-          })
-          if (_d == true) {
-            disabled = true
+    } else {
+
+      if (typeof disabledFn == 'string') {
+        //
+        let _fn = stringToFunction(disabledFn)
+        if (typeof _fn == 'function') {
+          try {
+            let _d = _fn({
+              page: this.getMainPageDesign(),
+              curRow: this.getMainPageDesign()?.getCurRow(),
+              parent: this.getParent(), //
+            })
+            if (_d == true) {
+              disabled = true
+            }
+          } catch (error) {
+            console.error('按钮禁用脚本报错') //
+            console.error(error) //
           }
-        } catch (error) {
-          console.error('按钮禁用脚本报错') //
-          console.error(error) //
+        }
+      } else {
+        let disabledDefaultFn = this.config.disabledDefaultFn
+        if (typeof disabledDefaultFn == 'string') {
+          // debugger//
+
+          let dObj = stateObj
+          let _fn = dObj[disabledDefaultFn]
+          if (typeof _fn == 'function') {
+            let _state = _fn({
+              page: this.getMainPageDesign(),
+              curRow: this.getMainPageDesign()?.getCurRow(),
+              parent: this.getParent(), //
+            })
+            if (_state == true) {
+              disabled = true//
+            }
+          }
         }
       }
     }
+
     return disabled
   }
   hiddenDropdown() {
@@ -113,50 +138,9 @@ export class Button extends Base {
     return this
   }
   getDefaultFnRun() {
-    let page = this.getMainPageDesign()
-    let obj = {
-      openSearchDialog: (config) => {
-        let page: PageDesign = config.page
-        page.openSearchDialog() //
-      },
-      addMainTableRow: async (config) => {
-        //
-        let page: PageDesign = config.page
-        await page.addMainTableRow() //
-      },
-      addTableRows: async (config) => {
-        let page: PageDesign = config.page
-        await page.addTableRows() //
-        //新增一行数据
-        // let tableName = page.getTableName() //
-        // let tRef: Table = page.getRef(tableName) //
-        // if (tRef == null) {
-        //   return
-        // }
-        // tRef.addRows(1) //
-      },
-      saveTableData: async (config) => {
-        //
-        let page: PageDesign = config.page
-        await page.saveTableData() //
-      }, //
-      setCurrentEdit: async (config) => {
-        //
-        let page: PageDesign = config.page
-        await page.setCurrentEdit() //
-      },
-      setCurrentView: async (config) => {
-        //
-        let page: PageDesign = config.page
-        await page.setCurrentView() //
-      }, //
-      getTableData: async (config) => {
-        //
-        let page: PageDesign = config.page
-        await page.getTableData() ////
-      },
-    }
-    return obj //
+    let _runObj = runObj
+    let obj = _runObj
+    return obj
   }
   async runFn(_config) {
     try {

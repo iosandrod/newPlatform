@@ -91,18 +91,18 @@ export default defineComponent({
           class={`${ns.b()}`} //
           isDesign={group.isDesign}
           {...group.getTabProps()}
-          height={27}
+          height={40}
           v-slots={{
             item: (el: Button) => {
               let btn = el.config.button //
               let disabled = btn.getDisabled()
+              let _class = ['v-contextmenu', 'h-35', 'items-center', 'flex']
+              if (disabled == true) {
+                _class.push('is-disabled') //
+              }
               let com = (
                 <div
-                  class={{
-                    'v-contextmenu': true,
-                    'is-disabled': disabled,
-                    // 'cursor-pointer': true,//
-                  }}
+                  class={_class}
                   style={{
                     minWidth: `${btn.getButtonWidth()}px`,
                     position: 'relative',
@@ -112,7 +112,9 @@ export default defineComponent({
                     runBtnFn(btn)
                   }}
                 >
-                  <ContextmenuItem>{btn?.getLabel()}</ContextmenuItem>
+                  <ContextmenuItem>
+                    <div class="h-full flex items-center">{btn?.getLabel()}</div>
+                  </ContextmenuItem>
                 </div>
               )
               let com1 = null
@@ -129,7 +131,7 @@ export default defineComponent({
                               dropdown.showDropdown() //
                             }}
                             onMouseleave={() => {}}
-                            class="v-contextmenu"
+                            class="v-contextmenu flex items-center"
                             style={{
                               minWidth: `${btn.getButtonWidth()}px`,
                               position: 'relative',

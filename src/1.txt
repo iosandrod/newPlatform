@@ -3942,3 +3942,195 @@ const app = createApp({
     // })
     // columnSelect[tableName] = _cols1 //
     // columnSelect[_key] = true //
+ {
+        label: '宽度',
+        field: 'width',
+        type: 'string',
+        tabTitle: titles[0],
+      },
+
+    //新增一行数据
+        // let tableName = page.getTableName() //
+        // let tRef: Table = page.getRef(tableName) //
+        // if (tRef == null) {
+        //   return
+        // }
+        // tRef.addRows(1) //
+
+
+           if (disabledDefaultFn == 'scanDisabled') {
+          }
+
+
+            {
+            label: '新增状态禁用',
+            value: 'addDisabled',
+          },
+
+
+           pageDesign.use('getTableData', async (context, next) => {
+      let fArg = context.args[0]
+      let instance: PageDesign = context.instance
+      let query = fArg.query
+      let tableName = fArg.tableName
+      let _tName = instance.getTableName()
+      let _d1 = {}
+      if (tableName == _tName) {
+        let _d = instance.getSearchBindData() //
+        let _dn = Object.entries(_d)
+        if (_dn.length > 0 && _dn.map((d) => d[1]).some((d) => d != null)) {
+          _d1 = _d
+        }
+      } //
+      let searchWhere = instance.getSearchWhere(_d1) //
+      let result = _.merge({}, query, searchWhere)
+      fArg.query = result //
+      instance.setCurrentLoading(true)
+      //获取全局的查询条件
+      await next().finally(() => {
+        setTimeout(() => {
+          instance.setCurrentLoading(false) //
+        }, 200)
+      }) //
+      instance.setCurrentView() //
+    })
+
+     // {
+        //   label: '保存',
+        //   fn: async (config) => {
+        //     let p: Table = config.parent
+        //     let d = p.getFlatTreeData()
+        //     let changeData = d.filter((item) => {
+        //       let _rowState = item['_rowState']
+        //       return _rowState == 'change'
+        //     })
+        //     // console.log('sfsdss', changeData)//
+        //     await this.getHttp().patch('navs', changeData) //
+        //     this.confirmMessage('更新菜单成功') ////
+        //     this.clearCacheValue('getMenuData') //
+        //     await this.getMenuData() //
+        //   },
+        // },
+
+        ||
+              _.get(
+                state.fieldsLogicState.get(element),
+                'visible',
+                undefined,
+              ) !== 0
+
+
+                // let _slots = _attrs['_slots']
+      // let _obj = null
+      // if (Array.isArray(_slots)) {
+      //   _obj = _slots.reduce((res, cur) => {
+      //     let _item = slots[cur]
+      //     if (_item) {
+      //       res[cur] = _item
+      //     }
+      //     return res
+      //   }, {})
+      // } ////
+
+      onBeforeUnmount(() => {
+      const index = _.findIndex(state.validateStates, {
+        data: { id: props.data.id },
+      })
+      if (index !== -1) {
+        state.validateStates.splice(index, 1)
+      }
+    })
+
+
+
+    {_slots.default()}
+          {ER.props.dragMode === 'icon' && unref(isEditModel) && <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>}
+          {unref(isEditModel) && (
+            <div class={[ns.e('bottomRight')]}>
+              <Icon
+                class={['handle', ns.e('selectParent')]}
+                onClick={withModifiers(
+                  (e) => {
+                    handleAction(5)
+                  },
+                  ['stop']
+                )}
+                icon="top"
+              ></Icon>
+              {props.hasDel && (
+                <Icon
+                  class={[ns.e('copy')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(1)
+                    },
+                    ['stop']
+                  )}
+                  icon="delete"
+                ></Icon>
+              )}
+              {props.data.type == 'Sform' && (
+                <Icon
+                  class={[ns.e('copy')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(7)
+                    },
+                    ['stop']
+                  )}
+                  icon="config"
+                ></Icon>
+              )}
+              {props.data.type == 'dform' && (
+                <Icon
+                  class={[ns.e('copy')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(8)
+                    },
+                    ['stop']
+                  )} //
+                  icon="config"
+                ></Icon> //设置子表
+              )}
+              {props.hasAddCol && (
+                <Icon
+                  class={[ns.e('addCol')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(6)
+                    },
+                    ['stop']
+                  )}
+                  icon="plus"
+                ></Icon>
+              )}
+              {/* {isShowCopy.value && (
+                <Icon
+                  class={[ns.e('copyIcon')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(2) //
+                    },
+                    ['stop']
+                  )}
+                  icon="copy"
+                ></Icon>
+              )} */}
+              {isShowWidthScale.value && (
+                <div ref={widthScaleElement}>
+                  <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
+                </div>
+              )}
+              {isShowHeightScale.value && (
+                <div ref={heightScaleElement}>
+                  <Icon class={[ns.e('widthScale')]} icon="dragHeight"></Icon>
+                </div>
+              )}
+            </div>
+          )}
+
+          {unref(isEditModel) && props.hasMask && maskNode}
+
+
+      // let s = props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value)

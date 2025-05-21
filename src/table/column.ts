@@ -69,7 +69,7 @@ export class Column extends Base {
   setHidden(bool) {
     this.config.hidden = bool //
   } //
-  getFormitem() {} //
+  getFormitem() { } //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -184,6 +184,7 @@ export class Column extends Base {
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        justifyContent: 'center',
         overflow: 'hidden',
         alignItems: 'center', //
       })
@@ -666,8 +667,9 @@ export class Column extends Base {
           return v1 //
         },
         (v) => {
+          console.log('更新了footer') //
           _this.templateCalValue = v
-          table.updateFooterColumns()
+          table.updateFooterColumns()//
         },
       )
     }
@@ -714,8 +716,9 @@ export class Column extends Base {
     let obj: any = props //
     return props //
   }
+
   getCalculateType() {
-    let type = this.config.calculateType
+    let type = this.config.calculate
     return type
   }
   getIsShow() {
@@ -1400,7 +1403,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() {}
+  updateBindData() { }
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {

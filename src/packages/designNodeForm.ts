@@ -94,12 +94,34 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         type: 'code',
         editType: 'code',
       },
-      {
+      {//
         field: 'disabledDefaultFn',
         title: '通用禁用脚本',
-        type: 'code',
-        editType: 'code',
-      }, //
+        type: 'select',
+        editType: 'select',
+        options: [
+          {
+            label: '编辑状态禁用',
+            value: 'editDisabled',
+          },
+          {
+            label: '新增状态禁用',
+            value: 'addDisabled',
+          },
+          {
+            label: '产看状态禁用',
+            value: 'scanDisabled',
+          },
+          {
+            label: '删除',
+            value: 'deleteTableRows',
+          },
+          {
+            label: '导出',
+            value: 'exportTableRows',
+          }, //
+        ],
+      },
     ],
     treeConfig: {
       id: 'id',
@@ -350,7 +372,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => {} //
+        _d['_items_set'] = (v) => { } //
         return _d //
       }),
     },
@@ -361,7 +383,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
 export const selectTypeMap = (_this: PageDesign) => {
   let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
-    let rTableName = _this.getRealTableName() //
+    let rTableName = _this.getRealTableName()//
     let items = [
       {
         field: 'field',

@@ -68,7 +68,7 @@ export const createTheme = () => {
       select: {
         // inlineColumnBgColor: 'rgba(26, 26, 255, 0.1)',
         // inlineRowBgColor: 'rgba(26, 26, 255, 0.1)',
-         inlineColumnBgColor: 'rgba(26, 26, 255, 0)',
+        inlineColumnBgColor: 'rgba(26, 26, 255, 0)',
         inlineRowBgColor: 'rgba(26, 26, 255, 0)',
       },
       padding: [10, 16, 10, 16],

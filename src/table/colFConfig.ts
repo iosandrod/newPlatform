@@ -35,6 +35,13 @@ export const getDFConfig = (_this, data) => {
     tableName: tableName,//
     items: [
       {
+        field: "id",
+        label: 'ID',
+        type: 'string',
+        tabTitle: titles[0],
+        disabled: true,//
+      },
+      {
         field: 'field',
         label: '字段',
         type: 'string',
@@ -84,6 +91,31 @@ export const getDFConfig = (_this, data) => {
             },
           ],
         },
+      }, {
+        field: "calculate",////
+        label: "合计方式",
+        tabTitle: titles[0],
+        type: "select",
+        options: {
+          options: [
+            {
+              label: '求和',
+              value: 'sum',
+            },
+            {
+              label: '平均值',
+              value: 'avg',
+            },
+            {
+              label: '最大值',
+              value: 'max',
+            },
+            {
+              label: '最小值',
+              value: 'min',
+            },
+          ],//计算
+        }
       },
       {
         label: '默认值',
@@ -96,12 +128,6 @@ export const getDFConfig = (_this, data) => {
         field: 'fieldFormat',
         tabTitle: titles[0],
         type: 'code', //
-      },
-      {
-        label: '宽度',
-        field: 'width',
-        type: 'string',
-        tabTitle: titles[0],
       },
       {
         label: '默认值类型',

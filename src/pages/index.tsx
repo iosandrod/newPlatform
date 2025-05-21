@@ -119,10 +119,11 @@ export default defineComponent({
       )
       let tableTab = (
         <tabCom
-          height={30}
+          height={40}
           onTabChange={(config) => {
             system.onMainTabChange(config)
           }}
+          showCloseIcon={true} //
           items={systemIns.getTabItems()}
           modelValue={systemIns.getTabModelValue()}
           showContextMenu={true}
@@ -130,9 +131,9 @@ export default defineComponent({
           v-slots={{
             //
             item: (item) => {
-              let oldC = 'border-b-2 border-blue-500' //
+              //
               let com = (
-                <div class="cursor-pointer pl-10 pr-10 -mb-px text-blue-500   focus:outline-none">
+                <div class="cursor-pointer   pl-10 pr-10 -mb-px text-blue-500   focus:outline-none">
                   <div>{item.getLabel()}</div>
                 </div>
               )
@@ -243,7 +244,7 @@ export default defineComponent({
                       >
                         <div class="py-1">
                           <div href="#" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
-                            回复我的
+                            个人中心
                           </div>
                         </div>
                       </div>

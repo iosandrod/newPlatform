@@ -127,4 +127,8 @@ export class PageDesignItem extends FormItem {
     let f = this.form
     f.onColumnsDesign(config)
   }
+  onColumnConfigChange(config: any): void {
+    let f = this.form
+    f.onColumnConfigChange(config)
+  }
 }

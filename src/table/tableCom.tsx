@@ -1,16 +1,4 @@
-import {
-  defineComponent,
-  inject,
-  onMounted,
-  onUnmounted,
-  provide,
-  ref,
-  toRaw,
-  vShow,
-  watch,
-  watchEffect,
-  withDirectives,
-} from 'vue'
+import { defineComponent, inject, onMounted, onUnmounted, provide, ref, toRaw, vShow, watch, watchEffect, withDirectives } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
 import { tableV2Props, ClickOutside } from 'element-plus'
@@ -154,8 +142,11 @@ export default defineComponent({
       type: Function,
     },
     onColumnHidden: {
-      type: Function, //
+      type: Function,
     },
+    onColumnConfigChange: {
+      type: Function,
+    }, //
     onColumnsDesign: {
       type: Function,
     },
@@ -190,7 +181,7 @@ export default defineComponent({
           newV = []
         }
         tableIns.setColumns(newV) //
-      },
+      }
     )
     const registerRootDiv = (el) => {
       tableIns.registerRef('root', el) //注册实例//
@@ -244,7 +235,7 @@ export default defineComponent({
       },
       (e) => {
         tableIns.updateColumns()
-      },
+      }
     ) //
     watch(
       () => {
@@ -253,7 +244,7 @@ export default defineComponent({
       (e) => {
         //
         tableIns.updateFooterColumns()
-      },
+      }
     ) //
     watch(
       () => {
@@ -298,7 +289,7 @@ export default defineComponent({
             delete contain[_index] //
           })
         } //
-      },
+      }
     )
     // watch(
     //   () => {
@@ -320,7 +311,7 @@ export default defineComponent({
           e = [] //
         }
         tableIns.setData(e)
-      },
+      }
     )
     provide('tableIns', tableIns)
     const inputProps = tableIns.getGlobalSearchProps()
@@ -332,13 +323,7 @@ export default defineComponent({
     }
     return () => {
       let com = null
-      com = withDirectives(
-        <div
-          style={{ width: '100%', height: '100%', minHeight: '200px' }}
-          ref={registerRootDiv}
-        ></div>,
-        [],
-      ) //
+      com = withDirectives(<div style={{ width: '100%', height: '100%', minHeight: '200px' }} ref={registerRootDiv}></div>, []) //
       let menuCom = <TableMenuCom></TableMenuCom>
       // if (props.showHeaderContext === false) {
       //   menuCom = null //
@@ -397,7 +382,7 @@ export default defineComponent({
             }}
           ></InputCom>
         </div>,
-        [[vShow, tableIns.globalConfig.show]],
+        [[vShow, tableIns.globalConfig.show]]
       )
 
       let calCom = withDirectives(
@@ -414,7 +399,7 @@ export default defineComponent({
           }}
           ref={registerFooterDiv}
         ></div>,
-        [[vShow, tableIns.getShowCalColumns()]],
+        [[vShow, tableIns.getShowCalColumns()]]
       )
       let calDiv = withDirectives(
         <div
@@ -423,7 +408,7 @@ export default defineComponent({
             // border: '1px solid RGBA(30, 40, 60,1)', //
           }}
         ></div>,
-        [[vShow, tableIns.getShowCalColumns()]],
+        [[vShow, tableIns.getShowCalColumns()]]
       )
       let tBodyCom = withDirectives(
         <div
@@ -466,11 +451,9 @@ export default defineComponent({
               tableIns.outClick(e) //
             },
           ],
-        ],
+        ]
       )
-      let loadingCom = (
-        <VxeLoading modelValue={tableIns.pageLoading}></VxeLoading>
-      )
+      let loadingCom = <VxeLoading modelValue={tableIns.pageLoading}></VxeLoading>
       let outCom = (
         <div
           style={{

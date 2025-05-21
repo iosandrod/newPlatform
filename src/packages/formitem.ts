@@ -1030,4 +1030,7 @@ export class FormItem extends Base {
   onColumnResize(config) {
 
   }
+  onColumnConfigChange(config) {
+    let f = config.field
+  }
 }

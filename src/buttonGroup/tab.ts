@@ -58,6 +58,9 @@ export class Tab extends Base {
       modelValue: this.getModelValue(),
     }
   }
+  getTabMinHeight() {
+    return '30px'
+  }
   getTabHeight() {
     let config = this.config
     let height = config.height
@@ -151,5 +154,5 @@ export class Tab extends Base {
     let rItems = [...oldItems, ..._items]
     return rItems //
   }
-  closeByCurrent(type) {}
+  closeByCurrent(type) { }
 }
