@@ -362,8 +362,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
 export const selectTypeMap = (_this: PageDesign) => {
   let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
-    let rTableName = _this.getRealTableName()
-    debugger////
+    let rTableName = _this.getRealTableName()//
     let items = [
       {
         field: 'field',

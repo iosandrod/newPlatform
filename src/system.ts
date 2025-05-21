@@ -698,8 +698,8 @@ export class System extends Base {
           options: {
             options: [
               {
-                label: '普通增行',
-                value: 'default',
+                label: '普通增行',//
+                value: 'default',//
               },
               {
                 label: '弹出窗口',
