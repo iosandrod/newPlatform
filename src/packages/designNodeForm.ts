@@ -347,11 +347,10 @@ export const formitemTypeMap = (_this: PageDesign) => {
       ],
       data: computed(() => {
         let _d = _this.state.selected?.options || {} //
-        // debugger//
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => { } //
+        _d['_items_set'] = (v) => {} //
         return _d //
       }),
     },
@@ -362,8 +361,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
 export const selectTypeMap = (_this: PageDesign) => {
   let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
-    let rTableName = _this.getRealTableName()
-    debugger////
+    let rTableName = _this.getRealTableName() //
     let items = [
       {
         field: 'field',
