@@ -165,6 +165,7 @@ export const initContextMenu = (table: Table) => {
         }) //
         let tableName = table.getTableName()
         originColumns = _.cloneDeep(originColumns) //
+
         let _d: any = await system.confirmTable({
           tableState: 'edit',
           columns: [
@@ -209,11 +210,17 @@ export const initContextMenu = (table: Table) => {
               ],
             }, //
             {
-              field: 'width',
-              title: '宽度',
-              editType: 'number', //
-              type: 'number', //
+              field: "hidden",
+              title: "是否隐藏",
+              type: "boolean",
+              editType: "boolean",//
             },
+            // {
+            //   field: 'width',
+            //   title: '宽度',
+            //   editType: 'number', //
+            //   type: 'number', //
+            // },
           ],
           data: originColumns,
         }) //

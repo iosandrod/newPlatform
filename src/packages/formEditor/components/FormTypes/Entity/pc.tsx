@@ -84,7 +84,13 @@ export default defineComponent({
               item.onColumnHidden(config)
             }}
             onColumnsDesign={(config) => {
-              _design.onColumnsDesign(config)
+              if (_design) {
+                //
+                _design.onColumnsDesign(config)
+              }
+            }}
+            onColumnConfigChange={(config) => {
+              item.onColumnConfigChange(config)
             }}
           ></erTable>
         </div>

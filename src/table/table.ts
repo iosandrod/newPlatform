@@ -2040,6 +2040,13 @@ export class Table extends Base {
   //外部点击事件
   outClick(event, isIn = false) {
     this.clearEditCell() //
+    let ins = this.getInstance()
+    if (ins) {
+      if (isIn == true) {
+        return//
+      }
+      ins.clearSelected()////
+    }
   } //
   getHeaderButtons() {
     let config = this.config //
@@ -2065,13 +2072,23 @@ export class Table extends Base {
     }) //
     let config = this.config
     let dragColumnAfterFn = config.dragColumnAfterFn
+    let columns = this.getFlatColumns()
     if (typeof dragColumnAfterFn == 'function') {
-      let columns = this.getFlatColumns()
       dragColumnAfterFn(
         columns.map((col) => {
           return col.config //
         }),
       )
+    }
+    let onColumnConfigChange = config.onColumnConfigChange
+    if (typeof onColumnConfigChange == 'function') {
+      onColumnConfigChange({//
+        columns: columns.map((col) => {
+          return col.config //
+        }),
+        tableName: this.getTableName(),
+        field: "order"
+      })
     }
   }
   startWatchSystemMouseConfig() {

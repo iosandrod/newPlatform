@@ -929,18 +929,22 @@ export class PageDesign extends Form {//
     this.setCurrentView() //
   }
   async updateTableColumn(config, refresh = true) {
-    //
-    let id = config.id
-    if (id == null) {
-      return //
-    } //
+    if (Array.isArray(config)) {
+
+    } else {
+      config = [config]
+    }
+    config = config.filter(c => { return c.id != null })
+    if (config.length == 0) {
+      return
+    }
     let http = this.getHttp()
     await http.patch('columns', config) //
     if (refresh == true) {
       this.getSystem().confirmMessage('列数据更新成功', 'success') ////
       this.getSystem().refreshPageDesign() //
     }
-  } //
+  }
   onBeforeEditCell(config) {
     let tableState = this.tableState
     // console.log('编辑之前我做了这些处理') //
@@ -972,5 +976,31 @@ export class PageDesign extends Form {//
       return _obj
     })
     return allCols //
+  }
+  getBindPageProps() {
+    //
+  }
+  onColumnConfigChange(config) {
+    // debugger//
+    let tableName = config.tableName//
+    let _tableName = this.getTableName()
+    let columns = config.columns//
+    if (tableName == _tableName) {
+      if (Array.isArray(columns)) {
+
+      } else {
+        columns = [columns]
+      }//
+      let field = config.field
+      if (field == null) {
+        return
+      }
+      columns = columns.map(col => {
+        let id = col.id
+        let fV = col[field]
+        return { id: id, [field]: fV }
+      }).filter(c => { return c.id != null })//
+      this.updateTableColumn(columns, false)//
+    }
   }
 }

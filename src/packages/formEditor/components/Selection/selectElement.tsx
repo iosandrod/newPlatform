@@ -1,16 +1,4 @@
-import {
-  withModifiers,
-  resolveComponent,
-  ref,
-  useSlots,
-  onMounted,
-  useAttrs,
-  unref,
-  onBeforeUnmount,
-  inject,
-  computed,
-  onUnmounted,
-} from 'vue'
+import { withModifiers, resolveComponent, ref, useSlots, onMounted, useAttrs, unref, onBeforeUnmount, inject, computed, onUnmounted } from 'vue'
 import { isHTMLTag } from '@vue/shared'
 import hooks from '@ER/hooks'
 import utils from '@ER/utils'
@@ -98,14 +86,7 @@ export default {
         isWarning,
       })
     }
-    onBeforeUnmount(() => {
-      const index = _.findIndex(state.validateStates, {
-        data: { id: props.data.id },
-      })
-      if (index !== -1) {
-        state.validateStates.splice(index, 1)
-      }
-    })
+
     const handleCommand = (command) => {
       const [fn, param] = command.split(' ')
       props.data.context[fn](param)
@@ -216,11 +197,7 @@ export default {
           const onMouseMove = (e) => {
             //如果不是lineChildren
             if (props.data.type == 'col') {
-              let offset = Math.ceil(
-                (oldWidth +
-                  Math.round((e.clientX - oldX) / columnWidth) * columnWidth) /
-                  columnWidth,
-              )
+              let offset = Math.ceil((oldWidth + Math.round((e.clientX - oldX) / columnWidth) * columnWidth) / columnWidth)
               if (offset >= 24) {
                 offset = 24
               }
@@ -245,9 +222,7 @@ export default {
               }
             } else {
               const curNewWidth = oldWidth + e.clientX - oldX
-              let curWidth = Math.round(
-                (curNewWidth / hoverEl.parentNode.offsetWidth) * 100,
-              ) //百分比
+              let curWidth = Math.round((curNewWidth / hoverEl.parentNode.offsetWidth) * 100) //百分比
               if (curWidth <= 25) {
                 curWidth = 25
               }
@@ -269,12 +244,7 @@ export default {
                     let num = pre + cur
                     return num
                   }, 0)
-                let offset = Math.ceil(
-                  (oldWidth +
-                    Math.round((e.clientX - oldX) / columnWidth) *
-                      columnWidth) /
-                    columnWidth,
-                )
+                let offset = Math.ceil((oldWidth + Math.round((e.clientX - oldX) / columnWidth) * columnWidth) / columnWidth)
                 if (offset >= 24) {
                   offset = 24
                 }
@@ -314,10 +284,7 @@ export default {
           const oldHeight = hoverEl.offsetHeight
           let _newHeight = null
           const onMouseMove = (e) => {
-            const isRootEl =
-              formIns.state.store.findIndex(
-                (e) => e.id === props.data.context.parent.id,
-              ) !== -1
+            const isRootEl = formIns.state.store.findIndex((e) => e.id === props.data.context.parent.id) !== -1
             if (!isRootEl) {
               return //
             }
@@ -333,12 +300,7 @@ export default {
             state.heightScaleLock = isScale.value = false
             if (_newHeight != null) {
               hoverEl.style.height = null
-              formIns.syncHeightByPlatform(
-                props.data,
-                state.platform,
-                false,
-                _newHeight,
-              )
+              formIns.syncHeightByPlatform(props.data, state.platform, false, _newHeight)
             }
           }
           document.addEventListener('mouseup', onMouseUp)
@@ -346,55 +308,38 @@ export default {
         })
       }
     })
-    const TagComponent = isHTMLTag(props.tag)
-      ? props.tag
-      : resolveComponent(props.tag)
+    const TagComponent = isHTMLTag(props.tag) ? props.tag : resolveComponent(props.tag)
     const Selected = computed(() => {
       return target.value.id === props.data.id && ns.is('Selected')
     })
     const maskNode = <div class={[ns.e('mask')]}></div>
-    const isShowCopy = computed(() =>
-      isInlineChildren
-        ? props.hasCopy &&
-          props.data.context.parent.columns.length < ER.props.inlineMax
-        : props.hasCopy,
-    )
+    const isShowCopy = computed(() => (isInlineChildren ? props.hasCopy && props.data.context.parent.columns.length < ER.props.inlineMax : props.hasCopy))
     return () => {
+      let _attrs = useAttrs()
+
+      let _slots = useSlots()
+      let _slots1 = {
+        ..._slots,
+        default: () => {
+          // let dComArr=[]
+          // let defaultCom=_slots.default()
+          // let arr = (
+          // )
+          // return arr
+        },
+      }
       return (
         <TagComponent
           class={['ER-element', id.value]}
-          {...useAttrs()}
+          {..._attrs}
+          // v-slots={_slots1} ////
           // @ts-ignore
-          class={[
-            ns.b(),
-            'overflow-x-hidden',
-            'w-full',
-            unref(isEditModel) &&
-              ER.props.dragMode === 'full' &&
-              props.hasDrag &&
-              'ER-handle',
-            !isField && ns.e('borderless'),
-            unref(isEditModel) && ns.e('editor'),
-            unref(isEditModel) && Selected.value,
-            unref(isEditModel) && isHover.value && ns.e('hover'),
-            unref(isEditModel) && isScale.value && ns.e('isScale'),
-            unref(isEditModel) && isWarning.value && ns.is('Warning'),
-          ]}
+          class={[ns.b(), 'overflow-x-hidden', 'w-full', unref(isEditModel) && ER.props.dragMode === 'full' && props.hasDrag && 'ER-handle', !isField && ns.e('borderless'), unref(isEditModel) && ns.e('editor'), unref(isEditModel) && Selected.value, unref(isEditModel) && isHover.value && ns.e('hover'), unref(isEditModel) && isScale.value && ns.e('isScale'), unref(isEditModel) && isWarning.value && ns.is('Warning')]}
           ref={registerRef}
           onClick={unref(isEditModel) && withModifiers(handleClick, ['stop'])}
         >
-          {slots.default()}
-          {!isPc.value && <span></span>}
-          {ER.props.dragMode === 'icon' && unref(isEditModel) && (
-            <div class={[ns.e('topLeft')]}>
-              {props.hasDrag && (
-                <Icon
-                  class={['ER-handle', ns.e('dragIcon')]}
-                  icon="Rank"
-                ></Icon>
-              )}
-            </div>
-          )}
+          {_slots.default()}
+          {ER.props.dragMode === 'icon' && unref(isEditModel) && <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>}
           {unref(isEditModel) && (
             <div class={[ns.e('bottomRight')]}>
               <Icon
@@ -403,7 +348,7 @@ export default {
                   (e) => {
                     handleAction(5)
                   },
-                  ['stop'],
+                  ['stop']
                 )}
                 icon="top"
               ></Icon>
@@ -414,7 +359,7 @@ export default {
                     (e) => {
                       handleAction(1)
                     },
-                    ['stop'],
+                    ['stop']
                   )}
                   icon="delete"
                 ></Icon>
@@ -426,7 +371,7 @@ export default {
                     (e) => {
                       handleAction(7)
                     },
-                    ['stop'],
+                    ['stop']
                   )}
                   icon="config"
                 ></Icon> //设置子表
@@ -438,7 +383,7 @@ export default {
                     (e) => {
                       handleAction(8)
                     },
-                    ['stop'],
+                    ['stop']
                   )} //
                   icon="config"
                 ></Icon> //设置子表
@@ -450,7 +395,7 @@ export default {
                     (e) => {
                       handleAction(6)
                     },
-                    ['stop'],
+                    ['stop']
                   )}
                   icon="plus"
                 ></Icon>
@@ -462,7 +407,7 @@ export default {
                     (e) => {
                       handleAction(2) //
                     },
-                    ['stop'],
+                    ['stop']
                   )}
                   icon="copy"
                 ></Icon>

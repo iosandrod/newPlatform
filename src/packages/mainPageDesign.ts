@@ -99,7 +99,6 @@ export class MainPageDesign extends PageDesign {
     let config = this.config //
     let system = this.getSystem()
     let tableName = this.getTableName()
-    // debugger////
     let pageEditType = config.pageEditType
     if (pageEditType == 'page') {
       system.routeOpen(`${tableName}---edit`, (d: editPageDesign) => {

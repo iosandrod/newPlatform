@@ -22,10 +22,10 @@ export const stateObj = {
         }//
     },
     scanDisabled: (config) => {//
-        let page: PageDesign = config.page//
-        let tableState = page.tableState//
+        let page: PageDesign = config?.page//
+        let tableState = page?.tableState//
         if (tableState == 'scan') {//
-            return true
+            return true////
         }//
     }
 }

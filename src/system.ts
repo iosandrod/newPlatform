@@ -15,6 +15,7 @@ import { VxeUI } from 'vxe-pc-ui'
 import { getDFConfig } from './table/colFConfig'
 import { editPageDesign } from '@ER/editPageDesign'
 import { MainPageDesign } from '@ER/mainPageDesign'
+import { mainUse } from './pageUseFn'
 export class System extends Base {
   allApp: any = [] //
   systemApp: any = []
@@ -111,19 +112,7 @@ export class System extends Base {
       let ob = b.order || 0
       return oa - ob
     }) //
-    // let _allT2 = [
-    //   //
-    //   {
-    //     label: '首页',
-    //     value: 'home',
-    //     tableName: 'home',
-    //   },
-    //   {
-    //     label: '登录',
-    //     value: 'login',
-    //     tableName: 'login', //
-    //   },
-    // ]
+
     return allT2 //
   } //
   openPageDesign(config) { } //
@@ -241,32 +230,11 @@ export class System extends Base {
     let pageDesign = new MainPageDesign(obj) //
     pageDesign.tableName = tableName //
     pageDesign.setLayoutData(layoutConfig)
-    pageDesign.use('getTableData', async (context, next) => {
-      // console.log('getTableData之前', context)//
-      let fArg = context.args[0]
-      let instance: PageDesign = context.instance
-      let query = fArg.query
-      let tableName = fArg.tableName
-      let _tName = instance.getTableName()
-      let _d1 = {}
-      if (tableName == _tName) {
-        let _d = instance.getSearchBindData() //
-        let _dn = Object.entries(_d)
-        if (_dn.length > 0 && _dn.map((d) => d[1]).some((d) => d != null)) {
-          _d1 = _d
-        }
-      } //
-      let searchWhere = instance.getSearchWhere(_d1) //
-      let result = _.merge({}, query, searchWhere)
-      fArg.query = result //
-      instance.setCurrentLoading(true)
-      //获取全局的查询条件
-      await next().finally(() => {
-        setTimeout(() => {
-          instance.setCurrentLoading(false) //
-        }, 200)
-      }) //
-      instance.setCurrentView() //
+    Object.entries(mainUse).forEach(([key, value]) => {
+      let _arr = value
+      for (const e of _arr) {//
+        pageDesign.use(key, e)
+      }
     })
     await pageDesign.getTableData() //
     this.tableMap[tableName] = pageDesign //
@@ -820,22 +788,7 @@ export class System extends Base {
         },
       ],
       buttons: [
-        // {
-        //   label: '保存',
-        //   fn: async (config) => {
-        //     let p: Table = config.parent
-        //     let d = p.getFlatTreeData()
-        //     let changeData = d.filter((item) => {
-        //       let _rowState = item['_rowState']
-        //       return _rowState == 'change'
-        //     })
-        //     // console.log('sfsdss', changeData)//
-        //     await this.getHttp().patch('navs', changeData) //
-        //     this.confirmMessage('更新菜单成功') ////
-        //     this.clearCacheValue('getMenuData') //
-        //     await this.getMenuData() //
-        //   },
-        // },
+
       ],
       columns: [
         {
@@ -997,7 +950,6 @@ export class System extends Base {
   } //
   @useDelay()
   async createColumnSelect(tableName) {//
-    // debugger////
     if (tableName == null) {
       return
     } //

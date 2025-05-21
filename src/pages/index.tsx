@@ -244,7 +244,7 @@ export default defineComponent({
                       >
                         <div class="py-1">
                           <div href="#" class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100">
-                            回复我的
+                            个人中心
                           </div>
                         </div>
                       </div>

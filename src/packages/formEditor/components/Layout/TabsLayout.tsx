@@ -34,7 +34,20 @@ export default defineComponent({
               //@ts-ignore
               return (
                 //@ts-ignore
-                <Selection class={[ns.e('area'), 'h-full']} tag="el-tab-pane" label={element.label} name={element.id} data={element} parent={props.data}>
+                <Selection
+                  class={[ns.e('area'), 'h-full']}
+                  tag="el-tab-pane"
+                  label={element.label}
+                  name={element.id}
+                  data={element}
+                  // v-slots={{
+                  //   label: () => {
+                  //     return <div>测试的</div>
+                  //   }, //
+                  // }}
+                  _slots={['label']}
+                  parent={props.data}
+                >
                   <LayoutDragGable class={['h-full', ..._class]} data-layout-type={'tabs-col'} data={element.list} {...opt} parent={element} />
                 </Selection>
               )
