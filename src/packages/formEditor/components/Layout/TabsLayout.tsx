@@ -40,11 +40,11 @@ export default defineComponent({
                   label={element.label}
                   name={element.id}
                   data={element}
-                  // v-slots={{
-                  //   label: () => {
-                  //     return <div>测试的</div>
-                  //   }, //
-                  // }}
+                  v-slots={{
+                    label: () => {
+                      return <div>测试的</div>
+                    }, //
+                  }}
                   _slots={['label']}
                   parent={props.data}
                 >

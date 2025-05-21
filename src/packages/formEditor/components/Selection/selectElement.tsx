@@ -146,10 +146,9 @@ export default {
     onUnmounted(() => {
       // props.data.context.getHoverDiv = null //
     })
-    const widthScaleElement = ref()
+    let widthScaleElement = ref()
     const isScale = ref(false)
     const isShowWidthScale = computed(() => {
-      // let s = props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value)
       let s = false
       let type = props.data.type
       if (type == 'col') {
@@ -173,7 +172,7 @@ export default {
     onMounted(() => {
       if (!unref(isEditModel)) return false
       let hoverEl = elementRef.value.$el || elementRef.value
-      const widthScaleEl = widthScaleElement.value
+      let widthScaleEl = widthScaleElement.value
       hoverEl.addEventListener('mouseover', (e) => {
         if (!state.widthScaleLock) {
           isHover.value = true
@@ -187,6 +186,7 @@ export default {
       })
       //显示宽度更改按钮
       if (isShowWidthScale.value) {
+        if (widthScaleEl == null) return
         widthScaleEl.addEventListener('mousedown', (e) => {
           let offsetParent = hoverEl.offsetParent
           let offsetParentWidth = offsetParent.offsetWidth //
@@ -275,6 +275,7 @@ export default {
       const hoverEl = elementRef.value.$el || elementRef.value
       //显示宽度更改按钮
       if (isShowHeightScale.value && heightScaleEl) {
+        //
         heightScaleEl.addEventListener('mousedown', (e) => {
           let offsetParent = hoverEl.offsetParent
           let offsetParentWidth = offsetParent.offsetWidth //
@@ -312,36 +313,26 @@ export default {
     const Selected = computed(() => {
       return target.value.id === props.data.id && ns.is('Selected')
     })
-    const maskNode = <div class={[ns.e('mask')]}></div>
     const isShowCopy = computed(() => (isInlineChildren ? props.hasCopy && props.data.context.parent.columns.length < ER.props.inlineMax : props.hasCopy))
     return () => {
+      let maskNode = <div class={[ns.e('mask')]}></div>
       let _attrs = useAttrs()
 
       let _slots = useSlots()
       let _slots1 = {
         ..._slots,
         default: () => {
-          // let dComArr=[]
-          // let defaultCom=_slots.default()
-          // let arr = (
-          // )
-          // return arr
-        },
-      }
-      return (
-        <TagComponent
-          class={['ER-element', id.value]}
-          {..._attrs}
-          // v-slots={_slots1} ////
-          // @ts-ignore
-          class={[ns.b(), 'overflow-x-hidden', 'w-full', unref(isEditModel) && ER.props.dragMode === 'full' && props.hasDrag && 'ER-handle', !isField && ns.e('borderless'), unref(isEditModel) && ns.e('editor'), unref(isEditModel) && Selected.value, unref(isEditModel) && isHover.value && ns.e('hover'), unref(isEditModel) && isScale.value && ns.e('isScale'), unref(isEditModel) && isWarning.value && ns.is('Warning')]}
-          ref={registerRef}
-          onClick={unref(isEditModel) && withModifiers(handleClick, ['stop'])}
-        >
-          {_slots.default()}
-          {ER.props.dragMode === 'icon' && unref(isEditModel) && <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>}
-          {unref(isEditModel) && (
-            <div class={[ns.e('bottomRight')]}>
+          let dComArr = []
+          let defaultCom = _slots.default()
+          let arr = []
+          arr.push(defaultCom)
+          if (unref(isEditModel)) {
+            if (ER.props.dragMode === 'icon') {
+              let _com = <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>
+              arr.push(_com)
+            } //
+            let iconArr = []
+            let selectParentIcon = (
               <Icon
                 class={['handle', ns.e('selectParent')]}
                 onClick={withModifiers(
@@ -352,7 +343,25 @@ export default {
                 )}
                 icon="top"
               ></Icon>
-              {props.hasDel && (
+            )
+            iconArr.push(selectParentIcon)
+            if (isShowCopy.value) {
+              let copyIcon = (
+                <Icon
+                  class={['handle', ns.e('copy')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(6)
+                    },
+                    ['stop']
+                  )}
+                  icon="copy"
+                ></Icon>
+              )
+              iconArr.push(copyIcon)
+            }
+            if (props.hasDel) {
+              let delIcon = (
                 <Icon
                   class={[ns.e('copy')]}
                   onClick={withModifiers(
@@ -363,8 +372,11 @@ export default {
                   )}
                   icon="delete"
                 ></Icon>
-              )}
-              {props.data.type == 'Sform' && (
+              )
+              iconArr.push(delIcon)
+            }
+            if (props.data.type == 'Sform') {
+              let _icon = (
                 <Icon
                   class={[ns.e('copy')]}
                   onClick={withModifiers(
@@ -374,9 +386,12 @@ export default {
                     ['stop']
                   )}
                   icon="config"
-                ></Icon> //设置子表
-              )}
-              {props.data.type == 'dform' && (
+                ></Icon>
+              )
+              iconArr.push(_icon)
+            }
+            if (props.data.type == 'dform') {
+              let _icon = (
                 <Icon
                   class={[ns.e('copy')]}
                   onClick={withModifiers(
@@ -387,8 +402,11 @@ export default {
                   )} //
                   icon="config"
                 ></Icon> //设置子表
-              )}
-              {props.hasAddCol && (
+              )
+              iconArr.push(_icon)
+            }
+            if (props.hasAddCol) {
+              let _icon = (
                 <Icon
                   class={[ns.e('addCol')]}
                   onClick={withModifiers(
@@ -399,34 +417,48 @@ export default {
                   )}
                   icon="plus"
                 ></Icon>
-              )}
-              {isShowCopy.value && (
-                <Icon
-                  class={[ns.e('copyIcon')]}
-                  onClick={withModifiers(
-                    (e) => {
-                      handleAction(2) //
-                    },
-                    ['stop']
-                  )}
-                  icon="copy"
-                ></Icon>
-              )}
-              {isShowWidthScale.value && (
-                <div ref={widthScaleElement}>
-                  <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
-                </div>
-              )}
-              {isShowHeightScale.value && (
-                <div ref={heightScaleElement}>
-                  <Icon class={[ns.e('widthScale')]} icon="dragHeight"></Icon>
-                </div>
-              )}
-            </div>
-          )}
-
-          {unref(isEditModel) && props.hasMask && maskNode}
-        </TagComponent>
+              )
+              if (isShowWidthScale.value) {
+                let _icon = (
+                  <div
+                    ref={(el) => {
+                      widthScaleElement.value = el
+                    }}
+                  >
+                    <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
+                  </div>
+                )
+                iconArr.push(_icon)
+              }
+              if (isShowHeightScale.value) {
+                let _icon = (
+                  <div ref={(el) => (heightScaleElement.value = el)}>
+                    <Icon class={[ns.e('heightScale')]} icon="dragHeight"></Icon>
+                  </div>
+                )
+                iconArr.push(_icon)
+              }
+              iconArr.push(_icon)
+            }
+            let _com = <div class={[ns.e('bottomRight')]}>{iconArr}</div>
+            arr.push(_com)
+            if (props.hasMask) {
+              arr.push(maskNode) //
+            }
+          }
+          return arr
+        },
+      }
+      return (
+        <TagComponent
+          class={['ER-element', id.value]}
+          {..._attrs}
+          v-slots={_slots1} //////
+          // @ts-ignore
+          class={[ns.b(), 'overflow-x-hidden', 'w-full', unref(isEditModel) && ER.props.dragMode === 'full' && props.hasDrag && 'ER-handle', !isField && ns.e('borderless'), unref(isEditModel) && ns.e('editor'), unref(isEditModel) && Selected.value, unref(isEditModel) && isHover.value && ns.e('hover'), unref(isEditModel) && isScale.value && ns.e('isScale'), unref(isEditModel) && isWarning.value && ns.is('Warning')]}
+          ref={registerRef}
+          onClick={unref(isEditModel) && withModifiers(handleClick, ['stop'])}
+        ></TagComponent>
       )
     }
   },

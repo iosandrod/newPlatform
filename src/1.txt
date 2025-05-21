@@ -4040,3 +4040,97 @@ const app = createApp({
         state.validateStates.splice(index, 1)
       }
     })
+
+
+
+    {_slots.default()}
+          {ER.props.dragMode === 'icon' && unref(isEditModel) && <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>}
+          {unref(isEditModel) && (
+            <div class={[ns.e('bottomRight')]}>
+              <Icon
+                class={['handle', ns.e('selectParent')]}
+                onClick={withModifiers(
+                  (e) => {
+                    handleAction(5)
+                  },
+                  ['stop']
+                )}
+                icon="top"
+              ></Icon>
+              {props.hasDel && (
+                <Icon
+                  class={[ns.e('copy')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(1)
+                    },
+                    ['stop']
+                  )}
+                  icon="delete"
+                ></Icon>
+              )}
+              {props.data.type == 'Sform' && (
+                <Icon
+                  class={[ns.e('copy')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(7)
+                    },
+                    ['stop']
+                  )}
+                  icon="config"
+                ></Icon>
+              )}
+              {props.data.type == 'dform' && (
+                <Icon
+                  class={[ns.e('copy')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(8)
+                    },
+                    ['stop']
+                  )} //
+                  icon="config"
+                ></Icon> //设置子表
+              )}
+              {props.hasAddCol && (
+                <Icon
+                  class={[ns.e('addCol')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(6)
+                    },
+                    ['stop']
+                  )}
+                  icon="plus"
+                ></Icon>
+              )}
+              {/* {isShowCopy.value && (
+                <Icon
+                  class={[ns.e('copyIcon')]}
+                  onClick={withModifiers(
+                    (e) => {
+                      handleAction(2) //
+                    },
+                    ['stop']
+                  )}
+                  icon="copy"
+                ></Icon>
+              )} */}
+              {isShowWidthScale.value && (
+                <div ref={widthScaleElement}>
+                  <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
+                </div>
+              )}
+              {isShowHeightScale.value && (
+                <div ref={heightScaleElement}>
+                  <Icon class={[ns.e('widthScale')]} icon="dragHeight"></Icon>
+                </div>
+              )}
+            </div>
+          )}
+
+          {unref(isEditModel) && props.hasMask && maskNode}
+
+
+      // let s = props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value)
