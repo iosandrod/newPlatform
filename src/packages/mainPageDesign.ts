@@ -1,4 +1,5 @@
 import { editPageDesign } from './editPageDesign'
+import pageCom from './pageCom'
 import { PageDesign } from './pageDesign'
 import { useHooks } from './utils/decoration'
 //
@@ -108,6 +109,36 @@ export class MainPageDesign extends PageDesign {
     }
     if (pageEditType == 'default') {
       await this.addTableRows() //
-    }//
+    } //
+  }
+  async importTableRows(): Promise<any> {
+    await this.openImportDialog()
+  }
+  async openImportDialog(): Promise<any> {//
+    let _ins = await this.getSystem().createPageImportDesign(
+      this.getTableName(),
+    )
+    let dialogConfig = {
+      width: 800,
+      height: 600,
+      title: '导入数据',
+      buttons: [
+        {
+          label: '导入数据',
+          fn: () => {
+            _ins.getTableData() //
+          },
+        },
+      ],
+      createFn: () => {
+        return {
+          component: pageCom,
+          props: {//
+            formIns: _ins, //
+          },
+        }
+      },
+    }
+    this.openDialog(dialogConfig) //
   }
 }

@@ -31,15 +31,15 @@ interface Filter {
   field: string
   /** 操作符，默认 '$eq'（等于） */
   operator?:
-  | '$eq'
-  | '$ne'
-  | '$gt'
-  | '$gte'
-  | '$lt'
-  | '$lte'
-  | '$in'
-  | '$nin'
-  | '$like'
+    | '$eq'
+    | '$ne'
+    | '$gt'
+    | '$gte'
+    | '$lt'
+    | '$lte'
+    | '$in'
+    | '$nin'
+    | '$like'
   /** 值 */
   value: any
 }
@@ -146,7 +146,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() { }
+  initDefaultTemplatePage() {}
   getValidateRules() {
     return []
   }
@@ -257,8 +257,8 @@ export class PageDesign extends Form {
       $and: filters.map(buildCond),
     }
   } //
-  async createTableData() { }
-  async updateTableData() { }
+  async createTableData() {}
+  async updateTableData() {}
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName, true) //
     let obj1 = {}
@@ -289,7 +289,7 @@ export class PageDesign extends Form {
     } //
     return []
   }
-  getMainTableConfig() { }
+  getMainTableConfig() {}
   // @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -374,18 +374,18 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() { }
+  getAllFormMap() {}
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() { }
+  initDefaultSForm() {}
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() { }
+  async openAddEntity() {}
   async addMainTableRow(addConfig?: any) {
     //
     //
@@ -614,9 +614,8 @@ export class PageDesign extends Form {
       return null
     }
     let tableName = this.getRealTableName()
-    let http = this.getHttp()
+    let http = this.getHttp() //
     let _data = await http.find(tableName, query) //
-    console.log(_data, 'testData') //
     return _data
   }
   getMainContextItems() {
@@ -667,7 +666,7 @@ export class PageDesign extends Form {
           // console.log(column, 'testColumn') //
           if (column == null) {
             return
-          }
+          } //
           let _d: any = await this.getSystem().designTargetColumn(column, 1) //
           let _obj = columnToEdit(_d) //
           let currentFItemConfig = this.currentFItemConfig
@@ -1020,9 +1019,8 @@ export class PageDesign extends Form {
   getBindPageProps() {
     //
   }
-  async importTableRows() {
-
-  }//
+  async openImportDialog() {}
+  async importTableRows() {} //
   onColumnConfigChange(config) {
     let tableName = config.tableName //
     let _tableName = this.getRealTableName() //
@@ -1070,11 +1068,9 @@ export class PageDesign extends Form {
             _arr.push(_fn) //
           }
         }
-      }//
+      } //
     } //
     return _obj //
   }
-  getTreeConfig() {
-
-  }
+  getTreeConfig() {}
 }

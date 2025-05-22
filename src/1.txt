@@ -4152,3 +4152,17 @@ const app = createApp({
         if (pageEditType == 'default') {
             await this.addTableRows() //
         }//
+
+        async getPageSearchLayout(name?: string) {
+    let http = this.getHttp()
+    let reg = /search$/
+    let name1: any = null
+    if (reg.test(name)) {
+      name1 = name
+    } else {
+      name1 = `${name}---search`
+    }
+    let data = await http.find('entity', { tableName: name1 }) //
+    let row = data[0] //
+    return row //
+  }

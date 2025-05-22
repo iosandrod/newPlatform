@@ -16,6 +16,7 @@ import { getDFConfig } from './table/colFConfig'
 import { editPageDesign } from '@ER/editPageDesign'
 import { MainPageDesign } from '@ER/mainPageDesign'
 import { mainUse } from './pageUseFn'
+import { ImportPageDesign } from '@ER/importPageDesign'
 export class System extends Base {
   allApp: any = [] //
   systemApp: any = []
@@ -23,6 +24,7 @@ export class System extends Base {
     clientX: 0,
     clientY: 0,
   }
+  tableImportMap: { [key: string]: PageDesign } = {}
   commandArr = []
   activePage = ''
   systemConfig = {
@@ -37,7 +39,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient() //
@@ -64,17 +66,17 @@ export class System extends Base {
   init() {
     super.init() //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabModelValue() {
     let route = this.getRouter()
     let r = route.currentRoute
@@ -119,7 +121,7 @@ export class System extends Base {
 
     return allT2 //
   } //
-  openPageDesign(config) { } //
+  openPageDesign(config) {} //
 
   async getPageLayout(name?: string) {
     let http = this.getHttp()
@@ -135,19 +137,21 @@ export class System extends Base {
     row.tableName = name
     return row //
   }
-  async getPageEditLayout(name?: string) {
+  async getPageEditLayout(name?: string, type = 'edit') {
     let http = this.getHttp()
-    let reg = /edit$/
+    // let reg = /edit$/
+    let reg = new RegExp(`${type}$`)
     let name1: any = null
     if (reg.test(name)) {
       name1 = name
     } else {
-      name1 = `${name}---edit`
+      name1 = `${name}---${type}`
     }
     let data = await http.find('entity', { tableName: name1 }) //
     let row = data[0] //
     return row //
   }
+
   createNodeIdKey(type) {
     let id = this.uuid()
     let key = `${type}_${id}`
@@ -178,7 +182,7 @@ export class System extends Base {
     await http.patch('entity', layout) //
     await this.refreshPageDesign() //
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -290,12 +294,38 @@ export class System extends Base {
     this.tableEditMap[editTableName] = _d //
     return _d //
   }
+  async createPageImportDesign(config: { tableName: string } | string) {
+    //
+    if (typeof config == 'string') {
+      config = {
+        tableName: config,
+      }
+    }
+    let tableName = config.tableName //
+    let searchTableName = tableName
+    if (!/import$/.test(tableName)) {
+      searchTableName = `${tableName}---${'import'}` //
+    } else {
+      tableName = searchTableName.split('---')[0]
+    } //
+    let _design = this.tableImportMap[searchTableName] //
+    if (_design) {
+      return _design //
+    }
+    let layoutConfig = await this.getPageEditLayout(searchTableName, 'import') //
+    let _d = new ImportPageDesign(layoutConfig) //
+    _d.tableName = tableName //
+    _d.setLayoutData(layoutConfig)
+    _d.tableName = searchTableName //
+    this.tableImportMap[searchTableName] = _d //
+    return _d
+  } //
   getShowEntityArr() {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any) {
     return new Promise(async (resolve, reject) => {
       let _form = new Form(formConfig) //
@@ -591,7 +621,7 @@ export class System extends Base {
     try {
       //
       //打开app
-    } catch (error) { }
+    } catch (error) {}
   }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
@@ -634,7 +664,7 @@ export class System extends Base {
         {
           field: 'tableCnName',
           label: '表格中文名',
-          itemChange: (config) => { },
+          itemChange: (config) => {},
         },
         {
           label: '显示分页',
@@ -664,24 +694,28 @@ export class System extends Base {
         }, //
         {
           label: '树配置',
-          field: "treeConfig",
-          type: "sform",//
+          field: 'treeConfig',
+          type: 'sform', //
           options: {
             itemSpan: 12,
-            items: [{
-              field: "id",
-              label: "树字段",
-              type: "string"
-            }, {
-              field: "parentId",
-              label: "父级字段",//
-              type: "string"
-            }, {
-              field: 'rootId',
-              label: '根节点',
-              type: 'string'//
-            }]
-          }
+            items: [
+              {
+                field: 'id',
+                label: '树字段',
+                type: 'string',
+              },
+              {
+                field: 'parentId',
+                label: '父级字段', //
+                type: 'string',
+              },
+              {
+                field: 'rootId',
+                label: '根节点',
+                type: 'string', //
+              },
+            ],
+          },
         },
         {
           field: 'hooks',
@@ -1009,7 +1043,7 @@ export class System extends Base {
     }
     //
   }
-  clearSelectColumns() { } //
+  clearSelectColumns() {} //
   getDesignByTableName(tableName) {
     let _obj = this.tableMap //
     let editObj = this.tableEditMap
