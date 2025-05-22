@@ -4,14 +4,14 @@ import { useHooks } from './utils/decoration'
 //
 export class SearchPageDesign extends PageDesign {
     //
-    @useHooks((config) => {
+    @useHooks((config) => {//
         let ctx: PageDesign = config.instance
         let args = config.args
         if (args.length == 0) {
             args[0] = {
                 tableName: ctx.getTableName(),
                 query: {}, //
-            }
+            }//
         }
         if (typeof args[0] == 'string') {
             args[0] = {
