@@ -1020,6 +1020,9 @@ export class PageDesign extends Form {
   getBindPageProps() {
     //
   }
+  async importTableRows() {
+
+  }//
   onColumnConfigChange(config) {
     let tableName = config.tableName //
     let _tableName = this.getRealTableName() //

@@ -4139,3 +4139,16 @@ const app = createApp({
     //   let _config = formitem.getFormConfig() //
     //   return _config
     // })
+
+    let config = this.config //
+        let system = this.getSystem()
+        let tableName = this.getTableName()
+        let pageEditType = config.pageEditType
+        if (pageEditType == 'page') {
+            system.routeOpen(`${tableName}---edit`, async (d: editPageDesign) => {
+                await d.addMainTableRow() //
+            })
+        }
+        if (pageEditType == 'default') {
+            await this.addTableRows() //
+        }//
