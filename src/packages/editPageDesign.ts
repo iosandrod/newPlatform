@@ -6,12 +6,17 @@ export class editPageDesign extends PageDesign {
   async addMainTableRow(addConfig?: any): Promise<void> {
     console.log('添加主表以及子表') //
     let defaultV = await this.getDefaultValue(this.getTableName()) //
-    console.log(defaultV, 'testDV') //
+    console.log(defaultV, 'testDV')
+    this.tableDataMap.curRow = defaultV //
   }
+  
   async getDefaultValue(tableName: string): Promise<any> {
     let columns = this.getTableColumns(tableName, true) //
     let obj1 = {}
     for (const col of columns) {
+      // if(col.field=='cSdOrderNo'){//
+      //   debugger//
+      // }
       let defaultValue = await this._getDefaultValue(col)
       if (defaultValue) {
         obj1 = { ...obj1, ...defaultValue } //
@@ -19,12 +24,12 @@ export class editPageDesign extends PageDesign {
     } //
     return obj1
   }
-  _getDefaultValue(col: any) {
+  async _getDefaultValue(col: any) {
     if (col instanceof Column) {
       return col.getDefaultValue() //
     }
     let _col = new Column(col)
-    let _col1 = _col.getDefaultValue()
+    let _col1 = await _col.getDefaultValue() //
     return _col1 //
   }
   getCurRow() {

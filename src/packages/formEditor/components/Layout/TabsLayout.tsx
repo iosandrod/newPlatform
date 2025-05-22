@@ -1,4 +1,11 @@
-import { defineComponent, resolveComponent, watch, useAttrs, inject, unref } from 'vue'
+import {
+  defineComponent,
+  resolveComponent,
+  watch,
+  useAttrs,
+  inject,
+  unref,
+} from 'vue'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable from './DragGable'
 import hooks from '@ER/hooks'
@@ -28,8 +35,21 @@ export default defineComponent({
       }
       return (
         //@ts-ignore
-        <Selection {...useAttrs()} data={props.data} parent={props.parent} hasCopy hasDel hasDrag hasWidthScale>
-          <el-tabs class={[ns.b(), 'h-full']} vModel={props.data.options.defaultValue} type={props.data.options.type} tabPosition={props.data.options.tabPosition}>
+        <Selection
+          {...useAttrs()}
+          data={props.data}
+          parent={props.parent}
+          hasCopy
+          hasDel
+          hasDrag
+          hasWidthScale
+        >
+          <el-tabs
+            class={[ns.b(), 'h-full']}
+            vModel={props.data.options.defaultValue}
+            type={props.data.options.type}
+            tabPosition={props.data.options.tabPosition}
+          >
             {props.data.columns.map((element, index0) => {
               //@ts-ignore
               return (
@@ -41,14 +61,26 @@ export default defineComponent({
                   name={element.id}
                   data={element}
                   v-slots={{
-                    label: () => {
-                      return <div>测试的</div>
+                    label: (item) => {
+                      let label = element.label || '选项'
+                      return (
+                        //
+                        <div class="h-30 flex items-center">
+                          <div>{label}</div>
+                        </div>
+                      )
                     }, //
                   }}
                   _slots={['label']}
                   parent={props.data}
                 >
-                  <LayoutDragGable class={['h-full', ..._class]} data-layout-type={'tabs-col'} data={element.list} {...opt} parent={element} />
+                  <LayoutDragGable
+                    class={['h-full', ..._class]}
+                    data-layout-type={'tabs-col'}
+                    data={element.list}
+                    {...opt}
+                    parent={element}
+                  />
                 </Selection>
               )
             })}

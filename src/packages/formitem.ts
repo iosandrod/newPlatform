@@ -941,7 +941,8 @@ export class FormItem extends Base {
     }
     return obj //
   }
-  openMainMenu(e) {
+  openMainMenu(e,item) {
+    //
     let f = this.getField()
     let tableName = this.getTableName() //
     let sys = this.getSystem()
@@ -950,7 +951,7 @@ export class FormItem extends Base {
       return
     }
     d.currentDField = f
-    d.openContextMenu(e) //
+    d.openContextMenu(e,item) //
   }
   getIsShowSearchIcon() {
     let options = this.getOptions()

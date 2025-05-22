@@ -123,3 +123,17 @@ export function stringToFunction<T extends (...args: any[]) => any>(
     return null
   }
 }
+
+export const columnToEdit = (col: any) => {
+  let editType = col.editType
+  let options = col.options
+  let optionsField = col.optionsField
+  let defaultValue = col.defaultValue
+  let ojb = {
+    defaultValue: defaultValue, //
+    type: editType,
+    options: options,
+    optionsField: optionsField,
+  }
+  return ojb //
+}

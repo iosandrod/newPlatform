@@ -25,25 +25,27 @@ import { BMenu } from '@/buttonGroup/bMenu'
 import { getDFConfig } from '@/table/colFConfig'
 import _ from 'lodash'
 import searchDialog from '@/dialog/_dialogCom/searchDialog'
+import { columnToEdit, stringToFunction } from './utils'
 interface Filter {
   /** 字段名 */
   field: string
   /** 操作符，默认 '$eq'（等于） */
   operator?:
-  | '$eq'
-  | '$ne'
-  | '$gt'
-  | '$gte'
-  | '$lt'
-  | '$lte'
-  | '$in'
-  | '$nin'
-  | '$like'
+    | '$eq'
+    | '$ne'
+    | '$gt'
+    | '$gte'
+    | '$lt'
+    | '$lte'
+    | '$in'
+    | '$nin'
+    | '$like'
   /** 值 */
   value: any
 }
-export class PageDesign extends Form {//
-  tabHidden = false//
+export class PageDesign extends Form {
+  //
+  tabHidden = false //
   hooksMetaData: Record<string, any[]> = {} //
   currentContextItem: PageDesignItem = null
   tabOrder: number = 0
@@ -144,7 +146,7 @@ export class PageDesign extends Form {//
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() { }
+  initDefaultTemplatePage() {}
   getValidateRules() {
     return []
   }
@@ -255,8 +257,8 @@ export class PageDesign extends Form {//
       $and: filters.map(buildCond),
     }
   } //
-  async createTableData() { }
-  async updateTableData() { }
+  async createTableData() {}
+  async updateTableData() {}
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName, true) //
     let obj1 = {}
@@ -287,7 +289,7 @@ export class PageDesign extends Form {//
     } //
     return []
   }
-  getMainTableConfig() { }
+  getMainTableConfig() {}
   // @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -298,9 +300,9 @@ export class PageDesign extends Form {//
   getAddRowsArgs() {
     return {
       rows: 1,
-      tableName: this.getTableName()
+      tableName: this.getTableName(),
     } as any
-  }//
+  } //
   @useHooks((config) => {
     let ctx: PageDesign = config.instance //
     let args = config.args
@@ -310,7 +312,7 @@ export class PageDesign extends Form {//
   })
   async addTableRows(
     //
-    config = this.getAddRowsArgs()
+    config = this.getAddRowsArgs(),
   ) {
     let rows = config.rows
     let tableName = config.tableName
@@ -325,8 +327,8 @@ export class PageDesign extends Form {//
     let tableIns = this.getTableRef(tableName)
     if (tableIns == null) {
       return
-    }//
-    tableIns.addRows({ rows: arr1 })//
+    } //
+    tableIns.addRows({ rows: arr1 }) //
   }
   getTableRef(tableName = this.getTableName()) {
     let tableIns = this.getRef(tableName)
@@ -344,7 +346,7 @@ export class PageDesign extends Form {//
     }
     nextTick(() => {
       this.setCurrentDesign(false) //
-      this.getSystem().refreshPageDesign()//
+      this.getSystem().refreshPageDesign() //
     })
   }
   async createTableDesign() {
@@ -355,13 +357,13 @@ export class PageDesign extends Form {//
     let _res = await http.create('entity', _data) // //
     // console.log(_res)
   }
-  async updateTableDesign() {//
+  async updateTableDesign() {
     let _data = this.getLayoutData() //
     let http = this.getHttp()
     let _config = this.config
     let _config1 = { ..._config, ..._data, id: _config.id } //
     await http.patch(`entity`, _config1) //
-    this.getSystem().confirmMessage('保存成功', 'success')//
+    this.getSystem().confirmMessage('保存成功', 'success') //
     console.log('保存成功') //
   }
   getMainTableName() {
@@ -372,18 +374,18 @@ export class PageDesign extends Form {//
     }
     return tableName //
   }
-  getAllFormMap() { }
+  getAllFormMap() {}
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() { }
+  initDefaultSForm() {}
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() { }
+  async openAddEntity() {}
   async addMainTableRow(addConfig?: any) {
     //
     //
@@ -509,8 +511,8 @@ export class PageDesign extends Form {//
       })
     }
   }
-  getTableCnName() {//
-    // debugger////
+  getTableCnName() {
+    ////
     let config = this.getTableConfig()
     let tableCnName = config.tableCnName || this.getTableName() //
     return tableCnName //
@@ -573,7 +575,6 @@ export class PageDesign extends Form {//
     }
   }
   getCurRow(tableName = this.getRealTableName()) {
-    //
     // let tRef: Table = this.getRef(tableName)
     // let curRow = null
     // let _tableName = this.getTableName()
@@ -654,11 +655,48 @@ export class PageDesign extends Form {//
         disabled: false,
       },
       {
-        label: '设计其他',
+        label: '设计当前列',
         fn: async () => {
-          console.log('设计其他') //
+          let cf = this.currentDField
+          if (cf == null) {
+            return
+          }
+          let column = this.getTableColumns().find((col) => {
+            return col.field == cf
+          })
+          // console.log(column, 'testColumn') //
+          if (column == null) {
+            return
+          }
+          let _d: any = await this.getSystem().designTargetColumn(column, 1) //
+          let _obj = columnToEdit(_d) //
+          let currentFItemConfig = this.currentFItemConfig
+          if (_d.id != null) {
+            //两个都要保存
+            await this.getHttp().patch('columns', _d)
+          }
+          Object.entries(_obj).forEach(([key, value]) => {
+            //
+            currentFItemConfig[key] = value //
+          })
+          await this.saveTableDesign() //
         },
+        visible: computed(() => {
+          let currentItem = this.currentContextItem
+          let _type = currentItem?.config?.type
+          if (_type == 'dform') {
+            //
+            return true
+          }
+          return false //
+        }),
       },
+      // {
+      //   label: '设计其他',
+      //   fn: async () => {
+      //     console.log('设计其他') //
+      //   },
+      // },
       {
         label: '设计按钮',
         fn: async () => {
@@ -699,7 +737,6 @@ export class PageDesign extends Form {//
     await this.getSystem().updateCurrentPageDesign()
   }
   openContextMenu(e, _item?: any) {
-    // debugger//
     this.currentContextItem = _item //
     let menu: BMenu = this.getRef('mainContextMenu')
     if (menu == null) {
@@ -811,10 +848,12 @@ export class PageDesign extends Form {//
       })
       .map((row) => {
         row.id = null
+        row.tableName = this.getRealTableName() //
         return row
       }) //
     await this.getHttp().create('columns', addCols)
     this.getSystem().confirmMessage('同步成功', 'success') //
+    this.getSystem().refreshPageDesign() //
   }
   getSearchWhere(data) {
     let columns = this.getTableColumns()
@@ -930,11 +969,12 @@ export class PageDesign extends Form {//
   }
   async updateTableColumn(config, refresh = true) {
     if (Array.isArray(config)) {
-
     } else {
       config = [config]
     }
-    config = config.filter(c => { return c.id != null })
+    config = config.filter((c) => {
+      return c.id != null
+    })
     if (config.length == 0) {
       return
     }
@@ -981,26 +1021,54 @@ export class PageDesign extends Form {//
     //
   }
   onColumnConfigChange(config) {
-    // debugger//
-    let tableName = config.tableName//
-    let _tableName = this.getTableName()
-    let columns = config.columns//
+    let tableName = config.tableName //
+    let _tableName = this.getRealTableName() //
+    let columns = config.columns //
     if (tableName == _tableName) {
       if (Array.isArray(columns)) {
-
       } else {
         columns = [columns]
-      }//
+      } //
       let field = config.field
       if (field == null) {
         return
       }
-      columns = columns.map(col => {
-        let id = col.id
-        let fV = col[field]
-        return { id: id, [field]: fV }
-      }).filter(c => { return c.id != null })//
-      this.updateTableColumn(columns, false)//
+      columns = columns
+        .map((col) => {
+          let id = col.id
+          let fV = col[field]
+          return { id: id, [field]: fV }
+        })
+        .filter((c) => {
+          return c.id != null
+        }) //
+      this.updateTableColumn(columns, false) //
+    } else {
+      this.updateTableDesign() //
     }
+  }
+  getHooksObj() {
+    let config = this.config
+    let hooks = config.hooks
+    let _obj: any = {}
+    if (Array.isArray(hooks)) {
+      for (const h of hooks) {
+        //
+        let name = h.name
+        let _arr = _obj[name]
+        if (_arr == null) {
+          _arr = []
+          _obj[name] = _arr
+        }
+        let fn = h.code //
+        if (typeof fn == 'string') {
+          let _fn = stringToFunction(fn) //
+          if (typeof _fn == 'function') {
+            _arr.push(_fn) //
+          }
+        }
+      }
+    } //
+    return _obj //
   }
 }

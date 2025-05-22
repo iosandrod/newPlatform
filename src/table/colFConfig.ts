@@ -63,13 +63,13 @@ export const getDFConfig = (_this, data) => {
           options: getAllColTypes(),
         },
       },
-      {
-        field: 'fieldFormat',
-        label: '编辑类型',
-        tabTitle: titles[1],
-        type: 'code', //
-        options: {},
-      },
+      // {
+      //   field: 'editType',
+      //   label: '编辑类型',
+      //   tabTitle: titles[1],
+      //   type: 'code', //
+      //   options: {},
+      // },
       {
         field: 'align',
         label: '对齐方式',

@@ -63,7 +63,7 @@ export class PageDesignItem extends FormItem {
     }
     return tableType
   }
-  async addNewRow() { } //
+  async addNewRow() {} //
 
   getShowHeaderButtons() {
     // debugger //
@@ -97,8 +97,8 @@ export class PageDesignItem extends FormItem {
     return entityType //
   }
   getdBindData() {
+    debugger//
     let design: PageDesign = this.form as any //
-    // let curRow = design.tableDataMap[tName]?.curRow || {}//
     let curRow = design.getCurRow()
     return curRow
   }
@@ -116,12 +116,12 @@ export class PageDesignItem extends FormItem {
   }
   onColumnResize(_config) {
     let f = this.form
-    f.onColumnResize(_config)//
+    f.onColumnResize(_config) //
   }
   onColumnHidden(config: any): void {
     // debugger//
     let f = this.form
-    f.onColumnHidden(config)//
+    f.onColumnHidden(config) //
   }
   onColumnsDesign(config: any): void {
     let f = this.form

@@ -128,7 +128,8 @@ export const createTheme = () => {
       borderLineWidth: 1,
       borderLineDash: [],
       hover: {
-        cellBgColor: '#CCE0FF',
+        // cellBgColor: '#CCE0FF',
+        // cellBgColor: '#000000',
         inlineColumnBgColor: '#F3F8FF',
         inlineRowBgColor: '#F3F8FF',
       },

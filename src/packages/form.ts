@@ -29,7 +29,7 @@ import { Node } from './formEditor/node'
 import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
 import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
-import { } from 'vxe-table'
+import {} from 'vxe-table'
 import { PageDesignItem } from './pageItem'
 import formCom from './formCom'
 import { formitemTypeMap, selectTypeMap } from './designNodeForm'
@@ -86,6 +86,7 @@ export class Form extends Base {
   dFormMap: any = shallowRef({})
   sFormMap: any = shallowRef({})
   curDForm: any = null //
+  currentFItemConfig: any
   curSForm: any = null //
   originalData = {}
   tableDataMap: any = {}
@@ -287,7 +288,7 @@ export class Form extends Base {
         node: newElement,
         parent:
           prevSortable.options.parent[
-          sortableUtils.index(prevSortable.el.parentNode)
+            sortableUtils.index(prevSortable.el.parentNode)
           ],
         form: ER.formIns,
       })
@@ -380,8 +381,8 @@ export class Form extends Base {
           target.dataset.layoutType === 'root'
             ? target
             : newTarget.__draggable_component__
-              ? newTarget.children[0]
-              : newTarget.parentNode
+            ? newTarget.children[0]
+            : newTarget.parentNode
         prevSortable = state._sortable
         inserRowIndex = 0
         this.setBorder(prevEl, 'drag-line-top')
@@ -620,7 +621,7 @@ export class Form extends Base {
     }) //
     _f.nextForm = null //
   }
-  closeCurSubForm() { }
+  closeCurSubForm() {}
   getCurrentTabName() {
     let curFormItem = this.curFormItem
     if (curFormItem == null) {
@@ -704,13 +705,23 @@ export class Form extends Base {
           list: _r,
         }
         return ob
-      }) //
+      })
+      let currentTab = this.config.currentTab
+      if (typeof currentTab == 'number') {
+        let _t = _tabCols[currentTab]
+        if (_t != null) {
+          currentTab = _t.id
+        }
+      }
       let _root = {
         ...this.createNodeIdKey('inline'),
         columns: [
           {
             ...this.createNodeIdKey('tabs'),
             columns: _tabCols,
+            options: {
+              defaultValue: currentTab, //
+            },
           },
         ],
         style: {},
@@ -796,7 +807,7 @@ export class Form extends Base {
   initPcLayout() {
     let pcLayout = this.pcLayout
   }
-  initMobileLayout() { }
+  initMobileLayout() {}
   addFormItem(config: Field) {
     let id = config.id
     let oldItems = this.items
@@ -853,7 +864,7 @@ export class Form extends Base {
   setData(data) {
     this.data = data
   }
-  setEditData(data) { }
+  setEditData(data) {}
   switchPlatform(platform) {
     let props = this.config
     let state = this.state
@@ -1050,9 +1061,9 @@ export class Form extends Base {
       state.fields.splice(fieldIndex, 1)
     }
   }
-  onColumnsDesign(cols) { }
-  onColumnHidden(c) { }
-  onColumnResize(config) { }
+  onColumnsDesign(cols) {}
+  onColumnHidden(c) {}
+  onColumnResize(config) {}
   addFieldData(node, isCopy = false) {
     let state = this.state
     if (/^(radio|cascader|checkbox|select)$/.test(node.type)) {
@@ -1696,7 +1707,7 @@ export class Form extends Base {
       item.designForm()
     }
   }
-  dragWidth(props: any) { }
+  dragWidth(props: any) {}
   getRealTableName() {
     let tableName = this.config.tableName || this.dTableName || this.tableName
     if (typeof tableName === 'string') {
@@ -1810,9 +1821,7 @@ export class Form extends Base {
     let _dialog = new Dialog(dConfig) //
     this.dialogArr.push(_dialog) //
   }
-  onColumnConfigChange(config) {
-
-  }
+  onColumnConfigChange(config) {}
 }
 //使用默认布局
 
