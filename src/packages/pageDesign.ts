@@ -334,7 +334,7 @@ export class PageDesign extends Form {
     let tableIns = this.getRef(tableName)
     return tableIns //
   }
-  async saveTableDesign() {
+  async saveTableDesign(_config?: any) {
     //获取表格的id配置
     let config = this.config
     let id = config.id
@@ -345,7 +345,7 @@ export class PageDesign extends Form {
       await this.updateTableDesign()
     }
     nextTick(() => {
-      this.setCurrentDesign(false) //
+      this.setCurrentDesign(false)
       this.getSystem().refreshPageDesign() //
     })
   }
@@ -813,6 +813,9 @@ export class PageDesign extends Form {
     let _data1 = this.getLayoutData()
     _data1.searchDialog = _data //
     await this.getSystem().updateCurrentPageDesign(_data1) //
+  }
+  async selectExcelFile() {
+    console.log('selectFile') //
   }
   getSearchBindData() {
     let _d = this.pageData

@@ -70,4 +70,8 @@ export const runObj = {
     let page: PageDesign = config.page //
     await page.importTableRows()
   },
+  selectExcelFile: async (config) => {
+    let page: PageDesign = config.page //
+    await page.selectExcelFile() //
+  },
 }

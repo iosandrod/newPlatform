@@ -67,7 +67,8 @@
     "vuedraggable": "^4.1.0",
     "vxe-pc-ui": "^4.4.26",
     "vxe-table": "^4.11.20",
-    "workerpool": "^9.2.0"
+    "workerpool": "^9.2.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/dat.gui": "^0.7.10",

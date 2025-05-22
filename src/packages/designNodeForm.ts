@@ -86,6 +86,10 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
             label: '刷新',
             value: 'getTableData',
           },
+          {
+            label: '选择文件',
+            value: 'selectExcelFile', //
+          },
         ],
       }, //
       {
@@ -94,7 +98,8 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         type: 'code',
         editType: 'code',
       },
-      {//
+      {
+        //
         field: 'disabledDefaultFn',
         title: '通用禁用脚本',
         type: 'select',
@@ -372,7 +377,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => { } //
+        _d['_items_set'] = (v) => {} //
         return _d //
       }),
     },
@@ -383,7 +388,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
 export const selectTypeMap = (_this: PageDesign) => {
   let formitemTypeArr = ['input', 'select']
   let createDSelect = (type) => {
-    let rTableName = _this.getRealTableName()//
+    let rTableName = _this.getRealTableName() //
     let items = [
       {
         field: 'field',

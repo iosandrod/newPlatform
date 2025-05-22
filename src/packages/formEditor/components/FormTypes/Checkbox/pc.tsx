@@ -22,13 +22,14 @@ export default defineComponent({
     let _value = computed(() => {
       let _config = formitem?.getBindConfig()
       return _config
-    }) 
+    })
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
     }
     return () => {
+      //
       let com = (
-        <div class="h-full w-full flex items-center"> 
+        <div class="h-full w-full flex items-center">
           <CheckboxCom ref={registerRef} {..._value.value}></CheckboxCom>
         </div>
       )

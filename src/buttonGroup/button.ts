@@ -68,7 +68,7 @@ export class Button extends Base {
     let config = this.config
     let disabled = Boolean(config.disabled === true)
     if (disabled) {
-      return disabled//
+      return disabled //
     }
     let disabledFn = config.disabledFn
     if (typeof disabledFn == 'function') {
@@ -81,7 +81,6 @@ export class Button extends Base {
         console.error('禁用脚本报错')
       }
     } else {
-
       if (typeof disabledFn == 'string') {
         //
         let _fn = stringToFunction(disabledFn)
@@ -114,7 +113,7 @@ export class Button extends Base {
               parent: this.getParent(), //
             })
             if (_state == true) {
-              disabled = true//
+              disabled = true //
             }
           }
         }
@@ -165,7 +164,8 @@ export class Button extends Base {
           let drun = this.getDefaultFnRun()
           let _fn = drun[defaultFn]
           if (typeof _fn == 'function') {
-            await _fn(_config) //
+            let _fn1 = _fn.bind(page)
+            await _fn1(_config) ////
           }
         }
       }

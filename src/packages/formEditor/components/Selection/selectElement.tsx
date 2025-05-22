@@ -1,4 +1,16 @@
-import { withModifiers, resolveComponent, ref, useSlots, onMounted, useAttrs, unref, onBeforeUnmount, inject, computed, onUnmounted } from 'vue'
+import {
+  withModifiers,
+  resolveComponent,
+  ref,
+  useSlots,
+  onMounted,
+  useAttrs,
+  unref,
+  onBeforeUnmount,
+  inject,
+  computed,
+  onUnmounted,
+} from 'vue'
 import { isHTMLTag } from '@vue/shared'
 import hooks from '@ER/hooks'
 import utils from '@ER/utils'
@@ -147,13 +159,13 @@ export default {
       // props.data.context.getHoverDiv = null //
     })
     let widthScaleElement = ref()
-    const isScale = ref(false)
-    const isShowWidthScale = computed(() => {
-      let s = false
+    let isScale = ref(false)
+    let isShowWidthScale = computed(() => {
+      let s = false //
       let type = props.data.type
       if (type == 'col') {
         s = true
-      }
+      } //
       let inline = props?.data?.context?.parent
       let parent = inline?.context?.parent
       if (parent?.type == 'col') {
@@ -197,7 +209,11 @@ export default {
           const onMouseMove = (e) => {
             //如果不是lineChildren
             if (props.data.type == 'col') {
-              let offset = Math.ceil((oldWidth + Math.round((e.clientX - oldX) / columnWidth) * columnWidth) / columnWidth)
+              let offset = Math.ceil(
+                (oldWidth +
+                  Math.round((e.clientX - oldX) / columnWidth) * columnWidth) /
+                  columnWidth,
+              )
               if (offset >= 24) {
                 offset = 24
               }
@@ -222,7 +238,9 @@ export default {
               }
             } else {
               const curNewWidth = oldWidth + e.clientX - oldX
-              let curWidth = Math.round((curNewWidth / hoverEl.parentNode.offsetWidth) * 100) //百分比
+              let curWidth = Math.round(
+                (curNewWidth / hoverEl.parentNode.offsetWidth) * 100,
+              ) //百分比
               if (curWidth <= 25) {
                 curWidth = 25
               }
@@ -244,7 +262,12 @@ export default {
                     let num = pre + cur
                     return num
                   }, 0)
-                let offset = Math.ceil((oldWidth + Math.round((e.clientX - oldX) / columnWidth) * columnWidth) / columnWidth)
+                let offset = Math.ceil(
+                  (oldWidth +
+                    Math.round((e.clientX - oldX) / columnWidth) *
+                      columnWidth) /
+                    columnWidth,
+                )
                 if (offset >= 24) {
                   offset = 24
                 }
@@ -285,7 +308,10 @@ export default {
           const oldHeight = hoverEl.offsetHeight
           let _newHeight = null
           const onMouseMove = (e) => {
-            const isRootEl = formIns.state.store.findIndex((e) => e.id === props.data.context.parent.id) !== -1
+            const isRootEl =
+              formIns.state.store.findIndex(
+                (e) => e.id === props.data.context.parent.id,
+              ) !== -1
             if (!isRootEl) {
               return //
             }
@@ -300,8 +326,13 @@ export default {
             document.removeEventListener('mousemove', onMouseMove)
             state.heightScaleLock = isScale.value = false
             if (_newHeight != null) {
-              hoverEl.style.height = null
-              formIns.syncHeightByPlatform(props.data, state.platform, false, _newHeight)
+              // hoverEl.style.height = null
+              formIns.syncHeightByPlatform(
+                props.data,
+                state.platform,
+                false,
+                _newHeight,
+              )
             }
           }
           document.addEventListener('mouseup', onMouseUp)
@@ -309,11 +340,18 @@ export default {
         })
       }
     })
-    const TagComponent = isHTMLTag(props.tag) ? props.tag : resolveComponent(props.tag)
+    const TagComponent = isHTMLTag(props.tag)
+      ? props.tag
+      : resolveComponent(props.tag)
     const Selected = computed(() => {
       return target.value.id === props.data.id && ns.is('Selected')
     })
-    const isShowCopy = computed(() => (isInlineChildren ? props.hasCopy && props.data.context.parent.columns.length < ER.props.inlineMax : props.hasCopy))
+    const isShowCopy = computed(() =>
+      isInlineChildren
+        ? props.hasCopy &&
+          props.data.context.parent.columns.length < ER.props.inlineMax
+        : props.hasCopy,
+    )
     return () => {
       let maskNode = <div class={[ns.e('mask')]}></div>
       let _attrs = useAttrs()
@@ -328,7 +366,16 @@ export default {
           arr.push(defaultCom)
           if (unref(isEditModel)) {
             if (ER.props.dragMode === 'icon') {
-              let _com = <div class={[ns.e('topLeft')]}>{props.hasDrag && <Icon class={['ER-handle', ns.e('dragIcon')]} icon="Rank"></Icon>}</div>
+              let _com = (
+                <div class={[ns.e('topLeft')]}>
+                  {props.hasDrag && (
+                    <Icon
+                      class={['ER-handle', ns.e('dragIcon')]}
+                      icon="Rank"
+                    ></Icon>
+                  )}
+                </div>
+              )
               arr.push(_com)
             } //
             let iconArr = []
@@ -339,7 +386,7 @@ export default {
                   (e) => {
                     handleAction(5)
                   },
-                  ['stop']
+                  ['stop'],
                 )}
                 icon="top"
               ></Icon>
@@ -353,7 +400,7 @@ export default {
                     (e) => {
                       handleAction(6)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="copy"
                 ></Icon>
@@ -368,7 +415,7 @@ export default {
                     (e) => {
                       handleAction(1)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="delete"
                 ></Icon>
@@ -383,7 +430,7 @@ export default {
                     (e) => {
                       handleAction(7)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="config"
                 ></Icon>
@@ -398,10 +445,30 @@ export default {
                     (e) => {
                       handleAction(8)
                     },
-                    ['stop']
+                    ['stop'],
                   )} //
                   icon="config"
                 ></Icon> //设置子表
+              )
+              iconArr.push(_icon)
+            }
+            if (isShowWidthScale.value == true) {
+              let _icon = (
+                <div
+                  ref={(el) => {
+                    widthScaleElement.value = el
+                  }}
+                >
+                  <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
+                </div>
+              )
+              iconArr.push(_icon)
+            }
+            if (isShowHeightScale.value) {
+              let _icon = (
+                <div ref={(el) => (heightScaleElement.value = el)}>
+                  <Icon class={[ns.e('heightScale')]} icon="dragHeight"></Icon>
+                </div>
               )
               iconArr.push(_icon)
             }
@@ -413,33 +480,13 @@ export default {
                     (e) => {
                       handleAction(6)
                     },
-                    ['stop']
+                    ['stop'],
                   )}
                   icon="plus"
                 ></Icon>
               )
-              if (isShowWidthScale.value) {
-                let _icon = (
-                  <div
-                    ref={(el) => {
-                      widthScaleElement.value = el
-                    }}
-                  >
-                    <Icon class={[ns.e('widthScale')]} icon="dragWidth"></Icon>
-                  </div>
-                )
-                iconArr.push(_icon)
-              }
-              if (isShowHeightScale.value) {
-                let _icon = (
-                  <div ref={(el) => (heightScaleElement.value = el)}>
-                    <Icon class={[ns.e('heightScale')]} icon="dragHeight"></Icon>
-                  </div>
-                )
-                iconArr.push(_icon)
-              }
               iconArr.push(_icon)
-            }
+            }//
             let _com = <div class={[ns.e('bottomRight')]}>{iconArr}</div>
             arr.push(_com)
             if (props.hasMask) {
@@ -455,7 +502,21 @@ export default {
           {..._attrs}
           v-slots={_slots1} //////
           // @ts-ignore
-          class={[ns.b(), 'overflow-x-hidden', 'w-full', unref(isEditModel) && ER.props.dragMode === 'full' && props.hasDrag && 'ER-handle', !isField && ns.e('borderless'), unref(isEditModel) && ns.e('editor'), unref(isEditModel) && Selected.value, unref(isEditModel) && isHover.value && ns.e('hover'), unref(isEditModel) && isScale.value && ns.e('isScale'), unref(isEditModel) && isWarning.value && ns.is('Warning')]}
+          class={[
+            ns.b(),
+            'overflow-x-hidden',
+            'w-full',
+            unref(isEditModel) &&
+              ER.props.dragMode === 'full' &&
+              props.hasDrag &&
+              'ER-handle',
+            !isField && ns.e('borderless'),
+            unref(isEditModel) && ns.e('editor'),
+            unref(isEditModel) && Selected.value,
+            unref(isEditModel) && isHover.value && ns.e('hover'),
+            unref(isEditModel) && isScale.value && ns.e('isScale'),
+            unref(isEditModel) && isWarning.value && ns.is('Warning'),
+          ]}
           ref={registerRef}
           onClick={unref(isEditModel) && withModifiers(handleClick, ['stop'])}
         ></TagComponent>

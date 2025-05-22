@@ -44,6 +44,10 @@ export class Dialog extends Base {
     if (width == null) {
       width = 400
     }
+    if (width == 1) {
+      let documentWidth = document.documentElement.clientWidth
+      width = documentWidth
+    }
     return width
   }
   getHeight() {
@@ -51,6 +55,10 @@ export class Dialog extends Base {
     if (height == null) {
       height = 300
     }
+    if (height == 1) {
+      let documentHeight = document.documentElement.clientHeight
+      height = documentHeight
+    } //
     return height
   }
   getModelValue() {
@@ -109,6 +117,6 @@ export class Dialog extends Base {
       // defaultBtns=defaultBtns.concat(extendButtons)
       defaultBtns.push(...extendButtons)
     }
-    return defaultBtns//
+    return defaultBtns //
   }
 }

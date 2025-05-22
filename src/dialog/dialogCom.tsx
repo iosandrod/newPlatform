@@ -398,6 +398,7 @@ export default defineComponent({
                 let btnG = (
                   <buttonGroupCom
                     buttonWidth={50}
+                    parent={dialog} //
                     items={dialog.getFooterButtons()} //
                   ></buttonGroupCom>
                 )

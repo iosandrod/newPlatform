@@ -1,8 +1,12 @@
+import { Dialog } from '@/dialog/dialog'
 import { editPageDesign } from './editPageDesign'
 import pageCom from './pageCom'
 import { PageDesign } from './pageDesign'
 import { useHooks } from './utils/decoration'
+import { ImportPageDesign } from './importPageDesign'
+import { VxeUI } from 'vxe-pc-ui'
 //
+import * as XLSX from 'xlsx'
 export class MainPageDesign extends PageDesign {
   //
   @useHooks((config) => {
@@ -114,13 +118,14 @@ export class MainPageDesign extends PageDesign {
   async importTableRows(): Promise<any> {
     await this.openImportDialog()
   }
-  async openImportDialog(): Promise<any> {//
+  async openImportDialog(): Promise<any> {
+    //
     let _ins = await this.getSystem().createPageImportDesign(
       this.getTableName(),
     )
     let dialogConfig = {
-      width: 800,
-      height: 600,
+      width: 1,
+      height: 1,
       title: '导入数据',
       buttons: [
         {
@@ -129,16 +134,84 @@ export class MainPageDesign extends PageDesign {
             _ins.getTableData() //
           },
         },
+        {
+          label: '设计布局',
+          fn: async (config) => {
+            let p: Dialog = config.parent
+            let com: ImportPageDesign = p.getRef('innerCom') //
+            com.setCurrentDesign(true) //
+          },
+        },
+        {
+          label: '保存布局',
+          fn: async (config) => {
+            let p: Dialog = config.parent
+            let com: ImportPageDesign = p.getRef('innerCom') //
+            com.saveTableDesign() //
+          },
+        },
       ],
       createFn: () => {
         return {
           component: pageCom,
-          props: {//
+          props: {
+            //
             formIns: _ins, //
           },
         }
       },
     }
     this.openDialog(dialogConfig) //
+  }
+  async selectExcelFile(): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      let _data = await this.getSystem().confirmForm({
+        title: '导入数据模板',
+        itemSpan: 24,
+        height: 200,
+        width: 300,
+        items: [
+          {
+            label: '是否包含标题',
+            type: 'boolean', //
+            field: 'includeTitle', //
+          },
+        ],
+        data: {
+          includeTitle: 1,//
+        },
+      })
+      console.log(_data) //
+      VxeUI.readFile({
+        multiple: false,
+      }).then(async (config) => {
+        const file = config.file
+        const arrayBuffer = await file.arrayBuffer() //
+
+        const data = new Uint8Array(arrayBuffer)
+        const workbook = XLSX.read(data, { type: 'array' })
+
+        // 读取第一个 Sheet
+        const sheetName = workbook.SheetNames[0]
+        const worksheet = workbook.Sheets[sheetName]
+
+        // 使用 header: 1 得到二维数组，再手动映射为对象
+        const rawData: any = XLSX.utils.sheet_to_json(worksheet, {
+          header: 1,
+          defval: '',
+        })
+
+        const [headers, ...rows] = rawData
+
+        const result = rows.map((row) => {
+          const obj = {}
+          headers.forEach((key, index) => {
+            obj[key] = row[index]
+          })
+          return obj
+        })
+        console.log('解析结果：', result)
+      })
+    })
   }
 }
