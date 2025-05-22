@@ -1,54 +1,68 @@
 import inputCom from '@/input/inputCom'
-import selectCom from '@/select/selectCom'
-import SelectCom from '@/select/selectCom'
+import FormCom from '@ER/formCom'
 import { FormItem } from '@ER/formitem'
+import { PageDesign } from '@ER/pageDesign'
+import { PageDesignItem } from '@ER/pageItem'
 import { ElInput } from 'element-plus'
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, inject } from 'vue'
 
 export default defineComponent({
-  name: 'InputPc',
+  name: 'DFormPc',
   inheritAttrs: false,
   customOptions: {},
   components: {
     inputCom,
-    selectCom,
-  },
+    FormCom,
+  }, //
   props: {
     data: Object,
     params: Object,
   },
   setup(props) {
-    const data = props.data
     const params = props.params
-    const formitem: FormItem = params.formitem
+    const formitem: PageDesignItem = params.formitem
+
+    //@ts-ignore
+    let pageD: PageDesign = inject('pageDesign', {}) //
+    let mainPage: PageDesign = inject('mainPageDesign', null) //
+    const registerRef = (el) => {
+      formitem.registerRef('fieldCom', el) //
+    }
+    const data = computed(() => {
+      let _data = formitem.getdBindData()
+      return _data
+    })
     let _value = computed(() => {
+      //
+      // debugger //
       let _config = formitem?.getBindConfig()
       return _config
-    })
-    let registerRef = (el) => {
-      formitem.registerRef('fieldCom', el)
-    }
-
-    let isColumnSelect = computed(() => {
-      let s = formitem.getIsColumnSelect()
-      return s
-    })
+    }) //
     return () => {
-      let com = (
-        <div
-          class="h-full w-full flex items-center"
-          style={{ minHeight: '36px', height: '36px' }} //
-        >
-          <inputCom ref={registerRef} {..._value.value} type={formitem.getType()}></inputCom>
+      let _com = (
+        <div class="h-full w-full" style={{ minHeight: '30px' }}>
+          <inputCom
+            v-slots={{
+              buttons: () => {
+                let com = (
+                  <div
+                    onClick={() => {
+                      formitem.openSFormDialog()
+                    }}
+                    class="h-full pointer"
+                  >
+                    <i class="vxe-icon-edit"></i>
+                  </div>
+                )
+                return com
+              },
+            }}
+            ref={registerRef}
+            {..._value.value}
+          ></inputCom>
         </div>
       )
-      let _com = null
-      if (isColumnSelect.value == true) {
-        _com = <SelectCom></SelectCom>
-      } else {
-        _com = com
-      }
-      return _com //
+      return _com
     }
-  }, //
-})
+  },
+}) //

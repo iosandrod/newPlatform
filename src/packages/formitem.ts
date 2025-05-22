@@ -19,6 +19,7 @@ import CodeEditor from '@/codeEditor/codeEditor'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { stringToFunction } from './utils'
 import { Input } from '@/input/inputClass'
+import formCom from './formCom'
 
 export type FormOptions = {
   items: Field[]
@@ -895,6 +896,36 @@ export class FormItem extends Base {
       },
     })
   }
+  openSFormDialog() {
+    // debugger//
+    let options = { ...this.getOptions() }//
+    let f = this.getField()//
+    let d = this.form.getData()
+    let b = d[f]
+    if (b == null) {
+      b = {}
+      d[f] = b
+    }//
+    //@ts-ignore
+    options['data'] = b//
+    // console.log(optinos)//
+    let _f = new Form(options)//
+    let dialogConfig = {
+      height: 600,
+      width: 1200,
+      createFn: () => {
+        return {
+          component: formCom,
+          props: {
+            formIns: _f,
+          },
+        }
+      },
+      confirmFn: (dialog: Dialog) => {//
+      },
+    }
+    this.getSystem().openDialog(dialogConfig)//
+  }
   getShowTable() {
     let options = this.getOptions()
     let showTable = options.showTable //
@@ -941,7 +972,7 @@ export class FormItem extends Base {
     }
     return obj //
   }
-  openMainMenu(e,item) {
+  openMainMenu(e, item) {
     //
     let f = this.getField()
     let tableName = this.getTableName() //
@@ -951,7 +982,7 @@ export class FormItem extends Base {
       return
     }
     d.currentDField = f
-    d.openContextMenu(e,item) //
+    d.openContextMenu(e, item) //
   }
   getIsShowSearchIcon() {
     let options = this.getOptions()

@@ -45,8 +45,7 @@ export default defineComponent({
       if (column == null) {
         return //
       } //
-      let event = config.event
-      // console.log(config, 'testEvent') ///
+      let event = config.event //
       _design.openContextMenu(event, item) //
     } //
     return () => {

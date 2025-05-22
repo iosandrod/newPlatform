@@ -195,36 +195,43 @@ export default defineComponent({
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       }) ////
-      // com = (
-      //   <div class="w-full h-full">
-      //     <formCom
-      //       ref={_reg3}
-      //       isDesign={true}
-      //       // {..._fConfig}
-      //       isTabForm={true}
-      //       {...{
-      //         // items: [
-      //         //   {
-      //         //     field: 'height',
-      //         //     label: '邮箱',
-      //         //     span: 24,
-      //         //     options: {
-      //         //       columnSelect: true, //
-      //         //       tableName: 'permissions', //
-      //         //     },
-      //         //     tabTitle: '权限',
-      //         //   },
-      //         //   {
-      //         //     field: 'width',
-      //         //     label: '密码',
-      //         //     span: 24,
-      //         //   },
-      //         // ],
-      //       }}
-      //       data={d1} //
-      //     ></formCom>
-      //   </div>
-      // )
+      com = (
+        <div class="w-full h-full">
+          <formCom
+            ref={_reg3}
+            isDesign={false}
+            // {..._fConfig}
+            {...{
+              items: [
+                {
+                  field: 'height',
+                  label: '邮箱',
+                  type: 'sform', //
+                  span: 24,
+                  options: {
+                    itemSpan: 12,
+                    items: [
+                      {
+                        field: 'height',
+                        label: '邮箱', //
+                      },
+                    ],
+                    columnSelect: true, //
+                    tableName: 'permissions', //
+                  },
+                  tabTitle: '权限',
+                },
+                {
+                  field: 'width',
+                  label: '密码',
+                  span: 24,
+                },
+              ],
+            }}
+            data={d1} //
+          ></formCom>
+        </div>
+      )
       // com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>
       // com = <dialogCom ref={_reg2}></dialogCom>

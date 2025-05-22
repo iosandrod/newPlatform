@@ -4134,3 +4134,8 @@ const app = createApp({
 
 
       // let s = props.hasWidthScale && !(ER.props.layoutType === 1 && !isPc.value)
+// let fConfig = computed(() => {
+    //   // debugger //
+    //   let _config = formitem.getFormConfig() //
+    //   return _config
+    // })

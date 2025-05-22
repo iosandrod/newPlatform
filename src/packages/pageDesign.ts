@@ -1028,7 +1028,7 @@ export class PageDesign extends Form {
       if (Array.isArray(columns)) {
       } else {
         columns = [columns]
-      } //
+      }
       let field = config.field
       if (field == null) {
         return
@@ -1067,8 +1067,11 @@ export class PageDesign extends Form {
             _arr.push(_fn) //
           }
         }
-      }
+      }//
     } //
     return _obj //
+  }
+  getTreeConfig() {
+
   }
 }

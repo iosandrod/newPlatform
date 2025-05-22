@@ -49,8 +49,8 @@ export const selectType = (item: FormItem) => {
 
 export const stableType = (item: FormItem) => {
   let obj = defaultType(item) //
-  obj.onChange = (config) => {}
-  obj.onInput = (config) => {} //
+  obj.onChange = (config) => { }
+  obj.onInput = (config) => { } //
   obj.readonly = true //
   obj.clearable = false //
   obj.modelValue = item.getBindShowValue()
@@ -58,8 +58,8 @@ export const stableType = (item: FormItem) => {
 }
 export const codeType = (item: FormItem) => {
   let obj = defaultType(item) //
-  obj.onChange = (config) => {}
-  obj.onInput = (config) => {} //
+  obj.onChange = (config) => { }
+  obj.onInput = (config) => { } //
   obj.readonly = true //
   obj.clearable = false //
   obj.modelValue = item.getBindShowValue()
@@ -71,9 +71,18 @@ export const booleanType = (item: FormItem) => {
     let value = config.value
     item.updateBindData({ value }) //
   }
-  obj.onInput = (config) => {} //
+  obj.onInput = (config) => { } //
   obj.readonly = true //
   obj.clearable = false //
+  return obj
+}
+export const sformType = (item: FormItem) => {
+  let obj = defaultType(item) //
+  obj.onChange = (config) => {
+  }
+  obj.readonly = true //
+  obj.clearable = false //
+  obj.modelValue = 'object'
   return obj
 }
 export const itemTypeMap = {
@@ -83,5 +92,6 @@ export const itemTypeMap = {
   select: selectType,
   stable: stableType,
   code: codeType,
-  boolean: booleanType,
+  boolean: booleanType,//
+  sform: sformType//
 }

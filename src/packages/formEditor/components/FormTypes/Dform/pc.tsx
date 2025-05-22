@@ -31,7 +31,7 @@ export default defineComponent({
     const data = computed(() => {
       let _data = formitem.getdBindData()
       return _data
-    })
+    }) //
     return () => {
       let _com = (
         <div class="h-full w-full" style={{ minHeight: '50px' }}>
