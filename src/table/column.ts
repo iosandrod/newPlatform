@@ -70,7 +70,7 @@ export class Column extends Base {
   setHidden(bool) {
     this.config.hidden = bool //
   } //
-  getFormitem() {} //
+  getFormitem() { } //
   createSort() {
     let field = this.getField()
     let sort = null
@@ -625,12 +625,15 @@ export class Column extends Base {
     }
     return width
   }
-  async updateBindValue(config) {
-    //
+  async updateBindValue(config) {//
     let value = config.value //值
     let row = config.row //行
     let field = config.field || this.getField()
     let table = this.table
+    if (config.validate === false) {
+      row[field] = value //
+      return true
+    }//
     let _res = await this.validateValue({ ...config, table })
     if (_res == true) {
       row[field] = value //
@@ -1287,7 +1290,7 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() {}
+  updateBindData() { }
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {

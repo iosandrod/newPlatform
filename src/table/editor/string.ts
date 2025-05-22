@@ -16,7 +16,7 @@ export interface OnStartParams {
   endEdit: () => void
 }
 import { createApp, isReactive, nextTick } from 'vue' //
-import {} from 'element-plus' //
+import { } from 'element-plus' //
 import { VxeInput } from 'vxe-pc-ui'
 import tableInput from './tableInput'
 import { ListTable } from '@visactor/vtable'
@@ -69,7 +69,7 @@ export class InputEditor extends BaseEditor {
       },
       column: column, //这是个函数
       row: _row, //
-      onChange: (v) => {},
+      onChange: (v) => { },
       style: {
         width: '100%',
         height: '100%',
@@ -143,13 +143,18 @@ export class InputEditor extends BaseEditor {
         //   let table = column.table
         //   table.getInstance().clearSelected()//
         // }, 300);
-        column.updateBindValue({
+        let updateConfig = {
           value: value,
-          row: this.row, //
-          field: this.field,
-        }) //
-        column.changeRowState(this.row) //
+          row: this.row,
+          field: this.field
+        }
         if (this.isEditHeader) {
+          //@ts-ignore
+          updateConfig.validate = false
+        }
+        column.updateBindValue(updateConfig) //
+        column.changeRowState(this.row) //
+        if (this.isEditHeader) {//
           // let _obj = { title: value, id: column.config.id }
           // column.getSystem().updateTargetColumn(_obj) //()
           column.table.onHeaderTitleChange({
@@ -178,7 +183,7 @@ export class InputEditor extends BaseEditor {
     }
   }
 
-  endEditing(): void {}
+  endEditing(): void { }
 
   isEditorElement(target: EventTarget | null): boolean {
     return target === this.element

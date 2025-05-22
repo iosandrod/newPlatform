@@ -63,7 +63,7 @@ export class PageDesignItem extends FormItem {
     }
     return tableType
   }
-  async addNewRow() {} //
+  async addNewRow() { } //
 
   getShowHeaderButtons() {
     // debugger //
@@ -97,7 +97,6 @@ export class PageDesignItem extends FormItem {
     return entityType //
   }
   getdBindData() {
-    debugger//
     let design: PageDesign = this.form as any //
     let curRow = design.getCurRow()
     return curRow

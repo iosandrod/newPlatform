@@ -10,7 +10,7 @@ import { http } from '@/service/client'
 
 const router = createRouter(
   shallowReactive({
-    history: createWebHistory(), //
+    history: createWebHistory(),
     routes,
   }),
 ) //

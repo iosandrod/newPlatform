@@ -4,12 +4,12 @@ import { useHooks } from './utils/decoration'
 
 export class editPageDesign extends PageDesign {
   async addMainTableRow(addConfig?: any): Promise<void> {
-    console.log('添加主表以及子表') //
+    console.log('添加主表以及子表') ////
     let defaultV = await this.getDefaultValue(this.getTableName()) //
-    console.log(defaultV, 'testDV')
-    this.tableDataMap.curRow = defaultV //
-  }
-  
+    let tableConfig = this.getTableRefData(this.getTableName())//
+    tableConfig.curRow = defaultV//
+  }//
+
   async getDefaultValue(tableName: string): Promise<any> {
     let columns = this.getTableColumns(tableName, true) //
     let obj1 = {}
@@ -21,7 +21,7 @@ export class editPageDesign extends PageDesign {
       if (defaultValue) {
         obj1 = { ...obj1, ...defaultValue } //
       } //
-    } //
+    } ////
     return obj1
   }
   async _getDefaultValue(col: any) {
@@ -33,7 +33,8 @@ export class editPageDesign extends PageDesign {
     return _col1 //
   }
   getCurRow() {
-    let curRow = super.getCurRow()
+    let tableName = this.getTableName()
+    let curRow = super.getCurRow(tableName)//
     return curRow //
   }
   getSaveData(): any {
