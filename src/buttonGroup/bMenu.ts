@@ -1,5 +1,6 @@
 import { Base } from '@/base/base'
 import { itemGroup } from './buttonGroup'
+import { stringToFunction } from '@ER/utils'
 
 export class BMenu extends itemGroup {
   modelValue = false
@@ -53,15 +54,25 @@ export class BMenuItem extends Base {
     let _b = new _class(b, this.menu, this)
     this.items.push(_b)
   }
-  onClick() {
+  async onClick() {
     const menu = this.menu
     const config = menu.config
     const _config = this.config
     let beforeHidden = config.beforeHidden
-    const fn = _config.fn
+    let fn = _config.fn
     let p = this.menu
-    let _parent = p.config.parent
-    if (typeof fn == 'function') fn({ item: this, parent: _parent }) //
+    let page = this.menu.getMainPageDesign()
+    let _parent = p.config.parent //
+    if (typeof fn == 'function') {
+      await fn({ item: this, parent: _parent, page: page }) //
+    }
+    if (typeof fn == 'string' && Boolean(fn)) {
+      let _fn = stringToFunction(fn)
+      if (typeof _fn == 'function') {
+        ////
+        await _fn.call(page, { item: this, parent: _parent, page: page }) //
+      }
+    }
     if (typeof beforeHidden == 'function') {
       //
       beforeHidden()

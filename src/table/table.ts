@@ -2324,7 +2324,7 @@ export class Table extends Base {
     } //
     _col.setHidden(true) //
     let ccnfig = this.config //
-   
+
     let onColumnConfigChange = ccnfig.onColumnConfigChange
     if (typeof onColumnConfigChange == 'function') {
       onColumnConfigChange({
@@ -2336,7 +2336,7 @@ export class Table extends Base {
         field: 'hidden', //
       }) //
     }
-  }
+  } //
   onTableConfigChange(config) {
     let _config = this.config
     let onTableConfigChange = _config.onTableConfigChange

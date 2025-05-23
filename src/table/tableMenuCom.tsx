@@ -8,6 +8,7 @@ export default defineComponent({
   name: 'tableMenuCom',
   setup() {
     const tableIns: Table = inject('tableIns')
+    let mainPage = inject('mainPageDesign', {}) //
     return () => {
       const items = tableIns.getContextItems()
       let com = (

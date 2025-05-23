@@ -1,11 +1,12 @@
 import { BMenu, BMenuItem } from '@/buttonGroup/bMenu'
-import { defineComponent, PropType, watch } from 'vue' //
+import { defineComponent, inject, PropType, watch } from 'vue' //
 import Contextmenu from './Contextmenu'
 import ContextmenuItem from './ContextmenuItem'
 import ContextmenuSubmenu from './ContextmenuSubmenu'
 import ContextmenuIcon from './ContextmenuIcon'
 import ContextmenuGroup from './ContextmenuGroup'
 import ContextmenuDivider from './ContextmenuDivider'
+import { PageDesign } from '@ER/pageDesign'
 
 export const itemCom = defineComponent({
   name: 'ContextmenuItemCom',
@@ -146,6 +147,11 @@ export default defineComponent({
         mIns.setItems(newV) //
       },
     )
+    let mP: PageDesign = inject('mainPageDesign')//
+    if (mP != null) {
+      let tName = mP.getTableName()
+      mIns.tableName = tName //
+    }
     expose({ _instance: mIns })
     return () => {
       const comArr = mIns.items.map((item) => {
