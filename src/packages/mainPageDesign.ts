@@ -121,8 +121,8 @@ export class MainPageDesign extends PageDesign {
   async openImportDialog(): Promise<any> {
     //
     let _ins = await this.getSystem().createPageImportDesign(
-      this.getTableName(),
-    )
+      this.getRealTableName(), //
+    )//
     let dialogConfig = {
       width: 1,
       height: 1,
@@ -163,8 +163,8 @@ export class MainPageDesign extends PageDesign {
     }
     this.openDialog(dialogConfig) //
   }
-  async selectExcelFile(): Promise<void> {
-    return new Promise(async (resolve, reject) => {
+  async selectExcelFile(): Promise<any> {
+    let sd = new Promise(async (resolve, reject) => {
       let _data = await this.getSystem().confirmForm({
         title: '导入数据模板',
         itemSpan: 24,
@@ -178,10 +178,9 @@ export class MainPageDesign extends PageDesign {
           },
         ],
         data: {
-          includeTitle: 1,//
+          includeTitle: 1, //
         },
       })
-      console.log(_data) //
       VxeUI.readFile({
         multiple: false,
       }).then(async (config) => {
@@ -200,18 +199,43 @@ export class MainPageDesign extends PageDesign {
           header: 1,
           defval: '',
         })
-
-        const [headers, ...rows] = rawData
-
-        const result = rows.map((row) => {
-          const obj = {}
-          headers.forEach((key, index) => {
-            obj[key] = row[index]
+        let _d = null
+        if (_data.includeTitle == 0) {
+          let [headers, ...rows] = rawData
+          let result = rows.map((row) => {
+            const obj = {}
+            headers.forEach((key, index) => {
+              obj[key] = row[index]
+            })
+            return obj //
           })
-          return obj
-        })
-        console.log('解析结果：', result)
+          _d = result
+        } else {
+          if (rawData.length < 2) {
+            console.warn('数据不足，至少应有标题和字段行')
+            reject('数据不足，至少应有标题和字段行')
+            return
+          }
+
+          let titleRow = rawData[0]
+          let fieldRow = rawData[1]
+          let dataRows = rawData.slice(2)
+
+          let data = dataRows.map((row) => {
+            let obj = {}
+            fieldRow.forEach((field, index) => {
+              obj[field] = row[index]
+            })
+            return obj
+          })
+          _d = data
+        }
+        resolve(_d)
       })
     })
+    let result = await sd
+    let dm = this.getTableRefData()
+    dm.data = result //
+    return result
   }
-}
+} //

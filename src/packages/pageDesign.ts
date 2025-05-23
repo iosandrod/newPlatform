@@ -362,6 +362,7 @@ export class PageDesign extends Form {
     let http = this.getHttp()
     let _config = this.config
     let _config1 = { ..._config, ..._data, id: _config.id } //
+    // debugger//
     await http.patch(`entity`, _config1) //
     this.getSystem().confirmMessage('保存成功', 'success') //
     console.log('保存成功') //
@@ -715,6 +716,7 @@ export class PageDesign extends Form {
   }
   async designMainButtons(item) {
     //
+    debugger////
     let _item: PageDesignItem = item
     if (item == null) {
       return
@@ -733,7 +735,8 @@ export class PageDesign extends Form {
     let sys = this.getSystem()
     let _data = await sys.confirmTable(tableConfig) //
     options.items = _data
-    await this.getSystem().updateCurrentPageDesign()
+    // await this.getSystem().updateCurrentPageDesign()
+    await this.saveTableDesign()//
   }
   openContextMenu(e, _item?: any) {
     this.currentContextItem = _item //

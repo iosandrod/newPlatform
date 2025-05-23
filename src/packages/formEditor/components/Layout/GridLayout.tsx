@@ -1,4 +1,11 @@
-import { defineComponent, resolveComponent, watch, useAttrs, unref, inject } from 'vue'
+import {
+  defineComponent,
+  resolveComponent,
+  watch,
+  useAttrs,
+  unref,
+  inject,
+} from 'vue'
 import hooks from '@ER/hooks'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable, { dragGableWrap } from './DragGable'
@@ -28,17 +35,19 @@ export default defineComponent({
       return type === 'col'
     }
     // const tag = resolveComponent(unref(isPc) ? 'el-row' : 'van-cell-group')
-    const tag = resolveComponent('el-row')
     let formIns: any = inject('formIns')
     let pluginName = formIns.getPluginName()
     let opt = {
-      [pluginName]: true,
-    }
+      [pluginName]: true, //
+    } //
     return () => {
+      const tag = resolveComponent('el-row')
       let _class = []
       if (!unref(isEditModel)) {
         _class.push('flex flex-col')
       }
+      let _style = props.data?.style || {}
+      // debugger//
       const node = (
         //@ts-ignore
         <Selection
@@ -50,17 +59,17 @@ export default defineComponent({
           hasDrag
           data={props.data}
           parent={props.parent}
-          class={['flex']} //
+          class={['flex']}
+          style={_style} //
         >
           <tag
             data-layout-type={'grid'}
             {...{
-              gutter: props.data.options.gutter,
-              justify: props.data.options.justify,
+              gutter: props.data?.options?.gutter,
+              justify: props.data?.options?.justify, //
               align: props.data.options.align,
-              // inset: !state.isPc
             }}
-            class={[ns.b(), 'flex','w-full']}
+            class={[ns.b(), 'flex', 'w-full']}
           >
             {props.data.columns.map((element, index) => {
               return (

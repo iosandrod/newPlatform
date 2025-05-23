@@ -29,7 +29,7 @@ export default defineComponent({
     return () => {
       //
       let com = (
-        <div class="h-full w-full flex items-center">
+        <div class="h-full w-full flex items-center h-30">
           <CheckboxCom ref={registerRef} {..._value.value}></CheckboxCom>
         </div>
       )

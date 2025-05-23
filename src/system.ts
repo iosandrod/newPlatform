@@ -326,7 +326,7 @@ export class System extends Base {
   }
   async confirm(config: any) {}
   async confirmEntity(entityConfig: any) {} //
-  async confirmForm(formConfig: any) {
+  async confirmForm(formConfig: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let _form = new Form(formConfig) //
       let component = formCom
@@ -715,6 +715,26 @@ export class System extends Base {
                 type: 'string', //
               },
             ],
+          },
+        },
+        {
+          label: '分页配置',
+          field: 'pagination',
+          type: 'sform',
+          options: {
+            itemSpan: 12,
+            items: [
+              {
+                field: 'pageSize',
+                label: '分页大小',
+                type: 'number',
+              },
+              {
+                field: 'show',
+                label: '是否显示',
+                type: 'boolean',
+              },
+            ], // 
           },
         },
         {

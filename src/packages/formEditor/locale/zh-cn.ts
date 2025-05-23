@@ -24,9 +24,8 @@ export default {
       dform: '表单',
       slider: '滑块',
       html: '富文本',
-      cascader: '级联框',
       uploadfile: '上传文件',
-      signature: '签名',
+      signature: '签名',//
       region: '省市区',
       grid: '栅格布局',
       stable: '表格',
@@ -38,7 +37,6 @@ export default {
       divider: '分割线',
       container: '容器',
       field: '基础字段',
-      defaultField: '预设字段',
       subform: '子表单',
     },
     layout: {
