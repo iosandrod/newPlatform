@@ -53,6 +53,9 @@ export default defineComponent({
       let com = (
         <div class="h-full w-full" style={{ minHeight: '200px' }}>
           <erTable
+            onTableConfigChange={(config) => {
+              item.onTableConfigChange(config)
+            }}
             onBeforeEditCell={(config) => {
               //
               let s = _design.onBeforeEditCell({
@@ -65,6 +68,10 @@ export default defineComponent({
             showHeaderContext={false}
             tableName={tableName}
             mainTableName={mainTableName}
+            // showCheckBoxColumn={item.getShowCheckboxColumn()}
+            // showRowNumberColumn={item.getShowRowSeriesNumber()} //
+            showCheckboxColumn={item.getShowCheckboxColumn()}
+            showRowSeriesNumber={item.getShowRowSeriesNumber()} //
             showHeaderButtons={item.getShowHeaderButtons()}
             key={item.id}
             ref={registerTable}

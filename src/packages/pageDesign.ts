@@ -26,6 +26,8 @@ import { getDFConfig } from '@/table/colFConfig'
 import _ from 'lodash'
 import searchDialog from '@/dialog/_dialogCom/searchDialog'
 import { columnToEdit, stringToFunction } from './utils'
+import { VxeUI } from 'vxe-pc-ui'
+import * as XLSX from 'xlsx' //
 interface Filter {
   /** 字段名 */
   field: string
@@ -45,6 +47,7 @@ interface Filter {
 }
 export class PageDesign extends Form {
   //
+  isDialog = false
   tabHidden = false //
   hooksMetaData: Record<string, any[]> = {} //
   currentContextItem: PageDesignItem = null
@@ -77,7 +80,7 @@ export class PageDesign extends Form {
           config[key] = value
         }
       })
-    }
+    } //
     super.init()
     let tableName = this.getTableName()
     this.tableDataMap[tableName] = {
@@ -346,6 +349,9 @@ export class PageDesign extends Form {
     }
     nextTick(() => {
       this.setCurrentDesign(false)
+      if (_config?.refresh == false) {
+        return //
+      }
       this.getSystem().refreshPageDesign() //
     })
   }
@@ -365,7 +371,6 @@ export class PageDesign extends Form {
     // debugger//
     await http.patch(`entity`, _config1) //
     this.getSystem().confirmMessage('保存成功', 'success') //
-    console.log('保存成功') //
   }
   getMainTableName() {
     let config = this.config
@@ -715,8 +720,6 @@ export class PageDesign extends Form {
     ]
   }
   async designMainButtons(item) {
-    //
-    debugger////
     let _item: PageDesignItem = item
     if (item == null) {
       return
@@ -736,7 +739,7 @@ export class PageDesign extends Form {
     let _data = await sys.confirmTable(tableConfig) //
     options.items = _data
     // await this.getSystem().updateCurrentPageDesign()
-    await this.saveTableDesign()//
+    await this.saveTableDesign() //
   }
   openContextMenu(e, _item?: any) {
     this.currentContextItem = _item //
@@ -751,6 +754,7 @@ export class PageDesign extends Form {
     let cnName = this.getTableCnName() //
     let rTableName = this.getRealTableName()
     return {
+      isDialog: this.isDialog,
       label: cnName,
       realTableName: rTableName,
       hidden: this.tabHidden,
@@ -799,9 +803,6 @@ export class PageDesign extends Form {
     }
     //打开查询弹框//
     this.openDialog(dialogConfig)
-    // let sys = this.getSystem()
-    // let _data = await sys.openDialog(dialogConfig)
-    // console.log(_data, 'testData') //
   }
   async designSearchForm() {
     let searchDialog = this.config.searchDialog
@@ -818,7 +819,79 @@ export class PageDesign extends Form {
     await this.getSystem().updateCurrentPageDesign(_data1) //
   }
   async selectExcelFile() {
-    console.log('selectFile') //
+    let sd = new Promise(async (resolve, reject) => {
+      let _data = await this.getSystem().confirmForm({
+        title: '导入数据模板',
+        itemSpan: 24,
+        height: 200,
+        width: 300,
+        items: [
+          {
+            label: '是否包含标题',
+            type: 'boolean', //
+            field: 'includeTitle', //
+          },
+        ],
+        data: {
+          includeTitle: 1, //
+        },
+      })
+      VxeUI.readFile({
+        multiple: false,
+      }).then(async (config) => {
+        const file = config.file
+        const arrayBuffer = await file.arrayBuffer() //
+
+        const data = new Uint8Array(arrayBuffer)
+        const workbook = XLSX.read(data, { type: 'array' })
+
+        // 读取第一个 Sheet
+        const sheetName = workbook.SheetNames[0]
+        const worksheet = workbook.Sheets[sheetName]
+
+        // 使用 header: 1 得到二维数组，再手动映射为对象
+        const rawData: any = XLSX.utils.sheet_to_json(worksheet, {
+          header: 1,
+          defval: '',
+        })
+        let _d = null
+        if (_data.includeTitle == 0) {
+          let [headers, ...rows] = rawData
+          let result = rows.map((row) => {
+            const obj = {}
+            headers.forEach((key, index) => {
+              obj[key] = row[index]
+            })
+            return obj //
+          })
+          _d = result
+        } else {
+          if (rawData.length < 2) {
+            console.warn('数据不足，至少应有标题和字段行')
+            reject('数据不足，至少应有标题和字段行')
+            return
+          }
+
+          let titleRow = rawData[0]
+          let fieldRow = rawData[1]
+          let dataRows = rawData.slice(2)
+
+          let data = dataRows.map((row) => {
+            let obj = {}
+            fieldRow.forEach((field, index) => {
+              obj[field] = row[index]
+            })
+            return obj
+          })
+          _d = data
+        }
+        resolve(_d)
+      })
+    })
+    let result = await sd
+    // let dm = this.getTableRefData()
+    // dm.data = result //
+    return result
   }
   getSearchBindData() {
     let _d = this.pageData
@@ -1041,6 +1114,9 @@ export class PageDesign extends Form {
         return
       }
       columns = columns
+        .filter((c) => {
+          return c != null
+        }) //
         .map((col) => {
           let id = col.id
           let fV = col[field]
@@ -1053,7 +1129,7 @@ export class PageDesign extends Form {
     } else {
       this.updateTableDesign() //
     }
-  }
+  } //
   getHooksObj() {
     let config = this.config
     let hooks = config.hooks
@@ -1079,4 +1155,12 @@ export class PageDesign extends Form {
     return _obj //
   }
   getTreeConfig() {}
+  onTableConfigChange(config) {
+    let tableName = config.tableName //
+    if (tableName == null) {
+      return //
+    }
+    let _tableName = this.getRealTableName() //
+    this.updateTableDesign()
+  }
 }

@@ -416,7 +416,7 @@ export default defineComponent({
             resize={true} //
             minHeight={dialog.getMinHeight()}
             minWidth={dialog.getMinWidth()}
-            showFooter={true} //
+            showFooter={dialog.getShowFooter()} //
           ></ModalCom>
         </div>
       )

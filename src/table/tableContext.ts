@@ -210,10 +210,10 @@ export const initContextMenu = (table: Table) => {
               ],
             }, //
             {
-              field: "hidden",
-              title: "是否隐藏",
-              type: "boolean",
-              editType: "boolean",//
+              field: 'hidden',
+              title: '是否隐藏',
+              type: 'boolean',
+              editType: 'boolean', //
             },
             // {
             //   field: 'width',
@@ -225,6 +225,70 @@ export const initContextMenu = (table: Table) => {
           data: originColumns,
         }) //
         table.onColumnsDesign(_d)
+      },
+    },
+    {
+      label: '表格信息配置',
+      key: 'refresh',
+      disabled: false, //
+      visible: true,
+      fn: async () => {
+        //
+        let _config = table.config //
+        _config = _.cloneDeep(_config) //
+        let fields = [
+          'tableName',
+          'treeConfig',
+          'showCheckboxColumn',
+          'showRowSeriesNumber',
+        ]
+        let _obj = _.pick(_config, fields)
+        let _fConfig = {
+          data: _obj, //
+          height: 500,
+          width: 800, //
+          items: [
+            {
+              field: 'treeConfig',
+              label: '树形表格配置',
+              type: 'sform',
+              disabled: false,
+              options: {
+                itemSpan: 12,
+                items: [
+                  {
+                    field: 'id',
+                    label: '树主键',
+                    type: 'string',
+                  },
+                  {
+                    field: 'parentId',
+                    label: '父主键',
+                    type: 'string',
+                  },
+                  {
+                    field: 'rootId',
+                    label: '根节点',
+                    type: 'string', //
+                  },
+                ],
+              },
+            },
+            {
+              field: 'showCheckboxColumn',
+              label: '是否显示复选框',
+              type: 'boolean',
+            },
+            {//
+              field: 'showRowSeriesNumber',
+              label: '是否显示行号',
+              type: 'boolean',
+            },
+          ],
+        }
+        let sys = table.getSystem()
+        let _d = await sys.confirmForm(_fConfig)
+        table.onTableConfigChange(_d) //
       },
     },
   ]

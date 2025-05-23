@@ -96,6 +96,10 @@ export class System extends Base {
       })
       .filter((row) => {
         let hidden = row.hidden
+        let isDialog = row.isDialog //
+        if (isDialog) {
+          return false
+        } //
         if (hidden) {
           return false
         }
@@ -107,6 +111,10 @@ export class System extends Base {
       })
       .filter((row) => {
         let hidden = row.hidden
+        let isDialog = row.isDialog //
+        if (isDialog) {
+          return false
+        }
         if (hidden) {
           return false
         }
@@ -268,7 +276,11 @@ export class System extends Base {
       tableName,
     }) //
   }
-  async createPageEditDesign(config: { tableName: string } | string) {
+  async createPageEditDesign(
+    config:
+      | { tableName: string; isDialog?: boolean; isConfirm?: boolean }
+      | string,
+  ) {
     //
     if (typeof config == 'string') {
       config = {
@@ -288,10 +300,53 @@ export class System extends Base {
     }
     let layoutConfig = await this.getPageEditLayout(editTableName) //
     let _d = new editPageDesign(layoutConfig) //
+    if (config.isDialog) {
+      _d.isDialog = true //
+    }
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
-    this.tableEditMap[editTableName] = _d //
+    if (config.isConfirm === true) {
+    } else {
+      this.tableEditMap[editTableName] = _d //
+    }
+    return _d //
+  }
+  async createConfirmEditDesign(
+    config:
+      | { tableName: string; isDialog?: boolean; isConfirm?: boolean }
+      | string,
+  ) {
+    //
+    if (typeof config == 'string') {
+      config = {
+        tableName: config,
+      }
+    } //
+    let tableName = config.tableName
+    let editTableName = tableName
+    if (!/edit$/.test(tableName)) {
+      editTableName = `${tableName}---edit` //
+    } else {
+      tableName = editTableName.split('---')[0]
+    }
+    let _design = this.tableEditMap[editTableName] //
+    if (_design) {
+      return _design //
+    }
+    let layoutConfig = await this.getPageEditLayout(editTableName) //
+    let _d = new editPageDesign(layoutConfig) //
+    if (config.isDialog) {
+      _d.isDialog = true //
+    }
+    _d.tableName = tableName //
+    _d.setLayoutData(layoutConfig)
+    _d.tableName = editTableName //
+    if (config.isConfirm === true) {
+      //
+    } else {
+      this.tableEditMap[editTableName] = _d //
+    }
     return _d //
   }
   async createPageImportDesign(config: { tableName: string } | string) {
@@ -734,7 +789,7 @@ export class System extends Base {
                 label: '是否显示',
                 type: 'boolean',
               },
-            ], // 
+            ], //
           },
         },
         {
@@ -1070,6 +1125,9 @@ export class System extends Base {
     let obj = editObj[tableName] || _obj[tableName]
     return obj
   }
-} //
+  async confirmEditEntity(config) {
+    let editDesign = await this.createPageEditDesign(config)
+  }
+}
 
 export const system = reactive(new System()) //

@@ -113,19 +113,21 @@ export class MainPageDesign extends PageDesign {
     }
     if (pageEditType == 'default') {
       await this.addTableRows() //
-    } //
+    }
+    if (pageEditType == 'dialog') {
+      await this.openEditDialog() //
+    }
   }
   async importTableRows(): Promise<any> {
     await this.openImportDialog()
   }
   async openImportDialog(): Promise<any> {
-    //
     let _ins = await this.getSystem().createPageImportDesign(
       this.getRealTableName(), //
-    )//
+    ) //
     let dialogConfig = {
-      width: 1,
-      height: 1,
+      width: 0.8,
+      height: 0.8, //
       title: '导入数据',
       buttons: [
         {
@@ -139,7 +141,7 @@ export class MainPageDesign extends PageDesign {
           fn: async (config) => {
             let p: Dialog = config.parent
             let com: ImportPageDesign = p.getRef('innerCom') //
-            com.setCurrentDesign(true) //
+            com.setCurrentDesign(true) ////
           },
         },
         {
@@ -157,6 +159,7 @@ export class MainPageDesign extends PageDesign {
           props: {
             //
             formIns: _ins, //
+            isMainPage: true, //
           },
         }
       },
@@ -164,78 +167,48 @@ export class MainPageDesign extends PageDesign {
     this.openDialog(dialogConfig) //
   }
   async selectExcelFile(): Promise<any> {
-    let sd = new Promise(async (resolve, reject) => {
-      let _data = await this.getSystem().confirmForm({
-        title: '导入数据模板',
-        itemSpan: 24,
-        height: 200,
-        width: 300,
-        items: [
-          {
-            label: '是否包含标题',
-            type: 'boolean', //
-            field: 'includeTitle', //
-          },
-        ],
-        data: {
-          includeTitle: 1, //
-        },
-      })
-      VxeUI.readFile({
-        multiple: false,
-      }).then(async (config) => {
-        const file = config.file
-        const arrayBuffer = await file.arrayBuffer() //
-
-        const data = new Uint8Array(arrayBuffer)
-        const workbook = XLSX.read(data, { type: 'array' })
-
-        // 读取第一个 Sheet
-        const sheetName = workbook.SheetNames[0]
-        const worksheet = workbook.Sheets[sheetName]
-
-        // 使用 header: 1 得到二维数组，再手动映射为对象
-        const rawData: any = XLSX.utils.sheet_to_json(worksheet, {
-          header: 1,
-          defval: '',
-        })
-        let _d = null
-        if (_data.includeTitle == 0) {
-          let [headers, ...rows] = rawData
-          let result = rows.map((row) => {
-            const obj = {}
-            headers.forEach((key, index) => {
-              obj[key] = row[index]
-            })
-            return obj //
-          })
-          _d = result
-        } else {
-          if (rawData.length < 2) {
-            console.warn('数据不足，至少应有标题和字段行')
-            reject('数据不足，至少应有标题和字段行')
-            return
-          }
-
-          let titleRow = rawData[0]
-          let fieldRow = rawData[1]
-          let dataRows = rawData.slice(2)
-
-          let data = dataRows.map((row) => {
-            let obj = {}
-            fieldRow.forEach((field, index) => {
-              obj[field] = row[index]
-            })
-            return obj
-          })
-          _d = data
-        }
-        resolve(_d)
-      })
-    })
-    let result = await sd
-    let dm = this.getTableRefData()
-    dm.data = result //
-    return result
+    let _d = await super.selectExcelFile()
+    console.log(_d, 'testD') //
   }
-} //
+  async openEditDialog() {
+    let editEn = await this.getSystem().createPageEditDesign({
+      tableName: this.getRealTableName(),
+      isDialog: true, //
+    })
+    let dialogConfig = {
+      width: 0.8,
+      height: 0.8, //
+      title: '编辑',
+      // showFooter: false,
+      buttons: [
+        {
+          label: '开启设计',
+          fn: async (config) => {
+            let p: Dialog = config.parent
+            let com: editPageDesign = p.getRef('innerCom') //
+            com.setCurrentDesign(true) //
+          },
+        },
+        {
+          label: '保存布局',
+          fn: async (config) => {
+            let p: Dialog = config.parent
+            let com: editPageDesign = p.getRef('innerCom') //
+            com.saveTableDesign() //
+          },
+        },
+      ],
+      createFn: () => {
+        return {
+          component: pageCom,
+          props: {
+            //
+            formIns: editEn, //
+            isMainPage: true, //
+          },
+        }
+      },
+    }
+    this.openDialog(dialogConfig)
+  }
+}

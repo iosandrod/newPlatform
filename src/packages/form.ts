@@ -1817,11 +1817,12 @@ export class Form extends Base {
       item.executeEvent(config)
     }
   }
-  openDialog(dConfig) {
-    let _dialog = new Dialog(dConfig) //
+  openDialog(dConfig, dialogName = null) {
+    let _dialog = new Dialog(dConfig) 
     this.dialogArr.push(_dialog) //
   }
   onColumnConfigChange(config) {}
+  onTableConfigChange(config) {}
 }
 //使用默认布局
 

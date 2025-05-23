@@ -40,7 +40,7 @@ export default defineComponent({
     }) //
     return () => {
       let _com = (
-        <div class="h-full w-full" style={{ minHeight: '30px' }}>
+        <div class="h-30 w-full" style={{ minHeight: '30px' }}>
           <inputCom
             v-slots={{
               buttons: () => {

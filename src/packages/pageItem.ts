@@ -63,7 +63,7 @@ export class PageDesignItem extends FormItem {
     }
     return tableType
   }
-  async addNewRow() { } //
+  async addNewRow() {} //
 
   getShowHeaderButtons() {
     // debugger //
@@ -123,11 +123,41 @@ export class PageDesignItem extends FormItem {
     f.onColumnHidden(config) //
   }
   onColumnsDesign(config: any): void {
-    let f = this.form
-    f.onColumnsDesign(config)
+    let f = this.form //
+    f.onColumnsDesign(config) //
   }
   onColumnConfigChange(config: any): void {
     let f = this.form
     f.onColumnConfigChange(config)
+  }
+  onTableConfigChange(config: any): void {
+    // debugger//
+    let f = this.form
+    let options = this.getOptions()
+    let _config = { ...config }
+    delete _config['tableName'] //
+    Object.entries(_config).forEach(([key, value]) => {
+      options[key] = value
+    }) //
+    f.onTableConfigChange(config)
+  }
+  getShowCheckboxColumn() {
+    let options = this.getOptions()
+    let bool = options.showCheckboxColumn
+    if (bool == null) {
+      bool = true
+    }
+    bool = Boolean(bool) //
+    return bool
+  }
+  getShowRowSeriesNumber() {
+    //
+    let options = this.getOptions()
+    let bool = options.showRowSeriesNumber
+    if (bool == null) {
+      bool = true
+    }
+    bool = Boolean(bool) //
+    return bool //
   }
 }

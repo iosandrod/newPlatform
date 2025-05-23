@@ -72,6 +72,7 @@ export const booleanType = (item: FormItem) => {
     item.updateBindData({ value }) //
   }
   obj.onInput = (config) => { } //
+  obj.modelValue=item.getCheckBindValue()
   obj.readonly = true //
   obj.clearable = false //
   return obj

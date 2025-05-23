@@ -6,9 +6,9 @@ export class editPageDesign extends PageDesign {
   async addMainTableRow(addConfig?: any): Promise<void> {
     console.log('添加主表以及子表') ////
     let defaultV = await this.getDefaultValue(this.getTableName()) //
-    let tableConfig = this.getTableRefData(this.getTableName())//
-    tableConfig.curRow = defaultV//
-  }//
+    let tableConfig = this.getTableRefData(this.getTableName()) //
+    tableConfig.curRow = defaultV //
+  } //
 
   async getDefaultValue(tableName: string): Promise<any> {
     let columns = this.getTableColumns(tableName, true) //
@@ -34,7 +34,7 @@ export class editPageDesign extends PageDesign {
   }
   getCurRow() {
     let tableName = this.getTableName()
-    let curRow = super.getCurRow(tableName)//
+    let curRow = super.getCurRow(tableName) //
     return curRow //
   }
   getSaveData(): any {
@@ -50,5 +50,16 @@ export class editPageDesign extends PageDesign {
   })
   async saveTableData(config = this.getSaveData()): Promise<any> {
     console.log('保存数据') //
+  }
+  setCurrentDesign(status: boolean = true) {
+    //
+    let configMap = this.tableConfigMap //
+    super.setCurrentDesign(status)
+  }
+  setColumnSelect() {}
+  async saveTableDesign(_config?: any) {
+    let isD = this.isDialog
+    let _config1 = { ..._config, refresh: !isD }
+    super.saveTableDesign(_config1)
   }
 }

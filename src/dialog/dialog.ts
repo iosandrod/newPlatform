@@ -44,9 +44,9 @@ export class Dialog extends Base {
     if (width == null) {
       width = 400
     }
-    if (width == 1) {
+    if (width <= 1) {
       let documentWidth = document.documentElement.clientWidth
-      width = documentWidth
+      width = documentWidth * width //
     }
     return width
   }
@@ -55,9 +55,9 @@ export class Dialog extends Base {
     if (height == null) {
       height = 300
     }
-    if (height == 1) {
+    if (height <= 1) {
       let documentHeight = document.documentElement.clientHeight
-      height = documentHeight
+      height = documentHeight * height
     } //
     return height
   }
@@ -118,5 +118,12 @@ export class Dialog extends Base {
       defaultBtns.push(...extendButtons)
     }
     return defaultBtns //
+  }
+  getShowFooter() {
+    let showFooter = this.config.showFooter
+    if (showFooter == null) {
+      showFooter = true
+    }
+    return showFooter //
   }
 }

@@ -58,11 +58,11 @@ export const createFieldConfig = (f: Form) => {
     }
   } //
   const fieldsConfig = [
-    // {
-    //   name: '预设字段',
-    //   id: 'defaultField',
-    //   children: [...allFields], //
-    // },
+    {
+      name: '预设字段',
+      id: 'defaultField', //
+      children: [...allFields], //
+    }, //
     {
       name: '基础字段',
       id: 'field',

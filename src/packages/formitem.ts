@@ -54,7 +54,23 @@ export class FormItem extends Base {
     }
     return field
   }
-  updateBindData(updateConfig: { value: any;[key: string]: any }) {
+  getCheckBindValue() {
+    let data = this.getData()
+    let field = this.getField()
+    let _field = `_${field}_get`
+    let value1 = data[_field]
+    let value = data[field]
+    if (typeof value1 == 'function') {
+      value = value1()
+    }
+    if (value == true) {
+      value = 1
+    } else {
+      value = 0 //
+    }//
+    return value
+  }
+  updateBindData(updateConfig: { value: any; [key: string]: any }) {
     // debugger//
     try {
       let value = updateConfig.value
@@ -101,7 +117,7 @@ export class FormItem extends Base {
       }
     } //
   }
-  async onValueChange() { }
+  async onValueChange() {}
   getForm() {
     return this.form //
   }
@@ -173,7 +189,7 @@ export class FormItem extends Base {
     }
     return options //
   }
-  getSubForm(id: string) { }
+  getSubForm(id: string) {}
   getData() {
     let form = this.form
     let data = form.getData()
@@ -692,8 +708,8 @@ export class FormItem extends Base {
     specialHandling && specialHandling(node.type, result)
     return result
   }
-  onColumnsDesign(config) { }
-  onColumnHidden(config) { }
+  onColumnsDesign(config) {}
+  onColumnHidden(config) {}
   isHiddenTitle() {
     //@ts-ignore
     let hiddenTitle = this.config.hiddenTitle
@@ -838,7 +854,7 @@ export class FormItem extends Base {
         if (Array.isArray(_value1)) {
           value = _value1 //
         }
-      } catch (error) { }
+      } catch (error) {}
     }
     if (!Array.isArray(value)) {
       value = [] //
@@ -874,7 +890,7 @@ export class FormItem extends Base {
     let codeConfig = this.getCodeConfig() //
     let sys = this.getSystem() //
     let value = this.getBindValue() ////
-    let tableName = this.getMainTableName()//
+    let tableName = this.getMainTableName() //
     let createFn = () => {
       return {
         component: codeEditorCom,
@@ -898,18 +914,18 @@ export class FormItem extends Base {
   }
   openSFormDialog() {
     // debugger//
-    let options = { ...this.getOptions() }//
-    let f = this.getField()//
+    let options = { ...this.getOptions() } //
+    let f = this.getField() //
     let d = this.form.getData()
     let b = d[f]
     if (b == null) {
       b = {}
       d[f] = b
-    }//
+    } //
     //@ts-ignore
-    options['data'] = b//
+    options['data'] = b //
     // console.log(optinos)//
-    let _f = new Form(options)//
+    let _f = new Form(options) //
     let dialogConfig = {
       height: 600,
       width: 1200,
@@ -921,10 +937,11 @@ export class FormItem extends Base {
           },
         }
       },
-      confirmFn: (dialog: Dialog) => {//
+      confirmFn: (dialog: Dialog) => {
+        //
       },
     }
-    this.getSystem().openDialog(dialogConfig)//
+    this.getSystem().openDialog(dialogConfig) //
   }
   getShowTable() {
     let options = this.getOptions()
@@ -1059,9 +1076,7 @@ export class FormItem extends Base {
     }
     return tabTitle
   } //
-  onColumnResize(config) {
-
-  }
+  onColumnResize(config) {}
   onColumnConfigChange(config) {
     let f = config.field
   }
