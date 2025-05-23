@@ -46,7 +46,7 @@ interface Filter {
   value: any
 }
 export class PageDesign extends Form {
-  //
+  isConfirm = false //
   isDialog = false
   tabHidden = false //
   hooksMetaData: Record<string, any[]> = {} //
@@ -350,6 +350,9 @@ export class PageDesign extends Form {
     nextTick(() => {
       this.setCurrentDesign(false)
       if (_config?.refresh == false) {
+        return
+      }
+      if (this.isConfirm == true) {
         return //
       }
       this.getSystem().refreshPageDesign() //

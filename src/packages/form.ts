@@ -1745,6 +1745,9 @@ export class Form extends Base {
     if (design == null) {
       design = tableEditMap[dTableName]
     }
+    if (design == null) {
+      design = system.tableConfirmMap[dTableName]//
+    } //
     return design
   }
   getFieldComButtons() {
@@ -1818,7 +1821,7 @@ export class Form extends Base {
     }
   }
   openDialog(dConfig, dialogName = null) {
-    let _dialog = new Dialog(dConfig) 
+    let _dialog = new Dialog(dConfig)
     this.dialogArr.push(_dialog) //
   }
   onColumnConfigChange(config) {}

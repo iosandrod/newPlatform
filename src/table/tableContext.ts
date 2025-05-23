@@ -244,6 +244,7 @@ export const initContextMenu = (table: Table) => {
         ]
         let _obj = _.pick(_config, fields)
         let _fConfig = {
+          itemSpan: 12, //
           data: _obj, //
           height: 500,
           width: 800, //
@@ -254,7 +255,7 @@ export const initContextMenu = (table: Table) => {
               type: 'sform',
               disabled: false,
               options: {
-                itemSpan: 12,
+                itemSpan: 12, //
                 items: [
                   {
                     field: 'id',
@@ -279,7 +280,8 @@ export const initContextMenu = (table: Table) => {
               label: '是否显示复选框',
               type: 'boolean',
             },
-            {//
+            {
+              //
               field: 'showRowSeriesNumber',
               label: '是否显示行号',
               type: 'boolean',

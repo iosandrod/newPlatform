@@ -154,9 +154,8 @@ export class Table extends Base {
   setTableState(state: 'edit' | 'scan') {
     //
     if (['edit', 'scan'].includes(state)) this.tableState = state //
-  }
-  @useRunAfter()
-  @useTimeout({ number: 10, key: 'setCurRow' }) ////
+  } //
+  @useTimeout({ number: 10, key: 'setCurRow' }) //
   setCurRow(row, isDb = false) {
     //
     let oldCurRow = this.tableData.curRow || {}
@@ -2641,7 +2640,7 @@ export class Table extends Base {
     let fOp = fIns?.options
     if (fOp) {
       fOp.rowSeriesNumber = _col
-      fIns.updateOption(fOp)//
+      fIns.updateOption(fOp) //
     } //
   }
 }

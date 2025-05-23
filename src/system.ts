@@ -39,6 +39,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
+  tableConfirmMap: { [key: string]: PageDesign } = {}
   async login() {}
   @cacheValue() //
   async getMenuData() {
@@ -330,7 +331,7 @@ export class System extends Base {
     } else {
       tableName = editTableName.split('---')[0]
     }
-    let _design = this.tableEditMap[editTableName] //
+    let _design = this.tableConfirmMap[editTableName] //
     if (_design) {
       return _design //
     }
@@ -339,13 +340,14 @@ export class System extends Base {
     if (config.isDialog) {
       _d.isDialog = true //
     }
+    _d.isConfirm=true
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
+    this.tableConfirmMap[editTableName] = _d
     if (config.isConfirm === true) {
       //
     } else {
-      this.tableEditMap[editTableName] = _d //
     }
     return _d //
   }

@@ -26,6 +26,7 @@ export const createGlobalConfig = () => {
 }
 export const createFieldConfig = (f: Form) => {
   let d: PageDesign = f.getCurrentPageDesign()
+  // debugger//
   let allFields = []
   if (d != null) {
     let columns = d.config.columns || [] //
