@@ -241,6 +241,7 @@ export const initContextMenu = (table: Table) => {
           'treeConfig',
           'showCheckboxColumn',
           'showRowSeriesNumber',
+          'contextItems',//
         ]
         let _obj = _.pick(_config, fields)
         let _fConfig = {
@@ -285,6 +286,30 @@ export const initContextMenu = (table: Table) => {
               field: 'showRowSeriesNumber',
               label: '是否显示行号',
               type: 'boolean',
+            },
+            {
+              field: 'contextItems',
+              label: '右键菜单配置', //
+              type: 'stable',
+              span: 24,
+              options: {
+                showTable: true,
+                tableState: 'edit',
+                columns: [
+                  {
+                    field: 'label',
+                    title: '菜单名称',
+                    type: 'string',
+                    editType: 'string',
+                  },
+                  {
+                    field: 'fn',
+                    title: '菜单事件',
+                    type: 'string',
+                    editType: 'code', //
+                  },
+                ],
+              }, //
             },
           ],
         }

@@ -340,7 +340,7 @@ export class System extends Base {
     if (config.isDialog) {
       _d.isDialog = true //
     }
-    _d.isConfirm=true
+    _d.isConfirm = true
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
@@ -890,9 +890,14 @@ export class System extends Base {
       contextItems: [
         {
           label: '添加菜单',
+          fn: async (config) => {
+            let p = config.parent
+            console.log('parent', p) //
+          },
         },
         {
-          label: '添加子菜单',
+          label: '添加子菜单', //
+          fn: async () => {},
         },
       ],
       buttons: [],
@@ -1019,6 +1024,12 @@ export class System extends Base {
         fn: async () => {
           let pageDesign = this.getCurrentPageDesign()
           await pageDesign.syncRealColumns()
+        },
+      },
+      {
+        label: '重新加载当前页面',
+        fn: async () => {
+          this.refreshPageDesign() //
         },
       },
     ]

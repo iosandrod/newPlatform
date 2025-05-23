@@ -532,7 +532,6 @@ export class Column extends Base {
           return v1 //
         },
         (v) => {
-          console.log('更新了footer') //
           _this.templateCalValue = v
           table.updateFooterColumns() //
         },

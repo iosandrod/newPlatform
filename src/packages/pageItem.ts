@@ -160,4 +160,17 @@ export class PageDesignItem extends FormItem {
     bool = Boolean(bool) //
     return bool //
   }
+  getTreeConfig() {
+    let options = this.getOptions()
+    let treeConfig = options?.treeConfig
+    return treeConfig //
+  }
+  getContextItems() {
+    let options = this.getOptions()
+    let _items = options?.contextItems || [] //
+    let _items1 = _items.map((item) => {
+      return item //
+    }) //
+    return _items1 //
+  }
 }

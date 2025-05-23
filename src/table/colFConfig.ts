@@ -32,14 +32,14 @@ export const getDFConfig = (_this, data) => {
     isTabForm: true, //
     height: 800,
     width: 1200,
-    tableName: tableName,//
+    tableName: tableName, //
     items: [
       {
-        field: "id",
+        field: 'id',
         label: 'ID',
         type: 'string',
         tabTitle: titles[0],
-        disabled: true,//
+        disabled: true, //
       },
       {
         field: 'field',
@@ -91,11 +91,12 @@ export const getDFConfig = (_this, data) => {
             },
           ],
         },
-      }, {
-        field: "calculate",////
-        label: "合计方式",
+      },
+      {
+        field: 'calculate', ////
+        label: '合计方式',
         tabTitle: titles[0],
-        type: "select",
+        type: 'select',
         options: {
           options: [
             {
@@ -114,8 +115,14 @@ export const getDFConfig = (_this, data) => {
               label: '最小值',
               value: 'min',
             },
-          ],//计算
-        }
+          ], //计算
+        },
+      },
+      {
+        field: 'tree',
+        label: '是否树形',
+        tabTitle: titles[0],
+        type: 'boolean', //
       },
       {
         label: '默认值',

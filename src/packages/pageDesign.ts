@@ -28,6 +28,7 @@ import searchDialog from '@/dialog/_dialogCom/searchDialog'
 import { columnToEdit, stringToFunction } from './utils'
 import { VxeUI } from 'vxe-pc-ui'
 import * as XLSX from 'xlsx' //
+import { Column } from '@/table/column'
 interface Filter {
   /** 字段名 */
   field: string
@@ -367,6 +368,7 @@ export class PageDesign extends Form {
     // console.log(_res)
   }
   async updateTableDesign() {
+    // debugger //
     let _data = this.getLayoutData() //
     let http = this.getHttp()
     let _config = this.config
@@ -1116,6 +1118,12 @@ export class PageDesign extends Form {
       if (field == null) {
         return
       }
+      columns = columns.map((col) => {
+        if (col instanceof Column) {
+          return col.config
+        }
+        return col
+      }) //
       columns = columns
         .filter((c) => {
           return c != null

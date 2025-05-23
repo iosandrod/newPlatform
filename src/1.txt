@@ -4168,3 +4168,17 @@ const app = createApp({
   }
 
     // console.log(_data, 'testData') //
+
+
+          console.log('更新了footer') //
+//
+
+ // let onHiddenColumn = ccnfig.onColumnHidden //
+    // if (typeof onHiddenColumn == 'function') {
+    //   onHiddenColumn({
+    //     column: _col, //
+    //     table: this, //
+    //     originColumn: _col.config, //
+    //     tableName: this.getTableName(),
+    //   }) //
+    // } //

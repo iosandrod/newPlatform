@@ -65,6 +65,8 @@ export default defineComponent({
               })
               return s //
             }}
+            contextItems={item.getContextItems()}
+            treeConfig={item.getTreeConfig()}
             showHeaderContext={false}
             tableName={tableName}
             mainTableName={mainTableName}

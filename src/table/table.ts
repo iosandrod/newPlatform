@@ -170,7 +170,7 @@ export class Table extends Base {
       //
       design.setCurRow(row, tableName) //
     }
-    this.updateIndexArr.add(oldIndex) //
+    this.updateIndexArr.add(oldIndex)
     this.updateIndexArr.add(newIndex) //
   } //
   getCurRow() {
@@ -2324,19 +2324,12 @@ export class Table extends Base {
     } //
     _col.setHidden(true) //
     let ccnfig = this.config //
-    // let onHiddenColumn = ccnfig.onColumnHidden //
-    // if (typeof onHiddenColumn == 'function') {
-    //   onHiddenColumn({
-    //     column: _col, //
-    //     table: this, //
-    //     originColumn: _col.config, //
-    //     tableName: this.getTableName(),
-    //   }) //
-    // } //
+   
     let onColumnConfigChange = ccnfig.onColumnConfigChange
     if (typeof onColumnConfigChange == 'function') {
       onColumnConfigChange({
         column: _col, //
+        columns: _col, //
         table: this, //
         originColumn: _col.config, //
         tableName: this.getTableName(),
