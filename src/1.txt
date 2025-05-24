@@ -4182,3 +4182,12 @@ const app = createApp({
     //     tableName: this.getTableName(),
     //   }) //
     // } //
+
+    // let com: Table = item.getRef('fieldCom')
+        // let tableName = com.getTableName()
+        // let t1 = com
+        // let d = t1.getFlatTreeData()
+        // let changeD = d.filter((row) => {
+        //   let rowState = row['_rowState']
+        //   return rowState == 'add' || rowState == 'change'
+        // })

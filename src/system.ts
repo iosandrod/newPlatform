@@ -212,7 +212,7 @@ export class System extends Base {
       config = {
         tableName: config,
       }
-    } //
+    }
     let router = this.getRouter()
     let tableName: string = config.tableName
     if (typeof fn == 'function') {
@@ -225,12 +225,11 @@ export class System extends Base {
   }
 
   async createPageDesign(config: { tableName: string } | string) {
-    //
     if (typeof config == 'string') {
       config = {
         tableName: config,
       }
-    }
+    } //
     let tableName = config.tableName
     let _design = this.tableMap[tableName]
     if (_design) {
@@ -428,16 +427,26 @@ export class System extends Base {
             tableIns: _table,
           },
         }
-      }
-      let _height = tableConfig.height
+      } //
+      let _height = tableConfig.height //
       let _width = tableConfig.width
       let _config = {
         createFn,
         width: _width || 600,
         height: _height || 400, //
-        confirmFn: (dialog: Dialog) => {
+        confirmFn: async (dialog: Dialog) => {
           let _data = _table.getData()
           let _confirmFn = tableConfig.confirmFn //
+          let requiredValidate = tableConfig.requiredValidate
+          //
+          if (requiredValidate == true) {
+            try {
+              await _table.validate()
+            } catch (error) {
+              reject(error) //
+              return false //
+            }
+          }
           if (typeof _confirmFn == 'function') {
             _confirmFn(dialog) //
           }
@@ -447,7 +456,7 @@ export class System extends Base {
       let dialog = await this.openDialog(_config) //
       return dialog //
     })
-  }
+  } //
   getAllDialog() {
     let _this = this
     let dialogArr = this.dialogArr

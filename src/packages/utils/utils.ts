@@ -137,3 +137,16 @@ export const columnToEdit = (col: any) => {
   }
   return ojb //
 }
+
+export const getFlatTreeData = (_data) => {
+  let data = _data
+    return data
+      .map((row) => {
+        let children = row.children
+        if (children && children?.length > 0) {
+          return [row, ...getFlatTreeData(children)]
+        }
+        return [row]
+      })
+      .flat()
+}

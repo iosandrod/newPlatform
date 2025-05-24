@@ -74,4 +74,8 @@ export const runObj = {
     let page: PageDesign = config.page //
     await page.selectExcelFile() //
   },
+  editTableRows: async (config) => {
+    let page: PageDesign = config.page //
+    await page.editTableRows() //
+  },
 }

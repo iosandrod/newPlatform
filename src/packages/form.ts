@@ -733,16 +733,17 @@ export class Form extends Base {
     }
   }
   createRootItems(items) {
-    let rootInline = {
-      ...this.createNodeIdKey('inline'),
-      columns: [],
-      style: {},
-    }
+    // let rootInline = {
+    //   ...this.createNodeIdKey('inline'),
+    //   columns: [],
+    //   style: {},
+    // }
+    let _rows = []
     // let _index = 0
-    let _rows = rootInline.columns
-    for (const item of items) {
+    // let _rows = rootInline.columns
+    for (let item of items) {
       let index = item.getRowIndex(items)
-      let _row = _rows[index]
+      let _row = _rows[index]?.columns?.[0] //
       if (_row == null) {
         _row = {
           ...this.createNodeIdKey('grid'),
@@ -754,9 +755,15 @@ export class Form extends Base {
           },
           style: {
             width: '100%',
-          },
-        } //
-        _rows[index] = _row //
+          }, //
+        }
+        let rootInline = {
+          ...this.createNodeIdKey('inline'),
+          columns: [_row],
+          style: {},
+        }
+        // _rows[index] = _row //
+        _rows[index] = rootInline //
       }
       let span = item.getSpan()
       let colLayout = {
@@ -776,7 +783,9 @@ export class Form extends Base {
       }
       _row.columns.push(colLayout)
     }
-    return [rootInline] //
+    // return [rootInline] //
+    console.log(_rows, 'sjfsldkjfsdlkfjdslfd') //
+    return _rows //
   }
   createNodeIdKey(type) {
     let id = this.uuid()
@@ -1746,7 +1755,7 @@ export class Form extends Base {
       design = tableEditMap[dTableName]
     }
     if (design == null) {
-      design = system.tableConfirmMap[dTableName]//
+      design = system.tableConfirmMap[dTableName] //
     } //
     return design
   }

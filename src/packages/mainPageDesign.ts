@@ -27,8 +27,8 @@ export class MainPageDesign extends PageDesign {
     return config
   }) //
   async getTableData(config?: any) {
-    // console.log('我是主要的东西了') //
-    await super.getTableData(config) //
+    let _d = super.getTableData(config)
+    return _d //
   } //
   onColumnResize(config) {
     let tName = config.tableName
@@ -170,7 +170,13 @@ export class MainPageDesign extends PageDesign {
     let _d = await super.selectExcelFile()
     console.log(_d, 'testD') //
   }
-  async openEditDialog() {
+  async openEditDialog(_config?: any) {
+    if (typeof _config == 'string') {
+      _config = {
+        editType: _config,
+      }
+    }
+    let editType = _config?.editType || 'add'
     let editEn = await this.getSystem().createPageEditDesign({
       tableName: this.getRealTableName(),
       isDialog: true, //
@@ -209,6 +215,18 @@ export class MainPageDesign extends PageDesign {
         }
       },
     }
+    this.getSystem().addCommand({
+      tableName: `${this.getRealTableName()}---edit`,
+      fn: async (config) => {
+        let _editType = editType
+        let page: editPageDesign = config
+        if (_editType == 'edit') {
+          // page.getTableData() //
+        }
+        if (_editType == 'add') {
+        }
+      },
+    }) //
     this.openDialog(dialogConfig)
   }
   async confirmEditEntity(config: any) {
@@ -256,5 +274,31 @@ export class MainPageDesign extends PageDesign {
       },
     }
     this.openDialog(_dialogConfig) //
+  } //
+  @useHooks((config) => {
+    let ctx: PageDesign = config.instance //
+    let args = config.args
+    if ((args.length = 0)) {
+      args[0] = ctx.getSaveData()
+    } //
+  })
+  async saveTableData(config = this.getSaveData()) {
+    let tName = this.getRealTableName()
+    let http = this.getHttp()
+    await http.runCustomMethod(tName, 'batchUpdate', config) //批量更新//
+    this.getSystem().confirmMessage('数据保存成功', 'success') //
+    this.getTableData() //
+    this.setCurrentView() //
+  }
+  async editTableRows(): Promise<any> {
+    //
+    let pageEditType = this.config.pageEditType //
+    if (pageEditType == 'page') {
+    }
+    if (pageEditType == 'default') {
+    }
+    if (pageEditType == 'dialog') {
+      this.openEditDialog() //
+    }
   }
 } //

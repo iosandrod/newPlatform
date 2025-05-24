@@ -147,7 +147,7 @@ export default defineComponent({
         mIns.setItems(newV) //
       },
     )
-    let mP: PageDesign = inject('mainPageDesign')//
+    let mP: PageDesign = inject('mainPageDesign',null)//
     if (mP != null) {
       let tName = mP.getTableName()
       mIns.tableName = tName //

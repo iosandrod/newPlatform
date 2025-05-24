@@ -67,7 +67,7 @@ export class FormItem extends Base {
       value = 1
     } else {
       value = 0 //
-    }//
+    } //
     return value
   }
   updateBindData(updateConfig: { value: any; [key: string]: any }) {
@@ -260,14 +260,38 @@ export class FormItem extends Base {
     }
     let preItems = items.slice(0, curIndex)
     let preSpans = preItems.map((item) => item.getSpan())
-    let preSpan = preSpans.reduce((a, b) => a + b, 0) //
-    let num = preSpan + this.getSpan()
-    let rowIndex = 0
-    if (num % 24 == 0) {
-      rowIndex = num / 24 - 1
-    } else {
-      rowIndex = Math.floor((preSpan + this.getSpan()) / 24)
+    preSpans = [...preSpans, this.getSpan()].map((item) => {
+      let obj = {
+        span: item,
+        rowIndex: null,
+      }
+      return obj
+    }) //
+    let arr = preSpans
+    // let preSpan = preSpans.reduce((a, b) => a + b, 0) //
+    // let num = preSpan + this.getSpan()
+    let currentRow = 0
+    let currentSpan = 0
+    for (const item of arr) {
+      if (currentSpan + item.span > 24) {
+        currentRow++
+        currentSpan = 0
+      }
+      item.rowIndex = currentRow
+      currentSpan += item.span
     }
+    let rowIndex = arr.slice(-1).pop().rowIndex //
+    // if (_items1 != null) {
+    //   debugger ////
+    // } //
+    // if (num % 24 == 0) {
+    //   rowIndex = num / 24 - 1
+    // } else {
+    //   rowIndex = Math.floor((preSpan + this.getSpan()) / 24) //
+    //   // if (this.getSpan() == 24) {
+    //   //   rowIndex += 1 //
+    //   // }
+    // }
     //做一个缓存
     this.rowIndex = rowIndex
     return rowIndex

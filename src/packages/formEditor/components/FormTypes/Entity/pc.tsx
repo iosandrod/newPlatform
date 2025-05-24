@@ -62,11 +62,15 @@ export default defineComponent({
                 ...config,
                 tableName,
                 item: item,
-              })
+              }) //
               return s //
             }}
+            curRow={item.getPageCurRow()}
             contextItems={item.getContextItems()}
             treeConfig={item.getTreeConfig()}
+            onCurRowChange={(config) => {
+              item.onCurRowChange(config)
+            }}
             showHeaderContext={false}
             tableName={tableName}
             mainTableName={mainTableName}
@@ -77,6 +81,9 @@ export default defineComponent({
             showHeaderButtons={item.getShowHeaderButtons()}
             key={item.id}
             ref={registerTable}
+            keyCodeColumn={item.getOptions()?.keyCodeColumn}
+            keyColumn={item.getOptions()?.keyColumn}
+            detailTableConfig={item.getOptions().detailTableConfig}
             data={data.value}
             onHeaderContextmenu={openDesignHeader}
             columns={columns.value}

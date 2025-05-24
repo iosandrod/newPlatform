@@ -158,7 +158,6 @@ export const initContextMenu = (table: Table) => {
       disabled: false, //
       visible: true,
       fn: async () => {
-        //
         let system = table.getSystem()
         let originColumns = table.getColumns().map((col) => {
           return col.config
@@ -167,6 +166,12 @@ export const initContextMenu = (table: Table) => {
         originColumns = _.cloneDeep(originColumns) //
 
         let _d: any = await system.confirmTable({
+          requiredValidate: true,
+          validateFn: async (config) => {
+            let table = config.table
+            let data = config.data //
+            return '出错了' //
+          },
           tableState: 'edit',
           columns: [
             {
@@ -215,12 +220,12 @@ export const initContextMenu = (table: Table) => {
               type: 'boolean',
               editType: 'boolean', //
             },
-            // {
-            //   field: 'width',
-            //   title: '宽度',
-            //   editType: 'number', //
-            //   type: 'number', //
-            // },
+            {
+              field: 'primary',
+              title: '是否主键',
+              editType: 'boolean', //
+              type: 'boolean', //
+            },
           ],
           data: originColumns,
         }) //
@@ -232,17 +237,23 @@ export const initContextMenu = (table: Table) => {
       key: 'refresh',
       disabled: false, //
       visible: true,
-      fn: async () => {
-        //
+      fn: async (config) => {
         let _config = table.config //
         _config = _.cloneDeep(_config) //
+        // debugger //
         let fields = [
           'tableName',
           'treeConfig',
           'showCheckboxColumn',
           'showRowSeriesNumber',
-          'contextItems',//
-        ]
+          'contextItems',
+          'detailTableConfig',
+          'keyColumn',
+          'keyCodeColumn',
+        ] //
+        let tName = table.getTableName()
+        let mainDesign = table.getMainPageDesign() //
+        let mN = mainDesign?.getRealTableName() || null
         let _obj = _.pick(_config, fields)
         let _fConfig = {
           itemSpan: 12, //
@@ -250,6 +261,40 @@ export const initContextMenu = (table: Table) => {
           height: 500,
           width: 800, //
           items: [
+            {
+              field: 'tableName',
+              label: '表名',
+              type: 'string',
+              disabled: true, //
+            },
+            {
+              field: 'detailTableConfig',
+              label: '详情表配置',
+              type: 'sform',
+              options: {
+                itemSpan: 12,
+                items: [
+                  {
+                    field: 'relateKey',
+                    label: '当前关联字段',
+                    type: 'string',
+                    options: {
+                      columnSelect: true,
+                      tableName: tName,
+                    },
+                  },
+                  {
+                    field: 'mainRelateKey',
+                    label: '主单据关联字段',
+                    type: 'string', //
+                    options: {
+                      columnSelect: true,
+                      tableName: mN, //
+                    }, //
+                  },
+                ],
+              },
+            },
             {
               field: 'treeConfig',
               label: '树形表格配置',
@@ -287,6 +332,24 @@ export const initContextMenu = (table: Table) => {
               label: '是否显示行号',
               type: 'boolean',
             },
+            {
+              field: 'keyColumn',
+              label: '主键字段',
+              type: 'string',
+              options: {
+                columnSelect: true,
+                tableName: tName, //
+              },
+            },
+            {
+              field: 'keyCodeColumn',
+              label: '单据字段',
+              type: 'string',
+              options: {
+                columnSelect: true,
+                tableName: tName, //
+              },
+            }, //
             {
               field: 'contextItems',
               label: '右键菜单配置', //

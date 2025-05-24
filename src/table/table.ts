@@ -154,10 +154,9 @@ export class Table extends Base {
   setTableState(state: 'edit' | 'scan') {
     //
     if (['edit', 'scan'].includes(state)) this.tableState = state //
-  } //
+  }
   @useTimeout({ number: 10, key: 'setCurRow' }) //
-  setCurRow(row, isDb = false) {
-    //
+  setCurRow(row, isProps = false) {
     let oldCurRow = this.tableData.curRow || {}
     if (toRaw(row) == toRaw(this.tableData.curRow)) return //
     this.tableData.curRow = row //
@@ -165,10 +164,15 @@ export class Table extends Base {
     let newIndex = row._index || ''
     this.timeout['updateRecords__now'] = true
     let tableName = this.getTableName()
-    let design = this.getMainPageDesign()
-    if (design && tableName != null) {
-      //
-      design.setCurRow(row, tableName) //
+    // let design = this.getMainPageDesign()
+    // if (design && tableName != null) {
+    //   if (isProps == false) {
+    //     design.setCurRow(row, tableName)
+    //   }
+    // }
+    let onCurRowChange = this.config.onCurRowChange
+    if (typeof onCurRowChange == 'function') {
+      onCurRowChange({ row: row, oldRow: oldCurRow }) //
     }
     this.updateIndexArr.add(oldIndex)
     this.updateIndexArr.add(newIndex) //
@@ -244,11 +248,33 @@ export class Table extends Base {
     }
   }
   setData(data) {
-    this.currentIndexContain = shallowRef({}) ////
+    this.currentIndexContain = shallowRef({})
+    let oldD = this.tableData.data
+    let _d1 = this.getFlatTreeData(oldD)
+    let dM = this.dataMap
+    _d1.forEach((e) => {
+      let _index = e['_index']
+      delete dM[_index] //
+    })
     data.forEach((e) => {
       this.initDataRow(e)
     })
     this.tableData.data = data
+    let _row = this.config.curRow
+    if (_row != null) {
+      let _index = _row._index
+      let _d = this.dataMap[_index]
+      if (_d == null) {
+        _row = null
+      }
+    } //
+    if (_row == null) {
+      _row = data[0]
+    }
+    if (_row == null) {
+      return //
+    }
+    this.setCurRow(_row) //
   }
   getTableName() {
     let tableName = this.config.tableName
@@ -488,7 +514,11 @@ export class Table extends Base {
     this.initEventListener() //
     this.loadColumns()
     this.loadData()
-    this.setCurRow(this.templateProps.data[0])
+    // let _row = this.config.curRow
+    // if (_row == null) {
+    //   _row = this.templateProps.data[0]
+    // }
+    // this.setCurRow(_row) //
   }
   initTreeConfig() {
     let treeConfig = this.config.treeConfig || {}
@@ -995,8 +1025,9 @@ export class Table extends Base {
       },
     } as ListTableConstructorOptions //
   }
+  //重新渲染//
   getShowData() {
-    let data = this.getData().map((row) => row) ////
+    let data = this.getData().map((row) => row) //
     return data //
   }
   getShowColumns() {
@@ -1271,7 +1302,7 @@ export class Table extends Base {
     return instance //
   }
   setMergeConfig(config?: any) {}
-  async addRows(rowsConfig?: { rows?: Array<any> } | number) {
+  async addRows(rowsConfig?: { rows?: Array<any>; isProps?: any } | number) {
     if (typeof rowsConfig === 'number') {
       let _rows = Array(rowsConfig).fill(null)
       let _row1 = []
@@ -1294,26 +1325,29 @@ export class Table extends Base {
       }
     }
     _arr.forEach((item) => {
-      // item['_rowState'] = 'add' //
-      Object.defineProperties(item, {
-        _rowState: { value: 'add', enumerable: false, writable: true },
-      })
+      if (item._rowState == null) {
+        Object.defineProperties(item, {
+          _rowState: { value: 'add', enumerable: false, writable: true },
+        })
+      } //
       this.initDataRow(item)
     })
-    for (const row of _arr) {
-      this.addRow(row)
-    } //
-    let data = this.getData()
-    let lastD = data[data.length - 1]
-    this.setCurRow(lastD)
-    this.addAfterMethod({
-      methodName: 'updateCanvas', //
-      fn: async () => {
-        this.scrollToRow({
-          row: lastD,
-        }) ////
-      },
-    })
+    if (rowsConfig?.isProps !== true) {
+      for (const row of _arr) {
+        this.addRow(row)
+      } //
+      let data = this.getData()
+      let lastD = data[data.length - 1]
+      this.setCurRow(lastD)
+      this.addAfterMethod({
+        methodName: 'updateCanvas', //
+        fn: async () => {
+          this.scrollToRow({
+            row: lastD,
+          }) ////
+        },
+      }) //
+    }
   }
   addBeforeMethod(config) {
     config.type = 'before'
@@ -1481,7 +1515,6 @@ export class Table extends Base {
     data.push(row) //
   }
   delCurRow() {
-    //
     let curRow = this.tableData.curRow
     let showData = this.getData() //
     let index = showData.indexOf(curRow) //
@@ -1810,7 +1843,8 @@ export class Table extends Base {
     try {
       let ins = this.getInstance() //
       let tCol = this.getTargetColumn(col, row)
-      if (tCol.getEditType() == 'boolean') {
+      if (tCol.getEditType() == 'boolean' && isTitle == false) {
+        //
         ins.clearSelected() //
         return
       }
@@ -2057,6 +2091,7 @@ export class Table extends Base {
     return 130
   }
   changeSortOrder(orderFieldArr: { field: string; order: number }[]) {
+    // debugger//
     let old1 = orderFieldArr.map((f) => f.field)
     old1.forEach((f, i) => {
       let columns = this.getFlatColumns()
@@ -2072,8 +2107,8 @@ export class Table extends Base {
       dragColumnAfterFn(
         columns.map((col) => {
           return col.config //
-        }),
-      )
+        }), //
+      ) //
     }
     let onColumnConfigChange = config.onColumnConfigChange
     if (typeof onColumnConfigChange == 'function') {
@@ -2454,6 +2489,7 @@ export class Table extends Base {
     return new Promise(async (resolve, reject) => {
       let data = config?.data //
       data = data || this.getFlatTreeData() //
+      let allData = data
       if (config?.change == true) {
         let changeData = data.filter((d) => {
           let rowState = d['_rowState']
@@ -2501,8 +2537,27 @@ export class Table extends Base {
         let _index = row['_index'] //
         delete this.validateMap[_index] //
       }
+      let validateFn = this.config.validateFn
+      let tErr = null
+      if (typeof validateFn == 'function') {
+        //
+        let _str = await validateFn({
+          table: this,
+          data: allData,
+          changeData: data, //
+        })
+        if (typeof _str == 'string') {
+          tErr = _str
+        }
+      }
       if (err == null) {
-        resolve(true) //
+        if (tErr == null) {
+          resolve(true) //
+        } else {
+          //
+          this.getSystem().confirmMessage(tErr, 'error') //
+          reject(tErr) //
+        } //
       } else {
         let _index = _row['_index']
         this.validateMap[_index] = [err] //

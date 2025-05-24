@@ -259,5 +259,10 @@ export const getAllColTypes = () => {
       label: '数字',
       value: 'number',
     },
+    {
+      label: '布尔型',
+      value: 'boolean', //
+    },
   ]
 }
+//

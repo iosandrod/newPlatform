@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash'
 import { FormItem } from './formitem'
 import { PageDesign } from './pageDesign'
+import { Column } from '@/table/column'
 
 export class PageDesignItem extends FormItem {
   //@ts-ignore
@@ -51,6 +52,7 @@ export class PageDesignItem extends FormItem {
     return []
   }
   getTableName() {
+    //
     let config = this.config
     let tableName = config?.options?.tableName
     return tableName
@@ -172,5 +174,55 @@ export class PageDesignItem extends FormItem {
       return item //
     }) //
     return _items1 //
+  }
+  getPageCurRow() {
+    let tableName = this.getOptions().tableName
+    if (tableName == null) {
+      return null
+    } //
+    let design: PageDesign = this.form as any //
+    let curRow = design.getCurRow(tableName) //
+    return curRow //
+  }
+  async onCurRowChange(config) {
+    let row = config.row //
+    let _config = { ...config, tableName: this.getTableName() }
+    let design: PageDesign = this.form as any //
+    await design.onCurRowChange(_config) //
+  }
+  async addRows(config) {
+    if (typeof config == 'number') {
+      config = {
+        num: config,
+      }
+    }
+    let design: PageDesign = this.form as any //
+    let fCom = this.getRef('fieldCom')
+    let tName = this.getTableName()
+    let columns = this.getOptions()?.columns || [] //
+    let _cols: Column[] = columns.map((col) => {
+      return new Column(col) //
+    })
+    let mainRow = design.getCurRow()
+    let _arr = []
+    for (let i = 0; i < config.num; i++) {
+      let obj = {}
+      for (const col of _cols) {
+        let _dValue = await col.getDefaultValue({
+          design: design,
+          curRow: mainRow,
+        })
+        obj = { ...obj, ..._dValue } //
+      }
+      Object.defineProperty(obj, '_rowState', { value: 'add' })
+      _arr.push(obj)
+    } //
+    // debugger //
+    let tDataMap = design.getTableRefData(tName)
+    let _d = tDataMap?.data
+    if (_d == null || !Array.isArray(_d)) {
+      return
+    }
+    _d.push(..._arr)
   }
 }

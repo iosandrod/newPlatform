@@ -128,7 +128,6 @@ export const click_cell = (table: Table) => {
         let title = config.title
         table.clearEditCell() //
         setTimeout(() => {
-          ////
           table.startEditCell(col, row, title, true) //
         }, 10)
       }

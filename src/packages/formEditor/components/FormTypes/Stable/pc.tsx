@@ -63,7 +63,12 @@ export default defineComponent({
       if (showTable.value == true) {
         let tableConfig = formitem.getTableConfig()
         com = (
-          <div class="w-full h-full">
+          <div
+            class="w-full "
+            style={{
+              minHeight: '200px',
+            }}
+          >
             <tableCom
               {...tableConfig}
               showHeaderButtons={true}
@@ -71,6 +76,7 @@ export default defineComponent({
             ></tableCom>
           </div>
         )
+        // com = null //
       }
       return com //
     }

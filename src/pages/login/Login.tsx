@@ -28,6 +28,7 @@ import { getDFConfig } from '@/table/colFConfig'
 import uploadCom from '@/input/uploadCom'
 import SearchDialog from '@/dialog/_dialogCom/searchDialog'
 import inputCom from '@/input/inputCom'
+import { tFConfig } from '@ER/formEditor/testData'
 export default defineComponent({
   components: {
     inputCom, //
@@ -152,8 +153,19 @@ export default defineComponent({
       //   .catch(() => {
       //     console.log('报错了') //
       //   })
-      let _d = await system.confirmDesignForm({}) //
-      console.log(_d, 'test_data') //
+      let _d = await system.confirmTable({
+        requiredValidate: true,
+        validateFn: async (config) => {
+          return '校验失败'
+        },
+        columns: [],
+        data: [
+          {
+            a: 1,
+          },
+        ],
+      }) //
+      console.log(_d, 'testD') //
     }
     // let p = new PageDesign(getDefaultPageProps())
     let _data1 = Array(10000)
@@ -207,46 +219,49 @@ export default defineComponent({
           ></tableCom>
         </div>
       ) //
+      com = null
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       }) ////
-      // com = (
-      //   <div class="w-full h-full">
-      //     <formCom
-      //       ref={_reg3}
-      //       isDesign={false}
-      //       // {..._fConfig}
-      //       {...{
-      //         items: [
-      //           {
-      //             field: 'height',
-      //             label: '邮箱',
-      //             type: 'sform', //
-      //             span: 24,
-      //             options: {
-      //               itemSpan: 12,
-      //               items: [
-      //                 {
-      //                   field: 'height',
-      //                   label: '邮箱', //
-      //                 },
-      //               ],
-      //               columnSelect: true, //
-      //               tableName: 'permissions', //
-      //             },
-      //             tabTitle: '权限',
-      //           },
-      //           {
-      //             field: 'width',
-      //             label: '密码',
-      //             span: 24,
-      //           },
-      //         ],
-      //       }}
-      //       data={d1} //
-      //     ></formCom>
-      //   </div>
-      // )
+      let _fConfig1 = tFConfig
+      com = ( //
+        <div class="w-full h-500">
+          <formCom
+            ref={_reg3}
+            isDesign={false}//
+            // {..._fConfig}
+            {...{
+              items: [
+                {
+                  field: 'height',
+                  label: '邮箱',
+                  type: 'sform', //
+                  span: 24,
+                  options: {
+                    itemSpan: 12,
+                    items: [
+                      {
+                        field: 'height',
+                        label: '邮箱', //
+                      },
+                    ],
+                    columnSelect: true, //
+                    tableName: 'permissions', //
+                  },
+                  tabTitle: '权限',
+                },
+                {
+                  field: 'width',
+                  label: '密码',
+                  span: 24,
+                },
+              ],
+            }}
+            {..._fConfig1} //
+            data={d1} //
+          ></formCom>
+        </div>
+      )
       // com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>
       // com = <dialogCom ref={_reg2}></dialogCom>

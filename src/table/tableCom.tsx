@@ -55,9 +55,12 @@ export default defineComponent({
       type: Boolean,
       default: false,
     }, //
+    validateFn: {
+      type: Function,
+    }, //
     data: {
+      //
       type: Array,
-      // default: () => [],
     }, //
     showHeaderButtons: {
       type: Boolean,
@@ -65,7 +68,10 @@ export default defineComponent({
     },
     showCalculate: {
       type: Boolean,
-      default: true, ////
+      default: true,
+    },
+    curRow: {
+      type: Object,
     },
     width: {
       type: Number,
@@ -172,6 +178,18 @@ export default defineComponent({
     contextItems: {
       type: Array,
     },
+    onCurRowChange: {
+      type: Function,
+    },
+    keyColumn: {
+      type: String,
+    },
+    keyCodeColumn: {
+      type: String,
+    },
+    detailTableConfig: {
+      type: Object,
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any
@@ -203,7 +221,7 @@ export default defineComponent({
     } //
     onMounted(() => {
       nextTick(() => {
-        tableIns.render() //
+        tableIns.render()
       })
     }) //
     onUnmounted(() => {
@@ -327,13 +345,28 @@ export default defineComponent({
     // )
     watch(
       () => {
-        return props.data
+        return [props.data, props.data?.length]
       },
-      (e) => {
-        if (!Array.isArray(e)) {
-          e = [] //
+      (newValue, oldValue) => {
+        let [newData, newLen] = newValue as any //
+        let [oldData, oldLen] = oldValue as any
+        if (newValue != oldValue) {
+          tableIns.setData(newData)
+        } else {
+          //添加行的
+          let addRows = newData.map((row) => {
+            return !oldData.includes(row)
+          })
+          //@ts-ignore
+          tableIns.addRows({ rows: addRows, isProps: true })
+          // let removeRows = oldData.map((row) => {
+          //   return !newData.includes(row)
+          // }) //
         }
-        tableIns.setData(e)
+        // if (!Array.isArray(e)) {
+        //   e = [] //
+        // }
+        // tableIns.setData(e)
       },
     )
     provide('tableIns', tableIns)

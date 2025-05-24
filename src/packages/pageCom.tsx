@@ -144,7 +144,10 @@ export default defineComponent({
           return
         } //
         let _command: any[] = commandArr as any
-        let myCommand = _command.filter((item) => item.name == tableName)
+        let myCommand = _command.filter((item) => {
+          let _name = item.name || item.tableName
+          return _name == tableName //
+        })
         let _myCommand = myCommand
         for (const c of _myCommand) {
           let index = _command.findIndex((item) => item == c)

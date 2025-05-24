@@ -3072,7 +3072,8 @@ export const _editLayout = {
                             list: [
                               {
                                 type: 'inline',
-                                columns: [//
+                                columns: [
+                                  //
                                   'nWpphB8MwhQJKurMUtRAR',
                                 ],
                                 style: {},
@@ -3091,7 +3092,7 @@ export const _editLayout = {
                           align: 'top',
                           hidden: false,
                           defaultValue: '_yNuSux3VBlbqnoWdXvYb',
-                        },    
+                        },
                         style: {
                           width: '100%',
                         },
@@ -3152,7 +3153,7 @@ export const _editLayout = {
                             id: '00tChLoKT5fqO_BuG8ywx',
                             key: 'tabsCol_00tChLoKT5fqO_BuG8ywx',
                             type: 'tabsCol',
-                            label:'Tab 1',
+                            label: 'Tab 1',
                             list: [
                               {
                                 id: 'omwKHWowKcx-2GKZprzOB',
@@ -3271,4 +3272,117 @@ export const _editLayout = {
     },
   ],
   logic: {},
+}
+
+export const tFConfig = {
+  itemSpan: 12, //
+  data: {}, //
+  height: 500,
+  width: 800, //
+  items: [
+    {
+      field: 'tableName',
+      label: '表名',
+      type: 'string',
+      disabled: true, //
+    },
+    {
+      field: 'detailTableConfig',
+      label: '详情表配置',
+      type: 'sform',
+      options: {
+        itemSpan: 12,
+        items: [
+          {
+            field: 'relateKey',
+            label: '当前关联字段',
+            type: 'string',
+            options: {},
+          },
+          {
+            field: 'mainRelateKey',
+            label: '主单据关联字段',
+            type: 'string', //
+            options: {}, //
+          },
+        ],
+      },
+    },
+    {
+      field: 'treeConfig',
+      label: '树形表格配置',
+      type: 'sform',
+      disabled: false,
+      options: {
+        itemSpan: 12, //
+        items: [
+          {
+            field: 'id',
+            label: '树主键',
+            type: 'string',
+          },
+          {
+            field: 'parentId',
+            label: '父主键',
+            type: 'string',
+          },
+          {
+            field: 'rootId',
+            label: '根节点',
+            type: 'string', //
+          },
+        ],
+      },
+    },
+    {
+      field: 'showCheckboxColumn',
+      label: '是否显示复选框',
+      type: 'boolean',
+    },
+    {
+      //
+      field: 'showRowSeriesNumber',
+      label: '是否显示行号',
+      type: 'boolean',
+    },
+
+    {
+      field: 'contextItems',
+      label: '右键菜单配置', //
+      // type: 'stable',
+      type: 'string',
+      span: 24,
+      options: {
+        showTable: true,
+        tableState: 'edit',
+        columns: [
+          {
+            field: 'label',
+            title: '菜单名称',
+            type: 'string',
+            editType: 'string',
+          },
+          {
+            field: 'fn',
+            title: '菜单事件',
+            type: 'string',
+            editType: 'code', //
+          },
+        ],
+      }, 
+    },
+    {
+      field: 'keyColumn',
+      label: '主键字段',
+      type: 'string',
+      options: {},
+      span: 24,
+    },
+    {
+      field: 'keyCodeColumn',
+      label: '单据字段',
+      type: 'string',
+      options: {},
+    }, //
+  ],
 }

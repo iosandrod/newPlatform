@@ -86,7 +86,7 @@ export class PageDesign extends Form {
     let tableName = this.getTableName()
     this.tableDataMap[tableName] = {
       data: [],
-      curRow: {},
+      curRow: null, //
     } //
   }
   initSearchForm() {
@@ -232,7 +232,7 @@ export class PageDesign extends Form {
     let _config = {
       data: row,
       event: evName,
-    } //
+    }
     await this.publishEvent(_config)
     return row
   }
@@ -367,12 +367,12 @@ export class PageDesign extends Form {
     let _res = await http.create('entity', _data) // //
     // console.log(_res)
   }
-  async updateTableDesign() {
-    // debugger //
+  async updateTableDesign(lastConfig?: any) {
+    //
     let _data = this.getLayoutData() //
     let http = this.getHttp()
-    let _config = this.config
-    let _config1 = { ..._config, ..._data, id: _config.id } //
+    let _config = this.config //
+    let _config1 = { ..._config, ..._data, ...lastConfig, id: _config.id }
     // debugger//
     await http.patch(`entity`, _config1) //
     this.getSystem().confirmMessage('保存成功', 'success') //
@@ -409,7 +409,7 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllDetailTable() {
+  getAllDetailTable(ref = false) {
     let allTable = this.getAllTable()
     let dTables = allTable.filter((t) => {
       return t.getEntityType() == 'detail'
@@ -423,6 +423,9 @@ export class PageDesign extends Form {
       return isEn //
     })
     return _items
+  }
+  async editTableRows() {
+    console.log('编辑当前行') //
   }
   async addEditTableRow() {
     let nRow = await this.createDefaultRow()
@@ -438,6 +441,7 @@ export class PageDesign extends Form {
     }
   }
   setLayoutData(d) {
+    //
     super.setLayoutData(d) //
     let allFields = this.state.fields
     let allEnFields = allFields.filter((f) => {
@@ -448,17 +452,20 @@ export class PageDesign extends Form {
       return false
     })
     for (const en of allEnFields) {
-      let tableName = en.tableName
+      // debugger //
+      let tableName = en.tableName || en.options?.tableName //
       if (tableName != null) {
         let tableConfigMap = this.tableConfigMap
-        tableConfigMap[tableName] = en
+        if (tableConfigMap[tableName] == null) {
+          tableConfigMap[tableName] = en.options
+        } //
         let tableDataMap = this.tableDataMap
         tableDataMap[tableName] = {
           curRow: null,
           data: [],
         }
       }
-    } //
+    }
     let tableName = this.getTableName() //
     if (this.tableConfigMap[tableName] == null) {
       this.tableConfigMap[tableName] = this.config //
@@ -523,7 +530,7 @@ export class PageDesign extends Form {
     }
   }
   getTableCnName() {
-    ////
+    // debugger //
     let config = this.getTableConfig()
     let tableCnName = config.tableCnName || this.getTableName() //
     return tableCnName //
@@ -757,7 +764,7 @@ export class PageDesign extends Form {
   getHomeTabLabel() {
     let tName = this.getTableName() //
     let cnName = this.getTableCnName() //
-    let rTableName = this.getRealTableName()
+    let rTableName = this.getRealTableName() //
     return {
       isDialog: this.isDialog,
       label: cnName,
@@ -1019,7 +1026,7 @@ export class PageDesign extends Form {
   getSaveData() {
     let tableName = this.getTableName() //
     let tRef: Table = this.getRef(tableName)
-    let d = tRef.getData()
+    let d = tRef.getFlatTreeData() //
     let addData = d.filter((row) => {
       let rowState = row['_rowState']
       return rowState == 'add'
@@ -1035,21 +1042,7 @@ export class PageDesign extends Form {
       delData: delData, //
     }
   }
-  @useHooks((config) => {
-    let ctx: PageDesign = config.instance //
-    let args = config.args
-    if ((args.length = 0)) {
-      args[0] = ctx.getSaveData()
-    } //
-  })
-  async saveTableData(config = this.getSaveData()) {
-    let tName = this.getRealTableName()
-    let http = this.getHttp()
-    await http.runCustomMethod(tName, 'batchUpdate', config) //批量更新//
-    this.getSystem().confirmMessage('数据保存成功', 'success') //
-    this.getTableData() //
-    this.setCurrentView() //
-  }
+
   async updateTableColumn(config, refresh = true) {
     if (Array.isArray(config)) {
     } else {
@@ -1167,11 +1160,45 @@ export class PageDesign extends Form {
   }
   getTreeConfig() {}
   onTableConfigChange(config) {
+    // debugger //
     let tableName = config.tableName //
     if (tableName == null) {
       return //
     }
     let _tableName = this.getRealTableName() //
+    if (_tableName == tableName) {
+      //
+      Object.entries(config).forEach(([key, value]) => {
+        //
+        this.config[key] = value
+      })
+    }
     this.updateTableDesign()
   }
+  async onCurRowChange(config) {
+    let tableName = config.tableName //
+    if (tableName == null) {
+      return //
+    }
+    this.setCurRow(config.row, tableName) //
+    // let tMapData = this.getTableRefData(tableName) //
+    // let row = config.row
+    // tMapData['curRow'] = row //
+  }
+  async saveTableData(config?: any) {}
+  getKeyColumn() {
+    let tConfig = this.getTableConfig()
+    let columns = tConfig.columns //
+    let _col = columns.filter((c) => {
+      return c.primary == 1 //
+    })
+    if (_col.length == 0) {
+      let keyColumn = tConfig.keyColumn
+      if (keyColumn == null) {
+        throw new Error('没有设置主键字段') //
+      }
+    }
+    return _col //
+  }
+  getKeyCodeColumn() {}
 }

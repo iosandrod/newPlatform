@@ -88,8 +88,12 @@ export class Dialog extends Base {
     let config = this.config
     let confirmFn = config.confirmFn
     if (typeof confirmFn == 'function') {
-      let status = await confirmFn(this) ////
-      if (status == false) {
+      try {
+        let status = await confirmFn(this) ////
+        if (status == false) {
+          return //
+        }
+      } catch (error) {
         return //
       }
     }
