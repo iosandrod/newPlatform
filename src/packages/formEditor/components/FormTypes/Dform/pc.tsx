@@ -35,7 +35,12 @@ export default defineComponent({
     return () => {
       let _com = (
         <div class="h-full w-full" style={{ minHeight: '50px' }}>
-          <FormCom ref={registerRef} {...fConfig.value} data={data.value}></FormCom>
+          <FormCom
+            ref={registerRef}
+            {...fConfig.value}
+            disabled={formitem.getFormDisabled()}
+            data={data.value}
+          ></FormCom>
         </div>
       )
       return _com

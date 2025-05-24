@@ -1189,16 +1189,18 @@ export class PageDesign extends Form {
   getKeyColumn() {
     let tConfig = this.getTableConfig()
     let columns = tConfig.columns //
+    let key = null
     let _col = columns.filter((c) => {
       return c.primary == 1 //
     })
-    if (_col.length == 0) {
-      let keyColumn = tConfig.keyColumn
-      if (keyColumn == null) {
-        throw new Error('没有设置主键字段') //
-      }
+    let keyColumn = tConfig.keyColumn
+    if (Boolean(keyColumn)) {
+      return keyColumn
     }
-    return _col //
+    if (_col.length == 0) {
+      throw new Error('没有设置主键字段') //
+    }
+    return _col[0].field //
   }
   getKeyCodeColumn() {}
 }

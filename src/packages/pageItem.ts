@@ -225,4 +225,13 @@ export class PageDesignItem extends FormItem {
     }
     _d.push(..._arr)
   }
+  getFormDisabled() {
+    let design: PageDesign = this.form as any //
+    let tableState = design.tableState //
+    let status = false
+    if (tableState == 'scan') {
+      status = true
+    }
+    return status //
+  }
 }

@@ -221,7 +221,14 @@ export class MainPageDesign extends PageDesign {
         let _editType = editType
         let page: editPageDesign = config
         if (_editType == 'edit') {
-          // page.getTableData() //
+          let query: any = {}
+          let keyColumn = this.getKeyColumn()
+          let curRow = this.getCurRow() //
+          let _id = curRow[keyColumn]
+          query[keyColumn] = _id //
+          page.getTableData({
+            query: query,
+          }) //
         }
         if (_editType == 'add') {
         }
@@ -298,7 +305,7 @@ export class MainPageDesign extends PageDesign {
     if (pageEditType == 'default') {
     }
     if (pageEditType == 'dialog') {
-      this.openEditDialog() //
+      this.openEditDialog('edit') //
     }
   }
 } //

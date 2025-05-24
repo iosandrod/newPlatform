@@ -44,14 +44,27 @@ export class editPageDesign extends PageDesign {
     return config //
   })
   async getTableData(config?: any) {
-    let tableName = config.tableName || this.getRealTableName() //
+    let tableName = config.tableName || this.getTableName() //
     let rTableName = this.getRealTableName() //
     let http = this.getHttp()
     let query = config.query || {}
     let tableState = this.tableState //
     if (Object.keys(query).length == 0) {
       return
+    } //
+    let res = await http.get(rTableName, 'find', query) //
+    let dataMap = this.getTableRefData(tableName)
+    let row = res[0] || {}
+    dataMap['data'] = res //
+    dataMap['curRow'] = row //
+    let evName = `${tableName}_getTableData` //
+    let _config = {
+      event: evName,
+      data: res,
     }
+    this.setCurrentDesignState('scan') //
+    await this.publishEvent(_config) //
+    return res
   }
   async getDefaultValue(tableName: string): Promise<any> {
     let columns = this.getTableColumns(tableName, true) //
