@@ -68,7 +68,7 @@ const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
     app.hooks([hooks.authentication(), hooks.populateHeader()])
   }
 }
-export class Client { }
+export class Client {}
 //
 export type createConfig = {}
 export const createClient = (config) => {
@@ -291,7 +291,7 @@ export class myHttp {
       )
     })
   }
-  async delete(tableName, params = {}, query = {}) { }
+  async delete(tableName, params = {}, query = {}) {}
   async getPageLayout(navName) {
     let data = await this.get('entity', 'find', {
       tableName: navName,
@@ -329,7 +329,13 @@ export class myHttp {
   }
   async hTable(tableName: string) {
     let _d = await this.runCustomMethod('entity', 'hasEntity', tableName)
-    return _d//
+    return _d //
+  }
+  registerEvent(event) {
+    let connection = this.client.get('connection')
+    connection.on(event, (data) => {
+      console.log('event', event, data) //
+    })
   }
 }
 

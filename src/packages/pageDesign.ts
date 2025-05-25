@@ -60,6 +60,25 @@ export class PageDesign extends Form {
   }
   constructor(config) {
     super(config)
+    let methods = config?.methods
+    let msg = [] ///
+    if (Array.isArray(methods) && methods.length > 0) {
+      for (let method of methods) {
+        let name = method.name //
+        let code = method.code
+        let oldFn = this[name]
+        if (oldFn != null) {
+          msg.push(`${name}已存在`) //
+          continue
+        }
+        try {
+          let _fn = stringToFunction(code)
+          if (typeof _fn == 'function') {
+            this[name] = _fn.bind(this) //
+          }
+        } catch (error) {}
+      }
+    }
   }
   init(): void {
     let _props = getDefaultPageProps() //
@@ -340,7 +359,7 @@ export class PageDesign extends Form {
   }
   async saveTableDesign(_config?: any) {
     //获取表格的id配置
-    let config = this.config
+    let config = { ...this.config, ..._config } //
     let id = config.id
     if (id == null) {
       await this.createTableDesign()
@@ -373,7 +392,6 @@ export class PageDesign extends Form {
     let http = this.getHttp()
     let _config = this.config //
     let _config1 = { ..._config, ..._data, ...lastConfig, id: _config.id }
-    // debugger//
     await http.patch(`entity`, _config1) //
     this.getSystem().confirmMessage('保存成功', 'success') //
   }
@@ -452,7 +470,6 @@ export class PageDesign extends Form {
       return false
     })
     for (const en of allEnFields) {
-      // debugger //
       let tableName = en.tableName || en.options?.tableName //
       if (tableName != null) {
         let tableConfigMap = this.tableConfigMap
@@ -530,7 +547,7 @@ export class PageDesign extends Form {
     }
   }
   getTableCnName() {
-    // debugger //
+    //
     let config = this.getTableConfig()
     let tableCnName = config.tableCnName || this.getTableName() //
     return tableCnName //
@@ -1076,7 +1093,6 @@ export class PageDesign extends Form {
     console.log('开始打印') //
   }
   getColumnSelectTreeData() {
-    //
     let allTableConfig = this.tableConfigMap
     let allCols = Object.values(allTableConfig).map((t: any) => {
       let columns = t.columns
@@ -1086,13 +1102,20 @@ export class PageDesign extends Form {
         title: t.tableName,
         children: _cols, //
       } //
-      // let obj = {
-      //   tableName: t.tableName,
-      //   columns: columns
-      // }
       return _obj
     })
     return allCols //
+  }
+  getMergeMethodsSelect() {
+    let config = this.config //
+    let methods = config.methods //
+    let _arr = []
+    if (Array.isArray(methods) && methods.length > 0) {
+      let _methods = _.cloneDeep(methods)
+      // return _methods //
+      _arr.push(..._methods) //
+    }
+    return _arr //
   }
   getBindPageProps() {
     //
@@ -1161,7 +1184,6 @@ export class PageDesign extends Form {
   }
   getTreeConfig() {}
   onTableConfigChange(config) {
-    // debugger //
     let tableName = config.tableName //
     if (tableName == null) {
       return //

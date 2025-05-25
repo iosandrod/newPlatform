@@ -226,7 +226,6 @@ export class PageDesignItem extends FormItem {
     _d.push(..._arr)
   }
   getFormDisabled(config?: any) {
-    //
     let _tableName = config?.tableName
     let _tableName1 = this.getOptions().tableName //
     let status1 = _tableName == _tableName1 && _tableName != null
@@ -234,8 +233,8 @@ export class PageDesignItem extends FormItem {
     let tableState = design.tableState //
     let status = false //
     if (tableState == 'scan' && status1) {
-      status = true
-    } //
+      status = true //
+    }
     return status //
   }
 }

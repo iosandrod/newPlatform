@@ -39,6 +39,7 @@ export default defineComponent({
     let sys = system
     let mainDesign = sys.getDesignByTableName(props.tableName)
     let allCols = mainDesign?.getColumnSelectTreeData()
+    let allMethods = mainDesign?.getMergeMethodsSelect() //--
     let infoConfig = null
     if (allCols != null) {
       infoConfig = {
@@ -65,7 +66,7 @@ export default defineComponent({
             width: 150, //
             sort: true,
             type: 'string',
-          },
+          }, //
         ],
         data: allCols,
       }
@@ -79,9 +80,19 @@ export default defineComponent({
           </div>
         )
       }
-      let com = <div class="w-full h-full" style={{ position: 'relative', border: '1px solid black' }} ref={register}></div>
+      let com = (
+        <div
+          class="w-full h-full"
+          style={{ position: 'relative', border: '1px solid black' }}
+          ref={register}
+        ></div>
+      )
       let outCom = (
-        <div class="w-full h-full flex" style={{ position: 'relative', minHeight: '100px' }} ref={registerOuter}>
+        <div
+          class="w-full h-full flex"
+          style={{ position: 'relative', minHeight: '100px' }}
+          ref={registerOuter}
+        >
           {com}
           {tCom}
         </div> //

@@ -132,8 +132,9 @@ export class TabItem extends Base {
   }
   getItemProp() {
     //
-    let name = this.getTabName()//
-    let obj = {//
+    let name = this.getTabName() //
+    let obj = {
+      //
       name,
     }
     return obj
@@ -218,5 +219,8 @@ export class TabItem extends Base {
     let position = root.getBoundingClientRect()
     this.dragConfig.rootLeft = position.left
     this.dragConfig.rootWidth = position.width
+  }
+  getDefaultItemSlots(slots) {
+   
   }
 }

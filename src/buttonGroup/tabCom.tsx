@@ -1,4 +1,4 @@
-import { defineComponent, watch } from 'vue'
+import { computed, defineComponent, watch } from 'vue'
 import { ElTabPane, ElTabs, tabPaneProps, tabsProps } from 'element-plus'
 import { Tab } from './tab'
 import { erFormEditor } from '@ER/formEditor'
@@ -72,7 +72,7 @@ export default defineComponent({
         } else {
           tabIns.setItems(newValue) //
         }
-      }
+      },
     )
     watch(
       //
@@ -82,7 +82,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      }
+      },
     )
     let ns = tabIns.hooks.useNamespace('tabCom')
     const register = (el) => {
@@ -95,18 +95,29 @@ export default defineComponent({
     const registerContext = (el) => {
       tabIns.registerRef('contextMenu', el) //
     }
+    let modelValue = computed(() => {
+      return tabIns.getModelValue()
+    })
     return () => {
       const item = slots.item
       let context = null
       if (props.showContextMenu == true) {
         //
-        context = <ContextmenuCom ref={registerContext} items={tabIns.getContextItems()}></ContextmenuCom>
+        context = (
+          <ContextmenuCom
+            ref={registerContext}
+            items={tabIns.getContextItems()}
+          ></ContextmenuCom>
+        )
       }
       let _class = ns.b()
       if (props.useDefaultClass == true) {
         //@ts-ignore
         _class = [] ////
-      }
+      } //
+      let dCom = tabIns.tabitems.map((el, index) => {
+        let _com = <div></div>
+      })
       const tabCom = (
         <div ref={register}>
           {context}
@@ -198,7 +209,11 @@ export default defineComponent({
                             position: 'relative', //
                             minHeight: mHeight, //
                             height: `${height}`,
-                            width: `${el.dragConfig.rootWidth ? `${el.dragConfig.rootWidth}px` : ''}`,
+                            width: `${
+                              el.dragConfig.rootWidth
+                                ? `${el.dragConfig.rootWidth}px`
+                                : ''
+                            }`,
                           }}
                         >
                           <div
@@ -219,13 +234,21 @@ export default defineComponent({
                       return dragCom
                     }, //
                     default: () => {
-                      return <div></div>
+                      // let _default = slots.default
+                      let innerCom = null
+                      // if (_default != null) {
+                      //   innerCom = _default(el) //
+                      // } //
+                      return <div>{innerCom}</div>
                     },
                   }
                   let com = null
                   com = (
                     <div>
-                      <ElTabPane {...el.getItemProp()} v-slots={_slots}></ElTabPane>
+                      <ElTabPane
+                        {...el.getItemProp()}
+                        v-slots={_slots}
+                      ></ElTabPane>
                     </div>
                   )
                   return com

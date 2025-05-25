@@ -357,6 +357,13 @@ export class System extends Base {
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
+    Object.entries(editUse).forEach(([key, value]) => {
+      let _arr = value
+      for (const e of _arr) {
+        //
+        _d.use(key, e)
+      } //
+    })
     this.tableConfirmMap[editTableName] = _d
     if (config.isConfirm === true) {
       //
@@ -426,7 +433,7 @@ export class System extends Base {
           let _d = dialog.getRef('innerCom').getData()
           resolve(_d) //
         },
-        width: formConfig.width || 400,
+        width: formConfig.width || 800,
         height: formConfig.height || 600,
         title: formConfig.title || '数据表单',
       }
@@ -776,21 +783,26 @@ export class System extends Base {
     let tableName = curPage.getTableName() //
     let _config = await this.getPageLayout(tableName)
     let data = _config //
+    let tabTitles = ['基本配置', '高级配置'] //
     let fConfig = {
+      isTabForm: true,
       itemSpan: 12,
       items: [
         {
-          field: 'tableCnName',
+          tabTitle: tabTitles[0],
+          field: 'tableCnName', //
           label: '表格中文名',
           itemChange: (config) => {},
         },
         {
           label: '显示分页',
+          tabTitle: tabTitles[0],
           field: 'showPagination',
           type: 'boolean',
         },
         {
           field: 'pageEditType',
+          tabTitle: tabTitles[0],
           label: '页面编辑类型',
           type: 'select', //
           options: {
@@ -814,6 +826,7 @@ export class System extends Base {
           label: '树配置',
           field: 'treeConfig',
           type: 'sform', //
+          tabTitle: tabTitles[0],
           options: {
             itemSpan: 12,
             items: [
@@ -838,6 +851,7 @@ export class System extends Base {
         {
           label: '分页配置',
           field: 'pagination',
+          tabTitle: tabTitles[0],
           type: 'sform',
           options: {
             itemSpan: 12,
@@ -859,10 +873,11 @@ export class System extends Base {
           field: 'hooks',
           // label: '高级钩子函数编辑',
           type: 'stable',
+          tabTitle: tabTitles[0],
           span: 24,
           hiddenTitle: true, //
           options: {
-            tableTitle: '高级钩子函数编辑', //
+            tableTitle: '高级钩子', //
             tableState: 'edit', //
             columns: [
               {
@@ -874,7 +889,11 @@ export class System extends Base {
                     label: '增行',
                     value: 'addTableRows', //
                   },
-                ],
+                  {
+                    label: '获取数据',
+                    value: 'getTableData', //
+                  },
+                ], //
               },
               {
                 field: 'desc',
@@ -889,9 +908,40 @@ export class System extends Base {
             ],
             showTable: true,
           },
-        }, //
+        },
+        {
+          field: 'methods', //
+          type: 'stable',
+          tabTitle: tabTitles[1],
+          span: 24,
+          hiddenTitle: true,
+          options: {
+            showRowSeriesNumber: true, //
+            tableTitle: '方法',
+            tableState: 'edit',
+            columns: [
+              {
+                //
+                field: 'name',
+                title: '方法名称',
+                editType: 'string',
+              },
+              {
+                field: 'desc',
+                title: '方法描述',
+                editType: 'string',
+              },
+              {
+                field: 'code',
+                title: '方法代码',
+                editType: 'code',
+              },
+            ],
+            showTable: true,
+          }, //
+        },
       ],
-      data,
+      data, //
     }
     let _data = await this.confirmForm(fConfig) //
     await this.getHttp().patch('entity', { ..._config }) //
@@ -1196,12 +1246,12 @@ export class System extends Base {
   getDesignByTableName(tableName) {
     let _obj = this.tableMap //
     let editObj = this.tableEditMap
-    let obj = editObj[tableName] || _obj[tableName]
+    let obj = editObj[tableName] || _obj[tableName] //
     return obj
   }
-  async confirmEditEntity(config) {
-    let editDesign = await this.createPageEditDesign(config)
-  }
+  // async confirmEditEntity(config) {
+  //   let editDesign = await this.createPageEditDesign(config)
+  // }
 }
 
 export const system = reactive(new System()) //

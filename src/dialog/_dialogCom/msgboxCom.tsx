@@ -13,10 +13,11 @@ export default defineComponent({
       type: Object,
     },
     type: {
-      type: String,
+      type: String || Object, //
     },
   },
   setup(props) {
+    //
     let type = props.type
     let color = ''
     if (type == 'error') {

@@ -159,15 +159,15 @@ export default defineComponent({
     let _data1 = Array(10000)
       .fill(null)
       .map((row) => {
-        return {}
-      })
+        return {} //
+      }) // //
     let d1 = reactive({ editType: 'date' })
     let show = ref(false)
     let pd = null
     system.createPageDesign('permissions').then((res) => {
       pd = res
-      show.value = true //
-    })
+      show.value = true
+    }) //
     return () => {
       if (show.value == false) {
         return null
@@ -271,6 +271,16 @@ export default defineComponent({
       // )
       // com=<input type="checkbox" class='vxe-checkbox--input' onChange={(value) => {
       // }}></input>
+      com = (
+        <tabCom
+          items={[{ label: 'tab1' }, { label: 'tab2' }]}
+          v-slots={{
+            default: (item) => {
+              return <div>{'测试123123'}</div> //
+            },
+          }}
+        ></tabCom>
+      )
       let _com = (
         <div
           style={{
