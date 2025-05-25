@@ -238,68 +238,7 @@ export class MainPageDesign extends PageDesign {
     this.openDialog(dialogConfig)
   }
   async confirmEditEntity(config: any) {
-    let tableName = config?.tableName //
-    if (tableName == null) {
-      return //
-    }
-    let _config = {
-      tableName,
-      command: async (page) => {
-        let _editType = config.editType || 'add'
-        if (_editType == 'edit') {
-          let query: any = {}
-          let curRow = config.curRow
-          if (curRow == null) {
-            return
-          }
-          let keyColumn = page.getKeyColumn() //
-          let _id = curRow[keyColumn]
-          query[keyColumn] = _id //
-          page.getTableData({
-            query: query,
-          }) //
-        }
-        if (_editType == 'add') {
-          page.addMainTableRow() //
-        }
-      }, //
-    }
-    let _d = await this.getSystem().createConfirmEditDesign(_config) //
-    let _dialogConfig = {
-      width: 0.8,
-      height: 0.8, //
-      title: '编辑',
-      // showFooter: false,//
-      buttons: [
-        {
-          label: '开启设计',
-          fn: async (config) => {
-            let p: Dialog = config.parent
-            let com: editPageDesign = p.getRef('innerCom') //
-            com.setCurrentDesign(true) //
-          },
-        },
-        {
-          label: '保存布局',
-          fn: async (config) => {
-            let p: Dialog = config.parent
-            let com: editPageDesign = p.getRef('innerCom') //
-            com.saveTableDesign() //
-          },
-        },
-      ],
-      createFn: () => {
-        return {
-          component: pageCom,
-          props: {
-            //
-            formIns: _d, //
-            isMainPage: true, //
-          },
-        }
-      },
-    }
-    this.openDialog(_dialogConfig) //
+   await  this.getSystem().confirmEditEntity(config, this)
   } //
   @useHooks((config) => {
     let ctx: PageDesign = config.instance //

@@ -4,6 +4,7 @@ import { toRaw } from 'vue'
 import { BMenu } from './bMenu'
 
 export class Tab extends Base {
+  modelValue = null
   currentItem?: any //
   scrollLeft = 0
   config: any
@@ -21,7 +22,10 @@ export class Tab extends Base {
     super.init()
     let config = this.config
     let items = config.items || []
-    this.setItems(items) //
+    this.setItems(items)
+    if (config.modelValue == null) {
+      this.modelValue = this.tabitems[0].getTabName() //
+    }
   }
   getPluginName() {
     let id = this.id
@@ -73,7 +77,11 @@ export class Tab extends Base {
   }
   getModelValue() {
     let config = this.config
-    let modelValue = config.modelValue //
+    let modelValue = config.modelValue
+    if (modelValue == null) {
+      let _modelValue = this.modelValue
+      modelValue = _modelValue //
+    } //
     return modelValue
   }
   onTabChange(id) {
@@ -88,6 +96,7 @@ export class Tab extends Base {
         item: config, //
       }) //
     }
+    this.modelValue = id //
   }
   getDragProps() {
     let obj: any = {}
@@ -154,5 +163,22 @@ export class Tab extends Base {
     let rItems = [...oldItems, ..._items]
     return rItems //
   }
-  closeByCurrent(type) { }
+  changeItemShow() {
+    let items = this.tabitems
+    let mv = this.getModelValue()
+    for (const item of items) {
+      let n = item.getTabName()
+      let innerCom: HTMLDivElement = item.getRef('tabPaneCom') //
+      if (n == mv) {
+        if (innerCom) {
+          innerCom.style.display = 'block' //
+        }
+      } else {
+        if (innerCom) {
+          innerCom.style.display = 'none'
+        }
+      }
+    }
+  }
+  closeByCurrent(type) {}
 }

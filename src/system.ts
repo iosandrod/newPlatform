@@ -4,7 +4,7 @@ import { Client, client as _client, http, myHttp } from './service/client'
 import { Base } from '@ER/base'
 import { cacheValue, useDelay } from '@ER/utils/decoration'
 import { PageDesign } from '@ER/pageDesign'
-import { getDefaultPageProps } from '@ER/pageCom'
+// import pageCom, { getDefaultPageProps } from '@ER/pageCom'
 import { Dialog } from './dialog/dialog'
 import { getDialogDefaultProps } from './dialog/dialogCom'
 import { Form } from '@ER/form'
@@ -893,6 +893,10 @@ export class System extends Base {
                     label: '获取数据',
                     value: 'getTableData', //
                   },
+                  {
+                    label: '页面加载',
+                    value: 'pageInit', //
+                  },
                 ], //
               },
               {
@@ -904,6 +908,7 @@ export class System extends Base {
                 field: 'code',
                 title: '钩子代码',
                 editType: 'code', //
+                tableName: tableName, //
               }, //
             ],
             showTable: true,
@@ -935,6 +940,7 @@ export class System extends Base {
                 field: 'code',
                 title: '方法代码',
                 editType: 'code',
+                tableName: tableName, //
               },
             ],
             showTable: true,
@@ -1249,9 +1255,80 @@ export class System extends Base {
     let obj = editObj[tableName] || _obj[tableName] //
     return obj
   }
-  // async confirmEditEntity(config) {
-  //   let editDesign = await this.createPageEditDesign(config)
-  // }
+  async confirmEditEntity(config: any, design = null) {
+    let tableName = config?.tableName //
+    if (tableName == null) {
+      return //
+    } //
+    let _component = this.getSysComponents().pageCom
+    let _config = {
+      tableName,
+      command: async (page) => {
+        let _editType = config.editType || 'add'
+        if (_editType == 'edit') {
+          let query: any = {}
+          let curRow = config.curRow
+          if (curRow == null) {
+            return
+          }
+          let keyColumn = page.getKeyColumn() //
+          let _id = curRow[keyColumn]
+          query[keyColumn] = _id //
+          page.getTableData({
+            query: query,
+          }) //
+        }
+        if (_editType == 'add') {
+          page.addMainTableRow({
+            curRow: config?.curRow || {}, //
+          }) //
+        } //
+      }, //
+    }
+    let _d = await this.getSystem().createConfirmEditDesign(_config) //
+    let _dialogConfig = {
+      width: 0.8,
+      height: 0.8, //
+      title: '编辑',
+      // showFooter: false,//
+      buttons: [
+        {
+          label: '开启设计',
+          fn: async (config) => {
+            let p: Dialog = config.parent
+            let com: editPageDesign = p.getRef('innerCom') //
+            com.setCurrentDesign(true) //
+          },
+        },
+        {
+          label: '保存布局',
+          fn: async (config) => {
+            let p: Dialog = config.parent
+            let com: editPageDesign = p.getRef('innerCom') //
+            com.saveTableDesign() //
+          },
+        },
+      ],
+      createFn: () => {
+        return {
+          component: _component,
+          props: {
+            //
+            formIns: _d, //
+            isMainPage: true, //
+          },
+        }
+      },
+    }
+    this.openDialog(_dialogConfig) //
+  } //
+  registerEntityEvent(config?: any) {
+    let tableName = config?.tableName //
+    let event = config.event
+    if (tableName == null || event == null) {
+      return
+    }
+  } //
 }
 
 export const system = reactive(new System()) //

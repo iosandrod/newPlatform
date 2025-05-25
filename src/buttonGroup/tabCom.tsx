@@ -1,4 +1,4 @@
-import { computed, defineComponent, watch } from 'vue'
+import { computed, defineComponent, nextTick, watch } from 'vue'
 import { ElTabPane, ElTabs, tabPaneProps, tabsProps } from 'element-plus'
 import { Tab } from './tab'
 import { erFormEditor } from '@ER/formEditor'
@@ -96,8 +96,20 @@ export default defineComponent({
       tabIns.registerRef('contextMenu', el) //
     }
     let modelValue = computed(() => {
+      //
       return tabIns.getModelValue()
     })
+    watch(
+      () => modelValue.value,
+      (newValue) => {
+        nextTick(() => {
+          tabIns.changeItemShow()
+        })
+      },
+      {
+        immediate: true, //
+      },
+    )
     return () => {
       const item = slots.item
       let context = null
@@ -116,10 +128,28 @@ export default defineComponent({
         _class = [] ////
       } //
       let dCom = tabIns.tabitems.map((el, index) => {
-        let _com = <div></div>
+        let _class = ['hidden','h-full']
+        let _default = slots.default
+        let _name = el.getTabName() //
+        let com1 = null
+        if (_default != null) {
+          com1 = _default(el)
+        }
+        let _com = (
+          <div
+            ref={(e) => {
+              el.registerRef('tabPaneCom', e)
+            }} //
+            class={_class}
+            key={_name}
+          >
+            {com1}
+          </div>
+        )
+        return _com //
       })
       const tabCom = (
-        <div ref={register}>
+        <div class="flex flex-col h-full" ref={register}>
           {context}
           <ElTabs
             style={{ height: `${tabIns.getTabHeight()}` }}
@@ -257,6 +287,7 @@ export default defineComponent({
               },
             }}
           ></ElTabs>
+          <div class="flex-1">{dCom}</div>
         </div>
       )
       return tabCom

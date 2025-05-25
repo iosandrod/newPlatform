@@ -39,6 +39,7 @@ import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import formCom from '@ER/formCom'
 import formEditor from '@ER/formEditor/formEditor'
+import pageCom from '@ER/pageCom'
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -57,6 +58,14 @@ self.MonacoEnvironment = {
     return new editorWorker()
   },
 }
+let componentObj = {
+  tableCom,
+  dropdownCom,
+  buttonCom,
+  buttonGroupCom,
+  formCom,
+  pageCom,
+}
 //@ts-ignore
 Base.prototype.system = system //
 //@ts-ignore
@@ -64,7 +73,9 @@ Base.prototype.http = http ////
 //@ts-ignore
 Base.prototype._router = router
 //@ts-ignore
-Table.component = tableCom
+Base.prototype.getAllComponent = () => componentObj
+//@ts-ignore
+// Table.component = tableCom
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)

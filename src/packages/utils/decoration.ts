@@ -207,96 +207,92 @@ export function useRunBefore(config?: any) {
   }
 }
 
+export function useEmit(config) {}
 
-export function useEmit(config) {
-
-}
-
-
-export function useHooks(config?: Function): any {//
+export function useHooks(config?: Function): any {
+  //
   return function hookable(
     target: any,
     propertyKey: string,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ) {
-    const original = descriptor.value;
+    const original = descriptor.value
 
     descriptor.value = async function (...args: any[]) {
       // 从实例的 hooksMetaData 上读取中间件
-      let middlewares: any[] = this.hooksMetaData?.[propertyKey] || [];
-      let ctx = { instance: this, args };
+      let middlewares: any[] = this.hooksMetaData?.[propertyKey] || []
+      let ctx = { instance: this, args }
       let _config = config
       if (typeof _config === 'function') {
-        let config1 = _config(ctx)//
-        ctx = { ...ctx, ...config1 }//
+        let config1 = _config(ctx) //
+        ctx = { ...ctx, ...config1 } //
       }
-      let index = -1;
+      let index = -1
 
       async function dispatch(i: number): Promise<any> {
         if (i <= index) {
-          throw new Error('next() called multiple times');
+          throw new Error('next() called multiple times')
         }
-        index = i;
-        const fn = middlewares[i];
+        index = i
+        const fn = middlewares[i]
         if (fn) {
-          return fn(ctx, () => dispatch(i + 1));
+          ////
+          return fn.call(ctx.instance, ctx, () => dispatch(i + 1))
         }
         // 所有中间件执行完，调用原方法
-        return original.apply(ctx.instance, ctx.args);
+        return original.apply(ctx.instance, ctx.args)
       }
-      return dispatch(0);
-    };
+      return dispatch(0)
+    }
 
-    return descriptor;
+    return descriptor
   }
 }
 
 export function useDelay(config?: { delay?: number }): any {
-  const delay = config?.delay ?? 200;
+  const delay = config?.delay ?? 200
 
   return function (target: any, key: string, descriptor: PropertyDescriptor) {
-    const originalMethod = descriptor.value;
+    const originalMethod = descriptor.value
     // 参数缓存
-    let argsQueue: any[] = [];
-    let timer: NodeJS.Timeout | null = null;
+    let argsQueue: any[] = []
+    let timer: NodeJS.Timeout | null = null
     if (isAsyncFunction(originalMethod)) {
       descriptor.value = async function (...args: any[]) {
         return new Promise(async (resolve, reject) => {
-          argsQueue.push(args); // 缓存每一次调用的参数
+          argsQueue.push(args) // 缓存每一次调用的参数
 
           if (timer) {
-            clearTimeout(timer); // 重置延迟
+            clearTimeout(timer) // 重置延迟
           }
 
           timer = setTimeout(async () => {
-            const queuedArgs = argsQueue.slice(); // 拷贝数组
-            argsQueue = []; // 清空缓存
+            const queuedArgs = argsQueue.slice() // 拷贝数组
+            argsQueue = [] // 清空缓存
 
             // 调用原函数，传入缓存数组
-            let _res = await originalMethod.call(this, queuedArgs);
-            resolve(_res)//
-          }, delay);
+            let _res = await originalMethod.call(this, queuedArgs)
+            resolve(_res) //
+          }, delay)
         })
-
       }
     } else {
-
       descriptor.value = function (...args: any[]) {
-        argsQueue.push(args); // 缓存每一次调用的参数
+        argsQueue.push(args) // 缓存每一次调用的参数
 
         if (timer) {
-          clearTimeout(timer); // 重置延迟
+          clearTimeout(timer) // 重置延迟
         }
 
         timer = setTimeout(() => {
-          const queuedArgs = argsQueue.slice(); // 拷贝数组
-          argsQueue = []; // 清空缓存
+          const queuedArgs = argsQueue.slice() // 拷贝数组
+          argsQueue = [] // 清空缓存
 
           // 调用原函数，传入缓存数组
-          originalMethod.call(this, queuedArgs);
-        }, delay);
+          originalMethod.call(this, queuedArgs)
+        }, delay)
       }
-    };
-    return descriptor;
-  };
+    }
+    return descriptor
+  }
 }

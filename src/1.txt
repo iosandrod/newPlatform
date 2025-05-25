@@ -4229,3 +4229,7 @@ const app = createApp({
         ],
       }) //
       console.log(_d, 'testD') //
+
+       // async confirmEditEntity(config) {
+  //   let editDesign = await this.createPageEditDesign(config)
+  // }

@@ -307,11 +307,19 @@ export const initContextMenu = (table: Table) => {
                     field: 'id',
                     label: '树主键',
                     type: 'string',
+                    options: {
+                      columnSelect: true,
+                      tableName: tName,
+                    },
                   },
                   {
                     field: 'parentId',
                     label: '父主键',
                     type: 'string',
+                    options: {
+                      columnSelect: true,
+                      tableName: tName, //
+                    }, //
                   },
                   {
                     field: 'rootId',

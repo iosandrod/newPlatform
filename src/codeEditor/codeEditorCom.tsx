@@ -2,11 +2,14 @@ import { defineComponent, onMounted, onUnmounted } from 'vue'
 import CodeEditor from './codeEditor'
 import { system } from '@/system'
 import tableCom from '@/table/tableCom'
+import tabCom from '@/buttonGroup/tabCom'
 
 export default defineComponent({
   name: 'CodeEditorCom',
   //
-  components: {},
+  components: {
+    tabCom, //
+  },
   props: {
     language: {
       type: String,
@@ -71,13 +74,55 @@ export default defineComponent({
         data: allCols,
       }
     }
+    let methodConfig = {
+      data: allMethods,
+      showRowSeriesNumber: false,
+      showCheckboxColumn: false, //
+      columns: [
+        {
+          field: 'name',
+          title: '方法名称',
+          width: 150,
+          type: 'string', //
+        },
+        {
+          title: '方法描述',
+          field: 'desc',
+          width: 150,
+          type: 'string',
+        },
+      ],
+    }
+    let tabConfig = {
+      items: [
+        {
+          label: '字段参照',
+          tableConfig: infoConfig,
+        },
+        {
+          label: '方法参照',
+          tableConfig: methodConfig, //
+        },
+      ],
+    }
     return () => {
       let tCom = null
       if (infoConfig != null) {
+        // tCom = (
+        //   <div class="w-410 overflow-hidden">
+        //     <erTable {...infoConfig}></erTable>
+        //   </div>
+        // )
         tCom = (
-          <div class="w-410 overflow-hidden">
-            <erTable {...infoConfig}></erTable>
-          </div>
+          <tabCom
+            v-slots={{
+              default: (item) => {
+                let tableConfig = item.config.tableConfig //
+                return <erTable {...tableConfig}></erTable>
+              },
+            }}
+            {...tabConfig}
+          ></tabCom>
         )
       }
       let com = (
@@ -94,7 +139,7 @@ export default defineComponent({
           ref={registerOuter}
         >
           {com}
-          {tCom}
+          <div class="w-410 h-full overflow-hidden">{tCom}</div>
         </div> //
       ) //
       return outCom //

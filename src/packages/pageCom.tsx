@@ -246,6 +246,9 @@ export default defineComponent({
     const setData2 = formIns.setLayoutData.bind(formIns)
     const getData = formIns.getLayoutData.bind(formIns)
     const setData = setData2
+    onMounted(() => {
+      formIns.pageInit() //
+    }) //
     const handleOperation = (type, val?: any) => {
       switch (type) {
         case 1:

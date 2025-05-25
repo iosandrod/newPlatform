@@ -768,7 +768,9 @@ export class PageDesign extends Form {
     let _data = await sys.confirmTable(tableConfig) //
     options.items = _data
     // await this.getSystem().updateCurrentPageDesign()
-    await this.saveTableDesign() //
+    await this.saveTableDesign({
+      refresh: false, //
+    }) //
   }
   openContextMenu(e, _item?: any) {
     this.currentContextItem = _item //
@@ -1225,5 +1227,7 @@ export class PageDesign extends Form {
     }
     return _col[0].field //
   }
+  @useHooks()
+  async pageInit() {}
   getKeyCodeColumn() {}
 }

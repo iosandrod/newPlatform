@@ -159,6 +159,10 @@ export class Base {
       system.tableMap[tableName] || system.tableEditMap[tableName]
     return targetDesign //
   }
+  getSysComponents(): any {
+    //@ts-ignore
+    return this.getAllComponent()
+  }
   changeRowState(re, state = 'change') {
     if (state == 'delete') {
       re['_rowState'] = 'delete'
