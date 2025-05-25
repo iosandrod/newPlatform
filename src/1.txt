@@ -4191,3 +4191,41 @@ const app = createApp({
         //   let rowState = row['_rowState']
         //   return rowState == 'add' || rowState == 'change'
         // })
+
+
+        // let id = this.id
+    // let obj: any = {
+    //   id: id,
+    //   key: this.getKey(),
+    // }
+    // obj.options = obj.options || {}
+    // const type = this.getType()
+    // obj.type = obj.type || type
+    // const style = this.getStyle()
+    // obj.style = obj.style || style //
+    // config.options = config.options || {}
+
+     // .map((t) => {
+    //   return t.getRef('fieldCom')
+    // })
+    // .filter((t) => {
+    //   let _t: Table = t
+    //   if (_t == null) {
+    //     return false
+    //   }
+    //   return true
+    // })
+
+     let _d = await system.confirmTable({
+        requiredValidate: true,
+        validateFn: async (config) => {
+          return '校验失败'
+        },
+        columns: [],
+        data: [
+          {
+            a: 1,
+          },
+        ],
+      }) //
+      console.log(_d, 'testD') //

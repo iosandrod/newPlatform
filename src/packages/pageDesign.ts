@@ -1007,7 +1007,8 @@ export class PageDesign extends Form {
     this.setCurrentDesignState('scan')
   }
   setCurrentDesignState(state) {
-    if (['scan', 'edit'].indexOf(state) == -1) {
+    //
+    if (['scan', 'edit', 'add'].indexOf(state) == -1) {
       return
     }
     this.tableState = state

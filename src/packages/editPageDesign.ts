@@ -5,26 +5,20 @@ import { Table } from '@/table/table'
 import { getFlatTreeData } from './utils'
 
 export class editPageDesign extends PageDesign {
+  setCurrentDesignState(state) {
+    super.setCurrentDesignState(state) //
+  }
   async addMainTableRow(addConfig?: any): Promise<void> {
     console.log('添加主表以及子表') ////
     let defaultV = await this.getDefaultValue(this.getTableName()) //
     let tableConfig = this.getTableRefData(this.getTableName()) //
     tableConfig.curRow = defaultV //
+    this.setCurrentDesignState('add') //
     let allDetailTable = this.getAllDetailTable()
-    let tref = allDetailTable
-    // .map((t) => {
-    //   return t.getRef('fieldCom')
-    // })
-    // .filter((t) => {
-    //   let _t: Table = t
-    //   if (_t == null) {
-    //     return false
-    //   }
-    //   return true
-    // })
+    let tref = allDetailTable //
     for (const ta of tref) {
       await ta.addRows(10)
-    } //
+    }
   }
   @useHooks((config) => {
     let ctx: PageDesign = config.instance
@@ -148,14 +142,40 @@ export class editPageDesign extends PageDesign {
     } //
   })
   async saveTableData(config = this.getSaveData()) {
-    console.log(config, 'testConfig') //
-    // console.log('saveTableData') //
-    let realTableName = this.getRealTableName()
+    if (this.tableState == 'scan') {
+      return //
+    } //
+    this.setCurrentLoading(true) //
+    let tableState = this.tableState
+    let _res = null
+    if (tableState == 'add') {
+      _res = await this.addMainRow(config)
+    } else {
+      _res = await this.updateMainRow(config) //
+    }
+    let row0 = _res[0]
+    this.setCurRow(row0)
+    this.setCurrentDesignState('scan') //
+  }
+  async addMainRow(config) {
     let http = this.getHttp()
-    // await http.runCustomMethod(realTableName, 'batchUpdate', config) //批量更新//
-    await http.create(realTableName, config)
-  } //
+    let realTableName = this.getRealTableName()
+    let _res = await http.create(realTableName, config)
+    this.getSystem().confirmMessage('数据新增成功', 'success')
+    return _res
+  }
+  async updateMainRow(config) {
+    let http = this.getHttp()
+    let realTableName = this.getRealTableName()
+    let _res = await http.patch(realTableName, config) //
+    this.getSystem().confirmMessage('数据更新成功', 'success') //
+    return _res
+  }
   async editTableRows() {
-    console.log('编辑当前行') //
+    let tableState = this.tableState //
+    if (tableState == 'edit' || tableState == 'add') {
+      return
+    } //
+    await this.setCurrentDesignState('edit')
   }
 }

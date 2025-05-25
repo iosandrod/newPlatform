@@ -174,7 +174,11 @@ export class Button extends Base {
       }
     } catch (error) {
       console.error(error) //
-      console.log('报错了') //
+      let page: PageDesign = _config.page
+      if (page) {
+        page.setCurrentLoading(false) //
+        page.getSystem().confirmMessageBox(error?.message || error, 'error') //
+      }
     }
   }
   getButtonWidth() {

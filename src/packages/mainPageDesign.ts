@@ -231,6 +231,7 @@ export class MainPageDesign extends PageDesign {
           }) //
         }
         if (_editType == 'add') {
+          page.addMainTableRow() //
         }
       },
     }) //
@@ -243,7 +244,25 @@ export class MainPageDesign extends PageDesign {
     }
     let _config = {
       tableName,
-      command: async (page) => {}, //
+      command: async (page) => {
+        let _editType = config.editType || 'add'
+        if (_editType == 'edit') {
+          let query: any = {}
+          let curRow = config.curRow
+          if (curRow == null) {
+            return
+          }
+          let keyColumn = page.getKeyColumn() //
+          let _id = curRow[keyColumn]
+          query[keyColumn] = _id //
+          page.getTableData({
+            query: query,
+          }) //
+        }
+        if (_editType == 'add') {
+          page.addMainTableRow() //
+        }
+      }, //
     }
     let _d = await this.getSystem().createConfirmEditDesign(_config) //
     let _dialogConfig = {

@@ -1835,6 +1835,26 @@ export class Form extends Base {
   }
   onColumnConfigChange(config) {}
   onTableConfigChange(config) {}
+  getDisabled() {
+    let config = this.config
+    let status = false
+    let disabled = config.disabled
+    if (disabled == true) {
+      status = true
+    }
+    let disabledFn = this.config.disabledFn
+    if (typeof disabledFn == 'function') {
+      try {
+        let _d = disabledFn()
+        if (_d == true) {
+          status = true
+        }
+      } catch (error) {
+        console.error('禁用脚本报错')
+      }
+    } //
+    return status
+  }
 }
 //使用默认布局
 

@@ -80,6 +80,7 @@ export type FieldOptions = {
 }
 
 export type Field = {
+  disabledFn?: any
   tabTitle?: string
   disabled?: boolean
   showTitle?: boolean

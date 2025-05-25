@@ -146,7 +146,12 @@ export default defineComponent({
         let _command: any[] = commandArr as any
         let myCommand = _command.filter((item) => {
           let _name = item.name || item.tableName
-          return _name == tableName //
+          let id = item.id
+          if (Boolean(id)) {
+            return _name == tableName && item.id
+          } else {
+            return _name == tableName //
+          }
         })
         let _myCommand = myCommand
         for (const c of _myCommand) {

@@ -15,8 +15,9 @@ import { VxeUI } from 'vxe-pc-ui'
 import { getDFConfig } from './table/colFConfig'
 import { editPageDesign } from '@ER/editPageDesign'
 import { MainPageDesign } from '@ER/mainPageDesign'
-import { mainUse } from './pageUseFn'
+import { editUse, mainUse } from './pageUseFn'
 import { ImportPageDesign } from '@ER/importPageDesign'
+import msgboxCom from './dialog/_dialogCom/msgboxCom'
 export class System extends Base {
   allApp: any = [] //
   systemApp: any = []
@@ -306,6 +307,13 @@ export class System extends Base {
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     _d.tableName = editTableName //
+    Object.entries(editUse).forEach(([key, value]) => {
+      let _arr = value
+      for (const e of _arr) {
+        //
+        _d.use(key, e)
+      }
+    })
     if (config.isConfirm === true) {
     } else {
       this.tableEditMap[editTableName] = _d //
@@ -314,10 +322,16 @@ export class System extends Base {
   }
   async createConfirmEditDesign(
     config:
-      | { tableName: string; isDialog?: boolean; isConfirm?: boolean }
+      | {
+          command?: any
+          tableName: string
+          isDialog?: boolean
+          isConfirm?: boolean
+        }
       | string,
   ) {
     //
+    // debugger //
     if (typeof config == 'string') {
       config = {
         tableName: config,
@@ -347,6 +361,14 @@ export class System extends Base {
     if (config.isConfirm === true) {
       //
     } else {
+    }
+    let command = config.command
+    if (command) {
+      this.addCommand({
+        name: editTableName,
+        id: _d.id,
+        fn: command,
+      })
     }
     return _d //
   }
@@ -497,7 +519,37 @@ export class System extends Base {
   addCommand(config) {
     let _arr = this.commandArr //
     _arr.push(config)
-  } //
+  }
+  async confirmMessageBox(msg: string | Object, type: any = 'success') {
+    let title = ''
+    if (type == 'error') {
+      title = '错误提示'
+    }
+    if (type == 'warning') {
+      title = '警告提示'
+    }
+    if (type == 'success') {
+      //
+      title = '成功提示'
+    }
+    let dialogConfig = {
+      title: title, //
+      width: 250, //
+      height: 200,
+      createFn: () => {
+        return {
+          component: msgboxCom,
+          props: {
+            message: msg,
+            type: type,
+          },
+        }
+      },
+      confirmFn: (dialog: Dialog) => {},
+      showFooter: false, //
+    } //
+    await this.openDialog(dialogConfig) //
+  }
   confirmMessage(msg: string | Object, type: any = 'success') {
     if (typeof msg == 'string') {
       msg = {

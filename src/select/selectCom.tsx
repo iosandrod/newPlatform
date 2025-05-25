@@ -183,12 +183,12 @@ export default defineComponent({
       let _com = (
         <div class="h-full w-full overflow-hidden">
           <Select
-            style={{ width: '100%', }} //
+            style={{ width: '100%' }} //
             ref={registerRef}
             {...props}
             modelValue={_select.getModelValue()}
             options={_select.getOptions()}
-            onChange={_onChange}
+            onChange={_onChange} //
             onInput={_onInput}
             onVisibleChange={_onVisibleChange}
             v-slots={{

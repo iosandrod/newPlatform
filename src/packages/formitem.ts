@@ -314,22 +314,29 @@ export class FormItem extends Base {
     if (config.style == null) {
       config.style = this.getStyle()
     }
-    // let id = this.id
-    // let obj: any = {
-    //   id: id,
-    //   key: this.getKey(),
-    // }
-    // obj.options = obj.options || {}
-    // const type = this.getType()
-    // obj.type = obj.type || type
-    // const style = this.getStyle()
-    // obj.style = obj.style || style //
-    // config.options = config.options || {}
+
     return config
   }
   getDisabled() {
-    let disables = this.config?.disabled
-    return disables //
+    // debugger //
+    let f = this.form
+    let _disabled = f.getDisabled()
+    let status = false
+    if (_disabled == true) {
+      status = true
+    }
+    if (!status) {
+      let disables = this.config?.disabled
+      if (disables == true) {
+        status = true
+      }
+    }
+    if (!status) {
+      let disabledFn = this.config?.disabledFn
+      if (typeof disabledFn == 'function') {
+      }
+    }
+    return status //
   }
   getClearable() {
     let clearable = this.config?.options?.clearable

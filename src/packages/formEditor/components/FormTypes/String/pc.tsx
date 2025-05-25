@@ -23,6 +23,7 @@ export default defineComponent({
     const formitem: FormItem = params.formitem
     let _value = computed(() => {
       let _config = formitem?.getBindConfig()
+      console.log(_config, 'test_config132312') //
       return _config
     })
     let registerRef = (el) => {

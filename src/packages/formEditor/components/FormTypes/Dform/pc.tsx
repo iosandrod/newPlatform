@@ -31,14 +31,20 @@ export default defineComponent({
     const data = computed(() => {
       let _data = formitem.getdBindData()
       return _data
-    }) //
+    })
+    let tableName = null //
+    if (mainPage != null) {
+      tableName = mainPage.getTableName() //
+    }
     return () => {
       let _com = (
         <div class="h-full w-full" style={{ minHeight: '50px' }}>
           <FormCom
             ref={registerRef}
             {...fConfig.value}
-            disabled={formitem.getFormDisabled()}
+            disabled={formitem.getFormDisabled({
+              tableName,
+            })} //
             data={data.value}
           ></FormCom>
         </div>

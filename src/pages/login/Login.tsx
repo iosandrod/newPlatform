@@ -153,19 +153,7 @@ export default defineComponent({
       //   .catch(() => {
       //     console.log('报错了') //
       //   })
-      let _d = await system.confirmTable({
-        requiredValidate: true,
-        validateFn: async (config) => {
-          return '校验失败'
-        },
-        columns: [],
-        data: [
-          {
-            a: 1,
-          },
-        ],
-      }) //
-      console.log(_d, 'testD') //
+      await system.confirmMessageBox('报错了', 'error') //
     }
     // let p = new PageDesign(getDefaultPageProps())
     let _data1 = Array(10000)
@@ -228,7 +216,7 @@ export default defineComponent({
         <div class="w-full h-500">
           <formCom
             ref={_reg3}
-            isDesign={false}//
+            isDesign={false} //
             // {..._fConfig}
             {...{
               items: [
@@ -262,6 +250,7 @@ export default defineComponent({
           ></formCom>
         </div>
       )
+      com = null //
       // com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>
       // com = <dialogCom ref={_reg2}></dialogCom>

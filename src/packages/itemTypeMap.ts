@@ -49,8 +49,8 @@ export const selectType = (item: FormItem) => {
 
 export const stableType = (item: FormItem) => {
   let obj = defaultType(item) //
-  obj.onChange = (config) => { }
-  obj.onInput = (config) => { } //
+  obj.onChange = (config) => {}
+  obj.onInput = (config) => {} //
   obj.readonly = true //
   obj.clearable = false //
   obj.modelValue = item.getBindShowValue()
@@ -58,8 +58,8 @@ export const stableType = (item: FormItem) => {
 }
 export const codeType = (item: FormItem) => {
   let obj = defaultType(item) //
-  obj.onChange = (config) => { }
-  obj.onInput = (config) => { } //
+  obj.onChange = (config) => {}
+  obj.onInput = (config) => {} //
   obj.readonly = true //
   obj.clearable = false //
   obj.modelValue = item.getBindShowValue()
@@ -71,16 +71,16 @@ export const booleanType = (item: FormItem) => {
     let value = config.value
     item.updateBindData({ value }) //
   }
-  obj.onInput = (config) => { } //
-  obj.modelValue=item.getCheckBindValue()
+  obj.onInput = (config) => {} //
+  obj.modelValue = item.getCheckBindValue()
   obj.readonly = true //
-  obj.clearable = false //
+  obj.clearable = false
+  obj.disabled = item.getDisabled() //
   return obj
 }
 export const sformType = (item: FormItem) => {
   let obj = defaultType(item) //
-  obj.onChange = (config) => {
-  }
+  obj.onChange = (config) => {}
   obj.readonly = true //
   obj.clearable = false //
   obj.modelValue = 'object'
@@ -93,6 +93,6 @@ export const itemTypeMap = {
   select: selectType,
   stable: stableType,
   code: codeType,
-  boolean: booleanType,//
-  sform: sformType//
+  boolean: booleanType, //
+  sform: sformType, //
 }

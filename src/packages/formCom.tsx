@@ -19,6 +19,9 @@ const getDefaultFormEditProps = () => {
       type: Boolean,
       default: false,
     },
+    disabled: {
+      type: Boolean, //
+    },
     itemSpan: {
       type: Number,
       default: 6,
