@@ -222,6 +222,7 @@ export class PageDesign extends Form {
     getDataConfig: any = {
       tableName: this.getTableName(),
       query: {}, //
+      queryArr: [],
     },
   ) {
     if (typeof getDataConfig == 'string') {
@@ -231,8 +232,40 @@ export class PageDesign extends Form {
     }
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
-    let query = getDataConfig.query || {}
-    let res = await http.get(tableName, 'find', query) //
+    let query = getDataConfig.query
+    let queryArr = getDataConfig?.queryArr || []
+    let _arr = queryArr
+      .map((row) => {
+        let field = row.field
+        let value = row.value
+        let operator = row.operator
+        if (field == null || value == null || operator == null) {
+          if (typeof row == 'object') {
+            //
+            let _arr = Object.entries(row).map(([key, value]) => {
+              let operator = '$eq'
+              let field = key
+              if (Array.isArray(value)) {
+                operator = '$in'
+              }
+              let obj = {
+                field,
+                operator,
+                value,
+              }
+              return obj
+            }) //
+            return _arr
+          }
+        } else {
+          return row
+        }
+      })
+      .flat()
+      .filter((d) => d != null)
+    let _query = this.buildQuery(_arr)
+    query = { ...query, ..._query } //
+    let res = await http.get(tableName, 'find', query)
     let dataMap = this.getTableRefData(tableName)
     dataMap['data'] = res //
     let evName = `${tableName}_getTableData` //
@@ -986,24 +1019,7 @@ export class PageDesign extends Form {
         searchOperator = '$eq'
       }
       //查询条件
-      // if (searchOperator == null) {
-      //   searchOperator='$eq'
-      //   let _v = data[searchF]
-      //   if (_v != null) {
-      //     obj[searchF] = _v //
-      //     _arr.push(obj) //
-      //   }
-      // } else {
-      // let _value = data[searchF]
-      // if (_value != null) {
-      //   let _obj = this.buildWhereInOperator({
-      //     value: _value,
-      //     field: searchF,
-      //     operator: searchOperator,
-      //   })
-      //   _arr.push(_obj)
-      // }
-      // }
+
       let obj1 = {
         field: searchF,
         operator: searchOperator,
@@ -1013,8 +1029,9 @@ export class PageDesign extends Form {
         _arr.push(obj1)
       }
     }
-    let q = this.buildQuery(_arr)
-    return q //
+    // let q = this.buildQuery(_arr)
+    // return q //
+    return _arr
   } //
   buildWhereInOperator(config: any) {
     return {}
@@ -1228,6 +1245,72 @@ export class PageDesign extends Form {
     return _col[0].field //
   }
   @useHooks()
-  async pageInit() {}
+  async pageInit() {
+    //
+  }
   getKeyCodeColumn() {}
+  initEntityEvent() {
+    //
+    let config = this.config
+    let events = config.events //
+    if (Array.isArray(events) && events.length > 0) {
+      for (let ev of events) {
+        //
+        let event = ev.eventName //
+        let tableName = ev.tableName //
+        if (event == null || event == '') {
+          //
+          continue //
+        }
+        let key = event //
+        if (tableName != null || tableName != '') {
+          key = `${tableName} ${event}` //
+        }
+        let eArr = this.entityEventManager[key]
+        if (eArr == null) {
+          this.entityEventManager[key] = []
+          eArr = this.entityEventManager[key]
+        }
+        let fn = ev.code //
+        let _fn = null //
+        if (typeof fn == 'function') {
+          _fn = fn
+        }
+        if (typeof fn == 'string') {
+          let _fn1 = stringToFunction(fn)
+          if (typeof _fn1 == 'function') {
+            _fn = _fn1
+          }
+        }
+        if (typeof _fn !== 'function') {
+          continue
+        }
+        ev._fn = _fn
+        eArr.push(ev)
+      }
+    }
+    //
+    let entityEvent = this.entityEventManager
+    Object.entries(entityEvent).forEach(([key, value]) => {
+      let _fn = (data) => {
+        for (const fn of value) {
+          let _fn1 = fn._fn
+          _fn1.call(this, data) //(data)
+        }
+      }
+      this.entityEventManagerArr.push({
+        key: key,
+        fn: _fn,
+      })
+      this.getHttp().registerEvent(key, _fn) //
+    })
+  }
+  clearEntityEvent() {
+    let entityEvent = this.entityEventManagerArr
+    for (const config of entityEvent) {
+      let key = config.key
+      let fn = config.fn //
+      this.getHttp().unRegisterEvent(key, fn) //
+    }
+  }
 }

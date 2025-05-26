@@ -1,13 +1,29 @@
 import _ from 'lodash'
 import { Table } from './table'
-import { getDFConfig } from './colFConfig'
-
+import { getDFConfig } from './colFConfig' //
+import { VxeText, VxeUI } from 'vxe-pc-ui'
 export const initContextMenu = (table: Table) => {
   let items = [
     {
       label: '复制',
       key: 'copy',
       visible: true,
+      fn: () => {
+        //
+        let col = table.curContextCol
+        let row = table.curContextRow
+        let f = col?.getField()
+        let v1 = null
+        if (row == null) {
+          v1 = f //
+        } else {
+          let _v = row?.[f]
+          v1 = _v
+        } //
+        //
+        let v2 = VxeUI.clipboard.copy(v1)
+        // console.log(v2) //
+      },
     },
     {
       label: '删除',
@@ -325,6 +341,31 @@ export const initContextMenu = (table: Table) => {
                     field: 'rootId',
                     label: '根节点',
                     type: 'string', //
+                  },
+                  {
+                    field: 'expand',
+                    label: '默认展开',
+                    type: 'select',
+                    options: {
+                      options: [
+                        {
+                          label: '展开全部',
+                          value: 'all',
+                        },
+                        {
+                          label: '展开第一级',
+                          value: 'first',
+                        },
+                        {
+                          label: '展开第二级',
+                          value: 'second',
+                        },
+                        {
+                          label: '不展开',
+                          value: 'none', //
+                        },
+                      ],
+                    },
                   },
                 ],
               },

@@ -352,6 +352,16 @@ export default defineComponent({
         let [oldData, oldLen] = oldValue as any
         if (newValue != oldValue) {
           tableIns.setData(newData)
+          let treeConfig = props.treeConfig
+          let expand = treeConfig?.expand
+          if (expand == 'all') {
+            nextTick(() => {
+              tableIns.expandAllTreeRow()
+            })
+          }
+          if (expand == 'first') {
+            tableIns.expandTargetRows(newValue) //
+          }
         } else {
           //添加行的
           let addRows = newData.map((row) => {

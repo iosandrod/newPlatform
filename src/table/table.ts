@@ -1087,7 +1087,7 @@ export class Table extends Base {
     let showCalculate = config.showCalculate
     return showCalculate
   }
-  getFlatTreeData(_data?: any): any[] {
+  getFlatTreeData(_data?: any, fn?: any): any[] {
     let data = _data || this.getData()
     return data
       .map((row) => {
@@ -2440,23 +2440,25 @@ export class Table extends Base {
     }
     return arr
   }
-  expandAllTreeRow(status = true) {
+  expandAllTreeRow(status = true, level: any = 'all') {
     let allRows = this.getFlatTreeData()
     allRows.forEach((row) => {
       let hierarchyState = row.hierarchyState
       if (hierarchyState != 'expand') {
         row.hierarchyState = 'expand'
-      } //
-      let _expanded = row['_expanded']
-      if (_expanded == null) {
-        Object.defineProperty(row, '_expanded', {
-          value: status,
-          enumerable: false,
-          writable: true,
-        })
-      } else {
-        row['_expanded'] = status //
-      } //
+      }
+      if (level === 'all') {
+        let _expanded = row['_expanded']
+        if (_expanded == null) {
+          Object.defineProperty(row, '_expanded', {
+            value: status,
+            enumerable: false,
+            writable: true,
+          })
+        } else {
+          row['_expanded'] = status //
+        } //
+      }
     })
     this.updateCanvas() //
   }

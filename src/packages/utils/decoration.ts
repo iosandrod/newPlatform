@@ -220,15 +220,20 @@ export function useHooks(config?: Function): any {
 
     descriptor.value = async function (...args: any[]) {
       // 从实例的 hooksMetaData 上读取中间件
-      let middlewares: any[] = this.hooksMetaData?.[propertyKey] || []
-      let ctx = { instance: this, args }
-      let _config = config
+      let middlewares: any[] = this.hooksMetaData?.[propertyKey] || [] //
+
+      let ctx = { instance: this, args } //
+      let _config = config //
       if (typeof _config === 'function') {
         let config1 = _config(ctx) //
         ctx = { ...ctx, ...config1 } //
       }
-      let index = -1
-
+      let _args = ctx.args
+      let arg0 = _args[0]
+      if (typeof arg0 === 'object') {
+        ctx = { ...arg0, ...ctx } //
+      }
+      let index = -1 //
       async function dispatch(i: number): Promise<any> {
         if (i <= index) {
           throw new Error('next() called multiple times')

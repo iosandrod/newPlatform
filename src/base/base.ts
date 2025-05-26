@@ -11,6 +11,8 @@ import { Router } from 'vue-router'
 import { PageDesign } from '@ER/pageDesign'
 export const workerPool = pool.pool()
 export class Base {
+  entityEventManager: { [key: string]: Array<any> } = {}
+  entityEventManagerArr=[]
   pageLoading = false
   _once: { [key: string]: boolean } = {}
   cacheMethod: {
@@ -176,5 +178,24 @@ export class Base {
   } //
   setCurrentLoading(loading: boolean) {
     this.pageLoading = loading ////
+  }
+  registerEntityEvent(config?: any) {
+    let tableName = config?.tableName //
+    let event = config.event
+    if (tableName == null || event == null) {
+      return
+    }
+    let http = this.getHttp() //
+    let client = http.client
+    let connection = client.get('connection')
+    // console.log(connection, 'connection') //
+    let eventName = `${tableName} ${event}`
+    connection.on(eventName, (data) => {
+      let fn=config.fn
+      if(typeof fn == 'function'){
+        fn(data)
+      }
+      // console.log('event', eventName, data)//
+    })
   }
 }

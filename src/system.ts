@@ -345,39 +345,43 @@ export class System extends Base {
       tableName = editTableName.split('---')[0]
     }
     let _design = this.tableConfirmMap[editTableName] //
+    let _design1 = null
     if (_design) {
-      return _design //
-    }
-    let layoutConfig = await this.getPageEditLayout(editTableName) //
-    let _d = new editPageDesign(layoutConfig) //
-    if (config.isDialog) {
-      _d.isDialog = true //
-    }
-    _d.isConfirm = true
-    _d.tableName = tableName //
-    _d.setLayoutData(layoutConfig)
-    _d.tableName = editTableName //
-    Object.entries(editUse).forEach(([key, value]) => {
-      let _arr = value
-      for (const e of _arr) {
-        //
-        _d.use(key, e)
-      } //
-    })
-    this.tableConfirmMap[editTableName] = _d
-    if (config.isConfirm === true) {
-      //
+      _design1 = _design //
     } else {
+      let layoutConfig = await this.getPageEditLayout(editTableName) //
+      let _d = new editPageDesign(layoutConfig) //
+      if (config.isDialog) {
+        _d.isDialog = true //
+      }
+      _d.isConfirm = true
+      _d.tableName = tableName //
+      _d.setLayoutData(layoutConfig)
+      _d.tableName = editTableName //
+      Object.entries(editUse).forEach(([key, value]) => {
+        let _arr = value
+        for (const e of _arr) {
+          //
+          _d.use(key, e)
+        } //
+      })
+      this.tableConfirmMap[editTableName] = _d
+      if (config.isConfirm === true) {
+        //
+      } else {
+      }
+      _design1 = _d //
     }
+
     let command = config.command
     if (command) {
       this.addCommand({
         name: editTableName,
-        id: _d.id,
+        id: _design1.id,
         fn: command,
       })
-    }
-    return _d //
+    } //
+    return _design1 //
   }
   async createPageImportDesign(config: { tableName: string } | string) {
     //
@@ -783,7 +787,7 @@ export class System extends Base {
     let tableName = curPage.getTableName() //
     let _config = await this.getPageLayout(tableName)
     let data = _config //
-    let tabTitles = ['基本配置', '高级配置'] //
+    let tabTitles = ['基本配置', '重载方法', '事件配置'] //
     let fConfig = {
       isTabForm: true,
       itemSpan: 12,
@@ -945,6 +949,61 @@ export class System extends Base {
             ],
             showTable: true,
           }, //
+        },
+        {
+          tabTitle: tabTitles[2], //
+          field: 'events', //
+          label: '事件',
+          type: 'stable',
+          span: 24,
+          options: {
+            showRowSeriesNumber: true, //
+            tableTitle: '事件',
+            tableState: 'edit',
+            columns: [
+              {
+                field: 'tableName',
+                title: '监听表名',
+                editType: 'string',
+              },
+              {
+                field: 'eventName',
+                title: '监听方法',
+                editType: 'select',
+                options: [
+                  {
+                    label: '新增',
+                    value: 'created',
+                  },
+                  {
+                    label: '更新',
+                    value: 'patch', //
+                  },
+                  {
+                    label: '删除',
+                    value: 'removed',
+                  },
+                ],
+              },
+              {
+                field: 'name',
+                title: '事件名称',
+                editType: 'string',
+              },
+              {
+                field: 'desc',
+                title: '事件描述',
+                editType: 'string',
+              },
+              {
+                field: 'code',
+                title: '事件代码',
+                editType: 'code',
+                tableName: tableName, //
+              },
+            ],
+            showTable: true,
+          },
         },
       ],
       data, //
@@ -1263,7 +1322,7 @@ export class System extends Base {
     let _component = this.getSysComponents().pageCom
     let _config = {
       tableName,
-      command: async (page) => {
+      command: async (page: editPageDesign) => {
         let _editType = config.editType || 'add'
         if (_editType == 'edit') {
           let query: any = {}
@@ -1321,13 +1380,6 @@ export class System extends Base {
       },
     }
     this.openDialog(_dialogConfig) //
-  } //
-  registerEntityEvent(config?: any) {
-    let tableName = config?.tableName //
-    let event = config.event
-    if (tableName == null || event == null) {
-      return
-    }
   } //
 }
 

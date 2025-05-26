@@ -4233,3 +4233,24 @@ const app = createApp({
        // async confirmEditEntity(config) {
   //   let editDesign = await this.createPageEditDesign(config)
   // }
+
+
+
+  // if (searchOperator == null) {
+      //   searchOperator='$eq'
+      //   let _v = data[searchF]
+      //   if (_v != null) {
+      //     obj[searchF] = _v //
+      //     _arr.push(obj) //
+      //   }
+      // } else {
+      // let _value = data[searchF]
+      // if (_value != null) {
+      //   let _obj = this.buildWhereInOperator({
+      //     value: _value,
+      //     field: searchF,
+      //     operator: searchOperator,
+      //   })
+      //   _arr.push(_obj)
+      // }
+      // }

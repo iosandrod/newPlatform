@@ -16,12 +16,14 @@ export class MainPageDesign extends PageDesign {
       args[0] = {
         tableName: ctx.getTableName(),
         query: {}, //
+        queryArr: [],
       }
     }
     if (typeof args[0] == 'string') {
       args[0] = {
         tableName: args[0],
         query: {},
+        queryArr: [],
       }
     }
     return config
@@ -238,7 +240,7 @@ export class MainPageDesign extends PageDesign {
     this.openDialog(dialogConfig)
   }
   async confirmEditEntity(config: any) {
-   await  this.getSystem().confirmEditEntity(config, this)
+    await this.getSystem().confirmEditEntity(config, this)
   } //
   @useHooks((config) => {
     let ctx: PageDesign = config.instance //

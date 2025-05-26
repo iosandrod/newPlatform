@@ -18,8 +18,14 @@ export const mainUse = {
         }
       } //
       let searchWhere = instance.getSearchWhere(_d1) //
-      let result = _.merge({}, query, searchWhere)
-      fArg.query = result //
+      let queryArr = context.queryArr
+      if (queryArr == null) {
+        queryArr = []
+        context.queryArr = queryArr
+      }
+      queryArr.push(...searchWhere) //
+      // let result = _.merge({}, query, searchWhere)
+      // fArg.query = result
       instance.setCurrentLoading(true)
       //获取全局的查询条件
       await next().finally(() => {

@@ -1,4 +1,4 @@
-import io from 'socket.io-client'
+import io, { Socket } from 'socket.io-client'
 import socketio from '@feathersjs/socketio-client'
 import { feathers, Params } from '@feathersjs/feathers'
 import auth, {
@@ -331,11 +331,16 @@ export class myHttp {
     let _d = await this.runCustomMethod('entity', 'hasEntity', tableName)
     return _d //
   }
-  registerEvent(event) {
-    let connection = this.client.get('connection')
-    connection.on(event, (data) => {
-      console.log('event', event, data) //
-    })
+  registerEvent(event, fn) {
+    let connection: Socket = this.client.get('connection')
+    if (typeof fn !== 'function') {
+      return
+    }
+    connection.on(event, fn) //
+  }
+  unRegisterEvent(event, fn) {
+    let connection: Socket = this.client.get('connection')
+    connection.removeListener(event, fn) //
   }
 }
 

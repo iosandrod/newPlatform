@@ -1,4 +1,10 @@
-import { defineComponent, isReactive, watchEffect, withDirectives } from 'vue'
+import {
+  defineComponent,
+  isReactive,
+  onUnmounted,
+  watchEffect,
+  withDirectives,
+} from 'vue'
 import {
   ClickOutside as vClickOutside,
   ElMessage,
@@ -248,7 +254,13 @@ export default defineComponent({
     const setData = setData2
     onMounted(() => {
       formIns.pageInit() //
+    })
+    onMounted(() => {
+      formIns.initEntityEvent()
     }) //
+    onUnmounted(() => {
+      formIns.clearEntityEvent() //
+    })
     const handleOperation = (type, val?: any) => {
       switch (type) {
         case 1:
