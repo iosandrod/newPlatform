@@ -256,6 +256,7 @@ export const initContextMenu = (table: Table) => {
       fn: async (config) => {
         let _config = table.config //
         _config = _.cloneDeep(_config) //
+        let titles = ['基本信息', '高级配置']
         // debugger //
         let fields = [
           'tableName',
@@ -265,7 +266,8 @@ export const initContextMenu = (table: Table) => {
           'contextItems',
           'detailTableConfig',
           'keyColumn',
-          'keyCodeColumn',
+          'keyCodeColumn', //
+          'onCurRowChange', //
         ] //
         let tName = table.getTableName()
         let mainDesign = table.getMainPageDesign() //
@@ -276,16 +278,19 @@ export const initContextMenu = (table: Table) => {
           data: _obj, //
           height: 500,
           width: 800, //
+          isTabForm: true,
           items: [
             {
               field: 'tableName',
               label: '表名',
+              tabTitle: titles[0],
               type: 'string',
               disabled: true, //
             },
             {
               field: 'detailTableConfig',
               label: '详情表配置',
+              tabTitle: titles[1],
               type: 'sform',
               options: {
                 itemSpan: 12,
@@ -315,6 +320,7 @@ export const initContextMenu = (table: Table) => {
               field: 'treeConfig',
               label: '树形表格配置',
               type: 'sform',
+              tabTitle: titles[0],
               disabled: false,
               options: {
                 itemSpan: 12, //
@@ -373,16 +379,18 @@ export const initContextMenu = (table: Table) => {
             {
               field: 'showCheckboxColumn',
               label: '是否显示复选框',
+              tabTitle: titles[0],
               type: 'boolean',
             },
             {
-              //
               field: 'showRowSeriesNumber',
+              tabTitle: titles[0],
               label: '是否显示行号',
               type: 'boolean',
             },
             {
               field: 'keyColumn',
+              tabTitle: titles[0],
               label: '主键字段',
               type: 'string',
               options: {
@@ -393,6 +401,7 @@ export const initContextMenu = (table: Table) => {
             {
               field: 'keyCodeColumn',
               label: '单据字段',
+              tabTitle: titles[0],
               type: 'string',
               options: {
                 columnSelect: true,
@@ -403,6 +412,7 @@ export const initContextMenu = (table: Table) => {
               field: 'contextItems',
               label: '右键菜单配置', //
               type: 'stable',
+              tabTitle: titles[1], //
               span: 24,
               options: {
                 showTable: true,
@@ -422,6 +432,12 @@ export const initContextMenu = (table: Table) => {
                   },
                 ],
               }, //
+            },
+            {
+              field: 'onCurRowChange',
+              label: '当前行变化事件',
+              type: 'code',
+              tabTitle: titles[1], //
             },
           ],
         }
