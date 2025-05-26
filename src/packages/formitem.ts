@@ -920,7 +920,12 @@ export class FormItem extends Base {
   openCodeDialog() {
     let codeConfig = this.getCodeConfig() //
     let sys = this.getSystem() //
-    let value = this.getBindValue() ////
+    let value = this.getBindValue()
+    if (typeof value == 'object' || typeof value == 'function') {
+      //
+      // value = value.toString()
+      value = '' //
+    }
     let tableName = this.getMainTableName() //
     let createFn = () => {
       return {

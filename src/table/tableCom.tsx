@@ -66,6 +66,10 @@ export default defineComponent({
       type: Boolean,
       default: false, //
     },
+    showHeaderDefaultButtons: {
+      type: Boolean,
+      default: true, //
+    },
     showCalculate: {
       type: Boolean,
       default: true,
@@ -153,6 +157,9 @@ export default defineComponent({
     onHeaderContextmenu: {
       type: Function,
     },
+    onTableDesign: {
+      type: Function,
+    },
     onDesignColumn: {
       type: Function,
     }, //
@@ -179,7 +186,7 @@ export default defineComponent({
       type: Array,
     },
     onCurRowChange: {
-      type: Function,
+      type: Function || String, //
     },
     keyColumn: {
       type: String,

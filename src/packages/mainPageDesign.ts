@@ -78,13 +78,7 @@ export class MainPageDesign extends PageDesign {
       this.getSystem().refreshPageDesign() //
     }
   }
-  @useHooks((config) => {
-    let ctx: PageDesign = config.instance //
-    let args = config.args
-    if ((args.length = 0)) {
-      args[0] = ctx.getAddRowsArgs()
-    } //
-  }) //
+
   async addTableRows(config = this.getAddRowsArgs()) {
     //
     let rows = config.rows
@@ -101,8 +95,15 @@ export class MainPageDesign extends PageDesign {
     if (tableIns == null) {
       return
     } //
-    tableIns.addRows({ rows: arr1 }) //
+    tableIns.addRows({ rows: arr1 })
   }
+  @useHooks((config) => {
+    let ctx: PageDesign = config.instance //
+    let args = config.args
+    if ((args.length == 0)) {
+      args[0] = ctx.getAddRowsArgs()
+    } //
+  }) //
   async addMainTableRow(addConfig) {
     let config = this.config //
     let system = this.getSystem()
@@ -114,10 +115,10 @@ export class MainPageDesign extends PageDesign {
       })
     }
     if (pageEditType == 'default') {
-      await this.addTableRows() //
+      await this.addTableRows(addConfig) //
     }
     if (pageEditType == 'dialog') {
-      await this.openEditDialog() //
+      await this.openEditDialog(addConfig) //
     }
   }
   async importTableRows(): Promise<any> {

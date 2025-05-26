@@ -76,13 +76,29 @@ export default defineComponent({
     }
     let methodConfig = {
       data: allMethods,
+      showHeaderButtons: true, //
+      showHeaderDefaultButtons: false, //
       showRowSeriesNumber: false,
+      buttons: [
+        {
+          label: '查看方法', //
+          fn: async () => {},
+        },
+        {
+          label: '添加方法',
+          fn: async () => {}, //
+        },
+        {
+          label: '编辑方法',
+          fn: async () => {},
+        },
+      ],
       showCheckboxColumn: false, //
       columns: [
         {
           field: 'name',
           title: '方法名称',
-          width: 150,
+          width: 250, //
           type: 'string', //
         },
         {
@@ -139,7 +155,7 @@ export default defineComponent({
           ref={registerOuter}
         >
           {com}
-          <div class="w-410 h-full overflow-hidden">{tCom}</div>
+          <div class="w-600 h-full overflow-hidden">{tCom}</div>
         </div> //
       ) //
       return outCom //

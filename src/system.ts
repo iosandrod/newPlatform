@@ -41,7 +41,7 @@ export class System extends Base {
   tableMap: { [key: string]: PageDesign } = {}
   tableEditMap: { [key: string]: PageDesign } = {}
   tableConfirmMap: { [key: string]: PageDesign } = {}
-  async login() { }
+  async login() {}
   @cacheValue() //
   async getMenuData() {
     let client = this.getClient() //
@@ -68,17 +68,17 @@ export class System extends Base {
   init() {
     super.init() //
   }
-  getCurrentShowPage() { }
-  buildMenuTree(rows) { }
+  getCurrentShowPage() {}
+  buildMenuTree(rows) {}
   getClient(): myHttp {
     return http
   }
-  getMenuProps() { }
+  getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) { }
+  _getCacheValue(key) {}
   getTabModelValue() {
     let route = this.getRouter()
     let r = route.currentRoute
@@ -131,7 +131,7 @@ export class System extends Base {
 
     return allT2 //
   } //
-  openPageDesign(config) { } //
+  openPageDesign(config) {} //
 
   async getPageLayout(name?: string) {
     let http = this.getHttp()
@@ -192,7 +192,7 @@ export class System extends Base {
     await http.patch('entity', layout) //
     await this.refreshPageDesign() //
   }
-  deletePageLayout(tableName, config) { }
+  deletePageLayout(tableName, config) {}
   getCurrentPageDesign() {
     let tableName = this.getCurrentPageName()
     let design = this.tableMap[tableName] //
@@ -323,11 +323,11 @@ export class System extends Base {
   async createConfirmEditDesign(
     config:
       | {
-        command?: any
-        tableName: string
-        isDialog?: boolean
-        isConfirm?: boolean
-      }
+          command?: any
+          tableName: string
+          isDialog?: boolean
+          isConfirm?: boolean
+        }
       | string,
   ) {
     //
@@ -413,8 +413,8 @@ export class System extends Base {
     let entityMap = this.tableMap
     return Object.values(entityMap) //
   }
-  async confirm(config: any) { }
-  async confirmEntity(entityConfig: any) { } //
+  async confirm(config: any) {}
+  async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
       let _form = new Form(formConfig) //
@@ -556,7 +556,7 @@ export class System extends Base {
           },
         }
       },
-      confirmFn: (dialog: Dialog) => { },
+      confirmFn: (dialog: Dialog) => {},
       showFooter: false, //
     } //
     await this.openDialog(dialogConfig) //
@@ -750,7 +750,7 @@ export class System extends Base {
     try {
       //
       //打开app
-    } catch (error) { }
+    } catch (error) {}
   }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
@@ -796,7 +796,7 @@ export class System extends Base {
           tabTitle: tabTitles[0],
           field: 'tableCnName', //
           label: '表格中文名',
-          itemChange: (config) => { },
+          itemChange: (config) => {},
         },
         {
           label: '显示分页',
@@ -867,29 +867,35 @@ export class System extends Base {
                 options: {
                   options: [
                     {
-                      label: "10条",
-                      value: 10
-                    }, {
-                      label: "100条",
+                      label: '10条',
+                      value: 10,
+                    },
+                    {
+                      label: '100条',
                       value: 100,
-                    }, {
-                      label: "1000条",
-                      value: 1000
-                    }, {
-                      label: "5000条",
-                      value: 5000
-                    }, {
-                      label: "10000条",
-                      value: 10000
-                    }, {
-                      label: "100000条",
-                      value: 100000//
-                    }, {
-                      label: "无限制",
-                      value: 0//
-                    }
-                  ]
-                }
+                    },
+                    {
+                      label: '1000条',
+                      value: 1000,
+                    },
+                    {
+                      label: '5000条',
+                      value: 5000,
+                    },
+                    {
+                      label: '10000条',
+                      value: 10000,
+                    },
+                    {
+                      label: '100000条',
+                      value: 100000, //
+                    },
+                    {
+                      label: '无限制',
+                      value: 0, //
+                    },
+                  ],
+                },
               },
               {
                 field: 'show',
@@ -917,7 +923,7 @@ export class System extends Base {
                 options: [
                   {
                     label: '增行',
-                    value: 'addTableRows', //
+                    value: 'addMainTableRow', //
                   },
                   {
                     label: '获取数据',
@@ -1099,7 +1105,7 @@ export class System extends Base {
         },
         {
           label: '添加子菜单', //
-          fn: async () => { },
+          fn: async () => {},
         },
       ],
       buttons: [],
@@ -1333,7 +1339,7 @@ export class System extends Base {
     }
     //
   }
-  clearSelectColumns() { } //
+  clearSelectColumns() {} //
   getDesignByTableName(tableName) {
     let _obj = this.tableMap //
     let editObj = this.tableEditMap

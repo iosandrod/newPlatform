@@ -1,7 +1,8 @@
-import { cloneDeep } from 'lodash'
+import _, { cloneDeep } from 'lodash'
 import { FormItem } from './formitem'
 import { PageDesign } from './pageDesign'
 import { Column } from '@/table/column'
+import { stringToFunction } from './utils'
 
 export class PageDesignItem extends FormItem {
   //@ts-ignore
@@ -65,7 +66,7 @@ export class PageDesignItem extends FormItem {
     }
     return tableType
   }
-  async addNewRow() { } //
+  async addNewRow() {} //
 
   getShowHeaderButtons() {
     // debugger //
@@ -186,8 +187,16 @@ export class PageDesignItem extends FormItem {
   }
   async onCurRowChange(config) {
     let row = config.row //
-    let _config = { ...config, tableName: this.getTableName() }
+    let config1: any = this.getOptions() //
+    let _conCurRowChange = config1.onCurRowChange
     let design: PageDesign = this.form as any //
+    if (typeof _conCurRowChange == 'string') {
+      let _fn = stringToFunction(_conCurRowChange)
+      if (typeof _fn == 'function') {
+        await _fn.call(design, { row, ...config })
+      }
+    }
+    let _config = { ...config, tableName: this.getTableName() } //
     await design.onCurRowChange(_config) //
   }
   async addRows(config) {
@@ -236,5 +245,197 @@ export class PageDesignItem extends FormItem {
       status = true //
     }
     return status //
+  }
+  async onTableDesign(config: any) {
+    let _config = this.getOptions()
+    // _config = _.cloneDeep(_config) //
+    _config=_.cloneDeep(_config)//
+    let titles = ['基本信息', '高级配置']
+    let fields = [
+      'tableName',
+      'treeConfig',
+      'showCheckboxColumn',
+      'showRowSeriesNumber',
+      'contextItems',
+      'detailTableConfig',
+      'keyColumn',
+      'keyCodeColumn', //
+      'onCurRowChange', //
+    ] //
+    let tName = this.getTableName()
+    let mainDesign = this.form //
+    let mN = mainDesign?.getRealTableName() || null
+    let _obj = _.pick(_config, fields)
+    let _fConfig = {
+      itemSpan: 12, //
+      data: _obj, //
+      height: 500,
+      width: 800, //
+      isTabForm: true,
+      items: [
+        {
+          field: 'tableName',
+          label: '表名',
+          tabTitle: titles[0],
+          type: 'string',
+          disabled: true, //
+        },
+        {
+          field: 'detailTableConfig',
+          label: '详情表配置',
+          tabTitle: titles[1],
+          type: 'sform',
+          options: {
+            itemSpan: 12,
+            items: [
+              {
+                field: 'relateKey',
+                label: '当前关联字段',
+                type: 'string',
+                options: {
+                  columnSelect: true,
+                  tableName: tName,
+                },
+              },
+              {
+                field: 'mainRelateKey',
+                label: '主单据关联字段',
+                type: 'string', //
+                options: {
+                  columnSelect: true,
+                  tableName: mN, //
+                }, //
+              },
+            ],
+          },
+        },
+        {
+          field: 'treeConfig',
+          label: '树形表格配置',
+          type: 'sform',
+          tabTitle: titles[0],
+          disabled: false,
+          options: {
+            itemSpan: 12, //
+            items: [
+              {
+                field: 'id',
+                label: '树主键',
+                type: 'string',
+                options: {
+                  columnSelect: true,
+                  tableName: tName,
+                },
+              },
+              {
+                field: 'parentId',
+                label: '父主键',
+                type: 'string',
+                options: {
+                  columnSelect: true,
+                  tableName: tName, //
+                }, //
+              },
+              {
+                field: 'rootId',
+                label: '根节点',
+                type: 'string', //
+              },
+              {
+                field: 'expand',
+                label: '默认展开',
+                type: 'select',
+                options: {
+                  options: [
+                    {
+                      label: '展开全部',
+                      value: 'all',
+                    },
+                    {
+                      label: '展开第一级',
+                      value: 'first',
+                    },
+                    {
+                      label: '展开第二级',
+                      value: 'second',
+                    },
+                    {
+                      label: '不展开',
+                      value: 'none', //
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        {
+          field: 'showCheckboxColumn',
+          label: '是否显示复选框',
+          tabTitle: titles[0],
+          type: 'boolean',
+        },
+        {
+          field: 'showRowSeriesNumber',
+          tabTitle: titles[0],
+          label: '是否显示行号',
+          type: 'boolean',
+        },
+        {
+          field: 'keyColumn',
+          tabTitle: titles[0],
+          label: '主键字段',
+          type: 'string',
+          options: {
+            columnSelect: true,
+            tableName: tName, //
+          },
+        },
+        {
+          field: 'keyCodeColumn',
+          label: '单据字段',
+          tabTitle: titles[0],
+          type: 'string',
+          options: {
+            columnSelect: true,
+            tableName: tName, //
+          },
+        }, //
+        {
+          field: 'onCurRowChange',
+          label: '当前行变化事件',
+          type: 'code', //
+          tabTitle: titles[1], //
+        },
+        {
+          field: 'contextItems',
+          label: '右键菜单配置', //
+          type: 'stable',
+          tabTitle: titles[1], //
+          span: 24, //
+          options: {
+            showTable: true,
+            tableState: 'edit',
+            columns: [
+              {
+                field: 'label',
+                title: '菜单名称',
+                type: 'string',
+                editType: 'string',
+              },
+              {
+                field: 'fn',
+                title: '菜单事件',
+                type: 'string',
+                editType: 'code', //
+              },
+            ],
+          }, //
+        },
+      ],
+    }
+    let sys = this.getSystem()
+    let _d = await sys.confirmForm(_fConfig) //
+    this.onTableConfigChange(_d) //
   }
 }

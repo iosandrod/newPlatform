@@ -65,6 +65,15 @@ export default defineComponent({
               }) //
               return s //
             }}
+            onTableDesign={(config) => {
+              //
+              item.onTableDesign({
+                //
+                ...config,
+                tableName,
+                item: item,
+              }) //
+            }}
             curRow={item.getPageCurRow()}
             contextItems={item.getContextItems()}
             treeConfig={item.getTreeConfig()}

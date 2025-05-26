@@ -17,7 +17,7 @@ export default defineComponent({
       let dbuttons = [
         {
           label: '新增',
-          key: 'add',
+          key: 'add', //
           fn: async () => {
             //添加行
             tableIns.addRows(1) //
@@ -73,6 +73,11 @@ export default defineComponent({
           },
         },
       ] //
+      let config = tableIns.config
+      let showHeaderDefaultButtons = config.showHeaderDefaultButtons
+      if (showHeaderDefaultButtons == false) {
+        dbuttons = [] //
+      }
       let newButtons = tableIns.getHeaderButtons()
       let mergeButtons = [...newButtons, ...dbuttons] //
       let buttons = mergeButtons.filter((item, i) => {

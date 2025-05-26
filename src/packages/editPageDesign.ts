@@ -10,7 +10,6 @@ export class editPageDesign extends PageDesign {
     super.setCurrentDesignState(state) //
   }
   async addMainTableRow(addConfig?: any): Promise<void> {
-    //
     let curRow = addConfig?.curRow || {}
     console.log('添加主表以及子表') ////
     let defaultV = await this.getDefaultValue(this.getTableName()) //
