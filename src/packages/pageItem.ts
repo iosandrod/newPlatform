@@ -65,7 +65,7 @@ export class PageDesignItem extends FormItem {
     }
     return tableType
   }
-  async addNewRow() {} //
+  async addNewRow() { } //
 
   getShowHeaderButtons() {
     // debugger //

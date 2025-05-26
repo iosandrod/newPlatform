@@ -4254,3 +4254,14 @@ const app = createApp({
       //   _arr.push(_obj)
       // }
       // }
+
+
+      // watch(
+    //   () => {
+    //     return state.store
+    //   },
+    //   (newValue) => {},
+    //   {
+    //     deep: true,
+    //   },
+    // )

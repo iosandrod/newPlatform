@@ -1,35 +1,6 @@
-import {
-  defineComponent,
-  isReactive,
-  onUnmounted,
-  watchEffect,
-  withDirectives,
-} from 'vue'
-import {
-  ClickOutside as vClickOutside,
-  ElMessage,
-  ElDialog,
-  ElScrollbar,
-  ElContainer,
-  ElHeader,
-  ElDropdown,
-  ElDropdownMenu,
-  ElDropdownItem,
-  ElButton,
-} from 'element-plus'
-import {
-  defineProps,
-  defineEmits,
-  ref,
-  reactive,
-  computed,
-  provide,
-  getCurrentInstance,
-  nextTick,
-  onMounted,
-  watch,
-  defineExpose,
-} from 'vue'
+import { defineComponent, isReactive, onUnmounted, watchEffect, withDirectives } from 'vue'
+import { ClickOutside as vClickOutside, ElMessage, ElDialog, ElScrollbar, ElContainer, ElHeader, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus'
+import { defineProps, defineEmits, ref, reactive, computed, provide, getCurrentInstance, nextTick, onMounted, watch, defineExpose } from 'vue'
 import fieldMenu from '@/menu/fieldCom'
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
@@ -174,7 +145,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      },
+      }
     )
     let layout = formIns.layout
     let _state = formIns.state
@@ -220,7 +191,7 @@ export default defineComponent({
       () => props.data,
       (val) => {
         formIns.setData(val) //
-      },
+      }
     )
     provide('pageDesign', formIns) //
     provide('formIns', formIns)
@@ -238,9 +209,7 @@ export default defineComponent({
     let setSelection = formIns.setSelection.bind(formIns) //
     setSelection(state.config)
     const syncLayout = formIns.syncLayout.bind(formIns)
-    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(
-      formIns,
-    )
+    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(formIns)
     const switchPlatform = formIns.switchPlatform.bind(formIns)
     const canvesScrollRef = ref('')
     const fireEvent = (type, data) => {
@@ -311,7 +280,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      },
+      }
     )
     watch(
       () => state.selected,
@@ -321,18 +290,10 @@ export default defineComponent({
       {
         deep: true,
         immediate: true,
-      },
+      }
     )
     const onClickOutside = () => {}
-    // watch(
-    //   () => {
-    //     return state.store
-    //   },
-    //   (newValue) => {},
-    //   {
-    //     deep: true,
-    //   },
-    // )
+
     const eve = formIns //
     provide('Everright', eve)
     let hide = () => {
@@ -342,6 +303,7 @@ export default defineComponent({
     formIns.hide = hide
     expose({ _instance: formIns }) //
     const registerContextMenu = (ref) => {
+      //
       formIns.registerRef('mainContextMenu', ref) //
     }
     return () => {
@@ -384,21 +346,14 @@ export default defineComponent({
           </div>
         )
       }
-      let loadingCom = (
-        <VxeLoading modelValue={formIns.pageLoading}></VxeLoading>
-      )
+      let loadingCom = <VxeLoading modelValue={formIns.pageLoading}></VxeLoading>
       let com = (
         <div class="h-full w-full overflow-hidden bg-white">
           {loadingCom}
           <div class="flex h-full w-full bg-white overflow-hidden flex-row">
             {contextCom}
             {_fieldCom}
-            <div class="flex-1 flex flex-col overflow-hidden">
-              {isShow.value &&
-                withDirectives(<CanvesPanel data={state.store} />, [
-                  [vClickOutside, onClickOutside],
-                ])}
-            </div>
+            <div class="flex-1 flex flex-col overflow-hidden">{isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}</div>
             {_ConfigCom}
           </div>
           {_arr}

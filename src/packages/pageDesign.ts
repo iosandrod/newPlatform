@@ -34,15 +34,15 @@ interface Filter {
   field: string
   /** 操作符，默认 '$eq'（等于） */
   operator?:
-    | '$eq'
-    | '$ne'
-    | '$gt'
-    | '$gte'
-    | '$lt'
-    | '$lte'
-    | '$in'
-    | '$nin'
-    | '$like'
+  | '$eq'
+  | '$ne'
+  | '$gt'
+  | '$gte'
+  | '$lt'
+  | '$lte'
+  | '$in'
+  | '$nin'
+  | '$like'
   /** 值 */
   value: any
 }
@@ -76,7 +76,7 @@ export class PageDesign extends Form {
           if (typeof _fn == 'function') {
             this[name] = _fn.bind(this) //
           }
-        } catch (error) {}
+        } catch (error) { }
       }
     }
   }
@@ -169,7 +169,7 @@ export class PageDesign extends Form {
     return createPageDesignFieldConfig() //
   }
   //设置默认模板
-  initDefaultTemplatePage() {}
+  initDefaultTemplatePage() { }
   getValidateRules() {
     return []
   }
@@ -313,8 +313,8 @@ export class PageDesign extends Form {
       $and: filters.map(buildCond),
     }
   } //
-  async createTableData() {}
-  async updateTableData() {}
+  async createTableData() { }
+  async updateTableData() { }
   async getDefaultValue(tableName: string) {
     let columns = this.getTableColumns(tableName, true) //
     let obj1 = {}
@@ -345,7 +345,7 @@ export class PageDesign extends Form {
     } //
     return []
   }
-  getMainTableConfig() {}
+  getMainTableConfig() { }
   // @useRunAfter()
   async addTableRow(data, tableName = this.getTableName()) {
     if (data == null) {
@@ -436,18 +436,18 @@ export class PageDesign extends Form {
     }
     return tableName //
   }
-  getAllFormMap() {}
+  getAllFormMap() { }
   @useOnce()
   initDefaultDForm() {
     super.initDefaultDForm() //
   } //
-  initDefaultSForm() {}
+  initDefaultSForm() { }
   //打开编辑页面
   async openEditEntity() {
     let tableName = this.tableName
   }
   //打开添加页面
-  async openAddEntity() {}
+  async openAddEntity() { }
   async addMainTableRow(addConfig?: any) {
     //
     //
@@ -591,7 +591,7 @@ export class PageDesign extends Form {
     return [tableName, ...dTableName]
   }
   getAllTableNameOptions() {
-    let tableName = this.getRealTableName()
+    let tableName = this.getTableName()//
     let tCnName = this.getTableCnName()
     let dTableOptions = this.getAllDetailTable().map((t) => {
       let tName = t.getTableName()
@@ -600,8 +600,8 @@ export class PageDesign extends Form {
         label: tCnName,
         value: tName,
       }
-    })
-    let arr = [{ label: tableName, value: tCnName }, ...dTableOptions]
+    })//
+    let arr = [{ label: tCnName, value: tableName }, ...dTableOptions]
     return arr //
   }
   async saveEditPageData() {
@@ -1139,8 +1139,8 @@ export class PageDesign extends Form {
   getBindPageProps() {
     //
   }
-  async openImportDialog() {}
-  async importTableRows() {} //
+  async openImportDialog() { }
+  async importTableRows() { } //
   onColumnConfigChange(config) {
     let tableName = config.tableName //
     let _tableName = this.getRealTableName() //
@@ -1201,7 +1201,7 @@ export class PageDesign extends Form {
     } //
     return _obj //
   }
-  getTreeConfig() {}
+  getTreeConfig() { }
   onTableConfigChange(config) {
     let tableName = config.tableName //
     if (tableName == null) {
@@ -1227,7 +1227,7 @@ export class PageDesign extends Form {
     // let row = config.row
     // tMapData['curRow'] = row //
   }
-  async saveTableData(config?: any) {}
+  async saveTableData(config?: any) { }
   getKeyColumn() {
     let tConfig = this.getTableConfig()
     let columns = tConfig.columns //
@@ -1248,7 +1248,7 @@ export class PageDesign extends Form {
   async pageInit() {
     //
   }
-  getKeyCodeColumn() {}
+  getKeyCodeColumn() { }
   initEntityEvent() {
     //
     let config = this.config
