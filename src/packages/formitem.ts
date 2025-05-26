@@ -766,6 +766,14 @@ export class FormItem extends Base {
     if (isShowS) {
       this.showDropdown()
     }
+    let isBaseinfo = this.getIsBaseinfo()
+    if (isBaseinfo) {
+      this.showDropdown() //
+    }
+  }
+  getIsBaseinfo() {
+    let type = this.getType()
+    return type == 'baseinfo'
   }
   onBlur(value?: any) {
     let nValue = this.getBindValue()
@@ -1094,7 +1102,7 @@ export class FormItem extends Base {
     let input: Input = this.getRef('fieldCom')
     if (input == null) {
       return
-    }
+    } //
     input.showDropdown(config) //
   }
   getColumnSelectOptions() {
@@ -1116,6 +1124,5 @@ export class FormItem extends Base {
   onColumnConfigChange(config) {
     let f = config.field
   }
-  openBaseInfoDialog() {
-  }
+  openBaseInfoDialog() {}
 }

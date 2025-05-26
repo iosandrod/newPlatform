@@ -1,5 +1,5 @@
 import { Base } from '@/base/base'
-import { watch, nextTick } from 'vue'
+import { watch, nextTick, toRaw } from 'vue'
 import { VxePulldownInstance } from 'vxe-pc-ui'
 
 export class Dropdown extends Base {
@@ -18,10 +18,10 @@ export class Dropdown extends Base {
   }
   onVisibleChange(value) {
     let visible = value.visible
-    this.modelValue = visible //
+    let _obj = toRaw(this)
+    _obj.modelValue = visible //
   }
   showDropdown() {
-    //
     this.isRunHiddenDropdown = false //
     this.modelValue = true
     let dropdown = this.getRef('dropdown')
@@ -63,7 +63,7 @@ export class Dropdown extends Base {
     if (typeof hiddenBefore == 'function') {
       s = await hiddenBefore()
       if (s == false) {
-        return false
+        return false //
       }
     }
     let _promise = new Promise((resolve) => {
@@ -74,8 +74,15 @@ export class Dropdown extends Base {
         } //
         this.isRunHiddenDropdown = false //
         resolve(true) //
-      }, 300)
+      }, 300) //
     })
-    return await _promise
+    let status = await _promise
+    if (status == true) {
+      console.log(status, 'testStatus我挂你巴拉')
+    }
+    // if (1 == 1) {
+    //   return false //
+    // }
+    return status //
   }
 }

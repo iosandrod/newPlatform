@@ -32,7 +32,7 @@ export class Input extends Base {
     } //
   } //
   showDropdown(e) {
-    let drop: Dropdown = this.getRef('dropdown') //
+    let drop: Dropdown = this.getRef('dropdown')
     if (drop) {
       drop.showDropdown() //
     }

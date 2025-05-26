@@ -3,6 +3,7 @@ import VxeInput from 'vxe-pc-ui/packages/input'
 import { Input } from './inputClass'
 import { VxeInputPropTypes, getConfig } from 'vxe-table'
 import dropdownCom from '@/menu/dropdownCom'
+import { system } from '@/system'
 export default defineComponent({
   name: 'InputCom',
   emits: [
@@ -185,6 +186,13 @@ export default defineComponent({
     maxlength: [String, Number] as PropType<VxeInputPropTypes.Maxlength>,
     // 已废弃
     autocomplete: String as PropType<VxeInputPropTypes.Autocomplete>,
+    isBaseinfo: {
+      type: Boolean, //
+      default: false, //
+    },
+    baseinfoTableName: {
+      type: String, //
+    },
   },
   components: {
     dropdownCom,
@@ -227,20 +235,22 @@ export default defineComponent({
         </div>
       ) //
       let _com = null
-      let type = props.type
-      if (type == 'search') {
+      let type: any = props.type
+      let isBaseinfo = props.isBaseinfo
+      if (isBaseinfo) {
         _com = (
           <dropdownCom
             class="h-full"
             ref={registerDropdown}
+            // destroyOnClose={false} //
             v-slots={{
               default: () => {
-                //
                 return com //
               },
               dropdown: () => {
+                //
                 let com = <div class="h-100 w-full bg-red"></div>
-                return com
+                return com //
               },
             }}
           ></dropdownCom>

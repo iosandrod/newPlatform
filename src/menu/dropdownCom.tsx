@@ -50,8 +50,8 @@ export default defineComponent({
       let com = (
         <Pulldown
           {...props}
-          hiddenBefore={async ()=>{
-            let s=await drop.onBeforeHidden()
+          hiddenBefore={async () => {
+            let s = await drop.onBeforeHidden()
             return s
           }}
           transfer={true}
@@ -75,35 +75,35 @@ export default defineComponent({
                 )
               }
               if (props.dropMode == 'click') {
-                com = <div class='w-full'>{dc}</div>
+                com = <div class="w-full">{dc}</div>
               }
               if (props.dropMode == null) {
-                com = <div class='w-full'>{dc}</div>
+                com = <div class="w-full">{dc}</div>
               }
               return com
             },
             dropdown: () => {
               let com = slots?.dropdown({ dropdown: drop }) || null
-              let com1 = null
-              if (props.dropMode == 'hover') {
-                com1 = (
-                  <div
-                    onMouseleave={(e) => {
-                      drop.dropdownout = true
-                      setTimeout(() => {
-                        if (drop.dropdownout == true) {
-                          drop.closeDropdown() //
-                        }
-                      }, 100)
-                    }}
-                  >
-                    {com}
-                  </div>
-                )
-              }
-              if (props.dropMode != 'hover') {
-                com1 = <div>{com}</div>
-              }
+              let com1 = com
+              // if (props.dropMode == 'hover') {
+              //   com1 = (
+              //     <div
+              //       onMouseleave={(e) => {
+              //         drop.dropdownout = true
+              //         setTimeout(() => {
+              //           if (drop.dropdownout == true) {
+              //             drop.closeDropdown() //
+              //           }
+              //         }, 100)
+              //       }}
+              //     >
+              //       {com}
+              //     </div>
+              //   )
+              // }
+              // if (props.dropMode != 'hover') {
+              //   com1 = <div>{com}</div>
+              // }
               // return <div>{com}</div> //
               return com1 //
             },

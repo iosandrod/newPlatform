@@ -86,6 +86,12 @@ export const sformType = (item: FormItem) => {
   obj.modelValue = 'object'
   return obj
 }
+export const baseinfoType = (item: FormItem) => {
+  let obj = defaultType(item) //
+  obj.onChange = (config) => {}
+  obj.clearable = true
+  return obj
+}
 export const itemTypeMap = {
   input: inputType,
   string: inputType,
@@ -95,4 +101,5 @@ export const itemTypeMap = {
   code: codeType,
   boolean: booleanType, //
   sform: sformType, //
+  baseinfo: baseinfoType,
 }
