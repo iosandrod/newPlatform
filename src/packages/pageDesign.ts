@@ -47,6 +47,7 @@ interface Filter {
   value: any
 }
 export class PageDesign extends Form {
+  isEdit = false
   isConfirm = false //
   isDialog = false
   tabHidden = false //
@@ -1311,6 +1312,69 @@ export class PageDesign extends Form {
       let key = config.key
       let fn = config.fn //
       this.getHttp().unRegisterEvent(key, fn) //
+    }
+  }//
+  getPaginateProps() {
+    let pageConfig = this.pageData
+    let curPage = pageConfig.curPage || 1
+    let obj = {
+      curPage: curPage,
+    }//
+    let _p = this.config.pagination || {}//
+    let _size = _p.pageSize
+    let pagination = _p || {}//
+    let options = [
+      {
+        label: "10条每页",
+        value: 10
+      }, {
+        label: "100条每页",
+        value: 100
+      }, {
+        label: "500条每页",
+        value: 500
+      }, {
+        label: "1000条每页",
+        value: 1000
+      }, {
+        label: "5000条每页",
+        value: 5000
+      }, {
+        label: "10000条每页",
+        value: 10000
+      }, {
+        label: "全部",
+        value: 0
+      }//
+    ]
+    obj = {
+      ...obj, ...pagination,
+      pageSizes: options,//
+      pageSize: pageConfig.pageSize || _size,//
+      currentPage: pageConfig.currentPage || 1,//
+      onPageChange: (config: any) => {
+        let currentPage = config.currentPage
+        let pageSize = config.pageSize
+        let obj = {
+          currentPage,
+          pageSize
+        }
+        Object.entries(obj).forEach(([key, value]) => {
+          this.pageData[key] = value//
+        })
+      }//
+    }
+    return obj//
+  }//
+  getShowPaginate() {
+    let isEdit = this.isEdit
+    if (isEdit == true) {
+      return false
+    }//
+    let pagination = this.config.pagination
+    let show = pagination?.show
+    if (show != false) {
+      return true
     }
   }
 }

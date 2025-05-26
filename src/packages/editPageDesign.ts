@@ -5,6 +5,7 @@ import { Table } from '@/table/table'
 import { getFlatTreeData } from './utils'
 
 export class editPageDesign extends PageDesign {
+  isEdit = true
   setCurrentDesignState(state) {
     super.setCurrentDesignState(state) //
   }
@@ -124,13 +125,13 @@ export class editPageDesign extends PageDesign {
     curRow['_relateData'] = _t
     return curRow
   }
-  async validate() {} //
+  async validate() { } //
   setCurrentDesign(status: boolean = true) {
     //
     let configMap = this.tableConfigMap //
     super.setCurrentDesign(status)
   }
-  setColumnSelect() {}
+  setColumnSelect() { }
   async saveTableDesign(_config?: any) {
     let isD = this.isDialog
     let _config1 = { ..._config, refresh: !isD }

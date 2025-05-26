@@ -1,5 +1,6 @@
 import { System } from '@/system'
 import PageCom from '@ER/pageCom'
+import { PageDesign } from '@ER/pageDesign'
 import { computed, defineComponent, inject, provide, ref } from 'vue'
 import { VxePager } from 'vxe-pc-ui'
 export default defineComponent({
@@ -13,6 +14,7 @@ export default defineComponent({
     const system: System = inject('systemIns')
     const router = system.getRouter()
     let tableName = props.tableName //
+    let isDefaultPage = true
     if (tableName == null) {
       let currentTable = router.currentRoute
       let p = currentTable.path //
@@ -22,11 +24,12 @@ export default defineComponent({
         _tableName = pArr.pop() //
       }
       tableName = _tableName
-    }
+    } //
+
     let show = ref(false)
     let _tableName = tableName.split('---')
     let l = _tableName.length
-    let en = computed(() => {
+    let en: { value: PageDesign } = computed(() => {
       let map = null
       if (l == 2) {
         map = system.tableEditMap
@@ -50,11 +53,7 @@ export default defineComponent({
       let map = null
       let _map = { ...system.tableMap, ...system.tableEditMap }
       map = _map //
-      // if (l == 2) {
-      //   map = system.tableEditMap
-      // } else {
-      //   map = system.tableMap
-      // }
+      //
       let obj = map[tableName]
       if (obj == null) {
         return false
@@ -70,9 +69,11 @@ export default defineComponent({
       }
       let _com = <PageCom isMainPage isDesign={false} formIns={en.value}></PageCom>
       //分页
+      let pObj = en.value.getPaginateProps()
+      // console.log(pObj, 'testPObj') //
       let pagin = (
         <div class="h-40">
-          <VxePager></VxePager>
+          <VxePager {...pObj}></VxePager>
         </div>
       ) //
       return (

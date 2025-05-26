@@ -22,7 +22,7 @@ import FormEditor from '@ER/formEditor/formEditor'
 import { Button } from '@/buttonGroup/button'
 import { system } from '@/system'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
-import { VxeCheckbox } from 'vxe-pc-ui'
+import { VxeCheckbox, VxePager } from 'vxe-pc-ui'
 import checkboxCom from '@/checkbox/checkboxCom'
 import { getDFConfig } from '@/table/colFConfig'
 import uploadCom from '@/input/uploadCom'
@@ -212,44 +212,45 @@ export default defineComponent({
         editType: 'date',
       }) ////
       let _fConfig1 = tFConfig
-      com = ( //
-        <div class="w-full h-500">
-          <formCom
-            ref={_reg3}
-            isDesign={false} //
-            // {..._fConfig}
-            {...{
-              items: [
-                {
-                  field: 'height',
-                  label: '邮箱',
-                  type: 'sform', //
-                  span: 24,
-                  options: {
-                    itemSpan: 12,
-                    items: [
-                      {
-                        field: 'height',
-                        label: '邮箱', //
-                      },
-                    ],
-                    columnSelect: true, //
-                    tableName: 'permissions', //
+      com = //
+        (
+          <div class="w-full h-500">
+            <formCom
+              ref={_reg3}
+              isDesign={false} //
+              // {..._fConfig}
+              {...{
+                items: [
+                  {
+                    field: 'height',
+                    label: '邮箱',
+                    type: 'sform', //
+                    span: 24,
+                    options: {
+                      itemSpan: 12,
+                      items: [
+                        {
+                          field: 'height',
+                          label: '邮箱', //
+                        },
+                      ],
+                      columnSelect: true, //
+                      tableName: 'permissions', //
+                    },
+                    tabTitle: '权限',
                   },
-                  tabTitle: '权限',
-                },
-                {
-                  field: 'width',
-                  label: '密码',
-                  span: 24,
-                },
-              ],
-            }}
-            {..._fConfig1} //
-            data={d1} //
-          ></formCom>
-        </div>
-      )
+                  {
+                    field: 'width',
+                    label: '密码',
+                    span: 24,
+                  },
+                ],
+              }}
+              {..._fConfig1} //
+              data={d1} //
+            ></formCom>
+          </div>
+        )
       com = null //
       // com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>
@@ -280,6 +281,44 @@ export default defineComponent({
             },
           }}
         ></tabCom>
+      )
+      com = (
+        <VxePager
+          {...{
+            pageSize: 100, //
+            currentPage: 2,
+            pageSizes: [
+              {
+                label: '10条每页',
+                value: 10,
+              },
+              {
+                label: '100条每页',
+                value: 100,
+              },
+              {
+                label: '500条每页',
+                value: 500,
+              },
+              {
+                label: '1000条每页',
+                value: 1000,
+              },
+              {
+                label: '5000条每页',
+                value: 5000,
+              },
+              {
+                label: '10000条每页',
+                value: 10000,
+              },
+              {
+                label: '全部',
+                value: 0,
+              }, //
+            ],
+          }}
+        ></VxePager>
       )
       let _com = (
         <div
