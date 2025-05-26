@@ -1,4 +1,5 @@
 import inputCom from '@/input/inputCom'
+import DropdownCom from '@/menu/dropdownCom'
 import selectCom from '@/select/selectCom'
 import SelectCom from '@/select/selectCom'
 import { FormItem } from '@ER/formitem'
@@ -23,17 +24,18 @@ export default defineComponent({
     const formitem: FormItem = params.formitem
     let _value = computed(() => {
       let _config = formitem?.getBindConfig()
-      console.log(_config, 'test_config132312') //
       return _config
     })
     let registerRef = (el) => {
-      formitem.registerRef('fieldCom', el)
+      formitem.registerRef('fieldCom', el) //
     }
-
-    let isColumnSelect = computed(() => {
-      let s = formitem.getIsColumnSelect()
-      return s
-    })
+    let tableName = formitem.getTableName() //
+    let searchEnConfig = computed(() => {
+      let sys = formitem.getSystem() //
+      let d = sys.getTargetSearchEntity(tableName)
+      return d
+    }) //
+    console.log(tableName, 'testTableName') //
     return () => {
       let com = ( //
         <div
@@ -61,7 +63,19 @@ export default defineComponent({
           ></inputCom>
         </div>
       ) //
-      let _com = com //
+      let dropCom = (
+        <DropdownCom
+          v-slots={{
+            default: () => {
+              return com
+            },
+            dropdown: () => {
+              return <div class="h-300 w-200 bg-red"></div>
+            },
+          }}
+        ></DropdownCom>
+      )
+      let _com = dropCom //
       return _com //
     }
   },

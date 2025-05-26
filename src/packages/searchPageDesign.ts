@@ -1,3 +1,5 @@
 import { PageDesign } from './pageDesign'
 
-export class SearchPageDesign extends PageDesign {}
+export class SearchPageDesign extends PageDesign {
+  isOpen = false //
+} //

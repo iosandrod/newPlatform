@@ -41,7 +41,7 @@ export class System extends Base {
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
   searchTableMap: { [key: string]: PageDesign } = {} //
-  tableEditMap: { [key: string]: PageDesign } = {}
+  tableEditMap: { [key: string]: PageDesign } = {} //
   tableConfirmMap: { [key: string]: PageDesign } = {}
   async login() {}
   @cacheValue() //
@@ -233,15 +233,20 @@ export class System extends Base {
       }
     }
     let tableName = config.tableName
-    let _design = this.tableMap[tableName]
+    let _design = this.searchTableMap[tableName]
+    let searchTableName = tableName
+    if (!/search$/.test(tableName)) {
+      let _tname = tableName.split('---')[0]
+      searchTableName = `${_tname}---search`
+    }
     if (_design) {
       return _design //
     }
-    let layoutConfig = await this.getPageLayout(tableName) //
+    let layoutConfig = await this.getPageLayout(searchTableName)
     let _d = new SearchPageDesign(layoutConfig) //
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
-    this.searchTableMap[tableName] = _d
+    this.searchTableMap[tableName] = _d //
     return _d
   }
   async createPageDesign(config: { tableName: string } | string) {
@@ -1431,7 +1436,11 @@ export class System extends Base {
       },
     }
     this.openDialog(_dialogConfig) //
-  } //
+  }
+  getTargetSearchEntity(tableName) {
+    let obj = this.searchTableMap[tableName]
+    return obj
+  }
 }
 
 export const system = reactive(new System()) //
