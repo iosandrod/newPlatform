@@ -29,11 +29,10 @@ export default defineComponent({
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
     }
-
     let isColumnSelect = computed(() => {
       let s = formitem.getIsColumnSelect()
       return s
-    })
+    }) //
     return () => {
       let com = (
         <div

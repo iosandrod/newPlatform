@@ -25,7 +25,7 @@ import entityPc from './Entity/pc'
 import entityMobile from './Entity/mobile'
 import dividerPc from './Divider/pc.vue'
 import dividerMobile from './Divider/mobile.vue' //
-import sformPc from './Sform/pc'//
+import sformPc from './Sform/pc' //
 import sformMobile from './Sform/mobile'
 import dformPc from './Dform/pc'
 import dformMobile from './Dform/mobile' //
@@ -37,6 +37,8 @@ import checkboxPc from './Checkbox/pc'
 import checkboxMobile from './Checkbox/mobile'
 import imagePc from './Image/pc'
 import imageMobile from './Image/mobile' //
+import baseinfoPc from './Baseinfo/pc'
+import baseinfoMobile from './Baseinfo/mobile' //
 export const typeMap = {
   image: {
     pc: imagePc,
@@ -109,6 +111,10 @@ export const typeMap = {
   boolean: {
     pc: checkboxPc,
     mobile: checkboxMobile,
+  },
+  baseinfo: {
+    pc: baseinfoPc,
+    mobile: baseinfoMobile,
   },
 }
 export default {}

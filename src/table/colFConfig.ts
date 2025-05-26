@@ -263,6 +263,10 @@ export const getAllColTypes = () => {
       label: '布尔型',
       value: 'boolean', //
     },
+    {
+      label: '参照表',
+      value: 'baseinfo', //
+    },
   ]
 }
 //

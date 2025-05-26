@@ -368,9 +368,7 @@ export class PageDesign extends Form {
       args[0] = ctx.getAddRowsArgs()
     } //
   })
-  async addTableRows(
-    config = this.getAddRowsArgs(),
-  ) {
+  async addTableRows(config = this.getAddRowsArgs()) {
     let rows = config.rows
     let tableName = config.tableName
     if (typeof rows == 'number') {
@@ -1131,7 +1129,7 @@ export class PageDesign extends Form {
     let methods = config.methods //
     let _arr = []
     if (Array.isArray(methods) && methods.length > 0) {
-      let _methods = _.cloneDeep(methods)
+      let _methods = methods //
       // return _methods //
       _arr.push(..._methods) //
     }

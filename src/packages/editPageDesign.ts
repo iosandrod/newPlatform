@@ -11,7 +11,9 @@ export class editPageDesign extends PageDesign {
   }
   async addMainTableRow(addConfig?: any): Promise<void> {
     let curRow = addConfig?.curRow || {}
-    console.log('添加主表以及子表') ////
+    let row = addConfig?.row || {}
+    curRow = { ...curRow, ...row }
+    console.log('添加主表以及子表')
     let defaultV = await this.getDefaultValue(this.getTableName()) //
     defaultV = { ...defaultV, ...curRow } //
     let tableConfig = this.getTableRefData(this.getTableName()) //
@@ -124,13 +126,13 @@ export class editPageDesign extends PageDesign {
     curRow['_relateData'] = _t
     return curRow
   }
-  async validate() { } //
+  async validate() {} //
   setCurrentDesign(status: boolean = true) {
     //
     let configMap = this.tableConfigMap //
     super.setCurrentDesign(status)
   }
-  setColumnSelect() { }
+  setColumnSelect() {}
   async saveTableDesign(_config?: any) {
     let isD = this.isDialog
     let _config1 = { ..._config, refresh: !isD }

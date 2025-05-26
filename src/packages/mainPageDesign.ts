@@ -100,7 +100,7 @@ export class MainPageDesign extends PageDesign {
   @useHooks((config) => {
     let ctx: PageDesign = config.instance //
     let args = config.args
-    if ((args.length == 0)) {
+    if (args.length == 0) {
       args[0] = ctx.getAddRowsArgs()
     } //
   }) //
@@ -111,7 +111,7 @@ export class MainPageDesign extends PageDesign {
     let pageEditType = config.pageEditType
     if (pageEditType == 'page') {
       system.routeOpen(`${tableName}---edit`, async (d: editPageDesign) => {
-        await d.addMainTableRow() //
+        await d.addMainTableRow(addConfig) //
       })
     }
     if (pageEditType == 'default') {
@@ -234,7 +234,7 @@ export class MainPageDesign extends PageDesign {
           }) //
         }
         if (_editType == 'add') {
-          page.addMainTableRow() //
+          page.addMainTableRow(_config) //
         }
       },
     }) //

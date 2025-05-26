@@ -18,6 +18,7 @@ import { MainPageDesign } from '@ER/mainPageDesign'
 import { editUse, mainUse } from './pageUseFn'
 import { ImportPageDesign } from '@ER/importPageDesign'
 import msgboxCom from './dialog/_dialogCom/msgboxCom'
+import { SearchPageDesign } from '@ER/saerchPageDesign'
 export class System extends Base {
   allApp: any = [] //
   systemApp: any = []
@@ -39,6 +40,7 @@ export class System extends Base {
   selectOptions = {}
   dialogArr: Dialog[] = []
   tableMap: { [key: string]: PageDesign } = {}
+  searchTableMap: { [key: string]: PageDesign } = {} //
   tableEditMap: { [key: string]: PageDesign } = {}
   tableConfirmMap: { [key: string]: PageDesign } = {}
   async login() {}
@@ -224,7 +226,24 @@ export class System extends Base {
     }
     router.push(`/${tableName}`) //
   }
-
+  async createPageSearchDesign(config?: { tableName: string } | string) {
+    if (typeof config == 'string') {
+      config = {
+        tableName: config,
+      }
+    }
+    let tableName = config.tableName
+    let _design = this.tableMap[tableName]
+    if (_design) {
+      return _design //
+    }
+    let layoutConfig = await this.getPageLayout(tableName) //
+    let _d = new SearchPageDesign(layoutConfig) //
+    _d.tableName = tableName //
+    _d.setLayoutData(layoutConfig)
+    this.searchTableMap[tableName] = _d
+    return _d
+  }
   async createPageDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {
       config = {

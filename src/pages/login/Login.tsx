@@ -212,46 +212,37 @@ export default defineComponent({
         editType: 'date',
       }) ////
       let _fConfig1 = tFConfig
-      com = //
-        (
-          <div class="w-full h-500">
-            <formCom
-              ref={_reg3}
-              isDesign={false} //
-              // {..._fConfig}
-              {...{
-                items: [
-                  {
-                    field: 'height',
-                    label: '邮箱',
-                    type: 'sform', //
-                    span: 24,
-                    options: {
-                      itemSpan: 12,
-                      items: [
-                        {
-                          field: 'height',
-                          label: '邮箱', //
-                        },
-                      ],
-                      columnSelect: true, //
-                      tableName: 'permissions', //
-                    },
-                    tabTitle: '权限',
+      com = ( //
+        <div class="w-full h-500">
+          <formCom
+            ref={_reg3}
+            isDesign={false} //
+            // {..._fConfig}
+            {...{
+              items: [
+                {
+                  field: 'height',
+                  label: '邮箱', //
+                  type: 'baseinfo', //
+                  span: 24,
+                  options: { 
+                    tableName: 'permissions', //
                   },
-                  {
-                    field: 'width',
-                    label: '密码',
-                    span: 24,
-                  },
-                ],
-              }}
-              {..._fConfig1} //
-              data={d1} //
-            ></formCom>
-          </div>
-        )
-      com = null //
+                  tabTitle: '权限',
+                },
+                {
+                  field: 'width',
+                  label: '密码',
+                  span: 24,
+                },
+              ],
+            }}
+            // {..._fConfig1} //
+            data={d1} //
+          ></formCom>
+        </div>
+      )
+      // com = null //
       // com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>
       // com = <dialogCom ref={_reg2}></dialogCom>
@@ -272,54 +263,54 @@ export default defineComponent({
       // )
       // com=<input type="checkbox" class='vxe-checkbox--input' onChange={(value) => {
       // }}></input>
-      com = (
-        <tabCom
-          items={[{ label: 'tab1' }, { label: 'tab2' }]}
-          v-slots={{
-            default: (item) => {
-              return <div>{'测试123123'}</div> //
-            },
-          }}
-        ></tabCom>
-      )
-      com = (
-        <VxePager
-          {...{
-            pageSize: 100, //
-            currentPage: 2,
-            pageSizes: [
-              {
-                label: '10条每页',
-                value: 10,
-              },
-              {
-                label: '100条每页',
-                value: 100,
-              },
-              {
-                label: '500条每页',
-                value: 500,
-              },
-              {
-                label: '1000条每页',
-                value: 1000,
-              },
-              {
-                label: '5000条每页',
-                value: 5000,
-              },
-              {
-                label: '10000条每页',
-                value: 10000,
-              },
-              {
-                label: '全部',
-                value: 0,
-              }, //
-            ],
-          }}
-        ></VxePager>
-      )
+      // com = (
+      //   <tabCom
+      //     items={[{ label: 'tab1' }, { label: 'tab2' }]}
+      //     v-slots={{
+      //       default: (item) => {
+      //         return <div>{'测试123123'}</div> //
+      //       },
+      //     }}
+      //   ></tabCom>
+      // )
+      // com = (
+      //   <VxePager
+      //     {...{
+      //       pageSize: 100, //
+      //       currentPage: 2,
+      //       pageSizes: [
+      //         {
+      //           label: '10条每页',
+      //           value: 10,
+      //         },
+      //         {
+      //           label: '100条每页',
+      //           value: 100,
+      //         },
+      //         {
+      //           label: '500条每页',
+      //           value: 500,
+      //         },
+      //         {
+      //           label: '1000条每页',
+      //           value: 1000,
+      //         },
+      //         {
+      //           label: '5000条每页',
+      //           value: 5000,
+      //         },
+      //         {
+      //           label: '10000条每页',
+      //           value: 10000,
+      //         },
+      //         {
+      //           label: '全部',
+      //           value: 0,
+      //         }, //
+      //       ],
+      //     }}
+      //   ></VxePager>
+      // )
       let _com = (
         <div
           style={{

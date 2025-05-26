@@ -155,8 +155,6 @@ export class InputEditor extends BaseEditor {
         column.updateBindValue(updateConfig) //
         column.changeRowState(this.row) //
         if (this.isEditHeader) {//
-          // let _obj = { title: value, id: column.config.id }
-          // column.getSystem().updateTargetColumn(_obj) //()
           column.table.onHeaderTitleChange({
             column: column.config,
           })

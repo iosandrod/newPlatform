@@ -94,12 +94,14 @@ export default defineComponent({
         },
       ],
       showCheckboxColumn: false, //
+      tableState: 'edit',
       columns: [
         {
-          field: 'name',
+          field: 'name', //
           title: '方法名称',
           width: 250, //
           type: 'string', //
+          editType: 'code',
         },
         {
           title: '方法描述',

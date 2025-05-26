@@ -216,8 +216,14 @@ export default defineComponent({
               console.log('focus') //
             }}
             modelValue={_input.getModelValue()}
+            v-slots={{
+              suffix: () => {
+                let buttons = slots?.buttons?.()
+                return buttons //
+              },
+            }}
           ></VxeInput>
-          {slots?.buttons?.()}
+          {/* {slots?.buttons?.()} */}
         </div>
       ) //
       let _com = null

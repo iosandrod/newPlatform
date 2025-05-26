@@ -1116,4 +1116,6 @@ export class FormItem extends Base {
   onColumnConfigChange(config) {
     let f = config.field
   }
+  openBaseInfoDialog() {
+  }
 }
