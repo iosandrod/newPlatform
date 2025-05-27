@@ -3,7 +3,7 @@ import { Base } from '@/base/base'
 import { Form } from './form'
 import { Field, TableCell, TableRow } from './layoutType'
 import { FormItemRule, InputProps } from 'element-plus'
-import { computed, isProxy, isRef } from 'vue'
+import { computed, isProxy, isRef, nextTick } from 'vue'
 import { FormProps } from './hooks/use-props'
 import dayjs from 'dayjs'
 import { showToast } from 'vant'
@@ -20,12 +20,18 @@ import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { stringToFunction } from './utils'
 import { Input } from '@/input/inputClass'
 import formCom from './formCom'
+import { Dropdown } from '@/menu/dropdown'
+import { SearchPageDesign } from './searchPageDesign'
 
 export type FormOptions = {
   items: Field[]
 }
 
 export class FormItem extends Base {
+  templateTableConfig = {
+    columns: [],
+    data: [],
+  }
   eventManager = {}
   tableName: string
   oldValue: any
@@ -768,7 +774,8 @@ export class FormItem extends Base {
     }
     let isBaseinfo = this.getIsBaseinfo()
     if (isBaseinfo) {
-      this.showDropdown() //
+      // this.showDropdown() //
+      this.openBaseInfoTable()
     }
   }
   getIsBaseinfo() {
@@ -1125,4 +1132,44 @@ export class FormItem extends Base {
     let f = config.field
   }
   openBaseInfoDialog() {}
+  getBaseInfoConfig() {
+    return this.templateTableConfig
+  }
+  getDropdownVisible() {
+    let fCom: Input = this.getRef('fieldCom')
+    let dropCom: Dropdown = fCom?.getRef('dropdown')
+    let v = dropCom?.getPanelVisible()
+    return v
+  }
+  async openBaseInfoTable() {
+    let v = this.getDropdownVisible()
+    if (v) {
+      return
+    } //
+    let sys = this.getSystem()
+    let searchEn: SearchPageDesign = await sys.createPageSearchDesign(
+      this.getTableName(),
+    )
+    let columns = searchEn.getTableColumns()
+    let _data = await searchEn.getTinyTableData({})
+    this.templateTableConfig.columns = columns
+    this.templateTableConfig.data = _data //
+    nextTick(() => {
+      this.showDropdown() //
+    })
+  }
+  async confirmTinyTableRow(row) {
+    let options = this.getOptions()
+    let bindColumns = options.bindColumns
+    if (Array.isArray(bindColumns)) {
+      for (const col of bindColumns) {
+        //绑定参照表对应值
+        let field = col.field
+        let value = row[field]
+        this.updateBindData({
+          value: value, //
+        })
+      }
+    }
+  }
 }

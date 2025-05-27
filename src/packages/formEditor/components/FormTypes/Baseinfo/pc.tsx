@@ -45,7 +45,12 @@ export default defineComponent({
           <inputCom
             ref={registerRef}
             {..._value.value}
-            isBaseinfo={true} //
+            isBaseinfo={true}
+            baseinfoConfig={formitem.getBaseInfoConfig()}
+            onConfirmTinyTable={async (config) => {
+              let row = config.row
+              await formitem.confirmTinyTableRow(row)
+            }}
             v-slots={{
               buttons: () => {
                 let com = (
@@ -77,7 +82,7 @@ export default defineComponent({
       //     ></DropdownCom>
       //   )
       //   let _com = dropCom //
-      let _com = com//
+      let _com = com //
       return _com //
     }
   },

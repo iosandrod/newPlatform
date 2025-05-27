@@ -236,7 +236,7 @@ export class PageDesign extends Form {
     let query = getDataConfig.query
     let queryArr = getDataConfig?.queryArr || []
     let _arr = queryArr
-      .map((row) => {
+      .map((row) => {  
         let field = row.field
         let value = row.value
         let operator = row.operator

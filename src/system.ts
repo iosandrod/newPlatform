@@ -18,7 +18,7 @@ import { MainPageDesign } from '@ER/mainPageDesign'
 import { editUse, mainUse } from './pageUseFn'
 import { ImportPageDesign } from '@ER/importPageDesign'
 import msgboxCom from './dialog/_dialogCom/msgboxCom'
-import { SearchPageDesign } from '@ER/saerchPageDesign'
+import { SearchPageDesign } from '@ER/searchPageDesign'
 export class System extends Base {
   allApp: any = [] //
   systemApp: any = []
@@ -226,7 +226,7 @@ export class System extends Base {
     }
     router.push(`/${tableName}`) //
   }
-  async createPageSearchDesign(config?: { tableName: string } | string) {
+  async createPageSearchDesign(config?: { tableName: string } | string): Promise<SearchPageDesign> {
     if (typeof config == 'string') {
       config = {
         tableName: config,
@@ -234,9 +234,10 @@ export class System extends Base {
     }
     let tableName = config.tableName
     let _design = this.searchTableMap[tableName]
-    let searchTableName = tableName
-    if (!/search$/.test(tableName)) {
-      let _tname = tableName.split('---')[0]
+    let searchTableName = tableName //
+    if (!/search$/.test(tableName) || tableName.split('---').length > 1) {
+      //
+      let _tname = tableName.split('---')[0] //
       searchTableName = `${_tname}---search`
     }
     if (_design) {
@@ -247,7 +248,7 @@ export class System extends Base {
     _d.tableName = tableName //
     _d.setLayoutData(layoutConfig)
     this.searchTableMap[tableName] = _d //
-    return _d
+    return _d //
   }
   async createPageDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {

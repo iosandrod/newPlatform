@@ -4272,3 +4272,17 @@ const app = createApp({
       // } else {
       //   map = system.tableMap
       // }
+
+      // let addR = ins.getCellAddress((row) => {
+    //   return row['_index'] == _index //
+    // }, field) //
+
+     // let _rowIndex = row['_index']
+    // let addR = ins.getCellAddrByFieldRecord(field, _index1) //
+     // {
+      //   field: 'editType',
+      //   label: '编辑类型',
+      //   tabTitle: titles[1],
+      //   type: 'code', //
+      //   options: {},
+      // },

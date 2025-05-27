@@ -71,6 +71,9 @@ export default defineComponent({
       type: Boolean as PropType<VxeInputPropTypes.Disabled>,
       default: null,
     },
+    onConfirmTinyTable: {
+      type: Function,
+    },
     placeholder: {
       type: String as PropType<VxeInputPropTypes.Placeholder>,
       default: null,
@@ -193,6 +196,9 @@ export default defineComponent({
     baseinfoTableName: {
       type: String, //
     },
+    baseinfoConfig: {
+      type: Object,
+    },
   },
   components: {
     dropdownCom,
@@ -248,8 +254,24 @@ export default defineComponent({
                 return com //
               },
               dropdown: () => {
-                //
-                let com = <div class="h-100 w-full bg-red"></div>
+                let baseinfoConfig = props.baseinfoConfig
+                let com = (
+                  <div class="h-300 w-full" style={{ minWidth: '300px' }}>
+                    <erTable
+                      {...baseinfoConfig}
+                      tableState="scan" //
+                      showRowSeriesNumber={false} //
+                      showCheckboxColumn={false} ////
+                      onDbCurRowChange={(config) => {
+                        console.log('双击行发生变化') ////
+                        let onConfirmTinyTable = props.onConfirmTinyTable
+                        if (typeof onConfirmTinyTable == 'function') {
+                          onConfirmTinyTable(config) //
+                        }
+                      }}
+                    ></erTable>
+                  </div>
+                )
                 return com //
               },
             }}

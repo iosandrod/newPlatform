@@ -126,10 +126,12 @@ export const click_cell = (table: Table) => {
         let row = config.row
         let col = config.col
         let title = config.title
-        table.clearEditCell() //
+        table.clearEditCell()
         setTimeout(() => {
-          table.startEditCell(col, row, title, true) //
+          table.startEditCell(col, row, title, true)
         }, 10)
+      }else{
+        table.onCellDblClick(config)
       }
     },
   })

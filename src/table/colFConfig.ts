@@ -63,13 +63,7 @@ export const getDFConfig = (_this, data) => {
           options: getAllColTypes(),
         },
       },
-      // {
-      //   field: 'editType',
-      //   label: '编辑类型',
-      //   tabTitle: titles[1],
-      //   type: 'code', //
-      //   options: {},
-      // },
+
       {
         field: 'align',
         label: '对齐方式',
@@ -130,6 +124,7 @@ export const getDFConfig = (_this, data) => {
         tabTitle: titles[1],
         type: fType, //
       },
+
       {
         label: '格式化',
         field: 'fieldFormat',
@@ -205,6 +200,51 @@ export const getDFConfig = (_this, data) => {
           }
         },
       },
+      {
+        field: 'baseinfoConfig',
+        type: 'sform',
+        tabTitle: titles[1], //
+        label: '参照表配置',
+        options: {
+          items: [
+            {
+              field: 'tableName',
+              label: '表名',
+              type: 'string', //
+            },
+            {
+              field: 'bindCOlumns',
+              label: '绑定参照表',
+              tabTitle: titles[1],
+              type: 'stable',
+              options: {
+                beforeOpen: async (config) => {
+                  let item = config?.item //
+                  let data = config.data //
+                },
+                showTable: true,
+                tableTitle: '绑定参照表',
+                tableState: 'edit',
+                columns: [
+                  {
+                    field: 'key',
+                    title: '当前字段',
+                    editType: 'string',
+                    columnSelect: true,
+                    tableName: tableName,
+                  },
+                  {
+                    field: 'targetKey',
+                    title: '值',
+                    editType: 'string',
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+
       {
         label: '选择项',
         field: 'options',

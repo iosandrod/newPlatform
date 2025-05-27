@@ -185,6 +185,9 @@ export default defineComponent({
     contextItems: {
       type: Array,
     },
+    onDbCurRowChange: {
+      type: Function, //
+    },
     onCurRowChange: {
       type: Function || String, //
     },
