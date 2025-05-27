@@ -153,6 +153,18 @@ export class InputEditor extends BaseEditor {
           updateConfig.validate = false
         }
         column.updateBindValue(updateConfig) //
+        let editType = column.getEditType()
+        if (editType == 'baseinfo') {
+          let cacheValueObj = column.cacheValueObj
+          if (typeof cacheValueObj == 'object') {
+            Object.entries(cacheValueObj).forEach(([key, value]) => {
+              if (key == column.getField()) {
+                return
+              } //
+              this.row[key] = value //
+            })//
+          }
+        }
         column.changeRowState(this.row) //
         if (this.isEditHeader) {
           //
@@ -165,7 +177,8 @@ export class InputEditor extends BaseEditor {
     nextTick(() => {
       column.table.updateSelectRange() //
     })
-    column.cacheValue = undefined //
+    column.cacheValue = undefined
+    column.cacheValueObj = undefined
     column.isChangeValue = false //
     this.element = undefined //
     this.column = null ////

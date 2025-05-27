@@ -49,6 +49,7 @@ export class Column extends Base {
     columns: [],
     data: [],
   }
+  cacheValueObj = null
   templateBg: any = null
   isHeaderdown = false
   disableHideCell = false //
@@ -149,10 +150,9 @@ export class Column extends Base {
         return true
       }
     }
-    if (type == 'select') {
+    if (type == 'select' && type == 'baseinfo') {
       let isAniVisible = input?.getSelectPanelVisible() //
       if (isAniVisible == true) {
-        //
         return true
       }
     }
@@ -647,7 +647,7 @@ export class Column extends Base {
     if (config.validate === false) {
       row[field] = value //
       return true
-    } //
+    }
     let _res = await this.validateValue({ ...config, table })
     if (_res == true) {
       row[field] = value //
@@ -1411,7 +1411,6 @@ export class Column extends Base {
     if (input == null) {
       return
     }
-    this.disableHideCell = true //
     input.showDropdown({})
   }
   onFocus(config) {}
@@ -1422,7 +1421,24 @@ export class Column extends Base {
         bindColumns = bindColumns[0]
         let field = bindColumns.field
         let value = row[field] //
+        this.cacheValue = value //
+      } else {
+        let _obj = {}
+        for (const col of bindColumns) {
+          let field = col.field
+          let myField = col.myField
+          let value = row[field]
+          _obj[myField] = value
+        }
+        this.cacheValueObj = _obj
       }
     }
+    this.isChangeValue = true //@
+  }
+  closeBaseInfoTable() {
+    let input: Input = this.getRef('input')
+    if (input == null) {
+      return
+    } //
   }
 }

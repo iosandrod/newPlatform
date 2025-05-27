@@ -158,12 +158,13 @@ export default defineComponent({
               isBaseinfo
               onVisibleChange={(v) => {
                 let visible = v.visible //
-                column.disableHideCell = visible //
+                column.disableHideCell = visible
+                nextTick(() => {
+                  column.table.clearEditCell() //
+                })
               }}
               onFocus={(config) => {
-                column.onFocus({
-                  row: row,
-                })
+                column.openBaseInfoTable() //
               }}
               baseinfoConfig={column.getBaseInfoConfig()}
             ></InputCom>

@@ -1,6 +1,6 @@
 import { Dropdown } from '@/menu/dropdown'
 import { Base } from '@ER/base'
-import { VxeInputInstance } from 'vxe-pc-ui'
+import { VxeInputInstance, VxePulldownInstance } from 'vxe-pc-ui'
 
 export class Input extends Base {
   config: any
@@ -38,6 +38,13 @@ export class Input extends Base {
       drop.showDropdown() //
     }
   }
+  hiddenDropdown() {
+    //
+    let drop: Dropdown = this.getRef('dropdown')
+    if (drop) {
+      drop.closeDropdown() //
+    }
+  }
   getIsFormInput() {
     let formitem = this.config.formitem
     if (formitem) {
@@ -49,5 +56,13 @@ export class Input extends Base {
     if (this.getIsFormInput()) {
       return
     }
+  }
+  getSelectPanelVisible() {
+    let dropdown: VxePulldownInstance = this.getRef('dropdown')
+    if (dropdown == null) {
+      return false
+    }
+    let isShow = dropdown?.isPanelVisible()
+    return isShow //
   }
 }
