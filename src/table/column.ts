@@ -1433,12 +1433,14 @@ export class Column extends Base {
         this.cacheValueObj = _obj
       }
     }
-    this.isChangeValue = true //@
+    this.isChangeValue = true //
+    this.closeBaseInfoTable() //
   }
   closeBaseInfoTable() {
     let input: Input = this.getRef('input')
     if (input == null) {
       return
     } //
+    input.hiddenDropdown() //
   }
 }

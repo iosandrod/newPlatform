@@ -42,7 +42,7 @@ export class Input extends Base {
     //
     let drop: Dropdown = this.getRef('dropdown')
     if (drop) {
-      drop.closeDropdown() //
+      drop.closeDropdown()
     }
   }
   getIsFormInput() {
