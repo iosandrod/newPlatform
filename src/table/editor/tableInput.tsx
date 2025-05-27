@@ -156,6 +156,10 @@ export default defineComponent({
               type={type} //
               modelValue={modelValue.value}
               isBaseinfo
+              onVisibleChange={(v) => {
+                let visible = v.visible //
+                column.disableHideCell = visible //
+              }}
               onFocus={(config) => {
                 column.onFocus({
                   row: row,

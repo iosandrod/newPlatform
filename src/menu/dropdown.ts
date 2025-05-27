@@ -20,6 +20,10 @@ export class Dropdown extends Base {
     let visible = value.visible
     let _obj = toRaw(this)
     _obj.modelValue = visible //
+    let _onVisibleChange = this.config?.onVisibleChange
+    if (typeof _onVisibleChange == 'function') {
+      _onVisibleChange(value) //
+    }
   }
   showDropdown() {
     this.isRunHiddenDropdown = false //

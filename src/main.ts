@@ -60,7 +60,7 @@ self.MonacoEnvironment = {
 }
 let componentObj = {
   tableCom,
-  dropdownCom,
+  dropdownCom, //
   buttonCom,
   buttonGroupCom,
   formCom,
@@ -81,8 +81,8 @@ Locale.use('en-US', enUS)
 app.use(Vant)
 app.component('erButton', buttonCom)
 app.component('erButtonGroup', buttonGroupCom)
-app.component('erForm', formEditor) ///
-app.component('erTable', tableCom) //
+app.component('erForm', formEditor) //
+app.component('erTable', tableCom)
 app.component('erDropdown', dropdownCom)
 app.component('erSelect', selectCom) //
 app.use(context) //

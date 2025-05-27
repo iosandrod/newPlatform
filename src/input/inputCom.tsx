@@ -6,6 +6,7 @@ import dropdownCom from '@/menu/dropdownCom'
 import { system } from '@/system'
 export default defineComponent({
   name: 'InputCom',
+
   emits: [
     'update:modelValue',
     'input',
@@ -199,6 +200,9 @@ export default defineComponent({
     baseinfoConfig: {
       type: Object,
     },
+    onVisibleChange: {
+      type: Function, //
+    },
   },
   components: {
     dropdownCom,
@@ -219,6 +223,7 @@ export default defineComponent({
           <VxeInput
             ref={register}
             style={{
+              //
               flex: 1,
               height: '100%', //
               width: '100%', //
@@ -246,28 +251,33 @@ export default defineComponent({
           <dropdownCom
             class="h-full"
             ref={registerDropdown}
-            // destroyOnClose={false} //
+            onVisibleChange={(visible) => {
+              let onVisibleChange = props.onVisibleChange
+              if (typeof onVisibleChange == 'function') {
+                onVisibleChange(visible) //
+              }
+            }}
             v-slots={{
               default: () => {
                 return com //
-              },
+              }, //
               dropdown: () => {
+                let tableCom = _input.getSysComponents()['tableCom']
                 let baseinfoConfig = props.baseinfoConfig
                 let com = (
                   <div class="h-300 w-full" style={{ minWidth: '300px' }}>
-                    <erTable
+                    <tableCom
                       {...baseinfoConfig}
                       tableState="scan" //
                       showRowSeriesNumber={false} //
                       showCheckboxColumn={false} ////
                       onDbCurRowChange={(config) => {
-                        console.log('双击行发生变化') ////
                         let onConfirmTinyTable = props.onConfirmTinyTable
                         if (typeof onConfirmTinyTable == 'function') {
                           onConfirmTinyTable(config) //
                         }
                       }}
-                    ></erTable>
+                    ></tableCom>
                   </div>
                 )
                 return com //

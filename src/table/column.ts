@@ -42,6 +42,7 @@ import { Dialog } from '@/dialog/dialog'
 import CodeEditor from '@/codeEditor/codeEditor'
 import { getCheckbox } from './columnFn'
 import { SearchPageDesign } from '@ER/searchPageDesign'
+import { Input } from '@/input/inputClass'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
   templateTableConfig = {
@@ -1406,8 +1407,22 @@ export class Column extends Base {
     })
   }
   showDropdown() {
-    let input = this.getRef('input')
-    console.log(input, 'testInput') //
+    let input: Input = this.getRef('input')
+    if (input == null) {
+      return
+    }
+    this.disableHideCell = true //
+    input.showDropdown({})
   }
   onFocus(config) {}
+  confirmTinyTableRow(row) {
+    let bindColumns = this.config.bindColumns //
+    if (Array.isArray(bindColumns) && bindColumns.length > 0) {
+      if (bindColumns.length == 1) {
+        bindColumns = bindColumns[0]
+        let field = bindColumns.field
+        let value = row[field] //
+      }
+    }
+  }
 }

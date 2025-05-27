@@ -266,3 +266,6 @@ li {
   .vxe-pulldown--content{
     width:'100%';
   }
+  .vxe-pulldown--content{
+    height: 100%;
+  }

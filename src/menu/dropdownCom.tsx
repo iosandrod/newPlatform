@@ -78,32 +78,32 @@ export default defineComponent({
                 com = <div class="w-full">{dc}</div>
               }
               if (props.dropMode == null) {
-                com = <div class="w-full">{dc}</div>
+                com = <div class="w-full h-full">{dc}</div>
               }
               return com
             },
             dropdown: () => {
               let com = slots?.dropdown({ dropdown: drop }) || null
               let com1 = com
-              // if (props.dropMode == 'hover') {
-              //   com1 = (
-              //     <div
-              //       onMouseleave={(e) => {
-              //         drop.dropdownout = true
-              //         setTimeout(() => {
-              //           if (drop.dropdownout == true) {
-              //             drop.closeDropdown() //
-              //           }
-              //         }, 100)
-              //       }}
-              //     >
-              //       {com}
-              //     </div>
-              //   )
-              // }
-              // if (props.dropMode != 'hover') {
-              //   com1 = <div>{com}</div>
-              // }
+              if (props.dropMode == 'hover') {
+                com1 = (
+                  <div
+                    onMouseleave={(e) => {
+                      drop.dropdownout = true
+                      setTimeout(() => {
+                        if (drop.dropdownout == true) {
+                          drop.closeDropdown() //
+                        }
+                      }, 100)
+                    }}
+                  >
+                    {com}
+                  </div>
+                )
+              }
+              if (props.dropMode != 'hover') {
+                com1 = <div>{com}</div>
+              }
               // return <div>{com}</div> //
               return com1 //
             },

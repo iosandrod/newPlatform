@@ -1884,7 +1884,9 @@ export class Table extends Base {
     }
   }
   clearEditCell() {
-    //
+    if (1 == 1) {
+      // return //
+    }
     let currentEditCol = this.currentEditCol
     let disableHideCell = currentEditCol?.disableHideCell
     if (disableHideCell == true) {
