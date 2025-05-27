@@ -888,10 +888,17 @@ export class FormItem extends Base {
     } ////
     return _config
   }
-  openTableDialog() {
-    //
+  async openTableDialog() {
     let options = this.getOptions()
-    let tableConfig = options //
+    let tableConfig = options
+    let openBefore = options.openBefore
+    let data = this.form.getData()
+    if (typeof openBefore == 'function') {
+      await openBefore({
+        item: this,
+        data: data, //
+      })
+    }
     let sys = this.getSystem()
     let value = this.getBindValue() //
     if (typeof value == 'string') {
@@ -1159,17 +1166,38 @@ export class FormItem extends Base {
     })
   }
   async confirmTinyTableRow(row) {
+    //
     let options = this.getOptions()
     let bindColumns = options.bindColumns
     if (Array.isArray(bindColumns)) {
-      for (const col of bindColumns) {
-        //绑定参照表对应值
-        let field = col.field
+      if (bindColumns.length == 1) {
+        bindColumns = bindColumns[0]
+        let field = bindColumns.field
         let value = row[field]
         this.updateBindData({
           value: value, //
         })
+      } else {
+        //
+        let data = this.form.getData()
+        for (const col of bindColumns) {
+          //多字段参照表对应值
+          let field = col.field
+          let myField = col.myField
+          let value = row[field]
+          if (myField == this.getField()) {
+            this.updateBindData({
+              value: value, //
+            })
+          } else {
+            let field = col.field
+            let value = row[field]
+            if (field != null && myField != null) {
+              data[myField] = value //
+            }
+          }
+        }
       }
     }
   }
-}
+} //

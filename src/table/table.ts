@@ -2700,7 +2700,7 @@ export class Table extends Base {
       fOp.rowSeriesNumber = _col
       fIns.updateOption(fOp) //
     } //
-  }
+  } //
   onCellDblClick(config) {
     let col = config.col //
     let row = config.row //

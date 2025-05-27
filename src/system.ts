@@ -226,14 +226,16 @@ export class System extends Base {
     }
     router.push(`/${tableName}`) //
   }
-  async createPageSearchDesign(config?: { tableName: string } | string): Promise<SearchPageDesign> {
+  async createPageSearchDesign(
+    config?: { tableName: string } | string,
+  ): Promise<SearchPageDesign> {
     if (typeof config == 'string') {
       config = {
         tableName: config,
       }
     }
-    let tableName = config.tableName
-    let _design = this.searchTableMap[tableName]
+    let tableName = config.tableName //
+    let _design: any = this.searchTableMap[tableName]
     let searchTableName = tableName //
     if (!/search$/.test(tableName) || tableName.split('---').length > 1) {
       //

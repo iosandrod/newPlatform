@@ -49,7 +49,6 @@ export default defineComponent({
             {..._value.value}
             options={formitem.getColumnSelectOptions()}
             onChange={(config) => {
-              // debugger//
               let value = config.value
               formitem.updateBindData({ value }) //
             }}

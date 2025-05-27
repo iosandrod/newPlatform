@@ -226,9 +226,7 @@ export default defineComponent({
               paddingRight: '3px', //
             }} //
             {...props} //
-            onFocus={(config) => {
-              console.log('focus') //
-            }}
+            onFocus={(config) => {}}
             modelValue={_input.getModelValue()}
             v-slots={{
               suffix: () => {

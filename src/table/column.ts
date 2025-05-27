@@ -41,8 +41,13 @@ import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { Dialog } from '@/dialog/dialog'
 import CodeEditor from '@/codeEditor/codeEditor'
 import { getCheckbox } from './columnFn'
+import { SearchPageDesign } from '@ER/searchPageDesign'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class Column extends Base {
+  templateTableConfig = {
+    columns: [],
+    data: [],
+  }
   templateBg: any = null
   isHeaderdown = false
   disableHideCell = false //
@@ -64,7 +69,15 @@ export class Column extends Base {
     this.init()
   } //
   getSelectOptions() {
+    let columnSelect = this.config.columnSelect
     let options = this.config.options || []
+    if (columnSelect === true) {
+      let tableName = this.getTableName()
+      let system = this.getSystem()
+      let ops = system.columnSelectOptions[tableName]
+      let arr = ops || []
+      options = arr //
+    }
     return options //
   } //
   setHidden(bool) {
@@ -645,11 +658,12 @@ export class Column extends Base {
     }
   }
   getBindConfig() {
-    let editType = this.getEditType()
-    let config = this.config
+    let editType = this.getEditType() //
+    let columnSelect = this.config.columnSelect
     return {
-      ...config,
-      type: editType,
+      columnSelect,
+      type: editType, //
+      tableName: this.getTableName(),
     }
   }
   getOrder() {
@@ -661,12 +675,18 @@ export class Column extends Base {
     }
     return order //
   }
-  focusInput() {
-    //
+  async focusInput() {
     let inputRef = this.getRef('input')
     if (inputRef) {
-      inputRef.focus && inputRef.focus() //
+      inputRef.focus && inputRef.focus()
+    } //
+    if (this.getIsBaseInfo()) {
+      this.openBaseInfoTable()
     }
+  }
+  getIsBaseInfo() {
+    let type = this.getEditType() //
+    return type == 'baseinfo'
   }
   getEditType() {
     let config = this.config
@@ -1358,4 +1378,36 @@ export class Column extends Base {
     }
     return color
   }
+  initColumnSelect() {
+    let columnSelect = this.config.columnSelect
+    if (columnSelect !== true) {
+      return //
+    }
+    let sys = this.getSystem()
+    let tableName = this.getTableName()
+    if (tableName == null) {
+      return //
+    }
+    sys.createColumnSelect(tableName)
+  }
+  getBaseInfoConfig() {
+    return this.templateTableConfig
+  }
+  async openBaseInfoTable() {
+    let sys = this.getSystem() //
+    let tableName = this.getTableName() //
+    let searchEn: SearchPageDesign = await sys.createPageSearchDesign(tableName)
+    let columns = searchEn.getTableColumns()
+    let _data = await searchEn.getTinyTableData({})
+    this.templateTableConfig.columns = columns
+    this.templateTableConfig.data = _data
+    nextTick(() => {
+      this.showDropdown() //
+    })
+  }
+  showDropdown() {
+    let input = this.getRef('input')
+    console.log(input, 'testInput') //
+  }
+  onFocus(config) {}
 }

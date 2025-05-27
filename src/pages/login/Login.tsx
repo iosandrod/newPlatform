@@ -181,8 +181,8 @@ export default defineComponent({
       com = (
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
           <tableCom
-            // {...tableConfig}
-            {...menuTConfig} ////
+            {...tableConfig}
+            // {...menuTConfig} ////
             // treeConfig={null}
             contextItems={[
               {
@@ -207,41 +207,46 @@ export default defineComponent({
           ></tableCom>
         </div>
       ) //
-      com = null
+      // com = null
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       }) ////
       let _fConfig1 = tFConfig
-      com = ( //
-        <div class="w-full h-500">
-          <formCom
-            ref={_reg3}
-            isDesign={false} //
-            // {..._fConfig}
-            {...{
-              items: [
-                {
-                  field: 'height',
-                  label: '邮箱', //
-                  type: 'baseinfo', //
-                  span: 24,
-                  options: { 
-                    tableName: 'permissions', //
-                  },
-                  tabTitle: '权限',
-                },
-                {
-                  field: 'width',
-                  label: '密码',
-                  span: 24,
-                },
-              ],
-            }}
-            // {..._fConfig1} //
-            data={d1} //
-          ></formCom>
-        </div>
-      )
+      // com = ( //
+      //   <div class="w-full h-500">
+      //     <formCom
+      //       ref={_reg3}
+      //       isDesign={false} //
+      //       // {..._fConfig}
+      //       {...{
+      //         items: [
+      //           {
+      //             field: 'height',
+      //             label: '邮箱', //
+      //             type: 'baseinfo', //
+      //             span: 24,
+      //             options: {
+      //               tableName: 'permissions',
+      //               bindColumns: [
+      //                 {
+      //                   field: 'id',
+      //                 }, //
+      //               ],
+      //             },
+      //             tabTitle: '权限',
+      //           },
+      //           {
+      //             field: 'width',
+      //             label: '密码',
+      //             span: 24,
+      //           },
+      //         ],
+      //       }}
+      //       // {..._fConfig1} //
+      //       data={d1} //
+      //     ></formCom>
+      //   </div>
+      // )
       // com = null //
       // com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>

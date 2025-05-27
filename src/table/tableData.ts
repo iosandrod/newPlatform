@@ -121,23 +121,14 @@ export const tableConfig: ListTableConstructorOptions = {
       calculateType: 'sum', //合计
       editType: 'boolean',
       required: true,
-      fieldFormat: (config) => {
-        let row = config.row //
-        let email = row.id
-        return `${email}`
-      },
     },
     {
       field: 'email1',
       title: 'email',
       width: 250,
-      frozen: 'right',
       sort: false,
-      fieldFormat: (config) => {
-        let row = config.row //
-        let email = row.email1
-        return `${email}`
-      },
+      editType:'baseinfo',//
+      tableName:"permissions"//
     },
     //@ts-ignore
     {

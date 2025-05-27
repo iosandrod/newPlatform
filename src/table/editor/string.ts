@@ -16,7 +16,7 @@ export interface OnStartParams {
   endEdit: () => void
 }
 import { createApp, isReactive, nextTick } from 'vue' //
-import { } from 'element-plus' //
+import {} from 'element-plus' //
 import { VxeInput } from 'vxe-pc-ui'
 import tableInput from './tableInput'
 import { ListTable } from '@visactor/vtable'
@@ -54,7 +54,6 @@ export class InputEditor extends BaseEditor {
     this.row = _row
     let field = column.getField()
     if (_row == null) {
-      //
       _row = column.config //
       this.row = column.config
       field = 'title' //
@@ -63,13 +62,14 @@ export class InputEditor extends BaseEditor {
     this.field = field
     let _value = _row[field]
     column.cacheValue = _value
+    column.initColumnSelect() //
     let app = createApp(tableInput, {
       onClick: (e) => {
         e.stopPropagation()
       },
       column: column, //这是个函数
       row: _row, //
-      onChange: (v) => { },
+      onChange: (v) => {},
       style: {
         width: '100%',
         height: '100%',
@@ -146,7 +146,7 @@ export class InputEditor extends BaseEditor {
         let updateConfig = {
           value: value,
           row: this.row,
-          field: this.field
+          field: this.field,
         }
         if (this.isEditHeader) {
           //@ts-ignore
@@ -154,7 +154,8 @@ export class InputEditor extends BaseEditor {
         }
         column.updateBindValue(updateConfig) //
         column.changeRowState(this.row) //
-        if (this.isEditHeader) {//
+        if (this.isEditHeader) {
+          //
           column.table.onHeaderTitleChange({
             column: column.config,
           })
@@ -181,7 +182,7 @@ export class InputEditor extends BaseEditor {
     }
   }
 
-  endEditing(): void { }
+  endEditing(): void {}
 
   isEditorElement(target: EventTarget | null): boolean {
     return target === this.element

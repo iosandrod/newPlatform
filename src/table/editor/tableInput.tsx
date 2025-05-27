@@ -83,11 +83,31 @@ export default defineComponent({
               ref={insRef}
               onChange={(v) => {
                 updateValue(v)
-              }} //
+              }}
+              {...column.getBindConfig()} //
               modelValue={modelValue.value}
             ></InputCom>
           </div>
         )
+        let columnSelect = column.config.columnSelect
+        if (columnSelect == true) {
+          com = (
+            <div style={{ width: '100%', height: '100%' }}>
+              <SelectCom
+                style={{ width: '100%', height: '100%' }} //
+                ref={insRef}
+                onChange={(v) => {
+                  updateValue(v)
+                }} //
+                clearable
+                options={column.getSelectOptions()} //
+                transfer
+                type={type} //
+                modelValue={selectModelValue.value} //
+              ></SelectCom>
+            </div>
+          )
+        }
       }
       if (type == 'datetime' || type == 'time' || type == 'date') {
         com = (
@@ -124,12 +144,33 @@ export default defineComponent({
         ) //
       }
       if (type == 'baseinfo') {
-        com = <div style={{ width: '100%', height: '100%' }}>参照表</div>
+        com = (
+          <div style={{ width: '100%', height: '100%' }}>
+            <InputCom
+              style={{ width: '100%', height: '100%' }} //
+              ref={insRef}
+              onChange={(v) => {
+                updateValue(v) //
+              }}
+              transfer
+              type={type} //
+              modelValue={modelValue.value}
+              isBaseinfo
+              onFocus={(config) => {
+                column.onFocus({
+                  row: row,
+                })
+              }}
+              baseinfoConfig={column.getBaseInfoConfig()}
+            ></InputCom>
+          </div>
+        )
       }
       if (type == 'code') {
         com = (
           <div class="h-full w-full flex items-center">
             <inputCom
+              class={['h-full']} //
               ref={insRef}
               modelValue={'...'}
               readonly //

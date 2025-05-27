@@ -11,6 +11,7 @@ const routes: RouteRecordRaw[] = [
       icon: 'CreditCardOutlined',
     },
     children: [
+      //
       {
         path: 'home',
         name: 'home', //
@@ -22,6 +23,11 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/pages/companyPage'), //
       },
     ],
+  },
+  {
+    path: '/testPage',
+    name: 'testPage', //
+    component: () => import('@/pages/login/Login'), //
   },
   {
     path: '/login',
@@ -53,7 +59,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: ':tableName',
-        name: 'entityTable', //
+        name: 'entityTable',
         component: () => import('@/pages/design/index'), //
       },
     ],

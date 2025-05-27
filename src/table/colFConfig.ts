@@ -123,8 +123,7 @@ export const getDFConfig = (_this, data) => {
         field: 'defaultValue',
         tabTitle: titles[1],
         type: fType, //
-      },
-
+      }, //
       {
         label: '格式化',
         field: 'fieldFormat',
@@ -206,6 +205,7 @@ export const getDFConfig = (_this, data) => {
         tabTitle: titles[1], //
         label: '参照表配置',
         options: {
+          itemSpan: 12,
           items: [
             {
               field: 'tableName',
@@ -215,6 +215,7 @@ export const getDFConfig = (_this, data) => {
             {
               field: 'bindCOlumns',
               label: '绑定参照表',
+              span: 24, //
               tabTitle: titles[1],
               type: 'stable',
               options: {
@@ -222,7 +223,7 @@ export const getDFConfig = (_this, data) => {
                   let item = config?.item //
                   let data = config.data //
                 },
-                showTable: true,
+                showTable: false, //
                 tableTitle: '绑定参照表',
                 tableState: 'edit',
                 columns: [
