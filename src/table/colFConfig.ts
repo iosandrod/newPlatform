@@ -221,7 +221,7 @@ export const getDFConfig = (_this, data) => {
             },
             {
               field: 'bindCOlumns',
-              label: '绑定参照表',
+              label: '绑定字段',
               span: 24, //
               tabTitle: titles[1],
               type: 'stable',
@@ -247,6 +247,14 @@ export const getDFConfig = (_this, data) => {
                     editType: 'string',
                   },
                 ],
+              },
+            },
+            {
+              field: 'showColumns',
+              label: '显示字段',
+              type: 'select',
+              options: {
+                multiple: true,
               },
             },
           ],

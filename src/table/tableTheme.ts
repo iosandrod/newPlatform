@@ -152,12 +152,14 @@ export const createTheme = () => {
     groupTitleStyle: null,
     scrollStyle: {
       scrollSliderColor: '#C0C0C0',
-      visible: 'always',
+      // visible: 'none', //
+      horizontalVisible: 'none',
+      verticalVisible: 'always',
       width: 7,
       hoverOn: true,
       barToSide: false,
-      horizontalPadding: 30, //
-      verticalPadding: 0,
+      // horizontalPadding: 60, //
+      // verticalPadding: 0,
     },
     tooltipStyle: null,
     frameStyle: {
@@ -245,5 +247,8 @@ export const createTheme = () => {
 export const createFooterTheme = () => {
   let _theme = createTheme()
   _theme.scrollStyle.horizontalPadding = 0 //
+  _theme.scrollStyle.visible = 'always'
+  _theme.scrollStyle.verticalVisible = 'always' //
+  _theme.scrollStyle.horizontalVisible = 'always'
   return _theme
 }

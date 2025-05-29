@@ -346,7 +346,8 @@ export class Table extends Base {
         // let isTree = this.getIsTree()
         let isTree = true //
         if (isTree && status == true) {
-          nextTick(() => {//
+          nextTick(() => {
+            //
             let _pid = r1?.[this?.treeConfig?.parentId]
             this.swapTwoRow(r1, r2, _pid) //
           })
@@ -1359,7 +1360,7 @@ export class Table extends Base {
     if (rowsConfig?.isProps !== true) {
       for (const row of _arr) {
         this.addRow(row)
-      } //  
+      } //
       let data = this.getData()
       let lastD = data[data.length - 1]
       this.setCurRow(lastD)
@@ -1522,7 +1523,7 @@ export class Table extends Base {
         if (oldColumnFilter != null && oldColumnFilter === tColumn) {
           return //
         }
-        let _data1 = [
+        let _data1 = [//
           ..._data.map((row) => {
             let obj = {
               [field]: row[field], //
@@ -1536,8 +1537,11 @@ export class Table extends Base {
           return _data1.findIndex((item1) => item1._value == _value) == i
         })
         _config = _.cloneDeep(_config) //
-        if(filterTable==null){
-          return//
+        if (filterTable == null) {
+          return //
+        }
+        if (!filterTable.setColumns) {
+          return //
         }
         filterTable.setColumns(_config) ////
         filterTable.setData(_data2) //
