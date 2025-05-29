@@ -262,6 +262,26 @@ export class MainPageDesign extends PageDesign {
     //
     let pageEditType = this.config.pageEditType //
     if (pageEditType == 'page') {
+      let keyColumn = this.getKeyColumn()
+      let keyCode = this.getKeyCodeColumn()
+      // console.log(keyColumn, keyCode, 'testKey') //
+      if (keyColumn == null) {
+        this.getSystem().confirmMessage('请先设置主键字段', 'warning')
+        return
+      }
+      let curRow = this.getCurRow() //
+      let _id = curRow[keyColumn] //
+      // let _keyCode = curRow[keyCode] //
+      this.getSystem().routeOpen(
+        `${this.getRealTableName()}---edit`,
+        async (d: editPageDesign) => {
+          await d.getTableData({
+            query: {
+              [keyColumn]: _id,
+            },
+          })
+        },
+      ) //
     }
     if (pageEditType == 'default') {
     }

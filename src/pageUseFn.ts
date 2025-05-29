@@ -58,4 +58,16 @@ export const editUse = {
       instance.setCurrentView() //
     },
   ],
+  getTableData: [
+    async (context, next) => {
+      let instance: PageDesign = context.instance
+      instance.setCurrentLoading(true) //
+      await next().finally(async () => {
+        setTimeout(() => {
+          instance.setCurrentLoading(false)
+        }, 200)
+      }) //
+      instance.setCurrentView() //
+    }, //
+  ],
 }

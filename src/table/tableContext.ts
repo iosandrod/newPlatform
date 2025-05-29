@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { Table } from './table'
-import { getDFConfig } from './colFConfig' //
+import { getDCConfig, getDFConfig } from './colFConfig' //
 import { VxeText, VxeUI } from 'vxe-pc-ui'
 export const initContextMenu = (table: Table) => {
   let items = [
@@ -180,84 +180,17 @@ export const initContextMenu = (table: Table) => {
         }) //
         let tableName = table.getTableName()
         originColumns = _.cloneDeep(originColumns) //
-
-        let _d: any = await system.confirmTable({
-          enableDragRow: true,
-          dragRowFn: (config) => {
-            return true //
-          },
-          requiredValidate: true,
-          showRowSeriesNumber: true, //
-          validateFn: async (config) => {
-            let table = config.table
-            let data = config.data //
-            let fields = data.map((item) => item.field)
-            let f1 = fields.filter((item, i) => {
-              return fields.indexOf(item) == i
-            })
-            if (f1.length != fields.length) {
-              return '绑定字段重复'
-            } //
-            return true
-          },
-          tableState: 'edit',
-          columns: [
-            {
-              field: 'title', //
-              title: '标题', //
-              editType: 'string', //
-              type: 'string', //
-            },
-            {
-              field: 'tableName',
-              title: '表名',
-              defaultValue: table.getTableName(), //
-              type: 'string',
-              disabled: true,
-            },
-            {
-              field: 'field', //
-              title: '绑定字段',
-              editType: 'string',
-              type: 'string',
-              disabled: true, //
-            },
-            {
-              field: 'align',
-              editType: 'select',
-              title: '对齐方式', //
-              type: 'string',
-              options: [
-                {
-                  label: '居左',
-                  value: 'left',
-                },
-                {
-                  label: '居中',
-                  value: 'center',
-                },
-                {
-                  label: '居右',
-                  value: 'right',
-                },
-              ],
-            }, //
-            {
-              field: 'hidden',
-              title: '是否隐藏',
-              type: 'boolean',
-              editType: 'boolean', //
-            },
-            {
-              field: 'primary',
-              title: '是否主键',
-              editType: 'boolean', //
-              type: 'boolean', //
-            },
-          ],
+        originColumns = originColumns.sort((c1, c2) => {
+          let o1 = c1.order
+          let o2 = c2.order
+          return o1 - o2
+        })
+        let _config = getDCConfig(this, {
           data: originColumns,
-        }) //
-        table.onColumnsDesign(_d)
+          tableName: tableName,
+        })
+        let _d: any = await system.confirmTable(_config) //
+        table.onColumnsDesign(_d) //
       },
     },
     {

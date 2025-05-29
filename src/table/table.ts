@@ -343,10 +343,11 @@ export class Table extends Base {
           }
         } else {
         }
-        let isTree = this.getIsTree()
+        // let isTree = this.getIsTree()
+        let isTree = true //
         if (isTree && status == true) {
-          nextTick(() => {
-            let _pid = r1[this.treeConfig.parentId]
+          nextTick(() => {//
+            let _pid = r1?.[this?.treeConfig?.parentId]
             this.swapTwoRow(r1, r2, _pid) //
           })
         }
@@ -1358,7 +1359,7 @@ export class Table extends Base {
     if (rowsConfig?.isProps !== true) {
       for (const row of _arr) {
         this.addRow(row)
-      } //
+      } //  
       let data = this.getData()
       let lastD = data[data.length - 1]
       this.setCurRow(lastD)
@@ -1535,6 +1536,9 @@ export class Table extends Base {
           return _data1.findIndex((item1) => item1._value == _value) == i
         })
         _config = _.cloneDeep(_config) //
+        if(filterTable==null){
+          return//
+        }
         filterTable.setColumns(_config) ////
         filterTable.setData(_data2) //
       })
@@ -2322,7 +2326,7 @@ export class Table extends Base {
             if (s2 < 0) {
               s2 = 0
             }
-            this.getInstance().setScrollTop(s2)
+            this.getInstance().setScrollTop(s2) //
           }
         }, 2) //
       }

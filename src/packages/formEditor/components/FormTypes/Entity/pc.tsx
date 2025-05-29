@@ -78,6 +78,7 @@ export default defineComponent({
             contextItems={item.getContextItems()}
             treeConfig={item.getTreeConfig()}
             onCurRowChange={(config) => {
+              //
               item.onCurRowChange(config)
             }}
             showHeaderContext={false}
@@ -112,7 +113,7 @@ export default defineComponent({
             onColumnResize={(config) => {
               item.onColumnResize(config)
             }}
-            enableDragColumn={true} //
+            enableDragColumn={false} //
             onColumnHidden={(config) => {
               item.onColumnHidden(config)
             }}

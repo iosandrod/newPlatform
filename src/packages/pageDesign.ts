@@ -205,7 +205,10 @@ export class PageDesign extends Form {
     let mainRelateKey = targetItem.getMainRelateKey()
     if (relateKey == null || mainRelateKey == null) {
       //
-      this.getSystem().confirmMessage('未设置关联字段', 'error') //
+      this.getSystem().confirmMessage(
+        `${dTableName.tableName}未设置关联字段`,
+        'warning',
+      ) //
       return
     }
     let query = {
@@ -215,7 +218,8 @@ export class PageDesign extends Form {
     let res = await this.getTableData({
       tableName,
       query,
-    }) //
+      detail: true,
+    })
     return res
   }
 
@@ -287,6 +291,15 @@ export class PageDesign extends Form {
       event: evName,
     }
     await this.publishEvent(_config)
+    let allDetailTable: string[] = this.getAllDetailTable().map((item) => {
+      let tName = item.getTableName()
+      return tName
+    })
+    if (tableName == this.getTableName()) {
+      for (let dTable of allDetailTable) {
+        this.getDetailTableData(dTable) //
+      } //
+    }
     return row
   }
   buildQuery(filters: Filter[]): Record<string, any> {
@@ -1250,7 +1263,19 @@ export class PageDesign extends Form {
   async pageInit() {
     //
   }
-  getKeyCodeColumn() {}
+  getKeyCodeColumn() {
+    let tConfig = this.getTableConfig()
+    let columns = tConfig.columns //
+    let key = null
+    let _col = columns.filter((c) => {
+      return c.keyCode == 1 //
+    }) //单据字段
+    let keyCodeColumn = tConfig.keyCodeColumn
+    if (Boolean(keyCodeColumn)) {
+      return keyCodeColumn
+    }
+    return _col?.[0]?.field //
+  }
   initEntityEvent() {
     //
     let config = this.config

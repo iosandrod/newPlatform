@@ -12,7 +12,7 @@ import formCom from '@ER/formCom'
 import { Table } from './table/table'
 import tableCom from './table/tableCom'
 import { VxeUI } from 'vxe-pc-ui'
-import { getDFConfig } from './table/colFConfig'
+import { getDCConfig, getDFConfig } from './table/colFConfig'
 import { editPageDesign } from '@ER/editPageDesign'
 import { MainPageDesign } from '@ER/mainPageDesign'
 import { editUse, mainUse } from './pageUseFn'
@@ -476,7 +476,7 @@ export class System extends Base {
     let _dialog = new Dialog(dialogConfig) //
     this.dialogArr.push(_dialog) //
   } //
-  async confirmTable(tableConfig: any) {
+  async confirmTable(tableConfig: any): any[] {
     return new Promise(async (resolve, reject) => {
       let _table = new Table(tableConfig)
       let component = tableCom
@@ -643,7 +643,7 @@ export class System extends Base {
       }
       await this.confirmForm(fConfig)
     } else {
-      let tableConfig = {
+      let tableConfig1 = {
         tableState: 'edit',
         columns: [
           {
@@ -691,18 +691,26 @@ export class System extends Base {
           },
         ],
         data: tCols,
-        confirmFn: async (dialog: Dialog) => {
-          let t = dialog.getRef('innerCom')
-          let d: any[] = t.getData()
-          let allChangeCol = d.filter((c) => {
-            return c['_rowState'] == 'change'
-          })
-          let http = this.getHttp()
-          let res = await http.patch('columns', allChangeCol) //
-          this.confirmMessage('更新列成功') //
-        },
+        // confirmFn: async (dialog: Dialog) => {
+        //   let t = dialog.getRef('innerCom')
+        //   let d: any[] = t.getData()
+        //   let allChangeCol = d.filter((c) => {
+        //     return c['_rowState'] == 'change'
+        //   })
+        //   let http = this.getHttp()
+        //   let res = await http.patch('columns', allChangeCol) //
+        //   this.confirmMessage('更新列成功') //
+        // },
       }
-      await this.confirmTable(tableConfig) //
+      let tableConfig = getDCConfig(this, {
+        tableName: tableName,
+        data: tCols,
+      })
+      let _d = await this.confirmTable(tableConfig)
+      let changeData = _d.filter((d) => {
+        return d['_rowState'] == 'change' || d['_rowState'] == 'add'
+      })
+      console.log(changeData) //
     }
   }
   getTargetDesign(tableName) {
@@ -1180,7 +1188,6 @@ export class System extends Base {
         await this.getMenuData() //
       },
       dragRowAfterFn: (config) => {
-        //
         let data = config.data
         data.forEach((item, i) => {
           item['_rowState'] = 'change'

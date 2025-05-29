@@ -21,7 +21,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         },
       },
       {
-        label: '添加默认按钮',//
+        label: '添加默认按钮', //
         fn: (config) => {
           let _t: Table = config.parent
           let curRow = _t.getCurRow()
@@ -526,6 +526,7 @@ export const selectTypeMap = (_this: PageDesign) => {
               field: 'callback',
               title: '事件代码',
               editType: 'code', //
+              tableName: rTableName, //
             },
           ],
         },

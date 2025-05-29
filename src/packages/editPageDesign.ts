@@ -39,23 +39,42 @@ export class editPageDesign extends PageDesign {
         tableName: args[0],
         query: {},
       }
-    }
-    return config //
+    } //
+    return config
   })
   async getTableData(config?: any) {
-    let tableName = config.tableName || this.getTableName() //
-    let rTableName = this.getRealTableName() //
+    let tableName = config.tableName || this.getRealTableName() //
+    // let rTableName = this.getRealTableName()
+    let rTableName = tableName //
     let http = this.getHttp()
     let query = config.query || {}
     let tableState = this.tableState //
-    if (Object.keys(query).length == 0) {
+    if (tableState == 'add' && Object.keys(query).length == 0) {
+      //
+      //
+      this.getSystem().confirmMessage('当前单据是新增', 'warning') //
       return
+    }
+    let keyColumn = this.getKeyColumn()
+    if (Object.keys(query).length == 0) {
+      let curRow = this.getCurRow() //
+      let _keyValue = curRow?.[keyColumn]
+      if (_keyValue != null) {
+        query = {
+          [keyColumn]: _keyValue,
+        }
+      }
     } //
+    if (Object.keys(query).length == 0) {
+      this.getSystem().confirmMessage('未设置查询条件', 'error')
+      return //
+    }
     let res = await http.get(rTableName, 'find', query) //
-    let dataMap = this.getTableRefData(tableName)
-    let row = res[0] || {}
+    let dataMap = this.getTableRefData(config.tableName || this.getTableName()) //
+    let row = res[0] || {} //
     dataMap['data'] = res //
-    dataMap['curRow'] = row //
+    // dataMap['curRow'] = row //
+    this.setCurRow(row, config?.tableName || this.getTableName()) //
     let evName = `${tableName}_getTableData` //
     let _config = {
       event: evName,
@@ -64,6 +83,35 @@ export class editPageDesign extends PageDesign {
     this.setCurrentDesignState('scan') //
     await this.publishEvent(_config) //
     return res
+  }
+  async setCurRow(row, tableName = this.getTableName()) {
+    //
+    let dataMap = this.getTableRefData(tableName)
+    dataMap['curRow'] = row
+    let evName = `${tableName}_setCurRow`
+    let _config = {
+      data: row,
+      event: evName,
+    }
+    await this.publishEvent(_config)
+    let allDetailTable: string[] = this.getAllDetailTable().map((item) => {
+      let tName = item.getTableName()
+      return tName
+    })
+    if (tableName == this.getTableName()) {
+      for (let dTable of allDetailTable) {
+        this.getDetailTableData(dTable) //
+      } //
+    }
+    return row
+  }
+  getKeyColumn() {
+    let keyColumn = super.getKeyColumn() //
+    if (keyColumn == null) {
+      this.getSystem().confirmMessage('请先设置主键字段', 'warning')
+      throw new Error('请先设置主键字段')
+    }
+    return keyColumn //
   }
   async getDefaultValue(tableName: string): Promise<any> {
     let columns = this.getTableColumns(tableName, true) //
@@ -110,10 +158,14 @@ export class editPageDesign extends PageDesign {
           let rowState = row['_rowState']
           return rowState == 'add' || rowState == 'change'
         })
-
+        _d = _d.map((row) => {
+          let rowState = row['_rowState']
+          let obj = { ...row, _rowState: rowState }
+          return obj
+        }) //
         let obj = {
           tableName: tableName,
-          data: changeD, //
+          data: _d, //
           ...detailTableConfig,
         }
         return obj //
@@ -149,10 +201,11 @@ export class editPageDesign extends PageDesign {
   async saveTableData(config = this.getSaveData()) {
     if (this.tableState == 'scan') {
       return //
-    } //
+    }
     this.setCurrentLoading(true) //
     let tableState = this.tableState
     let _res = null
+    console.log(config, 'fjlkdsfjdsl保存的配置') //
     if (tableState == 'add') {
       _res = await this.addMainRow(config)
     } else {

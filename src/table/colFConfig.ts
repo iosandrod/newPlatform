@@ -322,3 +322,96 @@ export const getAllColTypes = () => {
   ]
 }
 //
+
+export const getDCConfig = (_this: any, config) => {
+  let data = config.data
+  let tableName = config.tableName
+  let dConfig = {
+    title: '设计表格列',
+    height: 600,
+    width: 1000, //
+    enableDragRow: true,
+    dragRowFn: (config) => {
+      return true //
+    },
+    requiredValidate: true,
+    showRowSeriesNumber: true, //
+    validateFn: async (config) => {
+      let table = config.table
+      let data = config.data //
+      let fields = data.map((item) => item.field)
+      let f1 = fields.filter((item, i) => {
+        return fields.indexOf(item) == i
+      })
+      if (f1.length != fields.length) {
+        return '绑定字段重复'
+      } //
+      return true
+    },
+    tableState: 'edit',
+    columns: [
+      {
+        field: 'title', //
+        title: '标题', //
+        editType: 'string', //
+        type: 'string', //
+      },
+      {
+        field: 'tableName',
+        title: '表名',
+        defaultValue: tableName, //
+        type: 'string',
+        disabled: true,
+      },
+      {
+        field: 'field', //
+        title: '绑定字段',
+        editType: 'string',
+        type: 'string',
+        disabled: true, //
+      },
+      {
+        field: 'align',
+        editType: 'select',
+        title: '对齐方式', //
+        type: 'string',
+        options: [
+          {
+            label: '居左',
+            value: 'left',
+          },
+          {
+            label: '居中',
+            value: 'center',
+          },
+          {
+            label: '居右',
+            value: 'right',
+          },
+        ],
+      }, //
+      {
+        field: 'hidden',
+        title: '是否隐藏',
+        type: 'boolean',
+        editType: 'boolean', //
+      },
+      {
+        field: 'primary',
+        title: '是否主键',
+        editType: 'boolean', //
+        type: 'boolean', //
+      },
+    ],
+    data: data,
+    dragRowAfterFn: (config) => {
+      // debugger //
+      let data = config.data
+      data.forEach((item, i) => {
+        item['_rowState'] = 'change'
+        item['order'] = Number(i) + 1
+      })
+    },
+  }
+  return dConfig
+}

@@ -67,7 +67,9 @@ export default defineComponent({
       if (_show.value == false) {
         return <div></div> //
       }
-      let _com = <PageCom isMainPage isDesign={false} formIns={en.value}></PageCom>
+      let _com = (
+        <PageCom isMainPage isDesign={false} formIns={en.value}></PageCom>
+      )
       //分页
       let pObj = en.value.getPaginateProps()
       // console.log(pObj, 'testPObj') //
@@ -78,7 +80,7 @@ export default defineComponent({
       ) //
       return (
         <div class="h-full w-full flex flex-col">
-          {_com}
+          <div class="flex-1">{_com}</div>
           {pagin}
         </div>
       )
