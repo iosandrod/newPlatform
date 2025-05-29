@@ -944,11 +944,9 @@ export class FormItem extends Base {
     let sys = this.getSystem() //
     let value = this.getBindValue()
     if (typeof value == 'object' || typeof value == 'function') {
-      //
-      // value = value.toString()
       value = '' //
     }
-    let tableName = this.getMainTableName() //
+    let tableName = this.getMainTableName()
     let createFn = () => {
       return {
         component: codeEditorCom,

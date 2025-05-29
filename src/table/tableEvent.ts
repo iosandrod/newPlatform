@@ -20,6 +20,7 @@ export const scroll = (table: Table) => {
       _this.fatherScrollNum = Date.now()
       let childScrollNum = _this.childScrollNum
       let sub = childScrollNum - _this.fatherScrollNum
+      _this.onScroll(config) //
       if (sub < 0) {
         let scrollLeft = config.scrollLeft
         let ins = _this.getFooterInstance()
@@ -73,6 +74,7 @@ export const click_cell = (table: Table) => {
         //
         table.clearEditCell()
         if (tCol.getIsEditField()) {
+          // debugger //
           //是编辑的列数据//
           let curEdit = table.getCurrentCellEdit()
           if (curEdit != null) {
@@ -86,7 +88,11 @@ export const click_cell = (table: Table) => {
                 return
               }
               table.currentEditCol = tCol
-              let s = _this.startEditCell(config.col, config.row, config.value)
+              let s = _this.checkCanEditCell(
+                config.col,
+                config.row,
+                config.value,
+              ) //
               if (s == false) {
                 resolve(false)
               }
@@ -96,6 +102,11 @@ export const click_cell = (table: Table) => {
           let _p = await p
           if (_p == false) {
             table.setCurRow(originData) ////
+          } else {
+            if (originData == null) {
+              return //
+            } //
+            table.startEditCell(config.col, config.row, config.value) //
           }
         } else {
           if (originData == null) {
@@ -130,7 +141,7 @@ export const click_cell = (table: Table) => {
         setTimeout(() => {
           table.startEditCell(col, row, title, true)
         }, 10)
-      }else{
+      } else {
         table.onCellDblClick(config)
       }
     },
@@ -254,6 +265,15 @@ export const checkbox_state_change = (table: Table) => {
             } else {
               checked = 0 //
             }
+            let _index = originData._index
+            let row = config.row
+            let col1 = config.col
+            let canEdit = _this.checkCanEditCell(col1, row, checked)
+            if (canEdit == false) {
+              _this.timeout['updateRecords__now'] = true
+              _this.updateIndexArr.add(_index)
+              return
+            }
             let s = await _col.updateBindValue({
               value: checked,
               row: originData,
@@ -261,7 +281,7 @@ export const checkbox_state_change = (table: Table) => {
             })
             if (s == true) {
               originData['_rowState'] = 'change' //
-            }
+            } //
           }
         }
       })

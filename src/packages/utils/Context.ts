@@ -345,13 +345,16 @@ export class Context {
         let pParent = parent.context.parent
         if (pParent.type == 'col') {
           let ppParent = pParent.context.parent
-          if (ppParent.type == 'grid') {
-            let columns = ppParent.columns
-            if (columns.length == 1) {
-              let pppParent = ppParent.context.parent
-              if (pppParent.type == 'inline') {
-                let pppContext = pppParent.context
-                pppContext.delete() //
+          let list = ppParent.list || []
+          if (list.length == 1) {
+            if (ppParent.type == 'grid') {
+              let columns = ppParent.columns
+              if (columns.length == 1) {
+                let pppParent = ppParent.context.parent
+                if (pppParent.type == 'inline') {
+                  let pppContext = pppParent.context
+                  pppContext.delete() //
+                }
               }
             }
           }
@@ -363,7 +366,7 @@ export class Context {
     } else {
       arr.splice(arr.indexOf(node), 1)
     }
-  }
+  } //
   appendCol(index?: number) {
     const parent = this.parent
     let allCols = this.state.columns || []

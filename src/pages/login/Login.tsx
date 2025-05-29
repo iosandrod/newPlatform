@@ -182,8 +182,10 @@ export default defineComponent({
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
           <tableCom
             {...tableConfig}
+            // showRowSeriesNumber={false} //
             // {...menuTConfig} ////
             // treeConfig={null}
+
             contextItems={[
               {
                 label: '添加菜单',
@@ -198,10 +200,14 @@ export default defineComponent({
                   console.log('添加子菜单') //
                 },
               },
-            ]}
+            ]}//
             showGlobalSearch={true}
             enableDragColumn={true} //
             showHeaderButtons={true}
+            enableDragRow={true} //
+            dragRowFn={(config) => {
+              return true //
+            }}
             // showControllerButtons={true}
             // tableState="edit"
           ></tableCom>

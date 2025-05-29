@@ -11,8 +11,24 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
     buttons: [
       {
         label: '添加子按钮',
-        fn: () => {
-          console.log('添加子按钮') //
+        fn: (config) => {
+          let _t: Table = config.parent
+          let curRow = _t.getCurRow()
+          if (curRow == null) {
+            return
+          }
+          // console.log('添加子按钮') //
+        },
+      },
+      {
+        label: '添加默认按钮',//
+        fn: (config) => {
+          let _t: Table = config.parent
+          let curRow = _t.getCurRow()
+          if (curRow == null) {
+            return
+          }
+          // console.log('删除按钮') //
         },
       },
     ],
@@ -167,6 +183,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
           label: '表名',
           type: 'input', //
           onBlur: async (config) => {
+            debugger //
             let value = config.value
             let oldValue = config.oldValue
             if (value == oldValue) {
@@ -378,7 +395,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
         _d['_items_get'] = () => {
           return _this.state.selected.columns
         }
-        _d['_items_set'] = (v) => { } //
+        _d['_items_set'] = (v) => {} //
         return _d //
       }),
     },
@@ -410,6 +427,25 @@ export const selectTypeMap = (_this: PageDesign) => {
         field: 'label',
         label: '标题',
         type: 'input', //
+      },
+      {
+        field: 'style',
+        label: '样式',
+        options: {
+          items: [
+            {
+              field: 'width',
+              label: '宽度',
+              type: 'input', //
+            },
+            {
+              field: 'height',
+              label: '高度',
+              type: 'input', //
+            },
+          ],
+        },
+        type: 'sform',
       },
       {
         field: 'type',
@@ -544,6 +580,13 @@ export const selectTypeMap = (_this: PageDesign) => {
         return _this.state.selected || {} //
       }),
     },
+    grid: {
+      itemSpan: 24,
+      items: [...createDSelect('grid')],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    }, //
     stable: {
       itemSpan: 24,
       items: [...createDSelect('stable')],

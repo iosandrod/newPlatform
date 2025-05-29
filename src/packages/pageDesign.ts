@@ -236,7 +236,7 @@ export class PageDesign extends Form {
     let query = getDataConfig.query
     let queryArr = getDataConfig?.queryArr || []
     let _arr = queryArr
-      .map((row) => {  
+      .map((row) => {
         let field = row.field
         let value = row.value
         let operator = row.operator
@@ -992,7 +992,8 @@ export class PageDesign extends Form {
         row.tableName = this.getRealTableName() //
         return row
       }) //
-    await this.getHttp().create('columns', addCols)
+    console.log(addCols, 'fjdkldsjkls') //
+    let _res = await this.getHttp().create('columns', addCols)
     this.getSystem().confirmMessage('同步成功', 'success') //
     this.getSystem().refreshPageDesign() //
   }
@@ -1080,6 +1081,7 @@ export class PageDesign extends Form {
   }
 
   async updateTableColumn(config, refresh = true) {
+    let tableName = this.getRealTableName()
     if (Array.isArray(config)) {
     } else {
       config = [config]
@@ -1141,6 +1143,7 @@ export class PageDesign extends Form {
   async openImportDialog() {}
   async importTableRows() {} //
   onColumnConfigChange(config) {
+    //
     let tableName = config.tableName //
     let _tableName = this.getRealTableName() //
     let columns = config.columns //

@@ -164,7 +164,7 @@ export const initContextMenu = (table: Table) => {
         let data1 = await sys.confirmForm(fConfig) //
         let _dFn = table.config.onDesignColumn
         if (typeof _dFn == 'function') {
-          _dFn(data1) //
+          _dFn(data1, curContextCol.config)
         } //
       },
     },
@@ -182,11 +182,23 @@ export const initContextMenu = (table: Table) => {
         originColumns = _.cloneDeep(originColumns) //
 
         let _d: any = await system.confirmTable({
+          enableDragRow: true,
+          dragRowFn: (config) => {
+            return true //
+          },
           requiredValidate: true,
+          showRowSeriesNumber: true, //
           validateFn: async (config) => {
             let table = config.table
             let data = config.data //
-            return '出错了' //
+            let fields = data.map((item) => item.field)
+            let f1 = fields.filter((item, i) => {
+              return fields.indexOf(item) == i
+            })
+            if (f1.length != fields.length) {
+              return '绑定字段重复'
+            } //
+            return true
           },
           tableState: 'edit',
           columns: [
@@ -254,11 +266,11 @@ export const initContextMenu = (table: Table) => {
       disabled: false, //
       visible: true,
       fn: async (config) => {
-          let _config=table.config
-          let onTableDesign=_config.onTableDesign
-          if(typeof onTableDesign=='function'){
-            await onTableDesign(config)
-          }
+        let _config = table.config
+        let onTableDesign = _config.onTableDesign
+        if (typeof onTableDesign == 'function') {
+          await onTableDesign(config)
+        }
       },
     },
   ]

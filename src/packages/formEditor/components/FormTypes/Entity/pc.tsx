@@ -96,8 +96,17 @@ export default defineComponent({
             data={data.value}
             onHeaderContextmenu={openDesignHeader}
             columns={columns.value}
-            onDesignColumn={(config) => {
-              _design.updateTableColumn(config)
+            onDesignColumn={(config, col) => {
+              let itemName = item.getTableName()
+              let mainTableName = _design.getRealTableName()
+              if (itemName == mainTableName) {
+                _design.updateTableColumn(config)
+              } else {
+                Object.entries(config).forEach(([key, value]) => {
+                  col[key] = value //
+                })
+                _design.updateTableDesign() //
+              }
             }}
             disableColumnResize={false}
             onColumnResize={(config) => {

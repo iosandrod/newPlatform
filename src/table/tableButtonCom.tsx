@@ -39,37 +39,13 @@ export default defineComponent({
             //添加行
           },
         },
+
         {
-          label: '导出',
+          label: '更换ID',
           fn: async () => {
-            //添加行//
-            tableIns.updateCanvas() //
-          },
-        },
-        {
-          label: '启用加载状态',
-          fn: async () => {
-            //
-            tableIns.setCurrentLoading(true)
-            // tableIns.expandAllTreeRow() //
-          },
-        },
-        {
-          label: '禁用加载状态',
-          fn: async () => {
-            //
-            tableIns.setCurrentLoading(false)
-            // tableIns.expandAllTreeRow() //
-          },
-        },
-        {
-          label: '刷新', //
-          fn: async () => {
-            //
-            // tableIns.updateCanvas()
-            tableIns.validateData({}) //
-            let _res = await tableIns.validate() //
-            console.log(_res, 'test_row') //
+            let data = tableIns.getData()
+            let d0 = data[0]
+            d0['id'] = d0['id'] + 1 //
           },
         },
       ] //
@@ -86,7 +62,7 @@ export default defineComponent({
           let index = mergeButtons.findIndex((item1) => {
             return item1.key == key
           })
-          if (index != i) {
+          if (index != i) { 
             return false
           }
         }

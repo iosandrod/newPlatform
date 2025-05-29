@@ -4286,3 +4286,203 @@ const app = createApp({
       //   type: 'code', //
       //   options: {},
       // },
+      // let config = this.config
+      // let beforeEditCell = config.onBeforeEditCell
+      // if (typeof beforeEditCell == 'function') {
+      //   let re = ins.getRecordByCell(col, row)
+      //   let f = ins.getBodyField(col, row)
+      //   let _status = beforeEditCell({
+      //     row: re,
+      //     field: f,
+      //     value: value,
+      //   })
+      //   if (_status == false && isTitle == false) {
+      //     return false
+      //   }
+      // } 
+       // setTimeout(() => {
+      //   ins.clearSelected()
+      // }, 300)
+      // setTimeout(() => {
+      //   console.time('setColWidth')
+      //   // ins.clearSelected()//
+      //   console.timeEnd('setColWidth')//
+      // }, 1000)
+      // ins.selectCell(_templateEditCell.col, _templateEditCell.row) //
+      // setTimeout(() => {
+      //   ins.clearSelected() //
+      // }, 50)
+       // let _isTree = this.getIsTree()
+      // if (_isTree == true) {
+      //   container = null //
+      // }
+
+
+       container.on('mouseover', () => {
+      // let oldColor = container.attribute.background
+      // container._oldColor = oldColor
+      // container.setAttribute('background', _this.getHoverColor()) ///
+    })
+    container.on('mouseout', () => {
+      // let color = container._oldColor
+      // if (record == _this.table.tableData.curRow) {
+      //   color = _this.getCurrentRowColor() //
+      // }//
+      // container.setAttribute('background', color) ////
+    })
+
+
+    // let allRowIndex = Object.entries(currentIndexContain).map(
+      //   ([keys, value]) => {
+      //     value = value || {} //
+      //     let _value = Object.values(value).map((row) => row['currentRowIndex'])
+      //     let _arr1 = _value.filter((v, i) => _value.indexOf(v) == i) //
+      //     if (_arr1.length == 1) {
+      //       return _arr1[0]
+      //     }
+      //   },
+      // )
+
+
+      // let length = _this.table.templateProps.data.length
+    // let _length = length / 5
+    // rowStart = rowStart - _length
+    // if (rowStart < 0) {
+    //   rowStart = 0 //
+    // }
+    // rowEnd = rowEnd + _length //
+    // if (_row >= rowStart && _row <= rowEnd) {
+    //   //显示在视图上
+    //   let _arr = currentIndexContain[_index]
+    //   if (_arr == null) {
+    //     currentIndexContain[_index] = {}
+    //     _arr = currentIndexContain[_index] //
+    //   }
+    //   let field = _this.getField()
+    //   _arr[field] = container //
+    // } else {
+    //   currentIndexContain[_index] = null
+    // }
+
+
+     // let set: Set<string> = _containerMap[id2]
+    // if (set == null) {
+    //   _containerMap[id2] = new Set()
+    //   set = _containerMap[id2]
+    // }
+    // let id2 = `${id}_set`
+
+
+
+  if (typeof fieldFormat == 'function') {
+        try {
+          // let _index = record._index
+          // if (this.effectPool[_index] == null) {
+          //   console.log('執行了一些東西') //
+          //   this.effectPool[`${_index}`] = watch(
+          //     () => {
+          //       let value = '' //
+          //       if (typeof fieldFormat == 'function') {
+          //         let value1 = fieldFormat({
+          //           row: record,
+          //           col: this,
+          //           table: _table,
+          //           field: field,
+          //         })
+          //         if (value1 != null) {
+          //           value = value1
+          //         }
+          //       }
+          //       return value //
+          //     },
+          //     (newV) => {
+          //       console.log(newV, '新增了') //
+          //       _table.updateIndexArr.add(_index) //
+          //     },
+          //   )
+          // } //
+          // value = fieldFormat({
+          //   row: record,
+          //   col: this,
+          //   table: _table,
+          //   field: field,
+          // })
+        } catch (error) {
+          //
+        }
+      }
+      if (value === 0) {
+        value = '0' //
+      }
+
+       let formatFn = (config) => {
+      let record=config.row
+      let value = record[field] //
+    
+      return value
+    }
+
+     let field = this.getField() //
+    let _table = this.table
+     // let _arr = _containerMap[`${id}_arr`]
+    // console.log(Object.keys(map).length, 'test')//
+
+     {
+          label: '导出',
+          fn: async () => {
+            //添加行//
+            tableIns.updateCanvas() //
+          },
+        },
+        {
+          label: '启用加载状态',
+          fn: async () => {
+            //
+            tableIns.setCurrentLoading(true)
+            // tableIns.expandAllTreeRow() //
+          },
+        },
+        {
+          label: '禁用加载状态',
+          fn: async () => {
+            //
+            tableIns.setCurrentLoading(false)
+            // tableIns.expandAllTreeRow() //
+          },
+        },
+        {
+          label: '刷新', //
+          fn: async () => {
+            //
+            // tableIns.updateCanvas()
+            // tableIns.validateData({}) //
+            // let _res = await tableIns.validate() //
+            // console.log(_res, 'test_row') //
+            tableIns.updateCanvas() //
+          },
+        },
+        {
+          label: '加载新数据', //
+          fn: async () => {
+            let _data = JSON.parse(JSON.stringify(tableIns.getData()))
+            let _arr = []
+            if (_data.length > 10000) {
+              _arr = _data.slice(0, 10000) //
+            } else {
+              Array(10)
+                .fill(null)
+                .forEach((item, i) => {
+                  _arr.push(...JSON.parse(JSON.stringify(_data)))
+                })
+            }
+            tableIns.setData(_arr) //
+          },
+        },
+        {
+          label: 'logthis', //
+          fn: async () => {
+            // console.log('logthis', tableIns) //
+            // console.log(Object.keys(tableIns.dataMap).length) //
+            tableIns.clearCache()
+          },
+        },

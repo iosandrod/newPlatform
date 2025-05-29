@@ -249,7 +249,7 @@ export class PageDesignItem extends FormItem {
   async onTableDesign(config: any) {
     let _config = this.getOptions()
     // _config = _.cloneDeep(_config) //
-    _config=_.cloneDeep(_config)//
+    _config = _.cloneDeep(_config) //
     let titles = ['基本信息', '高级配置']
     let fields = [
       'tableName',

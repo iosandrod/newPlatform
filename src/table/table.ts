@@ -53,7 +53,9 @@ import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
 import { Row } from 'vant'
+import { containerMap } from './columnFn'
 export class Table extends Base {
+  isDragHeader = false
   runClearSelect = false
   treeConfig: any = null
   scrollRowInteral: any
@@ -75,7 +77,7 @@ export class Table extends Base {
   isMergeCell = true
   seriesNumberColumn: SeriesNumberColumn
   curContextRow: any = null
-  isHeaderContext: boolean = false
+  isHeaderContext: boolean = false //
   contextItems: any[] = []
   disableColumnResize = true //
   tableState: 'edit' | 'scan' = 'edit' //
@@ -479,14 +481,24 @@ export class Table extends Base {
       //头部的
     }) ////
     table.on('change_header_position_start', (e) => {
+      let record = table.getRecordByCell(e.col, e.row)
+      let isDragHeader = false
+      if (record == null) {
+        isDragHeader = false
+      } //
+      this.isDragHeader = isDragHeader
       this.startWatchSystemMouseConfig()
+      if (isDragHeader) {
+      } else {
+      }
     })
     table.on('change_header_position', (e) => {
       this.endWatchSystemMouseConfig()
     })
     table.on('change_header_position_fail', () => {
       this.endWatchSystemMouseConfig() //
-    })
+    }) //
+    // table.on('change')
     const emitEventArr = [
       'mouseleave_cell',
       'mouseenter_cell',
@@ -531,6 +543,9 @@ export class Table extends Base {
     this.treeConfig = treeConfig //
   }
   createFooterInstance(rootDiv) {
+    // if (1 == 1) {
+    //   return //
+    // }
     if (rootDiv == null) {
       return
     }
@@ -759,25 +774,15 @@ export class Table extends Base {
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
       console.time(uuid) //
-      let currentIndexContain = this.currentIndexContain
+      let currentIndexContain = containerMap[this.id] || {} //
       let updateKeys = Object.keys(currentIndexContain) //
       let _keys = updateKeys.filter((key) => {
-        //
         return _iArr1.includes(key)
       })
       let allContain = _keys.map((key) => {
         return currentIndexContain[key] //
       })
-      // let allRowIndex = Object.entries(currentIndexContain).map(
-      //   ([keys, value]) => {
-      //     value = value || {} //
-      //     let _value = Object.values(value).map((row) => row['currentRowIndex'])
-      //     let _arr1 = _value.filter((v, i) => _value.indexOf(v) == i) //
-      //     if (_arr1.length == 1) {
-      //       return _arr1[0]
-      //     }
-      //   },
-      // )
+
       if (this.getIsTree()) {
         // let c = this.instance.records
         // this.instance.setRecords(c) //
@@ -789,7 +794,11 @@ export class Table extends Base {
         }
         let Arr = Object.values(cArr)
         Arr.forEach((c: any) => {
-          c.updateCanvas() //
+          // c.updateCanvas() //
+          let updateFn = c.updateFn
+          if (typeof updateFn == 'function') {
+            updateFn() //
+          }
         })
       })
       nextTick(() => {
@@ -818,8 +827,9 @@ export class Table extends Base {
     if (t || t1) {
       this.runClearSelect = false //
       return
-    }
-    ins.selectCells(_select) //
+    } //
+    ins.render() ////
+    // ins.selectCells(_select) //
     console.timeEnd(_id) //
     console.log('消耗时间') //
   }
@@ -1033,12 +1043,21 @@ export class Table extends Base {
   }
   getShowColumns() {
     let columns = this.getColumns()
+    // if (1 == 1) {
+    //   let _columns = columns.map((col) => {
+    //     return { field: col.getField(), width: 100 }
+    //   })
+    //   return _columns //
+    // }
     let _cols = columns.filter((col) => {
       return col.getIsShow()
     })
     let _col1 = _cols.map((col) => {
       return col.getColumnProps()
     })
+    // if (1 == 1) {
+    //   return _col1 //
+    // }
     //显示check
     let _show = this.config.showCheckboxColumn
     let _show1 = this.getShowControllerColumn()
@@ -1129,11 +1148,14 @@ export class Table extends Base {
   loadColumns() {
     try {
       let columns = this.getShowColumns()
+      // columns = columns.map((col) => {
+      //   return { field: col.field }
+      // }) //
       this.templateProps.columns = columns //
     } catch (error) {
       console.log('加载列出错了')
-    }
-  } //
+    } //
+  }
 
   filterTreeInPlace(nodes, predicate) {
     return nodes.filter((node) => {
@@ -1356,7 +1378,8 @@ export class Table extends Base {
   }
   onUnmounted(): void {
     super.onUnmounted()
-    this.endWatchSystemMouseConfig() //
+    this.endWatchSystemMouseConfig()
+
     let instance = this.getInstance()
     this.clearEditCell() //
     if (instance == null) {
@@ -1390,6 +1413,7 @@ export class Table extends Base {
     let id = this.uuid() //
     console.time(id)
     this.currentIndexContain = shallowRef({}) //
+    console.log('更新了数据', records.length, 'dfjldskfjsdlfsdf') //
     instance.setRecords(records)
     console.timeEnd(id)
     console.log('视图更新时间') //
@@ -1849,7 +1873,27 @@ export class Table extends Base {
       console.log(row, col, '获取列出错') //
     }
   }
+  checkCanEditCell(col, row, value) {
+    let config = this.config
+    let ins = this.getInstance()
+    let beforeEditCell = config.onBeforeEditCell
+    if (typeof beforeEditCell == 'function') {
+      let re = ins.getRecordByCell(col, row)
+      let f = ins.getBodyField(col, row)
+      let _status = beforeEditCell({
+        row: re,
+        field: f,
+        value: value,
+      })
+      if (_status == false) {
+        return false
+      }
+    }
+  }
   startEditCell(col, row, value, isTitle = false) {
+    // if (1 == 1) {
+    //   return //
+    // }
     try {
       if (col == null || row == null) {
         return //
@@ -1861,18 +1905,12 @@ export class Table extends Base {
         ins.clearSelected() //
         return
       }
-      let config = this.config
-      let beforeEditCell = config.onBeforeEditCell
-      if (typeof beforeEditCell == 'function') {
-        let re = ins.getRecordByCell(col, row)
-        let f = ins.getBodyField(col, row)
-        let _status = beforeEditCell({
-          row: re,
-          field: f,
-          value: value,
-        })
-        if (_status == false && isTitle == false) {
-          return false
+
+      let _status = this.checkCanEditCell(col, row, value)
+      if (_status == false) {
+        if (isTitle == true) {
+        } else {
+          return
         }
       }
       this.templateEditCell = { col: col, row: row, value: value }
@@ -1884,9 +1922,6 @@ export class Table extends Base {
     }
   }
   clearEditCell() {
-    if (1 == 1) {
-      // return //
-    }
     let currentEditCol = this.currentEditCol
     let disableHideCell = currentEditCol?.disableHideCell
     if (disableHideCell == true) {
@@ -1901,18 +1936,6 @@ export class Table extends Base {
     let ins = this.getInstance()
     ins.completeEditCell()
     this.runClearSelect = true
-    // setTimeout(() => {
-    //   ins.clearSelected()
-    // }, 300)
-    // setTimeout(() => {
-    //   console.time('setColWidth')
-    //   // ins.clearSelected()//
-    //   console.timeEnd('setColWidth')//
-    // }, 1000)
-    // ins.selectCell(_templateEditCell.col, _templateEditCell.row) //
-    // setTimeout(() => {
-    //   ins.clearSelected() //
-    // }, 50)
   }
   getCurrentCellEdit() {
     let ins = this.getInstance()
@@ -2143,7 +2166,9 @@ export class Table extends Base {
     let outDiv: HTMLDivElement = this.getRef('outDiv')
     let bound = outDiv.getBoundingClientRect()
     let x = bound.x
+    let y = bound.y
     let endX = bound.width + x
+    let endY = bound.height + y //
     this.mouseWatch = watch(
       () => {
         return {
@@ -2152,23 +2177,45 @@ export class Table extends Base {
         }
       },
       (nv) => {
-        let _x = nv.x
-        if (_x < x) {
-          let speed = 100 + (_x - x)
-          if (speed < 5) {
-            speed = 5
+        // debugger//
+        if (this.isDragHeader == true) {
+          let _x = nv.x
+          if (_x < x) {
+            let speed = 100 + (_x - x)
+            if (speed < 5) {
+              speed = 5
+            }
+            this.scrollInSpeed('col', -speed)
           }
-          this.scrollInSpeed('col', -speed)
-        }
-        if (_x > endX) {
-          let speed = 100 - (_x - endX)
-          if (speed < 5) {
-            speed = 5
+          if (_x > endX) {
+            let speed = 100 - (_x - endX)
+            if (speed < 5) {
+              speed = 5
+            }
+            this.scrollInSpeed('col', speed) //
           }
-          this.scrollInSpeed('col', speed) //
-        }
-        if (_x > x && _x < endX) {
-          this.scrollColSpeed = 0
+          if (_x > x && _x < endX) {
+            this.scrollColSpeed = 0
+          }
+        } else {
+          let _y = nv.y
+          if (_y < y) {
+            let speed = 100 + (_y - y)
+            if (speed < 5) {
+              speed = 5
+            }
+            this.scrollInSpeed('row', -speed)
+          }
+          if (_y > endY) {
+            let speed = 100 - (_y - endY)
+            if (speed < 5) {
+              speed = 5
+            }
+            this.scrollInSpeed('row', speed) //
+          }
+          if (_y > y && _y < endY) {
+            this.scrollRowSpeed = 0 //
+          }
         }
       },
     )
@@ -2395,6 +2442,7 @@ export class Table extends Base {
     }
   }
   onColumnsDesign(cols: any[]) {
+    // debugger//
     let updateCols = cols.filter((col) => {
       let rowState = col['_rowState']
       return rowState == 'change'
@@ -2719,5 +2767,134 @@ export class Table extends Base {
         value: value, //
       })
     }
+  }
+  delRows(rows: any[]) {
+    if (Array.isArray(rows)) {
+      for (const r of rows) {
+        let _index = r._index
+        if (_index != null) {
+          this.dataMap[_index] = null
+        }
+      }
+    }
+  } //
+  onCellVisible(config) {
+    let field = config.field //
+    let record = config.record
+    let _index = record._index //
+    let _containerMap = containerMap
+    let id = this.id //
+    let id1 = `${id}_arr`
+    let _map = _containerMap[id]
+    let _arr: string[] = _containerMap[id1]
+    if (_map == null) {
+      _containerMap[id] = {}
+      _map = _containerMap[id]
+    }
+    if (_arr == null) {
+      _containerMap[id1] = []
+      _arr = _containerMap[id1]
+    }
+    let map1 = _map[_index]
+    if (map1 == null) {
+      //重新賦值
+      _map[_index] = {}
+      map1 = _map[_index]
+      let _length = _arr.length
+      let count = config.rowCount
+      if (_arr.includes(_index)) {
+      } else {
+        _arr.push(_index)
+      }
+      // console.log(_arr.length,'fsdkfjslfds')//
+      // console.log(count, 'sfjsdlfsdf') //
+      if (_length > count) {
+        let _length1 = _length - count
+        let _indexArr = _arr.splice(0, _length1)
+        _indexArr.forEach((item) => {
+          let _index1 = item
+          this.onCellHidden({
+            _index: _index1,
+          })
+        })
+      }
+    }
+    map1[field] = config
+    let fieldFormat = config.fieldFormat
+    let _v = null
+    if (typeof fieldFormat == 'function') {
+      let _value1 = fieldFormat({
+        row: record, //
+        field: field,
+        table: this,
+        col: config.column,
+      })
+      if (_value1 == null) {
+        _value1 = '' //
+      }
+      let _watch = map1[`watch_arr`]
+      if (_watch == null) {
+        _watch = []
+        map1[`watch_arr`] = _watch
+      }
+      let _w1 = watch(
+        () => {
+          let _value = fieldFormat({
+            row: record, //
+            field: field,
+            table: this,
+            col: config.column,
+          })
+          return _value
+        },
+        (v) => {
+          this.updateIndexArr.add(_index)
+          // _value1 = v
+        },
+        {
+          // immediate: true,
+        },
+      )
+      _watch.push(_w1) //
+      _v = _value1
+    }
+    return _v
+  }
+  hiddenAllCell() {
+    let _containerMap = containerMap
+    let id = this.id //
+    let _arr = _containerMap[`${id}_arr`] //
+    _arr.forEach((item) => {
+      this.onCellHidden({
+        _index: item,
+      })
+    })
+  }
+  onCellHidden(config) {
+    if (config == null) {
+      return
+    }
+    let _index = config._index //
+    let _containerMap = containerMap
+    let id = this.id //
+    let map = _containerMap[id]
+    let obj1 = map[_index]
+    if (obj1 == null) {
+      return
+    }
+    delete map[_index]
+    let watchArr = obj1[`watch_arr`]
+    if (Array.isArray(watchArr)) {
+      watchArr.forEach((item) => {
+        item() //
+      })
+    }
+    obj1[`watch_arr`] = null //
+  }
+  onScroll(config) {}
+  clearCache() {
+    let id = this.id
+    let _containerMap = containerMap
+    _containerMap[id] = null
   }
 }

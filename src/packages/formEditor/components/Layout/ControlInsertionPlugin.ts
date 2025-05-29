@@ -464,7 +464,7 @@ function ControlInsertionPlugin(ER: Form) {
             return
           }
           resetStates() //
-          return//
+          return //
         }
       } //
       let _oldEl1 = null //

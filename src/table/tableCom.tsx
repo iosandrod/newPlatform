@@ -379,9 +379,10 @@ export default defineComponent({
           })
           //@ts-ignore
           tableIns.addRows({ rows: addRows, isProps: true })
-          // let removeRows = oldData.map((row) => {
-          //   return !newData.includes(row)
-          // }) //
+          let removeRows = oldData.map((row) => {
+            return !newData.includes(row) //
+          })
+          tableIns.delRows(removeRows)
         }
         // if (!Array.isArray(e)) {
         //   e = [] //

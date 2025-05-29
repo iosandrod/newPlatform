@@ -52,9 +52,9 @@ export class CheckboxColumn extends Column {
   }
 
   getCustomLayout() {
-    // 
     return this.getCheckboxCustomLayout()
   }
+  
   getColumnProps(isFooter = false) {
     let _this = this
     let _props: CheckboxColumnDefine = super.getColumnProps()
@@ -62,14 +62,14 @@ export class CheckboxColumn extends Column {
     //@ts-ignore
     _props.cellType = 'text' //
     _props.headerIcon = undefined //
-      ; (_props.width = this.table.getCheckColumnWidth()),
-        (_props.checked = (config) => {
-          //@ts-ignore
-          let table: VTable.ListTable = config.table
-          let row = table.getRecordByCell(config.col, config.row)
-          let checkboxField = row?.checkboxField //
-          return checkboxField //
-        }) //
+    ;(_props.width = this.table.getCheckColumnWidth()),
+      (_props.checked = (config) => {
+        //@ts-ignore
+        let table: VTable.ListTable = config.table
+        let row = table.getRecordByCell(config.col, config.row)
+        let checkboxField = row?.checkboxField //
+        return checkboxField //
+      }) //
     _props.disable = (config) => {
       let table = config.table
       let row = table.getRecordByCell(config.col, config.row)
@@ -102,6 +102,7 @@ export class CheckboxColumn extends Column {
         justifyContent: 'center', //
       })
       container.appendChild(checkboxGroup)
+
       const checkbox1 = new CheckBox({
         text: {
           text: '', //

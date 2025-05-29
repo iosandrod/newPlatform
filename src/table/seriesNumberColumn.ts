@@ -34,6 +34,7 @@ import {
 } from '@visactor/vtable/es/ts-types'
 import { nextTick } from 'vue' //
 import { Column } from './column'
+import { getSerialLayout } from './columnFn'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class SeriesNumberColumn extends Column {
   getEditType() {
@@ -55,7 +56,6 @@ export class SeriesNumberColumn extends Column {
     return true
   } //
   getCustomLayout() {
-    //
     let customLayout = (args) => {
       let { table, row, col, rect, value } = args
       let t1: VTable.ListTable = table
@@ -349,6 +349,7 @@ export class SeriesNumberColumn extends Column {
       _props.headerCustomLayout = null //
     } //
     _props.headerCustomLayout = null //
+    _props.customLayout = getSerialLayout(this) //
     // _props.customLayout = (args) => {
     //   const { table, row, col, rect, value } = args
     //   const { height, width } = rect ?? table.getCellRect(col, row)

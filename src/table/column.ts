@@ -40,7 +40,7 @@ import { stringToFunction } from '@ER/utils'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { Dialog } from '@/dialog/dialog'
 import CodeEditor from '@/codeEditor/codeEditor'
-import { getCheckbox } from './columnFn'
+import { getCheckbox, getDefault } from './columnFn'
 import { SearchPageDesign } from '@ER/searchPageDesign'
 import { Input } from '@/input/inputClass'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
@@ -102,6 +102,9 @@ export class Column extends Base {
     if (disableColumnResize == null) {
       let table = this.table
       disableColumnResize = table.getDisableColumnResize()
+    }
+    if (1 == 1) {
+      return true //
     }
     return disableColumnResize
   }
@@ -172,6 +175,9 @@ export class Column extends Base {
     }
   } //
   getHeaderCustomLayout() {
+    // if (1 == 1) {
+    //   return null
+    // } //
     let hCustomLayout = (args) => {
       let { table, row, col, rect, value } = args
       let _value: string = value
@@ -322,8 +328,6 @@ export class Column extends Base {
     return customLayout
   }
   getFormat() {
-    let field = this.getField() //
-    let _table = this.table
     let config = this.config
     let fieldFormat = config.fieldFormat
     if (typeof fieldFormat !== 'function') {
@@ -334,6 +338,10 @@ export class Column extends Base {
         fieldFormat = (config) => {
           let type = this.getEditType()
           let row = config.row
+          if (row == null) {
+            console.log(config)
+            return '' //
+          }
           let field = config.field
           let value = row[field] //
           if (type == 'select') {
@@ -345,51 +353,8 @@ export class Column extends Base {
           return value
         }
       }
-    } //
-    let formatFn = (record, row, col, table) => {
-      let value = record[field] //
-      if (typeof fieldFormat == 'function') {
-        try {
-          let _index = record._index
-          if (this.effectPool[_index] == null) {
-            this.effectPool[`${_index}`] = watch(
-              () => {
-                let value = '' //
-                if (typeof fieldFormat == 'function') {
-                  let value1 = fieldFormat({
-                    row: record,
-                    col: this,
-                    table: _table,
-                    field: field,
-                  })
-                  if (value1 != null) {
-                    value = value1
-                  } //
-                } //
-                return value //
-              },
-              (newV) => {
-                console.log(newV, '新增了') //
-                _table.updateIndexArr.add(_index) //
-              },
-            )
-          } //
-          value = fieldFormat({
-            row: record,
-            col: this,
-            table: _table,
-            field: field,
-          })
-        } catch (error) {
-          //
-        }
-      }
-      if (value === 0) {
-        value = '0' //
-      }
-      return value
     }
-    return formatFn
+    return fieldFormat
   }
   getIndexColor(row, record?: any) {
     let color = 'rgb(255,255,255)'
@@ -468,12 +433,10 @@ export class Column extends Base {
       sort: () => {
         return 0
       },
-      /*
-       */
-      fieldFormat: _this.getFormat(),
       style: {
         borderColor: this.getBorderColor(),
       },
+      // fieldFormat: _this.getFormat(),
       headerCustomLayout: this.getHeaderCustomLayout(), //
       editor: edit, ////
       // headerEditor: new InputEditor(() => this), //
@@ -495,6 +458,9 @@ export class Column extends Base {
     return obj //
   }
   getIsChecked(r) {
+    if (r == null) {
+      return false //
+    }
     let f = this.getField()
     let v = r[f]
     if (v === '1') {
@@ -939,278 +905,13 @@ export class Column extends Base {
     return bg
   }
   getCustomLayout() {
-    //
     let editType = this.getEditType()
     if (editType == 'boolean' && this.table.tableState == 'edit') {
       let _layout = this.getCheckboxCustomLayout()
       return _layout //
     }
-    let customLayout = (args) => {
-      let { table, row, col, rect, value } = args
-      let t1: VTable.ListTable = table
-
-      let _value: string = value
-      let record = table.getCellOriginRecord(col, row)
-      let bg = this.getIndexColor(row, record) //
-      if (toRaw(record) == toRaw(this.table.tableData.curRow)) {
-        bg = this.getCurrentRowColor()
-      }
-      const { height, width } = rect ?? table.getCellRect(col, row)
-      let _height = height
-      let _length1 = t1.records.length
-      if (_length1 == row) {
-        _height = _height - 1 //
-      }
-      let _width = width
-      let colCount = t1.colCount
-      if (colCount == col + 1) {
-        _width = _width - 1
-      }
-      let lf = this.table.leftFrozen
-      if (lf && this.getIsLeftFrozen()) {
-        let field = this.getField()
-        if (lf == field) {
-          _width = _width - 1 //
-        }
-      }
-      let container = createGroup({
-        height: _height,
-        width: _width,
-        // display: 'flex',
-        // flexDirection: 'row',
-        flexWrap: 'nowrap',
-        background: bg, //
-        overflow: 'hidden',
-        lineWidth: 1,
-        stroke: this.getBorderColor(), //
-        alignItems: 'center',
-        boundsPadding: [0, 0, 0, 0], //
-      })
-      container.on('mouseenter', () => {
-        let oldColor = container.attribute.background
-        container._oldColor = oldColor
-        container.setAttribute('background', this.getHoverColor()) ///
-      })
-      container.on('mouseout', () => {
-        let color = container._oldColor
-        if (record == this.table.tableData.curRow) {
-          color = this.getCurrentRowColor() //
-        } else {
-          if ((color = this.getCurrentRowColor())) {
-            color = this.getIndexColor(row, record)
-          }
-        } //
-        container.setAttribute('background', color)
-      })
-      if (this.getField() == 'pid') {
-        // console.log(value, 'testValue') //
-      }
-      let _bounds = [0, 0, 0, 20]
-      let locationName = createText({
-        text: `${value}`, //
-        fontSize: 16,
-        x: 0,
-        y: 0,
-        // fontFamily: 'sans-serif',
-        fill: 'black',
-        boundsPadding: _bounds, //
-        lineDashOffset: 0,
-      })
-      let _g = createGroup({
-        width: width,
-        height,
-        x: 0,
-        y: 0,
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        overflow: 'hidden',
-        alignItems: 'center', //
-      })
-      if (this.getIsTree() == true) {
-        // _g.attribute.x = width - 60
-        let level = record._level
-        if (level > 0) {
-          let num = level * 20
-          _g.attribute.x = num //
-        }
-      }
-      let globalValue = this.table.globalConfig.value
-      if (globalValue.length > 0) {
-        let container = _g
-        let reg = new RegExp(globalValue, 'gi') //
-        _value = `${value}` //
-        let vArr = _value.matchAll(reg)
-        let _vArr = [...vArr]
-        _vArr = _vArr
-          .map((v, i) => {
-            let arr = []
-            let t = createText({
-              text: v[0], //
-              fontSize: 16,
-              fill: 'red',
-              boundsPadding: [0, 0, 0, 0],
-              lineDashOffset: 0,
-            })
-            if (i == 0 && v.index > 0) {
-              //
-              let t1 = createText({
-                text: _value.slice(0, v.index), //
-                fontSize: 16,
-                // fontFamily: 'sans-serif',
-                fill: 'black',
-                boundsPadding: [0, 0, 0, 0],
-                lineDashOffset: 0,
-              })
-              arr.push(t1)
-            }
-            arr.push(t)
-            if (
-              i == _vArr.length - 1 &&
-              v.index + v[0].length < _value.length
-            ) {
-              let t2 = createText({
-                text: _value.slice(v.index + v[0].length), //
-                fontSize: 14,
-                // fontFamily: 'sans-serif',
-                fill: 'black',
-                boundsPadding: [0, 0, 0, 0],
-                lineDashOffset: 0,
-              })
-              arr.push(t2)
-            }
-            return arr
-          })
-          .flat()
-        if (_vArr.length > 0) {
-          _vArr.forEach((item) => {
-            //@ts-ignore
-            container.add(item) //
-          })
-        } else {
-          container.add(locationName) //
-        }
-      } else {
-        let container = _g
-        container.add(locationName)
-      }
-      container.add(_g) //
-      container.on('mousedown', (args) => {
-        if (this.isMousedownRecord != null) {
-          this.table.emit('dblclick_cell', { originalData: record }) ////
-        }
-        this.isMousedownRecord = record
-        setTimeout(() => {
-          this.isMousedownRecord = null
-        }, 130)
-      })
-      let _index = record['_index'] ////
-      let _table = this.table //
-      let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
-      let rowStart = scrollConfig.rowStart
-      let rowEnd = scrollConfig.rowEnd
-      let _row = row
-      container['currentRowIndex'] = row //
-      let _this = this
-      let isTree = this.getIsTree()
-      let treeIcon = null
-      if (isTree == true && record?.['children']?.length > 0) {
-        container.removeChild(_g)
-        let _g1 = createGroup({
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'nowrap',
-          height: height,
-          width: width,
-          overflow: 'hidden',
-          cursor: 'pointer',
-          alignItems: 'center',
-          boundsPadding: [0, 0, 0, 0],
-        })
-        //
-        let _level = record['_level'] || 0
-        // let t = `\u27A4`
-        let t = null
-        // console.log(record['_expanded'], 'record')
-        t = this.getExpandIcon(record['_expanded'])
-
-        let _g2 = createGroup({
-          width: 10,
-          height: height / 2,
-          x: 0,
-          y: 0,
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          overflow: 'hidden',
-          alignItems: 'center',
-        })
-        let icon = createImage({
-          image: t,
-          cursor: 'pointer', //
-          height: height / 2,
-          overflow: 'hidden',
-          fill: 'black',
-          boundsPadding: [0, 0, 0, 3 + _level * 16], //
-          lineDashOffset: 0,
-        }) //
-        _bounds[3] = 0 //
-        _g2.add(icon)
-        _g1.add(_g2) //
-        _g1.add(locationName) //
-        container.add(_g1) //
-
-        treeIcon = icon
-      }
-      container['updateCanvas'] = () => {
-        // let record = table.getCellOriginRecord(col, row)
-        //基本的样式
-        let bg = _this.getIndexColor(row, record)
-        if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
-          bg = _this.getCurrentRowColor() //
-        } //
-        container.setAttribute('background', bg)
-        let formatFn = _this.getFormat()
-        let _value = formatFn(record, row, col, table)
-        locationName.setAttribute('text', _value)
-        if (treeIcon != null) {
-          let _expanded = record['_expanded']
-          let t = this.getExpandIcon(_expanded)
-          treeIcon.setAttribute('image', t) //
-        }
-      } //
-
-      let _length = 200 //
-      rowStart = rowStart - _length
-      if (rowStart < 0) {
-        rowStart = 0 //
-      }
-      rowEnd = rowEnd + _length
-      if (_row >= rowStart && _row <= rowEnd) {
-        let currentIndexContain = _table.currentIndexContain
-        //显示在视图上
-        let _arr = currentIndexContain[_index]
-        if (_arr == null) {
-          currentIndexContain[_index] = {}
-          _arr = currentIndexContain[_index] //
-        }
-        let field = this.getField()
-        _arr[field] = container //
-      } else {
-        let currentIndexContain = _table.currentIndexContain //
-        delete currentIndexContain[_index] //
-      }
-      // let _isTree = this.getIsTree()
-      // if (_isTree == true) {
-      //   container = null //
-      // }
-      return {
-        rootContainer: container,
-        // renderDefault: _isTree, //
-        renderDefault: false, //
-      }
-    }
-    return customLayout
+    let _layout = getDefault(this)
+    return _layout
   }
   async getDefaultValue(_config?: any) {
     let field = this.getField()
@@ -1221,27 +922,25 @@ export class Column extends Base {
     }
     let table = this.table
     let design = table?.getMainPageDesign()
+    design = design || _config?.design //
     let curRow = design?.getCurRow()
+    let obj1 = {
+      column: this,
+      table: this.table,
+      item: this,
+      design: design,
+      curRow: curRow,
+      ..._config,
+    }
     if (typeof defaultValue == 'function') {
-      defaultValue = await defaultValue({
-        column: this,
-        table: this.table,
-        item: this,
-        design: design,
-        curRow: curRow,
-        ..._config,
-      }) //
+      defaultValue = await defaultValue.call(design, obj1) //
     }
     let defaultValueType = config.defaultValueType
     if (defaultValueType == 'function') {
       let _fn = stringToFunction(defaultValue)
       if (typeof _fn == 'function') {
         try {
-          defaultValue = await _fn({
-            column: this,
-            table: this.table,
-            item: this,
-          })
+          defaultValue = await _fn.call(design, obj1) //
         } catch (error) {
           defaultValue = '' //
         }
@@ -1442,5 +1141,13 @@ export class Column extends Base {
       return
     } //
     input.hiddenDropdown() //
+  }
+  getCheckDisabled() {
+    //
+    let tableState = this.table.tableState
+    if (tableState == 'scan') {
+      return true
+    }
+    return false //
   }
 }

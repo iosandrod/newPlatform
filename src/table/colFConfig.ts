@@ -14,16 +14,19 @@ const enableTypes = [
 export const getDFConfig = (_this, data) => {
   let dType = data['defaultValueType']
   let fType = 'string'
-  if (dType == 'code') {
-    fType = 'code'
-  }
+
   let editType = data['editType']
   if (enableTypes.includes(editType)) {
     fType = editType //
   }
+  if (dType == 'function') {
+    //
+    fType = 'code'
+  }
   let tableName = null
   if (_this && _this.getRealTableName) {
-    tableName = _this.getRealTableName()
+    // tableName = _this.getRealTableName()
+    tableName = _this.getTableName() //
   }
   let titles = ['基本信息', '编辑信息']
   let fConfig = {
@@ -122,7 +125,11 @@ export const getDFConfig = (_this, data) => {
         label: '默认值',
         field: 'defaultValue',
         tabTitle: titles[1],
-        type: fType, //
+        type: fType, ////
+        options: {
+          //
+          tableName: tableName,
+        },
       }, //
       {
         label: '格式化',
@@ -307,6 +314,10 @@ export const getAllColTypes = () => {
     {
       label: '参照表',
       value: 'baseinfo', //
+    },
+    {
+      label: '代码',
+      value: 'code', //
     },
   ]
 }

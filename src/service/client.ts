@@ -299,6 +299,7 @@ export class myHttp {
     return data //
   }
   async create(tableName, data = {}) {
+    console.log('新增数据', tableName, data) //
     let _res = await this.post(tableName, 'create', data)
     return _res //
   } //

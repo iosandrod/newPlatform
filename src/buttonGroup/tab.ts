@@ -24,7 +24,7 @@ export class Tab extends Base {
     let items = config.items || []
     this.setItems(items)
     if (config.modelValue == null) {
-      this.modelValue = this.tabitems[0].getTabName() //
+      this.modelValue = this.tabitems?.[0]?.getTabName() //
     }
   }
   getPluginName() {
