@@ -253,7 +253,8 @@ export class MainPageDesign extends PageDesign {
   async saveTableData(config = this.getSaveData()) {
     let tName = this.getRealTableName()
     let http = this.getHttp()
-    await http.runCustomMethod(tName, 'batchUpdate', config) //批量更新//
+    // await http.runCustomMethod(tName, 'batchUpdate', config) //批量更新//
+    await http.batchUpdate(tName, config) //
     this.getSystem().confirmMessage('数据保存成功', 'success') //
     this.getTableData() //
     this.setCurrentView() //

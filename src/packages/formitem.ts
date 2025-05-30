@@ -193,6 +193,12 @@ export class FormItem extends Base {
     if (!Array.isArray(options)) {
       options = [] //
     }
+    let columnSelect = this.getIsColumnSelect()
+    if (columnSelect == true) {
+      //
+      let opt = this.getColumnSelectOptions()
+      options = opt
+    }
     return options //
   }
   getSubForm(id: string) {}
@@ -1162,6 +1168,11 @@ export class FormItem extends Base {
     nextTick(() => {
       this.showDropdown() //
     })
+  }
+  getMultiple() {
+    let options = this.getOptions()
+    let multiple = options.multiple
+    return multiple
   }
   async confirmTinyTableRow(row) {
     //

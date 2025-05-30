@@ -29,6 +29,7 @@ import uploadCom from '@/input/uploadCom'
 import SearchDialog from '@/dialog/_dialogCom/searchDialog'
 import inputCom from '@/input/inputCom'
 import { tFConfig } from '@ER/formEditor/testData'
+import selectCom from '@/select/selectCom'
 export default defineComponent({
   components: {
     inputCom, //
@@ -168,6 +169,7 @@ export default defineComponent({
       pd = res
       show.value = true
     }) //
+    let bind = ref('')
     return () => {
       if (show.value == false) {
         return null
@@ -200,7 +202,7 @@ export default defineComponent({
                   console.log('添加子菜单') //
                 },
               },
-            ]}//
+            ]} //
             showGlobalSearch={true}
             enableDragColumn={true} //
             showHeaderButtons={true}
@@ -322,6 +324,34 @@ export default defineComponent({
       //     }}
       //   ></VxePager>
       // )
+      com = (
+        <selectCom
+          modelValue={bind.value}
+          onChange={(value) => {
+            console.log(value.value, 'testValue') //
+            bind.value = value.value //
+          }}
+          multiple={true} //
+          options={[
+            {
+              label: '123',
+              value: '123',
+            },
+            {
+              label: 'sfs',
+              value: 'sfs', //
+            },
+            {
+              label: 'sfs1',
+              value: 'sfs1', //
+            },
+            {
+              label: 'sfs2',
+              value: 'sfs2', //
+            },
+          ]}
+        ></selectCom>
+      )
       let _com = (
         <div
           style={{

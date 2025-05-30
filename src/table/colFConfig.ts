@@ -227,6 +227,7 @@ export const getDFConfig = (_this, data) => {
               type: 'stable',
               options: {
                 beforeOpen: async (config) => {
+                  debugger //
                   let item = config?.item //
                   let data = config.data //
                 },
@@ -237,14 +238,16 @@ export const getDFConfig = (_this, data) => {
                   {
                     field: 'key',
                     title: '当前字段',
-                    editType: 'string',
+                    editType: 'select',
                     columnSelect: true,
-                    tableName: tableName,
+                    tableName: tableName, //
                   },
                   {
                     field: 'targetKey',
                     title: '值',
-                    editType: 'string',
+                    editType: 'select',
+                    columnSelect: true,
+                    tableName: tableName,
                   },
                 ],
               },
@@ -254,7 +257,9 @@ export const getDFConfig = (_this, data) => {
               label: '显示字段',
               type: 'select',
               options: {
+                columnSelect: true,
                 multiple: true,
+                tableName: tableName, //
               },
             },
           ],

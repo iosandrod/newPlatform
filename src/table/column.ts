@@ -1091,6 +1091,7 @@ export class Column extends Base {
     sys.createColumnSelect(tableName)
   }
   getBaseInfoConfig() {
+    debugger //
     return this.templateTableConfig
   }
   async openBaseInfoTable() {

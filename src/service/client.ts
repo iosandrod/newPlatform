@@ -343,6 +343,11 @@ export class myHttp {
     let connection: Socket = this.client.get('connection')
     connection.removeListener(event, fn) //
   }
+  async batchUpdate(tableName, data) {
+    console.log('批量更新数据', tableName, data) //
+    let _res = await this.runCustomMethod(tableName, 'batchUpdate', data)
+    return _res //
+  }
 }
 
 export const http = new myHttp()

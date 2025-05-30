@@ -39,9 +39,15 @@ export const selectType = (item: FormItem) => {
   let obj = defaultType(item)
   let options = item.getSelectOptions()
   obj.options = options
+  obj.multiple = item.getMultiple() //
   obj.onChange = (config) => {
-    // debugger//
     let value = config.value
+    if (Array.isArray(value)) {
+      let _value = value.filter((item) => {
+        return item != null && item != '' //
+      })
+      value = _value //
+    }
     item.updateBindData({ value }) //
   }
   return obj

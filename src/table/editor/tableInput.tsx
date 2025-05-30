@@ -109,6 +109,22 @@ export default defineComponent({
           )
         }
       }
+      if (type == 'number') {
+        com = (
+          <div style={{ width: '100%', height: '100%' }}>
+            <InputCom
+              style={{ width: '100%', height: '100%' }} //
+              ref={insRef}
+              type="number" //
+              onChange={(v) => {
+                updateValue(v)
+              }}
+              {...column.getBindConfig()} //
+              modelValue={modelValue.value}
+            ></InputCom>
+          </div>
+        )
+      }
       if (type == 'datetime' || type == 'time' || type == 'date') {
         com = (
           <div style={{ width: '100%', height: '100%' }}>
