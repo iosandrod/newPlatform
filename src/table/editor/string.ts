@@ -152,18 +152,19 @@ export class InputEditor extends BaseEditor {
           //@ts-ignore
           updateConfig.validate = false
         }
-        column.updateBindValue(updateConfig) //
         let editType = column.getEditType()
         if (editType == 'baseinfo') {
           let cacheValueObj = column.cacheValueObj
-          if (typeof cacheValueObj == 'object') {
+          if (cacheValueObj != null && typeof cacheValueObj == 'object') {
             Object.entries(cacheValueObj).forEach(([key, value]) => {
               if (key == column.getField()) {
                 return
               } //
               this.row[key] = value //
-            })//
+            }) //
           }
+        } else {
+          column.updateBindValue(updateConfig) //
         }
         column.changeRowState(this.row) //
         if (this.isEditHeader) {

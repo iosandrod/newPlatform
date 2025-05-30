@@ -1,4 +1,5 @@
 import { Form } from '@ER/form'
+import { FormItem } from '@ER/formitem'
 const enableTypes = [
   'string',
   'number',
@@ -220,16 +221,23 @@ export const getDFConfig = (_this, data) => {
               type: 'string', //
             },
             {
-              field: 'bindCOlumns',
+              field: 'bindColumns', //
               label: '绑定字段',
               span: 24, //
               tabTitle: titles[1],
               type: 'stable',
               options: {
-                beforeOpen: async (config) => {
-                  debugger //
-                  let item = config?.item //
+                openBefore: async (config) => {
+                  let item: FormItem = config?.item //
                   let data = config.data //
+                  let options = item.config.options
+                  let columns = options.columns
+                  let col1 = columns[1]
+                  if (data?.tableName == null) {
+                    return '请先选择表名' //
+                  }
+                  col1.tableName = data.tableName
+                  return //
                 },
                 showTable: false, //
                 tableTitle: '绑定参照表',

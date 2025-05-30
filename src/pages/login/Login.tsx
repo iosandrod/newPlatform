@@ -187,7 +187,32 @@ export default defineComponent({
             // showRowSeriesNumber={false} //
             // {...menuTConfig} ////
             // treeConfig={null}
-
+            columns={[
+              {
+                field: 'id',
+                title: 'ID',
+                width: 250,
+                calculateType: 'sum', //合计
+                // editType: 'boolean',
+                // required: true,
+              },
+              {
+                field: 'email1',
+                title: 'email',
+                width: 250,
+                sort: false,
+                editType: 'baseinfo', //
+                baseinfoConfig: {
+                  tableName: 't_Item',
+                  bindColumns: [
+                    {
+                      targetKey: 'cInvCode', //
+                    },
+                  ],
+                  searchFields: ['cInvCode'], //
+                }, 
+              }, 
+            ]}
             contextItems={[
               {
                 label: '添加菜单',
@@ -324,34 +349,34 @@ export default defineComponent({
       //     }}
       //   ></VxePager>
       // )
-      com = (
-        <selectCom
-          modelValue={bind.value}
-          onChange={(value) => {
-            console.log(value.value, 'testValue') //
-            bind.value = value.value //
-          }}
-          multiple={true} //
-          options={[
-            {
-              label: '123',
-              value: '123',
-            },
-            {
-              label: 'sfs',
-              value: 'sfs', //
-            },
-            {
-              label: 'sfs1',
-              value: 'sfs1', //
-            },
-            {
-              label: 'sfs2',
-              value: 'sfs2', //
-            },
-          ]}
-        ></selectCom>
-      )
+      // com = (
+      //   <selectCom
+      //     modelValue={bind.value}
+      //     onChange={(value) => {
+      //       console.log(value.value, 'testValue') //
+      //       bind.value = value.value //
+      //     }}
+      //     multiple={true} //
+      //     options={[
+      //       {
+      //         label: '123',
+      //         value: '123',
+      //       },
+      //       {
+      //         label: 'sfs',
+      //         value: 'sfs', //
+      //       },
+      //       {
+      //         label: 'sfs1',
+      //         value: 'sfs1', //
+      //       },
+      //       {
+      //         label: 'sfs2',
+      //         value: 'sfs2', //
+      //       },
+      //     ]}
+      //   ></selectCom>
+      // )
       let _com = (
         <div
           style={{

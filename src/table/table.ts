@@ -1523,7 +1523,8 @@ export class Table extends Base {
         if (oldColumnFilter != null && oldColumnFilter === tColumn) {
           return //
         }
-        let _data1 = [//
+        let _data1 = [
+          //
           ..._data.map((row) => {
             let obj = {
               [field]: row[field], //

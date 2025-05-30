@@ -900,10 +900,14 @@ export class FormItem extends Base {
     let openBefore = options.openBefore
     let data = this.form.getData()
     if (typeof openBefore == 'function') {
-      await openBefore({
+      let _v=await openBefore({
         item: this,
-        data: data, //
+        data: data,
       })
+      if(typeof _v=='string'){
+        this.getSystem().confirmMessage(_v,'warning')
+        return 
+      }
     }
     let sys = this.getSystem()
     let value = this.getBindValue() //

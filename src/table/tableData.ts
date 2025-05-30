@@ -127,8 +127,15 @@ export const tableConfig: ListTableConstructorOptions = {
       title: 'email',
       width: 250,
       sort: false,
-      editType:'baseinfo',//
-      tableName:"permissions"//
+      editType: 'baseinfo', //
+      baseinfoConfig: {
+        tableName: 't_Item',//
+        bindColumns: [
+          {
+            targetKey: 'cInvCode', //
+          },
+        ],
+      }, //
     },
     //@ts-ignore
     {
@@ -193,7 +200,7 @@ export const tableConfig: ListTableConstructorOptions = {
       title: 'city',
       width: 150,
     },
-  ].slice(0,2),
+  ].slice(0, 2),
   // columns: [
   //   {
   //     column_name: 'iInterID',
@@ -1138,7 +1145,7 @@ export const menuData = [
     navname: '系统设置',
     url: '/',
     icon: 'adasda',
-    pid: 1,//
+    pid: 1, //
     sort: 2000,
     remark: null,
     status: '1',
@@ -3208,7 +3215,7 @@ export const menuData = [
             remark: null,
             status: '1',
             type: 'WEB',
-            appId: null,//
+            appId: null, //
             appCode: null,
             tableName: null,
             children: [],
@@ -11943,9 +11950,15 @@ export const menuTConfig = {
       editType: 'string',
     },
     { field: 'url', title: '链接', width: 200, sort: false, type: 'string' },
-    { field: 'icon', title: '图标',required:true,
-      editType:"string",//
-       width: 100, sort: false, type: 'string' },
+    {
+      field: 'icon',
+      title: '图标',
+      required: true,
+      editType: 'string', //
+      width: 100,
+      sort: false,
+      type: 'string',
+    },
     { field: 'pid', title: '父级ID', width: 80, sort: true, type: 'number' },
     { field: 'sort', title: '排序', width: 100, sort: true, type: 'number' },
     { field: 'remark', title: '备注', width: 200, sort: false, type: 'string' },
@@ -11971,12 +11984,12 @@ export const menuTConfig = {
     {
       label: '添加子菜单',
       fn: async (record) => {
-        let p:Table=record.parent//表格
+        let p: Table = record.parent //表格
         p._addChildrenRow()
       },
     },
   ],
-  expandAll:true,
+  expandAll: true,
   treeConfig: {
     id: 'id',
     parentId: 'pid',

@@ -1090,18 +1090,41 @@ export class Column extends Base {
     }
     sys.createColumnSelect(tableName)
   }
-  getBaseInfoConfig() {
-    debugger //
+  _getBaseinfoConfig() {
     return this.templateTableConfig
   }
+  getBaseInfoConfig() {
+    // debugger //
+    return this.config.baseinfoConfig
+  }
+  getBaseInfoTableName() {
+    let baseinfoConfig = this.config?.baseinfoConfig
+    let tableName = baseinfoConfig?.tableName
+    return tableName
+  }
   async openBaseInfoTable() {
+    // debugger //
     let sys = this.getSystem() //
-    let tableName = this.getTableName() //
+    let tableName = this.getBaseInfoTableName() //
+    if (tableName == null) {
+      this.templateTableConfig.columns = []
+      this.templateTableConfig.data = []
+      return
+    }
+    let baseinfoConfig = this.config?.baseinfoConfig || {}
     let searchEn: SearchPageDesign = await sys.createPageSearchDesign(tableName)
     let columns = searchEn.getTableColumns()
-    let _data = await searchEn.getTinyTableData({})
+    let showColumns = baseinfoConfig?.showColumns || []
+    if (Array.isArray(showColumns) && showColumns.length > 0) {
+      columns = columns.filter((col) => showColumns.includes(col.field))
+    } //
+    let _data = await searchEn.getTinyTableData({
+      query: {
+        $limit: 10,
+      },
+    })
     this.templateTableConfig.columns = columns
-    this.templateTableConfig.data = _data
+    this.templateTableConfig.data = _data //
     nextTick(() => {
       this.showDropdown() //
     })
@@ -1114,26 +1137,32 @@ export class Column extends Base {
     input.showDropdown({})
   }
   onFocus(config) {}
+
   confirmTinyTableRow(row) {
-    let bindColumns = this.config.bindColumns //
+    let bConfig = this.getBaseInfoConfig() //
+    let bindColumns = bConfig?.bindColumns || []
     if (Array.isArray(bindColumns) && bindColumns.length > 0) {
+      // debugger //
       if (bindColumns.length == 1) {
         bindColumns = bindColumns[0]
-        let field = bindColumns.field
-        let value = row[field] //
+        let field = bindColumns.targetKey
+        let value = row[field]
         this.cacheValue = value //
       } else {
         let _obj = {}
         for (const col of bindColumns) {
-          let field = col.field
-          let myField = col.myField
+          let field = col.targetKey
+          let myField = col.key //
           let value = row[field]
           _obj[myField] = value
         }
         this.cacheValueObj = _obj
+        let f = this.getField()
+        let _v = _obj[f]
+        this.cacheValue = _v //
       }
+      this.isChangeValue = true //
     }
-    this.isChangeValue = true //
     this.closeBaseInfoTable() //
   }
   closeBaseInfoTable() {

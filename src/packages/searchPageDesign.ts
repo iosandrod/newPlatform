@@ -7,7 +7,7 @@ export class SearchPageDesign extends PageDesign {
   async getTinyTableData(config) {
     let realTableName = this.getRealTableName() //
     let http = this.getHttp() //
-    let query = config.query
+    let query = config.query || {} //
     let _data = await http.find(realTableName, query) //
     return _data ////
   }

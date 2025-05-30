@@ -96,6 +96,9 @@ export const baseinfoType = (item: FormItem) => {
   let obj = defaultType(item) //
   obj.onChange = (config) => {}
   obj.clearable = true
+  obj.onInput = (config) => {
+    console.log('baseinfoInput') //
+  } //
   return obj
 }
 export const itemTypeMap = {

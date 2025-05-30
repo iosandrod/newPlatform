@@ -182,7 +182,11 @@ export default defineComponent({
               onFocus={(config) => {
                 column.openBaseInfoTable() //
               }}
-              baseinfoConfig={column.getBaseInfoConfig()}
+              onConfirmTinyTable={(config) => {
+                ///
+                column.confirmTinyTableRow(config.row)
+              }}
+              baseinfoConfig={column._getBaseinfoConfig()}
             ></InputCom>
           </div>
         )
