@@ -101,6 +101,16 @@ export const baseinfoType = (item: FormItem) => {
   } //
   return obj
 }
+export const colorType = (item: FormItem) => {
+  let obj = defaultType(item) //
+  obj.onChange = (config) => {
+    let value = config.value
+    item.updateBindData({ value }) //
+  }
+  obj.clearable = true
+  obj.onInput = (config) => {} //
+  return obj
+}
 export const itemTypeMap = {
   input: inputType,
   string: inputType,
@@ -111,4 +121,5 @@ export const itemTypeMap = {
   boolean: booleanType, //
   sform: sformType, //
   baseinfo: baseinfoType,
+  color: colorType,
 }

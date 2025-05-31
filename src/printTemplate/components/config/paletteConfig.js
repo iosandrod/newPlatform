@@ -154,66 +154,65 @@ export const paletteConfigList = {
       },
     },
     {
-      label: '排列',
+      label: '水平排列',
+      field: 'justifyContent', // 对应原先 select 里每项包含两个 field：justifyContent/alignItems
       span: 24,
-      type: 'btnRadioGroup',
-      options: [
-        {
-          field: 'justifyContent',
-          // 是否 “单选”？原来 isRadio 默认为 true，可不显式写
-          // isRadio: true,
-          options: [
-            {
-              type: 'icon',
-              content: 'ri-align-left',
-              value: 'flex-start',
-              label: '水平居左',
-            },
-            {
-              type: 'icon',
-              content: 'ri-align-center',
-              value: 'center',
-              label: '水平居中',
-            },
-            {
-              type: 'icon',
-              content: 'ri-align-right',
-              value: 'flex-end',
-              label: '水平居右',
-            },
-          ],
-        },
-        {
-          field: 'alignItems',
-          // 下方这些组合也是 “单选”
-          // isRadio: true,
-          options: [
-            {
-              type: 'icon',
-              content: 'ri-align-left rotate-90',
-              value: 'flex-start',
-              label: '垂直居顶',
-            },
-            {
-              type: 'icon',
-              content: 'ri-align-center rotate-90',
-              value: 'center',
-              label: '垂直居中',
-            },
-            {
-              type: 'icon',
-              content: 'ri-align-right rotate-90',
-              value: 'flex-end',
-              label: '垂直居底',
-            },
-          ],
-        },
-      ],
+      type: 'select',
+      options: {
+        options: [
+          {
+            type: 'icon',
+            content: 'ri-align-left',
+            value: 'flex-start',
+            label: '水平居左',
+          },
+          {
+            type: 'icon',
+            content: 'ri-align-center',
+            value: 'center',
+            label: '水平居中',
+          },
+          {
+            type: 'icon',
+            content: 'ri-align-right',
+            value: 'flex-end',
+            label: '水平居右',
+          },
+        ],
+      },
     },
+    {
+      label: '垂直排列',
+      field: 'alignItems', // 对应原先 select 里每项包含两个 field：justifyContent/alignItems
+      span: 24,
+      type: 'select',
+      options: {
+        options: [
+          {
+            type: 'icon',
+            content: 'ri-align-left rotate-90',
+            value: 'flex-start',
+            label: '垂直居上',
+          },
+          {
+            type: 'icon',
+            content: 'ri-align-center rotate-90',
+            value: 'center',
+            label: '垂直居中',
+          },
+          {
+            type: 'icon',
+            content: 'ri-align-right rotate-90',
+            value: 'flex-end',
+            label: '垂直居下',
+          },
+        ], //
+      },
+    }, 
     {
       label: '文字样式',
       span: 24,
-      type: 'btnRadioGroup',
+      type: 'select',
       options: [
         {
           field: 'fontWeight',
@@ -425,8 +424,8 @@ export const paletteConfigList = {
       type: 'number',
       options: {
         min: 0,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '高度',
@@ -435,8 +434,8 @@ export const paletteConfigList = {
       type: 'number',
       options: {
         min: 0,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '背景颜色',
@@ -445,7 +444,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 此处可添加 color-picker 需要的其他配置
-      }
+      },
     },
     {
       label: '边框类型',
@@ -457,9 +456,9 @@ export const paletteConfigList = {
           { label: '无', value: 'none' },
           { label: '实线', value: 'solid' },
           { label: '线虚线', value: 'dashed' },
-          { label: '点虚线', value: 'dotted' }
-        ]
-      }
+          { label: '点虚线', value: 'dotted' },
+        ],
+      },
     },
     {
       label: '边框颜色',
@@ -468,7 +467,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '边框宽度',
@@ -478,8 +477,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 4,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '旋转角度（°）',
@@ -489,8 +488,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 360,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '元素位置',
@@ -501,10 +500,10 @@ export const paletteConfigList = {
         options: [
           { label: '跟随全局配置（默认）', value: 'default' },
           { label: '固定位置', value: 'fixed' },
-          { label: '重复位置', value: 'repeated' }
-        ]
-      }
-    }
+          { label: '重复位置', value: 'repeated' },
+        ],
+      },
+    },
   ],
 
   RoyLine: [
@@ -515,8 +514,8 @@ export const paletteConfigList = {
       type: 'number',
       options: {
         min: 0,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '粗细',
@@ -530,9 +529,9 @@ export const paletteConfigList = {
           { label: '正常', value: 1.5 },
           { label: '粗', value: 2 },
           { label: '极粗', value: 4 },
-          { label: '粗粗粗', value: 6 }
-        ]
-      }
+          { label: '粗粗粗', value: 6 },
+        ],
+      },
     },
     {
       label: '颜色',
@@ -541,7 +540,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '旋转角度（°）',
@@ -551,8 +550,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 360,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '元素位置',
@@ -563,10 +562,10 @@ export const paletteConfigList = {
         options: [
           { label: '跟随全局配置（默认）', value: 'default' },
           { label: '固定位置', value: 'fixed' },
-          { label: '重复位置', value: 'repeated' }
-        ]
-      }
-    }
+          { label: '重复位置', value: 'repeated' },
+        ],
+      },
+    },
   ],
 
   RoyStar: [
@@ -577,8 +576,8 @@ export const paletteConfigList = {
       type: 'number',
       options: {
         min: 0,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '颜色',
@@ -587,7 +586,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '样式',
@@ -599,9 +598,9 @@ export const paletteConfigList = {
           { label: '实心五角星', value: 'icon-shiwujiaoxing' },
           { label: '空心五角星', value: 'icon-kongwujiaoxing' },
           { label: '圆润五角星', value: 'icon-shoucang' },
-          { label: '双线五角星', value: 'icon-wujiaoxing' }
-        ]
-      }
+          { label: '双线五角星', value: 'icon-wujiaoxing' },
+        ],
+      },
     },
     {
       label: '旋转角度（°）',
@@ -611,8 +610,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 360,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '元素位置',
@@ -623,10 +622,10 @@ export const paletteConfigList = {
         options: [
           { label: '跟随全局配置（默认）', value: 'default' },
           { label: '固定位置', value: 'fixed' },
-          { label: '重复位置', value: 'repeated' }
-        ]
-      }
-    }
+          { label: '重复位置', value: 'repeated' },
+        ],
+      },
+    },
   ],
 
   RoySimpleTable: [
@@ -637,7 +636,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '边框颜色',
@@ -646,7 +645,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '边框宽度',
@@ -656,9 +655,9 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 4,
-        size: 'mini'
-      }
-    }
+        size: 'mini',
+      },
+    },
     // 如果需要 “元素位置” 的话，可按照之前示例补充
   ],
 
@@ -670,7 +669,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '边框颜色',
@@ -679,7 +678,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '边框宽度',
@@ -689,8 +688,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 4,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '字体',
@@ -704,9 +703,9 @@ export const paletteConfigList = {
           { label: '黑体', value: 'simhei' },
           { label: '楷体', value: 'kaiti' },
           { label: '仿宋', value: 'fangsong' },
-          { label: '微软雅黑', value: 'microsoft yahei' }
-        ]
-      }
+          { label: '微软雅黑', value: 'microsoft yahei' },
+        ],
+      },
     },
     {
       label: '字体颜色',
@@ -715,7 +714,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '字体大小（pt）',
@@ -725,9 +724,9 @@ export const paletteConfigList = {
       options: {
         min: 10,
         max: 120,
-        size: 'mini'
-      }
-    }
+        size: 'mini',
+      },
+    },
     // 如果需要 “元素位置” 的话，可按照之前示例补充
   ],
 
@@ -739,7 +738,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '边距',
@@ -749,10 +748,10 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 20,
-        size: 'mini'
-      }
-    }
-  ]  ,
+        size: 'mini',
+      },
+    },
+  ],
   RoySimpleTextIn: [
     {
       label: '字体',
@@ -766,9 +765,9 @@ export const paletteConfigList = {
           { label: '黑体', value: 'simhei' },
           { label: '楷体', value: 'kaiti' },
           { label: '仿宋', value: 'fangsong' },
-          { label: '微软雅黑', value: 'microsoft yahei' }
-        ]
-      }
+          { label: '微软雅黑', value: 'microsoft yahei' },
+        ],
+      },
     },
     {
       label: '字体颜色',
@@ -777,7 +776,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 对应原先 $colorPicker，若需额外配置可在此添加
-      }
+      },
     },
     {
       label: '字体大小（pt）',
@@ -787,8 +786,8 @@ export const paletteConfigList = {
       options: {
         min: 10,
         max: 120,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '行高',
@@ -797,75 +796,120 @@ export const paletteConfigList = {
       type: 'select',
       options: {
         options: [
-          { value: '1',   label: '1'   },
+          { value: '1', label: '1' },
           { value: '1.5', label: '1.5' },
-          { value: '2',   label: '2'   },
+          { value: '2', label: '2' },
           { value: '2.5', label: '2.5' },
-          { value: '3',   label: '3'   }
-        ]
-      }
+          { value: '3', label: '3' },
+        ],
+      },
     },
     {
-      label: '排列',
-      field: '', // 对应原先 btnRadioGroup 里每项包含两个 field：justifyContent/alignItems
+      label: '水平排列',
+      field: 'justifyContent', // 对应原先 select 里每项包含两个 field：justifyContent/alignItems
       span: 24,
-      type: 'btnRadioGroup',
-      options: [
-        {
-          field: 'justifyContent',
-          // 对应水平对齐那一组按钮
-          options: [
-            { type: 'icon', content: 'ri-align-left',   value: 'flex-start', label: '水平居左' },
-            { type: 'icon', content: 'ri-align-center', value: 'center',     label: '水平居中' },
-            { type: 'icon', content: 'ri-align-right',  value: 'flex-end',   label: '水平居右' }
-          ]
-        },
-        {
-          field: 'alignItems',
-          // 对应垂直对齐那一组按钮
-          options: [
-            { type: 'icon', content: 'ri-align-left rotate-90',   value: 'flex-start', label: '垂直居上'   },
-            { type: 'icon', content: 'ri-align-center rotate-90', value: 'center',     label: '垂直居中'   },
-            { type: 'icon', content: 'ri-align-right rotate-90',  value: 'flex-end',   label: '垂直居下'   }
-          ]
-        }
-      ]
+      type: 'select',
+      options: {
+        options: [
+          {
+            type: 'icon',
+            content: 'ri-align-left',
+            value: 'flex-start',
+            label: '水平居左',
+          },
+          {
+            type: 'icon',
+            content: 'ri-align-center',
+            value: 'center',
+            label: '水平居中',
+          },
+          {
+            type: 'icon',
+            content: 'ri-align-right',
+            value: 'flex-end',
+            label: '水平居右',
+          },
+        ],
+      },
+    },
+    {
+      label: '垂直排列',
+      field: 'alignItems', // 对应原先 select 里每项包含两个 field：justifyContent/alignItems
+      span: 24,
+      type: 'select',
+      options: {
+        options: [
+          {
+            type: 'icon',
+            content: 'ri-align-left rotate-90',
+            value: 'flex-start',
+            label: '垂直居上',
+          },
+          {
+            type: 'icon',
+            content: 'ri-align-center rotate-90',
+            value: 'center',
+            label: '垂直居中',
+          },
+          {
+            type: 'icon',
+            content: 'ri-align-right rotate-90',
+            value: 'flex-end',
+            label: '垂直居下',
+          },
+        ], //
+      },
     },
     {
       label: '文字样式',
-      field: '', // 对应原先 btnRadioGroup 里每项包含 fontWeight/fontStyle/isUnderLine/isDelLine
+      field: '', // 对应原先 select 里每项包含 fontWeight/fontStyle/isUnderLine/isDelLine
       span: 24,
-      type: 'btnRadioGroup',
+      type: 'select',
       options: [
         {
           field: 'fontWeight',
           isRadio: false, // 可多选
           options: [
-            { type: 'icon', content: 'ri-bold',       value: 'bold',    label: '粗体' }
-          ]
+            { type: 'icon', content: 'ri-bold', value: 'bold', label: '粗体' },
+          ],
         },
         {
           field: 'fontStyle',
           isRadio: false,
           options: [
-            { type: 'icon', content: 'ri-italic',     value: 'italic',  label: '斜体' }
-          ]
+            {
+              type: 'icon',
+              content: 'ri-italic',
+              value: 'italic',
+              label: '斜体',
+            },
+          ],
         },
         {
           field: 'isUnderLine',
           isRadio: false,
           options: [
-            { type: 'icon', content: 'ri-underline', value: true,      label: '下划线' }
-          ]
+            {
+              type: 'icon',
+              content: 'ri-underline',
+              value: true,
+              label: '下划线',
+            },
+          ],
         },
         {
           field: 'isDelLine',
           isRadio: false,
           options: [
-            { type: 'icon', content: 'ri-strikethrough', value: true,   label: '删除线' }
-          ]
-        }
-      ]
+            {
+              type: 'icon',
+              content: 'ri-strikethrough',
+              value: true,
+              label: '删除线',
+            },
+          ],
+        },
+      ],
     },
     {
       label: '背景颜色',
@@ -874,7 +918,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // $colorPicker 可自行扩展
-      }
+      },
     },
     {
       label: '边距',
@@ -884,9 +928,9 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 20,
-        size: 'mini'
-      }
-    }
+        size: 'mini',
+      },
+    },
   ],
   // 对应：RoyImage 表单配置
   RoyImage: [
@@ -898,8 +942,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 10000,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '边框类型',
@@ -908,12 +952,12 @@ export const paletteConfigList = {
       type: 'select',
       options: {
         options: [
-          { label: '无',     value: 'none'   },
-          { label: '实线',   value: 'solid'  },
+          { label: '无', value: 'none' },
+          { label: '实线', value: 'solid' },
           { label: '线虚线', value: 'dashed' },
-          { label: '点虚线', value: 'dotted' }
-        ]
-      }
+          { label: '点虚线', value: 'dotted' },
+        ],
+      },
     },
     {
       label: '边框颜色',
@@ -922,7 +966,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // $colorPicker
-      }
+      },
     },
     {
       label: '边框宽度',
@@ -932,8 +976,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 4,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '旋转角度（°）',
@@ -943,8 +987,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 360,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '元素位置',
@@ -954,11 +998,11 @@ export const paletteConfigList = {
       options: {
         options: [
           { label: '跟随全局配置（默认）', value: 'default' },
-          { label: '固定位置',           value: 'fixed'   },
-          { label: '重复位置',           value: 'repeated'}
-        ]
-      }
-    }
+          { label: '固定位置', value: 'fixed' },
+          { label: '重复位置', value: 'repeated' },
+        ],
+      },
+    },
   ],
   // 对应：RoyQRCode 表单配置
   RoyQRCode: [
@@ -969,8 +1013,8 @@ export const paletteConfigList = {
       type: 'number',
       options: {
         min: 0,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '高度',
@@ -979,8 +1023,8 @@ export const paletteConfigList = {
       type: 'number',
       options: {
         min: 0,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '背景颜色',
@@ -989,7 +1033,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '边框类型',
@@ -998,12 +1042,12 @@ export const paletteConfigList = {
       type: 'select',
       options: {
         options: [
-          { label: '无',     value: 'none'   },
-          { label: '实线',   value: 'solid'  },
+          { label: '无', value: 'none' },
+          { label: '实线', value: 'solid' },
           { label: '线虚线', value: 'dashed' },
-          { label: '点虚线', value: 'dotted' }
-        ]
-      }
+          { label: '点虚线', value: 'dotted' },
+        ],
+      },
     },
     {
       label: '边框颜色',
@@ -1012,7 +1056,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // $colorPicker
-      }
+      },
     },
     {
       label: '边框宽度',
@@ -1022,8 +1066,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 4,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '旋转角度（°）',
@@ -1033,8 +1077,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 360,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '元素位置',
@@ -1044,11 +1088,11 @@ export const paletteConfigList = {
       options: {
         options: [
           { label: '跟随全局配置（默认）', value: 'default' },
-          { label: '固定位置',           value: 'fixed'   },
-          { label: '重复位置',           value: 'repeated'}
-        ]
-      }
-    }
+          { label: '固定位置', value: 'fixed' },
+          { label: '重复位置', value: 'repeated' },
+        ],
+      },
+    },
   ],
   // 对应：RoyBarCode 表单配置
   RoyBarCode: [
@@ -1059,8 +1103,8 @@ export const paletteConfigList = {
       type: 'number',
       options: {
         min: 0,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '高度',
@@ -1069,8 +1113,8 @@ export const paletteConfigList = {
       type: 'number',
       options: {
         min: 0,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '背景颜色',
@@ -1079,7 +1123,7 @@ export const paletteConfigList = {
       type: 'color',
       options: {
         // 可留空
-      }
+      },
     },
     {
       label: '旋转角度（°）',
@@ -1089,8 +1133,8 @@ export const paletteConfigList = {
       options: {
         min: 0,
         max: 360,
-        size: 'mini'
-      }
+        size: 'mini',
+      },
     },
     {
       label: '元素位置',
@@ -1100,13 +1144,13 @@ export const paletteConfigList = {
       options: {
         options: [
           { label: '跟随全局配置（默认）', value: 'default' },
-          { label: '固定位置',           value: 'fixed'   },
-          { label: '重复位置',           value: 'repeated'}
-        ]
-      }
-    }
-  ]
-} 
+          { label: '固定位置', value: 'fixed' },
+          { label: '重复位置', value: 'repeated' },
+        ],
+      },
+    },
+  ],
+}
 
 export const settingConfigList = {
   RoySimpleTextIn: [
@@ -1140,7 +1184,7 @@ export const settingConfigList = {
       label: '文本类型',
       span: 24,
       itemRender: {
-        name: '$btnRadioGroup',
+        name: '$select',
         options: [
           {
             field: 'component',
@@ -1211,7 +1255,7 @@ export const settingConfigList = {
       label: '文本类型',
       span: 24,
       itemRender: {
-        name: '$btnRadioGroup',
+        name: '$select',
         options: [
           {
             field: 'component',
@@ -1256,7 +1300,7 @@ export const settingConfigList = {
       label: '展示头部留白',
       span: 24,
       itemRender: {
-        name: '$btnRadioGroup',
+        name: '$select',
         options: [
           {
             field: 'showPrefix',
@@ -1283,7 +1327,7 @@ export const settingConfigList = {
       label: '展示头部单元格',
       span: 24,
       itemRender: {
-        name: '$btnRadioGroup',
+        name: '$select',
         options: [
           {
             field: 'showHead',
@@ -1310,7 +1354,7 @@ export const settingConfigList = {
       label: '展示尾部单元格',
       span: 24,
       itemRender: {
-        name: '$btnRadioGroup',
+        name: '$select',
         options: [
           {
             field: 'showFoot',
@@ -1337,7 +1381,7 @@ export const settingConfigList = {
       label: '展示尾部留白',
       span: 24,
       itemRender: {
-        name: '$btnRadioGroup',
+        name: '$select',
         options: [
           {
             field: 'showSuffix',
@@ -1364,7 +1408,7 @@ export const settingConfigList = {
       label: '数据表格设置',
       span: 24,
       itemRender: {
-        name: '$btnRadioGroup',
+        name: '$select',
         options: [
           {
             field: 'bodyDataSetting',
@@ -1966,7 +2010,7 @@ export const settingConfigList = {
       label: '上传图片',
       span: 24,
       itemRender: {
-        name: '$btnRadioGroup',
+        name: '$select',
         options: [
           {
             field: 'src',

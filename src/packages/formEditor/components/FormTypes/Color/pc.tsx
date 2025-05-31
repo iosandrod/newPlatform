@@ -4,12 +4,14 @@ import SelectCom from '@/select/selectCom'
 import { FormItem } from '@ER/formitem'
 import { ElInput } from 'element-plus'
 import { computed, defineComponent } from 'vue'
+import { VxeColorPicker } from 'vxe-pc-ui'
 
 export default defineComponent({
   name: 'InputPc',
   inheritAttrs: false,
   customOptions: {},
   components: {
+    VxeColorPicker,
     inputCom,
     selectCom,
   },
@@ -27,18 +29,14 @@ export default defineComponent({
     })
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
-    }
-    let isColumnSelect = computed(() => {
-      let s = formitem.getIsColumnSelect()
-      return s
-    }) //
+    } //
     return () => {
       let com = (
         <div
           class="h-full w-full flex items-center"
           style={{ minHeight: '36px', height: '36px' }} //
         >
-          <inputCom ref={registerRef} {..._value.value}></inputCom>
+          <VxeColorPicker ref={registerRef} {..._value.value}></VxeColorPicker>
         </div>
       ) //
       return com //

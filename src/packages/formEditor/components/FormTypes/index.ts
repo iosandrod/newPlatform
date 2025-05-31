@@ -39,6 +39,8 @@ import imagePc from './Image/pc'
 import imageMobile from './Image/mobile' //
 import baseinfoPc from './Baseinfo/pc'
 import baseinfoMobile from './Baseinfo/mobile' //
+import colorPc from './Color/pc'
+import colorMobile from './Color/mobile'
 export const typeMap = {
   image: {
     pc: imagePc,
@@ -116,7 +118,9 @@ export const typeMap = {
     pc: baseinfoPc,
     mobile: baseinfoMobile,
   },
-  // color:{
-  // }
+  color: {
+    pc: colorPc,
+    mobile: colorMobile, //
+  }, //
 }
 export default {}
