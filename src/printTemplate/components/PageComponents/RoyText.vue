@@ -1,6 +1,6 @@
 <template>
-  <div style="width: 100%; height: 100%" @dblclick="onDblClick">
-    <RoyModal
+  <div style="width: 100%; height: 100%;" @dblclick="onDblClick">
+    <!-- <RoyModal
       v-if="showEditor"
       v-model:show="showEditor"
       height="70%"
@@ -12,43 +12,49 @@
         <WangToolbar
           :defaultConfig="toolbarConfig"
           :editor="wangEditor"
-          style="border-bottom: 1px solid #ccc"
+          style="border-bottom: 1px solid #ccc;"
         />
-        <WangEditor 
+        <WangEditor
           v-model="html"
           :defaultConfig="editorConfig"
           :mode="mode"
-          style="height: 300px"
+          style="height: 300px;"
           @onCreated="onCreated"
         />
       </div>
-    </RoyModal>
+    </RoyModal> -->
     <StyledText v-bind="style">
       <div class="roy-text-inner" v-html="propValue"></div>
     </StyledText>
   </div>
 </template>
 
-<script setup>
-import { ref, watch, onBeforeUnmount,computed } from 'vue'
+<script setup lang="ts">
+import { ref, watch, onBeforeUnmount, computed, inject } from 'vue'
 import { useStore, mapState } from 'vuex'
 import { StyledText } from '@/printTemplate/components/PageComponents/style'
 import RoyModal from '@/printTemplate/components/RoyModal/RoyModal.vue'
 import WangToolbar from '@/printTemplate/components/PageComponents/WangEditorVue/WangToolbar.vue'
 import WangEditor from '@/printTemplate/components/PageComponents/WangEditorVue/WangEditor.vue'
-import { toolBarConfig, editorConfig as _editorConfig, mode } from '@/printTemplate/components/config/editorConfig'
+import {
+  toolBarConfig,
+  editorConfig as _editorConfig,
+  mode,
+} from '@/printTemplate/components/config/editorConfig'
 import commonMixin from '@/printTemplate/mixin/commonMixin'
-
+import { System } from '@/system'
+let sys: System = inject('systemIns')
+// console.log(sys, 'sfsfsdfs') //
 // Props
 const props = defineProps({
   element: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   propValue: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 
 // Mixin (Vue 3 still supports options-based mixins; to use commonMixin, unwrap its methods/context)
@@ -63,7 +69,7 @@ const showEditor = ref(false)
 const html = ref(deepCopy(props.propValue))
 
 const toolbarConfig = toolBarConfig
-let editorConfig =JSON.parse(JSON.stringify(_editorConfig)) 
+let editorConfig = JSON.parse(JSON.stringify(_editorConfig))
 const editorMode = mode
 
 // Computed style from element
@@ -75,12 +81,24 @@ const style = computed(() => {
 function onBlur() {
   store.commit('printTemplateModule/setPropValue', {
     id: props.element.id,
-    propValue: html.value
+    propValue: html.value,
   })
 }
 
 function onDblClick() {
-  showEditor.value = true
+  // showEditor.value = true //
+  sys.openWangEditorDialog({
+    modelValue: html.value,
+    confirmFn: (dialog: Dialog) => {
+      let com: CodeEditor = dialog.getRef('innerCom')
+      let bindValue = com.getBindValue()
+      html.value = bindValue //
+      store.commit('printTemplateModule/setPropValue', {
+        id: props.element.id,
+        propValue: html.value,
+      })
+    },
+  }) //
 }
 
 function handleMouseDown(e) {
@@ -111,6 +129,6 @@ watch(
     if (newVal !== html.value) {
       html.value = deepCopy(newVal)
     }
-  }
+  },
 )
 </script>

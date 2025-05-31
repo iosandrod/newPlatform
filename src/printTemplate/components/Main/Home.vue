@@ -237,7 +237,7 @@ async function importFile() {
 
 function exportJSON() {
   const a = document.createElement('a')
-  a.download = `${pageConfig.value.title}.rptd`
+  a.download = `${pageConfig.value.title}.json`
   a.style.display = 'none'
   const blob = new Blob([JSON.stringify({
     pageConfig: pageConfig.value,

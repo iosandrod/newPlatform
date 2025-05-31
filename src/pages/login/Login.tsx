@@ -33,7 +33,12 @@ import selectCom from '@/select/selectCom'
 import pVue from '@/printTemplate/print.vue'
 import WangToolbar from '@/printTemplate/components/PageComponents/WangEditorVue/WangToolbar.vue'
 import WangEditor from '@/printTemplate/components/PageComponents/WangEditorVue/WangEditor.vue'
-import { toolBarConfig, editorConfig as _editorConfig, mode } from '@/printTemplate/components/config/editorConfig'
+import {
+  toolBarConfig,
+  editorConfig as _editorConfig,
+  mode,
+} from '@/printTemplate/components/config/editorConfig'
+import wangCom from '@/wangEditor/wangCom'
 export default defineComponent({
   components: {
     pVue,
@@ -57,6 +62,7 @@ export default defineComponent({
     dialogCom,
     VxeCheckbox,
     checkboxCom,
+    wangCom,
   },
   setup(props) {
     const formConfig = {
@@ -373,15 +379,43 @@ export default defineComponent({
       //   ></selectCom>
       // )
       com = <pVue></pVue>
+      // com = (
+      //   <wangCom
+      //     ref={(el) => {
+      //       _reg2.value = el._instance//
+      //     }}
+      //   ></wangCom>
+      // )
+      // com = (
+      //   <button
+      //     onClick={() => {
+      //       system.openWangEditorDialog({
+      //         confirmFn: (dialog) => {
+      //           console.log(dialog, 'testDialog') //
+      //           console.log('confirmFn') //
+      //         },
+      //       }) //
+      //     }}
+      //   >
+      //     123132
+      //   </button>
+      // )
       let _com = (
         <div
-          class='h-full'
+          class="h-full"
           style={{
             overflow: 'hidden', //
           }}
         >
           {com0}
           <div class="h-full w-full" style={{}}>
+            {/* <button
+              onClick={() => {
+                console.log(_reg2.value, 'testReg2') //
+              }}
+            >
+              测试1
+            </button> */}
             {com}
           </div>
         </div>

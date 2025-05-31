@@ -900,13 +900,13 @@ export class FormItem extends Base {
     let openBefore = options.openBefore
     let data = this.form.getData()
     if (typeof openBefore == 'function') {
-      let _v=await openBefore({
+      let _v = await openBefore({
         item: this,
         data: data,
       })
-      if(typeof _v=='string'){
-        this.getSystem().confirmMessage(_v,'warning')
-        return 
+      if (typeof _v == 'string') {
+        this.getSystem().confirmMessage(_v, 'warning')
+        return
       }
     }
     let sys = this.getSystem()
@@ -957,26 +957,37 @@ export class FormItem extends Base {
       value = '' //
     }
     let tableName = this.getMainTableName()
-    let createFn = () => {
-      return {
-        component: codeEditorCom,
-        props: {
-          ...codeConfig,
-          modelValue: value,
-          tableName: tableName,
-        },
-      }
-    } //
-    sys.openDialog({
-      height: 600,
-      width: 1200,
-      createFn, //
+    let config = {
+      ...codeConfig,
+      tableName,
+      modelValue: value,
       confirmFn: (dialog: Dialog) => {
         let com: CodeEditor = dialog.getRef('innerCom')
         let bindValue = com.getBindValue() //
         this.updateBindData({ value: bindValue }) ////
       },
-    })
+    }
+    sys.openCodeDialog(config) //
+    // let createFn = () => {
+    //   return {
+    //     component: codeEditorCom,
+    //     props: {
+    //       ...codeConfig,
+    //       modelValue: value,
+    //       tableName: tableName,
+    //     },
+    //   }
+    // }
+    // sys.openDialog({
+    //   height: 600,
+    //   width: 1200,
+    //   createFn, //
+    //   confirmFn: (dialog: Dialog) => {
+    //     let com: CodeEditor = dialog.getRef('innerCom')
+    //     let bindValue = com.getBindValue() //
+    //     this.updateBindData({ value: bindValue }) ////
+    //   },
+    // })
   }
   openSFormDialog() {
     // debugger//

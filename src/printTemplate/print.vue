@@ -74,14 +74,14 @@ const viewerVisible = ref(false)
 const templateVisible = ref(false) //
 // Predefined configurations
 const toolbarSlotConfig = [
-  {
-    name: '从报表配置拉取表格',
-    icon: 'ri-table-line',
-    event: () => {
-      //
-      toast('(开发者自定义按钮)')
-    },
-  },
+  // {
+  //   name: '从报表配置拉取表格',
+  //   icon: 'ri-table-line',
+  //   event: () => {
+  //     //
+  //     toast('(开发者自定义按钮)')
+  //   },
+  // },
 ]
 const headIconConfig = [
   {
@@ -92,14 +92,14 @@ const headIconConfig = [
       templateVisible.value = true
     },
   },
-  {
-    name: 'dataset',
-    icon: 'ri-database-line',
-    title: '数据源模拟',
-    event: () => {
-      toast('开发中')
-    },
-  },
+  // {
+  //   name: 'dataset',
+  //   icon: 'ri-database-line',
+  //   title: '数据源模拟',
+  //   event: () => {
+  //     toast('开发中')
+  //   },
+  // },
   {
     name: 'ShowViewer',
     icon: 'ri-eye-line',

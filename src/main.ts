@@ -85,6 +85,7 @@ Base.prototype.getAllComponent = () => componentObj
 // Table.component = tableCom
 import PrintDesign from '@/printTemplate/components/index.js'
 import store from '@/printTemplate/stores/index.js'
+import wangCom from './wangEditor/wangCom'
 app.use(PrintDesign, {
   store,
 }) //
@@ -92,6 +93,7 @@ app.use(store) //
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)
+app.component('wangEditor', wangCom)
 app.component('erButton', buttonCom)
 app.component('erButtonGroup', buttonGroupCom)
 app.component('erForm', formEditor) //

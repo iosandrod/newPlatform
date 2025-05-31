@@ -19,6 +19,9 @@ import { editUse, mainUse } from './pageUseFn'
 import { ImportPageDesign } from '@ER/importPageDesign'
 import msgboxCom from './dialog/_dialogCom/msgboxCom'
 import { SearchPageDesign } from '@ER/searchPageDesign'
+import codeEditorCom from './codeEditor/codeEditorCom'
+import CodeEditor from './codeEditor/codeEditor'
+import wangCom from './wangEditor/wangCom'
 export class System extends Base {
   allApp: any = [] //
   systemApp: any = []
@@ -133,8 +136,59 @@ export class System extends Base {
 
     return allT2 //
   } //
-  openPageDesign(config) {} //
-
+  openPageDesign(config) {}
+  openCodeDialog(config) {
+    let createFn = () => {
+      return {
+        component: codeEditorCom,
+        props: { ...config },
+      }
+    }
+    this.openDialog({
+      ...config,
+      height: 600,
+      width: 1200,
+      createFn,
+      confirmFn: (dialog) => {
+        let _confirmFn = config.confirmFn
+        if (typeof _confirmFn == 'function') {
+          _confirmFn(dialog) //
+        }
+      },
+      closeFn: () => {
+        let _closeFn = config.closeFn
+        if (typeof _closeFn == 'function') {
+          _closeFn() //
+        }
+      },
+    })
+  }
+  openWangEditorDialog(config) {
+    let createFn = () => {
+      return {
+        component: wangCom,
+        props: { ...config },
+      }
+    }
+    this.openDialog({
+      ...config,
+      height: 600,
+      width: 1200,
+      createFn,
+      confirmFn: (dialog) => {
+        let _confirmFn = config.confirmFn
+        if (typeof _confirmFn == 'function') {
+          _confirmFn(dialog) //
+        }
+      },
+      closeFn: () => {
+        let _closeFn = config.closeFn
+        if (typeof _closeFn == 'function') {
+          _closeFn() //
+        }
+      },
+    }) //
+  }
   async getPageLayout(name?: string) {
     let http = this.getHttp()
     let data = await http.get(
@@ -1452,5 +1506,4 @@ export class System extends Base {
     return obj
   }
 }
-
 export const system = reactive(new System()) //
