@@ -89,18 +89,26 @@ export const createClient = (config) => {
 
   return app //
 }
-export const client = createClient({})
+// export const client = createClient({})
+export const client: any = {
+  get: () => {
+    return {
+      emit: () => {},
+    }
+  },
+} //
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
   constructor() {
-    this.init() //
+    this.init()
   }
   async init() {
     let token = localStorage.getItem('feathers-jwt')
     if (token) {
       try {
-        let res = await this.client.authenticate({
+        //
+        let res = await this?.client?.authenticate({
           strategy: 'jwt',
           accessToken: token, //
           _unUseCaptcha: true,
@@ -156,7 +164,7 @@ export class myHttp {
     router.push('/companyLogin') //
   }
   async post(tableName, method, params = {}, query = {}): Promise<any> {
-    let connection = this.client.get('connection')
+    let connection = this?.client?.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(
         method, //
@@ -218,7 +226,7 @@ export class myHttp {
     return _data
   }
   async get(tableName, method, query?: any): Promise<any> {
-    let connection = this.client.get('connection')
+    let connection = this?.client?.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(
         method, //
@@ -236,7 +244,7 @@ export class myHttp {
   }
   async patch(tableName, params = {}, query = {}): Promise<any> {
     console.log('patch', params, query) //
-    let connection = this.client.get('connection')
+    let connection = this?.client?.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(
         'patch', //

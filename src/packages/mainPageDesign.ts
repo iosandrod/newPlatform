@@ -236,8 +236,8 @@ export class MainPageDesign extends PageDesign {
         if (_editType == 'add') {
           page.addMainTableRow(_config) //
         }
-      },
-    }) //
+      }, //
+    })
     this.openDialog(dialogConfig)
   }
   async confirmEditEntity(config: any) {

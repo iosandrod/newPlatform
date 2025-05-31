@@ -38,7 +38,7 @@ export class Select extends Base {
   }
   getSelectPanelVisible() {
     let reg: VxeSelectInstance = this.getRef('select')
-    let isShow = reg.isPanelVisible()
+    let isShow = reg.isPanelVisible() 
     return isShow //
   }
   onChange(value) {

@@ -30,8 +30,10 @@ import SearchDialog from '@/dialog/_dialogCom/searchDialog'
 import inputCom from '@/input/inputCom'
 import { tFConfig } from '@ER/formEditor/testData'
 import selectCom from '@/select/selectCom'
+import pVue from '@/printTemplate/App.vue'
 export default defineComponent({
   components: {
+    pVue,
     inputCom, //
     uploadCom,
     codeEditorCom,
@@ -144,16 +146,6 @@ export default defineComponent({
       btn.registerRef('page', el)
     }
     let fn1 = async () => {
-      // system.confirmForm({
-      //   ...formConfig,//
-      // })
-      // let _ins: PageDesign = btn.getRef('page')
-      // _ins
-      //   .validate()
-      //   .then(() => {})
-      //   .catch(() => {
-      //     console.log('报错了') //
-      //   })
       await system.confirmMessageBox('报错了', 'error') //
     }
     // let p = new PageDesign(getDefaultPageProps())
@@ -163,12 +155,12 @@ export default defineComponent({
         return {} //
       }) // //
     let d1 = reactive({ editType: 'date' })
-    let show = ref(false)
+    let show = ref(true)
     let pd = null
-    system.createPageDesign('permissions').then((res) => {
-      pd = res
-      show.value = true
-    }) //
+    // system.createPageDesign('permissions').then((res) => {
+    //   pd = res
+    //   show.value = true
+    // }) //
     let bind = ref('')
     return () => {
       if (show.value == false) {
@@ -210,8 +202,8 @@ export default defineComponent({
                     },
                   ],
                   searchFields: ['cInvCode'], //
-                }, 
-              }, 
+                },
+              },
             ]}
             contextItems={[
               {
@@ -377,6 +369,7 @@ export default defineComponent({
       //     ]}
       //   ></selectCom>
       // )
+      com = <pVue></pVue>
       let _com = (
         <div
           style={{
@@ -386,12 +379,7 @@ export default defineComponent({
         >
           {com2}
           {com0}
-          <div
-            style={{
-              height: '500px',
-              width: '100%', //
-            }}
-          >
+          <div class="h-full w-full" style={{}}>
             {com}
           </div>
         </div>

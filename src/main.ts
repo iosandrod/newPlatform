@@ -40,6 +40,11 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import formCom from '@ER/formCom'
 import formEditor from '@ER/formEditor/formEditor'
 import pageCom from '@ER/pageCom'
+import '@/printTemplate/assets/main.scss'
+import 'remixicon/fonts/remixicon.css'
+import Vuex from 'vuex'
+import printTemplateModule from '@/printTemplate/stores/modules/index.js'
+
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -58,6 +63,8 @@ self.MonacoEnvironment = {
     return new editorWorker()
   },
 }
+app.config.globalProperties.$VXETable = VxeTable
+app.config.globalProperties.$XModal = VxeTable.modal
 let componentObj = {
   tableCom,
   dropdownCom, //
@@ -76,6 +83,12 @@ Base.prototype._router = router
 Base.prototype.getAllComponent = () => componentObj
 //@ts-ignore
 // Table.component = tableCom
+import PrintDesign from '@/printTemplate/components/index.js'
+import store from '@/printTemplate/stores/index.js'
+app.use(PrintDesign, {
+  store,
+}) //
+app.use(store) //
 registerEdit()
 Locale.use('en-US', enUS)
 app.use(Vant)

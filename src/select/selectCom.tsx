@@ -167,7 +167,7 @@ export default defineComponent({
       _select.registerRef('select', ref) ////
     } //
     let _onChange = (value) => {
-      _select.onChange(value)
+      _select.onChange(value) //
     }
     let _onInput = (value) => {
       let $event = value.$event

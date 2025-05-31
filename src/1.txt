@@ -4486,3 +4486,14 @@ const app = createApp({
             tableIns.clearCache()
           },
         },
+
+         // system.confirmForm({
+      //   ...formConfig,//
+      // })
+      // let _ins: PageDesign = btn.getRef('page')
+      // _ins
+      //   .validate()
+      //   .then(() => {})
+      //   .catch(() => {
+      //     console.log('报错了') //
+      //   })
