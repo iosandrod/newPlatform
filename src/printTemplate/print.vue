@@ -46,15 +46,7 @@
       @load="loadTemp"
     />
 
-    <div class="fork-me">
-      <a
-        href="https://github.com/ROYIANS/print-template-designer"
-        target="_blank"
-      >
-        <i class="ri-github-line"></i>
-        Give me a Star!
-      </a>
-    </div>
+   
   </div>
 </template>
 
@@ -169,13 +161,7 @@ function loadTemp(data) {
 
 // onMounted hook: show initial toasts
 onMounted(async () => {
-  await toast(
-    '欢迎使用ROYIANS的打印模板设计器，仅个人学习使用',
-    'success',
-    3000,
-  )
-  await toast('当前网页预览的是最新开发分支，请留意', 'warning', 3000)
-  console.log('contributed by ROYIANS@Little-Dreamland﹢')
+  
 })
 </script>
 

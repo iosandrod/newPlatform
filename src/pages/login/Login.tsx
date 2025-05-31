@@ -30,7 +30,10 @@ import SearchDialog from '@/dialog/_dialogCom/searchDialog'
 import inputCom from '@/input/inputCom'
 import { tFConfig } from '@ER/formEditor/testData'
 import selectCom from '@/select/selectCom'
-import pVue from '@/printTemplate/App.vue'
+import pVue from '@/printTemplate/print.vue'
+import WangToolbar from '@/printTemplate/components/PageComponents/WangEditorVue/WangToolbar.vue'
+import WangEditor from '@/printTemplate/components/PageComponents/WangEditorVue/WangEditor.vue'
+import { toolBarConfig, editorConfig as _editorConfig, mode } from '@/printTemplate/components/config/editorConfig'
 export default defineComponent({
   components: {
     pVue,
