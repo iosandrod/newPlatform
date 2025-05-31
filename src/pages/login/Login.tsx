@@ -372,12 +372,11 @@ export default defineComponent({
       com = <pVue></pVue>
       let _com = (
         <div
+          class='h-full'
           style={{
-            padding: '100px', //
             overflow: 'hidden', //
           }}
         >
-          {com2}
           {com0}
           <div class="h-full w-full" style={{}}>
             {com}

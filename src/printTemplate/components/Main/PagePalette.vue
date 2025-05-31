@@ -4,8 +4,8 @@
       <roy-divider v-if="settingFormItemConfig.length" content-position="left">
         属性设置
       </roy-divider>
-      <vxe-form
-        ref="setting-form"
+      <erForm 
+        ref="settingForm"
         :align="formGlobalConfigIn.align"
         :data="settingFormData"
         :items="settingFormItemConfig"
@@ -15,16 +15,13 @@
         :size="formGlobalConfigIn.size"
         :span="formGlobalConfigIn.span"
         :title-align="formGlobalConfigIn.titleAlign"
-        :title-colon="formGlobalConfigIn.titleColon"
         :title-overflow="formGlobalConfigIn.titleOverflow"
-        :title-width="formGlobalConfigIn.titleWidth"
         :valid-config="formGlobalConfigIn.validConfig"
         sync-resize
       />
       <roy-divider content-position="left">样式设置</roy-divider>
-      <vxe-form
+      <erForm
         ref="paletteForm"
-        :align="formGlobalConfigIn.align"
         :data="formData"
         :items="formItemConfig"
         :loading="formGlobalConfigIn.loading"
@@ -32,88 +29,108 @@
         :rules="{}"
         :size="formGlobalConfigIn.size"
         :span="formGlobalConfigIn.span"
-        :title-align="formGlobalConfigIn.titleAlign"
-        :title-colon="formGlobalConfigIn.titleColon"
-        :title-overflow="formGlobalConfigIn.titleOverflow"
-        :title-width="formGlobalConfigIn.titleWidth"
-        :valid-config="formGlobalConfigIn.validConfig"
         sync-resize
-      />
+      /> 
     </div>
-    <div v-else class="roy-page-tools__empty animate__animated animate__headShake">
-      <i class="ri-door-lock-box-line animate__backInUp" style="color: var(--roy-color-warning)" />
+    <div
+      v-else
+      class="roy-page-tools__empty animate__animated animate__headShake"
+    >
+      <i
+        class="ri-door-lock-box-line animate__backInUp"
+        style="color: var(--roy-color-warning);"
+      />
       <div>请先选定一个组件，再进行该组件的属性设置</div>
     </div>
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex'
+<script setup>
+import { ref, reactive, computed, watch, nextTick, onMounted } from 'vue'
+import { useStore } from 'vuex'
 import commonMixin from '@/printTemplate/mixin/commonMixin'
-import { paletteConfigList, settingConfigList } from '@/printTemplate/components/config/paletteConfig'
+import {
+  paletteConfigList,
+  settingConfigList,
+} from '@/printTemplate/components/config/paletteConfig'
 
-export default {
-  name: 'PagePalette',
-  mixins: [commonMixin],
-  computed: {
-    ...mapState({
-      curComponent: (state) => state.printTemplateModule.curComponent,
-      curTableCell: (state) => state.printTemplateModule.curTableCell
-    }),
-    formItemConfig() {
-      let curComponentCode = this.curActiveComponent?.component || 'no'
-      return this.formItemConfigs[curComponentCode] || []
-    },
-    settingFormItemConfig() {
-      let curComponentCode = this.curActiveComponent?.component || 'no'
-      return this.settingFormItemConfigs[curComponentCode] || []
-    },
-    curActiveComponent() {
-      return this.curTableCell || this.curComponent
+// ------------ 状态 ------------
+const initCompleted = ref(false)
+const store = useStore()
+
+// 来自 Vuex 的状态
+const curComponent = computed(
+  () => store.state.printTemplateModule.curComponent,
+)
+const curTableCell = computed(
+  () => store.state.printTemplateModule.curTableCell,
+)
+
+// 当前选中的“组件” 或 “表格单元格”
+const curActiveComponent = computed(() => {
+  return curTableCell.value || curComponent.value
+})
+
+// 表单配置
+const formGlobalConfigIn = reactive({
+  titleOverflow: true,
+  span: 8,
+  align: 'left',
+  size: 'medium',
+  titleAlign: 'right',
+  titleWidth: '200',
+  titleColon: false,
+  preventSubmit: false,
+  loading: false,
+  validConfig: {
+    autoPos: true,
+  },
+})
+
+// 表单数据
+const formData = ref({})
+const settingFormData = ref({})
+
+// 所有组件的“样式”表单配置
+const formItemConfigs = paletteConfigList
+// 所有组件的“属性”表单配置
+const settingFormItemConfigs = settingConfigList
+
+// 根据当前选中组件，动态取对应的“样式”表单项
+const formItemConfig = computed(() => {
+  const code = curActiveComponent.value?.component || 'no'
+  let _items= formItemConfigs[code] || []
+  console.log(_items)
+  return _items//
+  // return []
+})
+
+// 根据当前选中组件，动态取对应的“属性”表单项
+const settingFormItemConfig = computed(() => {
+  const code = curActiveComponent.value?.component || 'no'
+  return settingFormItemConfigs[code] || []
+})
+
+// ------------ 监视 ------------
+watch(
+  curActiveComponent,
+  (newComp) => {
+    if (newComp) {
+      // 将选中组件的 style 对象 替换到“样式表单数据”
+      formData.value = newComp.style || {}
+      // 将选中组件本身 对象 替换到“属性表单数据”
+      settingFormData.value = newComp
     }
   },
-  data() {
-    return {
-      initCompleted: false,
-      formGlobalConfigIn: {
-        titleOverflow: true,
-        span: 8,
-        align: 'left',
-        size: 'medium',
-        titleAlign: 'right',
-        titleWidth: '200',
-        titleColon: false,
-        preventSubmit: false,
-        loading: false,
-        validConfig: {
-          autoPos: true
-        }
-      },
-      formData: {},
-      formItemConfigs: paletteConfigList,
-      settingFormData: {},
-      settingFormItemConfigs: settingConfigList
-    }
-  },
-  methods: {},
-  async mounted() {
-    this.$nextTick(() => {
-      this.initCompleted = true
-    })
-  },
-  watch: {
-    curActiveComponent: {
-      handler() {
-        if (this.curActiveComponent) {
-          this.formData = this.curActiveComponent.style
-          this.settingFormData = this.curActiveComponent
-        }
-      },
-      deep: true,
-      immediate: true
-    }
-  }
-}
+  { deep: true, immediate: true },
+)
+
+// ------------ 生命周期 ------------
+onMounted(() => {
+  nextTick(() => {
+    initCompleted.value = true
+  })
+})
 </script>
 
 <style lang="scss" scoped>
@@ -150,17 +167,17 @@ export default {
   }
 
   .vxe-form--item-title {
-    font-size: 10px;
+    // font-size: 10px;
     text-align: left !important;
     margin-bottom: 5px;
 
-    .vxe-form--item-title-label:before {
-      content: '';
-      width: 1px;
-      height: 80%;
-      margin-right: 5px;
-      border-left: var(--roy-color-primary) 3px solid;
-    }
+    // .vxe-form--item-title-label:before {
+    //   content: '';
+    //   width: 1px;
+    //   height: 80%;
+    //   margin-right: 5px;
+    //   border-left: var(--roy-color-primary) 3px solid;
+    // }
   }
 
   .vxe-form--item {

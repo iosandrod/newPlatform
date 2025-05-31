@@ -1,16 +1,10 @@
-<!--
-* @description 打印模板预览组件
-* @filename PtdViewer.vue
-* @author ROYIANS
-* @date 2022/11/11 15:31
-!-->
 <template>
   <RoyModal
     v-if="visibleIn"
     :show.sync="visibleIn"
     :title="directExport ? '打印导出' : '打印预览'"
     class="rptd-viewer"
-    height="90%"
+    height="90%" 
     width="90%"
   >
     <RoyLoading :loading="!initCompleted" :loading-text="loadingText">
@@ -31,182 +25,186 @@
           <i class="ri-file-ppt-line"></i>
           <span>导出PDF</span>
         </div>
-        <!-- <div v-print="printConfig" class="roy-viewer-btn">
-          <i class="ri-printer-line"></i>
-          <span>打印</span>
-        </div> -->
       </div>
     </RoyLoading>
   </RoyModal>
 </template>
 
-<script>
-import commonMixin from '@/printTemplate/mixin/commonMixin'
+<script setup>
+import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { useStore } from 'vuex'
 import RoyModal from '@/printTemplate/components/RoyModal/RoyModal.vue'
 import RoyLoading from '@/printTemplate/components/RoyLoading/index.vue'
 import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
 import toast from '@/printTemplate/utils/toast'
 import { getPageGenerator } from '@/printTemplate/components/Viewer/page-generator'
+import commonMixin from '@/printTemplate/mixin/commonMixin'
 
-/**
- * 打印模板预览组件
- */
-export default {
-  name: 'PtdViewer',
-  mixins: [commonMixin],
-  components: {
-    RoyLoading,
-    RoyModal
+// 1. 定义 Props
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    default: true
   },
-  directives: {
-    print
+  componentData: {
+    type: Array,
+    default: () => []
   },
-  props: {
-    visible: {
-      type: Boolean,
-      default: true
-    },
-    componentData: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    pageConfig: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    dataSource: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    dataSet: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    fileName: {
-      type: String,
-      default: ''
-    },
-    directExport: {
-      type: Boolean,
-      default: false
-    },
-    needToast: {
-      type: [Boolean, String],
-      default: '建议导出PDF后再打印，更精准'
+  pageConfig: {
+    type: Object,
+    default: () => ({})
+  },
+  dataSource: {
+    type: Array,
+    default: () => []
+  },
+  dataSet: {
+    type: Object,
+    default: () => ({})
+  },
+  fileName: {
+    type: String,
+    default: ''
+  },
+  directExport: {
+    type: Boolean,
+    default: false
+  },
+  needToast: {
+    type: [Boolean, String],
+    default: '建议导出PDF后再打印，更精准'
+  }
+})
+
+// 2. 定义 Emits
+const emit = defineEmits(['update:visible'])
+
+// 3. Vuex（如果需要根据 mixin 访问 store）
+const store = useStore()
+
+// 4. 本地状态
+const visibleIn = ref(props.visible)
+const initCompleted = ref(false)
+const isBlankPage = ref(false)
+const isExportPDF = ref(false)
+const totalPage = ref(0)
+const curPage = ref(0)
+const printConfig = reactive({ id: 'roy-viewer' })
+
+// Refs for DOM elements
+const viewer = ref(null)
+const tempHolder = ref(null)
+
+// 5. 计算属性
+const loadingText = computed(() => {
+  if (isExportPDF.value) {
+    return `正在导出PDF，正在处理第${curPage.value}页/共${totalPage.value}页`
+  } else {
+    return '正在生成页面...请耐心等待'
+  }
+})
+
+// 6. 监听 Props 变化
+watch(
+  () => props.visible,
+  (val) => {
+    visibleIn.value = val
+  }
+)
+
+// 当 visibleIn 改变时，向外发射更新事件
+watch(visibleIn, (val) => {
+  emit('update:visible', val)
+})
+
+// 7. 方法
+async function initMounted() {
+  initCompleted.value = false
+  isBlankPage.value = false
+
+  // 生成页面 HTML
+  const renderer = getPageGenerator({
+    renderElements: props.componentData,
+    pagerConfig: props.pageConfig,
+    dataSet: props.dataSet,
+    dataSource: props.dataSource
+  })
+  const renderPageHTML = await renderer.render()
+  if (renderPageHTML.length) {
+    const viewerEl = viewer.value
+    if (viewerEl) {
+      viewerEl.innerHTML = renderPageHTML
     }
-  },
-  computed: {
-    loadingText() {
-      if (this.isExportPDF) {
-        return `正在导出PDF，正在处理第${this.curPage}页/共${this.totalPage}页`
-      } else {
-        return '正在生成页面...请耐心等待'
-      }
+    if (props.needToast) {
+      toast(props.needToast, 'info', 5000)
     }
-  },
-  data() {
-    return {
-      visibleIn: false,
-      initCompleted: false,
-      isBlankPage: false,
-      isExportPDF: false,
-      totalPage: 0,
-      curPage: 0,
-      printConfig: {
-        id: 'roy-viewer'
-      }
-    }
-  },
-  methods: {
-    initMounted() {
-      this.$nextTick(async () => {
-        this.initCompleted = false
-        const renderer = getPageGenerator({
-          renderElements: this.componentData,
-          pagerConfig: this.pageConfig,
-          dataSet: this.dataSet,
-          dataSource: this.dataSource
-        })
-        const renderPageHTML = await renderer.render()
-        if (renderPageHTML.length) {
-          const viewerElement = this.$refs.viewer
-          viewerElement.innerHTML = renderPageHTML
-          if (this.needToast) {
-            toast(this.needToast, 'info', 5000)
-          }
-        } else {
-          this.isBlankPage = true
-        }
-        this.$el.querySelector('.roy-temp-holder').style.display = 'none'
-        this.$nextTick(() => {
-          if (this.directExport) {
-            this.exportPdf()
-          } else {
-            this.initCompleted = true
-          }
-        })
-      })
-    },
-    async exportPdf() {
-      const pages = this.$el.getElementsByClassName('roy-preview-page')
-      if (!pages.length) {
-        return
-      }
-      this.isExportPDF = true
-      this.initCompleted = false
-      let doc = new jsPDF({
-        orientation: this.pageConfig.pageDirection,
-        format: this.pageConfig.pageSize,
-        unit: 'mm'
-      })
-      this.totalPage = pages.length
-      for (let i = 0; i < pages.length; i++) {
-        this.curPage = i + 1
-        if (i !== 0) {
-          doc.addPage(this.pageConfig.pageSize, this.pageConfig.pageDirection)
-        }
-        const canvas = await html2canvas(pages[i], {
-          scale: '5'
-        })
-        const isNormalPage = this.pageConfig.pageDirection === 'p'
-        doc.addImage({
-          imageData: canvas.toDataURL('image/jpeg'),
-          format: 'JPEG',
-          x: 0,
-          y: 0,
-          width: isNormalPage ? this.pageConfig.pageWidth : this.pageConfig.pageHeight,
-          height: isNormalPage ? this.pageConfig.pageHeight : this.pageConfig.pageWidth
-        })
-      }
-      doc.save(`${this.fileName || this.pageConfig.title || '预览'}.pdf`)
-      this.initCompleted = true
-      this.isExportPDF = false
-      if (this.directExport) {
-        this.$emit('update:visible', false)
-      }
-    }
-  },
-  created() {
-    this.visibleIn = this.visible
-  },
-  mounted() {
-    this.initMounted()
-  },
-  watch: {
-    visibleIn(newVal) {
-      this.$emit('update:visible', newVal)
-    }
+  } else {
+    isBlankPage.value = true
+  }
+
+  // 隐藏暂存容器
+  if (tempHolder.value) {
+    tempHolder.value.style.display = 'none'
+  }
+
+  // 如果直接导出，先导出 PDF，否则标记完成
+  if (props.directExport) {
+    await exportPdf()
+  } else {
+    initCompleted.value = true
   }
 }
+
+async function exportPdf() {
+  const pages = Array.from(document.getElementsByClassName('roy-preview-page'))
+  if (!pages.length) {
+    return
+  }
+  isExportPDF.value = true
+  initCompleted.value = false
+
+  const { pageDirection, pageSize, pageWidth, pageHeight, title } = props.pageConfig
+  const doc = new jsPDF({
+    orientation: pageDirection,
+    format: pageSize,
+    unit: 'mm'
+  })
+
+  totalPage.value = pages.length
+  for (let i = 0; i < pages.length; i++) {
+    curPage.value = i + 1
+    if (i !== 0) {
+      doc.addPage(pageSize, pageDirection)
+    }
+    const canvas = await html2canvas(pages[i], { scale: 5 })
+    const isPortrait = pageDirection === 'p'
+    doc.addImage({
+      imageData: canvas.toDataURL('image/jpeg'),
+      format: 'JPEG',
+      x: 0,
+      y: 0,
+      width: isPortrait ? pageWidth : pageHeight,
+      height: isPortrait ? pageHeight : pageWidth
+    })
+  }
+
+  const fileBase =
+    props.fileName || props.pageConfig.title || '预览'
+  doc.save(`${fileBase}.pdf`)
+
+  initCompleted.value = true
+  isExportPDF.value = false
+
+  if (props.directExport) {
+    visibleIn.value = false
+  }
+}
+
+// 8. 生命周期
+onMounted(() => {
+  initMounted()
+})
 </script>
 
 <style lang="scss">

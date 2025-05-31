@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div style="height: 100%;">
     <PtdDesigner
       ref="designerRef"
       :pre-data-set="preDataSet"
@@ -47,7 +47,10 @@
     />
 
     <div class="fork-me">
-      <a href="https://github.com/ROYIANS/print-template-designer" target="_blank">
+      <a
+        href="https://github.com/ROYIANS/print-template-designer"
+        target="_blank"
+      >
         <i class="ri-github-line"></i>
         Give me a Star!
       </a>
@@ -68,24 +71,25 @@ const store = useStore()
 
 // Map state from Vuex
 const pageConfig = computed(() => store.state.printTemplateModule.pageConfig)
-const componentData = computed(() => store.state.printTemplateModule.componentData)
+const componentData = computed(
+  () => store.state.printTemplateModule.componentData,
+)
 const dataSource = computed(() => store.state.printTemplateModule.dataSource)
 const dataSet = computed(() => store.state.printTemplateModule.dataSet)
-
 // Refs
 const designerRef = ref(null)
 const viewerVisible = ref(false)
-const templateVisible = ref(false)
-
+const templateVisible = ref(false) //
 // Predefined configurations
 const toolbarSlotConfig = [
   {
     name: '从报表配置拉取表格',
     icon: 'ri-table-line',
     event: () => {
+      //
       toast('(开发者自定义按钮)')
-    }
-  }
+    },
+  },
 ]
 const headIconConfig = [
   {
@@ -94,7 +98,7 @@ const headIconConfig = [
     title: '预设模板',
     event: () => {
       templateVisible.value = true
-    }
+    },
   },
   {
     name: 'dataset',
@@ -102,7 +106,7 @@ const headIconConfig = [
     title: '数据源模拟',
     event: () => {
       toast('开发中')
-    }
+    },
   },
   {
     name: 'ShowViewer',
@@ -110,41 +114,41 @@ const headIconConfig = [
     title: '预览设计模板',
     event: () => {
       showViewer()
-    }
-  }
+    },
+  },
 ]
 const preDataSource = [
   {
     id: '0001',
     title: '当前日期（中文）',
     field: 'curDateChn',
-    typeName: 'BigCurDate'
+    typeName: 'BigCurDate',
   },
   {
     id: '0002',
     title: '当前日期（数字）',
     field: 'curDateNum',
-    typeName: 'CurDateTime'
+    typeName: 'CurDateTime',
   },
   {
     id: '0003',
     title: '当前日期时间（数字）',
     field: 'curDateTime',
-    typeName: 'CurDateTime'
+    typeName: 'CurDateTime',
   },
   {
     id: '0004',
     title: '表格数据',
     field: 'tableData',
-    typeName: 'Array'
-  }
+    typeName: 'Array',
+  },
 ]
 const preDataSet = {
   curDateTime: 'YYYY.MM.DD hh:mm',
   curDateChn: '',
   curDateNum: 'YYYY年MM月DD日',
   currentTime: 'YYYY年MM月DD日',
-  tableData: [{}, {}, {}, {}]
+  tableData: [{}, {}, {}, {}],
 }
 
 // Methods
@@ -154,7 +158,10 @@ function showViewer() {
 
 function loadTemp(data) {
   // Call the designer's loadTemplateData method
-  if (designerRef.value && typeof designerRef.value.loadTemplateData === 'function') {
+  if (
+    designerRef.value &&
+    typeof designerRef.value.loadTemplateData === 'function'
+  ) {
     designerRef.value.loadTemplateData(data)
   }
   templateVisible.value = false
@@ -162,7 +169,11 @@ function loadTemp(data) {
 
 // onMounted hook: show initial toasts
 onMounted(async () => {
-  await toast('欢迎使用ROYIANS的打印模板设计器，仅个人学习使用', 'success', 3000)
+  await toast(
+    '欢迎使用ROYIANS的打印模板设计器，仅个人学习使用',
+    'success',
+    3000,
+  )
   await toast('当前网页预览的是最新开发分支，请留意', 'warning', 3000)
   console.log('contributed by ROYIANS@Little-Dreamland﹢')
 })

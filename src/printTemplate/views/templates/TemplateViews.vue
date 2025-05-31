@@ -1,11 +1,11 @@
-<!--
-* @description
-* @filename TemplateViews.vue
-* @author ROYIANS
-* @date 2023/1/13 17:05
-!-->
 <template>
-  <RoyModal v-if="visibleIn" :show.sync="visibleIn" height="80%" title="预设模板" width="70%">
+  <RoyModal
+    v-if="visibleIn"
+    :show.sync="visibleIn"
+    height="80%"
+    title="预设模板"
+    width="70%"
+  >
     <roy-main class="TemplateViews">
       <div class="cards">
         <div v-for="(item, index) in templateData" :key="index" class="card">
@@ -21,78 +21,86 @@
               <small>{{ item.desp }}</small>
             </h3>
           </div>
-        </div>
+        </div> 
       </div>
     </roy-main>
   </RoyModal>
 </template>
 
-<script>
-import commonMixin from '@/printTemplate/mixin/commonMixin'
-import RoyModal from '@/printTemplate/components/RoyModal/RoyModal.vue'
+<script setup>
+import { ref, watch, onMounted } from 'vue'
 import axios from 'axios'
 import toast from '@/printTemplate/utils/toast'
+import commonMixin from '@/printTemplate/mixin/commonMixin'
+import RoyModal from '@/printTemplate/components/RoyModal/RoyModal.vue'
 
+// 引入 mixin 中的逻辑（如 deepCopy、getUuid 等），如果需要可以直接在 setup 中导入或复用
+// import { useCommonMixin } from '@/printTemplate/mixin/commonMixin'
+
+// 配置 Axios 默认值
 axios.defaults.timeout = 180000
 axios.defaults.baseURL = '/print-template-designer'
 axios.defaults.withCredentials = false
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-/**
- *
- */
-export default {
-  name: 'TemplateViews',
-  mixins: [commonMixin],
-  components: {
-    RoyModal
+// 1. 定义 Props & Emits
+const props = defineProps({
+  visible: {
+    type: Boolean,
+    default: true,
   },
-  props: {
-    visible: {
-      type: Boolean,
-      default: true
+})
+const emit = defineEmits(['update:visible', 'load'])
+
+// 2. 本地状态
+const visibleIn = ref(props.visible)
+const templateData = ref([
+  {
+    url: '/templates/comp-purchase-template.rptd',
+    img: 'https://s2.loli.net/2023/01/13/4iJbdwgy5rpI8em.png',
+    title: '公司采购安排单',
+    desp: '测试用',
+  },
+  {
+    url: '/templates/complex-text.rptd',
+    img: 'https://s2.loli.net/2023/09/27/i4cpTfgHj2bNxSZ.png',
+    title: '富文本分页测试',
+    desp: '测试用',
+  },
+])
+
+// 3. 监听 Props 变化，以同步到本地 visibleIn
+watch(
+  () => props.visible,
+  (newVal) => {
+    visibleIn.value = newVal
+  },
+)
+
+// 4. 监听 visibleIn 改变，向外抛出 update:visible
+watch(visibleIn, (newVal) => {
+  emit('update:visible', newVal)
+})
+
+// 5. 组件挂载后初始化（如果需要）, 这里暂时没有额外逻辑
+onMounted(() => {
+  // 如果 mixin 中有 initMounted，这里可以直接调用
+  // useCommonMixin().initMounted()
+})
+
+// 6. 加载模板的方法
+async function load(url) {
+  try {
+    const res = await axios.get(url)
+    if (res?.data?.componentData) {
+      // 抛出 load 事件，并传递后端返回的数据
+      emit('load', res.data)
+    } else {
+      toast('拉取模板失败')
     }
-  },
-  data() {
-    return {
-      visibleIn: false,
-      templateData: [
-        {
-          url: '/templates/comp-purchase-template.rptd',
-          img: 'https://s2.loli.net/2023/01/13/4iJbdwgy5rpI8em.png',
-          title: '公司采购安排单',
-          desp: '测试用'
-        },
-        {
-          url: '/templates/complex-text.rptd',
-          img: 'https://s2.loli.net/2023/09/27/i4cpTfgHj2bNxSZ.png',
-          title: '富文本分页测试',
-          desp: '测试用'
-        }
-      ]
-    }
-  },
-  methods: {
-    initMounted() {},
-    async load(url) {
-      let res = await axios.get(url)
-      if (res && res.data && res.data.componentData) {
-        this.$emit('load', res.data)
-      } else {
-        toast('拉取模板失败')
-      }
-    }
-  },
-  created() {
-    this.visibleIn = this.visible
-  },
-  mounted() {
-    this.initMounted()
-  },
-  watch: {
-    visibleIn(newVal) {
-      this.$emit('update:visible', newVal)
-    }
+  } catch (err) {
+    console.error(err)
+    toast('拉取模板失败')
   }
 }
 </script>

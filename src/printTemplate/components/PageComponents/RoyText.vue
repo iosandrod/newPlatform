@@ -1,17 +1,8 @@
-<!--/*-->
-<!-- * @Author: ROYIANS-->
-<!-- * @Date: 2022/10/18 9:12-->
-<!-- * @Description: 文本-->
-<!-- * @sign: 迷路，并无小路大路短路长路之区别。不能说在大路长路上迷路就不是迷路了。走在达不到目的的路上，就是迷路。-->
-<!-- * ╦═╗╔═╗╦ ╦╦╔═╗╔╗╔╔═╗-->
-<!-- * ╠╦╝║ ║╚╦╝║╠═╣║║║╚═╗-->
-<!-- * ╩╚═╚═╝ ╩ ╩╩ ╩╝╚╝╚═╝-->
-<!-- */-->
 <template>
   <div style="width: 100%; height: 100%" @dblclick="onDblClick">
     <RoyModal
       v-if="showEditor"
-      :show.sync="showEditor"
+      v-model:show="showEditor"
       height="70%"
       title="长文本编辑"
       width="60%"
@@ -23,7 +14,7 @@
           :editor="wangEditor"
           style="border-bottom: 1px solid #ccc"
         />
-        <WangEditor
+        <WangEditor 
           v-model="html"
           :defaultConfig="editorConfig"
           :mode="mode"
@@ -38,81 +29,88 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, watch, onBeforeUnmount,computed } from 'vue'
+import { useStore, mapState } from 'vuex'
 import { StyledText } from '@/printTemplate/components/PageComponents/style'
 import RoyModal from '@/printTemplate/components/RoyModal/RoyModal.vue'
 import WangToolbar from '@/printTemplate/components/PageComponents/WangEditorVue/WangToolbar.vue'
 import WangEditor from '@/printTemplate/components/PageComponents/WangEditorVue/WangEditor.vue'
-import { toolBarConfig, editorConfig, mode } from '@/printTemplate/components/config/editorConfig'
+import { toolBarConfig, editorConfig as _editorConfig, mode } from '@/printTemplate/components/config/editorConfig'
 import commonMixin from '@/printTemplate/mixin/commonMixin'
-import { mapState } from 'vuex'
 
-
-export default {
-  name: 'RoyText',
-  mixins: [commonMixin],
-  props: {
-    element: {
-      type: Object,
-      default: () => {}
-    },
-    propValue: {
-      type: String,
-      default: ''
-    }
+// Props
+const props = defineProps({
+  element: {
+    type: Object,
+    default: () => ({})
   },
-  components: {
-    WangEditor,
-    WangToolbar,
-    StyledText,
-    RoyModal
-  },
-  computed: {
-    ...mapState({
-      curComponent: (state) => state.printTemplateModule.curComponent
-    }),
-    style() {
-      return this.element.style || {}
-    }
-  },
-  data() {
-    return {
-      wangEditor: null,
-      showEditor: false,
-      html: this.deepCopy(this.propValue),
-      toolbarConfig: toolBarConfig,
-      editorConfig: editorConfig,
-      mode: mode
-    }
-  },
-  methods: {
-    onCreated(editor) {
-      this.wangEditor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
-    },
-    onBlur() {
-      this.$store.commit('printTemplateModule/setPropValue', {
-        id: this.element.id,
-        propValue: this.html
-      })
-    },
-    onDblClick() {
-      this.showEditor = true
-    },
-    handleMouseDown(e) {
-      e.stopPropagation()
-    },
-    handleTextClosed() {
-      this.onBlur()
-    }
-  },
-  created() {},
-  watch: {},
-  beforeDestroy() {
-    const editor = this.wangEditor
-    if (editor == null) {
-      return
-    }
-    editor.destroy() // 组件销毁时，及时销毁编辑器
+  propValue: {
+    type: String,
+    default: ''
   }
+})
+
+// Mixin (Vue 3 still supports options-based mixins; to use commonMixin, unwrap its methods/context)
+const { deepCopy, getUuid } = commonMixin.methods
+
+// Vuex store
+const store = useStore()
+
+// Local reactive state
+const wangEditor = ref(null)
+const showEditor = ref(false)
+const html = ref(deepCopy(props.propValue))
+
+const toolbarConfig = toolBarConfig
+let editorConfig =JSON.parse(JSON.stringify(_editorConfig)) 
+const editorMode = mode
+
+// Computed style from element
+const style = computed(() => {
+  return props.element.style || {}
+})
+
+// When the modal closes, save current HTML back to Vuex
+function onBlur() {
+  store.commit('printTemplateModule/setPropValue', {
+    id: props.element.id,
+    propValue: html.value
+  })
 }
+
+function onDblClick() {
+  showEditor.value = true
+}
+
+function handleMouseDown(e) {
+  e.stopPropagation()
+}
+
+function handleTextClosed() {
+  onBlur()
+}
+
+// Called when WangEditor has been created
+function onCreated(editorInstance) {
+  wangEditor.value = Object.seal(editorInstance)
+}
+
+// Clean up editor before unmount
+onBeforeUnmount(() => {
+  const editorInstance = wangEditor.value
+  if (editorInstance) {
+    editorInstance.destroy()
+  }
+})
+
+// Keep html in sync if propValue changes externally
+watch(
+  () => props.propValue,
+  (newVal) => {
+    if (newVal !== html.value) {
+      html.value = deepCopy(newVal)
+    }
+  }
+)
 </script>

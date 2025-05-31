@@ -1,10 +1,7 @@
 <template>
-  <ul
-    v-show="visible"
-    ref="contextmenu"
-    :class="contextmenuCls"
-    :style="style"
-  >
+  <ul 
+  v-show="visible"
+   ref="contextmenu" :class="contextmenuCls" :style="style">
     <slot></slot>
   </ul>
 </template>
@@ -18,27 +15,27 @@ import {
   onMounted,
   onBeforeUnmount,
   provide,
-  defineExpose,
+  defineExpose, 
   nextTick,
 } from 'vue'
 // 1. 定义 Props
 const props = defineProps({
   eventType: {
     type: String,
-    default: 'contextmenu'
+    default: 'contextmenu',
   },
   theme: {
     type: String,
-    default: 'default'
+    default: 'default',
   },
   autoPlacement: {
     type: Boolean,
-    default: true
+    default: true,
   },
   disabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 // 2. 定义 Emits
@@ -53,11 +50,13 @@ const style = reactive({ top: 0, left: 0 })
 const isClick = computed(() => props.eventType === 'click')
 const contextmenuCls = computed(() => [
   'roy-context',
-  `roy-context--${props.theme}`
+  `roy-context--${props.theme}`,
 ])
 
 // 5. 唯一 ID，用来在全局 window.$$VContextmenu 中注册/查找
-const contextmenuId = `roy-ctx-${Date.now()}-${Math.random().toString(36).substr(2)}`
+const contextmenuId = `roy-ctx-${Date.now()}-${Math.random()
+  .toString(36)
+  .substr(2)}`
 
 // 6. 拿到根节点引用
 const contextmenu = ref(null)
@@ -84,7 +83,7 @@ function handleReferenceContextmenu(event) {
 
   // 找到当前触发事件的引用对象
   const reference = references.value.find((refObj) =>
-    refObj.el.contains(event.target)
+    refObj.el.contains(event.target),
   )
   emit('contextmenu', reference ? reference.vnode : null)
 
@@ -142,7 +141,7 @@ function hideAll() {
   if (window.$$VContextmenu) {
     Object.keys(window.$$VContextmenu).forEach((key) => {
       window.$$VContextmenu[key].hide()
-    })
+    }) //
   }
 }
 
@@ -198,15 +197,15 @@ onBeforeUnmount(() => {
 provide('$$contextmenu', {
   addRef,
   show,
-  hide, 
-  hideAll
+  hide,
+  hideAll,
 })
 defineExpose({
   addRef,
   show,
-  hide, 
+  hide,
   hideAll,
-  _uid: contextmenuId//
+  _uid: contextmenuId, //
 })
 </script>
 
@@ -336,4 +335,3 @@ defineExpose({
   color: #fff !important;
 }
 </style>
- 

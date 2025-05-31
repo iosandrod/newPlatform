@@ -13,7 +13,7 @@
     :transfer="appendToBody"
     :width="width"
     remember
-    resize
+    resize 
     show-zoom
     @close="close"
   >

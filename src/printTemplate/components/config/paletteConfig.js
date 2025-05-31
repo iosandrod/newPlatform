@@ -3,1632 +3,1115 @@ import { deepCopy } from '@/printTemplate/utils/html-util'
 import toast from '@/printTemplate/utils/toast'
 import store from '@/printTemplate/stores/index'
 import QRCode from 'easyqrcodejs'
+export const formConfig1 = {}
 
 export const paletteConfigList = {
   RoyText: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
-      }
+      type: 'number',
+      options: {
+        //
+        min: 0,
+      },
     },
     {
-      title: '高度',
+      label: '高度',
       field: 'height',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
-      }
+      options: {
+        //
+        min: 0,
+      },
     },
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
-      }
+      type: 'color',
     },
     {
-      title: '边框类型',
+      label: '边框类型',
       field: 'borderType',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
           {
             label: '无',
-            value: 'none'
+            value: 'none',
           },
           {
             label: '实线',
-            value: 'solid'
+            value: 'solid',
           },
           {
             label: '线虚线',
-            value: 'dashed'
+            value: 'dashed',
           },
           {
             label: '点虚线',
-            value: 'dotted'
-          }
-        ]
-      }
+            value: 'dotted',
+          },
+        ],
+      },
     },
     {
-      title: '边框颜色',
+      label: '边框颜色',
       field: 'borderColor',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
-      }
+      type: 'color',
+      options: {},
     },
     {
-      title: '边框宽度',
+      label: '边框宽度',
       field: 'borderWidth',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 4
-        }
-      }
+      type: 'number',
     },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
-      }
-    }
-    // {
-    //   title: '元素位置',
-    //   field: 'elementPosition',
-    //   span: 24,
-    //   itemRender: {
-    //     name: '$radio',
-    //     options: [
-    //       {
-    //         label: '是',
-    //         value: true
-    //       },
-    //       {
-    //         label: '否',
-    //         value: false
-    //       }
-    //     ]
-    //   }
-    // }
+      type: 'number', //
+    },
   ],
   RoySimpleText: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
-      }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini',
+      },
     },
     {
-      title: '高度',
+      label: '高度',
       field: 'height',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
-      }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini',
+      },
     },
     {
-      title: '字体',
+      label: '字体',
       field: 'fontFamily',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '默认',
-            value: 'default'
-          },
-          {
-            label: '宋体',
-            value: 'simsun'
-          },
-          {
-            label: '黑体',
-            value: 'simhei'
-          },
-          {
-            label: '楷体',
-            value: 'kaiti'
-          },
-          {
-            label: '仿宋',
-            value: 'fangsong'
-          },
-          {
-            label: '微软雅黑',
-            value: 'microsoft yahei'
-          }
-        ]
-      }
+          { label: '默认', value: 'default' },
+          { label: '宋体', value: 'simsun' },
+          { label: '黑体', value: 'simhei' },
+          { label: '楷体', value: 'kaiti' },
+          { label: '仿宋', value: 'fangsong' },
+          { label: '微软雅黑', value: 'microsoft yahei' },
+        ],
+        // 如果需要给 $select 组件传其他 props，可在此加入，
+        // 例如：clearable: true, placeholder: '请选择字体'
+      },
     },
     {
-      title: '字体颜色',
+      label: '字体颜色',
       field: 'color',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
-      }
+      type: 'color',
+      options: {
+        // 可留空，或填写 color-picker 额外 props
+      },
     },
     {
-      title: '字体大小（pt）',
+      label: '字体大小（pt）',
       field: 'fontSize',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 10,
-          max: 120
-        }
-      }
+      type: 'number',
+      options: {
+        min: 10,
+        max: 120,
+        size: 'mini',
+      },
     },
     {
-      title: '行高',
+      label: '行高',
       field: 'lineHeight',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            value: '1',
-            label: '1'
-          },
-          {
-            value: '1.5',
-            label: '1.5'
-          },
-          {
-            value: '2',
-            label: '2'
-          },
-          {
-            value: '2.5',
-            label: '2.5'
-          },
-          {
-            value: '3',
-            label: '3'
-          }
-        ]
-      }
+          { value: '1', label: '1' },
+          { value: '1.5', label: '1.5' },
+          { value: '2', label: '2' },
+          { value: '2.5', label: '2.5' },
+          { value: '3', label: '3' },
+        ],
+        // 例如：size: 'mini'
+      },
     },
     {
-      title: '排列',
+      label: '排列',
       span: 24,
-      itemRender: {
-        name: '$btnRadioGroup',
-        options: [
-          {
-            field: 'justifyContent',
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-align-left',
-                value: 'flex-start',
-                label: '水平居左'
-              },
-              {
-                type: 'icon',
-                content: 'ri-align-center',
-                value: 'center',
-                label: '水平居中'
-              },
-              {
-                type: 'icon',
-                content: 'ri-align-right',
-                value: 'flex-end',
-                label: '水平居下'
-              }
-            ]
-          },
-          {
-            field: 'alignItems',
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-align-left rotate-90',
-                value: 'flex-start',
-                label: '垂直居左'
-              },
-              {
-                type: 'icon',
-                content: 'ri-align-center rotate-90',
-                value: 'center',
-                label: '垂直居中'
-              },
-              {
-                type: 'icon',
-                content: 'ri-align-right rotate-90',
-                value: 'flex-end',
-                label: '垂直居下'
-              }
-            ]
-          }
-        ]
-      }
+      type: 'btnRadioGroup',
+      options: [
+        {
+          field: 'justifyContent',
+          // 是否 “单选”？原来 isRadio 默认为 true，可不显式写
+          // isRadio: true,
+          options: [
+            {
+              type: 'icon',
+              content: 'ri-align-left',
+              value: 'flex-start',
+              label: '水平居左',
+            },
+            {
+              type: 'icon',
+              content: 'ri-align-center',
+              value: 'center',
+              label: '水平居中',
+            },
+            {
+              type: 'icon',
+              content: 'ri-align-right',
+              value: 'flex-end',
+              label: '水平居右',
+            },
+          ],
+        },
+        {
+          field: 'alignItems',
+          // 下方这些组合也是 “单选”
+          // isRadio: true,
+          options: [
+            {
+              type: 'icon',
+              content: 'ri-align-left rotate-90',
+              value: 'flex-start',
+              label: '垂直居顶',
+            },
+            {
+              type: 'icon',
+              content: 'ri-align-center rotate-90',
+              value: 'center',
+              label: '垂直居中',
+            },
+            {
+              type: 'icon',
+              content: 'ri-align-right rotate-90',
+              value: 'flex-end',
+              label: '垂直居底',
+            },
+          ],
+        },
+      ],
     },
     {
-      title: '文字样式',
+      label: '文字样式',
       span: 24,
-      itemRender: {
-        name: '$btnRadioGroup',
-        options: [
-          {
-            field: 'fontWeight',
-            isRadio: false,
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-bold',
-                value: 'bold',
-                label: '粗体'
-              }
-            ]
-          },
-          {
-            field: 'fontStyle',
-            isRadio: false,
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-italic',
-                value: 'italic',
-                label: '斜体'
-              }
-            ]
-          },
-          {
-            field: 'isUnderLine',
-            isRadio: false,
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-underline',
-                value: true,
-                label: '下划线'
-              }
-            ]
-          },
-          {
-            field: 'isDelLine',
-            isRadio: false,
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-strikethrough',
-                value: true,
-                label: '删除线'
-              }
-            ]
-          }
-        ]
-      }
+      type: 'btnRadioGroup',
+      options: [
+        {
+          field: 'fontWeight',
+          isRadio: false, // 这里允许多选，原来 isRadio: false
+          options: [
+            {
+              type: 'icon',
+              content: 'ri-bold',
+              value: 'bold',
+              label: '粗体',
+            },
+          ],
+        },
+        {
+          field: 'fontStyle',
+          isRadio: false,
+          options: [
+            {
+              type: 'icon',
+              content: 'ri-italic',
+              value: 'italic',
+              label: '斜体',
+            },
+          ],
+        },
+        {
+          field: 'isUnderLine',
+          isRadio: false,
+          options: [
+            {
+              type: 'icon',
+              content: 'ri-underline',
+              value: true,
+              label: '下划线',
+            },
+          ],
+        },
+        {
+          field: 'isDelLine',
+          isRadio: false,
+          options: [
+            {
+              type: 'icon',
+              content: 'ri-strikethrough',
+              value: true,
+              label: '删除线',
+            },
+          ],
+        },
+      ],
     },
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
-      }
+      type: 'color',
+      options: {
+        // 需要时可加 props
+      },
     },
     {
-      title: '边框类型',
+      label: '边框类型',
       field: 'borderType',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '无',
-            value: 'none'
-          },
-          {
-            label: '实线',
-            value: 'solid'
-          },
-          {
-            label: '线虚线',
-            value: 'dashed'
-          },
-          {
-            label: '点虚线',
-            value: 'dotted'
-          }
-        ]
-      }
+          { label: '无', value: 'none' },
+          { label: '实线', value: 'solid' },
+          { label: '线虚线', value: 'dashed' },
+          { label: '点虚线', value: 'dotted' },
+        ],
+      },
     },
     {
-      title: '边框颜色',
+      label: '边框颜色',
       field: 'borderColor',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
-      }
+      type: 'color',
+      options: {},
     },
     {
-      title: '边框宽度',
+      label: '边框宽度',
       field: 'borderWidth',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 4
-        }
-      }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 4,
+        size: 'mini',
+      },
     },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
-      }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 360,
+        size: 'mini',
+      },
     },
     {
-      title: '元素位置',
+      label: '元素位置',
       field: 'elementPosition',
       span: 24,
-      itemRender: {
-        name: '$radio',
+      type: 'radio',
+      options: {
         options: [
-          {
-            label: '跟随全局配置（默认）',
-            value: 'default'
-          },
-          {
-            label: '固定位置',
-            value: 'fixed'
-          },
-          {
-            label: '重复位置',
-            value: 'repeated'
-          }
-        ]
-      }
-    }
+          { label: '跟随全局配置（默认）', value: 'default' },
+          { label: '固定位置', value: 'fixed' },
+          { label: '重复位置', value: 'repeated' },
+        ],
+      },
+    },
   ],
+
   RoyRect: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
-      }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini',
+      },
     },
     {
-      title: '高度',
+      label: '高度',
       field: 'height',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
-      }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini',
+      },
     },
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
-      }
+      type: 'color',
+      options: {},
     },
     {
-      title: '边框类型',
+      label: '边框类型',
       field: 'borderType',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '无',
-            value: 'none'
-          },
-          {
-            label: '实线',
-            value: 'solid'
-          },
-          {
-            label: '线虚线',
-            value: 'dashed'
-          },
-          {
-            label: '点虚线',
-            value: 'dotted'
-          }
-        ]
-      }
+          { label: '无', value: 'none' },
+          { label: '实线', value: 'solid' },
+          { label: '线虚线', value: 'dashed' },
+          { label: '点虚线', value: 'dotted' },
+        ],
+      },
     },
     {
-      title: '边框颜色',
+      label: '边框颜色',
       field: 'borderColor',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
-      }
+      type: 'color',
+      options: {},
     },
     {
-      title: '边框宽度',
+      label: '边框宽度',
       field: 'borderWidth',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 4
-        }
-      }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 4,
+        size: 'mini',
+      },
     },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
-      }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 360,
+        size: 'mini',
+      },
     },
     {
-      title: '元素位置',
+      label: '元素位置',
       field: 'elementPosition',
       span: 24,
-      itemRender: {
-        name: '$radio',
+      type: 'radio',
+      options: {
         options: [
-          {
-            label: '跟随全局配置（默认）',
-            value: 'default'
-          },
-          {
-            label: '固定位置',
-            value: 'fixed'
-          },
-          {
-            label: '重复位置',
-            value: 'repeated'
-          }
-        ]
-      }
-    }
+          { label: '跟随全局配置（默认）', value: 'default' },
+          { label: '固定位置', value: 'fixed' },
+          { label: '重复位置', value: 'repeated' },
+        ],
+      },
+    },
   ],
   RoyCircle: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini'
       }
     },
     {
-      title: '高度',
+      label: '高度',
       field: 'height',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini'
       }
     },
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 此处可添加 color-picker 需要的其他配置
       }
     },
     {
-      title: '边框类型',
+      label: '边框类型',
       field: 'borderType',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '无',
-            value: 'none'
-          },
-          {
-            label: '实线',
-            value: 'solid'
-          },
-          {
-            label: '线虚线',
-            value: 'dashed'
-          },
-          {
-            label: '点虚线',
-            value: 'dotted'
-          }
+          { label: '无', value: 'none' },
+          { label: '实线', value: 'solid' },
+          { label: '线虚线', value: 'dashed' },
+          { label: '点虚线', value: 'dotted' }
         ]
       }
     },
     {
-      title: '边框颜色',
+      label: '边框颜色',
       field: 'borderColor',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '边框宽度',
+      label: '边框宽度',
       field: 'borderWidth',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 4
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 4,
+        size: 'mini'
       }
     },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 360,
+        size: 'mini'
       }
     },
     {
-      title: '元素位置',
+      label: '元素位置',
       field: 'elementPosition',
       span: 24,
-      itemRender: {
-        name: '$radio',
+      type: 'radio',
+      options: {
         options: [
-          {
-            label: '跟随全局配置（默认）',
-            value: 'default'
-          },
-          {
-            label: '固定位置',
-            value: 'fixed'
-          },
-          {
-            label: '重复位置',
-            value: 'repeated'
-          }
+          { label: '跟随全局配置（默认）', value: 'default' },
+          { label: '固定位置', value: 'fixed' },
+          { label: '重复位置', value: 'repeated' }
         ]
       }
     }
   ],
+
   RoyLine: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini'
       }
     },
     {
-      title: '粗细',
+      label: '粗细',
       field: 'height',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '极细',
-            value: 0.5
-          },
-          {
-            label: '细',
-            value: 1
-          },
-          {
-            label: '正常',
-            value: 1.5
-          },
-          {
-            label: '粗',
-            value: 2
-          },
-          {
-            label: '极粗',
-            value: 4
-          },
-          {
-            label: '粗粗粗',
-            value: 6
-          }
+          { label: '极细', value: 0.5 },
+          { label: '细', value: 1 },
+          { label: '正常', value: 1.5 },
+          { label: '粗', value: 2 },
+          { label: '极粗', value: 4 },
+          { label: '粗粗粗', value: 6 }
         ]
       }
     },
     {
-      title: '颜色',
+      label: '颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 360,
+        size: 'mini'
       }
     },
     {
-      title: '元素位置',
+      label: '元素位置',
       field: 'elementPosition',
       span: 24,
-      itemRender: {
-        name: '$radio',
+      type: 'radio',
+      options: {
         options: [
-          {
-            label: '跟随全局配置（默认）',
-            value: 'default'
-          },
-          {
-            label: '固定位置',
-            value: 'fixed'
-          },
-          {
-            label: '重复位置',
-            value: 'repeated'
-          }
+          { label: '跟随全局配置（默认）', value: 'default' },
+          { label: '固定位置', value: 'fixed' },
+          { label: '重复位置', value: 'repeated' }
         ]
       }
     }
   ],
+
   RoyStar: [
     {
-      title: '大小',
+      label: '大小',
       field: 'height',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini'
       }
     },
     {
-      title: '颜色',
+      label: '颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '样式',
+      label: '样式',
       field: 'icon',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '实心五角星',
-            value: 'icon-shiwujiaoxing'
-          },
-          {
-            label: '空心五角星',
-            value: 'icon-kongwujiaoxing'
-          },
-          {
-            label: '圆润五角星',
-            value: 'icon-shoucang'
-          },
-          {
-            label: '双线五角星',
-            value: 'icon-wujiaoxing'
-          }
+          { label: '实心五角星', value: 'icon-shiwujiaoxing' },
+          { label: '空心五角星', value: 'icon-kongwujiaoxing' },
+          { label: '圆润五角星', value: 'icon-shoucang' },
+          { label: '双线五角星', value: 'icon-wujiaoxing' }
         ]
       }
     },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 360,
+        size: 'mini'
       }
     },
     {
-      title: '元素位置',
+      label: '元素位置',
       field: 'elementPosition',
       span: 24,
-      itemRender: {
-        name: '$radio',
+      type: 'radio',
+      options: {
         options: [
-          {
-            label: '跟随全局配置（默认）',
-            value: 'default'
-          },
-          {
-            label: '固定位置',
-            value: 'fixed'
-          },
-          {
-            label: '重复位置',
-            value: 'repeated'
-          }
+          { label: '跟随全局配置（默认）', value: 'default' },
+          { label: '固定位置', value: 'fixed' },
+          { label: '重复位置', value: 'repeated' }
         ]
       }
     }
   ],
+
   RoySimpleTable: [
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '边框颜色',
+      label: '边框颜色',
       field: 'borderColor',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '边框宽度',
+      label: '边框宽度',
       field: 'borderWidth',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 4
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 4,
+        size: 'mini'
       }
     }
-    // {
-    //   title: '元素位置',
-    //   field: 'elementPosition',
-    //   span: 24,
-    //   itemRender: {
-    //     name: '$radio',
-    //     options: [
-    //       {
-    //         label: '是',
-    //         value: true
-    //       },
-    //       {
-    //         label: '否',
-    //         value: false
-    //       }
-    //     ]
-    //   }
-    // }
+    // 如果需要 “元素位置” 的话，可按照之前示例补充
   ],
+
   RoyComplexTable: [
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '边框颜色',
+      label: '边框颜色',
       field: 'borderColor',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '边框宽度',
+      label: '边框宽度',
       field: 'borderWidth',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 4
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 4,
+        size: 'mini'
       }
     },
     {
-      title: '字体',
+      label: '字体',
       field: 'fontFamily',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '默认',
-            value: 'default'
-          },
-          {
-            label: '宋体',
-            value: 'simsun'
-          },
-          {
-            label: '黑体',
-            value: 'simhei'
-          },
-          {
-            label: '楷体',
-            value: 'kaiti'
-          },
-          {
-            label: '仿宋',
-            value: 'fangsong'
-          },
-          {
-            label: '微软雅黑',
-            value: 'microsoft yahei'
-          }
+          { label: '默认', value: 'default' },
+          { label: '宋体', value: 'simsun' },
+          { label: '黑体', value: 'simhei' },
+          { label: '楷体', value: 'kaiti' },
+          { label: '仿宋', value: 'fangsong' },
+          { label: '微软雅黑', value: 'microsoft yahei' }
         ]
       }
     },
     {
-      title: '字体颜色',
+      label: '字体颜色',
       field: 'color',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '字体大小（pt）',
+      label: '字体大小（pt）',
       field: 'fontSize',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 10,
-          max: 120
-        }
+      type: 'number',
+      options: {
+        min: 10,
+        max: 120,
+        size: 'mini'
       }
     }
-    // {
-    //   title: '元素位置',
-    //   field: 'elementPosition',
-    //   span: 24,
-    //   itemRender: {
-    //     name: '$radio',
-    //     options: [
-    //       {
-    //         label: '是',
-    //         value: true
-    //       },
-    //       {
-    //         label: '否',
-    //         value: false
-    //       }
-    //     ]
-    //   }
-    // }
+    // 如果需要 “元素位置” 的话，可按照之前示例补充
   ],
+
   RoyTextIn: [
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '边距',
+      label: '边距',
       field: 'padding',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 20
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 20,
+        size: 'mini'
       }
     }
-  ],
+  ]  ,
   RoySimpleTextIn: [
     {
-      title: '字体',
+      label: '字体',
       field: 'fontFamily',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '默认',
-            value: 'default'
-          },
-          {
-            label: '宋体',
-            value: 'simsun'
-          },
-          {
-            label: '黑体',
-            value: 'simhei'
-          },
-          {
-            label: '楷体',
-            value: 'kaiti'
-          },
-          {
-            label: '仿宋',
-            value: 'fangsong'
-          },
-          {
-            label: '微软雅黑',
-            value: 'microsoft yahei'
-          }
+          { label: '默认', value: 'default' },
+          { label: '宋体', value: 'simsun' },
+          { label: '黑体', value: 'simhei' },
+          { label: '楷体', value: 'kaiti' },
+          { label: '仿宋', value: 'fangsong' },
+          { label: '微软雅黑', value: 'microsoft yahei' }
         ]
       }
     },
     {
-      title: '字体颜色',
+      label: '字体颜色',
       field: 'color',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 对应原先 $colorPicker，若需额外配置可在此添加
       }
     },
     {
-      title: '字体大小（pt）',
+      label: '字体大小（pt）',
       field: 'fontSize',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 10,
-          max: 120
-        }
+      type: 'number',
+      options: {
+        min: 10,
+        max: 120,
+        size: 'mini'
       }
     },
     {
-      title: '行高',
+      label: '行高',
       field: 'lineHeight',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            value: '1',
-            label: '1'
-          },
-          {
-            value: '1.5',
-            label: '1.5'
-          },
-          {
-            value: '2',
-            label: '2'
-          },
-          {
-            value: '2.5',
-            label: '2.5'
-          },
-          {
-            value: '3',
-            label: '3'
-          }
+          { value: '1',   label: '1'   },
+          { value: '1.5', label: '1.5' },
+          { value: '2',   label: '2'   },
+          { value: '2.5', label: '2.5' },
+          { value: '3',   label: '3'   }
         ]
       }
     },
     {
-      title: '排列',
+      label: '排列',
+      field: '', // 对应原先 btnRadioGroup 里每项包含两个 field：justifyContent/alignItems
       span: 24,
-      itemRender: {
-        name: '$btnRadioGroup',
-        options: [
-          {
-            field: 'justifyContent',
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-align-left',
-                value: 'flex-start',
-                label: '水平居左'
-              },
-              {
-                type: 'icon',
-                content: 'ri-align-center',
-                value: 'center',
-                label: '水平居中'
-              },
-              {
-                type: 'icon',
-                content: 'ri-align-right',
-                value: 'flex-end',
-                label: '水平居下'
-              }
-            ]
-          },
-          {
-            field: 'alignItems',
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-align-left rotate-90',
-                value: 'flex-start',
-                label: '垂直居左'
-              },
-              {
-                type: 'icon',
-                content: 'ri-align-center rotate-90',
-                value: 'center',
-                label: '垂直居中'
-              },
-              {
-                type: 'icon',
-                content: 'ri-align-right rotate-90',
-                value: 'flex-end',
-                label: '垂直居下'
-              }
-            ]
-          }
-        ]
-      }
+      type: 'btnRadioGroup',
+      options: [
+        {
+          field: 'justifyContent',
+          // 对应水平对齐那一组按钮
+          options: [
+            { type: 'icon', content: 'ri-align-left',   value: 'flex-start', label: '水平居左' },
+            { type: 'icon', content: 'ri-align-center', value: 'center',     label: '水平居中' },
+            { type: 'icon', content: 'ri-align-right',  value: 'flex-end',   label: '水平居右' }
+          ]
+        },
+        {
+          field: 'alignItems',
+          // 对应垂直对齐那一组按钮
+          options: [
+            { type: 'icon', content: 'ri-align-left rotate-90',   value: 'flex-start', label: '垂直居上'   },
+            { type: 'icon', content: 'ri-align-center rotate-90', value: 'center',     label: '垂直居中'   },
+            { type: 'icon', content: 'ri-align-right rotate-90',  value: 'flex-end',   label: '垂直居下'   }
+          ]
+        }
+      ]
     },
     {
-      title: '文字样式',
+      label: '文字样式',
+      field: '', // 对应原先 btnRadioGroup 里每项包含 fontWeight/fontStyle/isUnderLine/isDelLine
       span: 24,
-      itemRender: {
-        name: '$btnRadioGroup',
-        options: [
-          {
-            field: 'fontWeight',
-            isRadio: false,
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-bold',
-                value: 'bold',
-                label: '粗体'
-              }
-            ]
-          },
-          {
-            field: 'fontStyle',
-            isRadio: false,
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-italic',
-                value: 'italic',
-                label: '斜体'
-              }
-            ]
-          },
-          {
-            field: 'isUnderLine',
-            isRadio: false,
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-underline',
-                value: true,
-                label: '下划线'
-              }
-            ]
-          },
-          {
-            field: 'isDelLine',
-            isRadio: false,
-            options: [
-              {
-                type: 'icon',
-                content: 'ri-strikethrough',
-                value: true,
-                label: '删除线'
-              }
-            ]
-          }
-        ]
-      }
+      type: 'btnRadioGroup',
+      options: [
+        {
+          field: 'fontWeight',
+          isRadio: false, // 可多选
+          options: [
+            { type: 'icon', content: 'ri-bold',       value: 'bold',    label: '粗体' }
+          ]
+        },
+        {
+          field: 'fontStyle',
+          isRadio: false,
+          options: [
+            { type: 'icon', content: 'ri-italic',     value: 'italic',  label: '斜体' }
+          ]
+        },
+        {
+          field: 'isUnderLine',
+          isRadio: false,
+          options: [
+            { type: 'icon', content: 'ri-underline', value: true,      label: '下划线' }
+          ]
+        },
+        {
+          field: 'isDelLine',
+          isRadio: false,
+          options: [
+            { type: 'icon', content: 'ri-strikethrough', value: true,   label: '删除线' }
+          ]
+        }
+      ]
     },
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // $colorPicker 可自行扩展
       }
     },
     {
-      title: '边距',
+      label: '边距',
       field: 'padding',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 20
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 20,
+        size: 'mini'
       }
     }
   ],
+  // 对应：RoyImage 表单配置
   RoyImage: [
     {
-      title: '圆角',
+      label: '圆角',
       field: 'borderRadius',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 10000
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 10000,
+        size: 'mini'
       }
     },
     {
-      title: '边框类型',
+      label: '边框类型',
       field: 'borderType',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '无',
-            value: 'none'
-          },
-          {
-            label: '实线',
-            value: 'solid'
-          },
-          {
-            label: '线虚线',
-            value: 'dashed'
-          },
-          {
-            label: '点虚线',
-            value: 'dotted'
-          }
+          { label: '无',     value: 'none'   },
+          { label: '实线',   value: 'solid'  },
+          { label: '线虚线', value: 'dashed' },
+          { label: '点虚线', value: 'dotted' }
         ]
       }
     },
     {
-      title: '边框颜色',
+      label: '边框颜色',
       field: 'borderColor',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // $colorPicker
       }
     },
     {
-      title: '边框宽度',
+      label: '边框宽度',
       field: 'borderWidth',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 4
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 4,
+        size: 'mini'
       }
     },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 360,
+        size: 'mini'
       }
     },
     {
-      title: '元素位置',
+      label: '元素位置',
       field: 'elementPosition',
       span: 24,
-      itemRender: {
-        name: '$radio',
+      type: 'radio',
+      options: {
         options: [
-          {
-            label: '跟随全局配置（默认）',
-            value: 'default'
-          },
-          {
-            label: '固定位置',
-            value: 'fixed'
-          },
-          {
-            label: '重复位置',
-            value: 'repeated'
-          }
+          { label: '跟随全局配置（默认）', value: 'default' },
+          { label: '固定位置',           value: 'fixed'   },
+          { label: '重复位置',           value: 'repeated'}
         ]
       }
     }
   ],
+  // 对应：RoyQRCode 表单配置
   RoyQRCode: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini'
       }
     },
     {
-      title: '高度',
+      label: '高度',
       field: 'height',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini'
       }
     },
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
     {
-      title: '边框类型',
+      label: '边框类型',
       field: 'borderType',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
         options: [
-          {
-            label: '无',
-            value: 'none'
-          },
-          {
-            label: '实线',
-            value: 'solid'
-          },
-          {
-            label: '线虚线',
-            value: 'dashed'
-          },
-          {
-            label: '点虚线',
-            value: 'dotted'
-          }
+          { label: '无',     value: 'none'   },
+          { label: '实线',   value: 'solid'  },
+          { label: '线虚线', value: 'dashed' },
+          { label: '点虚线', value: 'dotted' }
         ]
       }
     },
     {
-      title: '边框颜色',
+      label: '边框颜色',
       field: 'borderColor',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // $colorPicker
       }
     },
     {
-      title: '边框宽度',
+      label: '边框宽度',
       field: 'borderWidth',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 4
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 4,
+        size: 'mini'
       }
     },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 360,
+        size: 'mini'
       }
     },
     {
-      title: '元素位置',
+      label: '元素位置',
       field: 'elementPosition',
       span: 24,
-      itemRender: {
-        name: '$radio',
+      type: 'radio',
+      options: {
         options: [
-          {
-            label: '跟随全局配置（默认）',
-            value: 'default'
-          },
-          {
-            label: '固定位置',
-            value: 'fixed'
-          },
-          {
-            label: '重复位置',
-            value: 'repeated'
-          }
+          { label: '跟随全局配置（默认）', value: 'default' },
+          { label: '固定位置',           value: 'fixed'   },
+          { label: '重复位置',           value: 'repeated'}
         ]
       }
     }
   ],
+  // 对应：RoyBarCode 表单配置
   RoyBarCode: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini'
       }
     },
     {
-      title: '高度',
+      label: '高度',
       field: 'height',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        size: 'mini'
       }
     },
     {
-      title: '背景颜色',
+      label: '背景颜色',
       field: 'background',
       span: 24,
-      itemRender: {
-        name: '$colorPicker',
-        props: {}
+      type: 'color',
+      options: {
+        // 可留空
       }
     },
-    // {
-    //   title: '边框类型',
-    //   field: 'borderType',
-    //   span: 24,
-    //   itemRender: {
-    //     name: '$select',
-    //     options: [
-    //       {
-    //         label: '无',
-    //         value: 'none'
-    //       },
-    //       {
-    //         label: '实线',
-    //         value: 'solid'
-    //       },
-    //       {
-    //         label: '线虚线',
-    //         value: 'dashed'
-    //       },
-    //       {
-    //         label: '点虚线',
-    //         value: 'dotted'
-    //       }
-    //     ]
-    //   }
-    // },
-    // {
-    //   title: '边框颜色',
-    //   field: 'borderColor',
-    //   span: 24,
-    //   itemRender: {
-    //     name: '$colorPicker',
-    //     props: {}
-    //   }
-    // },
-    // {
-    //   title: '边框宽度',
-    //   field: 'borderWidth',
-    //   span: 24,
-    //   itemRender: {
-    //     name: '$input',
-    //     props: {
-    //       type: 'number',
-    //       size: 'mini',
-    //       min: 0,
-    //       max: 4
-    //     }
-    //   }
-    // },
     {
-      title: '旋转角度（°）',
+      label: '旋转角度（°）',
       field: 'rotate',
       span: 24,
-      itemRender: {
-        name: '$input',
-        props: {
-          type: 'number',
-          size: 'mini',
-          min: 0,
-          max: 360
-        }
+      type: 'number',
+      options: {
+        min: 0,
+        max: 360,
+        size: 'mini'
       }
     },
     {
-      title: '元素位置',
+      label: '元素位置',
       field: 'elementPosition',
       span: 24,
-      itemRender: {
-        name: '$radio',
+      type: 'radio',
+      options: {
         options: [
-          {
-            label: '跟随全局配置（默认）',
-            value: 'default'
-          },
-          {
-            label: '固定位置',
-            value: 'fixed'
-          },
-          {
-            label: '重复位置',
-            value: 'repeated'
-          }
+          { label: '跟随全局配置（默认）', value: 'default' },
+          { label: '固定位置',           value: 'fixed'   },
+          { label: '重复位置',           value: 'repeated'}
         ]
       }
     }
   ]
-}
+} 
 
 export const settingConfigList = {
   RoySimpleTextIn: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
       itemRender: {
@@ -1636,12 +1119,12 @@ export const settingConfigList = {
         props: {
           type: 'number',
           size: 'mini',
-          min: 0
-        }
-      }
+          min: 0,
+        },
+      },
     },
     {
-      title: '高度',
+      label: '高度',
       field: 'height',
       span: 24,
       itemRender: {
@@ -1649,12 +1132,12 @@ export const settingConfigList = {
         props: {
           type: 'number',
           size: 'mini',
-          min: 0
-        }
-      }
+          min: 0,
+        },
+      },
     },
     {
-      title: '文本类型',
+      label: '文本类型',
       span: 24,
       itemRender: {
         name: '$btnRadioGroup',
@@ -1683,23 +1166,23 @@ export const settingConfigList = {
                 type: 'icon',
                 content: 'ri-text',
                 value: 'RoySimpleTextIn',
-                label: '普通文本'
+                label: '普通文本',
               },
               {
                 type: 'icon',
                 content: 'ri-t-box-line',
                 value: 'RoyTextIn',
-                label: '富文本'
-              }
-            ]
-          }
-        ]
-      }
-    }
+                label: '富文本',
+              },
+            ],
+          },
+        ],
+      },
+    },
   ],
   RoyTextIn: [
     {
-      title: '宽度',
+      label: '宽度',
       field: 'width',
       span: 24,
       itemRender: {
@@ -1707,12 +1190,12 @@ export const settingConfigList = {
         props: {
           type: 'number',
           size: 'mini',
-          min: 0
-        }
-      }
+          min: 0,
+        },
+      },
     },
     {
-      title: '高度',
+      label: '高度',
       field: 'height',
       span: 24,
       itemRender: {
@@ -1720,12 +1203,12 @@ export const settingConfigList = {
         props: {
           type: 'number',
           size: 'mini',
-          min: 0
-        }
-      }
+          min: 0,
+        },
+      },
     },
     {
-      title: '文本类型',
+      label: '文本类型',
       span: 24,
       itemRender: {
         name: '$btnRadioGroup',
@@ -1754,23 +1237,23 @@ export const settingConfigList = {
                 type: 'icon',
                 content: 'ri-text',
                 value: 'RoySimpleTextIn',
-                label: '普通文本'
+                label: '普通文本',
               },
               {
                 type: 'icon',
                 content: 'ri-t-box-line',
                 value: 'RoyTextIn',
-                label: '富文本'
-              }
-            ]
-          }
-        ]
-      }
-    }
+                label: '富文本',
+              },
+            ],
+          },
+        ],
+      },
+    },
   ],
   RoyComplexTable: [
     {
-      title: '展示头部留白',
+      label: '展示头部留白',
       span: 24,
       itemRender: {
         name: '$btnRadioGroup',
@@ -1783,21 +1266,21 @@ export const settingConfigList = {
                 type: 'icon',
                 content: 'ri-check-line',
                 value: true,
-                label: '是'
+                label: '是',
               },
               {
                 type: 'icon',
                 content: 'ri-close-line',
                 value: false,
-                label: '否'
-              }
-            ]
-          }
-        ]
-      }
+                label: '否',
+              },
+            ],
+          },
+        ],
+      },
     },
     {
-      title: '展示头部单元格',
+      label: '展示头部单元格',
       span: 24,
       itemRender: {
         name: '$btnRadioGroup',
@@ -1810,21 +1293,21 @@ export const settingConfigList = {
                 type: 'icon',
                 content: 'ri-check-line',
                 value: true,
-                label: '是'
+                label: '是',
               },
               {
                 type: 'icon',
                 content: 'ri-close-line',
                 value: false,
-                label: '否'
-              }
-            ]
-          }
-        ]
-      }
+                label: '否',
+              },
+            ],
+          },
+        ],
+      },
     },
     {
-      title: '展示尾部单元格',
+      label: '展示尾部单元格',
       span: 24,
       itemRender: {
         name: '$btnRadioGroup',
@@ -1837,21 +1320,21 @@ export const settingConfigList = {
                 type: 'icon',
                 content: 'ri-check-line',
                 value: true,
-                label: '是'
+                label: '是',
               },
               {
                 type: 'icon',
                 content: 'ri-close-line',
                 value: false,
-                label: '否'
-              }
-            ]
-          }
-        ]
-      }
+                label: '否',
+              },
+            ],
+          },
+        ],
+      },
     },
     {
-      title: '展示尾部留白',
+      label: '展示尾部留白',
       span: 24,
       itemRender: {
         name: '$btnRadioGroup',
@@ -1864,21 +1347,21 @@ export const settingConfigList = {
                 type: 'icon',
                 content: 'ri-check-line',
                 value: true,
-                label: '是'
+                label: '是',
               },
               {
                 type: 'icon',
                 content: 'ri-close-line',
                 value: false,
-                label: '否'
-              }
-            ]
-          }
-        ]
-      }
+                label: '否',
+              },
+            ],
+          },
+        ],
+      },
     },
     {
-      title: '数据表格设置',
+      label: '数据表格设置',
       span: 24,
       itemRender: {
         name: '$btnRadioGroup',
@@ -1894,17 +1377,17 @@ export const settingConfigList = {
                 type: 'icon',
                 content: 'ri-settings-5-line',
                 value: 'none',
-                label: '设置'
-              }
-            ]
-          }
-        ]
-      }
-    }
+                label: '设置',
+              },
+            ],
+          },
+        ],
+      },
+    },
   ],
   RoyQRCode: [
     {
-      title: '内容',
+      label: '内容',
       field: 'text',
       span: 24,
       itemRender: {
@@ -1912,58 +1395,59 @@ export const settingConfigList = {
         props: {
           type: 'text',
           size: 'mini',
-          max: 100
-        }
-      }
+          max: 100,
+        },
+      },
     },
     {
-      title: '前景色',
+      label: '前景色',
       field: 'colorDark',
       span: 24,
       itemRender: {
         name: '$colorPicker',
-        props: {}
-      }
+        props: {},
+      },
     },
     {
-      title: '背景色',
+      label: '背景色',
       field: 'colorLight',
       span: 24,
       itemRender: {
         name: '$colorPicker',
-        props: {}
-      }
+        props: {},
+      },
     },
     {
-      title: '纠错级别',
+      label: '纠错级别',
       field: 'correctLevel',
       span: 24,
-      itemRender: {
-        name: '$select',
+      type: 'select',
+      options: {
+        //
         options: [
           {
             label: 'H级别',
-            value: QRCode.CorrectLevel.H
+            value: QRCode.CorrectLevel.H,
           },
           {
             label: 'Q级别',
-            value: QRCode.CorrectLevel.Q
+            value: QRCode.CorrectLevel.Q,
           },
           {
             label: 'M级别',
-            value: QRCode.CorrectLevel.M
+            value: QRCode.CorrectLevel.M,
           },
           {
             label: 'L级别',
-            value: QRCode.CorrectLevel.L
-          }
-        ]
-      }
-    }
+            value: QRCode.CorrectLevel.L,
+          },
+        ],
+      },
+    },
   ],
   RoyBarCode: [
     {
-      title: '内容',
+      label: '内容',
       field: 'text',
       span: 24,
       itemRender: {
@@ -1971,12 +1455,12 @@ export const settingConfigList = {
         props: {
           type: 'text',
           size: 'mini',
-          max: 50
-        }
-      }
+          max: 50,
+        },
+      },
     },
     {
-      title: '显示文字',
+      label: '显示文字',
       field: 'includeText',
       span: 24,
       itemRender: {
@@ -1984,26 +1468,26 @@ export const settingConfigList = {
         options: [
           {
             label: '是',
-            value: true
+            value: true,
           },
           {
             label: '否',
-            value: false
-          }
-        ]
-      }
+            value: false,
+          },
+        ],
+      },
     },
     {
-      title: '前景色',
+      label: '前景色',
       field: 'colorDark',
       span: 24,
       itemRender: {
         name: '$colorPicker',
-        props: {}
-      }
+        props: {},
+      },
     },
     {
-      title: '编码格式',
+      label: '编码格式',
       field: 'bcid',
       span: 24,
       itemRender: {
@@ -2011,475 +1495,475 @@ export const settingConfigList = {
         options: [
           {
             label: 'AusPost 4 State Customer Code',
-            value: 'auspost'
+            value: 'auspost',
           },
           {
             label: 'Aztec Code',
-            value: 'azteccode'
+            value: 'azteccode',
           },
           {
             label: 'Compact Aztec Code',
-            value: 'azteccodecompact'
+            value: 'azteccodecompact',
           },
           {
             label: 'Aztec Runes',
-            value: 'aztecrune'
+            value: 'aztecrune',
           },
           {
             label: 'BC412',
-            value: 'bc412'
+            value: 'bc412',
           },
           {
             label: 'Channel Code',
-            value: 'channelcode'
+            value: 'channelcode',
           },
           {
             label: 'Codablock F',
-            value: 'codablockf'
+            value: 'codablockf',
           },
           {
             label: 'Code 11',
-            value: 'code11'
+            value: 'code11',
           },
           {
             label: 'Code 128',
-            value: 'code128'
+            value: 'code128',
           },
           {
             label: 'Code 16K',
-            value: 'code16k'
+            value: 'code16k',
           },
           {
             label: 'Code 25',
-            value: 'code2of5'
+            value: 'code2of5',
           },
           {
             label: 'Italian Pharmacode',
-            value: 'code32'
+            value: 'code32',
           },
           {
             label: 'Code 39',
-            value: 'code39'
+            value: 'code39',
           },
           {
             label: 'Code 39 Extended',
-            value: 'code39ext'
+            value: 'code39ext',
           },
           {
             label: 'Code 49',
-            value: 'code49'
+            value: 'code49',
           },
           {
             label: 'Code 93',
-            value: 'code93'
+            value: 'code93',
           },
           {
             label: 'Code 93 Extended',
-            value: 'code93ext'
+            value: 'code93ext',
           },
           {
             label: 'Code One',
-            value: 'codeone'
+            value: 'codeone',
           },
           {
             label: 'COOP 2 of 5',
-            value: 'coop2of5'
+            value: 'coop2of5',
           },
           {
             label: 'Custom 4 state symbology',
-            value: 'daft'
+            value: 'daft',
           },
           {
             label: 'GS1 DataBar Expanded',
-            value: 'databarexpanded'
+            value: 'databarexpanded',
           },
           {
             label: 'GS1 DataBar Expanded Composite',
-            value: 'databarexpandedcomposite'
+            value: 'databarexpandedcomposite',
           },
           {
             label: 'GS1 DataBar Expanded Stacked',
-            value: 'databarexpandedstacked'
+            value: 'databarexpandedstacked',
           },
           {
             label: 'GS1 DataBar Expanded Stacked Composite',
-            value: 'databarexpandedstackedcomposite'
+            value: 'databarexpandedstackedcomposite',
           },
           {
             label: 'GS1 DataBar Limited',
-            value: 'databarlimited'
+            value: 'databarlimited',
           },
           {
             label: 'GS1 DataBar Limited Composite',
-            value: 'databarlimitedcomposite'
+            value: 'databarlimitedcomposite',
           },
           {
             label: 'GS1 DataBar Omnidirectional',
-            value: 'databaromni'
+            value: 'databaromni',
           },
           {
             label: 'GS1 DataBar Omnidirectional Composite',
-            value: 'databaromnicomposite'
+            value: 'databaromnicomposite',
           },
           {
             label: 'GS1 DataBar Stacked',
-            value: 'databarstacked'
+            value: 'databarstacked',
           },
           {
             label: 'GS1 DataBar Stacked Composite',
-            value: 'databarstackedcomposite'
+            value: 'databarstackedcomposite',
           },
           {
             label: 'GS1 DataBar Stacked Omnidirectional',
-            value: 'databarstackedomni'
+            value: 'databarstackedomni',
           },
           {
             label: 'GS1 DataBar Stacked Omnidirectional Composite',
-            value: 'databarstackedomnicomposite'
+            value: 'databarstackedomnicomposite',
           },
           {
             label: 'GS1 DataBar Truncated',
-            value: 'databartruncated'
+            value: 'databartruncated',
           },
           {
             label: 'GS1 DataBar Truncated Composite',
-            value: 'databartruncatedcomposite'
+            value: 'databartruncatedcomposite',
           },
           {
             label: 'Datalogic 2 of 5',
-            value: 'datalogic2of5'
+            value: 'datalogic2of5',
           },
           {
             label: 'Data Matrix',
-            value: 'datamatrix'
+            value: 'datamatrix',
           },
           {
             label: 'Data Matrix Rectangular',
-            value: 'datamatrixrectangular'
+            value: 'datamatrixrectangular',
           },
           {
             label: 'Data Matrix Rectangular Extension',
-            value: 'datamatrixrectangularextension'
+            value: 'datamatrixrectangularextension',
           },
           {
             label: 'DotCode',
-            value: 'dotcode'
+            value: 'dotcode',
           },
           {
             label: 'EAN-13',
-            value: 'ean13'
+            value: 'ean13',
           },
           {
             label: 'EAN-13 Composite',
-            value: 'ean13composite'
+            value: 'ean13composite',
           },
           {
             label: 'GS1-14',
-            value: 'ean14'
+            value: 'ean14',
           },
           {
             label: 'EAN-2 (2 digit addon)',
-            value: 'ean2'
+            value: 'ean2',
           },
           {
             label: 'EAN-5 (5 digit addon)',
-            value: 'ean5'
+            value: 'ean5',
           },
           {
             label: 'EAN-8',
-            value: 'ean8'
+            value: 'ean8',
           },
           {
             label: 'EAN-8 Composite',
-            value: 'ean8composite'
+            value: 'ean8composite',
           },
           {
             label: 'Flattermarken',
-            value: 'flattermarken'
+            value: 'flattermarken',
           },
           {
             label: 'GS1-128',
-            value: 'gs1-128'
+            value: 'gs1-128',
           },
           {
             label: 'GS1-128 Composite',
-            value: 'gs1-128composite'
+            value: 'gs1-128composite',
           },
           {
             label: 'GS1 Composite 2D Component',
-            value: 'gs1-cc'
+            value: 'gs1-cc',
           },
           {
             label: 'GS1 Data Matrix',
-            value: 'gs1datamatrix'
+            value: 'gs1datamatrix',
           },
           {
             label: 'GS1 Data Matrix Rectangular',
-            value: 'gs1datamatrixrectangular'
+            value: 'gs1datamatrixrectangular',
           },
           {
             label: 'GS1 Digital Link Data Matrix',
-            value: 'gs1dldatamatrix'
+            value: 'gs1dldatamatrix',
           },
           {
             label: 'GS1 Digital Link QR Code',
-            value: 'gs1dlqrcode'
+            value: 'gs1dlqrcode',
           },
           {
             label: 'GS1 DotCode',
-            value: 'gs1dotcode'
+            value: 'gs1dotcode',
           },
           {
             label: 'GS1 North American Coupon',
-            value: 'gs1northamericancoupon'
+            value: 'gs1northamericancoupon',
           },
           {
             label: 'GS1 QR Code',
-            value: 'gs1qrcode'
+            value: 'gs1qrcode',
           },
           {
             label: 'Han Xin Code',
-            value: 'hanxin'
+            value: 'hanxin',
           },
           {
             label: 'HIBC Aztec Code',
-            value: 'hibcazteccode'
+            value: 'hibcazteccode',
           },
           {
             label: 'HIBC Codablock F',
-            value: 'hibccodablockf'
+            value: 'hibccodablockf',
           },
           {
             label: 'HIBC Code 128',
-            value: 'hibccode128'
+            value: 'hibccode128',
           },
           {
             label: 'HIBC Code 39',
-            value: 'hibccode39'
+            value: 'hibccode39',
           },
           {
             label: 'HIBC Data Matrix',
-            value: 'hibcdatamatrix'
+            value: 'hibcdatamatrix',
           },
           {
             label: 'HIBC Data Matrix Rectangular',
-            value: 'hibcdatamatrixrectangular'
+            value: 'hibcdatamatrixrectangular',
           },
           {
             label: 'HIBC MicroPDF417',
-            value: 'hibcmicropdf417'
+            value: 'hibcmicropdf417',
           },
           {
             label: 'HIBC PDF417',
-            value: 'hibcpdf417'
+            value: 'hibcpdf417',
           },
           {
             label: 'HIBC QR Code',
-            value: 'hibcqrcode'
+            value: 'hibcqrcode',
           },
           {
             label: 'IATA 2 of 5',
-            value: 'iata2of5'
+            value: 'iata2of5',
           },
           {
             label: 'Deutsche Post Identcode',
-            value: 'identcode'
+            value: 'identcode',
           },
           {
             label: 'Industrial 2 of 5',
-            value: 'industrial2of5'
+            value: 'industrial2of5',
           },
           {
             label: 'Interleaved 2 of 5 (ITF)',
-            value: 'interleaved2of5'
+            value: 'interleaved2of5',
           },
           {
             label: 'ISBN',
-            value: 'isbn'
+            value: 'isbn',
           },
           {
             label: 'ISMN',
-            value: 'ismn'
+            value: 'ismn',
           },
           {
             label: 'ISSN',
-            value: 'issn'
+            value: 'issn',
           },
           {
             label: 'ITF-14',
-            value: 'itf14'
+            value: 'itf14',
           },
           {
             label: 'Japan Post 4 State Customer Code',
-            value: 'japanpost'
+            value: 'japanpost',
           },
           {
             label: 'Royal Dutch TPG Post KIX',
-            value: 'kix'
+            value: 'kix',
           },
           {
             label: 'Deutsche Post Leitcode',
-            value: 'leitcode'
+            value: 'leitcode',
           },
           {
             label: 'Royal Mail Mailmark',
-            value: 'mailmark'
+            value: 'mailmark',
           },
           {
             label: 'Marks & Spencer',
-            value: 'mands'
+            value: 'mands',
           },
           {
             label: 'Matrix 2 of 5',
-            value: 'matrix2of5'
+            value: 'matrix2of5',
           },
           {
             label: 'MaxiCode',
-            value: 'maxicode'
+            value: 'maxicode',
           },
           {
             label: 'MicroPDF417',
-            value: 'micropdf417'
+            value: 'micropdf417',
           },
           {
             label: 'Micro QR Code',
-            value: 'microqrcode'
+            value: 'microqrcode',
           },
           {
             label: 'MSI Modified Plessey',
-            value: 'msi'
+            value: 'msi',
           },
           {
             label: 'USPS Intelligent Mail',
-            value: 'onecode'
+            value: 'onecode',
           },
           {
             label: 'PDF417',
-            value: 'pdf417'
+            value: 'pdf417',
           },
           {
             label: 'Compact PDF417',
-            value: 'pdf417compact'
+            value: 'pdf417compact',
           },
           {
             label: 'Pharmaceutical Binary Code',
-            value: 'pharmacode'
+            value: 'pharmacode',
           },
           {
             label: 'Two-track Pharmacode',
-            value: 'pharmacode2'
+            value: 'pharmacode2',
           },
           {
             label: 'USPS PLANET',
-            value: 'planet'
+            value: 'planet',
           },
           {
             label: 'Plessey UK',
-            value: 'plessey'
+            value: 'plessey',
           },
           {
             label: 'PosiCode',
-            value: 'posicode'
+            value: 'posicode',
           },
           {
             label: 'USPS POSTNET',
-            value: 'postnet'
+            value: 'postnet',
           },
           {
             label: 'Pharmazentralnummer (PZN)',
-            value: 'pzn'
+            value: 'pzn',
           },
           {
             label: 'QR Code',
-            value: 'qrcode'
+            value: 'qrcode',
           },
           {
             label: 'Codabar',
-            value: 'rationalizedCodabar'
+            value: 'rationalizedCodabar',
           },
           {
             label: 'Custom 1D symbology',
-            value: 'raw'
+            value: 'raw',
           },
           {
             label: 'Rectangular Micro QR Code',
-            value: 'rectangularmicroqrcode'
+            value: 'rectangularmicroqrcode',
           },
           {
             label: 'Royal Mail 4 State Customer Code',
-            value: 'royalmail'
+            value: 'royalmail',
           },
           {
             label: 'SSCC-18',
-            value: 'sscc18'
+            value: 'sscc18',
           },
           {
             label: 'Swiss QR Code',
-            value: 'swissqrcode'
+            value: 'swissqrcode',
           },
           {
             label: 'Miscellaneous symbols',
-            value: 'symbol'
+            value: 'symbol',
           },
           {
             label: 'Telepen',
-            value: 'telepen'
+            value: 'telepen',
           },
           {
             label: 'Telepen Numeric',
-            value: 'telepennumeric'
+            value: 'telepennumeric',
           },
           {
             label: 'Ultracode',
-            value: 'ultracode'
+            value: 'ultracode',
           },
           {
             label: 'UPC-A',
-            value: 'upca'
+            value: 'upca',
           },
           {
             label: 'UPC-A Composite',
-            value: 'upcacomposite'
+            value: 'upcacomposite',
           },
           {
             label: 'UPC-E',
-            value: 'upce'
+            value: 'upce',
           },
           {
             label: 'UPC-E Composite',
-            value: 'upcecomposite'
-          }
-        ]
-      }
-    }
+            value: 'upcecomposite',
+          },
+        ],
+      },
+    },
   ],
   RoyImage: [
     {
-      title: '标题',
+      label: '标题',
       field: 'title',
       span: 24,
       itemRender: {
         name: '$input',
         props: {
           type: 'text',
-          size: 'mini'
-        }
-      }
+          size: 'mini',
+        },
+      },
     },
     {
-      title: '图片链接地址',
+      label: '图片链接地址',
       field: 'src',
       span: 24,
       itemRender: {
         name: '$textarea',
         props: {
           type: 'text',
-          size: 'mini'
-        }
-      }
+          size: 'mini',
+        },
+      },
     },
     {
-      title: '上传图片',
+      label: '上传图片',
       span: 24,
       itemRender: {
         name: '$btnRadioGroup',
@@ -2506,12 +1990,12 @@ export const settingConfigList = {
                 type: 'icon',
                 content: 'ri-upload-line',
                 value: 'uploaded-image',
-                label: '点击上传图片'
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
+                label: '点击上传图片',
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
 }

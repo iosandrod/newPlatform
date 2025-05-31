@@ -6,7 +6,14 @@
         v-for="item in contextMenu"
         :key="item.code"
         :class="`roy-context--${item.status}`"
-        @click="item.event"
+        @click="
+          (e) => {
+            // debugger //
+            if (e.$$contextmenu == null) {
+              item.event()
+            }
+          }
+        "
       >
         <i :class="item.icon"></i>
         <span>{{ item.label }}</span>
@@ -220,7 +227,9 @@ export default defineComponent({
         code: 'addRow',
         icon: 'ri-insert-row-bottom',
         status: 'default',
-        event: () => menyItemCmd('addRow'),
+        event: () => {
+          menyItemCmd('addRow')
+        },
       },
       {
         label: '添加列',
@@ -585,7 +594,7 @@ export default defineComponent({
       if (!elementData) return
       const cellEl = document.getElementById(`roy-component-${elementData.id}`)
       if (!cellEl) {
-        debugger//
+        debugger //
         return
       }
 

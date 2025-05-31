@@ -23,13 +23,13 @@ export default {
     disabled: Boolean,
     autoHide: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
 
   data() {
     return {
-      hover: false
+      hover: false,
     }
   },
   computed: {
@@ -37,9 +37,9 @@ export default {
       return {
         'roy-context-item': !this.divider,
         'roy-context-item--hover': this.hover,
-        'roy-context-item--disabled': this.disabled
+        'roy-context-item--disabled': this.disabled,
       }
-    }
+    },
   },
 
   methods: {
@@ -70,7 +70,7 @@ export default {
       this.$emit('click', this, event)
 
       this.autoHide && this.$$contextmenu.hide()
-    }
-  }
+    },
+  },
 }
 </script>

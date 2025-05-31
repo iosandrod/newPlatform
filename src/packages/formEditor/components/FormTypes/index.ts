@@ -116,5 +116,7 @@ export const typeMap = {
     pc: baseinfoPc,
     mobile: baseinfoMobile,
   },
+  // color:{
+  // }
 }
 export default {}

@@ -5,7 +5,7 @@
  * @date 2023/4/3
 -->
 <template>
-  <section :class="{ 'is-vertical': isVertical }" class="roy-container">
+  <section :class="{ 'is-vertical': isVertical }" class="flex flex-col roy-container">
     <slot />
   </section>
 </template>
