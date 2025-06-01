@@ -198,6 +198,48 @@ export const selected_cell = (table: Table) => {
           }, 0)
           // table.updateCanvas() //
         }
+        let targetCol = table.getFlatColumns().find((col) => {
+          return col.getField() == field
+        })
+        if (targetCol == null) {
+          return
+        }
+        let config = targetCol.config
+        let enableSelect = config.enableSelect
+        if (enableSelect == true) {
+          let _start = start.row
+          let _end = end.row
+          if (_start > _end) {
+            _start = end.row
+            _end = start.row
+          }
+          let rArr = []
+          for (let i = _start; i <= _end; i++) {
+            let check = table.checkCanEditCell(start.col, i, null)
+            if (check == false) {
+              continue
+            }
+            let record = ins.getRecordByCell(start.col, i) //
+            // record.checkboxField = !record.checkboxField
+            rArr.push(record)
+          }
+          for (let row of rArr) {
+            let oldValue = row[targetCol.getField()]
+            let bool = Boolean(oldValue)
+            let nv = null
+            if (bool == true) {
+              nv = 0
+            } else {
+              nv = 1
+            }
+            targetCol.updateBindValue({
+              value: nv,
+              field: targetCol.getField(),
+              row,
+            }) //
+            console.log('选中行', row) //
+          }
+        }
       }
     },
   })

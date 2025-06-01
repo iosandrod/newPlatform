@@ -6,6 +6,7 @@ import _ from 'lodash'
 import { tableConfig } from '@/table/tableData'
 import { Column } from '@/table/column'
 import { system } from '@/system'
+import design from '@/pages/design'
 export default defineComponent({
   name: 'entityPc', //
   props: ['data', 'params', 'item'], //
@@ -51,7 +52,10 @@ export default defineComponent({
     return () => {
       //
       let com = (
-        <div class="h-full  w-full box-border " style={{ minHeight: '200px' ,padding:'4px' }}>
+        <div
+          class="h-full  w-full box-border "
+          style={{ minHeight: '200px', padding: '4px' }}
+        >
           <erTable
             onTableConfigChange={(config) => {
               item.onTableConfigChange(config)
@@ -118,8 +122,18 @@ export default defineComponent({
               item.onColumnHidden(config)
             }}
             onColumnsDesign={(config) => {
+              let tableName = item.getTableName()
+              let dTableName = _design.getRealTableName()
+              if (tableName != dTableName) {
+                // console.log(fitem,item,'tseetitem')//
+                // let addCols = config.addCols || []
+                // let updateCols = config.updateCols || []
+                // let allCols = [...addCols, ...updateCols]
+                // item.config.columns = allCols //
+                let allCols = config.allCols //
+                item.config.options.columns = allCols
+              }
               if (_design) {
-                //
                 _design.onColumnsDesign(config)
               }
             }}

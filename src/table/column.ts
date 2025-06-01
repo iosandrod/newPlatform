@@ -463,10 +463,10 @@ export class Column extends Base {
     }
     let f = this.getField()
     let v = r[f]
-    if (v === '1') {
+    if (v == '1') {
       v = true
     }
-    if (v === '0') {
+    if (v == '0') {
       v = false //
     }
     v = Boolean(v)
@@ -616,7 +616,14 @@ export class Column extends Base {
     }
     let _res = await this.validateValue({ ...config, table })
     if (_res == true) {
+      let oldv = row[field]
+      if (oldv == value) {
+        return true
+      }
       row[field] = value //
+      if (row['_rowState'] == 'unChange') {
+        row['_rowState'] = 'change' //
+      }
       return true
     } else {
       let table = this.table //

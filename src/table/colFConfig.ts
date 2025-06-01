@@ -432,7 +432,8 @@ export const getDCConfig = (_this: any, config) => {
       {
         field: 'hidden',
         title: '是否隐藏',
-        type: 'boolean',
+        type: 'boolean', //
+        enableSelect: true, //允许批量修改//
         editType: 'boolean', //
       },
       {

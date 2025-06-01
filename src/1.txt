@@ -5998,3 +5998,25 @@ export const formConfig = {
     //   field: column.getField(),
     //   table: column.table,
     // })
+
+
+ // let _length = 200 //
+      // rowStart = rowStart - _length
+      // if (rowStart < 0) {
+      //   rowStart = 0 //
+      // }
+      // rowEnd = rowEnd + _length
+
+      // let currentIndexContain = _table.currentIndexContain
+      // //显示在视图上
+      // let _arr = currentIndexContain[_index]
+      // if (_arr == null) {
+      //   currentIndexContain[_index] = {}
+      //   _arr = currentIndexContain[_index] //
+      // }
+      // let field = _this.getField()
+      // _arr[field] = container //
+      // } else {
+      // let currentIndexContain = _table.currentIndexContain //
+      // delete currentIndexContain[_index]
+      // }

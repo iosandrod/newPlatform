@@ -202,7 +202,8 @@ export default defineComponent({
                 title: 'email',
                 width: 250,
                 sort: false,
-                editType: 'baseinfo', //
+                editType: 'boolean', //
+                enableSelect: true, //
                 baseinfoConfig: {
                   tableName: 't_Item',
                   bindColumns: [
@@ -408,9 +409,12 @@ export default defineComponent({
           }}
         >
           {com0}
-          <div class="h-full w-full " style={{
-            padding:"100px"
-          }}>
+          <div
+            class="h-full w-full "
+            style={{
+              padding: '100px',
+            }}
+          >
             {/* <button
               onClick={() => {
                 console.log(_reg2.value, 'testReg2') //

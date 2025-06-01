@@ -105,6 +105,10 @@ export const getCheckbox = (column: Column) => {
       let f = _this.getField()
       let c = record[f] //
       c = _this.getIsChecked(record)
+      let num = Number(c)
+      if (!isNaN(num)) {
+        c = num //
+      }
       // console.log(record, c, 'record') ////
       checkbox1.attribute.checked = Boolean(c) //
       checkbox1.render() //
@@ -117,6 +121,7 @@ export const getCheckbox = (column: Column) => {
       updateFn,
       container,
       rowCount: count + 400, //
+      fieldFormat: _this.getFormat(),
     })
     // let _length = 200 //
     // rowStart = rowStart - _length
@@ -486,26 +491,6 @@ export const getDefault = (column: Column) => {
         }
       } //
       obj123['updateFn'] = updateFn //
-      // let _length = 200 //
-      // rowStart = rowStart - _length
-      // if (rowStart < 0) {
-      //   rowStart = 0 //
-      // }
-      // rowEnd = rowEnd + _length
-
-      // let currentIndexContain = _table.currentIndexContain
-      // //显示在视图上
-      // let _arr = currentIndexContain[_index]
-      // if (_arr == null) {
-      //   currentIndexContain[_index] = {}
-      //   _arr = currentIndexContain[_index] //
-      // }
-      // let field = _this.getField()
-      // _arr[field] = container //
-      // } else {
-      // let currentIndexContain = _table.currentIndexContain //
-      // delete currentIndexContain[_index]
-      // }
     }
 
     return {

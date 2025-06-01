@@ -158,6 +158,7 @@ export class InputEditor extends BaseEditor {
           if (cacheValueObj != null && typeof cacheValueObj == 'object') {
             Object.entries(cacheValueObj).forEach(([key, value]) => {
               if (key == column.getField()) {
+                column.updateBindValue(updateConfig) //
                 return
               } //
               this.row[key] = value //

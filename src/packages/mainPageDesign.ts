@@ -76,6 +76,8 @@ export class MainPageDesign extends PageDesign {
       await http.runCustomMethod('columns', 'batchUpdate', config) //
       this.getSystem().confirmMessage('列数据更新成功', 'success') ////
       this.getSystem().refreshPageDesign() //
+    } else {
+      this.saveTableDesign({ refresh: false }) //
     }
   }
 
@@ -337,7 +339,7 @@ export class MainPageDesign extends PageDesign {
     }
     let curRow = tRef.getCurRow()
     let tConfig = this.getTableConfig(_tableName)
-    let keyColumn=tConfig.keyColumn
+    let keyColumn = tConfig.keyColumn
     let treeConfig = tConfig?.treeConfig || {}
     let rootValue = treeConfig?.rootValue
     let id = treeConfig?.id
@@ -354,7 +356,7 @@ export class MainPageDesign extends PageDesign {
     await this.confirmEditEntity({
       tableName: _tableName,
       curRow: curRow,
-      keyColumn, 
+      keyColumn,
       editType: 'edit', //
     })
   }

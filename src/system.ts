@@ -325,6 +325,12 @@ export class System extends Base {
       return _design //
     }
     let layoutConfig = await this.getPageLayout(tableName) //
+    // let f = layoutConfig.fields
+    // debugger//
+    // f = f.filter((e) => e.type != null) //
+    // layoutConfig.layout.pc=[layoutConfig.layout.pc[0]]
+    // layoutConfig.layout.mobile=[layoutConfig.layout.mobile[0]]//
+    // layoutConfig.fields = f //
     if (layoutConfig == null) {
       this.confirmErrorMessage('找不到模块') //
       return Promise.reject('找不到模块') //

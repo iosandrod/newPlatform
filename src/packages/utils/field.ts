@@ -255,16 +255,7 @@ const transferData = (lang, path, locale, options = {}) => {
 }
 const isNull = (e) => e === '' || e === null || e === undefined
 const checkIsInSubform = (node) => {
-  if (!node) return false
-  let result = false
-  let parent = node.context.parent
-  while (parent && !result) {
-    if (parent.type === 'subform') {
-      result = true
-    }
-    parent = parent.context?.parent
-  }
-  return result
+ return false
 }
 const getSubFormValues = (subform) =>
   subform.list.map((e) => {

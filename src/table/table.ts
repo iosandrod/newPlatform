@@ -1887,9 +1887,14 @@ export class Table extends Base {
     let config = this.config
     let ins = this.getInstance()
     let beforeEditCell = config.onBeforeEditCell
+    let tableState = this.tableState
+    if (tableState == 'scan') {
+      return false
+    }
     if (typeof beforeEditCell == 'function') {
       let re = ins.getRecordByCell(col, row)
-      let f = ins.getBodyField(col, row)
+      let f: any = ins.getBodyField(col, row)
+      value = value || re[f]
       let _status = beforeEditCell({
         row: re,
         field: f,
@@ -2452,8 +2457,8 @@ export class Table extends Base {
     }
   }
   onColumnsDesign(cols: any[]) {
-    // debugger//
     let updateCols = cols.filter((col) => {
+      //
       let rowState = col['_rowState']
       return rowState == 'change'
     })
@@ -2464,6 +2469,10 @@ export class Table extends Base {
     let config = {
       addCols: addCols,
       updateCols: updateCols,
+      // otherCols: cols.filter((col) => {
+      //   return !addCols.includes(col) && !updateCols.includes(col)
+      // }), //
+      allCols: cols,
       tableName: this.getTableName(),
     }
     let ccnfig = this.config
@@ -2792,6 +2801,7 @@ export class Table extends Base {
     let field = config.field //
     let record = config.record
     if (record == null) {
+      console.log(record, 'record没有') //
       return //
     }
     let _index = record?._index //
