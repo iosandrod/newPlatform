@@ -49,6 +49,7 @@ export class System extends Base {
   async login() {}
   @cacheValue() //
   async getMenuData() {
+    // debugger//
     let client = this.getClient() //
     let d = await client.find('navs') //
     let filFn = (rows: any[]) => {
@@ -785,7 +786,7 @@ export class System extends Base {
       return
     } //
     let http = await this.getHttp()
-    let code = http.create('captcha', k) //
+    let code = await http.create('captcha', { api: k }) //
     let _system = this
     _system.confirmMessage('获取验证码成功', 'success') //
     return code //

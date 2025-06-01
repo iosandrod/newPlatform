@@ -89,14 +89,14 @@ export const createClient = (config) => {
 
   return app //
 }
-// export const client = createClient({})
-export const client: any = {
-  get: () => {
-    return {
-      emit: () => {},
-    }
-  },
-} //
+export const client = createClient({})
+// export const client: any = {
+//   get: () => {
+//     return {
+//       emit: () => {},
+//     }
+//   },
+// } //
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
