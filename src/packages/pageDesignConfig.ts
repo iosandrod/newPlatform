@@ -51,25 +51,12 @@ export const pageDesignFieldConfig = [
         },
       },
       {
-        type: 'input',
-        label: '单行文本',
+        type: 'gantt',
+        label: '甘特图',
         icon: 'input',
         key: '',
         id: '',
-        options: {
-          clearable: true,
-          isShowWordLimit: false,
-          renderType: 1,
-          disabled: false,
-          showPassword: false,
-          defaultValue: '',
-          placeholder: '',
-          labelWidth: 100,
-          isShowLabel: true,
-          required: false,
-          min: null,
-          max: null,
-        },
+        options: {}, //
       },
       {
         type: 'dform', //
@@ -94,9 +81,10 @@ export const pageDesignFieldConfig = [
           width: '100%',
           minHeight: '50px',
         },
-      }, {
+      },
+      {
         type: 'buttongroup', //
-        label: '按钮组',//
+        label: '按钮组', //
         icon: 'input',
         id: '',
         options: {
@@ -161,10 +149,8 @@ export const pageDesignFieldConfig = [
                 list: [],
                 style: {},
               },
-
             ],
           },
-
         ],
         options: {
           width: 100,

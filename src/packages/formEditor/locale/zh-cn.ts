@@ -10,6 +10,7 @@ export default {
       textarea: '多行文本',
       number: '数字',
       radio: '单选框',
+      gantt: '甘特图', //
       buttongroup: '按钮组', //
       checkbox: '复选框',
       select: '下拉框',
@@ -25,7 +26,7 @@ export default {
       slider: '滑块',
       html: '富文本',
       uploadfile: '上传文件',
-      signature: '签名',//
+      signature: '签名', //
       region: '省市区',
       grid: '栅格布局',
       stable: '表格',
