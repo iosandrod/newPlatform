@@ -378,7 +378,7 @@ export default defineComponent({
       //     ]}
       //   ></selectCom>
       // )
-      com = <pVue></pVue>
+      // com = <pVue></pVue>
       // com = (
       //   <wangCom
       //     ref={(el) => {
@@ -408,7 +408,9 @@ export default defineComponent({
           }}
         >
           {com0}
-          <div class="h-full w-full" style={{}}>
+          <div class="h-full w-full " style={{
+            padding:"100px"
+          }}>
             {/* <button
               onClick={() => {
                 console.log(_reg2.value, 'testReg2') //

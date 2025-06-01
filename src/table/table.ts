@@ -55,6 +55,7 @@ import { InputEditor } from './editor/string'
 import { Row } from 'vant'
 import { containerMap } from './columnFn'
 export class Table extends Base {
+  isTreeIconClick = false
   isDragHeader = false
   runClearSelect = false
   treeConfig: any = null
@@ -2347,7 +2348,7 @@ export class Table extends Base {
     return false
   }
   openTreeRow(col, row) {
-    //
+    console.log(col, row, 'openTreeRow') //
     let ins = this.getInstance() //
     let record = ins.getRecordByCell(col, row) //
     let f = ins.getBodyField(col, row)
@@ -2790,7 +2791,10 @@ export class Table extends Base {
   onCellVisible(config) {
     let field = config.field //
     let record = config.record
-    let _index = record._index //
+    if (record == null) {
+      return //
+    }
+    let _index = record?._index //
     let _containerMap = containerMap
     let id = this.id //
     let id1 = `${id}_arr`
@@ -2904,6 +2908,6 @@ export class Table extends Base {
   clearCache() {
     let id = this.id
     let _containerMap = containerMap
-    _containerMap[id] = null
+    _containerMap[id] = null //
   }
 }

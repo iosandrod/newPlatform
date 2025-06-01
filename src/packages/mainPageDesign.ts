@@ -290,4 +290,72 @@ export class MainPageDesign extends PageDesign {
       this.openEditDialog('edit') //
     }
   }
+  async getRelateTreeData(tableName: any): Promise<void> {
+    if (typeof tableName == 'string') {
+      tableName = {
+        tableName: tableName,
+      }
+    }
+    let _tableName = tableName.tableName
+    let http = this.getHttp()
+    let _data = await http.find(_tableName)
+    let dataRef = this.getTableRefData(_tableName)
+    let tConfig = this.getTableConfig(_tableName) //
+    let treeConfig = tConfig?.treeConfig || {}
+    let rootValue = treeConfig?.rootValue || '0' //
+    let buildTreeData = (data, parentId = rootValue) => {
+      let _data = data
+        .filter((item) => item.cParentClsNo == parentId)
+        .map((item) => ({
+          ...item,
+          children: buildTreeData(data, item.cClsNo),
+        }))
+      return _data
+    }
+    let data1 = buildTreeData(_data)
+    let rootCnValue = treeConfig?.rootCnValue || '客户类别'
+    let _data2 = [
+      {
+        cClsNo: rootValue,
+        cClsName: rootCnValue,
+        children: data1,
+      },
+    ]
+    dataRef['data'] = _data2 //
+    this.getSystem().confirmMessage('加载树数据成功123') //
+  }
+  async editRelateTreeData(tableName) {
+    if (typeof tableName == 'string') {
+      tableName = {
+        tableName: tableName,
+      }
+    }
+    let _tableName = tableName.tableName
+    let tRef = this.getRef(_tableName)
+    if (tRef == null) {
+      return
+    }
+    let curRow = tRef.getCurRow()
+    let tConfig = this.getTableConfig(_tableName)
+    let keyColumn=tConfig.keyColumn
+    let treeConfig = tConfig?.treeConfig || {}
+    let rootValue = treeConfig?.rootValue
+    let id = treeConfig?.id
+    let _value = curRow[id]
+    if (_value == rootValue && rootValue != null) {
+      //
+      this.getSystem().confirmMessage('不能编辑根节点')
+      return
+    }
+    if (curRow == null) {
+      this.getSystem().confirmMessage('请选择一行进行编辑') //
+      return
+    }
+    await this.confirmEditEntity({
+      tableName: _tableName,
+      curRow: curRow,
+      keyColumn, 
+      editType: 'edit', //
+    })
+  }
 } //

@@ -104,7 +104,7 @@ export class Column extends Base {
       disableColumnResize = table.getDisableColumnResize()
     }
     if (1 == 1) {
-      return true //
+      // return true //
     }
     return disableColumnResize
   }
@@ -365,10 +365,10 @@ export class Column extends Base {
     }
     let bgColor = this.getBgColor()
     if (typeof bgColor == 'function') {
-      let color1 = bgColor(record) //
+      let color1 = bgColor({ row: record, data: this.table.templateProps.data })
       if (color1 != null) {
         color = color1 //
-      }
+      } //
     }
     return color
   }
@@ -1158,6 +1158,7 @@ export class Column extends Base {
   onFocus(config) {}
 
   confirmTinyTableRow(row) {
+    //
     let bConfig = this.getBaseInfoConfig() //
     let bindColumns = bConfig?.bindColumns || []
     if (Array.isArray(bindColumns) && bindColumns.length > 0) {

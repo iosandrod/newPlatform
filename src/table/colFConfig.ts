@@ -24,10 +24,14 @@ export const getDFConfig = (_this, data) => {
     //
     fType = 'code'
   }
-  let tableName = null
+  let tableName = null //
   if (_this && _this.getRealTableName) {
     // tableName = _this.getRealTableName()
     tableName = _this.getTableName() //
+  }
+  let realTableName = data['tableName']
+  if (realTableName) {
+    tableName = realTableName //
   }
   let titles = ['基本信息', '编辑信息']
   let fConfig = {
@@ -137,6 +141,18 @@ export const getDFConfig = (_this, data) => {
         field: 'fieldFormat',
         tabTitle: titles[0],
         type: 'code', //
+        options: {
+          tableName: tableName, //
+        },
+      },
+      {
+        label: '背景色',
+        field: 'bgColor',
+        type: 'code', //
+        tabTitle: titles[0],
+        options: {
+          tableName: tableName, //
+        },
       },
       {
         label: '默认值类型',
@@ -233,10 +249,12 @@ export const getDFConfig = (_this, data) => {
                   let options = item.config.options
                   let columns = options.columns
                   let col1 = columns[1]
+                  let col0 = columns[0]
                   if (data?.tableName == null) {
                     return '请先选择表名' //
                   }
                   col1.tableName = data.tableName
+                  col0.tableName = tableName
                   return //
                 },
                 showTable: false, //

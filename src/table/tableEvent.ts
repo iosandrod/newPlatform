@@ -62,8 +62,10 @@ export const click_cell = (table: Table) => {
       setTimeout(() => {
         table.isContainerClick = false
       }, 0)
-      // console.log(config, 'is click cell') //
-      table.openTreeRow(config.col, config.row) //
+      let isTreeIconClick = table.isTreeIconClick
+      if (isTreeIconClick) {
+        table.openTreeRow(config.col, config.row) //
+      }
       let field = config.field //
       let originData = config.originData //
       let tCol = table.getLastFlatColumns().find((col) => {

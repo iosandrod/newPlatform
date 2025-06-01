@@ -1,6 +1,6 @@
 import { VTable } from '@visactor/vue-vtable'
 import { Column } from './column'
-import { toRaw } from 'vue'
+import { nextTick, toRaw } from 'vue'
 import {
   CheckBox,
   createGroup,
@@ -226,15 +226,14 @@ export const getDefault = (column: Column) => {
     let { table, row, col, rect, value } = args
     let t1: VTable.ListTable = table
     let _value: string = value //
-    let record = table.getCellOriginRecord(col, row)
-    // let _format = column.getFormat()
-    // _value = _format({
-    //   row: record,
-    //   col: column,
-    //   field: column.getField(),
-    //   table: column.table,
-    // })
-
+    let record = t1.getRecordByCell(col, row) //
+    if (record == null) {
+      return {
+        rootContainer: null,
+        renderDefault: false, //
+      }
+    }
+    record = record || {} //
     let bg = _this.getIndexColor(row, record) //
     if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
       bg = _this.getCurrentRowColor()
@@ -326,12 +325,12 @@ export const getDefault = (column: Column) => {
     })
     if (_this.getIsTree() == true) {
       // _g.attribute.x = width - 60
-      let level = record._level
+      let level = record?._level
       if (level > 0) {
-        let num = level * 20
+        let num = level * 20 //
         _g.attribute.x = num //
       }
-    }
+    } //
     let globalValue = _this.table.globalConfig.value
     if (globalValue.length > 0) {
       let container = _g
@@ -442,7 +441,13 @@ export const getDefault = (column: Column) => {
         fill: 'black',
         boundsPadding: [0, 0, 0, 3 + _level * 16], //
         lineDashOffset: 0,
-      }) //
+      })
+      icon.on('click', (args) => {
+        column.table.isTreeIconClick = true //
+        nextTick(() => {
+          column.table.isTreeIconClick = false //
+        })
+      })
       _bounds[3] = 0 //
       _g2.add(icon)
       _g1.add(_g2) //

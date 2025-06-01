@@ -474,9 +474,7 @@ export default defineComponent({
             position: 'absolute',
             bottom: 0,
             height: `${tableIns.getDefaultHeaderRowHeight()}px`, //
-            // borderLeft: '1px solid RGBA(30, 40, 60,0)',
-            // borderRight: '1px solid RGBA(30, 40, 60,0)',
-            // border: '1px solid RGBA(30, 40, 60,1)',
+            
             boxSizing: 'border-box',
             width: '100%',
           }}
@@ -488,7 +486,6 @@ export default defineComponent({
         <div
           style={{
             height: `${tableIns.getDefaultHeaderRowHeight()}px`,
-            // border: '1px solid RGBA(30, 40, 60,1)', //
           }}
         ></div>,
         [[vShow, tableIns.getShowCalColumns()]],
@@ -509,7 +506,9 @@ export default defineComponent({
             position: 'relative',
             display: 'flex',
             flexDirection: 'column', //
-            border: '1px solid RGBA(30, 40, 60)',
+            // margin: '4px',
+            border:"1px solid #ccc",
+            // border: '1px solid black',
             boxSizing: 'border-box',
           }} //
         >
@@ -548,6 +547,7 @@ export default defineComponent({
             display: 'flex', //
             flexDirection: 'column',
             position: 'relative',
+            boxSizing: 'border-box',
           }}
         >
           {loadingCom}

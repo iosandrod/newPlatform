@@ -138,30 +138,36 @@ export class System extends Base {
     return allT2 //
   } //
   openPageDesign(config) {}
-  openCodeDialog(config) {
-    let createFn = () => {
-      return {
-        component: codeEditorCom,
-        props: { ...config },
+  async openCodeDialog(config) {
+    return new Promise((resolve, reject) => {
+      let createFn = () => {
+        return {
+          component: codeEditorCom,
+          props: { ...config },
+        }
       }
-    }
-    this.openDialog({
-      ...config,
-      height: 600,
-      width: 1200,
-      createFn,
-      confirmFn: (dialog) => {
-        let _confirmFn = config.confirmFn
-        if (typeof _confirmFn == 'function') {
-          _confirmFn(dialog) //
-        }
-      },
-      closeFn: () => {
-        let _closeFn = config.closeFn
-        if (typeof _closeFn == 'function') {
-          _closeFn() //
-        }
-      },
+      this.openDialog({
+        ...config,
+        height: 600,
+        width: 1200,
+        createFn,
+        confirmFn: (dialog) => {
+          let _confirmFn = config.confirmFn
+          if (typeof _confirmFn == 'function') {
+            _confirmFn(dialog) //
+          }
+          let _d = dialog.getRef('innerCom').getModelValue()
+          resolve(_d)
+        },
+        closeFn: (dialog) => {
+          let _closeFn = config.closeFn
+          if (typeof _closeFn == 'function') {
+            _closeFn() //
+          }
+          let _d = dialog?.getRef('innerCom')?.getModelValue()
+          resolve(_d)
+        },
+      })
     })
   }
   openWangEditorDialog(config) {
@@ -1451,7 +1457,10 @@ export class System extends Base {
           if (curRow == null) {
             return
           }
-          let keyColumn = page.getKeyColumn() //
+          if (config?.keyColumn != null) {
+            page.setKeyColumn(config.keyColumn) //
+          }
+          let keyColumn = config?.keyColumn || page.getKeyColumn()
           let _id = curRow[keyColumn]
           query[keyColumn] = _id //
           page.getTableData({

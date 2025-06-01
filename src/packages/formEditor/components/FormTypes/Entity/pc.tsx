@@ -51,7 +51,7 @@ export default defineComponent({
     return () => {
       //
       let com = (
-        <div class="h-full w-full" style={{ minHeight: '200px' }}>
+        <div class="h-full  w-full box-border " style={{ minHeight: '200px' ,padding:'4px' }}>
           <erTable
             onTableConfigChange={(config) => {
               item.onTableConfigChange(config)

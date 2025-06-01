@@ -107,7 +107,6 @@ export class myHttp {
     let token = localStorage.getItem('feathers-jwt')
     if (token) {
       try {
-        //
         let res = await this?.client?.authenticate({
           strategy: 'jwt',
           accessToken: token, //
@@ -116,7 +115,7 @@ export class myHttp {
         system.loginInfo = res //
         return res
       } catch (error) {
-        console.error(error, '登录失败') //
+        console.error(error, '登录失败')
         localStorage.removeItem('feathers-jwt') //
       }
     }

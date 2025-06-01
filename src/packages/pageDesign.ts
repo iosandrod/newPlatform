@@ -1410,4 +1410,14 @@ export class PageDesign extends Form {
       return true
     }
   }
+  async getRelateTreeData(tableName) {}
+  async editRelateTreeData(tableName: any) {
+    //
+  }
+  setKeyColumn(key: string) {
+    this.config.keyColumn = key
+  }
+  setKeyCodeColumn(key: string) {
+    this.config.keyCodeColumn = key
+  }
 }

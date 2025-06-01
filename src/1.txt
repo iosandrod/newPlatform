@@ -5991,3 +5991,10 @@ export const formConfig = {
 //     }
 //   }
 // }
+ // let _format = column.getFormat()
+    // _value = _format({
+    //   row: record,
+    //   col: column,
+    //   field: column.getField(),
+    //   table: column.table,
+    // })
