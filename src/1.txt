@@ -6020,3 +6020,10 @@ export const formConfig = {
       // let currentIndexContain = _table.currentIndexContain //
       // delete currentIndexContain[_index]
       // }
+
+
+       // console.log(fitem,item,'tseetitem')//
+                // let addCols = config.addCols || []
+                // let updateCols = config.updateCols || []
+                // let allCols = [...addCols, ...updateCols]
+                // item.config.columns = allCols //

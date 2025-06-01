@@ -125,11 +125,7 @@ export default defineComponent({
               let tableName = item.getTableName()
               let dTableName = _design.getRealTableName()
               if (tableName != dTableName) {
-                // console.log(fitem,item,'tseetitem')//
-                // let addCols = config.addCols || []
-                // let updateCols = config.updateCols || []
-                // let allCols = [...addCols, ...updateCols]
-                // item.config.columns = allCols //
+               
                 let allCols = config.allCols //
                 item.config.options.columns = allCols
               }
