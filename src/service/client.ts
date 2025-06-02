@@ -73,10 +73,17 @@ export class Client {}
 export type createConfig = {}
 export const createClient = (config) => {
   let port = location.port
-  // console.log(port, 'testPort') //
-  let _host = `http://localhost:3031`
+  let userid = config.userid
+  let appName = config.appName
+  let _key = '' //
+  if (appName != null && userid != 'undefined') {
+    _key = `/${appName}_${userid}`
+  }
+  // let _host = `http://localhost:3031`
+  // let _host = `http://localhost:3031/erp_2`//
+  let _host = `http://localhost:3031${_key}`
   // if (port == '3004') {
-  //   _host = `${_host}/erp_1` //
+  //   _host = `${_host}/erp_2` //
   // }
   const socket = io(_host, {
     transports: ['websocket'],
@@ -86,7 +93,6 @@ export const createClient = (config) => {
   app.configure(client)
   app.set('connection', socket)
   app.configure(init()) //
-
   return app //
 }
 export const client = createClient({})
@@ -100,8 +106,23 @@ export const client = createClient({})
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
+  mainClient = client
   constructor() {
     this.init()
+  }
+  changeClient(config) {
+    let appName = config.appName
+    if (appName == null || appName == 'platform') {
+      this.client = this.mainClient
+      return
+    }
+    let userid = config.userid
+    if (userid == null || userid == 0) {
+      this.client = this.mainClient
+      return //
+    }
+    let _client = createClient(config)
+    this.client = _client //
   }
   async init() {
     let token = localStorage.getItem('feathers-jwt')
@@ -171,6 +192,7 @@ export class myHttp {
         params,
         query,
         (data, err) => {
+          console.log(method, 'testMethod', data, err, 'sdjfklsf') //
           let isError = false
           let error = null //
           let _data = null

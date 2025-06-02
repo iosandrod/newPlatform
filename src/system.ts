@@ -49,7 +49,7 @@ export class System extends Base {
   async login() {}
   @cacheValue() //
   async getMenuData() {
-    // debugger//
+    //
     let client = this.getClient() //
     let d = await client.find('navs') //
     let filFn = (rows: any[]) => {
@@ -165,7 +165,7 @@ export class System extends Base {
             _closeFn() //
           }
           let _d = dialog?.getRef('innerCom')?.getModelValue()
-          resolve(_d)
+          resolve(_d) //
         },
       })
     })
@@ -820,6 +820,7 @@ export class System extends Base {
   }
   async loginUser(data) {
     let h = this.getHttp()
+    h.changeClient(data) //
     let _res = await h.loginUser(data) //
     return _res
   }
@@ -1522,6 +1523,46 @@ export class System extends Base {
   getTargetSearchEntity(tableName) {
     let obj = this.searchTableMap[tableName]
     return obj
+  }
+
+  changeHttpClient(config) {
+    let userid = config.userid
+    let appName = config.appName
+    if (appName == null || userid == null) {
+      return
+    }
+    let http = this.getHttp()
+    http.changeClient(config) //
+  }
+  async getAllRegisterCompany() {
+    let http = this.getHttp()
+    let res = await http.runCustomMethod('company', 'getAllRegisterCompany', {}) //
+    // console.log(res, 'testRes') ////
+    let _res = res
+      .map((re) => {
+        let user = re.user
+        return { ...user, ...re }
+      })
+      .map((row) => {
+        let appName = row.appName
+        let userid = row.userid
+        let companyCnName = row.companyCnName
+        let appCnName = row.appCnName
+        return {
+          appName,
+          appCnName,
+          userid,
+          companyCnName,
+        } //
+      })
+    //加入平台
+    _res.push({
+      appName: 'platform',
+      appCnName: '平台',
+      userid: 0,
+      companyCnName: '平台', //
+    })
+    return _res //
   }
 }
 export const system = reactive(new System()) //

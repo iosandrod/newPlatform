@@ -1,16 +1,17 @@
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { system } from '@/system'
-import { defineComponent, onMounted, reactive, ref } from 'vue'
-
+import { defineComponent, onMounted, reactive, ref } from 'vue' //
 export default defineComponent({
   setup(props) {
     let data = reactive({
-      loginType: 'email', //
+      appName: 'platform', //
+      userid: 0,
+      loginType: 'email',
       email: '1151685410@qq.com',
       password: '1',
       _unUseCaptcha: true,
     })
-    let loginFConfig = {
+    let loginFConfig: any = reactive({
       labelWidth: 70,
       data: data,
       items: [
@@ -48,6 +49,24 @@ export default defineComponent({
           },
         },
         {
+          field: 'userid', //
+          type: 'select',
+          options: {
+            options: [],
+          },
+          label: '公司',
+          required: true,
+        },
+        {
+          field: 'appName',
+          type: 'select',
+          options: {
+            options: [],
+          },
+          label: '应用',
+          required: true, //
+        },
+        {
           field: '_captcha',
           label: '验证码',
           type: 'string',
@@ -55,22 +74,44 @@ export default defineComponent({
         },
       ],
       itemSpan: 24,
+    })
+    let getCompanyFn = async () => {
+      let allCompany = await system.getAllRegisterCompany()
+      let appOptions = allCompany.map((item: any) => {
+        return {
+          label: item.appCnName || item.appName,
+          value: item.appName,
+        }
+      })
+      let companyOptions = allCompany.map((item: any) => {
+        return {
+          label: item.companyCnName || item.companyName,
+          value: item.userid, //
+        }
+      })
+      loginFConfig.items[3].options.options = companyOptions //
+      loginFConfig.items[4].options.options = appOptions
     }
+    onMounted(async () => {
+      await getCompanyFn() //
+    })
     let cdata = ref('')
     let code = ref('')
     let fn = async () => {
       let _res = await system.createCaptcha('authentication_create')
       let data = _res.data
       code.value = data
-      cdata.value = _res.text //
+      cdata.value = _res.text
     }
     onMounted(async () => {
       await fn() //
     })
     let loginFn = async () => {
       let _f: any = fins.value
-      await _f.validate() //
+      await _f.validate()
       let _data = data
+      // let appName = _data.appName
+      // let userid = _data.company
       await system.loginUser(_data)
     }
     let buttons = [
