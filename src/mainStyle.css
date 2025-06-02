@@ -269,3 +269,14 @@ li {
   .vxe-pulldown--content{
     height: 100%;
   }
+
+  :root {
+  --vxe-ui-form-item-min-height-default: 40px !important;
+}
+.vxe-form--item{
+  min-height: 36px !important;
+}
+
+.vxe-form--item-content{
+  padding-bottom: 5px !important;
+}

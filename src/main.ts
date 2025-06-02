@@ -42,9 +42,9 @@ import formEditor from '@ER/formEditor/formEditor'
 import pageCom from '@ER/pageCom'
 import '@/printTemplate/assets/main.scss'
 import 'remixicon/fonts/remixicon.css'
-import './style.js'
 import Vuex from 'vuex'
 import printTemplateModule from '@/printTemplate/stores/modules/index.js'
+import './style.js'
 
 //@ts-ignore
 self.MonacoEnvironment = {

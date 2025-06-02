@@ -600,9 +600,11 @@ export class System extends Base {
       return
     }
     let http = this.getHttp()
-    let tableInfo = await http.find('tables', { tableName })
-    let row = tableInfo[0]
-    return row //
+    let tableInfo = await http.runCustomMethod('entity', 'getTableConfig', {
+      tableName,
+    })
+    // let row = tableInfo[0]
+    return tableInfo //
   }
   async createColLayout(filedStr) {
     let lastArr = []
@@ -653,8 +655,8 @@ export class System extends Base {
       confirmFn: (dialog: Dialog) => {},
       showFooter: false, //
     } //
-    await this.openDialog(dialogConfig) //
-  }
+    await this.openDialog(dialogConfig)
+  } //
   confirmMessage(msg: string | Object, type: any = 'success') {
     if (typeof msg == 'string') {
       msg = {

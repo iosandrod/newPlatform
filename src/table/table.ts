@@ -390,9 +390,9 @@ export class Table extends Base {
       _sConfig = this.seriesNumberColumn.getColumnProps() //
     }
     let dragMode = this.getDragMode()
-    // console.log(dragMode) //
     let table = new ListTable({
       dragOrder: dragMode, //
+      frozenColCount: this.frozenColCount,
       padding: {},
       //ts-ignore
       headerEditor: (args) => {
@@ -561,6 +561,7 @@ export class Table extends Base {
     let fListTable = ListTable
     let table = new fListTable({
       autoFillHeight: true,
+      frozenColCount: this.frozenColCount,
       multipleSort: true, //
       sortState: [],
       defaultRowHeight: 30,
@@ -1046,12 +1047,7 @@ export class Table extends Base {
   }
   getShowColumns() {
     let columns = this.getColumns()
-    // if (1 == 1) {
-    //   let _columns = columns.map((col) => {
-    //     return { field: col.getField(), width: 100 }
-    //   })
-    //   return _columns //
-    // }
+
     let _cols = columns.filter((col) => {
       return col.getIsShow()
     })
@@ -1101,6 +1097,7 @@ export class Table extends Base {
     }
     this.frozenColCount = _count
     this.rightFrozenColCount = count //
+    console.log('frozenColCount', _count, 'rightFrozenColCount', count) //
     return _col1 ////
   }
   //返回bool//

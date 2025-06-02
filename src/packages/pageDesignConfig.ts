@@ -130,33 +130,7 @@ export const pageDesignFieldConfig = [
           align: 'top',
         },
       },
-      {
-        type: 'table',
-        label: '表格布局',
-        icon: 'tableStokeP2',
-        id: '',
-        rows: [
-          {
-            type: 'tr',
-            columns: [
-              {
-                type: 'td',
-                options: {
-                  colspan: 1,
-                  rowspan: 1,
-                  isMerged: false,
-                },
-                list: [],
-                style: {},
-              },
-            ],
-          },
-        ],
-        options: {
-          width: 100,
-          widthType: '%',
-        },
-      },
+   
       {
         type: 'tabs',
         label: '标签页',

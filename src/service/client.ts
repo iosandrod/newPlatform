@@ -75,9 +75,9 @@ export const createClient = (config) => {
   let port = location.port
   // console.log(port, 'testPort') //
   let _host = `http://localhost:3031`
-  if (port == '3004') {
-    _host = `${_host}/erp_1` //
-  }
+  // if (port == '3004') {
+  //   _host = `${_host}/erp_1` //
+  // }
   const socket = io(_host, {
     transports: ['websocket'],
   })

@@ -10,6 +10,7 @@ import {
   watch,
   watchEffect,
   withDirectives,
+  onDeactivated
 } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
@@ -215,7 +216,13 @@ export default defineComponent({
     expose({ _instance: tableIns })
     provide('tableIns', tableIns)
     onMounted(() => {
+      //
+      console.log('表格挂在了') //
       tableIns.onMounted() //
+    })//
+    onDeactivated(() => {
+      //
+      console.log('表格离开了') //
     })
     watch(
       () => props.columns,
@@ -474,7 +481,7 @@ export default defineComponent({
             position: 'absolute',
             bottom: 0,
             height: `${tableIns.getDefaultHeaderRowHeight()}px`, //
-            
+
             boxSizing: 'border-box',
             width: '100%',
           }}
@@ -507,7 +514,7 @@ export default defineComponent({
             display: 'flex',
             flexDirection: 'column', //
             // margin: '4px',
-            border:"1px solid #ccc",
+            border: '1px solid #ccc',
             // border: '1px solid black',
             boxSizing: 'border-box',
           }} //
