@@ -361,9 +361,11 @@ export default {
         ..._slots,
         default: () => {
           let dComArr = []
-          let defaultCom = _slots.default()
           let arr = []
-          arr.push(defaultCom)
+          if(_slots.default){
+            let defaultCom = _slots?.default()
+            arr.push(defaultCom)
+          }//
           if (unref(isEditModel)) {
             if (ER.props.dragMode === 'icon') {
               let _com = (
@@ -492,7 +494,7 @@ export default {
             if (props.hasMask) {
               arr.push(maskNode) //
             }
-          }
+          } 
           return arr
         },
       }

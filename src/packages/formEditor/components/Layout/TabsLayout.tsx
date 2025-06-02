@@ -5,14 +5,17 @@ import {
   useAttrs,
   inject,
   unref,
+  onMounted,
 } from 'vue'
 import Selection from '@ER/formEditor/components/Selection/selectElement'
 import LayoutDragGable from './DragGable'
 import hooks from '@ER/hooks'
+import { nextTick } from 'vue' //
 export default defineComponent({
   name: 'TabsLayout',
   inheritAttrs: false,
   customOptions: {},
+  components: {},
   props: {
     data: Object,
     parent: Array,
@@ -20,6 +23,7 @@ export default defineComponent({
   setup(props) {
     const ns = hooks.useNamespace('TabsLayout') //
     if (!props.data.options.defaultValue) {
+      //默认值
       props.data.options.defaultValue = props.data.columns[0].id
     }
     let formIns: any = inject('formIns')
@@ -27,7 +31,30 @@ export default defineComponent({
     let opt = {
       [pluginName]: true,
     } //
+    let refDiv = {}
     const { isEditModel } = hooks.useTarget()
+    let changeVisible = () => {
+      nextTick(() => {
+        let defaultValue = props.data.options.defaultValue
+        Object.entries(refDiv).forEach(([key, value]) => {
+          let _value: HTMLDivElement = value as any
+          if (key == defaultValue) {
+            _value.style.display = 'block'
+          } else {
+            _value.style.display = 'none' //
+          }
+        })
+      })
+    }
+    onMounted(() => {
+      changeVisible()
+    })
+    watch(
+      () => props.data.options.defaultValue,
+      (newVal) => {
+        changeVisible() //
+      },
+    )
     return () => {
       let _class = []
       if (!unref(isEditModel)) {
@@ -44,47 +71,113 @@ export default defineComponent({
           hasDrag
           hasWidthScale
         >
-          <el-tabs
-            class={[ns.b(), 'h-full']}
-            vModel={props.data.options.defaultValue}
-            type={props.data.options.type}
-            tabPosition={props.data.options.tabPosition}
-          >
-            {props.data.columns.map((element, index0) => {
-              //@ts-ignore
-              return (
+          <div class="h-full w-full flex flex-col">
+            <el-tabs
+              class={[ns.b(), 'h-30']}
+              vModel={props.data.options.defaultValue}
+              type={props.data.options.type}
+              tabPosition={props.data.options.tabPosition}
+            >
+              {props.data.columns.map((element, index0) => {
                 //@ts-ignore
-                <Selection
-                  class={[ns.e('area'), 'h-full']}
-                  tag="el-tab-pane"
-                  label={element.label}
-                  name={element.id}
-                  data={element}
-                  v-slots={{
-                    label: (item) => {
-                      let label = element.label || '选项'
-                      return (
-                        //
-                        <div class="h-30 flex items-center">
-                          <div>{label}</div>
-                        </div>
-                      )
-                    }, //
-                  }}
-                  _slots={['label']}
-                  parent={props.data}
-                >
-                  <LayoutDragGable
-                    class={['h-full', ..._class]}
-                    data-layout-type={'tabs-col'}
-                    data={element.list}
-                    {...opt}
-                    parent={element}
-                  />
-                </Selection>
-              )
-            })}
-          </el-tabs>
+                // let com= (
+                //   //@ts-ignore
+                //   <Selection
+                //     class={[ns.e('area'), 'h-full']}
+                //     tag="el-tab-pane"
+                //     label={element.label}
+                //     name={element.id}
+                //     data={element}
+                //     v-slots={{
+                //       label: (item) => {
+                //         let label = element.label || '选项'
+                //         return (
+                //           //
+                //           <div class="h-30 flex items-center">
+                //             <div>{label}</div>
+                //           </div>
+                //         )
+                //       }, //
+                //     }}
+                //     _slots={['label']}
+                //     parent={props.data}
+                //   >
+                //     <LayoutDragGable
+                //       class={['h-full', ..._class]}
+                //       data-layout-type={'tabs-col'}
+                //       data={element.list}
+                //       {...opt}
+                //       parent={element}
+                //     />
+                //   </Selection>
+                // )
+                // return com
+                let com = (
+                  <el-tab-pane
+                    v-slots={{
+                      label: (item) => {
+                        let label = element.label || '选项'
+                        return (
+                          //
+                          <div class="h-30 flex items-center">
+                            <div>{label}</div>
+                          </div>
+                        )
+                      },
+                    }}
+                    // label={element.label}
+                    name={element.id}
+                  ></el-tab-pane>
+                )
+                return com //
+              })}
+            </el-tabs>
+            <div class="flex-1 w-full flex">
+              {props.data.columns.map((element, index0) => {
+                let com = (
+                  //@ts-ignore
+                  <div
+                    class=" flex-1 h-full" //
+                    ref={(el) => {
+                      let id = element.id
+                      refDiv[id] = el
+                      // console.log(el, 'testElement') //
+                    }}
+                  >
+                    <Selection
+                      class={[ns.e('area'), 'h-full']}
+                      tag="div"
+                      label={element.label}
+                      name={element.id}
+                      data={element}
+                      v-slots={{
+                        label: (item) => {
+                          let label = element.label || '选项'
+                          return (
+                            //
+                            <div class="h-30 flex items-center">
+                              <div>{label}</div>
+                            </div>
+                          )
+                        }, //
+                      }}
+                      _slots={['label']}
+                      parent={props.data}
+                    >
+                      <LayoutDragGable
+                        class={['h-full', ..._class]}
+                        data-layout-type={'tabs-col'}
+                        data={element.list}
+                        {...opt}
+                        parent={element}
+                      />
+                    </Selection>
+                  </div>
+                )
+                return com //
+              })}
+            </div>
+          </div>
         </Selection>
       )
     }

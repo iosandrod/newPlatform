@@ -288,8 +288,9 @@ export class Table extends Base {
     let instance = this.getInstance() //
     if (instance != null) {
       const oldOptions = instance.options
-      _.merge(oldOptions, opt) //
-      instance.updateOption(oldOptions) //
+      _.merge(oldOptions, opt)
+      instance.updateOption(oldOptions) 
+      // instance.frozenBodyDomContainer
     }
   }
   getListTableOption() {}
@@ -1097,7 +1098,7 @@ export class Table extends Base {
     }
     this.frozenColCount = _count
     this.rightFrozenColCount = count //
-    console.log('frozenColCount', _count, 'rightFrozenColCount', count) //
+    // console.log('frozenColCount', _count, 'rightFrozenColCount', count) //
     return _col1 ////
   }
   //返回bool//
