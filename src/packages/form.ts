@@ -816,6 +816,8 @@ export class Form extends Base {
   }
   initMobileLayout() {}
   addFormItem(config: Field) {
+    if (Array.isArray(config)) {
+    }
     let id = config.id
     let oldItems = this.items
     let index = oldItems.findIndex((item) => item.id === id)
@@ -1035,6 +1037,12 @@ export class Form extends Base {
     }
     this.isShowConfig = state.selected === result
     state.selected = result
+    //@ts-ignore
+    let options = result.options
+    if (Array.isArray(options)) {
+      //@ts-ignore
+      result.options = {} //
+    }
     nextTick(() => {
       this.isShowConfig = true
     })

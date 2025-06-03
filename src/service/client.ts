@@ -102,6 +102,7 @@ export const client = createClient({})
 //       emit: () => {},
 //     }
 //   },
+//   authenticate: () => {},
 // } //
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {

@@ -58,6 +58,7 @@ export const createFieldConfig = (f: Form) => {
       })
     }
   } //
+  // console.log(allFields.map((f) => f.field)) //
   const fieldsConfig = [
     {
       name: '预设字段',

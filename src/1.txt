@@ -6063,3 +6063,26 @@ export const formConfig = {
     //   })
     //   return _columns //
     // }
+      //   let dropCom = (
+      //     <DropdownCom
+      //       v-slots={{
+      //         default: () => {
+      //           return com
+      //         },
+      //         dropdown: () => {
+      //           return <div class="h-300 w-200 bg-red"></div>
+      //         },
+      //       }}
+      //     ></DropdownCom>
+      //   )
+      //   let _com = dropCom //
+
+       // let tRef: Table = this.getRef(tableName)
+    // let curRow = null
+    // let _tableName = this.getTableName()
+    // if (tRef == null) {
+    //   curRow = this.tableDataMap[_tableName]?.curRow ////
+    // } else {
+    //   curRow = tRef.getCurRow()
+    // }
+    // return curRow //

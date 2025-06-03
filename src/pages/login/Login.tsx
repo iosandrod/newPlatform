@@ -31,6 +31,7 @@ import inputCom from '@/input/inputCom'
 import { tFConfig } from '@ER/formEditor/testData'
 import selectCom from '@/select/selectCom'
 import pVue from '@/printTemplate/print.vue'
+import auditVue from '@/audit/App.vue' //
 import WangToolbar from '@/printTemplate/components/PageComponents/WangEditorVue/WangToolbar.vue'
 import WangEditor from '@/printTemplate/components/PageComponents/WangEditorVue/WangEditor.vue'
 import {
@@ -42,6 +43,7 @@ import wangCom from '@/wangEditor/wangCom'
 export default defineComponent({
   components: {
     pVue,
+    auditVue,
     inputCom, //
     uploadCom,
     codeEditorCom,
@@ -265,8 +267,9 @@ export default defineComponent({
                     bindColumns: [
                       {
                         field: 'id',
-                      }, //
+                      },
                     ],
+                    searchColumns: ['subject'], //
                   },
                   tabTitle: '权限',
                 },
@@ -401,6 +404,7 @@ export default defineComponent({
       //     123132
       //   </button>
       // )
+      // com=<auditVue></auditVue>
       let _com = (
         <div
           class="h-full"

@@ -69,19 +69,7 @@ export default defineComponent({
           ></inputCom>
         </div>
       ) //
-      //   let dropCom = (
-      //     <DropdownCom
-      //       v-slots={{
-      //         default: () => {
-      //           return com
-      //         },
-      //         dropdown: () => {
-      //           return <div class="h-300 w-200 bg-red"></div>
-      //         },
-      //       }}
-      //     ></DropdownCom>
-      //   )
-      //   let _com = dropCom //
+    
       let _com = com //
       return _com //
     }

@@ -33,7 +33,7 @@ export const getDFConfig = (_this, data) => {
   if (realTableName) {
     tableName = realTableName //
   }
-  let titles = ['基本信息', '编辑信息']
+  let titles = ['基本信息', '编辑信息', '查询信息'] //
   let fConfig = {
     itemSpan: 12,
     data: data,
@@ -132,9 +132,9 @@ export const getDFConfig = (_this, data) => {
         tabTitle: titles[1],
         type: fType, ////
         options: {
-          //
           tableName: tableName,
-        },
+          ...data,
+        },//
       }, //
       {
         label: '格式化',
@@ -291,7 +291,24 @@ export const getDFConfig = (_this, data) => {
           ],
         },
       },
-
+      {
+        field: 'optionsField',
+        label: '下拉字段配置', //
+        tabTitle: titles[1],
+        type: 'baseinfo', //
+        options: {
+          baseinfoConfig: {
+            tableName: 'DataDictionary',
+            bindColumns: [
+              {
+                key: 'optionsField',
+                targetKey: 'DictionaryName', //
+              },
+            ], //
+            searchColumns: ['DictionaryName', 'Remark'], //
+          },
+        },
+      },
       {
         label: '选择项',
         field: 'options',
@@ -315,6 +332,13 @@ export const getDFConfig = (_this, data) => {
             },
           ],
         },
+      },
+      {
+        field: 'searchField',
+        label: '查询字段',
+        tabTitle: titles[2],
+        type: 'string', //
+        options: {},
       },
     ],
   }

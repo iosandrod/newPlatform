@@ -382,6 +382,15 @@ export class PageDesignItem extends FormItem {
           type: 'boolean',
         },
         {
+          field: 'rowHeight',
+          label: '行高',
+          type: 'number',
+          options: {
+            min: 10, //
+          },
+          tabTitle: titles[0], //
+        },
+        {
           field: 'keyColumn',
           tabTitle: titles[0],
           label: '主键字段',

@@ -8,6 +8,10 @@ export class SearchPageDesign extends PageDesign {
     let realTableName = this.getRealTableName() //
     let http = this.getHttp() //
     let query = config.query || {} //
+    let $limit = query.$limit
+    if ($limit == null) {
+      query.$limit = 10
+    } //
     let _data = await http.find(realTableName, query) //
     return _data ////
   }

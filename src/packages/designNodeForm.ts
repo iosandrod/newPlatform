@@ -2,6 +2,7 @@ import { computed } from 'vue'
 import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
 import { Column } from '@/table/column'
+import { FormItem } from './formitem'
 
 export const getButtonGroupTableConfig = (_this?: PageDesign) => {
   let tableName = _this.getRealTableName()
@@ -173,6 +174,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
   let tableOptions = _this.getAllTableName()
   let detailTable = _this
   let allTableOptions = _this.getAllTableNameOptions()
+  let tableName = _this?.getRealTableName() || ''
   let obj = {
     entity: {
       //
@@ -290,6 +292,88 @@ export const formitemTypeMap = (_this: PageDesign) => {
       ],
       data: computed(() => {
         return _this.state.selected?.options //
+      }),
+    },
+    baseinfo: {
+      itemSpan: 24,
+      items: [
+        {
+          field: 'placeholder',
+          label: '提示',
+          type: 'input', //
+        },
+        {
+          field: 'baseinfoConfig',
+          type: 'sform',
+          label: '参照表配置', //
+          options: {
+            itemSpan: 12,
+            items: [
+              {
+                field: 'tableName',
+                label: '表名',
+                type: 'string', //
+              },
+              {
+                field: 'bindColumns', //
+                label: '绑定字段',
+                span: 24, //
+                type: 'stable',
+                options: {
+                  openBefore: async (config) => {
+                    let item: FormItem = config?.item //
+                    let data = config.data //
+                    let options = item.config.options
+                    let columns = options.columns
+                    let col1 = columns[1]
+                    let col0 = columns[0]
+                    if (data?.tableName == null) {
+                      return '请先选择表名' //
+                    }
+                    col1.tableName = data.tableName
+                    col0.tableName = tableName
+                    return //
+                  },
+                  showTable: false, //
+                  tableTitle: '绑定参照表',
+                  tableState: 'edit',
+                  columns: [
+                    {
+                      field: 'key',
+                      title: '当前字段',
+                      editType: 'select',
+                      columnSelect: true,
+                      tableName: tableName, //
+                    },
+                    {
+                      field: 'targetKey',
+                      title: '值',
+                      editType: 'select',
+                      columnSelect: true,
+                      tableName: tableName,
+                    },
+                  ],
+                },
+              },
+              {
+                field: 'showColumns',
+                label: '显示字段',
+                type: 'select',
+                options: {
+                  columnSelect: true,
+                  multiple: true,
+                  tableName: tableName, //
+                },
+              },
+            ],
+          },
+        },
+      ],
+      data: computed(() => {
+        let opt = _this.state.selected?.options
+        if (Array.isArray(opt)) {
+        }
+        return opt
       }),
     },
     buttongroup: {
@@ -605,6 +689,13 @@ export const selectTypeMap = (_this: PageDesign) => {
     string: {
       itemSpan: 24,
       items: [...createDSelect('string')],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }),
+    },
+    baseinfo: {
+      itemSpan: 24,
+      items: [...createDSelect('baseinfo')], //
       data: computed(() => {
         return _this.state.selected || {} //
       }),

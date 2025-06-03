@@ -97,7 +97,11 @@ export const baseinfoType = (item: FormItem) => {
   obj.onChange = (config) => {}
   obj.clearable = true
   obj.onInput = (config) => {
-    console.log('baseinfoInput') //
+    //
+    let value = config.value
+    item.getTinyTableSearchData({
+      value: value,
+    })
   } //
   return obj
 }

@@ -655,15 +655,6 @@ export class PageDesign extends Form {
     }
   }
   getCurRow(tableName = this.getRealTableName()) {
-    // let tRef: Table = this.getRef(tableName)
-    // let curRow = null
-    // let _tableName = this.getTableName()
-    // if (tRef == null) {
-    //   curRow = this.tableDataMap[_tableName]?.curRow ////
-    // } else {
-    //   curRow = tRef.getCurRow()
-    // }
-    // return curRow //
     let curRow = this.tableDataMap[tableName]?.curRow
     return curRow //
   }
@@ -754,10 +745,18 @@ export class PageDesign extends Form {
             //两个都要保存
             await this.getHttp().patch('columns', _d)
           }
+          let _options = currentFItemConfig?.options || {}
+          if (Array.isArray(_options)) {
+            _options = {}
+            if (currentFItemConfig?.['options']) {
+              currentFItemConfig['options'] = _options
+            }
+          }
           Object.entries(_obj).forEach(([key, value]) => {
-            //
-            currentFItemConfig[key] = value //
+            _options[key] = value //
           })
+          let type = currentFItemConfig?.type
+          currentFItemConfig['type'] = type || currentFItemConfig['type']
           await this.saveTableDesign() //
         },
         visible: computed(() => {
@@ -1419,5 +1418,7 @@ export class PageDesign extends Form {
   }
   setKeyCodeColumn(key: string) {
     this.config.keyCodeColumn = key
-  }
+  } //
+  //进入打印
+  async printTemplate() {}
 }

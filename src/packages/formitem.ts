@@ -22,12 +22,14 @@ import { Input } from '@/input/inputClass'
 import formCom from './formCom'
 import { Dropdown } from '@/menu/dropdown'
 import { SearchPageDesign } from './searchPageDesign'
+import { useTimeout } from './utils/decoration'
 
 export type FormOptions = {
   items: Field[]
 }
 
 export class FormItem extends Base {
+  timeout: any = {} //
   templateTableConfig = {
     columns: [],
     data: [],
@@ -58,6 +60,8 @@ export class FormItem extends Base {
     if (field == null) {
       field = this.id
     }
+    if (field == 'cCustNo') {
+    }
     return field
   }
   getCheckBindValue() {
@@ -77,7 +81,6 @@ export class FormItem extends Base {
     return value
   }
   updateBindData(updateConfig: { value: any; [key: string]: any }) {
-    // debugger//
     try {
       let value = updateConfig.value
       let field = this.getField()
@@ -149,7 +152,20 @@ export class FormItem extends Base {
     this.setSubForm()
     this.initSTable()
     this.initColumnSelect()
-  } //
+    this.initOptionsField()
+  }
+  async initOptionsField() {
+    let options = this.getOptions()
+    let optionsField = options?.optionsField
+    if (optionsField == null) {
+      return //
+    }
+    let type = this.getType()
+    if (type == 'select') {
+      let sys = this.getSystem()
+      sys.createOptionsFieldSelect(optionsField) //
+    } //
+  }
   initColumnSelect() {
     let columnSelect = this.getIsColumnSelect()
     if (columnSelect !== true) {
@@ -190,12 +206,17 @@ export class FormItem extends Base {
   getSelectOptions() {
     let _options = this.getOptions()
     let options = _options?.options || []
-    if (!Array.isArray(options)) {
-      options = [] //
+    if (Array.isArray(options) && options.length > 0) {
+      options = options //
+    } else {
+      let optionsField = _options?.optionsField
+      if (typeof optionsField == 'string' && optionsField.length > 0) {
+        //
+        options = this.getSystem().fieldSelectOptions[optionsField] || [] //
+      }
     }
     let columnSelect = this.getIsColumnSelect()
     if (columnSelect == true) {
-      //
       let opt = this.getColumnSelectOptions()
       options = opt
     }
@@ -294,7 +315,6 @@ export class FormItem extends Base {
     }
     let rowIndex = arr.slice(-1).pop().rowIndex //
     // if (_items1 != null) {
-    //   debugger ////
     // } //
     // if (num % 24 == 0) {
     //   rowIndex = num / 24 - 1
@@ -330,7 +350,6 @@ export class FormItem extends Base {
     return config
   }
   getDisabled() {
-    // debugger //
     let f = this.form
     let _disabled = f.getDisabled()
     let status = false
@@ -990,12 +1009,12 @@ export class FormItem extends Base {
     // })
   }
   openSFormDialog() {
-    // debugger//
     let options = { ...this.getOptions() } //
     let f = this.getField() //
     let d = this.form.getData()
     let b = d[f]
-    if (b == null) {
+    if (b == null || Array.isArray(b) || typeof b !== 'object') {
+      //
       b = {}
       d[f] = b
     } //
@@ -1124,12 +1143,9 @@ export class FormItem extends Base {
   }
   onSearchClick(e) {
     let input: Input = this.getRef('fieldCom')
-    // input.showDropdown() //
-    // console.log(input, 'fieldCom') //
     if (input == null) {
       return
-    }
-    // input.showDropdown(e)
+    } //
   }
   showDropdown(config?: any) {
     let input: Input = this.getRef('fieldCom')
@@ -1167,15 +1183,22 @@ export class FormItem extends Base {
     let v = dropCom?.getPanelVisible()
     return v
   }
+  _getBaseinfoConfig() {
+    return this.getOptions().baseinfoConfig || {}
+  }
+  async getSearchEn(tableName?: string) {
+    let sys = this.getSystem()
+    tableName = tableName || this._getBaseinfoConfig().tableName //
+    let searchEn: SearchPageDesign = await sys.createPageSearchDesign(tableName)
+    return searchEn
+  }
   async openBaseInfoTable() {
     let v = this.getDropdownVisible()
     if (v) {
       return
     } //
     let sys = this.getSystem()
-    let searchEn: SearchPageDesign = await sys.createPageSearchDesign(
-      this.getTableName(),
-    )
+    let searchEn: SearchPageDesign = await this.getSearchEn()
     let columns = searchEn.getTableColumns()
     let _data = await searchEn.getTinyTableData({})
     this.templateTableConfig.columns = columns
@@ -1184,19 +1207,27 @@ export class FormItem extends Base {
       this.showDropdown() //
     })
   }
+  async closeBaseInfoTable() {
+    let input: Input = this.getRef('fieldCom')
+    if (input == null) {
+      return
+    } //
+    input.hiddenDropdown()
+  }
   getMultiple() {
     let options = this.getOptions()
     let multiple = options.multiple
     return multiple
   }
   async confirmTinyTableRow(row) {
-    //
-    let options = this.getOptions()
-    let bindColumns = options.bindColumns
+    // debugger //
+    // let options = this.getOptions()
+    let _tConfig = this._getBaseinfoConfig()
+    let bindColumns = _tConfig?.bindColumns || [] //
     if (Array.isArray(bindColumns)) {
       if (bindColumns.length == 1) {
         bindColumns = bindColumns[0]
-        let field = bindColumns.field
+        let field = bindColumns.targetKey
         let value = row[field]
         this.updateBindData({
           value: value, //
@@ -1206,15 +1237,16 @@ export class FormItem extends Base {
         let data = this.form.getData()
         for (const col of bindColumns) {
           //多字段参照表对应值
-          let field = col.field
-          let myField = col.myField
-          let value = row[field]
-          if (myField == this.getField()) {
+          let field = col.key
+          let myField = col.targetKey //
+          let value = row[field] //
+          if (field == this.getField()) {
             this.updateBindData({
               value: value, //
             })
           } else {
-            let field = col.field
+            let field = col.targetKey
+            let myField = col.key
             let value = row[field]
             if (field != null && myField != null) {
               data[myField] = value //
@@ -1223,5 +1255,38 @@ export class FormItem extends Base {
         }
       }
     }
+    nextTick(() => {
+      this.closeBaseInfoTable()
+    })
+  }
+  @useTimeout({ number: 500, key: 'getTinyTableSearchData' }) //
+  async getTinyTableSearchData(config) {
+    let value = config.value //
+    let _options = this._getBaseinfoConfig()
+    let searchEn = await this.getSearchEn()
+    let searchColumns = _options?.searchColumns || [] //
+    let query: any = {}
+    if (
+      Array.isArray(searchColumns) &&
+      searchColumns.length > 0 &&
+      value?.length > 0
+    ) {
+      let obj = {}
+      for (const field of searchColumns) {
+        obj[field] = {
+          $like: `%${value}%`, //
+        }
+      }
+      let _arr = Object.entries(obj).map(([key, value]) => {
+        return {
+          [key]: value,
+        }
+      })
+      query = { $or: _arr }
+    } //
+    console.log(query, 'query') //
+    let _data = await searchEn.getTinyTableData({ query }) //
+    // console.log(_data, 'getTinyTableSearchData')//
+    this.templateTableConfig.data = _data //
   }
 } //
