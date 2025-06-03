@@ -883,7 +883,6 @@ export class System extends Base {
   }
   enterApp(name) {
     //
-    window.open('localhost:3004') //
   }
   async designCurrentPageConfig() {
     //
@@ -898,7 +897,15 @@ export class System extends Base {
       itemSpan: 12,
       items: [
         {
-          tabTitle: tabTitles[0],
+          tabTitle: tabTitles[0], //
+          field: 'tableName',
+          label: '表名',
+          type: 'input', //
+          disabled: true, //
+          itemChange: (config) => {},
+        },
+        {
+          tabTitle: tabTitles[0], //
           field: 'tableCnName', //
           label: '表格中文名',
           itemChange: (config) => {},

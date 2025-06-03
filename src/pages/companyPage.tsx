@@ -23,6 +23,7 @@ export default defineComponent({
     _header,
   },
   setup() {
+    //审批
     const systemIns = system //
     provide('systemIns', systemIns) //
     let isInstallApp = computed(() => {
@@ -81,7 +82,7 @@ export default defineComponent({
               启动应用
             </button>
           )
-        }
+        } //
         return (
           <div
             id="installed"
