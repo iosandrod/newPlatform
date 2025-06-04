@@ -173,19 +173,17 @@ export default defineComponent({
                         },
                       },
                       {
+                        label: '退出页面设计',
+                        fn: async () => {
+                          system.refreshPageDesign() //
+                        },
+                      },
+                      {
                         label: '保存页面设计',
                         fn: async () => {
                           let currentPageDesign = system.getCurrentPageDesign()
                           await currentPageDesign.saveTableDesign()
                         },
-                      },
-                      {
-                        label: '设计表格',
-                        fn: async () => {},
-                      },
-                      {
-                        label: '页面高级配置',
-                        fn: async () => {}, //
                       },
                       {
                         label: '打印页面',

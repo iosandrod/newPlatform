@@ -77,7 +77,13 @@ const getDefaultFormEditProps = () => {
     tableName: {
       type: String,
     },
-  } ///
+    itemDisabled: {
+      type: Function, //
+    },
+    disabledFn: {
+      type: Function, //
+    },
+  }
 }
 export default defineComponent({
   components: {},

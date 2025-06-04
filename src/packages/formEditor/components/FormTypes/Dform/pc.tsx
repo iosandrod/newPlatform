@@ -36,6 +36,7 @@ export default defineComponent({
     if (mainPage != null) {
       tableName = mainPage.getTableName() //
     }
+    let itemTName = formitem.getOptions().tableName
     return () => {
       let _com = (
         <div class="h-full w-full" style={{ minHeight: '36px' }}>
@@ -44,7 +45,29 @@ export default defineComponent({
             {...fConfig.value}
             disabled={formitem.getFormDisabled({
               tableName,
-            })} //
+            })}
+            disabledFn={(config) => {
+              let field = config.field
+              if (itemTName == tableName) {
+                //主页面表单
+                if (mainPage != null) {
+                  let cols = mainPage.getTableConfig().columns || []
+                  let col = cols.find((col) => col.field == field)
+                  let addDisabled = col?.addDisabled
+                  let editDisabled = col?.editDisabled
+                  let pageEditState = mainPage.tableState
+                  if (pageEditState == 'add') {
+                    if (addDisabled == 1) {
+                      return true
+                    }
+                  } else if (pageEditState == 'edit') {
+                    if (editDisabled == 1) {
+                      return true
+                    }
+                  }
+                }
+              }
+            }} //
             data={data.value}
           ></FormCom>
         </div>

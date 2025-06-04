@@ -226,7 +226,7 @@ export class FormItem extends Base {
   getData() {
     let form = this.form
     let data = form.getData()
-    return data ////
+    return data
   }
   getTdColumn(): TableCell[] {
     let span = this.getSpan()
@@ -350,12 +350,14 @@ export class FormItem extends Base {
     return config
   }
   getDisabled() {
+    let field = this.getField() //
     let f = this.form
-    let _disabled = f.getDisabled()
+    let _disabled = f.getDisabled(this) //
     let status = false
     if (_disabled == true) {
       status = true
     }
+
     if (!status) {
       let disables = this.config?.disabled
       if (disables == true) {
@@ -378,6 +380,9 @@ export class FormItem extends Base {
   }
   getRequired() {
     let required = this.config?.options?.required
+    // if (this.getTitle() == '销售日期') {
+    //   debugger //
+    // }
     return required
   }
   getLabelWidth() {
@@ -1288,5 +1293,8 @@ export class FormItem extends Base {
     let _data = await searchEn.getTinyTableData({ query }) //
     // console.log(_data, 'getTinyTableSearchData')//
     this.templateTableConfig.data = _data //
+  }
+  getFormItemDisabled(config: any) {
+    //
   }
 } //

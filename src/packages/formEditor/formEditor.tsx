@@ -41,6 +41,12 @@ import { Form } from '@ER/form'
 import fieldCom from '@/menu/fieldCom'
 export const getDefaultFormEditProps = () => {
   return {
+    disabledFn: {
+      type: Function, //
+    },
+    itemDisabled: {
+      type: Function,
+    }, //
     isTabForm: {
       type: Boolean,
       default: false,

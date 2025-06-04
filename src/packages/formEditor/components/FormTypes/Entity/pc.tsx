@@ -125,7 +125,6 @@ export default defineComponent({
               let tableName = item.getTableName()
               let dTableName = _design.getRealTableName()
               if (tableName != dTableName) {
-               
                 let allCols = config.allCols //
                 item.config.options.columns = allCols
               }
@@ -136,6 +135,7 @@ export default defineComponent({
             onColumnConfigChange={(config) => {
               item.onColumnConfigChange(config)
             }}
+            rowHeight={item.getTableRowHeight()} //
           ></erTable>
         </div>
       )

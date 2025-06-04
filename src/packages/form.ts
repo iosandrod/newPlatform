@@ -1841,7 +1841,7 @@ export class Form extends Base {
   }
   onColumnConfigChange(config) {}
   onTableConfigChange(config) {}
-  getDisabled() {
+  getDisabled(item?: FormItem) {
     let config = this.config
     let status = false
     let disabled = config.disabled
@@ -1851,14 +1851,18 @@ export class Form extends Base {
     let disabledFn = this.config.disabledFn
     if (typeof disabledFn == 'function') {
       try {
-        let _d = disabledFn()
+        let f = item?.getField()
+        let _d = disabledFn({
+          field: f,
+        }) 
         if (_d == true) {
           status = true
         }
       } catch (error) {
         console.error('禁用脚本报错')
       }
-    } //
+    }
+    //
     return status
   }
 }

@@ -289,7 +289,7 @@ export class Table extends Base {
     if (instance != null) {
       const oldOptions = instance.options
       _.merge(oldOptions, opt)
-      instance.updateOption(oldOptions) 
+      instance.updateOption(oldOptions)
       // instance.frozenBodyDomContainer
     }
   }
@@ -460,7 +460,8 @@ export class Table extends Base {
       },
       sortState: [],
       theme: createTheme() as any,
-      defaultRowHeight: 30,
+      // defaultRowHeight: this.getDefaultRowHeight(), //
+      defaultRowHeight: this.getDefaultRowHeight(), //
       heightMode: 'standard', //
       defaultHeaderRowHeight: this.getDefaultHeaderRowHeight(), //
       container: rootDiv, //
@@ -2917,5 +2918,13 @@ export class Table extends Base {
     let id = this.id
     let _containerMap = containerMap
     _containerMap[id] = null //
+  }
+  getDefaultRowHeight() {
+    let height = Number(this.config?.rowHeight)
+    if (isNaN(height)) {
+      height = 30
+    } //  
+    // console.log('行高度', height)//
+    return height
   }
 }

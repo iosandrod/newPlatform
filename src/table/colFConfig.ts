@@ -134,7 +134,7 @@ export const getDFConfig = (_this, data) => {
         options: {
           tableName: tableName,
           ...data,
-        },//
+        }, //
       }, //
       {
         label: '格式化',
@@ -192,6 +192,24 @@ export const getDFConfig = (_this, data) => {
             }
           }
         },
+      },
+      {
+        field: 'addDisabled',
+        label: '新增禁用',
+        tabTitle: titles[1],
+        type: 'boolean', //
+      },
+      {
+        field: 'editDisabled',
+        label: '编辑禁用',
+        tabTitle: titles[1],
+        type: 'boolean',
+      },
+      {
+        field: 'required',
+        label: '必填',
+        tabTitle: titles[1], //
+        type: 'boolean',
       },
       {
         field: 'itemChange',

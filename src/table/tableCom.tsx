@@ -201,6 +201,10 @@ export default defineComponent({
     detailTableConfig: {
       type: Object,
     },
+    rowHeight: {
+      type: Number,
+      default: 30, //
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any
@@ -208,7 +212,7 @@ export default defineComponent({
       tableIns = props.tableIns as any
     } else {
       tableIns = new Table(props) //
-    }
+    } //
     if (props.mainTableName != null) {
       //@ts-ignore
       tableIns.tableName = props.mainTableName

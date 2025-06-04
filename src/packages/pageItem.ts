@@ -261,6 +261,7 @@ export class PageDesignItem extends FormItem {
       'keyColumn',
       'keyCodeColumn', //
       'onCurRowChange', //
+      'rowHeight', //
     ] //
     let tName = this.getTableName()
     let mainDesign = this.form //
@@ -446,5 +447,14 @@ export class PageDesignItem extends FormItem {
     let sys = this.getSystem()
     let _d = await sys.confirmForm(_fConfig) //
     this.onTableConfigChange(_d) //
+  }
+  getTableRowHeight() {
+    let options = this.getOptions()
+    let rowHeight = options?.rowHeight
+    return rowHeight
+  }
+  getFormitemDisabled(config) {
+    let field = config.field //
+    let tableName = config.tableName
   }
 }
