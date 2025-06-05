@@ -70,7 +70,7 @@ export default defineComponent({
               _class.push('flex-1')
               _class1.push('flex-1') //
             }
-          }
+          } 
         }
       }
       return (

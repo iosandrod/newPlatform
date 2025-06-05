@@ -1349,8 +1349,11 @@ export class Table extends Base {
         return
       }
     }
+    // _arr = _arr.filter((item) => {
+    //   return Boolean(item) != false
+    // }) //
     _arr.forEach((item) => {
-      if (item._rowState == null) {
+      if (item?._rowState == null) {
         Object.defineProperties(item, {
           _rowState: { value: 'add', enumerable: false, writable: true },
         })
@@ -1371,7 +1374,7 @@ export class Table extends Base {
             row: lastD,
           }) ////
         },
-      }) //
+      })
     }
   }
   addBeforeMethod(config) {
@@ -2492,7 +2495,7 @@ export class Table extends Base {
       }
       row['_expanded'] = status //
       let col = 'collapse'
-      if (status == true) {
+      if (status == true) {//scss less vuex 
         col = 'expand'
       }
       row['hierarchyState'] = col //
@@ -2923,7 +2926,7 @@ export class Table extends Base {
     let height = Number(this.config?.rowHeight)
     if (isNaN(height)) {
       height = 30
-    } //  
+    } //
     // console.log('行高度', height)//
     return height
   }

@@ -54,6 +54,8 @@ import vFocus from '@/audit/directive/focus'
 import '@/audit/styles/index.scss' //
 //@ts-ignore
 import pinia from '@/audit/stores'
+// import "@arco-design/web-vue/dist/arco.css";
+
 app.directive('focus', vFocus)
 // import "virtual:svg-icons-register";
 import Vuex from 'vuex'
@@ -105,7 +107,6 @@ import wangCom from './wangEditor/wangCom'
 // import { registerAntdComp } from './audit/antd'
 // import { registerIconsComp } from './audit/icons'
 import ArcoVue from "@arco-design/web-vue";
-import "@arco-design/web-vue/dist/arco.css";
 import ArcoVueIcon from "@arco-design/web-vue/es/icon";
 app.use(ArcoVueIcon);
 app.use(ArcoVue); 

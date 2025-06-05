@@ -116,7 +116,7 @@ onBeforeMount(() => {
 </script>
 
 <style lang="scss">
-@import "@/audit/styles/variables.module.scss";
+@use "@/audit/styles/variables.module.scss" as *;;
 
 .change-user-container {
   .user-list {

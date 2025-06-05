@@ -83,6 +83,9 @@ const excludes = [
 ]
 const flatNodes = (nodes, excludes, fn?: any, excludesFn?: any) => {
   return nodes.reduce((res, node, currentIndex) => {
+    if(node==null){
+      return res
+    }//
     //不是field的node
     if (excludes.indexOf(node.type) === -1) {
       res.push(node)

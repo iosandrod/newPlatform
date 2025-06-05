@@ -232,6 +232,9 @@ export class PageDesignItem extends FormItem {
     if (_d == null || !Array.isArray(_d)) {
       return
     }
+    if (config.reset == true) {
+      _d.splice(0, _d.length)
+    } //
     _d.push(..._arr)
   }
   getFormDisabled(config?: any) {
@@ -262,6 +265,7 @@ export class PageDesignItem extends FormItem {
       'keyCodeColumn', //
       'onCurRowChange', //
       'rowHeight', //
+      'viewTableName',
     ] //
     let tName = this.getTableName()
     let mainDesign = this.form //
@@ -280,6 +284,12 @@ export class PageDesignItem extends FormItem {
           tabTitle: titles[0],
           type: 'string',
           disabled: true, //
+        },
+        {
+          field: 'viewTableName',
+          label: '视图表名',
+          tabTitle: titles[0],
+          type: 'string', //
         },
         {
           field: 'detailTableConfig',

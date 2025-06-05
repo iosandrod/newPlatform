@@ -149,7 +149,7 @@ onBeforeMount(async () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/audit/styles/variables.module.scss";
+@use "@/audit/styles/variables.module.scss" as *;;
 
 $header-height: 70px;
 $canvas-bg: $MainContentBg;

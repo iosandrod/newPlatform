@@ -265,7 +265,7 @@ onBeforeMount(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/audit/styles/variables.module.scss";
+@use "@/audit/styles/variables.module.scss" as *;;
 
 @FlowTabsHeight: 36px;
 @SearchBoxHeight: 56px;

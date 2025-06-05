@@ -22,7 +22,7 @@
       <div ref="containerRef" class="screen-container">
         <div
           id="designer-page"
-          v-contextmenu="'contextmenu'"
+          v-contextmenu="'contextmenuRef'" 
           :style="canvasStyle"
           @contextmenu="handleContextMenu"
           @mousedown="handleMouseDown"

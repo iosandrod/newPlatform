@@ -1243,7 +1243,10 @@ export class Form extends Base {
     let layout = this.layout
     let state = this.state
     const fields = utils.processField(_.cloneDeep(state.store))
-    layout.pc = this.getLayoutDataByplatform('pc')
+    layout.pc = this.getLayoutDataByplatform('pc').filter((item) => {
+      let id=item.id
+      return id!=null
+    })//
     layout.mobile = this.getLayoutDataByplatform('mobile')
     let id = this.config.id
     return _.cloneDeep({

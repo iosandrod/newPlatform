@@ -22,7 +22,7 @@ export class editPageDesign extends PageDesign {
     let allDetailTable = this.getAllDetailTable()
     let tref = allDetailTable //
     for (const ta of tref) {
-      await ta.addRows(10)
+      await ta.addRows({ num: 10, reset: true })
     }
   }
   @useHooks((config) => {

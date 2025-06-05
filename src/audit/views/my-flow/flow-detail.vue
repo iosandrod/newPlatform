@@ -875,7 +875,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/audit/styles/variables.module.scss";
+@use "@/audit/styles/variables.module.scss" as *;;
 @bottomActionHeight: 52px;
 @DetailHeaderHeight: 40px;
 @FormLabelWidth: 84px;

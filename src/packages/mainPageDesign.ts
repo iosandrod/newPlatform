@@ -4,7 +4,6 @@ import pageCom from './pageCom'
 import { PageDesign } from './pageDesign'
 import { useHooks } from './utils/decoration'
 import { ImportPageDesign } from './importPageDesign'
-import { VxeUI } from 'vxe-pc-ui'
 //
 import * as XLSX from 'xlsx'
 export class MainPageDesign extends PageDesign {
@@ -236,6 +235,12 @@ export class MainPageDesign extends PageDesign {
           }) //
         }
         if (_editType == 'add') {
+          let allDetailConfig = Object.values(page.tableDataMap).map(
+            (t: any) => {
+              // let data = t?.data
+              t.data = [] //
+            },
+          )
           page.addMainTableRow(_config) //
         }
       }, //

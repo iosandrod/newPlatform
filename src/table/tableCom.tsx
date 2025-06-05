@@ -367,7 +367,8 @@ export default defineComponent({
       (newValue, oldValue) => {
         let [newData, newLen] = newValue as any //
         let [oldData, oldLen] = oldValue as any
-        if (newValue != oldValue) {
+        if (newData != oldData) {
+          //
           tableIns.setData(newData)
           let treeConfig = props.treeConfig
           let expand = treeConfig?.expand
@@ -381,15 +382,18 @@ export default defineComponent({
           }
         } else {
           //添加行的
-          let addRows = newData.map((row) => {
-            return !oldData.includes(row)
+          // let addRows = newData.filter((row) => {
+          //   return !oldData.includes(row)
+          // })
+          // //@ts-ignore
+          // tableIns.addRows({ rows: addRows, isProps: true })
+          // let removeRows = oldData.filter((row) => {
+          //   return !newData.includes(row) //
+          // })
+          // tableIns.delRows(removeRows)
+          newData.forEach((row) => {
+            tableIns.initDataRow(row) //
           })
-          //@ts-ignore
-          tableIns.addRows({ rows: addRows, isProps: true })
-          let removeRows = oldData.map((row) => {
-            return !newData.includes(row) //
-          })
-          tableIns.delRows(removeRows)
         }
         // if (!Array.isArray(e)) {
         //   e = [] //

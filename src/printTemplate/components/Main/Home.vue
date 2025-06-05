@@ -214,7 +214,6 @@ function readFile(options = {}) {
     input.click()
   })
 }
-
 async function importFile() {
   try {
     const { file } = await readFile({ types: ['rptd'] })

@@ -6086,3 +6086,71 @@ export const formConfig = {
     //   curRow = tRef.getCurRow()
     // }
     // return curRow //
+
+     let minRow = Math.min(startX.value, r)
+      let maxRow = Math.max(startX.value, r)
+      let minCol = Math.min(startY.value, c)
+      let maxCol = Math.max(startY.value, c)
+      let changed = true
+
+      // 🚀 不断扩展合并范围直到稳定
+
+      // 🚀 迭代扩展区域，直到稳定
+      while (changed) {
+        changed = false
+
+        for (let row = minRow; row <= maxRow; row++) {
+          for (let col = minCol; col <= maxCol; col++) {
+            const layout = layoutDetail?.[row - 1]?.[col - 1]
+            if (!layout || layout.colSpan === 0 || layout.rowSpan === 0)
+              continue
+
+            const rowSpan = layout.rowSpan ?? 1
+            const colSpan = layout.colSpan ?? 1
+
+            const rowEnd = row + rowSpan - 1
+            const colEnd = col + colSpan - 1
+
+            const rowStart = row
+            const colStart = col
+
+            if (rowStart < minRow) {
+              minRow = rowStart
+              changed = true
+            }
+            if (colStart < minCol) {
+              minCol = colStart
+              changed = true
+            }
+            if (rowEnd > maxRow) {
+              maxRow = rowEnd
+              changed = true
+            }
+            if (colEnd > maxCol) {
+              maxCol = colEnd
+              changed = true
+            }
+          }
+        }
+      }
+
+      // ✅ 最终结果是扩展后的矩形区域
+
+      // let startLayout = tableLayout?.[startX.value - 1]?.[startY.value - 1]
+      // if (startLayout?.colSpan > 1) {
+      //   c = c + startLayout.colSpan - 1
+      // }
+      // if (startLayout?.rowSpan > 1) {
+      //   r = r + startLayout.rowSpan - 1 //
+      // }
+      // if (layout?.colSpan > 1) {
+      //   c = c + layout.colSpan - 1
+      // }
+      // if (layout?.rowSpan > 1) {
+      //   r = r + layout.rowSpan - 1
+      // }
+
+       // endX.value = r
+        // endY.value = c
+        // endX.value = maxRow
+        // endY.value = maxCol

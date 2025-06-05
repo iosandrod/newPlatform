@@ -314,7 +314,7 @@ onMounted(() => {
 </style>
 
 <style lang="scss" scoped>
-@import "@/audit/styles/variables.module.scss";
+@use "@/audit/styles/variables.module.scss" as *;;
 @FormLabelWidth: 84px;
 
 .flow-form-box {

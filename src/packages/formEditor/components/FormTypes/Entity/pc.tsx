@@ -122,6 +122,7 @@ export default defineComponent({
               item.onColumnHidden(config)
             }}
             onColumnsDesign={(config) => {
+              // debugger //
               let tableName = item.getTableName()
               let dTableName = _design.getRealTableName()
               if (tableName != dTableName) {

@@ -383,7 +383,7 @@ export default defineComponent({
       //     ]}
       //   ></selectCom>
       // )
-      // com = <pVue></pVue>
+      com = <pVue></pVue>
       // com = (
       //   <wangCom
       //     ref={(el) => {
@@ -417,7 +417,7 @@ export default defineComponent({
           <div
             class="h-full w-full "
             style={{
-              padding: '100px',
+              // padding: '100px',
             }}
           >
             {/* <button

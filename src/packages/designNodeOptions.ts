@@ -183,7 +183,6 @@ export const formitemTypeMap = (_this: PageDesign) => {
           label: '表名',
           type: 'input', //
           onBlur: async (config) => {
-            debugger //
             let value = config.value
             let oldValue = config.oldValue
             if (value == oldValue) {
@@ -252,7 +251,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
               )
               let _se = select.map((col) => {
                 let obj = {
-                  label: col.title,
+                  label: col.title || col.field, //
                   value: col.field,
                 } //
                 return obj
