@@ -6154,3 +6154,23 @@ export const formConfig = {
         // endY.value = c
         // endX.value = maxRow
         // endY.value = maxCol
+
+
+
+         for (let rr = 1; rr <= tableConfig.rows; rr++) {
+          const idx = (rr - 1) * tableConfig.cols + (c - 1)
+          const info = tableConfig.layoutDetail[idx]
+          if (info.colSpan === curConfig.colSpan) {
+            tableData[`${rr}-${c}`].width =
+              (rect.width + dX) / Number(props.scale)
+          }
+        }
+        // 同一行高度
+        for (let cc = 1; cc <= tableConfig.cols; cc++) {
+          const idx = (r - 1) * tableConfig.cols + (cc - 1)
+          const info = tableConfig.layoutDetail[idx]
+          if (info.rowSpan === curConfig.rowSpan) {
+            tableData[`${r}-${cc}`].height =
+              (rect.height + dY) / Number(props.scale)
+          }
+        }
