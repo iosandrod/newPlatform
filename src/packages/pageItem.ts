@@ -266,10 +266,38 @@ export class PageDesignItem extends FormItem {
       'onCurRowChange', //
       'rowHeight', //
       'viewTableName',
+      'mainRelateKey',
+      'relateKey',//
     ] //
     let tName = this.getTableName()
+
     let mainDesign = this.form //
     let mN = mainDesign?.getRealTableName() || null
+    let fd = []
+    if (mN != tName) {
+      fd = [
+        {
+          field: 'mainRelateKey',
+          label: '主单据关联字段',
+          type: 'string',
+          tabTitle: titles[0],
+          options: {
+            columnSelect: true,
+            tableName: mN, //
+          },
+        },
+        {
+          field: 'relateKey',
+          label: '当前关联字段',
+          type: 'string',
+          tabTitle: titles[0],
+          options: {
+            columnSelect: true,
+            tableName: tName,
+          },
+        },
+      ]
+    }
     let _obj = _.pick(_config, fields)
     let _fConfig = {
       itemSpan: 12, //
@@ -401,6 +429,7 @@ export class PageDesignItem extends FormItem {
           },
           tabTitle: titles[0], //
         },
+        ...fd, //
         {
           field: 'keyColumn',
           tabTitle: titles[0],
@@ -420,7 +449,8 @@ export class PageDesignItem extends FormItem {
             columnSelect: true,
             tableName: tName, //
           },
-        }, //
+        },
+
         {
           field: 'onCurRowChange',
           label: '当前行变化事件',

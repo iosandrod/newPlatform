@@ -6174,3 +6174,14 @@ export const formConfig = {
               (rect.height + dY) / Number(props.scale)
           }
         }
+
+         // const startIndex = (sx - 1) * tableConfig.cols + (sy - 1)
+      // const groupId = tableConfig.layoutDetail[startIndex].groupId
+      // if (!groupId) return
+      // tableConfig.layoutDetail.forEach((info) => {
+      //   if (info.groupId === groupId) {
+      //     info.rowSpan = 1
+      //     info.colSpan = 1
+      //     delete info.groupId
+      //   }
+      // })

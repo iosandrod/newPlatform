@@ -784,24 +784,66 @@ export default defineComponent({
       }
     }
 
+    // function splitCell() {
+    //   const sx = startX.value
+    //   const sy = startY.value
+    //   if (sx === -1 || sy === -1) {
+    //     toast('请选中要拆分的单元格')
+    //     return
+    //   }
+    //   let layoutDetail = tableConfig.layoutDetail
+
+    //   let rowArr = layoutDetail?.[sx - 1]?.[sy - 1]
+    //   if (!rowArr) {
+    //     return
+    //   }
+    //   let rowSpan=rowArr.rowSpan
+    //   let colSpan=rowArr.colSpan
+
+    // }
     function splitCell() {
       const sx = startX.value
       const sy = startY.value
+
       if (sx === -1 || sy === -1) {
         toast('请选中要拆分的单元格')
         return
       }
-      const startIndex = (sx - 1) * tableConfig.cols + (sy - 1)
-      const groupId = tableConfig.layoutDetail[startIndex].groupId
-      if (!groupId) return
 
-      tableConfig.layoutDetail.forEach((info) => {
-        if (info.groupId === groupId) {
-          info.rowSpan = 1
-          info.colSpan = 1
-          delete info.groupId
+      const layoutDetail = tableConfig.layoutDetail
+      const mainLayout = layoutDetail?.[sx - 1]?.[sy - 1]
+
+      if (!mainLayout || (mainLayout.colSpan <= 1 && mainLayout.rowSpan <= 1)) {
+        toast('当前单元格未合并，无需拆分')
+        return
+      }
+
+      const rowSpan = mainLayout.rowSpan
+      const colSpan = mainLayout.colSpan
+
+      // 遍历该合并区域，恢复所有被合并格子
+      for (let r = sx; r < sx + rowSpan; r++) {
+        for (let c = sy; c < sy + colSpan; c++) {
+          const layout = layoutDetail?.[r - 1]?.[c - 1]
+          if (layout) {
+            layout.colSpan = 1
+            layout.rowSpan = 1
+          }
+
+          // 如果 tableData 中某格被 width/height = 0，也还原为默认
+          const key = `${r}-${c}`
+          if (tableData[key]) {
+            tableData[key].width ||= defaultTableCell.width
+            tableData[key].height ||= defaultTableCell.height
+          }
         }
-      })
+      }
+
+      // 最后清除主格的合并信息
+      layoutDetail[sx - 1][sy - 1].colSpan = 1
+      layoutDetail[sx - 1][sy - 1].rowSpan = 1
+
+      toast('拆分成功')
     }
 
     function menyItemCmd(cmd) {
@@ -887,7 +929,6 @@ export default defineComponent({
       document.addEventListener('mousemove', onMove)
       document.addEventListener('mouseup', onUp)
     }
-    
 
     function unlinkCell(r, c, e) {
       e.stopPropagation()

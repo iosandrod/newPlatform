@@ -11,6 +11,7 @@ import {
   watchEffect,
   withDirectives,
   onDeactivated,
+  reactive,
 } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
 import { ListTable } from '@visactor/vue-vtable'
@@ -26,6 +27,7 @@ import TableFitlerCom from './tableFilterCom'
 import InputCom from '@/input/inputCom'
 import { Table } from './table'
 import { VxeLoading } from 'vxe-pc-ui'
+import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow'
 
 // new ListTable()
 //核心表格组件
@@ -409,15 +411,41 @@ export default defineComponent({
     const registerFooterDiv = (el) => {
       tableIns.registerRef('footerDiv', el) //
     }
+    const registerSearchDiv = (el) => {
+      tableIns.registerRef('searchDiv', el) //
+    }
+    let bodyStyle: any = reactive({
+      minHeight: '200px',//
+    })
+    // vShow, tableIns.globalConfig.show
+    watch(
+      () => tableIns.globalConfig.show,
+      (e) => {
+        nextTick(() => {
+          let sRef = tableIns.getRef('bodyDiv') //
+          if (sRef == null) {
+            return
+          }
+          let bound = sRef.getBoundingClientRect()
+          if (e == true) {
+            let _height = Math.round(bound.height)
+            let _height1 = _height - 45
+            bodyStyle.height = `${_height1}px !important`
+          } else {
+            bodyStyle.height = '100%' //
+          }
+        })
+      },
+      {
+        immediate: true, //
+      },
+    )
+    let registerBodyDiv = (el) => {
+      tableIns.registerRef('bodyDiv', el)
+    }
     return () => {
       let com = null
-      com = withDirectives(
-        <div
-          style={{ width: '100%', height: '100%', minHeight: '200px' }}
-          ref={registerRootDiv}
-        ></div>,
-        [],
-      ) //
+
       let menuCom = <TableMenuCom></TableMenuCom>
       // if (props.showHeaderContext === false) {
       //   menuCom = null //
@@ -432,12 +460,13 @@ export default defineComponent({
         filterTCom = <TableFitlerCom tableIns={tableIns}></TableFitlerCom>
       }
       // const inputProps = tableIns.getGlobalSearchProps()
-      const globalSearchInput = withDirectives(
+      let globalSearchInput = withDirectives(
         <div
+          ref={registerSearchDiv}
           style={{
             width: '100%',
-            height: '40px',
             display: 'flex',
+            overflow: 'hidden',
             alignItems: 'center',
           }}
         >
@@ -501,6 +530,17 @@ export default defineComponent({
         ></div>,
         [[vShow, tableIns.getShowCalColumns()]],
       )
+      com = withDirectives(
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+             minHeight: '200px'
+          }}
+          ref={registerRootDiv}
+        ></div>,
+        [],
+      ) //
       let tBodyCom = withDirectives(
         <div
           onClick={(e) => {
@@ -510,6 +550,7 @@ export default defineComponent({
             }
             tableIns.outClick(e, true) //
           }}
+          ref={registerBodyDiv}
           style={{
             flex: 1,
             width: '100%', //
@@ -517,10 +558,9 @@ export default defineComponent({
             position: 'relative',
             display: 'flex',
             flexDirection: 'column', //
-            // margin: '4px',
             border: '1px solid #ccc',
-            // border: '1px solid black',
             boxSizing: 'border-box',
+            ...bodyStyle,
           }} //
         >
           <div
@@ -552,7 +592,7 @@ export default defineComponent({
       let outCom = (
         <div
           style={{
-            minHeight: '200px', //
+            // minHeight: '200px', //
             width: '100%',
             height: '100%',
             display: 'flex', //

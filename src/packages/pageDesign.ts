@@ -1037,7 +1037,8 @@ export class PageDesign extends Form {
         operator: searchOperator,
         value: data[searchF],
       }
-      if (obj1.value != null) {
+      if (obj1.value != null && obj1.value != '') {
+        //
         _arr.push(obj1)
       }
     }

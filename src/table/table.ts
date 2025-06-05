@@ -484,7 +484,7 @@ export class Table extends Base {
         createReactContainer: true, //
       },
       //头部的
-    }) ////
+    }) //
     table.on('change_header_position_start', (e) => {
       let record = table.getRecordByCell(e.col, e.row)
       let isDragHeader = false
@@ -2495,7 +2495,8 @@ export class Table extends Base {
       }
       row['_expanded'] = status //
       let col = 'collapse'
-      if (status == true) {//scss less vuex 
+      if (status == true) {
+        //scss less vuex
         col = 'expand'
       }
       row['hierarchyState'] = col //
@@ -2662,6 +2663,7 @@ export class Table extends Base {
     let err = validateMap[_index][0] //
     // console.log(err) ////
     let ins = this.getInstance()
+    // ins.autoFillHeight
     let field = err.field
     let row = err.row //
     let _index1 = this.getFlatTreeData().findIndex((r) => r['_index'] == _index)
