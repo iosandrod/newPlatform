@@ -863,10 +863,7 @@ export default defineComponent({
         const dX = moveEvent.movementX
         const dY = moveEvent.movementY
         // 同一列宽度
-
         for (let rr = 1; rr <= tableConfig.rows; rr++) {
-          // const idx = (rr - 1) * tableConfig.cols + (c - 1)
-          // const info = tableConfig.layoutDetail[idx]
           let info = tableConfig.layoutDetail?.[rr - 1]?.[c - 1]
           if (info?.colSpan === curConfig?.colSpan) {
             tableData[`${rr}-${c}`].width =
@@ -875,8 +872,6 @@ export default defineComponent({
         }
         // 同一行高度
         for (let cc = 1; cc <= tableConfig.cols; cc++) {
-          // const idx = (r - 1) * tableConfig.cols + (cc - 1)
-          // const info = tableConfig.layoutDetail[idx]
           let info = tableConfig.layoutDetail?.[r - 1]?.[cc - 1]
           if (info?.rowSpan === curConfig?.rowSpan) {
             tableData[`${r}-${cc}`].height =
@@ -892,6 +887,7 @@ export default defineComponent({
       document.addEventListener('mousemove', onMove)
       document.addEventListener('mouseup', onUp)
     }
+    
 
     function unlinkCell(r, c, e) {
       e.stopPropagation()
