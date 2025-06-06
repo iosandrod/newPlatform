@@ -66,7 +66,7 @@ export const editUse = {
         setTimeout(() => {
           instance.setCurrentLoading(false)
         }, 200)
-      }) //
+      })// 
       instance.setCurrentView() //
     }, //
   ],

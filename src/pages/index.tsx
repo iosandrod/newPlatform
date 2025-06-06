@@ -14,6 +14,7 @@ import pageCom from '@ER/pageCom'
 import _header from './pageHeader'
 import TableCom from '@/table/tableCom'
 import { Table } from '@/table/table'
+import LeftMenu from './leftMenu'
 
 export default defineComponent({
   components: {
@@ -23,6 +24,7 @@ export default defineComponent({
     menuCom,
     fieldCom, //
     tabCom,
+    LeftMenu,
     _header,
   },
   setup() {
@@ -41,82 +43,8 @@ export default defineComponent({
     let _config = null
 
     return () => {
-      // if (show.value == false) {
-      //   return null
-      // }
-      // if (1 == 1) {
-      //   let com = (
-      //     <div class="h-400 w-400">
-      //       <TableCom
-      //         {..._config}
-      //         showHeaderButtons={true}
-      //         buttons={[
-      //           {
-      //             label: '更新',
-      //             fn: async (config) => {
-      //               console.log('更新') //
-      //               let table: Table = config.parent //
-      //               // console.log(config) ////
-      //               let fData = table.getFlatTreeData()
-      //               let _data = fData.filter((item) => {
-      //                 let _rowState = item['_rowState']
-      //                 return _rowState == 'change'
-      //               })
-      //               console.log(_data) //
-      //             },
-      //           },
-      //         ]}
-      //       ></TableCom>
-      //     </div>
-      //   )
-      //   return com //
-      // }
-      let leftMenu = (
-        <menuCom
-          onItemClick={(item) => {
-            systemIns.onMenuItemClick(item)
-          }}
-          items={systemIns.getMenuItems()}
-          ref={registerMenu}
-          showSearch={true}
-          searchFn={(config) => {
-            let value = config.value
-            let item = config.item
-            let _config = item.config.navname //
-            let reg = new RegExp(value, 'gi') //
-            let bool = false
-            let tableName = item.config.tableName
-            if (reg.test(_config)) {
-              bool = true
-            }
-            if (reg.test(tableName)) {
-              bool = true
-            }
-            return bool //
-          }}
-          v-slots={{
-            subItemTitle: (item) => {
-              let config = item.config
-              let navname = config.navname
-              return <div>{navname}</div>
-            },
-            itemTitle: (item) => {
-              let config = item.config
-              let navname = config.navname
-              let com = (
-                <div
-                // onClick={(config) => {
-                //   console.log('我点击了这个东西') //
-                // }}
-                >
-                  {navname}
-                </div>
-              ) //
-              return com
-            },
-          }}
-        ></menuCom>
-      )
+     
+      let leftM=<LeftMenu></LeftMenu>
       let tableTab = (
         <tabCom
           height={40}
@@ -265,7 +193,7 @@ export default defineComponent({
               ></er-dropdown>
             </div>
           </div>
-        </header>
+        </header> 
       )
       return (
         <div
@@ -274,7 +202,7 @@ export default defineComponent({
         >
           {pageHeader}
           <div class="h-full w-full flex flex-row">
-            <div style={{ width: '300px', height: '100%' }}>{leftMenu}</div>
+            <div style={{ width: '300px', height: '100%' }}>{leftM}</div>
             <div class="flex flex-col flex-1 h-full ">
               <div class="w-full bg-white tab-line">{tableTab}</div>
               <div class="w-full h-full overflow-hidden">

@@ -73,6 +73,10 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = filFn(d) //
     return d //
   }
+  async refreshMenuData(){
+    this.clearCacheValue('getMenuData')
+    await this.getMenuData()
+  }
   init() {
     super.init() //
   }
@@ -895,7 +899,6 @@ export class System extends Base {
     //
   }
   async designCurrentPageConfig() {
-    //
     let curPage = this.getCurrentPageDesign()
     // let _config = _.cloneDeep(curPage.config) //
     let tableName = curPage.getTableName() //
@@ -1075,8 +1078,23 @@ export class System extends Base {
                 editType: 'code', //
                 tableName: tableName, //
               }, //
+              {
+                field: 'type',
+                title: '钩子类型',
+                editType: 'select',
+                options: [
+                  {
+                    label: '前端',
+                    value: 'front',
+                  },
+                  {
+                    label: '后端',
+                    value: 'back',
+                  },
+                ],
+              },
             ],
-            showTable: true,
+            showTable: true, //
           },
         },
         {
@@ -1215,83 +1233,7 @@ export class System extends Base {
     return 'normal' //
   }
   async designSystemNavs() {
-    let _data = await this.getHttp().find('navs')
-    let tableConfig = {
-      showHeaderButtons: false, //
-      enableDragRow: true,
-      treeConfig: {
-        id: 'id',
-        parentId: 'pid',
-        rootId: 0,
-      },
-      contextItems: [
-        {
-          label: '添加菜单',
-          fn: async (config) => {
-            let p = config.parent
-            console.log('parent', p) //
-          },
-        },
-        {
-          label: '添加子菜单', //
-          fn: async () => {},
-        },
-      ],
-      buttons: [],
-      columns: [
-        {
-          field: 'id',
-          title: 'id',
-          tree: true,
-          frozen: 'left',
-        },
-        {
-          field: 'navname', //
-          title: '导航名称',
-          editType: 'string', //
-          width: 200, //
-        },
-        {
-          field: 'tableName',
-          editType: 'string', //
-          title: '表格或者视图名称',
-        },
-        {
-          field: 'status',
-          title: '是否启用', //
-          editType: 'boolean', //
-        },
-      ],
-      data: _data,
-      height: 600,
-      width: 800, //
-      dragRowFn: (config) => {
-        return true //
-      },
-      confirmFn: async (dialog) => {
-        let data = dialog.getRef('innerCom').getFlatTreeData()
-        // console.log(data, 'testData')//
-        let _data1 = data.filter((item) => {
-          return item['_rowState'] == 'change'
-        })
-        // console.log(_data1)//
-        let http = this.getHttp()
-        await http.patch('navs', _data1) //
-        this.confirmMessage('更新菜单成功') ////
-        this.clearCacheValue('getMenuData') //
-        await this.getMenuData() //
-      },
-      dragRowAfterFn: (config) => {
-        let data = config.data
-        data.forEach((item, i) => {
-          item['_rowState'] = 'change'
-          item['sort'] = Number(i) + 1 ////
-        })
-      },
-      showRowSeriesNumber: true,
-    }
-    await this.confirmTable(tableConfig) //
-    return tableConfig
+    this.routeOpen('navs') //
   }
 
   async enterCurrentPageDesign() {

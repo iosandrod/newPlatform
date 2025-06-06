@@ -54,7 +54,7 @@ export default defineComponent({
     let enableDragRow = dragConfig?.enableDragRow
     let enableDragColumn = dragConfig?.enableDragCol
     enableDragRow = Boolean(enableDragRow)
-    enableDragColumn = Boolean(enableDragColumn) 
+    enableDragColumn = Boolean(enableDragColumn)
     let dragRowFn = dragConfig?.dragRowFn
     if (typeof dragRowFn == 'string') {
       dragRowFn = stringToFunction(dragRowFn)

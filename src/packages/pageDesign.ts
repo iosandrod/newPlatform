@@ -211,6 +211,18 @@ export class PageDesign extends Form {
       ) //
       return
     }
+    if (curRow == null) {
+      let refData = this.getTableRefData(dTableName.tableName)
+      if (refData) {
+        refData['data'] = [] //
+      }
+      return
+    }
+    let _value = curRow[mainRelateKey]
+    if (_value === '' || _value == null) {
+      this.getSystem().confirmMessage(`主单据没有关联值`, 'warning') //
+      return //
+    }
     let query = {
       [relateKey]: curRow[mainRelateKey],
     }
@@ -282,7 +294,10 @@ export class PageDesign extends Form {
     // console.log(config, 'testConfig')
     let res = await http.find(_t, query, config) //
     let dataMap = this.getTableRefData(tableName)
-    dataMap['data'] = res //
+    dataMap['data'] = res
+    if (res.length == 0 && tableName == this.getTableName()) {
+      this.setCurRow(null) //
+    }
     let evName = `${tableName}_getTableData` //
     let _config = {
       event: evName,
@@ -1260,9 +1275,6 @@ export class PageDesign extends Form {
       return //
     }
     this.setCurRow(config.row, tableName) //
-    // let tMapData = this.getTableRefData(tableName) //
-    // let row = config.row
-    // tMapData['curRow'] = row //
   }
   async saveTableData(config?: any) {}
   getKeyColumn() {
@@ -1457,5 +1469,6 @@ export class PageDesign extends Form {
     let tableName = this.getRealTableName()
     await http.batchDelete(tableName, curRow) //
     sys.confirmMessage('删除成功', 'success') //
+    this.getTableData() //
   }
 }
