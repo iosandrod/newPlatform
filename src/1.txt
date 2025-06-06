@@ -6185,3 +6185,9 @@ export const formConfig = {
       //     delete info.groupId
       //   }
       // })
+
+
+      // if (this.runClearSelect == true) {
+        //   this.getInstance().clearSelected()
+        //   this.runClearSelect = false //
+        // }

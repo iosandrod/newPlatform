@@ -7,6 +7,7 @@ import { tableConfig } from '@/table/tableData'
 import { Column } from '@/table/column'
 import { system } from '@/system'
 import design from '@/pages/design'
+import { stringToFunction } from '@ER/utils'
 export default defineComponent({
   name: 'entityPc', //
   props: ['data', 'params', 'item'], //
@@ -49,6 +50,21 @@ export default defineComponent({
       let event = config.event //
       _design.openContextMenu(event, item) //
     } //
+    let dragConfig = item.config?.options?.dragConfig //
+    let enableDragRow = dragConfig?.enableDragRow
+    let enableDragColumn = dragConfig?.enableDragCol
+    enableDragRow = Boolean(enableDragRow)
+    enableDragColumn = Boolean(enableDragColumn) 
+    let dragRowFn = dragConfig?.dragRowFn
+    if (typeof dragRowFn == 'string') {
+      dragRowFn = stringToFunction(dragRowFn)
+    }
+    // console.log(dragConfig, 'testDConfig') //
+    let dragRowAfterFn = dragConfig?.dragRowAfterFn
+    if (typeof dragRowAfterFn == 'string') {
+      dragRowAfterFn = stringToFunction(dragRowAfterFn)
+    }
+    // console.log(enableDragRow, 'enableDragRow') //
     return () => {
       //
       let com = (
@@ -60,6 +76,10 @@ export default defineComponent({
             onTableConfigChange={(config) => {
               item.onTableConfigChange(config)
             }}
+            enableDragRow={enableDragRow}
+            dragRowFn={dragRowFn}
+            dragRowAfterFn={dragRowAfterFn} //
+            enableDragColumn={enableDragColumn} //
             onBeforeEditCell={(config) => {
               //
               let s = _design.onBeforeEditCell({

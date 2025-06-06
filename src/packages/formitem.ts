@@ -40,7 +40,7 @@ export class FormItem extends Base {
   field: Field = {} as any
   subForm?: Form
   form: Form
-  config: Field | { [key: string]: any } //
+  config: Field & { [key: string]: any } //
   rowIndex: number //
   columns: TableCell[] = []
   mobileColumns: TableCell[] = []
@@ -381,7 +381,6 @@ export class FormItem extends Base {
   getRequired() {
     let required = this.config?.options?.required
     // if (this.getTitle() == '销售日期') {
-    //   debugger //
     // }
     return required
   }
@@ -980,7 +979,7 @@ export class FormItem extends Base {
     if (typeof value == 'object' || typeof value == 'function') {
       value = '' //
     }
-    let tableName = this.getMainTableName()
+    let tableName = this.getMainTableName() || this.getOptions().tableName //
     let config = {
       ...codeConfig,
       tableName,
@@ -1225,7 +1224,6 @@ export class FormItem extends Base {
     return multiple
   }
   async confirmTinyTableRow(row) {
-    // debugger //
     // let options = this.getOptions()
     let _tConfig = this._getBaseinfoConfig()
     let bindColumns = _tConfig?.bindColumns || [] //

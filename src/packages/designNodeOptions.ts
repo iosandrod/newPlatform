@@ -3,6 +3,7 @@ import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
 import { Column } from '@/table/column'
 import { FormItem } from './formitem'
+import { defaultButtons } from './defaultButtons'
 export const getButtonGroupTableConfig = (_this?: PageDesign) => {
   let tableName = _this.getRealTableName()
   let obj = {
@@ -25,10 +26,12 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         fn: (config) => {
           let _t: Table = config.parent
           let curRow = _t.getCurRow()
-          if (curRow == null) {
-            return
-          }
-          // console.log('删除按钮') //
+          // if (curRow == null) {
+          //   return
+          // }
+          let _defaultButtons = JSON.parse(JSON.stringify(defaultButtons))
+          _t.config.data.splice(0)
+          _t.config.data.push(..._defaultButtons) //
         },
       },
     ],

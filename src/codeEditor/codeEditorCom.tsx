@@ -42,6 +42,7 @@ export default defineComponent({
     expose({ _instance: editor })
     let sys = system
     let mainDesign = sys.getDesignByTableName(props.tableName)
+    // debugger //
     let allCols = mainDesign?.getColumnSelectTreeData()
     let allMethods = mainDesign?.getMergeMethodsSelect() //--
     let infoConfig = null
@@ -97,7 +98,7 @@ export default defineComponent({
             let curRow = parent.getCurRow()
             let sys = system
             let _config = {
-              modelValue: curRow.code,//
+              modelValue: curRow.code, //
               tableName: props.tableName, //
             }
             let _value = await sys.openCodeDialog(_config) //

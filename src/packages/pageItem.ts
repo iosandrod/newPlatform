@@ -134,7 +134,7 @@ export class PageDesignItem extends FormItem {
     f.onColumnConfigChange(config)
   }
   onTableConfigChange(config: any): void {
-    // debugger//
+    //
     let f = this.form
     let options = this.getOptions()
     let _config = { ...config }
@@ -267,7 +267,8 @@ export class PageDesignItem extends FormItem {
       'rowHeight', //
       'viewTableName',
       'mainRelateKey',
-      'relateKey',//
+      'relateKey', //
+      'dragConfig', //
     ] //
     let tName = this.getTableName()
 
@@ -419,6 +420,47 @@ export class PageDesignItem extends FormItem {
           tabTitle: titles[0],
           label: '是否显示行号',
           type: 'boolean',
+        },
+        {
+          field: 'dragConfig',
+          label: '拖拽配置',
+          type: 'sform',
+          tabTitle: titles[0],
+          options: {
+            itemSpan: 12,
+            items: [
+              {
+                field: 'dragRowAfterFn',
+                label: '拖拽行后回调',
+                type: 'code',
+                options: {
+                  //
+                  tableName: tName,
+                },
+              },
+              {
+                field: 'dragRowFn',
+                label: '拖拽行回调',
+                type: 'code',
+                options: {
+                  //
+                  tableName: tName, //
+                },
+              },
+              {
+                field: 'enableDragRow',
+                label: '是否启用行拖拽',
+                type: 'boolean',
+                options: {},
+              },
+              {
+                field: 'enableDragCol',
+                label: '是否启用列拖拽',
+                type: 'boolean',
+                options: {},
+              }, //
+            ],
+          },
         },
         {
           field: 'rowHeight',

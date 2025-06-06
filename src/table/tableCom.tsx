@@ -415,7 +415,7 @@ export default defineComponent({
       tableIns.registerRef('searchDiv', el) //
     }
     let bodyStyle: any = reactive({
-      minHeight: '200px',//
+      minHeight: '200px', //
     })
     // vShow, tableIns.globalConfig.show
     watch(
@@ -426,12 +426,16 @@ export default defineComponent({
           if (sRef == null) {
             return
           }
+          // debugger //
           let bound = sRef.getBoundingClientRect()
           if (e == true) {
             let _height = Math.round(bound.height)
-            let _height1 = _height - 45
+            let _height1 = _height - 85
+            bodyStyle.flex = ''
             bodyStyle.height = `${_height1}px !important`
+            // bodyStyle.display = 'none' //
           } else {
+            bodyStyle.flex = 1 //
             bodyStyle.height = '100%' //
           }
         })
@@ -535,7 +539,7 @@ export default defineComponent({
           style={{
             width: '100%',
             height: '100%',
-             minHeight: '200px'
+            minHeight: '200px',
           }}
           ref={registerRootDiv}
         ></div>,

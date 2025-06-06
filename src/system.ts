@@ -631,34 +631,41 @@ export class System extends Base {
     _arr.push(config)
   }
   async confirmMessageBox(msg: string | Object, type: any = 'success') {
-    let title = ''
-    if (type == 'error') {
-      title = '错误提示'
-    }
-    if (type == 'warning') {
-      title = '警告提示'
-    }
-    if (type == 'success') {
-      //
-      title = '成功提示'
-    }
-    let dialogConfig = {
-      title: title, //
-      width: 250, //
-      height: 200,
-      createFn: () => {
-        return {
-          component: msgboxCom,
-          props: {
-            message: msg,
-            type: type,
-          },
-        }
-      },
-      confirmFn: (dialog: Dialog) => {},
-      showFooter: false, //
-    } //
-    await this.openDialog(dialogConfig)
+    return new Promise(async (resolve, reject) => {
+      let title = ''
+      if (type == 'error') {
+        title = '错误提示'
+      }
+      if (type == 'warning') {
+        title = '警告提示'
+      }
+      if (type == 'success') {
+        //
+        title = '成功提示'
+      }
+      let dialogConfig = {
+        title: title, //
+        width: 250, //
+        height: 200,
+        createFn: () => {
+          return {
+            component: msgboxCom,
+            props: {
+              message: msg,
+              type: type,
+            },
+          }
+        },
+        confirmFn: (dialog: Dialog) => {
+          resolve(true)
+        },
+        closeFn: (dialog: Dialog) => {
+          resolve(false)
+        },
+        showFooter: true, //
+      } //
+      await this.openDialog(dialogConfig)
+    })
   } //
   confirmMessage(msg: string | Object, type: any = 'success') {
     if (typeof msg == 'string') {
@@ -1019,6 +1026,13 @@ export class System extends Base {
               },
             ], //
           },
+        },
+        {
+          label: '关联视图',
+          field: 'viewTableName', //
+          type: 'string', //
+          tabTitle: tabTitles[0],
+          options: {},
         },
         {
           field: 'hooks',

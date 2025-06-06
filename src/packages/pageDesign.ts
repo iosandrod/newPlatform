@@ -268,9 +268,19 @@ export class PageDesign extends Form {
       })
       .flat()
       .filter((d) => d != null)
+
     let _query = this.buildQuery(_arr)
-    query = { ...query, ..._query } //
-    let res = await http.get(tableName, 'find', query)
+    query = { ...query, ..._query }
+    // let viewTable = this.config.viewTableName
+    let tableConfig = this.getTableConfig(tableName)
+    let viewTable = tableConfig.viewTableName //
+    let _t = tableName
+    let config: any = {}
+    if (typeof viewTable == 'string' && viewTable.length > 0) {
+      config.viewTable = viewTable
+    }
+    // console.log(config, 'testConfig')
+    let res = await http.find(_t, query, config) //
     let dataMap = this.getTableRefData(tableName)
     dataMap['data'] = res //
     let evName = `${tableName}_getTableData` //
@@ -1073,6 +1083,18 @@ export class PageDesign extends Form {
   confirmFieldSelect() {
     //
   }
+  getFlatTreeData(_data: any) {
+    let data = _data
+    return data
+      .map((row) => {
+        let children = row.children
+        if (children && children?.length > 0) {
+          return [row, ...this.getFlatTreeData(children)]
+        }
+        return [row]
+      })
+      .flat()
+  }
   getSaveData() {
     let tableName = this.getTableName() //
     let tRef: Table = this.getRef(tableName)
@@ -1422,4 +1444,18 @@ export class PageDesign extends Form {
   } //
   //进入打印
   async printTemplate() {}
+  //简易删除
+  async deleteTableRows() {
+    //删除模式
+    let curRow = this.getCurRow()
+    let sys = this.getSystem()
+    let status = await sys.confirmMessageBox('确定删除吗', 'warning')
+    if (!status) {
+      return
+    } //
+    let http = this.getHttp()
+    let tableName = this.getRealTableName()
+    await http.batchDelete(tableName, curRow) //
+    sys.confirmMessage('删除成功', 'success') //
+  }
 }

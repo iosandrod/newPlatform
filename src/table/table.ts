@@ -809,10 +809,6 @@ export class Table extends Base {
       })
       nextTick(() => {
         this.updateSelectRange()
-        // if (this.runClearSelect == true) {
-        //   this.getInstance().clearSelected()
-        //   this.runClearSelect = false //
-        // }
       }) //
       // ins.changeCellValue(0, 0, '')//
       console.timeEnd(uuid) //
@@ -2405,15 +2401,18 @@ export class Table extends Base {
       let _d = this.getTreeDataByPid(pid)
       data = _d.children
     }
-    let index1 = data.indexOf(r1)
-    let index2 = data.indexOf(r2)
-    data.splice(index1, 1)
-    data.splice(index2, 0, r1) //
+    // let index1 = data.indexOf(r1)
+    // let index2 = data.indexOf(r2)
+    // data.splice(index1, 1)
+    // data.splice(index2, 0, r1) //
     let config = this.config
     let dragRowAfterFn = config.dragRowAfterFn
     if (typeof dragRowAfterFn == 'function') {
       dragRowAfterFn({ startRow: r1, endRow: r2, data })
     }
+    nextTick(() => {
+      this.updateCanvas() //
+    })
     return //
   }
   onColumnResize(_config) {
@@ -2523,7 +2522,7 @@ export class Table extends Base {
       let pRow = this.dataMap[pIndex]
       this.getFlatParent(pRow, arr)
     }
-    return arr
+    return [...arr, row] //
   }
   expandAllTreeRow(status = true, level: any = 'all') {
     let allRows = this.getFlatTreeData()

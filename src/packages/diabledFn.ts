@@ -82,4 +82,8 @@ export const runObj = {
     let page: PageDesign = config.page //
     await page.printTemplate() //
   },
+  deleteTableRows: async (config) => {
+    let page: PageDesign = config.page //
+    await page.deleteTableRows() //
+  },
 }

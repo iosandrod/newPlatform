@@ -243,9 +243,14 @@ export class myHttp {
     let _res = await this.post(tableName, me, data)
     return _res //
   }
-  async find(tableName, query = {}): Promise<any> {
-    let _data = await this.get(tableName, 'find', query) //
-    return _data
+  async find(tableName, query = {}, config?: any): Promise<any> {
+    // let _data = await this.get(tableName, 'find', query) //
+    // return _data
+    let _data = await this.runCustomMethod(tableName, 'getTableData', {
+      query,
+      ...config,
+    })
+    return _data //
   }
   async get(tableName, method, query?: any): Promise<any> {
     let connection = this?.client?.get('connection')
@@ -376,6 +381,11 @@ export class myHttp {
   async batchUpdate(tableName, data) {
     console.log('批量更新数据', tableName, data) //
     let _res = await this.runCustomMethod(tableName, 'batchUpdate', data)
+    return _res //
+  }
+  async batchDelete(tableName, data) {
+    console.log('批量删除数据', tableName, data) //
+    let _res = await this.runCustomMethod(tableName, 'batchDelete', data)
     return _res //
   }
 }

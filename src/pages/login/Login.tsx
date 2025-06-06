@@ -40,6 +40,7 @@ import {
   mode,
 } from '@/printTemplate/components/config/editorConfig'
 import wangCom from '@/wangEditor/wangCom'
+import { Table } from '@/table/table'
 export default defineComponent({
   components: {
     pVue,
@@ -186,44 +187,52 @@ export default defineComponent({
       com = (
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
           <tableCom
-            {...tableConfig}
+            // {...tableConfig}
             // showRowSeriesNumber={false} //
-            // {...menuTConfig} ////
+            {...menuTConfig} ////
+            data={menuTConfig.data.slice(0, 1)} //
             // treeConfig={null}
-            rowHeight={100} //
-            columns={[
-              {
-                field: 'id',
-                title: 'ID',
-                width: 250,
-                calculateType: 'sum', //合计
-                // editType: 'boolean',
-                // required: true,
-              },
-              {
-                field: 'email1',
-                title: 'email',
-                width: 250,
-                sort: false,
-                editType: 'boolean', //
-                enableSelect: true, //
-                baseinfoConfig: {
-                  tableName: 't_Item',
-                  bindColumns: [
-                    {
-                      targetKey: 'cInvCode', //
-                    },
-                  ],
-                  searchFields: ['cInvCode'], //
-                },
-              },
-            ]}
+            // rowHeight={100} //
+            // treeConfig={null}
+            // columns={[
+            //   {
+            //     field: 'id',
+            //     title: 'ID',
+            //     width: 250,
+            //     calculateType: 'sum', //合计
+            //     // editType: 'boolean',
+            //     // required: true,
+            //   },
+            //   {
+            //     field: 'email1',
+            //     title: 'email',
+            //     width: 250,
+            //     sort: false,
+            //     editType: 'boolean', //
+            //     enableSelect: true, //
+            //     baseinfoConfig: {
+            //       tableName: 't_Item',
+            //       bindColumns: [
+            //         {
+            //           targetKey: 'cInvCode', //
+            //         },
+            //       ],
+            //       searchFields: ['cInvCode'], //
+            //     },
+            //   },
+            // ]}
             contextItems={[
               {
                 label: '添加菜单',
                 fn: async (config) => {
-                  console.log('添加菜单') //
-                  console.log(config, 'testConfig') //
+                  // console.log('添加菜单') //
+                  // console.log(config, 'testConfig') //
+                  let p: Table = config.parent //
+                  let curContextRow = p.curContextRow
+                  let pid = curContextRow?.pid
+                  if (pid == null) {
+                    return
+                  }
                 },
               },
               {
@@ -383,7 +392,7 @@ export default defineComponent({
       //     ]}
       //   ></selectCom>
       // )
-      com = <pVue></pVue>
+      // com = <pVue></pVue>
       // com = (
       //   <wangCom
       //     ref={(el) => {
@@ -416,9 +425,11 @@ export default defineComponent({
           {com0}
           <div
             class="h-full w-full "
-            style={{
-              // padding: '100px',
-            }}
+            style={
+              {
+                // padding: '100px',
+              }
+            }
           >
             {/* <button
               onClick={() => {
