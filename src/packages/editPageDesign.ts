@@ -205,7 +205,6 @@ export class editPageDesign extends PageDesign {
     this.setCurrentLoading(true) //
     let tableState = this.tableState
     let _res = null
-    console.log(config, 'fjlkdsfjdsl保存的配置') //
     if (tableState == 'add') {
       _res = await this.addMainRow(config)
     } else {
@@ -218,7 +217,7 @@ export class editPageDesign extends PageDesign {
   async addMainRow(config) {
     let http = this.getHttp()
     let realTableName = this.getRealTableName()
-    let _res = await http.create(realTableName, config)
+    let _res = await http.create(realTableName, config) //
     this.getSystem().confirmMessage('数据新增成功', 'success')
     return _res
   }

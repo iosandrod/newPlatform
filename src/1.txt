@@ -6233,3 +6233,15 @@ export const formConfig = {
      // let tMapData = this.getTableRefData(tableName) //
     // let row = config.row
     // tMapData['curRow'] = row //
+
+
+    if (tableName == 't_PurOrder') {
+      debugger //
+    } ////
+
+
+     let _data = this.getLayoutData()
+    //@ts-ignore
+    _data.tableName = this.getMainTableName()
+    let http = this.getHttp()
+    let _res = await http.create('entity', _data) // //

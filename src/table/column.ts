@@ -80,6 +80,13 @@ export class Column extends Base {
       let arr = ops || []
       options = arr //
     }
+    let optionsField = this.config.optionsField
+    if (typeof optionsField == 'string' && optionsField.length > 0) {
+      let system = this.getSystem()
+      let ops = system.fieldSelectOptions[optionsField]
+      let arr = ops || []
+      options = arr //
+    }
     return options //
   } //
   setHidden(bool) {
@@ -140,7 +147,19 @@ export class Column extends Base {
 
   init(): void {
     super.init() //
+    this.initOptionsField()
     this.setColumns()
+  }
+  initOptionsField() {
+    let options = this.config
+    let optionsField = options?.optionsField
+    if (optionsField == null) {
+      return
+    }
+    if (optionsField.length > 0) {
+      let sys = this.getSystem()
+      sys.createOptionsFieldSelect(optionsField) //
+    }
   }
   getCanHidden() {
     let _this = reactive(this)
@@ -1120,7 +1139,6 @@ export class Column extends Base {
     return this.templateTableConfig
   }
   getBaseInfoConfig() {
-    // debugger //
     return this.config.baseinfoConfig
   }
   getBaseInfoTableName() {
@@ -1129,7 +1147,6 @@ export class Column extends Base {
     return tableName
   }
   async openBaseInfoTable() {
-    // debugger //
     let sys = this.getSystem() //
     let tableName = this.getBaseInfoTableName() //
     if (tableName == null) {

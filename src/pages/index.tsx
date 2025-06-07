@@ -43,8 +43,7 @@ export default defineComponent({
     let _config = null
 
     return () => {
-     
-      let leftM=<LeftMenu></LeftMenu>
+      let leftM = <LeftMenu></LeftMenu>
       let tableTab = (
         <tabCom
           height={40}
@@ -111,6 +110,13 @@ export default defineComponent({
                         fn: async () => {
                           let currentPageDesign = system.getCurrentPageDesign()
                           await currentPageDesign.saveTableDesign()
+                        },
+                      },
+                      {
+                        label: '同步当前列',
+                        fn: async () => {
+                          let currentPageDesign = system.getCurrentPageDesign()
+                          await currentPageDesign.syncErpTableColumns() //
                         },
                       },
                       {
@@ -193,7 +199,7 @@ export default defineComponent({
               ></er-dropdown>
             </div>
           </div>
-        </header> 
+        </header>
       )
       return (
         <div

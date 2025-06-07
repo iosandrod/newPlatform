@@ -268,7 +268,8 @@ export class PageDesignItem extends FormItem {
       'viewTableName',
       'mainRelateKey',
       'relateKey', //
-      'dragConfig', //
+      'dragConfig',
+      'realTableName', //
     ] //
     let tName = this.getTableName()
 
@@ -317,6 +318,12 @@ export class PageDesignItem extends FormItem {
         {
           field: 'viewTableName',
           label: '视图表名',
+          tabTitle: titles[0],
+          type: 'string', //
+        },
+        {
+          field: 'realTableName',
+          label: '实际表名',
           tabTitle: titles[0],
           type: 'string', //
         },

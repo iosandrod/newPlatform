@@ -206,6 +206,15 @@ export const initContextMenu = (table: Table) => {
         }
       },
     },
+    {
+      label: '同步列',
+      key: 'syncRealColumns',
+      disabled: false, //
+      visible: true,
+      fn: async (config) => {
+        //
+      },
+    },
   ]
   let contextItems = table.config.contextItems
   if (Array.isArray(contextItems) && contextItems.length > 0) {

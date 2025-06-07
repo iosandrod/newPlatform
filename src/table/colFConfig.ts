@@ -401,7 +401,7 @@ export const getAllColTypes = () => {
       value: 'code', //
     },
   ]
-}
+} //
 //
 
 export const getDCConfig = (_this: any, config) => {
@@ -477,6 +477,13 @@ export const getDCConfig = (_this: any, config) => {
         type: 'boolean', //
         enableSelect: true, //允许批量修改//
         editType: 'boolean', //
+      },
+      {
+        field: 'editType',
+        title: '编辑类型',
+        type: 'string',
+        editType: 'select',//
+        options: getAllColTypes(), //
       },
       {
         field: 'primary',

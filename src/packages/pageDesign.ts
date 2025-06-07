@@ -448,14 +448,7 @@ export class PageDesign extends Form {
       this.getSystem().refreshPageDesign() //
     })
   }
-  async createTableDesign() {
-    let _data = this.getLayoutData()
-    //@ts-ignore
-    _data.tableName = this.getMainTableName()
-    let http = this.getHttp()
-    let _res = await http.create('entity', _data) // //
-    // console.log(_res)
-  }
+  async createTableDesign() {} //
   async updateTableDesign(lastConfig?: any) {
     //
     let _data = this.getLayoutData() //
@@ -780,7 +773,7 @@ export class PageDesign extends Form {
           Object.entries(_obj).forEach(([key, value]) => {
             _options[key] = value //
           })
-          let type = currentFItemConfig?.type
+          let type = _obj?.type
           currentFItemConfig['type'] = type || currentFItemConfig['type']
           await this.saveTableDesign() //
         },
@@ -1457,10 +1450,20 @@ export class PageDesign extends Form {
   //进入打印
   async printTemplate() {}
   //简易删除
-  async deleteTableRows() {
+  async deleteTableRows(_tableName?: any) {
     //删除模式
     let curRow = this.getCurRow()
     let sys = this.getSystem()
+    let _state = curRow['_rowState']
+    if (_state == 'add') {
+      let dRef = this.getTableRefData(_tableName)
+      let _data = dRef.data
+      let _index = _data.indexOf(curRow)
+      if (_index > -1) {
+        _data.splice(_index, 1)
+      } //
+      return
+    }
     let status = await sys.confirmMessageBox('确定删除吗', 'warning')
     if (!status) {
       return
@@ -1470,5 +1473,58 @@ export class PageDesign extends Form {
     await http.batchDelete(tableName, curRow) //
     sys.confirmMessage('删除成功', 'success') //
     this.getTableData() //
+  }
+  async syncErpTableColumns() {
+    //
+    
+    let realTableName = this.getRealTableName()
+    let erpTable = await this.getHttp().find('sys_ErpTable', {
+      tableName: realTableName,
+    }) //
+    // console.log(erpTable) //
+    let row = erpTable[0]
+    let _obj: any = {}
+    Object.entries(row).forEach(([key, value]) => {
+      try {
+        let _v = JSON.parse(value as any)
+        if (typeof _v == 'object' || Array.isArray(_v)) {
+          //
+          value = _v //
+        }
+      } catch (error) {}
+      _obj[key] = value //
+    })
+    let _columns = this.getTableConfig().columns
+    _columns = JSON.parse(JSON.stringify(_columns))
+    // console.log(_obj) ////
+    let columns = _obj.columns || []
+    for (let col of columns) {
+      let f = col.field
+      let c = _columns.find((c) => {
+        return c.field == f
+      })
+      let keys = [
+        {
+          key: 'title',
+          myKey: 'title',
+        },
+        {
+          key: 'width',
+          myKey: 'width',
+        },
+      ]
+      if (c) {
+        for (let key of keys) {
+          if (col[key.key] != null) {
+            c[key.myKey] = col[key.key]
+          }
+        } //
+      }
+    }
+    _columns.forEach((e) => {
+      e['_rowState'] = 'change'
+    }) //
+    this.getHttp().patch('columns', _columns) //
+    this.getSystem().confirmMessage('同步成功', 'success') //
   }
 }

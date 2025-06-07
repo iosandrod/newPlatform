@@ -73,7 +73,7 @@ export class System extends Base {
     this.systemConfig.menuConfig.items = filFn(d) //
     return d //
   }
-  async refreshMenuData(){
+  async refreshMenuData() {
     this.clearCacheValue('getMenuData')
     await this.getMenuData()
   }
@@ -1034,6 +1034,13 @@ export class System extends Base {
           label: '关联视图',
           field: 'viewTableName', //
           type: 'string', //
+          tabTitle: tabTitles[0],
+          options: {},
+        },
+        {
+          label: '真实表名', //
+          field: 'realTableName',
+          type: 'string',
           tabTitle: tabTitles[0],
           options: {},
         },

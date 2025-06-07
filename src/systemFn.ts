@@ -25,6 +25,7 @@ export const createColumnSelect = async (sys: System, tableName) => {
   let columnSelect = _this.columnSelectOptions
   let arr = columnSelect[tableName] //
   let _cols = null
+ 
   if (arr == null) {
     let query = null
     if (Array.isArray(tableName)) {
