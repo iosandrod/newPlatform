@@ -3,7 +3,7 @@
     <div class="fd-main-box" v-dragscroll>
       <Flow ref="flowBox"></Flow>
     </div>
-  </section> 
+  </section>
 </template>
 
 <script setup>
@@ -23,6 +23,8 @@ import { Notification } from '@arco-design/web-vue' //
 import { onBeforeMount, ref, toRaw } from 'vue'
 import { useRouter } from 'vue-router'
 import FlowValidate from '@/audit/views/flow-manage/flow-validate'
+import { onMounted } from 'vue'
+import { system } from '@/system'
 
 let { flowDefinition } = useFlowStore()
 const router = useRouter()
@@ -83,7 +85,8 @@ const deploy = () => {
     launching.value = false
   }
 }
-
+onMounted(() => {
+})
 onBeforeMount(async () => {
   // if (flowDefinition.workFlowDef == undefined) {
   //   router.push("/flowmanindex");

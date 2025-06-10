@@ -33,16 +33,18 @@ export default defineComponent({
       return s
     })
     return () => {
-      let com = (
-        <div
-          class="h-full w-full flex items-center"
-          style={{ minHeight: '36px', height: '36px' }} //
-        >
-          <inputCom ref={registerRef} {..._value.value}></inputCom>
-        </div>
-      ) //
-      let _com = com //
-      return _com //
-    }  
+      // let com = (
+      //   <div
+      //     class="h-full w-full flex items-center"
+      //     style={{ minHeight: '36px', height: '36px' }} //
+      //   >
+      //     <inputCom ref={registerRef} {..._value.value}></inputCom>
+      //   </div>
+      // ) //
+      // let _com = com //
+      // return _com //
+      let com = <div class="h-40 w-full">baseInfo组件</div>
+      return com //
+    }
   },
 })

@@ -6245,3 +6245,319 @@ export const formConfig = {
     _data.tableName = this.getMainTableName()
     let http = this.getHttp()
     let _res = await http.create('entity', _data) // //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <template>
+  <div class="flex flex-col h-screen">
+    <!-- Header -->
+    <header class="flex items-center justify-between px-5 text-white bg-blue-600 shadow-md h-60">
+      <!-- Logo -->
+      <div class="text-2xl font-bold">MyApp Platform</div>
+      <!-- Navigation Menu -->
+      <el-menu
+        mode="horizontal"
+        :default-active="activeHeader"
+        background-color="transparent"
+        text-color="#ffffff"
+        active-text-color="#ffe58f"
+        class="flex-1 mx-10"
+      >
+        <el-menu-item index="1" class="px-4">Home</el-menu-item>
+        <el-menu-item index="2" class="px-4">About</el-menu-item>
+        <el-menu-item index="3" class="px-4">Contact</el-menu-item>
+      </el-menu>
+      <!-- User Module -->
+      <div class="flex items-center ml-5">
+        <template v-if="isLoggedIn">
+  <div class="flex items-center space-x-2">
+    <el-dropdown
+      split-button
+      type="primary"
+      @click="logout"
+      placement="bottom-end"
+      class="h-40 px-4 rounded-lg"
+    >
+      <span class="flex items-center space-x-2">
+        <img :src="user.avatar" alt="avatar" class="w-40 h-40 rounded-full" />
+        <span class="font-medium">{{ user.name }}</span>
+      </span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="profile">个人中心</el-dropdown-item>
+          <el-dropdown-item command="support">联系客服</el-dropdown-item>
+          <el-dropdown-item divided command="author">联系作者</el-dropdown-item>
+          <el-dropdown-item command="promo">获取优惠</el-dropdown-item>
+          <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
+</template>
+        <template v-else>
+          <el-button type="primary" size="small" @click="login">Login</el-button>
+        </template>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1">
+      <!-- Sidebar Menu -->
+      <aside class="bg-gray-100 w-200">
+        <el-menu :default-active="activeSidebar" class="w-full">
+          <el-menu-item index="1" class="flex items-center h-40 px-4"><i class="mr-2 el-icon-menu"></i>Dashboard</el-menu-item>
+          <el-menu-item index="2" class="flex items-center h-40 px-4"><i class="mr-2 el-icon-setting"></i>Settings</el-menu-item>
+          <el-menu-item index="3" class="flex items-center h-40 px-4"><i class="mr-2 el-icon-user"></i>Profile</el-menu-item>
+          <el-menu-item index="4" class="flex items-center h-40 px-4"><i class="mr-2 el-icon-document"></i>Reports</el-menu-item>
+        </el-menu>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="flex-1 p-5 overflow-auto bg-gray-50">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-20">
+          <el-card v-for="app in apps" :key="app.id" class="transition-transform transform hover:-translate-y-2">
+            <div class="flex items-center mb-2">
+              <i :class="app.icon + ' text-24 mr-2'" />
+              <span class="text-lg font-semibold">{{ app.name }}</span>
+            </div>
+            <div class="mb-4 text-sm text-gray-600">{{ app.description }}</div>
+            <div class="text-right"><el-button type="primary" size="small">Open</el-button></div>
+          </el-card>
+        </div>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="flex items-center justify-center h-40 text-gray-500 bg-gray-100">
+      © 2025 MyApp Platform
+    </footer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+interface AppItem {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+// 应用列表数据
+const apps = ref<AppItem[]>([
+  { id: 1, name: 'Analytics', description: 'View data insights', icon: 'el-icon-data-analysis' },
+  { id: 2, name: 'Tasks', description: 'Manage your tasks', icon: 'el-icon-check' },
+  { id: 3, name: 'Messages', description: 'Check your messages', icon: 'el-icon-message' },
+  { id: 4, name: 'Settings', description: 'Configure your preferences', icon: 'el-icon-setting' }
+]);
+
+// 菜单激活状态
+const activeHeader = ref('1');
+const activeSidebar = ref('1');
+
+// 用户登录状态及信息
+const isLoggedIn = ref(false);
+const user = ref({ name: 'User Name', avatar: 'https://via.placeholder.com/40' });
+
+// 登录与登出方法 (替换为实际逻辑)
+function login() {
+  isLoggedIn.value = true;
+}
+
+function logout() {
+  isLoggedIn.value = false;
+}
+
+function handleCommand(command: string) {
+  if (command === 'profile') {
+    // 跳转到个人中心
+    console.log('Go to profile');
+  } else if (command === 'logout') {
+    logout();
+  }
+}
+</script>
+
+
+ <!-- <el-menu-item index="2" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-setting"></i>
+            Settings
+          </el-menu-item>
+          <el-menu-item index="3" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-user"></i>
+            Profile
+          </el-menu-item>
+          <el-menu-item index="4" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-document"></i>
+            Reports 
+          </el-menu-item> -->
+          // const routes: RouteRecordRaw[] = []
+  // Object.entries(pages).forEach(([filePath, module]) => {
+  //   // filePath 示例: '../views/user/profile/index.vue'
+  //   // 拆分：['..','views','user','profile','index.vue'] -> 取 ['user','profile']
+  //   const segments = filePath.split('/').slice(2, -1)
+  //   console.log(segments, 'segments')
+  //   let appName=segments[1]
+  //   // 如果没有 segments，说明是 views/index.vue -> 根路由
+  //   if (segments.length === 0) {
+  //     routes.push({
+  //       path: '/',
+  //       name: 'home',
+  //       component: module.default,
+  //     })
+  //     return
+  //   }
+
+  //   // 递归插入到 routes 中
+  //   let parentArray = routes
+  //   segments.forEach((seg, idx) => {
+  //     const isLast = idx === segments.length - 1
+  //     const routePath = idx === 0 ? `/${seg}` : seg
+  //     let route = parentArray.find((r) => r.path === routePath)
+  //     if (!route) {
+  //       route = {
+  //         path: routePath,
+  //         name: seg,
+  //         // 只有最末层才挂载 component
+  //         component: isLast ? module.default : undefined,
+  //         children: [],
+  //       }
+  //       parentArray.push(route)
+  //     } else if (isLast) {
+  //       // 如果上次只创建了空壳，这里补上 component
+  //       route.component = module.default
+  //     }
+
+  //     // 下一层挂载在 children
+  //     if (!route.children) route.children = []
+  //     parentArray = route.children
+  //   })
+  // })
+
+  // router.addRoute('pageIndex', {
+      //   path: 'companyHome',
+      //   name: 'companyHome', //
+      //   component: () => import('@/pages/platform/home/erpHome.vue'), //
+      //   meta: {
+      //     icon: 'CreditCardOutlined',
+      //   },
+      // })
+
+
+       // chunkFileNames: (chunk) => {
+    //   return 'assets/' + chunk.name + '.[hash]' + '.' + timestamp + '.js'
+    // },
+    // assetFileNames: (asset) => {
+    //   const name = asset.name
+    //   if (name && (name.endsWith('.css') || name.endsWith('.js'))) {
+    //     const names = name.split('.')
+    //     const extname = names.splice(names.length - 1, 1)[0]
+    //     return `assets/${names.join('.')}.[hash].${timestamp}.${extname}`
+    //   }
+    //   return 'assets/' + asset.name
+    // },
+    if (nextForm != null && formIns.isDesign == true) {
+        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
+      } ////
+
+
+      if (nextForm != null && formIns.isDesign == true) {
+        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
+      }
+
+
+
+  
+
+
+         if (store.length == 1) {
+          let n0 = store[0]
+          let pContext = n0.context
+          let pp = pContext.parent
+          if (pp.type == 'col') {
+            let pp1 = pp.context.parent
+            if (pp1.type == 'grid') {
+              let pp1columns = pp1.columns
+              if (pp1columns.length == 1) {
+                let pp1Context = pp1?.context // is inline
+                let pppparent = pp1Context?.parent //is Array
+                let ppppContext = pppparent?.context
+                let ppppparent = ppppContext?.parent
+                if (ppppparent == ER.state.store) {
+                  //
+                  // debugger
+                  newElement = ER.wrapElement(
+                    _.cloneDeep(oldEl),
+                    inserRowIndex !== '',
+                    true,
+                    isBlock,
+                    true,
+                  )
+                  inserRowIndex = ppppparent.findIndex(
+                    (node) => node.id == pppparent.id,
+                  )
+                  store = ER.state.store //
+                  preP = ER.state.store //
+                  // ER.state.store.splice(inserRowIndex, 0, newElement) //
+                }
+              }
+            }
+          }
+        }
+
+        let isInRootDiv = false
+      if (inserRowIndex !== '') {
+        let store = []
+        store = Array.isArray(prevSortable?.options?.parent)
+          ? prevSortable?.options.parent
+          : prevSortable?.options?.parent?.list
+        // 在指定的索引位置插入新元素
+        let _store = ER.state.store
+        if (_store == store) {
+          isInRootDiv = true //
+        }
+      } //
+
+      // state.store = newData
+        // state.store.forEach((e) => {
+        //   utils.addContext({ node: e, parent: state.store, form: this }) //
+        // })
+
+
+        {/* <router-view
+                  v-slots={{
+                    default: (config) => {
+                      const { Component, route } = config
+                      if (!Component) {
+                        return <div></div>
+                      }
+                      const FullPath = route.fullPath
+                      let _com = (
+                        <KeepAlive>
+                          <Component key={FullPath} />
+                        </KeepAlive>
+                      ) //
+                      return _com
+                    },
+                  }}
+                ></router-view> */}

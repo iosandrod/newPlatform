@@ -16,6 +16,9 @@ export default defineComponent({
       let arr = system.getAllDialog()
       return arr
     })
+    onMounted(() => {
+      system.createSystemRoutes() //
+    })
     document.addEventListener('mousemove', (e) => {
       let clientX = e.clientX
       let clientY = e.clientY
@@ -23,7 +26,9 @@ export default defineComponent({
       system.mouseConfig.clientY = clientY //
     })
     return () => {
-      //
+      // if (system.hasInitRoutes === false) {
+      //   return
+      // } //
       let dArr = diaArr.value.map((d) => {
         return <dialogCom dialogIns={d}></dialogCom>
       })

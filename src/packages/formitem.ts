@@ -23,6 +23,7 @@ import formCom from './formCom'
 import { Dropdown } from '@/menu/dropdown'
 import { SearchPageDesign } from './searchPageDesign'
 import { useTimeout } from './utils/decoration'
+import { platform } from 'os'
 
 export type FormOptions = {
   items: Field[]
@@ -172,7 +173,7 @@ export class FormItem extends Base {
       return //
     }
     let tableName = this.getTableName()
-    
+
     this.getSystem().createColumnSelect(tableName)
   }
   initSTable() {
@@ -829,8 +830,11 @@ export class FormItem extends Base {
     } //
   } //
   async designForm() {
+    // debugger //
     let formConfig = this.getFormConfig() //
-    let _config = _.cloneDeep(formConfig) //
+    let platform = this.form.getCurrentPlatform()
+    let _config = _.cloneDeep(formConfig)
+    _config.platform = platform //
     let system = this.getSystem() //
     let tName = this.form.tableName
     let _f = new Form(_config) //
@@ -854,6 +858,7 @@ export class FormItem extends Base {
       width: 1200,
       createFn,
       confirmFn: (dialog: Dialog) => {
+        //
         let inCom: Form = dialog.getRef('innerCom')
         let layoutData = inCom.getLayoutData()
         let options = this.getOptions()
@@ -867,11 +872,12 @@ export class FormItem extends Base {
     let options = this.getOptions()
     let items = options?.items || [] //
     let itemSpan = this.getItemSpan() //
-    let layoutData = options.layoutData //
+    let layoutData = options.layoutData
     return {
       items: items,
       layoutData, //
       itemSpan: itemSpan, //
+      platform: this.form.getCurrentPlatform(), //
     }
   }
   getPageButtons() {
@@ -1288,7 +1294,7 @@ export class FormItem extends Base {
       })
       query = { $or: _arr }
     } //
-    console.log(query, 'query') //
+    // console.log(query, 'query') //
     let _data = await searchEn.getTinyTableData({ query }) //
     // console.log(_data, 'getTinyTableSearchData')//
     this.templateTableConfig.data = _data //
@@ -1296,4 +1302,5 @@ export class FormItem extends Base {
   getFormItemDisabled(config: any) {
     //
   }
+  getFormDisabled(config: any) {}
 } //

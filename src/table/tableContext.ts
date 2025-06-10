@@ -20,7 +20,7 @@ export const initContextMenu = (table: Table) => {
           let _v = row?.[f]
           v1 = _v
         } //
-        //
+        table.getSystem().copyValue(v1)
         let v2 = VxeUI.clipboard.copy(v1)
         // console.log(v2) //
       },

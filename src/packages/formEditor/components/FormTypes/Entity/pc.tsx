@@ -6,7 +6,7 @@ import _ from 'lodash'
 import { tableConfig } from '@/table/tableData'
 import { Column } from '@/table/column'
 import { system } from '@/system'
-import design from '@/pages/design'
+import design from '@/pages/erp/design'
 import { stringToFunction } from '@ER/utils'
 export default defineComponent({
   name: 'entityPc', //
@@ -23,15 +23,21 @@ export default defineComponent({
       return _cols //
     }) //
     let fitem: PageDesignItem = props.item
-    let _design: PageDesign = inject('mainPageDesign', {}) as any
+    let _design: PageDesign = inject('mainPageDesign', null) as any
     let tableName = item.getTableName()
-    let mainTableName = _design.getTableName()
+    let mainTableName = null
+    if (_design) {
+      mainTableName = _design?.getTableName()
+    }
     let data = computed(() => {
-      let _data = _design.getTableRefData(tableName)?.data || []
+      if (_design == null) {
+        return [] //
+      }
+      let _data = _design?.getTableRefData(tableName)?.data || []
       return _data //
     })
     const pageDesign: PageDesign = inject('pageDesign')
-    let tableType = item.getTableType()
+    let tableType = item?.getTableType()
     //只能有个一个pageDesign//
     const registerTable = (ins) => {
       pageDesign.registerRef(tableName, ins) //
@@ -48,7 +54,7 @@ export default defineComponent({
         return //
       } //
       let event = config.event //
-      _design.openContextMenu(event, item) //
+      _design.openContextMenu(event, item)
     } //
     let dragConfig = item.config?.options?.dragConfig //
     let enableDragRow = dragConfig?.enableDragRow
@@ -161,6 +167,6 @@ export default defineComponent({
         </div>
       )
       return com
-    } //
+    }
   },
 })

@@ -147,6 +147,11 @@ export class PageDesign extends Form {
     }
   }
   addFormItem(config): any {
+    let id = config?.id
+    let hasItem = this.items.find((item) => item.id == id)
+    if (hasItem) {
+      return //
+    }
     let type = config.type
     if (type == 'buttonGroup') {
       config.type = 'buttongroup' //
@@ -450,16 +455,21 @@ export class PageDesign extends Form {
   }
   async createTableDesign() {} //
   async updateTableDesign(lastConfig?: any) {
-    //
     let _data = this.getLayoutData() //
     let http = this.getHttp()
     let _config = this.config //
-    let _config1 = { ..._config, ..._data, ...lastConfig, id: _config.id }
+    let _config1 = {
+      ..._config,
+      ..._data,
+      ...lastConfig,
+      id: _config.id,
+      platform: this.config?.platform || 'pc', //
+    }
     await http.patch(`entity`, _config1) //
     this.getSystem().confirmMessage('保存成功', 'success') //
   }
   getMainTableName() {
-    let config = this.config
+    let config = this.config //
     let tableName = config.tableName
     if (!tableName) {
       tableName = this.tableName
@@ -1476,7 +1486,7 @@ export class PageDesign extends Form {
   }
   async syncErpTableColumns() {
     //
-    
+
     let realTableName = this.getRealTableName()
     let erpTable = await this.getHttp().find('sys_ErpTable', {
       tableName: realTableName,

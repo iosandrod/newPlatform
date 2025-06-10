@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { nextTick, reactive } from 'vue'
 import _ from 'lodash'
 import { Client, client as _client, http, myHttp } from './service/client'
 import { Base } from '@ER/base'
@@ -23,7 +23,9 @@ import codeEditorCom from './codeEditor/codeEditorCom'
 import CodeEditor from './codeEditor/codeEditor'
 import wangCom from './wangEditor/wangCom'
 import { createColumnSelect } from './systemFn'
+import { generateRoutes } from '@/router/register'
 export class System extends Base {
+  hasInitRoutes = false
   allApp: any = [] //
   systemApp: any = []
   mouseConfig = {
@@ -649,8 +651,8 @@ export class System extends Base {
       }
       let dialogConfig = {
         title: title, //
-        width: 250, //
-        height: 200,
+        width: 500, //
+        height: 300,
         createFn: () => {
           return {
             component: msgboxCom,
@@ -660,6 +662,14 @@ export class System extends Base {
             },
           }
         },
+        buttons: [
+          {
+            label: '复制',
+            fn: () => {
+              this.copyValue(msg) //
+            },
+          },
+        ],
         confirmFn: (dialog: Dialog) => {
           resolve(true)
         },
@@ -858,6 +868,7 @@ export class System extends Base {
   }
   //安装app
   async installApp(name) {
+    //
     try {
       let http = this.getHttp() //
       await http.create('company', { appName: name }) //
@@ -866,8 +877,8 @@ export class System extends Base {
     }
   }
   async openApp(name) {
+    let canOpen = true //
     try {
-      //
       //打开app
     } catch (error) {}
   }
@@ -1251,8 +1262,9 @@ export class System extends Base {
     curd.setCurrentDesign(true) //
   }
   async logout() {
+    debugger //
     let http = this.getClient()
-    await http.logoutUser() //
+    await http.logoutUser()
   }
   async onMenuItemClick(item) {
     // console.log('左侧菜单点击', item)//
@@ -1480,7 +1492,7 @@ export class System extends Base {
           userid,
           companyCnName,
         } //
-      })
+      }) //
     //加入平台
     _res.push({
       appName: 'platform',
@@ -1488,7 +1500,45 @@ export class System extends Base {
       userid: 0,
       companyCnName: '平台', //
     })
-    return _res //
+    return _res
+  } //
+  async createSystemRoutes() {
+    let app = await this.getCurrentApp()
+    let globalRou = this.getGlobRoute()
+    let router = this.getRouter()
+    let targetRoutes = globalRou[app]
+    let curRou = router.currentRoute
+    let url = window.location.href
+    let host = window.location.host
+    let _path = url.split(host)[1]
+    // console.log(curRou, 'curRou') //
+    if (Array.isArray(targetRoutes) && targetRoutes.length > 0) {
+      for (const r of targetRoutes) {
+        router.addRoute('pageIndex', r)
+      }
+      this.hasInitRoutes = true //
+      nextTick(() => {
+        router.push({
+          path: _path,
+        }) //
+      }) //
+    } //
+  }
+  async getCurrentApp() {
+    let host = window.location.host
+    let port = window.location.port
+    if (port == '3004') {
+      return 'erp'
+    }
+    return 'platform' //
+  }
+  getGlobRoute() {
+    let vueF = generateRoutes()
+    // console.log(vueF, 'testRoutes') //
+    return vueF //
+  }
+  copyValue(v) {
+    let v2 = VxeUI.clipboard.copy(v)
   }
 }
 export const system = reactive(new System()) //

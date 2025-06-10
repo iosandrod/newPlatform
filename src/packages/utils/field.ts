@@ -2,14 +2,13 @@ import _ from 'lodash'
 import { nanoid } from './nanoid'
 // import { typeMap } from '@ER/formEditor/components/FormTypes'
 const fieldsRe = /^(buttongroup|input|textarea|number|radio|checkbox|select|time|date|rate|switch|slider|html|cascader|uploadfile|signature|region|subform|entity|dform)$/
-class LayoutNode { }
 const deepTraversal = (node, fn) => {
   fn(node)
   const nodes = node.list || node.rows || node.columns || node.children || []
   nodes.forEach((e) => {
     deepTraversal(e, fn)
   })
-}
+} //
 const wrapElement = (element, fn?: any) => {
   const result = element
   deepTraversal(result, (node) => {
@@ -83,9 +82,9 @@ const excludes = [
 ]
 const flatNodes = (nodes, excludes, fn?: any, excludesFn?: any) => {
   return nodes.reduce((res, node, currentIndex) => {
-    if(node==null){
+    if (node == null) {
       return res
-    }//
+    } //
     //不是field的node
     if (excludes.indexOf(node.type) === -1) {
       res.push(node)
@@ -236,9 +235,10 @@ const syncWidthByPlatform = (
   // })
 }
 const transferLabelPath = (node) =>
-  `er.fields.${node.type === 'input'
-    ? `${node.type}.${node.options.renderType - 1}`
-    : `${node.type}`
+  `er.fields.${
+    node.type === 'input'
+      ? `${node.type}.${node.options.renderType - 1}`
+      : `${node.type}`
   }` //
 const fieldLabel = (t, node) => {
   // console.log(node,'testNode')//
@@ -258,7 +258,7 @@ const transferData = (lang, path, locale, options = {}) => {
 }
 const isNull = (e) => e === '' || e === null || e === undefined
 const checkIsInSubform = (node) => {
- return false
+  return false
 }
 const getSubFormValues = (subform) =>
   subform.list.map((e) => {

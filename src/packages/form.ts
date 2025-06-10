@@ -25,7 +25,7 @@ import {
 import _, { reject } from 'lodash'
 import utils from '@ER/utils'
 import generatorData from './formEditor/generatorData'
-import { Node } from './formEditor/node'
+// import { Node } from './formEditor/node'
 import ControlInsertionPlugin from './formEditor/components/Layout/ControlInsertionPlugin'
 import Sortable from '@/sortablejs/Sortable'
 import { uniqueId } from 'xe-utils'
@@ -170,6 +170,10 @@ export class Form extends Base {
     //@ts-ignore
     this.init() //
     this.formIns = this
+    let platform = config.platform
+    if (platform == 'mobile') {
+      this.switchPlatform('mobile') //
+    }
   } //
   getButtons() {
     let config = this.config
@@ -177,7 +181,6 @@ export class Form extends Base {
     return buttons
   }
   setItems(items, setLayout = true) {
-    // debugger//
     this.items.splice(0)
     for (const item of items) {
       this.addFormItem(item)
@@ -195,6 +198,7 @@ export class Form extends Base {
         layout,
         list: [], //
       } //
+      console.log(obj, 'testObj') //
       this.setLayoutData(obj)
     }
   }
@@ -465,6 +469,10 @@ export class Form extends Base {
         reject('校验出错') //
       }) //
     })
+  }
+  getCurrentPlatform() {
+    let state = this.state
+    return state.platform //
   }
   getPluginName() {
     let id = this.id.slice(0, 4) //
@@ -863,8 +871,8 @@ export class Form extends Base {
     return rows
   }
   onMounted() {
-    let fConfig = this.getFormConfig() //
-    this.setData(fConfig)
+    // let fConfig = this.getFormConfig() //
+    // this.setData(fConfig)
   }
   onUnmounted() {
     super.onUnmounted() //
@@ -882,25 +890,27 @@ export class Form extends Base {
     }
     if (props.layoutType === 2) {
       this.syncLayout(platform, (newData) => {
-        state.store = newData
+        state.store.splice(0)
+        state.store.push(...newData)
         state.store.forEach((e) => {
-          utils.addContext({ node: e, parent: state.store })
+          utils.addContext({ node: e, parent: state.store, form: this }) //
         })
       })
     }
-    state.platform = platform
+    state.platform = platform //
   }
   syncLayout(platform, fn) {
     let state = this.state
     let layout = this.layout
     const isPc = platform === 'pc'
-    const original = _.cloneDeep(state.store)
+    let original = _.cloneDeep(state.store) //
     utils.disassemblyData2(original)
     layout[isPc ? 'mobile' : 'pc'] = original
+    //如果是空//
     if (_.isEmpty(isPc ? layout.pc : layout.mobile)) {
-      const newData = state.fields
-        .filter((field) => !utils.checkIsInSubform(field))
-        .map((e) => this.wrapElement(e, true, false, false, false))
+      let newData = state.fields.map((e) =>
+        this.wrapElement(e, true, false, false, false),
+      ) //
       fn && fn(newData)
     } else {
       const layoutFields = utils
@@ -910,13 +920,13 @@ export class Form extends Base {
             id: e,
           } //
         })
-      const copyData = _.cloneDeep(isPc ? layout.pc : layout.mobile)
-      const addFields = _.differenceBy(
+      let copyData = _.cloneDeep(isPc ? layout.pc : layout.mobile)
+      let addFields = _.differenceBy(
         state.fields.filter((field) => !utils.checkIsInSubform(field)),
         layoutFields,
         'id',
       )
-      const delFields = _.differenceBy(layoutFields, state.fields, 'id')
+      let delFields = _.differenceBy(layoutFields, state.fields, 'id')
       utils.repairLayout(copyData, delFields)
       utils.combinationData2(copyData, state.fields)
       copyData.push(
@@ -924,14 +934,14 @@ export class Form extends Base {
       )
       fn && fn(copyData)
     }
-  }
+  } //
   setNodes(config: { lists: any[] }) {
-    const lists = config.lists
-    const _nodes = lists.map((e) => {
-      let _node = new Node(e, this)
-      return _node
-    })
-    this.state.store = _nodes //
+    // const lists = config.lists
+    // const _nodes = lists.map((e) => {
+    //   let _node = new Node(e, this)
+    //   return _node
+    // })
+    // this.state.store = _nodes //
   }
   flatNodes(nodes, excludes, fn?: any, excludesFn?: any) {
     return nodes.reduce((res, node, currentIndex) => {
@@ -1120,7 +1130,7 @@ export class Form extends Base {
     } else if (isWrap) {
       // 如果 isWrap 为 true（但 sourceBlock 为 false），则将元素封装为一个 'inline' 类型的对象
       node = {
-        type: 'inline',
+        ...this.createNodeIdKey('inline'), //
         columns: [el], // 将元素作为 columns 数组的元素
       }
     } else {
@@ -1171,7 +1181,7 @@ export class Form extends Base {
     return labelWidth
   }
   getLayoutDataByplatform(platform) {
-    const isPc = platform === 'pc'
+    let isPc = platform === 'pc'
     let layout = this.layout
     let state = this.state
     if (_.isEmpty(isPc ? layout.pc : layout.mobile)) {
@@ -1198,16 +1208,14 @@ export class Form extends Base {
         .pickfields(isPc ? layout.pc : layout.mobile)
         .map((e) => {
           return {
-            id: e,
+            id: e, //
           }
         })
-      const copyData = _.cloneDeep(isPc ? layout.pc : layout.mobile)
-      const addFields = _.cloneDeep(
-        _.differenceBy(
-          state.fields.filter((field) => !utils.checkIsInSubform(field)),
-          layoutFields,
-          'id',
-        ).map((e) => this.wrapElement(e, true, false, false, false)),
+      let copyData = _.cloneDeep(isPc ? layout.pc : layout.mobile)
+      let addFields = _.cloneDeep(
+        _.differenceBy(state.fields, layoutFields, 'id').map((e) =>
+          this.wrapElement(e, true, false, false, false),
+        ),
       )
       const delFields = _.differenceBy(layoutFields, state.fields, 'id')
       utils.repairLayout(copyData, delFields)
@@ -1242,11 +1250,14 @@ export class Form extends Base {
   getLayoutData(): any {
     let layout = this.layout
     let state = this.state
+    // console.log(this, 'testThis') //
+    // console.log(this.state.fields,'testField')//
     const fields = utils.processField(_.cloneDeep(state.store))
-    layout.pc = this.getLayoutDataByplatform('pc').filter((item) => {
-      let id=item.id
-      return id!=null
-    })//
+    layout.pc = this.getLayoutDataByplatform('pc') //
+    layout.pc = layout.pc.filter((item) => {
+      let id = item.id
+      return id != null
+    }) //
     layout.mobile = this.getLayoutDataByplatform('mobile')
     let id = this.config.id
     return _.cloneDeep({
@@ -1255,6 +1266,7 @@ export class Form extends Base {
       data: state.data,
       config: state.config,
       fields,
+      platform: state.platform, //
       logic: state.logic,
     })
   }
@@ -1678,7 +1690,7 @@ export class Form extends Base {
     // let platform = this.state.platform
     let state = this.state
     state.store.forEach((e) => {
-      utils.addContext({ node: e, parent: state.store })
+      utils.addContext({ node: e, parent: state.store, form: this }) //
     })
   }
   checkIslineChildren(node) {
@@ -1722,7 +1734,7 @@ export class Form extends Base {
     let items = this.items
     let item = items.find((item) => item.id === id)
     if (item) {
-      item.designForm()
+      item.designForm() //
     }
   }
   dragWidth(props: any) {}
@@ -1857,7 +1869,7 @@ export class Form extends Base {
         let f = item?.getField()
         let _d = disabledFn({
           field: f,
-        }) 
+        })
         if (_d == true) {
           status = true
         }
@@ -1867,6 +1879,30 @@ export class Form extends Base {
     }
     //
     return status
+  }
+  getControllerButtons() {
+    let btns = [
+      {
+        label: '手机端',
+        fn: async () => {
+          this.switchPlatform('mobile')
+        },
+      },
+      {
+        label: 'PC端',
+        fn: async () => {
+          this.switchPlatform('pc')
+        },
+      },
+      {
+        label: '打印JSON',
+        fn: async () => {
+          let _layout = this.getLayoutData()
+          console.log(_layout, 'testLayout') //
+        },
+      },
+    ]
+    return btns
   }
 }
 //使用默认布局

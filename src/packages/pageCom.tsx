@@ -47,12 +47,17 @@ import { PageDesign } from './pageDesign'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import DialogCom from '@/dialog/dialogCom'
 import { VxeLoading } from 'vxe-pc-ui'
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 export const getDefaultPageProps = () => {
   return {
     itemSpan: {
       type: Number,
       default: 6,
-    }, //
+    },
+    platform: {
+      type: String,
+      default: 'pc', //
+    },
     items: {
       default: () => [],
     },
@@ -85,7 +90,7 @@ export const getDefaultPageProps = () => {
       default: true,
     },
     isShowI18n: {
-      type: Boolean,
+      type: Boolean, //
       default: true,
     },
     dragMode: {
@@ -384,6 +389,17 @@ export default defineComponent({
       let loadingCom = (
         <VxeLoading modelValue={formIns.pageLoading}></VxeLoading>
       )
+      let btnsCom = null
+      if (formIns.isDesign == true) {
+        btnsCom = (
+          <div class="flex justify-center w-full">
+            <ButtonGroupCom
+              items={formIns.getControllerButtons()}
+            ></ButtonGroupCom>
+            <div>{formIns.state.platform}</div>
+          </div>
+        )
+      }
       let com = (
         <div class="h-full w-full overflow-hidden bg-white">
           {loadingCom}
@@ -391,6 +407,7 @@ export default defineComponent({
             {contextCom}
             {_fieldCom}
             <div class="flex-1 flex flex-col overflow-hidden">
+              {btnsCom}
               {isShow.value &&
                 withDirectives(<CanvesPanel data={state.store} />, [
                   [vClickOutside, onClickOutside],
@@ -403,9 +420,7 @@ export default defineComponent({
         </div>
       )
       //如果是设计模式就使用面包屑
-      if (nextForm != null && formIns.isDesign == true) {
-        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
-      } //
+      //
       return com //
     }
   },

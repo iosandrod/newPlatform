@@ -69,9 +69,8 @@ export const createFieldConfig = (f: Form) => {
       id: 'field',
       children: [
         {
-          type: 'input',
+          type: 'string',
           label: '单行文本',
-          icon: 'input',
           key: '',
           id: '',
           options: {
@@ -79,7 +78,7 @@ export const createFieldConfig = (f: Form) => {
             isShowWordLimit: false,
             renderType: 1,
             disabled: false,
-            showPassword: false,
+            showPassword: false, //
             defaultValue: '',
             placeholder: '',
             labelWidth: 100,

@@ -1,5 +1,5 @@
 // import './css.js'
-import { createApp } from 'vue' //
+import { createApp, nextTick } from 'vue' //
 import App from './App' //
 import router from '@/router'
 import elementPlus from 'element-plus'
@@ -7,7 +7,6 @@ import * as VueVTable from '@visactor/vue-vtable'
 const app = createApp(App)
 import Vant, { Locale } from 'vant'
 import enUS from 'vant/es/locale/lang/en-US'
-import 'element-plus/dist/index.css'
 import 'element-plus/dist/index.css'
 import 'vant/lib/index.css'
 import './mainStyle.css'
@@ -106,10 +105,10 @@ import store from '@/printTemplate/stores/index.js'
 import wangCom from './wangEditor/wangCom'
 // import { registerAntdComp } from './audit/antd'
 // import { registerIconsComp } from './audit/icons'
-import ArcoVue from "@arco-design/web-vue";
-import ArcoVueIcon from "@arco-design/web-vue/es/icon";
-app.use(ArcoVueIcon);
-app.use(ArcoVue); 
+import ArcoVue from '@arco-design/web-vue'
+import ArcoVueIcon from '@arco-design/web-vue/es/icon'
+app.use(ArcoVueIcon)
+app.use(ArcoVue)
 app.use(PrintDesign, {
   store,
 }) //
@@ -124,8 +123,11 @@ app.component('wangEditor', wangCom)
 app.use(Vue3Dragscroll)
 app.component('erButton', buttonCom)
 app.component('erButtonGroup', buttonGroupCom)
-app.component('erForm', formEditor) //
-
+// app.component('erForm', formEditor) //
+// app.component('erForm', formCom)
+app.component('erForm', formEditor)
+app.component('erFormEditor', formEditor)
+app.component('erPage', pageCom) //
 app.component('SvgIcon', SvgIcon)
 app.component('erTable', tableCom)
 app.component('erDropdown', dropdownCom)
@@ -136,6 +138,19 @@ app.use(context) //
 app.use(VxeTable) //
 app.use(VxeUIAll)
 app.use(router)
+// router.addRoute('pageIndex', {
+//   path: 'companyHome',
+//   name: 'companyHome', //
+//   component: () => import('@/pages/platform/home/erpHome.vue'), //
+//   meta: {
+//     icon: 'CreditCardOutlined',
+//   },
+// })
+// nextTick(() => {
+//   router.push({
+//     name: 'companyHome',
+//   })
+// })
 app.use(elementPlus) //
 app.mount('#app')
 //

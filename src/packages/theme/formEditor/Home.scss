@@ -1,7 +1,6 @@
 @use '../base.scss' as *;
 @include b(Home) {
   .tab-line {
-    padding-bottom: 2px;
   }
   .home-tab-item {
     // background-color: red;

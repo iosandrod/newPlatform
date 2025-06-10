@@ -213,7 +213,7 @@ export const getDFConfig = (_this, data) => {
       },
       {
         field: 'itemChange',
-        label: '数据变化',
+        label: '值更新事件',
         tabTitle: titles[1],
         type: 'code', //
       },
