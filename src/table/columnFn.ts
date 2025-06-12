@@ -1,6 +1,6 @@
 import { VTable } from '@visactor/vue-vtable'
 import { Column } from './column'
-import { nextTick, toRaw ,isProxy} from 'vue'
+import { nextTick, toRaw, isProxy } from 'vue'
 import {
   CheckBox,
   createGroup,
@@ -17,7 +17,7 @@ export const getCheckbox = (column: Column) => {
     let _value: string = value
     let record = table.getCellOriginRecord(col, row)
     let bg = _this.getIndexColor(row, record) //
-    if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+    if ((record?._index) == (_this.table.tableData?.curRow?._index)) {
       bg = _this.getCurrentRowColor()
       console.log('update') //
     }
@@ -98,7 +98,7 @@ export const getCheckbox = (column: Column) => {
       // let record = table.getCellOriginRecord(col, row)
       //基本的样式
       let bg = _this.getIndexColor(row, record)
-      if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+      if ((record?._index) == (_this.table.tableData?.curRow?._index)) {
         bg = _this.getCurrentRowColor() //
       } //
       container.setAttribute('background', bg)
@@ -201,7 +201,7 @@ export const getSerialLayout = (column: Column) => {
     // container['updateCanvas'] = () => {
     let updateFn = () => {
       let bg = _this.getIndexColor(row)
-      if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+      if ((record?._index) == (_this.table.tableData?.curRow?._index)) {
         bg = _this.getCurrentRowColor()
       } //
       container.setAttribute('background', bg) //
@@ -241,7 +241,7 @@ export const getDefault = (column: Column) => {
     }
     record = record || {} //
     let bg = _this.getIndexColor(row, record) //
-    if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+    if (record?._index == _this.table.tableData?.curRow?._index) {
       bg = _this.getCurrentRowColor()
     }
     const { height, width } = rect ?? table.getCellRect(col, row)
@@ -471,11 +471,11 @@ export const getDefault = (column: Column) => {
       // let rowEnd = scrollConfig.rowEnd
       // let _row = row
       // container['updateCanvas'] = () => {
-      let updateFn = () => {
+      let updateFn = () => { 
         // let record = table.getCellOriginRecord(col, row)
         //基本的样式
         let bg = _this.getIndexColor(row, record)
-        if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+        if ((record?._index) == (_this.table.tableData?.curRow?._index)) {
           bg = _this.getCurrentRowColor() //
         } //
         container.setAttribute('background', bg)

@@ -127,15 +127,15 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    enableDragColumn: {
-      type: Boolean,
-      default: false,
-    },
     dragRowFn: {
       type: Function, //
     },
     dragRowAfterFn: {
       type: Function, //
+    },
+    enableDragColumn: {
+      type: Boolean,
+      default: false,
     },
     dragColumnFn: {
       type: Function,

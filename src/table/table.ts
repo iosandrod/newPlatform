@@ -172,12 +172,7 @@ export class Table extends Base {
     let newIndex = row._index || ''
     this.timeout['updateRecords__now'] = true
     let tableName = this.getTableName()
-    // let design = this.getMainPageDesign()
-    // if (design && tableName != null) {
-    //   if (isProps == false) {
-    //     design.setCurRow(row, tableName)
-    //   }
-    // }
+
     let onCurRowChange = this.config.onCurRowChange
     if (typeof onCurRowChange == 'function') {
       onCurRowChange({ row: row, oldRow: oldCurRow }) //
@@ -282,7 +277,12 @@ export class Table extends Base {
     if (_row == null) {
       return //
     }
-    this.setCurRow(_row) //
+    setTimeout(() => {
+      let record = this.getInstance()?.records?.[0]
+      if (record) {
+        this.setCurRow(record) //
+      }
+    }, 800)
   }
   getTableName() {
     let tableName = this.config.tableName
@@ -774,6 +774,7 @@ export class Table extends Base {
       //
       //@ts-ignore
       let record = tableIns.dataMap[k]
+
       let index = records.indexOf(record)
       if (index != -1) {
         _arr.push(record)
@@ -781,6 +782,7 @@ export class Table extends Base {
         _iArr1.push(k)
       }
     }
+    console.log(tableIns.dataMap, '更新的index') ////
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
       console.time(uuid) //
@@ -804,7 +806,6 @@ export class Table extends Base {
         }
         let Arr = Object.values(cArr)
         Arr.forEach((c: any) => {
-          // c.updateCanvas() //
           let updateFn = c.updateFn
           if (typeof updateFn == 'function') {
             updateFn() //

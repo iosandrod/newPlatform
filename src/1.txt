@@ -6561,3 +6561,22 @@ function handleCommand(command: string) {
                     },
                   }}
                 ></router-view> */}
+
+                // let _data = data.map((_row) => {
+      //   let row = { ..._row } //
+      //   let children = row.columns || []
+      //   let list = row.list || []
+      //   let rows = row.rows || []
+      //   children = [...children, ...list, ...rows]
+      //   if (Array.isArray(children) && children.length > 0) {
+      //     return [row, ...fn(children)]
+      //   }
+      //   return [row]
+      // })
+      // return _data.flat()
+      // let design = this.getMainPageDesign()
+    // if (design && tableName != null) {
+    //   if (isProps == false) {
+    //     design.setCurRow(row, tableName)
+    //   }
+    // }

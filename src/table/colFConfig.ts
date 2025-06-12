@@ -12,7 +12,7 @@ const enableTypes = [
   'cascader',
   'region',
 ]
-export const getDFConfig = (_this, data) => {
+export const getDFConfig = (_this, data, tableName1?: any) => {
   let dType = data['defaultValueType']
   let fType = 'string'
 
@@ -482,7 +482,7 @@ export const getDCConfig = (_this: any, config) => {
         field: 'editType',
         title: '编辑类型',
         type: 'string',
-        editType: 'select',//
+        editType: 'select', //
         options: getAllColTypes(), //
       },
       {

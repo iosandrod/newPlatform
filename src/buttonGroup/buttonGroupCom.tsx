@@ -1,7 +1,13 @@
 import { itemGroup } from '@/buttonGroup/buttonGroup'
 import { defineComponent, inject, toRaw, watch } from 'vue'
 import tabCom from '@/buttonGroup/tabCom'
-import { ElButton, ClickOutside, ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
+import {
+  ElButton,
+  ClickOutside,
+  ElMenu,
+  ElMenuItem,
+  ElSubMenu,
+} from 'element-plus'
 import { Button } from './button'
 import MenuCom from '@/menu/menuCom'
 import dropdownCom from '@/menu/dropdownCom'
@@ -22,6 +28,9 @@ export default defineComponent({
     ClickOutside,
   },
   props: {
+    tableName: {
+      type: String, //
+    },
     buttonWidth: {
       type: Number,
       default: 50, //
@@ -37,8 +46,11 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup(props, { attrs, slots, emit }) {
+  setup(props, { attrs, slots, emit, expose }) {
     let group = new itemGroup(props, props._class as any)
+    expose({
+      _instance: group,
+    })//
     const ns = group.hooks.useNamespace('buttonGroupCom')
     const btnG = group.hooks.useNamespace('buttonMenuCom')
     let currentMainPage = inject('pageDesign', {}) //
@@ -69,7 +81,7 @@ export default defineComponent({
         for (const item of delItems) {
           group.delItem(item)
         }
-      }
+      },
     )
     let mainPage: PageDesign = inject('mainPageDesign', null)
     if (mainPage != null) {
@@ -113,7 +125,9 @@ export default defineComponent({
                   }}
                 >
                   <ContextmenuItem>
-                    <div class="h-full flex items-center">{btn?.getLabel()}</div>
+                    <div class="h-full flex items-center">
+                      {btn?.getLabel()}
+                    </div>
                   </ContextmenuItem>
                 </div>
               )
@@ -156,7 +170,11 @@ export default defineComponent({
                                 const btn = item.button
                                 let disabled = btn.getDisabled()
                                 return (
-                                  <div class={[{ 'is-disabled': disabled }]} style={{ width: '100%' }} onClick={() => runBtnFn(btn)}>
+                                  <div
+                                    class={[{ 'is-disabled': disabled }]}
+                                    style={{ width: '100%' }}
+                                    onClick={() => runBtnFn(btn)}
+                                  >
                                     {btn.getLabel()}
                                   </div>
                                 ) //

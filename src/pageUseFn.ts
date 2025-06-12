@@ -1,6 +1,13 @@
 import { PageDesign } from '@ER/pageDesign'
 import _ from 'lodash' //
 export const mainUse = {
+  pageInit: [
+    async (context, next) => {
+      await next()
+      let instance: PageDesign = context.instance
+      instance.getTableData() //
+    },
+  ],
   getTableData: [
     //处理查询控件的表单
     async (context, next) => {
@@ -24,9 +31,14 @@ export const mainUse = {
         context.queryArr = queryArr
       }
       queryArr.push(...searchWhere) //
-      // let result = _.merge({}, query, searchWhere)
-      // fArg.query = result
+      //处理左侧树的查询条件
+      let relateArr = await instance.getRelateSearchWheres()
+      // console.log(relateArr, 'relateArr') ////
+      if (relateArr.length > 0) {
+        queryArr.push(...relateArr) //
+      }
       instance.setCurrentLoading(true)
+      //树的设置
       //获取全局的查询条件
       await next().finally(() => {
         setTimeout(() => {
@@ -66,7 +78,7 @@ export const editUse = {
         setTimeout(() => {
           instance.setCurrentLoading(false)
         }, 200)
-      })// 
+      }) //
       instance.setCurrentView() //
     }, //
   ],

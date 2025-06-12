@@ -600,7 +600,6 @@ export class PageDesign extends Form {
   }
   //添加类别
   async addRelateTableRow(tableName?: any, row?: any) {
-    //
     let _config = tableName
     if (typeof tableName == 'string') {
       _config = {
@@ -618,9 +617,76 @@ export class PageDesign extends Form {
     let parentId = treeConfig.parentId
     let rootId = treeConfig.rootId //
     let curRow = this.getCurRow(tableName)
-    let parentValue = curRow[id] //
+    let parentValue = curRow?.[id] //
+    if (curRow == null) {
+      parentValue = rootId
+    }
+    await this.getSystem().confirmEditEntity({
+      tableName,
+      curRow: {
+        //
+        [parentId]: parentValue, //
+      },
+      editType: 'add', //
+    })
   } //
-  async editRelateTableRow(tableName?: any, row?: any) {}
+  async editRelateTableRow(tableName?: any, row?: any) {
+    //
+    let _config = tableName
+    if (typeof tableName == 'string') {
+      _config = {
+        tableName,
+      }
+    }
+    tableName = _config.tableName //
+    /* 
+      async function fn() {
+    let tRef = this.getRef('t_CustomerCls')
+    let curRow = tRef.getCurRow()
+    let _curRow = null
+    if (curRow == null) {
+        this.getSystem().confirmMessage('请选择一行进行编辑')
+        return 
+        // _curRow = {
+        //     cParentClsNo: '0'
+        // }
+    } else {
+        // let id = curRow['cClsNo']
+        // _curRow = {
+        //     cParentClsNo: id
+        // }
+    }
+    await this.confirmEditEntity({
+        tableName: 't_CustomerCls',
+        curRow: _curRow,
+        editType: "edit"
+    })
+}
+    */
+    tableName = _config.tableName
+    let dataRef = this.getTableRefData(tableName) //
+    let tConfig = this.getTableConfig(tableName)
+    let treeConfig = tConfig.treeConfig
+    if (treeConfig == null) {
+      return
+    } //
+    let curRow = this.getCurRow(tableName)
+    let keyColumn = tConfig.keyColumn
+    if (keyColumn == null) {
+      this.getSystem().confirmMessage('未设置主键', 'warning') //
+      return
+    }
+    if (curRow == null || curRow[keyColumn] == null) {
+      this.getSystem().confirmMessage('请选择一行数据', 'warning') //
+      return
+    }
+    await this.confirmEditEntity({
+      tableName,
+      curRow: curRow,
+      editType: 'edit',
+    })
+  }
+  async deleteRelateTableRow(tableName?: any, row?: any) {}
   async addDetailTableRow(tableName?: string, row?: any) {
     //
     let tTable: Table = this.getRef(tableName)
@@ -664,8 +730,28 @@ export class PageDesign extends Form {
         value: tName,
       }
     }) //
-    let arr = [{ label: tCnName, value: tableName }, ...dTableOptions]
+    let rTableOptions = this.getAllRelateTable().map((t) => {
+      let tName = t.getTableName()
+      let tCnName = t.getTableCnName()
+      return {
+        label: tCnName,
+        value: tName,
+      }
+    })
+    let arr = [
+      { label: tCnName, value: tableName },
+      ...dTableOptions,
+      ...rTableOptions,
+    ] //
     return arr //
+  }
+  getAllRelateTable() {
+    let allTable = this.getAllTable()
+    let rTables = allTable.filter((t) => {
+      let isRelate = t.getEntityType()
+      return isRelate == 'relate'
+    })
+    return rTables
   }
   async saveEditPageData() {
     let realTableName = this.getRealTableName() //
@@ -1269,6 +1355,10 @@ export class PageDesign extends Form {
           _obj[name] = _arr
         }
         let fn = h.code //
+        let enable = h.enable
+        if (enable == 0) {
+          continue
+        } //
         if (typeof fn == 'string') {
           let _fn = stringToFunction(fn) //
           if (typeof _fn == 'function') {
@@ -1488,9 +1578,86 @@ export class PageDesign extends Form {
     this.config.keyCodeColumn = key
   } //
   //进入打印
+  async getRelateSearchWheres() {
+    /* 
+      async function fn(context, next) {
+    let row = this.getCustomerClssCurRow()
+    let _fn = (data) => {
+        let _data = data.map(row => {
+            let children = row.children
+            let d1 = [row]
+            if (Array.isArray(children) && children.length > 0) {
+                return [row, ..._fn(children)]
+            }
+            return [row]
+        })
+        return _data.flat()
+    }
+    if (row == null) {
+        //没有客户类别就是跳出
+        return
+    }
+    let rows = _fn([row])
+    let rowsArg = rows.map(row => {
+        return row['cClsNo']
+    })
+    console.log(rows, 'testRows')
+    let query = context.queryArr
+    // let cClsNo = row['cClsNo']
+    let obj = {
+        cClsNo: rowsArg
+    }
+    query.push(obj)
+    await next()
+}
+    */
+    let allTable = this.getAllTable()
+      .filter((item) => {
+        let type = item.config?.options?.tableType //
+        if (type == 'relate') {
+          return true
+        }
+      })
+      .map((item) => item.getTableName()) //
+    let _fn = (data) => {
+      let _data = data.map((row) => {
+        let children = row.children
+        if (Array.isArray(children) && children.length > 0) {
+          return [row, ..._fn(children)]
+        }
+        return [row]
+      })
+      return _data.flat()
+    }
+    let _arr = []
+    for (let name of allTable) {
+      let tableData = this.getTableRefData(name)
+      let tableConfig = this.getTableConfig(name)
+      let curRow = tableData.curRow //
+      let relateKey = tableConfig?.relateKey
+      let mainRelateKey = tableConfig?.mainRelateKey
+      if (relateKey == null || mainRelateKey == null) {
+        this.getSystem().confirmMessage(`${name}未设置关联字段`, 'warning') //
+        continue
+      }
+      if (curRow == null) {
+        continue
+      }
+      let rows = _fn([curRow])
+      let rowsArg = rows.map((row) => {
+        return row[relateKey]
+      })
+      let _queryArr = _arr
+      _queryArr.push({
+        [mainRelateKey]: rowsArg,
+      }) //
+    }
+    return _arr //
+  }
   async printTemplate() {}
   //简易删除
   async deleteTableRows(_tableName?: any) {
+    //
     //删除模式
     let curRow = this.getCurRow()
     let sys = this.getSystem()
@@ -1566,5 +1733,91 @@ export class PageDesign extends Form {
     }) //
     this.getHttp().patch('columns', _columns) //
     this.getSystem().confirmMessage('同步成功', 'success') //
+  }
+  //最近距离
+  getTheCloseEntity(_id: string) {
+    let state = this.state
+    let store = state.store //
+    let fn = (data) => {
+      let _data = data.map((row) => {
+        // if (row.id == null) {
+        //   debugger //
+        // }
+        let _row = { ...row }
+        let children = row.columns || []
+        let list = row.list || []
+        let rows = row.rows || [] //
+        children = [...children, ...list, ...rows]
+        if (Array.isArray(children) && children.length > 0) {
+          let _c = fn(children)
+          _row.children = _c
+        }
+        return _row
+      })
+      return _data
+    }
+    let fData = fn(store)
+    let _this = this
+    function findEntityInSubtree(node: any): any | null {
+      if (node.type === 'entity') return node
+      for (const child of node.children || []) {
+        const found = findEntityInSubtree(child)
+        if (found) return found
+      }
+      return null
+    }
+
+    function findNearestEntity(root: any, targetId: string): any | null {
+      const idToNode = new Map<string, any>()
+      const childToParent = new Map<any, any>()
+
+      // 建立 id 和 parent 映射
+      function buildMaps(node: any, parent: any | null = null) {
+        idToNode.set(node.id, node)
+        if (parent) childToParent.set(node, parent)
+        for (const child of node.children || []) {
+          buildMaps(child, node)
+        }
+      }
+
+      buildMaps(root)
+
+      const targetNode = idToNode.get(targetId)
+      if (!targetNode) return null
+
+      let currentNode: any | undefined = targetNode
+      while (currentNode) {
+        const parent = childToParent.get(currentNode)
+
+        if (parent) {
+          // 查找当前节点的兄弟节点（包括它们的子孙）
+          for (const sibling of parent.children || []) {
+            if (sibling === currentNode) continue
+            const found = findEntityInSubtree(sibling)
+            if (found) return found
+          }
+        }
+
+        // 如果 parent 本身是 entity，也可以返回
+        if (parent && parent.type === 'entity') {
+          return parent
+        }
+
+        // 向上继续找
+        currentNode = parent
+      }
+
+      return null
+    }
+    let root = {
+      id: this.uuid(),
+      type: 'root',
+      children: fData,
+    }
+    let nextNode = findNearestEntity(root, _id)
+    return nextNode
+  }
+  async confirmEditEntity(config: any) {
+    await this.getSystem().confirmEditEntity(config, this)
   }
 }

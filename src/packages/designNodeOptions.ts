@@ -31,7 +31,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
           // }
           let _defaultButtons = JSON.parse(JSON.stringify(defaultButtons))
           _t.config.data.splice(0)
-          _t.config.data.push(..._defaultButtons) //
+          _t.config.data.push(..._defaultButtons)
         },
       },
     ],
@@ -109,6 +109,18 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
             label: '选择文件',
             value: 'selectExcelFile', //
           },
+          {
+            label: '新增类别',
+            value: 'addRelateTableRow',
+          },
+          {
+            label: '编辑类别',
+            value: 'editRelateTableRow', //
+          },
+          {
+            label: '删除类别',
+            value: 'deleteRelateTableRow',
+          },
         ],
       }, //
       {
@@ -147,18 +159,34 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         ],
       },
     ],
+    showRowSeriesNumber: true,
     treeConfig: {
       id: 'id',
       parentId: 'pid',
     },
+    enableDragRow: true,
+    dragRowFn: (config) => {
+      return true
+    },
+    dargRowAfterFn: (config) => {}, //
   }
   return obj
 }
 //处理内部options
 export const getButtonGroupFConfig = (_this: PageDesign) => {
+  //
+  let tableSelect = _this.getAllTableNameOptions()
   let tableConfig = {
     itemSpan: 24, //
     items: [
+      {
+        label: '关联表名',
+        field: 'tableName',
+        type: 'select',
+        options: {
+          options: tableSelect,
+        },
+      }, //
       {
         title: '按钮',
         field: 'items',
@@ -166,7 +194,7 @@ export const getButtonGroupFConfig = (_this: PageDesign) => {
         type: 'stable', ////
         hiddenTitle: true,
         options: getButtonGroupTableConfig(_this), //
-      }, //
+      },
     ],
   }
   return tableConfig
@@ -417,6 +445,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
     },
     buttongroup: {
       ...getButtonGroupFConfig(_this),
+
       data: computed(() => {
         return _this.state.selected?.options //
       }),

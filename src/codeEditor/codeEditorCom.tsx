@@ -41,8 +41,10 @@ export default defineComponent({
     })
     expose({ _instance: editor })
     let sys = system
-    let mainDesign = sys.getDesignByTableName(props.tableName)
-    // debugger //
+    let mainDesign = sys.getDesignByTableName(props.tableName) //
+    if (mainDesign == null) {
+      mainDesign = sys.getCurrentPageDesign() //
+    }
     let allCols = mainDesign?.getColumnSelectTreeData()
     let allMethods = mainDesign?.getMergeMethodsSelect() //--
     let infoConfig = null

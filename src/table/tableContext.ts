@@ -159,9 +159,9 @@ export const initContextMenu = (table: Table) => {
         let _config = curContextCol.config
         _config = _.cloneDeep(_config) //
         let sys = table.getSystem()
-        let mainD = table.getMainPageDesign()
+        let mainD = table.getMainPageDesign() //
         let fConfig = getDFConfig(mainD, _config)
-        let data1 = await sys.confirmForm(fConfig) //
+        let data1 = await sys.confirmForm(fConfig)
         let _dFn = table.config.onDesignColumn
         if (typeof _dFn == 'function') {
           _dFn(data1, curContextCol.config)

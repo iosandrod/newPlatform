@@ -364,7 +364,7 @@ export class System extends Base {
         }
       }
     })
-    await pageDesign.getTableData() //
+    // await pageDesign.getTableData() //
     this.tableMap[tableName] = pageDesign //
     return pageDesign
   }
@@ -1108,6 +1108,11 @@ export class System extends Base {
                     value: 'back',
                   },
                 ],
+              },
+              {
+                field: 'enable',
+                title: '是否启用',
+                editType: 'boolean', //
               },
             ],
             showTable: true, //

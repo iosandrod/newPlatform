@@ -71,7 +71,7 @@ export const codeType = (item: FormItem) => {
   obj.onInput = (config) => {} //
   obj.readonly = true //
   obj.clearable = false //
-  obj.modelValue = item.getBindShowValue()
+  // obj.modelValue = item.getBindShowValue()
   return obj
 }
 export const booleanType = (item: FormItem) => {

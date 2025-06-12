@@ -887,8 +887,10 @@ export class FormItem extends Base {
   }
   getPageButtonsProps() {
     let options = this.getOptions()
-    let items = this.getPageButtons()
+    let items = this.getPageButtons() //
+    let tableName = this.getTableName()
     return {
+      tableName,
       items,
       buttonWidth: 50, //
     }
@@ -986,7 +988,9 @@ export class FormItem extends Base {
     if (typeof value == 'object' || typeof value == 'function') {
       value = '' //
     }
-    let tableName = this.getMainTableName() || this.getOptions().tableName //
+    let _data = this.form.getData() //
+    let tableName =
+      this.getMainTableName() || this.getOptions().tableName || _data?.tableName
     let config = {
       ...codeConfig,
       tableName,
