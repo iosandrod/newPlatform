@@ -24,6 +24,8 @@ import CodeEditor from './codeEditor/codeEditor'
 import wangCom from './wangEditor/wangCom'
 import { createColumnSelect } from './systemFn'
 import { generateRoutes } from '@/router/register'
+import { Menu } from './menu/menu'
+import { BMenu } from './buttonGroup/bMenu'
 export class System extends Base {
   hasInitRoutes = false
   allApp: any = [] //
@@ -206,11 +208,7 @@ export class System extends Base {
   }
   async getPageLayout(name?: string) {
     let http = this.getHttp()
-    let data = await http.get(
-      'entity',
-      'find', //
-      { tableName: name },
-    ) //
+    let data = await http.find('entity', { tableName: name }) //
     let row = data[0]
     if (row == null) {
       return null
@@ -1539,6 +1537,36 @@ export class System extends Base {
   }
   copyValue(v) {
     let v2 = VxeUI.clipboard.copy(v)
+  }
+  getSysContextItems() {
+    let _items = [
+      {
+        label: '设计当前菜单',
+        fn: () => {
+          let menu: Menu = this.getRef('leftMenu')
+          let curItem = menu.curContextMenu
+          this.designMenuItem(curItem) //
+        },
+      },
+    ]
+    return _items
+  }
+  async designMenuItem(item) {
+    if (item == null) {
+      return
+    }
+    await this.confirmEditEntity({
+      tableName: 'navs',
+      editType: 'edit',
+      curRow: item,
+    })
+  }
+  async openContextMenu(e) {
+    let menu: BMenu = this.getRef('contextmenu')
+    if (menu == null) {
+      return
+    }
+    menu.open(e)
   }
 }
 export const system = reactive(new System()) //

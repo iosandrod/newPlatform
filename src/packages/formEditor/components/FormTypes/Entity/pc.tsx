@@ -143,7 +143,6 @@ export default defineComponent({
             onColumnResize={(config) => {
               item.onColumnResize(config)
             }}
-            enableDragColumn={false} //
             onColumnHidden={(config) => {
               item.onColumnHidden(config)
             }}

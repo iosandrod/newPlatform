@@ -107,7 +107,7 @@ export class Column extends Base {
     let config = this.config
     let disableColumnResize = config.disableColumnResize
     if (disableColumnResize == null) {
-      let table = this.table
+      let table = this.getTable()
       disableColumnResize = table.getDisableColumnResize()
     }
     if (1 == 1) {
@@ -119,7 +119,7 @@ export class Column extends Base {
     let _config = this.config
     let tableName = _config.tableName
     if (tableName == null) {
-      tableName = this.table.getTableName()
+      tableName = this.getTable().getTableName()
     }
     return tableName //
   }
@@ -181,7 +181,7 @@ export class Column extends Base {
     return false ////
   }
   hiddenEditor() {
-    let table = this.table
+    let table = this.getTable()
     let ins = table.getInstance()
     ins.completeEditCell() //
   }
@@ -295,9 +295,11 @@ export class Column extends Base {
       container.on('mouseleave', () => {
         controllerGroup.attribute.background = '' //
         let image = g1._lastChild
-        let item = _this.table.columnFilterConfig.filterConfig.find(
-          (item) => item.field == _this.getField(),
-        )
+        let item = _this
+          .getTable()
+          .columnFilterConfig.filterConfig.find(
+            (item) => item.field == _this.getField(),
+          )
         if (item != null) {
           let indexArr = item.indexArr
           if (indexArr.length > 0) {
@@ -327,7 +329,7 @@ export class Column extends Base {
     return hCustomLayout
   }
   addColumn(col: any) {
-    let table = this.table
+    let table = this.getTable()
     let columns = this.columns
     let column = new Column(col, table)
     columns.push(column) //
@@ -355,16 +357,18 @@ export class Column extends Base {
       }
       if (typeof fieldFormat !== 'function') {
         fieldFormat = (config) => {
-          let type = this.getEditType()
+          let _this = config.column || config.col //
+          if (_this == null) {
+          }
+          let type = _this.getEditType()
           let row = config.row
           if (row == null) {
-            console.log(config)
             return '' //
           }
           let field = config.field
           let value = row[field] //
           if (type == 'select') {
-            let options = this.getSelectOptions()
+            let options = _this.getSelectOptions()
             let value = config.row[field]
             let _label = options.find((item) => item.value == value)?.label
             return _label || value //
@@ -384,7 +388,10 @@ export class Column extends Base {
     }
     let bgColor = this.getBgColor()
     if (typeof bgColor == 'function') {
-      let color1 = bgColor({ row: record, data: this.table.templateProps.data })
+      let color1 = bgColor({
+        row: record,
+        data: this.getTable().templateProps.data,
+      })
       if (color1 != null) {
         color = color1 //
       } //
@@ -392,7 +399,7 @@ export class Column extends Base {
     return color
   }
   getMergeCell() {
-    let table = this.table
+    let table = this.getTable()
     let isMergeCell = table.isMergeCell
   }
   getMergeCellColor() {
@@ -400,7 +407,7 @@ export class Column extends Base {
     return color
   }
   getColumnProps(isFooter = false) {
-    let table = this.table
+    let table = this.getTable()
     let config = this.config
     let _columns = this.columns.map((col) => {
       if (isFooter == true) {
@@ -420,9 +427,11 @@ export class Column extends Base {
     }
     let hIconColor = '#1890ff'
     let enterType = 'mouseenter_cell'
-    let item = _this.table.columnFilterConfig.filterConfig.find(
-      (item) => item.field == _this.getField(),
-    )
+    let item = _this
+      .getTable()
+      .columnFilterConfig.filterConfig.find(
+        (item) => item.field == _this.getField(),
+      )
     if (item != null) {
       let indexArr = item.indexArr
       if (indexArr.length > 0) {
@@ -432,7 +441,7 @@ export class Column extends Base {
     }
     //@ts-ignore
     let customLayout = undefined
-    if (this.table.showCustomLayout == true) {
+    if (this.getTable().showCustomLayout == true) {
       customLayout = this.getCustomLayout() //
     }
     //@ts-ignore
@@ -493,7 +502,7 @@ export class Column extends Base {
   }
   getIsTree() {
     let _t = false
-    let isTree = this.table.getIsTree()
+    let isTree = this.getTable().getIsTree()
     let tree = this.config.tree
     if (isTree == true && tree == true) {
       _t = true //
@@ -502,7 +511,7 @@ export class Column extends Base {
   }
   getCalculateValue() {
     let _this = this
-    let table = this.table //
+    let table = this.getTable() //
     let field = this.getField()
     if (this.effectPool[`${this.id}_cal`] == null) {
       let _data = table.templateProps.data //
@@ -601,8 +610,8 @@ export class Column extends Base {
     return field //
   }
   getColumnWidth() {
-    let isFilterTable = this.table.getIsFilterTable()
-    let table = this.table
+    let isFilterTable = this.getTable().getIsFilterTable()
+    let table = this.getTable()
     let config = this.config
     let width = config.width
     if (isFilterTable == true) {
@@ -617,7 +626,7 @@ export class Column extends Base {
     }
     if (width == null) {
       //
-      let table = this.table
+      let table = this.getTable()
       let defaultWidth = table.getDefaultWidth()
       width = defaultWidth
     }
@@ -628,7 +637,7 @@ export class Column extends Base {
     let value = config.value //值
     let row = config.row //行
     let field = config.field || this.getField()
-    let table = this.table
+    let table = this.getTable()
     if (config.validate === false) {
       row[field] = value //
       return true
@@ -645,7 +654,7 @@ export class Column extends Base {
       }
       return true
     } else {
-      let table = this.table //
+      let table = this.getTable() //
       //@ts-ignore
       table.validateMap[row._index] = [_res] //
     }
@@ -698,7 +707,7 @@ export class Column extends Base {
     return type
   }
   getIsEditField() {
-    let table = this.table
+    let table = this.getTable()
     let isEdit = table.getIsEditTable()
     if (isEdit == false) {
       return false //
@@ -819,7 +828,7 @@ export class Column extends Base {
       </svg>
        `
     }
-    let sortCache = this.table.sortCache
+    let sortCache = this.getTable().sortCache
     let v = sortCache.find((s) => s.field == this.getField())
     let s = Boolean(v)
     let order = v?.order
@@ -846,7 +855,7 @@ export class Column extends Base {
     })
     topImage.on('click', (config: any) => {
       let field = this.getField()
-      this.table.headerSortClick({
+      this.getTable().headerSortClick({
         field,
         order: 'asc',
         type: this.getColType(), //
@@ -854,7 +863,7 @@ export class Column extends Base {
     })
     bottomImage.on('click', () => {
       let field = this.getField()
-      this.table.headerSortClick({
+      this.getTable().headerSortClick({
         field,
         order: 'desc',
         type: this.getColType(),
@@ -885,9 +894,11 @@ export class Column extends Base {
     let height = config.height
     let hIconColor = '#1890ff' //
     let _this = this
-    let item = _this.table.columnFilterConfig.filterConfig.find(
-      (item) => item.field == _this.getField(),
-    )
+    let item = _this
+      .getTable()
+      .columnFilterConfig.filterConfig.find(
+        (item) => item.field == _this.getField(),
+      )
     if (item != null) {
       let indexArr = item.indexArr
       if (indexArr.length > 0) {
@@ -915,7 +926,7 @@ export class Column extends Base {
       boundsPadding: [0, 0, 0, 0],
     })
     g1.on('click', (config) => {
-      this.table.openColumnFilter(config)
+      this.getTable().openColumnFilter(config)
     }) //三角形
     g1.add(image)
     return g1
@@ -932,7 +943,7 @@ export class Column extends Base {
   }
   getCustomLayout() {
     let editType = this.getEditType()
-    if (editType == 'boolean' && this.table.tableState == 'edit') {
+    if (editType == 'boolean' && this.getTable().tableState == 'edit') {
       let _layout = this.getCheckboxCustomLayout()
       return _layout //
     }
@@ -946,13 +957,13 @@ export class Column extends Base {
     if (defaultValue == null) {
       return {} //
     }
-    let table = this.table
+    let table = this.getTable()
     let design = table?.getMainPageDesign()
     design = design || _config?.design //
     let curRow = design?.getCurRow()
     let obj1 = {
       column: this,
-      table: this.table,
+      table: this.getTable(),
       item: this,
       design: design,
       curRow: curRow,
@@ -1218,10 +1229,18 @@ export class Column extends Base {
   }
   getCheckDisabled() {
     //
-    let tableState = this.table.tableState
+    let tableState = this.getTable().tableState
     if (tableState == 'scan') {
       return true
     }
     return false //
+  }
+  getTable() {
+    let table = this.table
+    if (isReactive(table)) {
+      return table
+    } else {
+      return reactive(table) //
+    }
   }
 }

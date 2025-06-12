@@ -83,7 +83,7 @@ export class FormItem extends Base {
   }
   updateBindData(updateConfig: { value: any; [key: string]: any }) {
     try {
-      let value = updateConfig.value
+      let value = updateConfig.value //
       let field = this.getField()
       let updateBefore = this.config.updateBefore
       if (typeof updateBefore == 'function') {

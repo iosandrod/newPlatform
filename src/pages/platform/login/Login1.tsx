@@ -430,7 +430,7 @@ export default defineComponent({
       // com=<auditVue></auditVue>
 
       // let _fConfig11 = getDesignTableConfig(_item1)
-      com = <erForm {..._config123}></erForm> //
+      // com = <erForm {..._config123}></erForm> //
       let _com = (
         <div
           class="h-full"

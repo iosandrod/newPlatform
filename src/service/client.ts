@@ -343,12 +343,10 @@ export class myHttp {
     console.time('uploadFile')
     let uri = await this.fileToDataURL(file)
     console.timeEnd('uploadFile')
-    console.log('转化时间分析') //
     let obj = {
       uri: uri,
       fileName: fileName,
     } //
-    console.log(obj, 'testObj') //
     let _res = await this.create('uploads', obj) //
     return _res
   }

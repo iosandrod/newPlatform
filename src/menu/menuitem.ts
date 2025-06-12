@@ -21,12 +21,12 @@ export class MenuItem extends Base {
   setMenuItems(items) {
     this.menuitems.splice(0)
     for (const item of items) {
-      this.addMenuItem(item)//
+      this.addMenuItem(item) //
     }
   }
   addMenuItem(itemConfig: any) {
     let item = new MenuItem(itemConfig, this.menu)
-    item.parent = this//
+    item.parent = this //
     let menuitems = this.menuitems
     menuitems.push(item) //
   }
@@ -44,16 +44,15 @@ export class MenuItem extends Base {
     const obj = {
       index: `${id}`, //
       teleported: true, //
-
     }
     return obj
   }
   onClick(config) {
     //
-    let _config = this.config//
-    let menu = this.menu//
-    menu.onItemClick(this)//
-  }//
+    let _config = this.config //
+    let menu = this.menu //
+    menu.onItemClick(this) //
+  } //
   getLabel() {
     let config = this.config
     let label = config.label //
@@ -125,6 +124,18 @@ export class MenuItem extends Base {
     let config = this.config //
     let disabled = config.disabled //
     return disabled //
+  }
+  async onContextmenu(e) {
+    e.preventDefault() //
+    e.stopPropagation() //
+    // console.log(this.config, 'onContextmenu') //
+    this.menu.curContextMenu = this.config //
+    let menu = this.menu //
+    let config = menu.config
+    let onContextmenu = config.onContextmenu //
+    if (typeof onContextmenu == 'function') {
+      onContextmenu({ menu: menu, item: this, event: e }) ////
+    }
   }
 }
 /* 

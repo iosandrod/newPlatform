@@ -36,6 +36,7 @@ import { formitemTypeMap, selectTypeMap } from './designNodeForm'
 import { VxeFormInstance } from 'vxe-pc-ui'
 import { PageDesign } from './pageDesign'
 import { Dialog } from '@/dialog/dialog'
+import { createDForm } from './fieldFormConfig'
 //转换数据
 //
 let prevEl: any = ''
@@ -198,7 +199,6 @@ export class Form extends Base {
         layout,
         list: [], //
       } //
-      console.log(obj, 'testObj') //
       this.setLayoutData(obj)
     }
   }
@@ -1042,7 +1042,7 @@ export class Form extends Base {
       if (_t1) {
         this.curSForm = _t1
       } else {
-        this.curSForm = null //
+        this.curSForm = null
       }
     }
     this.isShowConfig = state.selected === result
@@ -1903,6 +1903,22 @@ export class Form extends Base {
       },
     ]
     return btns
+  }
+  changeCurrentDesignForm(type) {
+    let dFormMap = this.dFormMap
+    let _f = dFormMap[type]
+    if (_f) {
+      this.curDForm = _f
+      return
+    } //
+    let select = this.state.selected
+    let _f1 = createDForm(this as any, select as any)
+    if (!_f1) {
+      this.curDForm = null
+      return
+    } //
+    dFormMap[type] = _f1
+    this.curDForm = _f1
   }
 }
 //使用默认布局

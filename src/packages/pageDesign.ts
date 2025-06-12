@@ -465,7 +465,7 @@ export class PageDesign extends Form {
       id: _config.id,
       platform: this.config?.platform || 'pc', //
     }
-    await http.patch(`entity`, _config1) //
+    await http.patch(`entity`, _config1)
     this.getSystem().confirmMessage('保存成功', 'success') //
   }
   getMainTableName() {
@@ -598,6 +598,29 @@ export class PageDesign extends Form {
     } //
     return _config //
   }
+  //添加类别
+  async addRelateTableRow(tableName?: any, row?: any) {
+    //
+    let _config = tableName
+    if (typeof tableName == 'string') {
+      _config = {
+        tableName,
+      }
+    }
+    tableName = _config.tableName
+    let dataRef = this.getTableRefData(tableName) //
+    let tConfig = this.getTableConfig(tableName)
+    let treeConfig = tConfig.treeConfig
+    if (treeConfig == null) {
+      return
+    }
+    let id = treeConfig.id
+    let parentId = treeConfig.parentId
+    let rootId = treeConfig.rootId //
+    let curRow = this.getCurRow(tableName)
+    let parentValue = curRow[id] //
+  } //
+  async editRelateTableRow(tableName?: any, row?: any) {}
   async addDetailTableRow(tableName?: string, row?: any) {
     //
     let tTable: Table = this.getRef(tableName)
@@ -1256,7 +1279,14 @@ export class PageDesign extends Form {
     } //
     return _obj //
   }
-  getTreeConfig() {}
+  getTreeConfig() {
+    let config = this.config
+    let treeConfig = config.treeConfig
+    return treeConfig
+  }
+  getTreeRootId() {}
+  getTreeId() {}
+  getTreeParentId() {}
   onTableConfigChange(config) {
     let tableName = config.tableName //
     if (tableName == null) {

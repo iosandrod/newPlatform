@@ -124,8 +124,8 @@ app.use(Vue3Dragscroll)
 app.component('erButton', buttonCom)
 app.component('erButtonGroup', buttonGroupCom)
 // app.component('erForm', formEditor) //
-// app.component('erForm', formCom)
-app.component('erForm', formEditor)
+app.component('erForm', formCom)
+// app.component('erForm', formEditor)
 app.component('erFormEditor', formEditor)
 app.component('erPage', pageCom) //
 app.component('SvgIcon', SvgIcon)

@@ -22,9 +22,11 @@ import TableCom from '@/table/tableCom'
 import { Table } from '@/table/table'
 import LeftMenu from './leftMenu' //
 import { useRoute } from 'vue-router'
+import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 
 export default defineComponent({
   components: {
+    ContextmenuCom,
     erForm,
     erFormEditor,
     tableEditor,
@@ -224,19 +226,24 @@ export default defineComponent({
         </header>
       )
       let dCom = useSlots()?.default(currentRoutePath.value)
+      let context = (
+        <ContextmenuCom
+          ref={(el) => systemIns.registerRef('contextmenu', el)}
+          items={systemIns.getSysContextItems()}
+        ></ContextmenuCom>
+      )
       return (
         <div
           class={[ns.b(), 'flex-col']}
           style={{ display: 'flex', width: '100vw', height: '100vh' }}
         >
+          {context}
           {pageHeader}
           <div class="w-full flex flex-row flex-1 overflow-auto">
             <div style={{ width: '300px', height: '100%' }}>{leftM}</div>
             <div class="flex flex-col flex-1 h-full ">
               <div class="w-full bg-white tab-line">{tableTab}</div>
-              <div class="w-full flex-1 overflow-auto   ">
-                {dCom}
-              </div>
+              <div class="w-full flex-1 overflow-auto   ">{dCom}</div>
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { MenuItem } from './menuitem'
 export class Menu extends Base {
   isOpenAll = false
   config: any
+  curContextMenu: any
   menuitems: MenuItem[] = []
   searchValue = '' ////
   constructor(config) {

@@ -8,6 +8,10 @@ import {
   triggerRef,
   toRaw,
   watch,
+  isReactive,
+  reactive,
+  isProxy,
+  ref,
 } from 'vue'
 import { Column } from './column'
 import { CheckboxColumn } from './checkboxColumn' //
@@ -1045,12 +1049,13 @@ export class Table extends Base {
   }
   getShowColumns() {
     let columns = this.getColumns()
-
+    //是否显示
     let _cols = columns.filter((col) => {
       return col.getIsShow()
-    })
+    }) //
     let _col1 = _cols.map((col) => {
-      return col.getColumnProps()
+      let _col = toRaw(col) //
+      return _col.getColumnProps()
     })
     // if (1 == 1) {
     //   return _col1 //
@@ -1145,6 +1150,7 @@ export class Table extends Base {
   }
   loadColumns() {
     try {
+      console.log('load columns sdfjsldkfjsdlfsd') //
       let columns = this.getShowColumns()
       // columns = columns.map((col) => {
       //   return { field: col.field }
@@ -1310,6 +1316,12 @@ export class Table extends Base {
   registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
+    if (isReactive(this)) {
+      instance = instance
+    } else {
+      //@ts-ignore
+      instance = instance?.value
+    }
     if (instance == null) {
       return null
     }
@@ -1479,45 +1491,46 @@ export class Table extends Base {
     }
   }
   openColumnFilter(config) {
+    let _this = reactive(this)
     //
-    let ins = this.getInstance()
+    let ins = _this.getInstance()
     let _col = ins.getColAt(config.canvas.x)
     let _row = ins.getRowAt(config.canvas.y)
     let col = _col.col
     let row = _row.row //
     let field: string = ins.getBodyField(col, row) as any
-    let tColumn = this.getFlatColumns().find((col) => col.getField() == field)
+    let tColumn = _this.getFlatColumns().find((col) => col.getField() == field)
     let width = tColumn.getColumnWidth()
-    this.columnFilterConfig.width = width + 60 //
+    _this.columnFilterConfig.width = width + 60 //
     // let event = config.event
     let client = config.client
     let x = client.x
     let y = client.y
-    let oldColumnFilter = this.currentFilterColumn
-    this.currentFilterColumn = tColumn //
-    this.columnFilterConfig.x = x
-    this.columnFilterConfig.y = y //
-    const pulldownMenu: Dropdown = this.getRef('columnDropdown')
+    let oldColumnFilter = _this.currentFilterColumn
+    _this.currentFilterColumn = tColumn //
+    _this.columnFilterConfig.x = x
+    _this.columnFilterConfig.y = y //
+    const pulldownMenu: Dropdown = _this.getRef('columnDropdown')
     if (pulldownMenu == null) {
       return
     }
-    this.permission.canCloseColumnFilter = false
-    if (this.timeout['closeColumnFilter']) {
+    _this.permission.canCloseColumnFilter = false
+    if (_this.timeout['closeColumnFilter']) {
       clearTimeout(this.timeout['closeColumnFilter'])
-      this.timeout['closeColumnFilter'] = null
+      _this.timeout['closeColumnFilter'] = null
     } //
-    this.timeout['closeColumnFilter'] = setTimeout(() => {
-      this.permission.canCloseColumnFilter = true
+    _this.timeout['closeColumnFilter'] = setTimeout(() => {
+      _this.permission.canCloseColumnFilter = true
     }, 200)
     nextTick(() => {
       pulldownMenu.showDropdown() //
       nextTick(() => {
-        const filterTable: Table = this.getRef('columnFilterTable')
+        const filterTable: Table = _this.getRef('columnFilterTable')
         let _config = [tColumn].map((col) => {
           return col.config
         })
-        let _data = this.getInstance().records
-        let _d = this.getFlatTreeData(_data) //
+        let _data = _this.getInstance().records
+        let _d = _this.getFlatTreeData(_data) //
         _data = _d //
         if (oldColumnFilter != null && oldColumnFilter === tColumn) {
           return //
@@ -2268,7 +2281,7 @@ export class Table extends Base {
     //
     let _config = null
     let parentId = config?.parentId
-    let id = config?.id
+    let id = config?.id //
     if (parentId != null || id != null) {
       _config = config
       return
@@ -2401,17 +2414,26 @@ export class Table extends Base {
       let _d = this.getTreeDataByPid(pid)
       data = _d.children
     }
-    // let index1 = data.indexOf(r1)
-    // let index2 = data.indexOf(r2)
-    // data.splice(index1, 1)
-    // data.splice(index2, 0, r1) //
+    //顶层的节点
+    if (this.templateProps.data.includes(r1)) {
+      let index1 = data.indexOf(r1)
+      let index2 = data.indexOf(r2)
+      data.splice(index1, 1) //
+      data.splice(index2, 0, r1) //
+    }
+
     let config = this.config
     let dragRowAfterFn = config.dragRowAfterFn
     if (typeof dragRowAfterFn == 'function') {
+      //
       dragRowAfterFn({ startRow: r1, endRow: r2, data })
     }
     nextTick(() => {
+      // console.log(data, 'testData') //
       this.updateCanvas() //
+      // nextTick(() => {
+      //   console.log(this.getInstance().records, 'testRecords')//
+      // })
     })
     return //
   }
@@ -2848,13 +2870,31 @@ export class Table extends Base {
     map1[field] = config
     let fieldFormat = config.fieldFormat
     let _v = null
+    let column = this.columnsMap[field] || config.column
+    if (column == null) {
+      if (field == 'checkboxField') {
+        column = this.checkboxColumn
+      }
+      if (field == 'seriesNumber') {
+        column = this.seriesNumberColumn //
+      }
+    }
+    // console.log(
+    //   isProxy(this),
+    //   isProxy(record),
+    //   isProxy(column),
+    //   field,
+    //   'isProxy',
+    // )
+    let obj1 = {
+      row: record, //
+      field: field,
+      table: this,
+      col: column,
+      column: column, //
+    }
     if (typeof fieldFormat == 'function') {
-      let _value1 = fieldFormat({
-        row: record, //
-        field: field,
-        table: this,
-        col: config.column,
-      })
+      let _value1 = fieldFormat(obj1)
       if (_value1 == null) {
         _value1 = '' //
       }
@@ -2863,14 +2903,16 @@ export class Table extends Base {
         _watch = []
         map1[`watch_arr`] = _watch
       }
+      // let column=ref(config.column)
+
       let _w1 = watch(
         () => {
-          let _value = fieldFormat({
-            row: record, //
-            field: field,
-            table: this,
-            col: config.column,
-          })
+          // console.log(
+          //   isProxy(record),
+          //   'isProxy(record)',
+          //   isProxy(config.column),
+          // )
+          let _value = fieldFormat(obj1) //
           return _value
         },
         (v) => {

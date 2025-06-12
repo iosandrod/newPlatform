@@ -1,6 +1,6 @@
 import { VTable } from '@visactor/vue-vtable'
 import { Column } from './column'
-import { nextTick, toRaw } from 'vue'
+import { nextTick, toRaw ,isProxy} from 'vue'
 import {
   CheckBox,
   createGroup,
@@ -226,7 +226,8 @@ export const getSerialLayout = (column: Column) => {
 }
 
 export const getDefault = (column: Column) => {
-  let _this = column
+  let _this = column.getTable().columnsMap[column.getField()] //
+  console.log(isProxy(_this), 'isProxy')
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
     let t1: VTable.ListTable = table
@@ -274,7 +275,7 @@ export const getDefault = (column: Column) => {
       alignItems: 'center',
       boundsPadding: [0, 0, 0, 0], //
     })
-    let _table = _this.table
+    let _table = _this.getTable() //
     let count = _table.getInstance().visibleRowCount //
     let obj123 = {
       container: container,
@@ -293,14 +294,16 @@ export const getDefault = (column: Column) => {
       container.setAttribute('background', _this.getHoverColor()) ///
     })
     container.on('mouseout', () => {
+      // debugger//
       let color = container._oldColor
-      if (record == _this.table.tableData.curRow) {
+      // console.log(color,'testColor')//
+      if (record['_index'] == _this.table.tableData?.curRow?._index) {
         color = _this.getCurrentRowColor() //
       } else {
         if ((color = _this.getCurrentRowColor())) {
           color = _this.getIndexColor(row, record)
         }
-      } //
+      }
       container.setAttribute('background', color)
     })
     if (_this.getField() == 'pid') {

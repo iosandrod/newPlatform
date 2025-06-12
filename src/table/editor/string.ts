@@ -15,7 +15,7 @@ export interface OnStartParams {
   container: HTMLElement
   endEdit: () => void
 }
-import { createApp, isReactive, nextTick } from 'vue' //
+import { createApp, isProxy, isReactive, nextTick } from 'vue' //
 import {} from 'element-plus' //
 import { VxeInput } from 'vxe-pc-ui'
 import tableInput from './tableInput'
@@ -152,6 +152,7 @@ export class InputEditor extends BaseEditor {
           //@ts-ignore
           updateConfig.validate = false
         }
+        // console.log(isProxy(column)) //
         let editType = column.getEditType()
         if (editType == 'baseinfo') {
           let cacheValueObj = column.cacheValueObj
@@ -201,7 +202,7 @@ export class InputEditor extends BaseEditor {
 
   isEditorElement(target: EventTarget | null): boolean {
     return target === this.element
-  } //
+  }
   async validateValue(
     newValue: string,
     oldValue: string,

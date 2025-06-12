@@ -19,6 +19,10 @@ export default defineComponent({
     return () => {
       let leftMenu = (
         <menuCom
+          onContextmenu={(config) => {
+            let event = config.event
+            systemIns.openContextMenu(event)
+          }}
           onItemClick={(item) => {
             systemIns.onMenuItemClick(item)
           }}
