@@ -127,11 +127,11 @@ export default defineComponent({
             data={data.value}
             onHeaderContextmenu={openDesignHeader}
             columns={columns.value}
-            onDesignColumn={(config, col) => {
+            onDesignColumn={(config, col, refresh) => {
               let itemName = item.getTableName()
               let mainTableName = _design.getRealTableName()
               if (itemName == mainTableName) {
-                _design.updateTableColumn(config)
+                _design.updateTableColumn(config, refresh) //
               } else {
                 Object.entries(config).forEach(([key, value]) => {
                   col[key] = value //

@@ -12,7 +12,7 @@ import {
   _testData,
   entityData,
 } from './formEditor/testData'
-import { useHooks, useOnce, useRunAfter } from './utils/decoration'
+import { useHooks, useOnce, useRunAfter, useTimeout } from './utils/decoration'
 import { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
 import {
@@ -48,6 +48,7 @@ interface Filter {
 }
 export class PageDesign extends Form {
   isEdit = false
+  timeout:any={}
   isConfirm = false //
   isDialog = false
   tabHidden = false //
@@ -239,7 +240,7 @@ export class PageDesign extends Form {
     })
     return res
   }
-
+  // @useTimeout({ number: 500 })
   async getTableData(
     getDataConfig: any = {
       tableName: this.getTableName(),
@@ -319,6 +320,15 @@ export class PageDesign extends Form {
     let _config = {
       data: row,
       event: evName,
+    }
+    let tableConfig = this.getTableConfig(tableName) //
+    let tableType = tableConfig?.tableType
+    if (tableType == 'relate') {
+      let relateConfig = tableConfig?.relateConfig
+      let curRowChange = relateConfig?.curRowChange
+      if (Boolean(curRowChange)) {
+        this.getTableData() //
+      }
     }
     await this.publishEvent(_config)
     let allDetailTable: string[] = this.getAllDetailTable().map((item) => {
@@ -639,30 +649,7 @@ export class PageDesign extends Form {
       }
     }
     tableName = _config.tableName //
-    /* 
-      async function fn() {
-    let tRef = this.getRef('t_CustomerCls')
-    let curRow = tRef.getCurRow()
-    let _curRow = null
-    if (curRow == null) {
-        this.getSystem().confirmMessage('请选择一行进行编辑')
-        return 
-        // _curRow = {
-        //     cParentClsNo: '0'
-        // }
-    } else {
-        // let id = curRow['cClsNo']
-        // _curRow = {
-        //     cParentClsNo: id
-        // }
-    }
-    await this.confirmEditEntity({
-        tableName: 't_CustomerCls',
-        curRow: _curRow,
-        editType: "edit"
-    })
-}
-    */
+
     tableName = _config.tableName
     let dataRef = this.getTableRefData(tableName) //
     let tConfig = this.getTableConfig(tableName)
@@ -686,7 +673,53 @@ export class PageDesign extends Form {
       editType: 'edit',
     })
   }
-  async deleteRelateTableRow(tableName?: any, row?: any) {}
+  async deleteRelateTableRow(tableName?: any, row?: any) {
+    //
+    let _config = tableName
+    if (typeof tableName == 'string') {
+      _config = {
+        tableName,
+      }
+    }
+    tableName = _config.tableName //
+
+    tableName = _config.tableName
+    let dataRef = this.getTableRefData(tableName) //
+    let tConfig = this.getTableConfig(tableName)
+    let treeConfig = tConfig.treeConfig
+    if (treeConfig == null) {
+      return
+    } //
+    let curRow = this.getCurRow(tableName)
+    let keyColumn = tConfig.keyColumn
+    if (keyColumn == null) {
+      this.getSystem().confirmMessage('未设置主键', 'warning') //
+      return
+    }
+    if (curRow == null || curRow[keyColumn] == null) {
+      this.getSystem().confirmMessage('请选择一行数据', 'warning') //
+      return
+    }
+    let http = this.getHttp()
+    let children = curRow.children
+    if (children?.length > 0) {
+      this.getSystem().confirmMessage('当前数据有子节点，无法删除')
+      return
+    } //
+    let sys = this.getSystem()
+    let state = await sys.confirmMessageBox('是否删除当前行数据') //
+    let mainName = this.getRealTableName() //
+    let mainData = this.getTableRefData(mainName)
+    let data = mainData.data
+    if (data?.length > 0) {
+      this.getSystem().confirmMessage('当前主表数据有类别关联，无法删除') //
+      return
+    }
+    if (state) {
+      await http.delete(tableName, curRow) //
+      this.getSystem().confirmMessage('删除数据成功') //
+    }
+  }
   async addDetailTableRow(tableName?: string, row?: any) {
     //
     let tTable: Table = this.getRef(tableName)
@@ -1488,6 +1521,29 @@ export class PageDesign extends Form {
       })
       this.getHttp().registerEvent(key, _fn) //
     })
+    let allTable = this.getAllRelateTable() //
+    let allConfigs = allTable.map((t) => {
+      return t.config
+    }) //
+    for (const table of allConfigs) {
+      let options = table.options
+      let tableName = options.tableName //
+      let relateConfig = options?.relateConfig || {}
+      let listenChanged = relateConfig.listenChanged //
+      if (Boolean(listenChanged) == false) {
+        continue
+      }
+      let _key = 'changed'
+      let key = `${tableName} ${_key}`
+      let fn = () => {
+        this.getRelateTreeData(tableName)
+      }
+      this.entityEventManagerArr.push({
+        key: key,
+        fn: fn,
+      })
+      this.getHttp().registerEvent(key, fn) //
+    }
   }
   clearEntityEvent() {
     let entityEvent = this.entityEventManagerArr
@@ -1567,7 +1623,9 @@ export class PageDesign extends Form {
       return true
     }
   }
-  async getRelateTreeData(tableName) {}
+  async getRelateTreeData(tableName) {
+    console.log(tableName, 'testTableName') //
+  }
   async editRelateTreeData(tableName: any) {
     //
   }

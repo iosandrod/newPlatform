@@ -23,7 +23,12 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
     'dragConfig',
     'realTableName', //
     'platform',
+    'relateConfig',
   ] //
+  /* 
+    'initGetData',
+    'listenChanged', //
+  */
   let tName = _this.getTableName()
 
   let mainDesign = _this.form //
@@ -270,6 +275,47 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
         },
         tabTitle: titles[0], //
       },
+      {
+        field: 'relateConfig',
+        label: '关联配置',
+        type: 'sform',
+        tabTitle: titles[0],
+        options: {
+          itemSpan: 12,
+          items: [
+            {
+              field: 'initGetData',
+              label: '首次加载数据',
+              type: 'boolean',
+              tabTitle: titles[0], //
+            },
+            {
+              field: 'listenChanged', //监听
+              label: '监听表格更新',
+              type: 'boolean',
+              tabTitle: titles[0], //
+            },
+            {
+              field: 'curRowChange',
+              label: '行更新获取数据',
+              type: 'boolean', //
+              tabTitle: titles[0],
+            },
+          ],
+        },
+      },
+      // {
+      //   field: 'initGetData',
+      //   label: '首次加载数据',
+      //   type: 'boolean',
+      //   tabTitle: titles[0], //
+      // },
+      // {
+      //   field: 'listenChanged', //监听
+      //   label: '监听表格更新',
+      //   type: 'boolean',
+      //   tabTitle: titles[0], //
+      // },
       {
         field: 'onCurRowChange',
         label: '当前行变化事件',

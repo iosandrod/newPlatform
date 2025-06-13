@@ -5,6 +5,20 @@ export const mainUse = {
     async (context, next) => {
       await next()
       let instance: PageDesign = context.instance
+      let allTable = instance.getAllTable().map((t) => {
+        return t.config
+      })
+      for (let ta of allTable) {
+        let tableType = ta.options?.tableType
+        let options = ta.options?.relateConfig //
+        let initGetData = options?.initGetData
+
+        if (tableType == 'relate') {
+          if (Boolean(initGetData)) {
+            await instance.getRelateTreeData(ta?.options?.tableName)
+          }
+        } //
+      }
       instance.getTableData() //
     },
   ],

@@ -310,27 +310,32 @@ export class MainPageDesign extends PageDesign {
     let dataRef = this.getTableRefData(_tableName)
     let tConfig = this.getTableConfig(_tableName) //
     let treeConfig = tConfig?.treeConfig || {}
-    let rootValue = treeConfig?.rootValue || '0' //
+    let rootValue = treeConfig?.rootId || '0' //
+    let _parentId = treeConfig?.parentId
+    let id = treeConfig?.id
     let buildTreeData = (data, parentId = rootValue) => {
       let _data = data
-        .filter((item) => item.cParentClsNo == parentId)
+        .filter((item) => item[_parentId] == parentId)
         .map((item) => ({
           ...item,
-          children: buildTreeData(data, item.cClsNo),
+          children: buildTreeData(data, item[id]),
         }))
       return _data
     }
     let data1 = buildTreeData(_data)
     let rootCnValue = treeConfig?.rootCnValue || '客户类别'
+    let treeColF = tConfig.columns.find((col) => {
+      return col.isTree == true
+    })?.field
     let _data2 = [
       {
-        cClsNo: rootValue,
-        cClsName: rootCnValue,
+        [id]: rootValue,
+        [treeColF]: rootCnValue,
         children: data1,
       },
     ]
     dataRef['data'] = _data2 //
-    this.getSystem().confirmMessage('加载树数据成功123') //
+    // this.getSystem().confirmMessage('加载树数据成功123') //
   }
   async editRelateTreeData(tableName) {
     if (typeof tableName == 'string') {

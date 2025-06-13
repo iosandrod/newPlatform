@@ -325,8 +325,10 @@ export class myHttp {
         }, //
       )
     })
+  } //
+  async delete(tableName, params = {}, query = {}) {
+    await this.batchDelete(tableName, params) //
   }
-  async delete(tableName, params = {}, query = {}) {}
   async getPageLayout(navName) {
     let data = await this.get('entity', 'find', {
       tableName: navName,

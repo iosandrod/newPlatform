@@ -6580,3 +6580,28 @@ function handleCommand(command: string) {
     //     design.setCurRow(row, tableName)
     //   }
     // }
+
+    /* 
+      async function fn() {
+    let tRef = this.getRef('t_CustomerCls')
+    let curRow = tRef.getCurRow()
+    let _curRow = null
+    if (curRow == null) {
+        this.getSystem().confirmMessage('请选择一行进行编辑')
+        return 
+        // _curRow = {
+        //     cParentClsNo: '0'
+        // }
+    } else {
+        // let id = curRow['cClsNo']
+        // _curRow = {
+        //     cParentClsNo: id
+        // }
+    }
+    await this.confirmEditEntity({
+        tableName: 't_CustomerCls',
+        curRow: _curRow,
+        editType: "edit"
+    })
+}
+    */

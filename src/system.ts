@@ -1183,6 +1183,10 @@ export class System extends Base {
                     label: '删除',
                     value: 'removed',
                   },
+                  {
+                    label: '改变',
+                    value: 'changed',
+                  }, //
                 ],
               },
               {

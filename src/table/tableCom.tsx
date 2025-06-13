@@ -380,7 +380,7 @@ export default defineComponent({
             })
           }
           if (expand == 'first') {
-            tableIns.expandTargetRows(newValue) //
+            tableIns.expandTargetRows(newData) //
           }
         } else {
           //添加行的
@@ -430,7 +430,7 @@ export default defineComponent({
           let bound = sRef.getBoundingClientRect()
           if (e == true) {
             let _height = Math.round(bound.height)
-            let _height1 = _height - 85
+            let _height1 = _height - 40
             bodyStyle.flex = ''
             bodyStyle.height = `${_height1}px !important`
             // bodyStyle.display = 'none' //

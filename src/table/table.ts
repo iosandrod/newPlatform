@@ -2440,10 +2440,17 @@ export class Table extends Base {
   }
   onColumnResize(_config) {
     //
-    let config = this.config
-    let onColumnResize = config.onColumnResize
-    if (typeof onColumnResize == 'function') {
-      onColumnResize(_config) //
+    // let config = this.config
+    // let onColumnResize = config.onColumnResize
+    // if (typeof onColumnResize == 'function') {
+    //   onColumnResize(_config) //
+    // }
+    // console.log(_config, 'onColumnResize') //
+    let column = _config.originColumn
+    column.width = _config.width
+    let onDesignColumn = this.config.onDesignColumn
+    if (typeof onDesignColumn == 'function') {
+      onDesignColumn(column, column,false) //
     }
   }
   hiddenColumn(field) {
@@ -2506,6 +2513,7 @@ export class Table extends Base {
     }
   }
   expandTargetRows(rows, hiddenOther = true) {
+    // debugger//
     let setExpand = (row: any, status = true) => {
       let _expanded = row['_expanded']
       if (_expanded == null) {

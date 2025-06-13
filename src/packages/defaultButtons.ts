@@ -50,3 +50,24 @@ export const defaultButtons = [
     children: [],
   },
 ]
+
+export const defaultRelateButtons = [
+  {
+    fn: '',
+    label: '添加类别',
+    children: [],
+    defaultFn: 'addRelateTableRow',
+  },
+  {
+    fn: '',
+    id: 'PWdXA_Wc8BBWYYm2H7Dur',
+    label: '更新类别',
+    children: [],
+    defaultFn: 'editRelateTableRow',
+  },
+  {
+    label: '删除类别',
+    children: [],
+    defaultFn: 'deleteRelateTableRow',
+  },
+]
