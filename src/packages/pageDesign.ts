@@ -48,7 +48,7 @@ interface Filter {
 }
 export class PageDesign extends Form {
   isEdit = false
-  timeout:any={}
+  timeout: any = {}
   isConfirm = false //
   isDialog = false
   tabHidden = false //
@@ -1174,7 +1174,6 @@ export class PageDesign extends Form {
         row.tableName = this.getRealTableName() //
         return row
       }) //
-    console.log(addCols, 'fjdkldsjkls') //
     let _res = await this.getHttp().create('columns', addCols)
     this.getSystem().confirmMessage('同步成功', 'success') //
     this.getSystem().refreshPageDesign() //
@@ -1739,30 +1738,13 @@ export class PageDesign extends Form {
     sys.confirmMessage('删除成功', 'success') //
     this.getTableData() //
   }
+
   async syncErpTableColumns() {
     //
-
     let realTableName = this.getRealTableName()
-    let erpTable = await this.getHttp().find('sys_ErpTable', {
-      tableName: realTableName,
-    }) //
-    // console.log(erpTable) //
-    let row = erpTable[0]
-    let _obj: any = {}
-    Object.entries(row).forEach(([key, value]) => {
-      try {
-        let _v = JSON.parse(value as any)
-        if (typeof _v == 'object' || Array.isArray(_v)) {
-          //
-          value = _v //
-        }
-      } catch (error) {}
-      _obj[key] = value //
-    })
+    let columns = await this.getOldErpTableColumns(realTableName)
     let _columns = this.getTableConfig().columns
     _columns = JSON.parse(JSON.stringify(_columns))
-    // console.log(_obj) ////
-    let columns = _obj.columns || []
     for (let col of columns) {
       let f = col.field
       let c = _columns.find((c) => {
@@ -1791,6 +1773,26 @@ export class PageDesign extends Form {
     }) //
     this.getHttp().patch('columns', _columns) //
     this.getSystem().confirmMessage('同步成功', 'success') //
+  }
+  async getOldErpTableColumns(tableName) {
+    let erpTable = await this.getHttp().find('sys_ErpTable', {
+      tableName: tableName,
+    })
+    let row = erpTable[0]
+    let _obj: any = {}
+    Object.entries(row).forEach(([key, value]) => {
+      try {
+        let _v = JSON.parse(value as any)
+        if (typeof _v == 'object' || Array.isArray(_v)) {
+          //
+          value = _v //
+        }
+      } catch (error) {}
+      _obj[key] = value //
+    })
+    
+    let _columns = _obj.columns || []
+    return _columns
   }
   //最近距离
   getTheCloseEntity(_id: string) {

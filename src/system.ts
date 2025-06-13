@@ -1577,5 +1577,25 @@ export class System extends Base {
     }
     menu.open(e)
   }
+  async getOldErpTableColumns(tableName) {
+    let erpTable = await this.getHttp().find('sys_ErpTable', {
+      tableName: tableName,
+    })
+    let row = erpTable[0]
+    let _obj: any = {}
+    Object.entries(row).forEach(([key, value]) => {
+      try {
+        let _v = JSON.parse(value as any)
+        if (typeof _v == 'object' || Array.isArray(_v)) {
+          //
+          value = _v //
+        }
+      } catch (error) {}
+      _obj[key] = value //
+    })
+
+    let _columns = _obj.columns || []
+    return _columns
+  }
 }
 export const system = reactive(new System()) //

@@ -212,7 +212,59 @@ export const initContextMenu = (table: Table) => {
       disabled: false, //
       visible: true,
       fn: async (config) => {
-        //
+        let tableName = table.getTableName()
+        let fConfig = {
+          title: '同步列',
+          height: 200,
+          width: 300,
+          itemSpan: 24, //
+          data: {
+            tableName: tableName,
+          },
+          items: [
+            {
+              label: '表名',
+              field: 'tableName',
+              disabled: false, //
+              visible: true,
+              required: true,
+            },
+          ],
+        }
+        let system = table.getSystem()
+        let data = await system.confirmForm(fConfig)
+        // console.log(data) //
+        let _tableName = data.tableName
+        let _columns = await table.getSystem().getOldErpTableColumns(_tableName)
+        if (_columns.length == 0) {
+          return
+        }
+        let allCols = table.getFlatColumns().map((col) => {
+          return col.config
+        })
+        for (const col of _columns) {
+          let f = col.field
+          let c = allCols.find((c) => {
+            return c.field == f
+          })
+          let keys = [
+            {
+              key: 'title',
+              myKey: 'title',
+            },
+            {
+              key: 'width',
+              myKey: 'width',
+            },
+          ]
+          if (c) {
+            for (let key of keys) {
+              if (col[key.key] != null) {
+                c[key.myKey] = col[key.key] 
+              }
+            } //
+          }
+        }
       },
     },
   ]
