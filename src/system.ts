@@ -285,6 +285,10 @@ export class System extends Base {
     }
     let router = this.getRouter()
     let tableName: string = config.tableName
+    let en = this.getTargetDesign(tableName)
+    if (en != null) {
+      en.tabHidden = false
+    } //
     if (typeof fn == 'function') {
       this.addCommand({
         name: tableName,
@@ -296,6 +300,9 @@ export class System extends Base {
   async createPageSearchDesign(
     config?: { tableName: string } | string,
   ): Promise<SearchPageDesign> {
+    if (config == null) {
+      return //
+    }
     if (typeof config == 'string') {
       config = {
         tableName: config,
@@ -807,7 +814,8 @@ export class System extends Base {
   getTargetDesign(tableName) {
     let _obj = this.tableMap //
     let editObj = this.tableEditMap
-    let obj = editObj[tableName] || _obj[tableName]
+    let confirm = this.tableConfirmMap
+    let obj = editObj[tableName] || _obj[tableName] || confirm[tableName] //
     return obj
   }
   async updateTargetColumn(col) {

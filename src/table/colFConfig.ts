@@ -12,6 +12,69 @@ const enableTypes = [
   'cascader',
   'region',
 ]
+export const getBaseInfoEditConfig = (_this, tableName) => {
+  return {
+    itemSpan: 12,
+    items: [
+      {
+        field: 'tableName',
+        label: '表名',
+        type: 'string', //
+      },
+      {
+        field: 'bindColumns', //
+        label: '绑定字段',
+        span: 24, //
+        type: 'stable',
+        options: {
+          openBefore: async (config) => {
+            let item: FormItem = config?.item //
+            let data = config.data //
+            let options = item.config.options
+            let columns = options.columns
+            let col1 = columns[1]
+            let col0 = columns[0]
+            if (data?.tableName == null) {
+              return '请先选择表名' //
+            }
+            col1.tableName = data.tableName
+            col0.tableName = tableName
+            return //
+          },
+          showTable: false, //
+          tableTitle: '绑定参照表',
+          tableState: 'edit',
+          columns: [
+            {
+              field: 'key',
+              title: '当前字段',
+              editType: 'select',
+              columnSelect: true,
+              tableName: tableName, //
+            },
+            {
+              field: 'targetKey',
+              title: '值',
+              editType: 'select',
+              columnSelect: true,
+              tableName: tableName,
+            },
+          ],
+        },
+      },
+      {
+        field: 'showColumns',
+        label: '显示字段',
+        type: 'select',
+        options: {
+          columnSelect: true,
+          multiple: true,
+          tableName: tableName, //
+        },
+      },
+    ],
+  }
+}
 export const getDFConfig = (_this, data, tableName1?: any) => {
   let dType = data['defaultValueType']
   let fType = 'string'
@@ -246,68 +309,7 @@ export const getDFConfig = (_this, data, tableName1?: any) => {
         type: 'sform',
         tabTitle: titles[1], //
         label: '参照表配置',
-        options: {
-          itemSpan: 12,
-          items: [
-            {
-              field: 'tableName',
-              label: '表名',
-              type: 'string', //
-            },
-            {
-              field: 'bindColumns', //
-              label: '绑定字段',
-              span: 24, //
-              tabTitle: titles[1],
-              type: 'stable',
-              options: {
-                openBefore: async (config) => {
-                  let item: FormItem = config?.item //
-                  let data = config.data //
-                  let options = item.config.options
-                  let columns = options.columns
-                  let col1 = columns[1]
-                  let col0 = columns[0]
-                  if (data?.tableName == null) {
-                    return '请先选择表名' //
-                  }
-                  col1.tableName = data.tableName
-                  col0.tableName = tableName
-                  return //
-                },
-                showTable: false, //
-                tableTitle: '绑定参照表',
-                tableState: 'edit',
-                columns: [
-                  {
-                    field: 'key',
-                    title: '当前字段',
-                    editType: 'select',
-                    columnSelect: true,
-                    tableName: tableName, //
-                  },
-                  {
-                    field: 'targetKey',
-                    title: '值',
-                    editType: 'select',
-                    columnSelect: true,
-                    tableName: tableName,
-                  },
-                ],
-              },
-            },
-            {
-              field: 'showColumns',
-              label: '显示字段',
-              type: 'select',
-              options: {
-                columnSelect: true,
-                multiple: true,
-                tableName: tableName, //
-              },
-            },
-          ],
-        },
+        options: getBaseInfoEditConfig(_this, tableName), //
       },
       {
         field: 'optionsField',

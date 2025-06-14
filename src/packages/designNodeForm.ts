@@ -3,6 +3,7 @@ import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
 import { Column } from '@/table/column'
 import { FormItem } from './formitem'
+import { getAllColTypes } from '@/table/colFConfig'
 export * from './designNodeOptions' //
 
 //编辑options
@@ -57,53 +58,8 @@ export const selectTypeMap = (_this: PageDesign) => {
         label: '类型',
         type: 'select',
         options: {
-          options: [
-            {
-              label: '输入框',
-              value: 'input',
-            },
-            {
-              label: '下拉框',
-              value: 'select',
-            },
-            {
-              label: '日期',
-              value: 'date',
-            },
-            {
-              label: '时间',
-              value: 'time',
-            },
-            {
-              label: '日期时间',
-              value: 'datetime',
-            },
-            {
-              label: '数字',
-              value: 'number',
-            },
-            {
-              label: '密码',
-              value: 'stable',
-            },
-            {
-              label: '代码',
-              value: 'code',
-            },
-            {
-              label: '开关',
-              value: 'switch',
-            },
-            {
-              label: '图片',
-              value: 'image',
-            },
-            {
-              label: '子表单', //
-              value: 'sform',
-            },
-          ],
-        },
+          options: getAllColTypes(),
+        }, //
       },
       {
         field: 'eventMap', //

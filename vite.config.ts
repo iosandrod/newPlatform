@@ -6,14 +6,13 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import svgLoader from 'vite-svg-loader'
 import tailwindcss from '@tailwindcss/vite'
+import UnoCSS from 'unocss/vite'
 const resolve = path.resolve
 const isProduction = process.env.NODE_ENV === 'production'
 
 const timestamp = new Date().getTime()
 const prodRollupOptions = {
-  output: {
-   
-  },
+  output: {},
 }
 // vite 配置
 export default ({ command, mode }) => {
@@ -77,6 +76,7 @@ export default ({ command, mode }) => {
       }),
       tailwindcss(),
       vueJsx(),
+      UnoCSS(), //
       // Components({
       //   resolvers: [
       //     AntDesignVueResolver({

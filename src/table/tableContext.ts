@@ -260,7 +260,7 @@ export const initContextMenu = (table: Table) => {
           if (c) {
             for (let key of keys) {
               if (col[key.key] != null) {
-                c[key.myKey] = col[key.key] 
+                c[key.myKey] = col[key.key]
               }
             } //
           }

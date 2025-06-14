@@ -143,6 +143,10 @@ export default defineComponent({
     dragColumnAfterFn: {
       type: Function, //
     },
+    showCheckAll: {
+      type: Boolean,
+      default: true,
+    },
     showHeaderContext: {
       type: Boolean,
       default: true,
@@ -206,6 +210,10 @@ export default defineComponent({
     rowHeight: {
       type: Number,
       default: 30, //
+    },
+    calHeight: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props, { slots, attrs, emit, expose }) {
@@ -422,22 +430,24 @@ export default defineComponent({
       () => tableIns.globalConfig.show,
       (e) => {
         nextTick(() => {
-          let sRef = tableIns.getRef('bodyDiv') //
-          if (sRef == null) {
-            return
-          }
-          // debugger //
-          let bound = sRef.getBoundingClientRect()
-          if (e == true) {
-            let _height = Math.round(bound.height)
-            let _height1 = _height - 40
-            bodyStyle.flex = ''
-            bodyStyle.height = `${_height1}px !important`
-            // bodyStyle.display = 'none' //
-          } else {
-            bodyStyle.flex = 1 //
-            bodyStyle.height = '100%' //
-          }
+          if (props.calHeight == true) {
+            let sRef = tableIns.getRef('bodyDiv') //
+            if (sRef == null) {
+              return
+            }
+            // debugger //
+            let bound = sRef.getBoundingClientRect()
+            if (e == true) {
+              let _height = Math.round(bound.height)
+              let _height1 = _height - 40
+              bodyStyle.flex = ''
+              bodyStyle.height = `${_height1}px !important`
+              // bodyStyle.display = 'none' //
+            } else {
+              bodyStyle.flex = 1 //
+              bodyStyle.height = '100%' //
+            }
+          } //
         })
       },
       {
@@ -479,30 +489,61 @@ export default defineComponent({
             {...inputProps}
             v-slots={{
               buttons: () => {
+                // let com = (
+                //   <buttonGroupCom
+                //     buttonWidth={40}
+                //     items={[
+                //       {
+                //         label: '<<',
+                //         fn: () => {
+                //           tableIns.jumpToSearchNext(true) //
+                //         }, //
+                //       },
+                //       {
+                //         label: '>>',
+                //         fn: () => {
+                //           tableIns.jumpToSearchNext() //
+                //         },
+                //       },
+                //       {
+                //         label: 'X',
+                //         fn: () => {
+                //           tableIns.showGlobalSearch(false) //
+                //         },
+                //       },
+                //     ]}
+                //   ></buttonGroupCom>
+                // )
                 let com = (
-                  <buttonGroupCom
-                    buttonWidth={40}
-                    items={[
-                      {
-                        label: '<<',
-                        fn: () => {
-                          tableIns.jumpToSearchNext(true) //
-                        }, //
-                      },
-                      {
-                        label: '>>',
-                        fn: () => {
-                          tableIns.jumpToSearchNext() //
-                        },
-                      },
-                      {
-                        label: 'X',
-                        fn: () => {
-                          tableIns.showGlobalSearch(false) //
-                        },
-                      },
-                    ]}
-                  ></buttonGroupCom>
+                  <div class="flex items-center space-x-2 p-2 bg-gray-100 rounded-t-md border-b">
+                    <button
+                      onClick={() => {
+                        tableIns.jumpToSearchNext()
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200 transition"
+                      title="上一页"
+                    >
+                      &laquo;
+                    </button> 
+                    <button
+                      onClick={() => {
+                        tableIns.jumpToSearchNext(true)
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200 transition"
+                      title="下一页"
+                    >
+                      &raquo;
+                    </button>
+                    <button
+                      onClick={() => {
+                        tableIns.showGlobalSearch(false)
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-white bg-red-500 border border-red-600 rounded-md shadow-sm hover:bg-red-600 transition"
+                      title="关闭"
+                    >
+                      X
+                    </button>
+                  </div>
                 )
                 return com //
               },

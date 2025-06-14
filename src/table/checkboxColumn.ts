@@ -54,7 +54,7 @@ export class CheckboxColumn extends Column {
   getCustomLayout() {
     return this.getCheckboxCustomLayout()
   }
-  
+
   getColumnProps(isFooter = false) {
     let _this = this
     let _props: CheckboxColumnDefine = super.getColumnProps()
@@ -81,7 +81,58 @@ export class CheckboxColumn extends Column {
       return false
     }
     //@ts-ignore
-    _props.headerCustomLayout = (args) => {
+    // _props.headerCustomLayout = (args) => {
+    //   const { table, row, col, rect } = args
+    //   const { height, width } = rect ?? table.getCellRect(col, row)
+    //   // console.log(width,'testWidth')//
+    //   const container = createGroup({
+    //     height: height - 2,
+    //     width: width - 2,
+    //     x: 1,
+    //     y: 1, //
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //   })
+    //   const checkboxGroup = createGroup({
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     boundsPadding: [0, 0, 0, 0],
+    //     justifyContent: 'center', //
+    //   })
+
+    //   const checkbox1 = new CheckBox({
+    //     text: {
+    //       text: '', //
+    //     },
+    //     disabled: false, //
+    //     checked: _this.table.isCheckAll, //
+    //     boundsPadding: [0, 0, 0, 0],
+    //   }) //
+    //   checkbox1.render()
+    //   checkboxGroup.appendChild(checkbox1)
+    //   checkbox1.addEventListener('checkbox_state_change', (e) => {
+    //     const target = e.target ////
+    //     let attributes = target.attribute //
+    //     let checked = attributes.checked
+    //     _this.table.updateCheckboxAll(checked)
+    //   }) //
+    //   container.appendChild(checkboxGroup)
+    //   return {
+    //     rootContainer: container,
+    //     renderDefault: false,
+    //   }
+    // }
+    if (isFooter) {
+      _props.headerCustomLayout = null //
+    } //
+    _props.customLayout = this.getCustomLayout()
+    return _props //
+  }
+  getHeaderCustomLayout() {
+    let _this = this
+    return (args) => {
       const { table, row, col, rect } = args
       const { height, width } = rect ?? table.getCellRect(col, row)
       // console.log(width,'testWidth')//
@@ -101,7 +152,6 @@ export class CheckboxColumn extends Column {
         boundsPadding: [0, 0, 0, 0],
         justifyContent: 'center', //
       })
-      container.appendChild(checkboxGroup)
 
       const checkbox1 = new CheckBox({
         text: {
@@ -119,15 +169,14 @@ export class CheckboxColumn extends Column {
         let checked = attributes.checked
         _this.table.updateCheckboxAll(checked)
       }) //
+      if (this.table.config.showCheckAll == true) {
+        //
+        container.appendChild(checkboxGroup)
+      }
       return {
         rootContainer: container,
         renderDefault: false,
       }
     }
-    if (isFooter) {
-      _props.headerCustomLayout = null //
-    } //
-    _props.customLayout = this.getCustomLayout()
-    return _props //
   }
 }

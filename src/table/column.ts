@@ -213,9 +213,7 @@ export class Column extends Base {
         alignItems: 'center', //
         boundsPadding: [0, 0, 0, 0],
       })
-      container.on('dragover', (e) => {
-        console.log('is drag') //
-      })
+
       let _g = createGroup({
         width: width,
         height,
@@ -1108,14 +1106,22 @@ export class Column extends Base {
   }
   setNoFrozen() {
     let config = this.config //
-    config.frozen = null //
+    config.frozen = null
+    this.table.onColumnResize({
+      originColumn: this.config, //
+    })
+    this.table.loadColumns() //
   }
   setFrozen(type) {
     let config = this.config
     if (!['left', 'right'].includes(type)) {
       return
     }
-    config.frozen = type ////
+    config.frozen = type
+    this.table.onColumnResize({
+      originColumn: this.config, //
+    })
+    this.table.loadColumns()
   }
   setOrder(n: number) {
     //

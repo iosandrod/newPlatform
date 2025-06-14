@@ -782,7 +782,7 @@ export class Table extends Base {
         _iArr1.push(k)
       }
     }
-    console.log(tableIns.dataMap, '更新的index') ////
+    // console.log(tableIns.dataMap, '更新的index') ////
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
       console.time(uuid) //
@@ -831,11 +831,15 @@ export class Table extends Base {
     let _select = ins.getSelectedCellRanges()
     let t = this.templateEditCell
     let t1 = this.runClearSelect
+    console.log('渲染了') //
+    ins.render() ////
+    nextTick(() => {
+      ins.render() //
+    })
     if (t || t1) {
       this.runClearSelect = false //
       return
     } //
-    ins.render() ////
     // ins.selectCells(_select) //
     console.timeEnd(_id) //
     console.log('消耗时间') //
@@ -1151,7 +1155,7 @@ export class Table extends Base {
   }
   loadColumns() {
     try {
-      console.log('load columns sdfjsldkfjsdlfsd') //
+      // console.log('load columns sdfjsldkfjsdlfsd') //
       let columns = this.getShowColumns()
       // columns = columns.map((col) => {
       //   return { field: col.field }
@@ -1503,6 +1507,9 @@ export class Table extends Base {
     let tColumn = _this.getFlatColumns().find((col) => col.getField() == field)
     let width = tColumn.getColumnWidth()
     _this.columnFilterConfig.width = width + 60 //
+    if (_this.columnFilterConfig.width < 300) {
+      _this.columnFilterConfig.width = 300 //
+    }
     // let event = config.event
     let client = config.client
     let x = client.x
@@ -1540,6 +1547,7 @@ export class Table extends Base {
           //
           ..._data.map((row) => {
             let obj = {
+              ...row, //
               [field]: row[field], //
               _value: row[field],
             }
@@ -1551,6 +1559,10 @@ export class Table extends Base {
           return _data1.findIndex((item1) => item1._value == _value) == i
         })
         _config = _.cloneDeep(_config) //
+        let col0 = _config[0]
+        if (width < 240) {
+          col0.width = 240 //
+        }
         if (filterTable == null) {
           return //
         }
@@ -2447,10 +2459,10 @@ export class Table extends Base {
     // }
     // console.log(_config, 'onColumnResize') //
     let column = _config.originColumn
-    column.width = _config.width
+    column.width = _config?.width || column.width
     let onDesignColumn = this.config.onDesignColumn
     if (typeof onDesignColumn == 'function') {
-      onDesignColumn(column, column,false) //
+      onDesignColumn(column, column, false) //
     }
   }
   hiddenColumn(field) {

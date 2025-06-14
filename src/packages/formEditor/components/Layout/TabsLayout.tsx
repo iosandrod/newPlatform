@@ -50,8 +50,9 @@ export default defineComponent({
       changeVisible()
     })
     watch(
-      () => props.data.options.defaultValue,
+      () => [props.data.options.defaultValue, props?.data?.columns?.length], //
       (newVal) => {
+        //
         changeVisible() //
       },
     )
@@ -119,7 +120,10 @@ export default defineComponent({
                         let label = element.label || '选项'
                         return (
                           //
-                          <div class="h-30 flex items-center">
+                          // <div class="h-30 flex items-center">
+                          //   <div>{label}</div>
+                          // </div>
+                          <div class="h-30 px-4 py-2 border-x border-t border-gray-300 rounded-t-md text-gray-700 hover:bg-gray-100 flex justify-center items-center">
                             <div>{label}</div>
                           </div>
                         )

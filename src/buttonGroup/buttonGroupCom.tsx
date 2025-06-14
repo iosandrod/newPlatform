@@ -50,7 +50,7 @@ export default defineComponent({
     let group = new itemGroup(props, props._class as any)
     expose({
       _instance: group,
-    })//
+    }) //
     const ns = group.hooks.useNamespace('buttonGroupCom')
     const btnG = group.hooks.useNamespace('buttonMenuCom')
     let currentMainPage = inject('pageDesign', {}) //
@@ -108,13 +108,18 @@ export default defineComponent({
             item: (el: Button) => {
               let btn = el.config.button //
               let disabled = btn.getDisabled()
-              let _class = ['v-contextmenu', 'h-35', 'items-center', 'flex']
+              let _class = [
+                // 'v-contextmenu',
+                'h-35',
+                'items-center',
+                'flex',
+              ]
               if (disabled == true) {
                 _class.push('is-disabled') //
               }
               let com = (
                 <div
-                  class={_class}
+                  class={[..._class, 'pt-2 pb-2 pl-1 pr-1']}
                   style={{
                     minWidth: `${btn.getButtonWidth()}px`,
                     position: 'relative',
@@ -124,11 +129,14 @@ export default defineComponent({
                     runBtnFn(btn)
                   }}
                 >
-                  <ContextmenuItem>
+                  {/* <ContextmenuItem>
                     <div class="h-full flex items-center">
                       {btn?.getLabel()}
                     </div>
-                  </ContextmenuItem>
+                  </ContextmenuItem> */}
+                  <button class="px-4 py-1.5 rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition">
+                    {btn?.getLabel()}
+                  </button>
                 </div>
               )
               let com1 = null

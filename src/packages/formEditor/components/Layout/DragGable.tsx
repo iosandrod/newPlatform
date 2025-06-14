@@ -291,8 +291,8 @@ export default defineComponent({
                     tCom = null //
                   }
                   innerCom = (
-                    <div class="flex flex-row h-full">
-                      {tCom}
+                    <div class="flex flex-row h-full ">
+                      {/* {tCom} */}
                       <TypeComponent
                         item={formitem}
                         key={`${element.id}__${element.type}`}

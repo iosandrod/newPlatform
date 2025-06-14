@@ -76,6 +76,7 @@ export default defineComponent({
                   <div style={{ flex: 1, overflow: 'hidden' }}>
                     <erTable
                       isFilterTable={true} //
+                      showCheckAll={false}
                       ref={registerTable}
                       showHeaderButton={false}
                       showCalculate={false} //

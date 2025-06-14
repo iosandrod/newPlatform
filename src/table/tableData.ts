@@ -129,7 +129,7 @@ export const tableConfig: ListTableConstructorOptions = {
       sort: false,
       editType: 'baseinfo', //
       baseinfoConfig: {
-        tableName: 't_Item',//
+        tableName: 't_Item', //
         bindColumns: [
           {
             targetKey: 'cInvCode', //
@@ -11918,7 +11918,8 @@ export const menuTConfig = {
       width: 80,
       sort: true,
       tree: true,
-      // editType: "boolean",//
+      editType: 'boolean', //
+      enableSelect: true,
       // bgColor:(record)=>{
       //   if(record['id']==98){
       //     return 'red'
@@ -11930,7 +11931,8 @@ export const menuTConfig = {
     {
       field: 'createdAt',
       title: '创建时间',
-      width: 180,
+      editType: 'string',
+      width: 400,
       sort: true,
       type: 'date',
     },
@@ -11979,7 +11981,7 @@ export const menuTConfig = {
       sort: false,
       type: 'string',
     },
-  ],
+  ].slice(0, 4), //
   contextItems: [
     {
       label: '添加子菜单',

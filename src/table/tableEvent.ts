@@ -237,7 +237,6 @@ export const selected_cell = (table: Table) => {
               field: targetCol.getField(),
               row,
             }) //
-            console.log('选中行', row) //
           }
         }
       }

@@ -188,7 +188,7 @@ export default defineComponent({
     })
     let _item1 = _item.items[0]
     // console.log(_item, 'testItem')
-    let _config123=getDesignTableConfig(_item1)
+    let _config123 = getDesignTableConfig(_item1)
     console.log(_config123)
     return () => {
       if (show.value == false) {
@@ -265,8 +265,9 @@ export default defineComponent({
             dragRowFn={(config) => {
               return true //
             }}
+            treeConfig={null}
             // showControllerButtons={true}
-            // tableState="edit"
+            tableState="edit"
           ></tableCom>
         </div>
       ) //
@@ -275,39 +276,39 @@ export default defineComponent({
         editType: 'date',
       }) ////
       let _fConfig1 = tFConfig
-      com = ( //
-        <div class="w-full h-500">
-          <er-form
-            platform="pc"
-            // platform="pc"
-            ref={_reg3}
-            isDesign={true} //
-            {...{
-              items: [
-                {
-                  field: 'height',
-                  label: '邮箱', //
-                  // type: 'dform', //
-                  type: 'string', //
-                  span: 24,
-                  options: {
-                    tableName: 'permissions',
-                    bindColumns: [
-                      {
-                        field: 'id',
-                      },
-                    ],
-                    searchColumns: ['subject'], //
-                  },
-                  tabTitle: '权限',
-                },
-              ],
-            }}
-            // {..._fConfig1} //
-            data={d1} //
-          ></er-form>
-        </div>
-      ) //
+      // com = ( //
+      //   <div class="w-full h-500">
+      //     <er-form
+      //       platform="pc"
+      //       // platform="pc"
+      //       ref={_reg3}
+      //       isDesign={true} //
+      //       {...{
+      //         items: [
+      //           {
+      //             field: 'height',
+      //             label: '邮箱', //
+      //             // type: 'dform', //
+      //             type: 'string', //
+      //             span: 24,
+      //             options: {
+      //               tableName: 'permissions',
+      //               bindColumns: [
+      //                 {
+      //                   field: 'id',
+      //                 },
+      //               ],
+      //               searchColumns: ['subject'], //
+      //             },
+      //             tabTitle: '权限',
+      //           },
+      //         ],
+      //       }}
+      //       // {..._fConfig1} //
+      //       data={d1} //
+      //     ></er-form>
+      //   </div>
+      // ) //
       // com = null //
       // com = <SearchDialog pageDesign={pd}></SearchDialog>
       // com = <uploadCom></uploadCom>

@@ -246,10 +246,37 @@ export class MainPageDesign extends PageDesign {
                 if (field.type == 'bool') {
                   field.type = 'boolean' //
                 }
+                if (
+                  ![
+                    'image',
+                    'buttongroup',
+                    'string',
+                    'input',
+                    'entity',
+                    'stable',
+                    'number',
+                    'sform',
+                    'radio',
+                    'select',
+                    'divider',
+                    'dform',
+                    'code',
+                    'time',
+                    'date',
+                    'datetime',
+                    'checkbox',
+                    'boolean',
+                    'baseinfo',
+                    'color',
+                    'gantt',
+                  ].includes(field.type)
+                ) {
+                  field.type = 'string' ////
+                }
                 if (['int', 'float', 'number'].includes(field.type)) {
                   field.type = 'number' //
                 }
-                
+
                 let options = item.options
                 field.label = item.editTitle //
                 let optionsField = item.optionsField //

@@ -18,6 +18,14 @@ const routes: RouteRecordRaw[] = [
           icon: 'CreditCardOutlined',
         },
       },
+      {
+        path: 'chat',
+        name: 'chat',
+        component: () => import('@/pages/platform/chat/App.vue'),
+        meta: {
+          icon: 'CreditCardOutlined',
+        },
+      },
     ],
   },
 ]

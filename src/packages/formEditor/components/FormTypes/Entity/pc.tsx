@@ -75,7 +75,7 @@ export default defineComponent({
       //
       let com = (
         <div
-          class="h-full  w-full box-border "
+          class="  w-full box-border "
           style={{ minHeight: '200px', padding: '4px' }}
         >
           <erTable
@@ -85,6 +85,7 @@ export default defineComponent({
             enableDragRow={enableDragRow}
             dragRowFn={dragRowFn}
             dragRowAfterFn={dragRowAfterFn} //
+            calHeight={true}
             enableDragColumn={enableDragColumn} //
             onBeforeEditCell={(config) => {
               //

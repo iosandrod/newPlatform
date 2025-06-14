@@ -107,6 +107,8 @@ import wangCom from './wangEditor/wangCom'
 // import { registerIconsComp } from './audit/icons'
 import ArcoVue from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
+import NaiveChatP from './chat'
+app.use(NaiveChatP)//
 app.use(ArcoVueIcon)
 app.use(ArcoVue)
 app.use(PrintDesign, {

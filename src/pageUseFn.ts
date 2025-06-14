@@ -69,6 +69,37 @@ export const mainUse = {
       instance.setCurrentEdit()
     },
   ],
+  addMainTableRow: [
+    async (context, next) => {
+      let instance: PageDesign = context.instance
+      let allRelateTables = instance.getAllRelateTable() //
+      let row = context.row
+      // debugger //
+      for (let table of allRelateTables) {
+        let options = table.config.options //
+        //获取关联字段
+        // let relateConfig = options?.relateConfig //
+        let relateKey = options?.relateKey //
+        let treeConfig = options?.treeConfig || {} //
+        let mainRelateKey = options?.mainRelateKey //
+        let tableName = options?.tableName //
+        if (Boolean(relateKey) && Boolean(mainRelateKey)) {
+          let _curRow = instance.getCurRow(tableName)
+          let _value = _curRow?.[relateKey]
+          let rootId = treeConfig?.rootId
+          if (_value == rootId) {
+            _value = null
+          }
+          if (_value != null) {
+            if (row) {
+              row[mainRelateKey] = _value //
+            }
+          }
+        }
+      }
+      await next()
+    },
+  ],
 }
 
 export const editUse = {

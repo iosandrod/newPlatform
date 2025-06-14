@@ -95,15 +95,15 @@ export const createClient = (config) => {
   app.configure(init()) //
   return app //
 }
-export const client = createClient({})
-// export const client: any = {
-//   get: () => {
-//     return {
-//       emit: () => {},
-//     }
-//   },
-//   authenticate: () => {},
-// } //
+// export const client = createClient({})
+export const client: any = {
+  get: () => {
+    return {
+      emit: () => {},
+    }
+  },
+  authenticate: () => {},
+} //
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
@@ -163,8 +163,8 @@ export class myHttp {
       // console.log(_res, 'testRes') //
       system.confirmMessage('登录成功') //
       let router = system.getRouter()
-      router.push('/companyHome') // //
-      return _res ////
+      router.push('/home')
+      return _res
     } catch (error) {
       system.confirmMessage(`登录失败,${error?.message}`, 'error') //
     }

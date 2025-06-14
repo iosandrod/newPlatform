@@ -180,5 +180,18 @@ export class Tab extends Base {
       }
     }
   }
+  hiddenItem(item) {
+    // console.log('hiddenItem', item) //
+    let config = this.config
+    let onCloseClick = config.onCloseClick
+    if (typeof onCloseClick == 'function') {
+      let items = this.tabitems.map((item1) => item1.config)
+      let index = items.findIndex((item1) => item1.name == item.config.name) //
+      let next = items[index + 1]
+      let pre = items[index - 1]
+      let modelValue = this.getModelValue()
+      onCloseClick({ item: item.config, items, next, pre, modelValue }) //
+    }
+  }
   closeByCurrent(type) {}
 }

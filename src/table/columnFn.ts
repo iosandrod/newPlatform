@@ -9,7 +9,11 @@ import {
 } from '@visactor/vtable/es/vrender'
 export const containerMap = {}
 export const getCheckbox = (column: Column) => {
-  let _this = column
+  let _this = column.getTable().columnsMap[column.getField()] //
+  if (column.getField() == 'checkboxField') {
+    //@ts-ignore
+    _this = column.getTable().checkboxColumn //
+  }
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
     let t1: VTable.ListTable = table
@@ -17,7 +21,7 @@ export const getCheckbox = (column: Column) => {
     let _value: string = value
     let record = table.getCellOriginRecord(col, row)
     let bg = _this.getIndexColor(row, record) //
-    if ((record?._index) == (_this.table.tableData?.curRow?._index)) {
+    if (record?._index == _this.table.tableData?.curRow?._index) {
       bg = _this.getCurrentRowColor()
       console.log('update') //
     }
@@ -98,7 +102,7 @@ export const getCheckbox = (column: Column) => {
       // let record = table.getCellOriginRecord(col, row)
       //基本的样式
       let bg = _this.getIndexColor(row, record)
-      if ((record?._index) == (_this.table.tableData?.curRow?._index)) {
+      if (record?._index == _this.table.tableData?.curRow?._index) {
         bg = _this.getCurrentRowColor() //
       } //
       container.setAttribute('background', bg)
@@ -201,7 +205,7 @@ export const getSerialLayout = (column: Column) => {
     // container['updateCanvas'] = () => {
     let updateFn = () => {
       let bg = _this.getIndexColor(row)
-      if ((record?._index) == (_this.table.tableData?.curRow?._index)) {
+      if (record?._index == _this.table.tableData?.curRow?._index) {
         bg = _this.getCurrentRowColor()
       } //
       container.setAttribute('background', bg) //
@@ -471,11 +475,11 @@ export const getDefault = (column: Column) => {
       // let rowEnd = scrollConfig.rowEnd
       // let _row = row
       // container['updateCanvas'] = () => {
-      let updateFn = () => { 
+      let updateFn = () => {
         // let record = table.getCellOriginRecord(col, row)
         //基本的样式
         let bg = _this.getIndexColor(row, record)
-        if ((record?._index) == (_this.table.tableData?.curRow?._index)) {
+        if (record?._index == _this.table.tableData?.curRow?._index) {
           bg = _this.getCurrentRowColor() //
         } //
         container.setAttribute('background', bg)
