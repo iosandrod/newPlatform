@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import packageJson from '../../package.json'
+import { ref, watchEffect } from 'vue'
 
 const dark = ref(false)
 
@@ -11,19 +11,24 @@ watchEffect(() => {
 
 <template>
   <div
-
     bg="gray-100 dark:gray-900"
-
     flex="~"
-
-    fixed left-0 top-0 z-1000 h-70px w-full items-center justify-between px-20px
+    fixed
+    left-0
+    top-0
+    z-1000
+    h-70px 
+    w-full
+    items-center
+    justify-between
+    px-20px
   >
     <div flex="~ gap3" items-center>
       <h3 text="26px green-600/80" font-500>
         Naive Chat
       </h3>
       <div text="12px" bg="orange-600/80" rounded-10px px-10px py-2px>
-        Beta v{{ packageJson.version }}
+        Beta v{{ '' }}
       </div>
     </div>
     <div flex="~ gap5">

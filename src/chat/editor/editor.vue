@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { nextTick } from 'vue';
-import { ref } from 'vue';
+import { nextTick } from 'vue'
+import { ref } from 'vue'
 
 const emits = defineEmits<{
   (e: 'send', content: string): void
@@ -12,28 +12,24 @@ const tools = [
     name: 'file',
     icon: 'i-ri:folder-2-line',
   },
-] 
+]
 
 const editableRef = ref()
 const content = ref('')
 function send() {
-  if (editableRef.value)
-    content.value = editableRef.value.innerHTML
+  if (editableRef.value) content.value = editableRef.value.innerHTML
   emits('send', content.value)
   editableRef.value.innerHTML = ''
   content.value = ''
 }
 
 function handleEnter(event: KeyboardEvent) {
-  if (event.ctrlKey)
-    insertNewLine()
-  else
-    send()
+  if (event.ctrlKey) insertNewLine()
+  else send()
 }
 
 function updateContent() {
-  if (editableRef.value)
-    content.value = editableRef.value.innerText
+  if (editableRef.value) content.value = editableRef.value.innerText
 }
 
 function focusInput() {
@@ -61,17 +57,15 @@ async function toolClick(toolType: string) {
 function changeInputFile(e: Event) {
   const files = (e.target as HTMLInputElement).files
   if (files) {
-    Array.from(files)
-      .forEach((item) => {
-        emits('upload', item)
-      })
+    Array.from(files).forEach((item) => {
+      emits('upload', item)
+    })
   }
 }
 
 function insertNewLine() {
   const selection = window.getSelection()
-  if (!selection)
-    return
+  if (!selection) return
 
   const range = selection.getRangeAt(0)
   const br = document.createElement('br')
@@ -108,25 +102,16 @@ defineExpose({
       display-none
       type="file"
       @change="changeInputFile"
-    >
-    <div
-      min-h-40px
-      flex items-center
-      px-20px
-    >
-      <div
-
-        flex="~ gap5" items-center
-        justify-between
-        text="18px gray-500/60 "
-      >
+    />
+    <div min-h-40px flex items-center px-20px>
+      <div flex="~ gap5" items-center justify-between text="18px gray-500/60 ">
         <slot name="message-tools" :upload="changeInputFile">
           <div
             v-for="i in tools"
             :key="i.icon"
             text="hover:green/80"
             cursor-pointer
-            :class="`${i.icon} text-hover:green/80` "
+            :class="`${i.icon} text-hover:green/80`"
             @click="toolClick(i.name)"
           />
         </slot>
@@ -139,7 +124,8 @@ defineExpose({
       h-60px
       flex-1
       overflow-auto
-      px-20px py-5px
+      px-20px
+      py-5px
       text-left
       outline-none
       contenteditable="true"

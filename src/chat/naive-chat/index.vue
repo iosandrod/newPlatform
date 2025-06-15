@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { provide, ref, reactive, computed, onMounted, nextTick, Ref, watchEffect } from 'vue'
+import {
+  provide,
+  ref,
+  reactive,
+  computed,
+  onMounted,
+  nextTick,
+  Ref,
+  watchEffect,
+} from 'vue'
 import type { Contact, Menu, MenuKey } from '../'
 import NcEditor from '../editor/editor.vue'
 import NcAvatar from '../avatar/avatar.vue'
@@ -88,7 +97,7 @@ provide('current-contact', currentContact)
 provide<Ref<MenuKey>>('active-menu-key', activeMenuKey)
 provide(
   'user-info',
-  computed(() => props.userInfo), 
+  computed(() => props.userInfo),
 )
 provide('contacts', contacts)
 provide('last-messages', lastMessages)

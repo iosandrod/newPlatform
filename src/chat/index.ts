@@ -30,20 +30,12 @@ const components = [
 const NaiveChatP: Plugin = {
   install(app: App) {
     components.forEach((plugin) => {
-      plugin.install?.(app)
+      plugin.install?.(app) //
     })
   },
 }
 
-export {
-  NaiveChat,
-  NcContact,
-  NcMessage,
-  NcMenu,
-  NcAvatar,
-  NcEditor,
-  NcBadge,
-}
+export { NaiveChat, NcContact, NcMessage, NcMenu, NcAvatar, NcEditor, NcBadge }
 export * from './contact/types'
 export * from './naive-chat/types'
 export * from './menu/types'

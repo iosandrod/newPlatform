@@ -2,9 +2,12 @@
 import type { RouteRecordRaw } from 'vue-router'
 
 // 注意：这里的泛型声明告诉 TS，每个模块都有一个 default 导出
-const modules = import.meta.glob<{ default: any }>('@/pages/**/index.vue', {
-  eager: true,
-})
+const modules = import.meta.glob<{ default: any }>(
+  '@/pages/**/index.{vue,tsx}',
+  {
+    eager: true,
+  },
+)
 
 export function generateRoutes(): any {
   // return routes

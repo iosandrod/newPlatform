@@ -6631,3 +6631,58 @@ function handleCommand(command: string) {
 
     // let _columns = this.getTableConfig().columns
     // _columns = JSON.parse(JSON.stringify(_columns))
+
+     function handleEventMessageClick() {
+      alert('点击了Event消息')
+    }
+
+    function handleSetValue() {
+      naiveChatRef.value?.setValue('you wife is charming')
+    }
+
+    function handleAvatarRounded() {
+      rounded.value = rounded.value === 4 ? 40 : 4
+    }
+
+       // let createContactId = 10011
+    // function handleAddContact() {
+    //   createContactId += 1
+    //   naiveChatRef.value?.appendContact({
+    //     id: createContactId,
+    //     nickname: `好友${createContactId}`,
+    //     avatar: '',
+    //     index: 'H',
+    //   })
+    // }
+ const userInfo = {
+      nickname: 'King',
+      avatar:
+        'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132',
+      id: 1000,
+    }
+
+
+      <div style={{ display: 'flex', gap: '12px', padding: '20px 0' }}>
+            {/* <button onClick={handleAddContact}>添加一个联系人</button> */}
+            {/* <button onClick={handleSendEventMessage}>发送一条Event消息</button> */}
+            {/* <button onClick={handleSetValue}>给输入框插入内容</button> */}
+            {/* <button onClick={handleAvatarRounded}>切换头像形状</button> */}
+            {/* <button onClick={handleAppendMessage}>梁老师发来一条消息</button>
+            <button onClick={handleRemoveMessage}>删除一条消息</button>
+            <button onClick={handleSendMessage}>发送一条消息</button> */}
+            {/* <button onClick={handleUpdateMessage}>修改一条消息</button> */}
+            {/* <button onClick={handleUpdateContact}>修改联系人</button> */}
+          </div>
+
+          {/* <div style={{ display: 'flex', gap: '12px' }}>
+            <button onClick={handleAddContact}>添加一个联系人</button>
+            <button onClick={handleSendEventMessage}>发送一条Event消息</button>
+            <button onClick={handleSetValue}>给输入框插入内容</button>
+            <button onClick={handleAvatarRounded}>切换头像形状</button>
+          </div> */}
+
+          <div
+            style={{ marginTop: '50px', textAlign: 'center', color: '#4B5563' }}
+          >
+            {/* 你可以在此处添加更多内容 */}
+          </div>

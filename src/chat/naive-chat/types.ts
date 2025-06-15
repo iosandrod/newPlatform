@@ -42,7 +42,7 @@ export interface MessageStatus {
 export interface MessageStore {
   [id: number]: MessageStatus
 }
-
+//
 type SomeOptionalMessage = {
   toContactId: number
   id: string
