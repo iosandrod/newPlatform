@@ -7,6 +7,41 @@ import {
   createImage,
   createText,
 } from '@visactor/vtable/es/vrender'
+import * as d3 from 'd3'
+function createSvgTextString(text, width, height, fontSize, lineHeight = 1.2) {
+  // 1. 创建一个脱离文档的 SVG 容器
+  const svg = d3
+    .create('svg')
+    .attr('xmlns', 'http://www.w3.org/2000/svg')
+    .attr('width', width)
+    .attr('height', height)
+
+  // 2. 拆分多行
+  const lines = text.split('\n')
+
+  // 3. 在 SVG 里插入 <text>，设置起始坐标 (x, y)
+  //    y 设为 fontSize，让第一行基线刚好在这个位置
+  const textEl = svg
+    .append('text')
+    .attr('x', 0)
+    .attr('y', fontSize)
+    .attr('font-family', 'Arial, sans-serif')
+    .attr('font-size', fontSize)
+    .attr('fill', 'black')
+
+  // 4. 对每一行都添加一个 <tspan>
+  lines.forEach((line, i) => {
+    const t = textEl
+      .append('tspan')
+      .attr('x', 0)
+      // 第一行不需额外 dy，后续行按照行高累加
+      .attr('dy', i === 0 ? 0 : fontSize * lineHeight)
+      .text(line)
+  })
+
+  // 5. 序列化并返回
+  return new XMLSerializer().serializeToString(svg.node())
+}
 export const containerMap = {}
 export const getCheckbox = (column: Column) => {
   let _this = column.getTable().columnsMap[column.getField()] //
@@ -23,7 +58,7 @@ export const getCheckbox = (column: Column) => {
     let bg = _this.getIndexColor(row, record) //
     if (record?._index == _this.table.tableData?.curRow?._index) {
       bg = _this.getCurrentRowColor()
-      console.log('update') //
+      // console.log('update') //
     }
     const { height, width } = rect ?? table.getCellRect(col, row)
     let _height = height
@@ -180,29 +215,7 @@ export const getSerialLayout = (column: Column) => {
       justifyContent: 'center',
       background: gb,
     })
-    // let t = createText({
-    //   text: value, //
-    //   fontSize: 14,
-    //   fill: 'black',
-    //   fontWeight: 'bold',
-    // })
-    // container.add(t) //
-    /*
 
-      */
-
-    // let _index = record['_index'] //
-    // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
-    // let rowStart = scrollConfig?.rowStart
-    // let rowEnd = scrollConfig?.rowEnd
-    // if (rowStart == null || rowEnd == null) {
-    //   rowStart = 0
-    //   rowEnd = 0
-    // }
-    // let _row = row
-    // let currentIndexContain = _table.currentIndexContain
-    // container['currentRowIndex'] = row //
-    // container['updateCanvas'] = () => {
     let updateFn = () => {
       let bg = _this.getIndexColor(row)
       if (record?._index == _this.table.tableData?.curRow?._index) {
@@ -231,7 +244,7 @@ export const getSerialLayout = (column: Column) => {
 
 export const getDefault = (column: Column) => {
   let _this = column.getTable().columnsMap[column.getField()] //
-  console.log(isProxy(_this), 'isProxy')
+  // console.log(isProxy(_this), 'isProxy')
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
     let t1: VTable.ListTable = table
@@ -300,7 +313,6 @@ export const getDefault = (column: Column) => {
     container.on('mouseout', () => {
       // debugger//
       let color = container._oldColor
-      // console.log(color,'testColor')//
       if (record['_index'] == _this.table.tableData?.curRow?._index) {
         color = _this.getCurrentRowColor() //
       } else {
@@ -311,7 +323,6 @@ export const getDefault = (column: Column) => {
       container.setAttribute('background', color)
     })
     if (_this.getField() == 'pid') {
-      // console.log(value, 'testValue') //
     }
     let _bounds = [0, 0, 0, 20]
     let locationName = createText({
@@ -324,6 +335,21 @@ export const getDefault = (column: Column) => {
       boundsPadding: _bounds, //
       lineDashOffset: 0,
     })
+    // let formSize = _this.getFontSize()
+    // let svg = createSvgTextString(`${_value}`, width, height, 12) //
+    // console.log(svg, 'svg') //
+    // let locationName = createImage({
+    //   x: 0,
+    //   y: 0,
+    //   //     image: `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+    //   //   <text x="0" y="${
+    //   //     height / 2 - formSize / 2
+    //   //   }" font-family="Arial" font-size="${formSize}px" fill="black">
+    //   //     ${`${_value}`}
+    //   //   </text>
+    //   // </svg>`,
+    //   image:svg,//
+    // })
     let _g = createGroup({
       width: width,
       height,

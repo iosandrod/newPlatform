@@ -19,7 +19,9 @@ export const mainUse = {
           }
         } //
       }
-      instance.getTableData() //
+      setTimeout(() => {
+        instance.getTableData() //
+      }, 1000);
     },
   ],
   getTableData: [

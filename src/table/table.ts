@@ -2847,7 +2847,7 @@ export class Table extends Base {
     let field = config.field //
     let record = config.record
     if (record == null) {
-      console.log(record, 'record没有') //
+      console.log(config, 'record没有') //
       return //
     }
     let _index = record?._index //
@@ -2878,6 +2878,7 @@ export class Table extends Base {
       // console.log(_arr.length,'fsdkfjslfds')//
       // console.log(count, 'sfjsdlfsdf') //
       if (_length > count) {
+        console.log('删除了')
         let _length1 = _length - count
         let _indexArr = _arr.splice(0, _length1)
         _indexArr.forEach((item) => {
@@ -2921,11 +2922,11 @@ export class Table extends Base {
       }
       let _watch = map1[`watch_arr`]
       if (_watch == null) {
-        _watch = []
+        // _watch = []
+        _watch = {} //
         map1[`watch_arr`] = _watch
       }
       // let column=ref(config.column)
-
       let _w1 = watch(
         () => {
           // console.log(
@@ -2944,7 +2945,12 @@ export class Table extends Base {
           // immediate: true,
         },
       )
-      _watch.push(_w1) //
+      // _watch.push(_w1) //
+      if (_watch[field] != null) {
+        let fn = _watch[field]
+        fn() //
+      }
+      _watch[field] = _w1
       _v = _value1
     }
     return _v
@@ -2977,6 +2983,13 @@ export class Table extends Base {
       watchArr.forEach((item) => {
         item() //
       })
+      obj1[`watch_arr`] = null
+    } else {
+      if (typeof watchArr == 'object') {
+        Object.values(watchArr).forEach((item: any) => {
+          item()
+        })
+      }
     }
     obj1[`watch_arr`] = null //
   }

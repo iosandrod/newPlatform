@@ -66,6 +66,12 @@ const menus = ref<Menu[]>([
     active: false,
   },
   {
+    key: 'newcontact',
+    icon: 'i-ri:contacts-line',
+    activeIcon: 'i-ri:contacts-fill',
+    active: false,
+  }, //
+  {
     key: 'more',
     icon: 'i-ri:more-line',
     activeIcon: 'i-ri:more-fill',
@@ -409,8 +415,81 @@ defineExpose({
         </div>
         <div v-show="activeMenuKey === 'contact'" overflow-y-auto>
           <slot name="sidebar-contact-header">
-            <div px-10px py-10px bg="gray/2">
-              自定义头部信息
+            <div class="flex flex-col w-full bg-gray-100">
+              <!-- 搜索区：外边距 10px、内边距左右 12px、上下 10px，高 40px -->
+              <div class="">
+                <div
+                  class="flex items-center h-40 pl-10 pr-10 rounded-lg bl-g-white p"
+                >
+                  <!-- 放大镜图标 20×20 -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-20 h-20 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1111.5 4.5a7.5 7.5 0 015.15 12.15z"
+                    />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="搜索"
+                    class="w-full ml-10 text-sm text-gray-600 placeholder-gray-400 bg-transparent focus:outline-none"
+                  />
+                  <!-- 加号图标 20×20 -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-20 h-20 text-gray-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="flex-1 overflow-auto">
+                <!-- 新的朋友 -->
+                <div class="pl-10 mt-10 text-xs text-gray-500">
+                  新的朋友
+                </div>
+                <ul>
+                  <li
+                    class="flex items-center pl-10 bg-white h-50 hover:bg-gray-100"
+                  >
+                    <div
+                      class="flex items-center justify-center w-32 h-32 text-white bg-orange-400 rounded-lg"
+                    >
+                      <!-- 向下箭头 12×12 -->
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-12 h-12"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M18 9l-6 6-6-6"
+                        />
+                      </svg> 
+                    </div>
+                    <span class="ml-10 text-sm text-gray-800">新的朋友</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </slot>
           <div v-for="item in contacts" :key="item.id">

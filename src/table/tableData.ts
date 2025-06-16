@@ -200,7 +200,7 @@ export const tableConfig: ListTableConstructorOptions = {
       title: 'city',
       width: 150,
     },
-  ].slice(0, 2),
+  ].slice(0, 5),
   // columns: [
   //   {
   //     column_name: 'iInterID',
@@ -1129,7 +1129,7 @@ export const tableConfig: ListTableConstructorOptions = {
   //   },
   // ],
   //@ts-ignore
-  data: generatePersons(100000), ////
+  data: generatePersons(500), ////
 }
 export const tablestaticData = {
   defaultRowHeight: 80,

@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import { NaiveChat } from '@/chat'
 import type {
   Contact,
@@ -10,6 +10,7 @@ import type {
 import BaseHeaderVue from '@/pages/platform/chat/components/BaseHeader.vue'
 import { contacts, messages } from '@/pages/platform/chat/utils'
 import { ChatClass } from './chatClass'
+import { system } from '@/system'
 
 export default defineComponent({
   name: 'NaiveChatApp', //
@@ -29,7 +30,8 @@ export default defineComponent({
     contacts: {
       type: Array,
       default: () => {
-        return JSON.parse(JSON.stringify(contacts)) //
+        // return JSON.parse(JSON.stringify(contacts)) //
+        return []
       },
     },
   },
@@ -66,20 +68,92 @@ export default defineComponent({
       //       status: 'success',
       //     })
       //   })
-      console.log(message) //
+      // console.log(message) //
     }
-    return () => (
-      <NaiveChat
-        ref={(el) => {
-          chatIns.registerRef('naiveChatRef', el)
-        }}
-        userInfo={chatIns.getUserInfo()}
-        avatarRounded={rounded.value}
-        onChangeContact={changeContact}
-        onPullMessage={pullMessage}
-        onSend={send}
-        // onEventMessageClick={handleEventMessageClick}
-      />
-    )
+    // system.initChat()
+    // system.registerRef('chatIns', chatIns) //
+    onMounted(() => {
+      system.registerRef('chatIns', chatIns)
+      system.initChat() //
+    })
+    onUnmounted(() => {
+      system.registerRef('chatIns', null) //
+    })
+    return () => {
+      let com = (
+        <NaiveChat
+          ref={(el) => {
+            chatIns.registerRef('naiveChatRef', el)
+          }}
+          userInfo={chatIns.getUserInfo()}
+          avatarRounded={rounded.value}
+          onChangeContact={changeContact}
+          onPullMessage={pullMessage}
+          onSend={send}
+          // onEventMessageClick={handleEventMessageClick}
+        />
+      )
+      return (
+        <div>
+          {com}
+          <erButtonGroup
+            items={[
+              {
+                label: '添加好友',
+                fn: async () => {
+                  await system.addFriend(2)
+                },
+              },
+              {
+                label: '查找联系人',
+                fn: async () => {
+                  let fConfig = {
+                    title: '输入联系人名称',
+                    height: 200,
+                    width: 300, //
+                    itemSpan: 24,
+                    items: [
+                      {
+                        field: 'username', //
+                        type: 'string',
+                        label: '昵称',
+                        placeholder: '请输入昵称', //
+                      },
+                    ],
+                    data: {
+                      username: '',
+                    },
+                  }
+                  let d = await system.confirmForm(fConfig) //
+                  let { username } = d //
+                  let data = await system.searchFriend(username)
+                  let data1 = await system.confirmTable({
+                    title: '选择联系人',
+                    height: 300,
+                    width: 600,
+                    columns: [
+                      { title: '昵称', field: 'username' },
+                      { title: '头像', field: 'avatar' },
+                    ],
+                    data, //
+                    showHeaderButtons: false, //
+                    showCheckboxColumn: true, //
+                  })
+                  // console.log(data1, 'testData1') //
+                  let checkData = data1.filter((item) => {
+                    return item['checkboxField'] == true
+                  })
+                  if (checkData.length == 0) {
+                    return
+                  }
+                  let { id } = checkData[0]
+                  await system.addFriend(id) //
+                },
+              },
+            ]}
+          ></erButtonGroup>
+        </div>
+      )
+    }
   },
 })

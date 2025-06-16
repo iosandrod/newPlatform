@@ -11,7 +11,6 @@ import 'element-plus/dist/index.css'
 import 'vant/lib/index.css'
 import './mainStyle.css'
 import './homeStyle.css'
-import './style.scss' //
 import 'vxe-table/lib/style.css'
 import 'vxe-pc-ui/styles/all.scss'
 // import 'default-passive-events' //
@@ -107,8 +106,10 @@ import wangCom from './wangEditor/wangCom'
 // import { registerIconsComp } from './audit/icons'
 import ArcoVue from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
-import NaiveChatP from './chat'
-app.use(NaiveChatP)//
+import NaiveChatP from './chat'//
+import './style.scss' //
+
+app.use(NaiveChatP)
 app.use(ArcoVueIcon)
 app.use(ArcoVue)
 app.use(PrintDesign, {
@@ -140,19 +141,7 @@ app.use(context) //
 app.use(VxeTable) //
 app.use(VxeUIAll)
 app.use(router)
-// router.addRoute('pageIndex', {
-//   path: 'companyHome',
-//   name: 'companyHome', //
-//   component: () => import('@/pages/platform/home/erpHome.vue'), //
-//   meta: {
-//     icon: 'CreditCardOutlined',
-//   },
-// })
-// nextTick(() => {
-//   router.push({
-//     name: 'companyHome',
-//   })
-// })
+
 app.use(elementPlus) //
 app.mount('#app')
 //

@@ -132,5 +132,8 @@ export class ChatClass extends Base {
     let sys = this.getSystem()
     let http = this.getHttp()
   }
-  //获取用户的群聊
+  setContacts(contacts) {
+    let naiveChatRef = this.getNaiveChatRef()
+    naiveChatRef?.initContacts(contacts) //
+  }
 }

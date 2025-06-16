@@ -203,10 +203,10 @@ export default defineComponent({
       com = (
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
           <tableCom
-            // {...tableConfig}
+            {...tableConfig}
             // showRowSeriesNumber={false} //
-            {...menuTConfig} ////
-            data={menuTConfig.data.slice(0, 1)} //
+            // {...menuTConfig} ////
+            // data={menuTConfig.data.slice(0, 1)} //
             // treeConfig={null}
             // rowHeight={100} //
             // treeConfig={null}

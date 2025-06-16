@@ -2,7 +2,7 @@ import { nextTick, reactive } from 'vue'
 import _ from 'lodash'
 import { Client, client as _client, http, myHttp } from './service/client'
 import { Base } from '@ER/base'
-import { cacheValue, useDelay } from '@ER/utils/decoration'
+import { cacheValue, useDelay, useOnce } from '@ER/utils/decoration'
 import { PageDesign } from '@ER/pageDesign'
 // import pageCom, { getDefaultPageProps } from '@ER/pageCom'
 import { Dialog } from './dialog/dialog'
@@ -26,6 +26,8 @@ import { createColumnSelect } from './systemFn'
 import { generateRoutes } from '@/router/register'
 import { Menu } from './menu/menu'
 import { BMenu } from './buttonGroup/bMenu'
+import { ChatClass } from './chat/chatClass'
+import { Contact } from './chat'
 export class System extends Base {
   hasInitRoutes = false
   allApp: any = [] //
@@ -557,7 +559,7 @@ export class System extends Base {
     let _dialog = new Dialog(dialogConfig) //
     this.dialogArr.push(_dialog) //
   } //
-  async confirmTable(tableConfig: any): any[] {
+  async confirmTable(tableConfig: any): Promise<any[]> {
     return new Promise(async (resolve, reject) => {
       let _table = new Table(tableConfig)
       let component = tableCom
@@ -572,6 +574,7 @@ export class System extends Base {
       let _height = tableConfig.height //
       let _width = tableConfig.width
       let _config = {
+        title: tableConfig?.title, //
         createFn,
         width: _width || 600,
         height: _height || 400, //
@@ -1604,6 +1607,76 @@ export class System extends Base {
 
     let _columns = _obj.columns || []
     return _columns
+  } //
+  async addFriend(friendid) {
+    // let userinfo = this.getUserInfo()
+    let http = this.getHttp() //
+    let res = await http.post('users', 'addFriend', { friendid })
+    this.confirmMessage('发送好友请求成功')
+  }
+  async searchFriend(keyword) {
+    let http = this.getHttp() //
+    if (keyword == null || keyword.trim().length == 0) {
+      return []
+    }
+    let data = await http.find('users', {
+      username: {
+        $like: `%${keyword}%`, //
+      },
+      id: {
+        $nin: [this.getUserInfo()?.user?.id], //
+      },
+    })
+    return data //
+  }
+  @useOnce()
+  async initChat() {
+    console.log('初始化聊天') //
+    let userid = this.getUserId() //
+    let myFriends = await this.getHttp().find('friends', {
+      status: 'success', //
+      $or: [
+        {
+          userid: userid,
+        },
+        {
+          friendid: userid,
+        },
+      ], //
+    })
+    // console.log(myFriends, 'testFriends') //
+    let allId = myFriends
+      .map((item) => {
+        return [item.userid, item.friendid]
+      })
+      .flat()
+      .filter((item) => {
+        return item != userid
+      })
+    // console.log(allId, 'testId') //
+    if (allId.length > 0) {
+      let allUsers = await this.getHttp().find('users', {
+        id: {
+          $in: allId,
+        }, //
+      }) //
+      let _contacts = allUsers.map((item, i) => {
+        let c: Contact = {
+          id: item.id,
+          nickname: item.username,
+          avatar: '',
+          index: i,
+        }
+        return c
+      })
+
+      let chatIns: ChatClass = this.getRef('chatIns') //
+      chatIns.setContacts(_contacts) //
+    }
+  }
+  getUserId() {
+    let userinfo = this.getUserInfo()
+    return userinfo?.user?.id
   }
 }
 export const system = reactive(new System()) //

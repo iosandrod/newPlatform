@@ -1249,4 +1249,7 @@ export class Column extends Base {
       return reactive(table) //
     }
   }
+  getFontSize() {
+    return 8
+  }
 }

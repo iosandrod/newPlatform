@@ -6686,3 +6686,41 @@ function handleCommand(command: string) {
           >
             {/* 你可以在此处添加更多内容 */}
           </div>
+
+          // router.addRoute('pageIndex', {
+//   path: 'companyHome',
+//   name: 'companyHome', //
+//   component: () => import('@/pages/platform/home/erpHome.vue'), //
+//   meta: {
+//     icon: 'CreditCardOutlined',
+//   },
+// })
+// nextTick(() => {
+//   router.push({
+//     name: 'companyHome',
+//   })
+// })
+
+ // let t = createText({
+    //   text: value, //
+    //   fontSize: 14,
+    //   fill: 'black',
+    //   fontWeight: 'bold',
+    // })
+    // container.add(t) //
+    /*
+
+      */
+
+    // let _index = record['_index'] //
+    // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
+    // let rowStart = scrollConfig?.rowStart
+    // let rowEnd = scrollConfig?.rowEnd
+    // if (rowStart == null || rowEnd == null) {
+    //   rowStart = 0
+    //   rowEnd = 0
+    // }
+    // let _row = row
+    // let currentIndexContain = _table.currentIndexContain
+    // container['currentRowIndex'] = row //
+    // container['updateCanvas'] = () => {
