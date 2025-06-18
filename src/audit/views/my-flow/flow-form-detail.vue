@@ -315,7 +315,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @use "@/audit/styles/variables.module.scss" as *;;
-@FormLabelWidth: 84px;
+$FormLabelWidth: 84px;
 
 .flow-form-box {
   padding: 10px 0;
@@ -330,7 +330,7 @@ onMounted(() => {
 
     .label {
       color: #9ba5b3;
-      width: @FormLabelWidth;
+      width: $FormLabelWidth;
       overflow: hidden;
       white-space: nowrap;
       flex-shrink: 0;
@@ -343,7 +343,7 @@ onMounted(() => {
       color: #1d2129;
       display: flex;
       align-items: flex-start;
-      width: calc(100% - @FormLabelWidth - 16px);
+      width: calc(100% - $FormLabelWidth - 16px);
       word-wrap: anywhere;
       word-break: break-all;
     }
@@ -393,7 +393,7 @@ onMounted(() => {
   .flow-inst-list {
     width: 100%;
     display: grid !important;
-    grid-template-columns: repeat(auto-fit, @FlowCardWidth);
+    grid-template-columns: repeat(auto-fit, $FlowCardWidth);
     gap: 8px;
   }
 

@@ -114,6 +114,13 @@ export const selectTypeMap = (_this: PageDesign) => {
         return _this.state.selected || {} //
       }), //
     },
+    boolean: {
+      itemSpan: 24,
+      items: [...createDSelect('boolean')],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }), //
+    },
     input: {
       itemSpan: 24,
       items: [...createDSelect('input')],

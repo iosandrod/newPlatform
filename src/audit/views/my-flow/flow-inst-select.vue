@@ -267,13 +267,13 @@ onBeforeMount(() => {
 <style lang="scss" scoped>
 @use "@/audit/styles/variables.module.scss" as *;;
 
-@FlowTabsHeight: 36px;
-@SearchBoxHeight: 56px;
+$FlowTabsHeight: 36px;
+$SearchBoxHeight: 56px;
 
 .flow-select-container {
   .flow-select-body {
     .flow-tabs {
-      height: @FlowTabsHeight;
+      height: $FlowTabsHeight;
       margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
@@ -282,7 +282,7 @@ onBeforeMount(() => {
       .search-box {
         display: flex;
         align-items: center;
-        height: @SearchBoxHeight;
+        height: $SearchBoxHeight;
 
         .search-segment + .search-segment {
           margin-left: 4px;
@@ -303,7 +303,7 @@ onBeforeMount(() => {
 
     .flow-list {
       width: 100%;
-      height: calc(100vh - @FlowTabsHeight - 200px);
+      height: calc(100vh - $FlowTabsHeight - 200px);
       border: 1px solid var(--color-neutral-3);
       border-radius: 4px;
       overflow: hidden auto;

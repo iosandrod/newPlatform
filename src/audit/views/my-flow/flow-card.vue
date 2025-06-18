@@ -80,7 +80,7 @@ const onDetailClose = () => {
 
 <style lang="scss" scoped>
 @use "@/audit/styles/variables.module.scss";
-
+$BorderRadius: 4px;
 .flow-card-box {
   user-select: none;
   border-radius: $BorderRadius;

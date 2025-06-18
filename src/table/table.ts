@@ -2878,7 +2878,6 @@ export class Table extends Base {
       // console.log(_arr.length,'fsdkfjslfds')//
       // console.log(count, 'sfjsdlfsdf') //
       if (_length > count) {
-        console.log('删除了')
         let _length1 = _length - count
         let _indexArr = _arr.splice(0, _length1)
         _indexArr.forEach((item) => {

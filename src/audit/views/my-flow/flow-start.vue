@@ -99,11 +99,11 @@ onBeforeMount(() => {
 </script>
 
 <style lang="scss" scoped>
-@use "@/audit/styles/variables.module.scss" as *;;
+/* @use "@/audit/styles/variables.module.scss" as *;; */
 
-@SearchBoxHeigth: 55px;
+/* @SearchBoxHeigth: 55px; */
 
-.flow-start-box {
+/* .flow-start-box {
   width: 100%;
   // height: calc(100vh - $AppHeaderHeight - $AppBreadcrumbHeight);
   overflow: hidden;
@@ -191,5 +191,5 @@ onBeforeMount(() => {
       }
     }
   }
-}
+} */
 </style>

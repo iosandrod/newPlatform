@@ -14,6 +14,7 @@ import pageCom from '@ER/pageCom'
 import TableCom from '@/table/tableCom'
 import { Table } from '@/table/table'
 import LeftMenu from './leftMenu'
+import { Dropdown } from '@/menu/dropdown'
 
 export default defineComponent({
   components: {
@@ -153,10 +154,30 @@ export default defineComponent({
               ></er-dropdown>
             </div>
             <div class="flex-1 mx-8 flex items-center justify-center">
-              <input
-                placeholder="全局查询"
-                class="w-400 h-35 px-3 border border-gray-300 rounded-l-md outline-none"
-              />
+              <er-dropdown
+                ref={(el) => {
+                  systemIns.registerRef('gSearch', el)
+                }}
+                v-slots={{
+                  default: () => {
+                    let com = (
+                      <input
+                        onFocus={() => {
+                          let _ref: Dropdown = systemIns.getRef('gSearch')
+                          _ref.showDropdown() //
+                        }}
+                        placeholder="全局查询"
+                        class="w-400 h-35 px-3 border border-gray-300 rounded-l-md outline-none"
+                      />
+                    )
+                    return com
+                  },
+                  dropdown: () => {
+                    let com = <div class="w-400 h-400 bg-red"></div>
+                    return com
+                  },
+                }}
+              ></er-dropdown>
             </div>
 
             <div class="flex items-center space-x-4">

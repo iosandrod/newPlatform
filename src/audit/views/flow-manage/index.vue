@@ -153,13 +153,14 @@
 </template>
 
 <script setup>
-import FlowManApi from '@/audit/api/FlowManApi'
+// import FlowManApi from '@/audit/api/FlowManApi'
 import BackToTop from '@/audit/components/common/BackToTop.vue'
 import EditableText from '@/audit/components/common/EditableText.vue'
 import ArrayUtil from '@/audit/components/flow/common/ArrayUtil'
 import FlowIcon from '@/audit/components/icons/FlowIcon.vue'
 import { useFlowStore, useOrganStore, useUserStore } from '@/audit/stores'
 import { Notification } from '@arco-design/web-vue'
+let FlowManApi = {}//
 import {
   IconCheckCircle,
   IconCopy,
@@ -305,7 +306,7 @@ onBeforeMount(() => {
 <style scoped lang="scss">
 @import '@/audit/styles/variables.module.scss';
 
-@SearchHeight: 55px;
+$SearchHeight: 55px;
 
 .fd-main-box {
   user-select: none;
@@ -318,9 +319,9 @@ onBeforeMount(() => {
   .search-area {
     display: flex;
     justify-content: space-between;
-    margin: 0 @LayoutGap @LayoutGap;
+    margin: 0 $LayoutGap $LayoutGap;
     border-radius: $BorderRadius;
-    height: @SearchHeight;
+    height: $SearchHeight;
     padding: 0 $Gap;
     background: #fff;
     display: flex;
@@ -335,11 +336,11 @@ onBeforeMount(() => {
 
   .flow-groups-area {
     height: calc(
-      100vh - $AppHeaderHeight - $AppBreadcrumbHeight - @SearchHeight -
-        @LayoutGap
+      100vh - $AppHeaderHeight - $AppBreadcrumbHeight - $SearchHeight -
+        $LayoutGap
     );
     overflow: hidden auto;
-    padding: 0 @LayoutGap;
+    padding: 0 $LayoutGap;
 
     .empty-flow-box {
       border-radius: $BorderRadius;
@@ -353,7 +354,7 @@ onBeforeMount(() => {
       // box-shadow: 0 0 3px 1px #eee;
       background-color: #fff;
       overflow: hidden;
-      margin-bottom: @LayoutGap;
+      margin-bottom: $LayoutGap;
 
       .group-header {
         height: 48px;

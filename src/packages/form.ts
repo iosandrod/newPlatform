@@ -444,9 +444,21 @@ export class Form extends Base {
     return new Promise(async (resolve, reject) => {
       let form: VxeFormInstance = this.getRef('form')
       // let items = form.getItems()
-      form.validate((err) => {
+      form.validate(async (err) => {
+        err=err||{}//
         let _arr = Object.values(err)
         if (_arr.length == 0) {
+          let _validateFn = this.config.validate
+          if (typeof _validateFn == 'function') {
+            try {
+              let _value = await _validateFn()
+              if (typeof _value == 'string') {
+                reject(_value)
+              }
+            } catch (error) {
+              reject(error?.message) //
+            }
+          }
           resolve(true) //
         }
         let allItem = _arr
@@ -466,6 +478,7 @@ export class Form extends Base {
             //@ts-ignore
             return { field: r.field, message: r.content, title: r.title }
           })
+
         reject('校验出错') //
       }) //
     })

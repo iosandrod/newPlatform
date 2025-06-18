@@ -24,19 +24,15 @@
         <template v-if="isLoggedIn">
           <div class="flex items-center space-x-2">
             <el-dropdown
-              split-button
               type="primary"
               @click="handleCommand"
               placement="bottom-end"
               class="h-40 px-4 rounded-lg"
             >
               <span class="flex items-center space-x-2">
-                <img
-                  :src="user.avatar"
-                  alt="avatar"
-                  class="w-40 h-40 rounded-full"
-                />
-                <span class="font-medium">{{ user.name }}</span>
+                <span class="font-medium text-white">
+                  {{ systemIns.getUserName() }}
+                </span>
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -84,7 +80,7 @@
           </el-menu-item>
         </el-menu>
       </aside>
- 
+
       <!-- Content Area -->
       <main class="flex-1 p-5 overflow-auto bg-gray-50">
         <div
@@ -150,7 +146,6 @@ const apps = ref<AppItem[]>([
     description: '配置化构建应用', //
     icon: 'el-icon-data-analysis',
   },
-  
 ])
 
 // 菜单激活状态
@@ -176,7 +171,7 @@ let user = computed(() => {
 
 // 登录与登出方法 (替换为实际逻辑)
 function login() {
-  systemIns.routeTo('/companyLogin') //
+  systemIns.routeTo('/login') //
 }
 
 function logout() {

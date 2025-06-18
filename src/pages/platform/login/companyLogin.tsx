@@ -188,7 +188,7 @@ export default defineComponent({
                     第三方登录 或
                     <div
                       onClick={() => {
-                        system.routeTo('companyRegister') //
+                        system.routeTo('register') //
                       }}
                       href="#"
                       class="text-blue-600 cursor-pointer"

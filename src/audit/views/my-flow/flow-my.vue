@@ -174,5 +174,5 @@ onBeforeMount(() => {
 </script>
 
 <style lang="scss">
-@import "./flow-base.less";
+@import "./flow-base.scss";
 </style>

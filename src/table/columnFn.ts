@@ -8,6 +8,7 @@ import {
   createText,
 } from '@visactor/vtable/es/vrender'
 import * as d3 from 'd3'
+import { render } from 'bwip-js'
 function createSvgTextString(text, width, height, fontSize, lineHeight = 1.2) {
   // 1. 创建一个脱离文档的 SVG 容器
   const svg = d3
@@ -51,6 +52,7 @@ export const getCheckbox = (column: Column) => {
   }
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
+
     let t1: VTable.ListTable = table
 
     let _value: string = value
@@ -246,6 +248,11 @@ export const getDefault = (column: Column) => {
   let _this = column.getTable().columnsMap[column.getField()] //
   // console.log(isProxy(_this), 'isProxy')
   let customLayout = (args) => {
+    // if (1 == 1) {
+    //   return {
+    //     renderDefault: true,
+    //   }
+    // }
     let { table, row, col, rect, value } = args
     let t1: VTable.ListTable = table
     let _value: string = value //

@@ -165,7 +165,7 @@ export default defineComponent({
                     已有账号
                     <div
                       onClick={() => {
-                        system.routeTo('companyLogin') //
+                        system.routeTo('login') //
                       }}
                       href="#"
                       class="text-blue-600 cursor-pointer"

@@ -73,14 +73,14 @@ export default routes
   //   component: () => import('@/pages/platform/login/Login'),
   // },
   // {
-  //   path: '/companyLogin',
-  //   name: 'companyLogin',
-  //   component: () => import('@/pages/platform/login/companyLogin'),
+  //   path: '/login',
+  //   name: 'login',
+  //   component: () => import('@/pages/platform/login/login'),
   // },
   // {
-  //   path: '/companyRegister',
-  //   name: 'companyRegister',
-  //   component: () => import('@/pages/platform/login/companyRegister'),
+  //   path: '/register',
+  //   name: 'register',
+  //   component: () => import('@/pages/platform/login/register'),
   // },
   // {
   //   path: '/companyUserInfo',

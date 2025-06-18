@@ -164,7 +164,7 @@ export class myHttp {
       console.log(_res, 'test_res') //
       system.confirmMessage('注册成功')
       let r = system.getRouter()
-      r.push('companyLogin') //
+      r.push('login') //
     } catch (error) {
       system.confirmMessage(`注册失败,${error?.message}`, 'error') //
     }
@@ -190,7 +190,7 @@ export class myHttp {
       let client = this.client //
       await client.logout() //
       let router = system.getRouter()
-      router.push('/companyLogin') //
+      router.push('/login') //
       system.loginInfo = null //
     } catch (error) {
       console.error('登出信息报错') //
@@ -198,7 +198,7 @@ export class myHttp {
   }
   redirectToLogin() {
     let router = system.getRouter()
-    router.push('/companyLogin') //
+    router.push('/login') //
   }
   async post(tableName, method, params = {}, query = {}): Promise<any> {
     let connection = this?.client?.get('connection')

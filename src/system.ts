@@ -1280,7 +1280,6 @@ export class System extends Base {
     curd.setCurrentDesign(true) //
   }
   async logout() {
-    debugger //
     let http = this.getClient()
     await http.logoutUser()
   }
@@ -1677,6 +1676,10 @@ export class System extends Base {
   getUserId() {
     let userinfo = this.getUserInfo()
     return userinfo?.user?.id
+  }
+  getUserName() {
+    let userinfo = this.getUserInfo()
+    return userinfo?.user?.username //
   }
 }
 export const system = reactive(new System()) //

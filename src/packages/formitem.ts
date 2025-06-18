@@ -1094,6 +1094,20 @@ export class FormItem extends Base {
       }
       rArr.push(obj1) //
     }
+    let validate = this.config.validate
+    let _this = this //
+    if (typeof validate == 'function') {
+      rArr.push({
+        validator: async (config) => {
+          let { itemValue, rule, rules, data, field } = config
+          let _value = await validate(config)
+          if (typeof _value == 'string') {
+            return Promise.reject(new Error(_value)) //
+          }
+          return true //
+        },
+      }) //
+    }
     let f = this.getField()
     let obj = {
       [f]: rArr, //

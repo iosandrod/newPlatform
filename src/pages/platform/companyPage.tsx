@@ -209,7 +209,7 @@ export default defineComponent({
           <div class="space-x-2 flex">
             <div
               onClick={() => {
-                systemIns.routeTo('/companyLogin') //
+                systemIns.routeTo('/login') //
               }}
               href="#login"
               class="cursor-pointer px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-md transition-colors"
@@ -218,7 +218,7 @@ export default defineComponent({
             </div>
             <div
               onClick={() => {
-                systemIns.routeTo('/companyRegister') //
+                systemIns.routeTo('/register') //
               }}
               class="cursor-pointer px-4 py-2 border border-indigo-500 text-indigo-500 hover:bg-indigo-50 rounded-md transition-colors"
             >

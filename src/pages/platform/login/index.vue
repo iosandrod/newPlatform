@@ -27,10 +27,10 @@
               class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
             <span class="ml-2">记住我</span>
-          </label>
+          </label> 
           <div
             class="text-blue-600 cursor-pointer"
-            @click="system.routeTo('companyRegister')"
+            @click="system.routeTo('register')"
           >
             忘记密码?
           </div>
@@ -49,7 +49,7 @@
             第三方登录 或
             <span
               class="text-blue-600 cursor-pointer"
-              @click="system.routeTo('companyRegister')"
+              @click="system.routeTo('register')"
             >
               立即注册
             </span>

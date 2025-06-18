@@ -17,7 +17,7 @@ const router = createRouter(
   }),
 ) // 
 
-let unAuthPath = /companyLogin|companyRegister|companyHome/g
+let unAuthPath = /login|register|companyHome/g
 router.beforeEach(async (to, from, next) => {
   next() //
   // let p = to.path
@@ -42,7 +42,7 @@ router.beforeEach(async (to, from, next) => {
   //   } else {
   //     next()
   //     // next({
-  //     //   // name: 'companyLogin', //
+  //     //   // name: 'login', //
   //     // })
   //   }
   // } else {
