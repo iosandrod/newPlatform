@@ -1,4 +1,6 @@
 <template>
-  <div></div>
+  <div>
+    erp的首页
+  </div>
 </template>
 <script setup lang="ts"></script>

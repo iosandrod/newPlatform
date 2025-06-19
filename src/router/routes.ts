@@ -4,7 +4,6 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'pageIndex',
-    // component: () => import('@/pages/companyPage'), //
     component: () => import('@/pages/pageIndex.vue'), //
     meta: {
       icon: 'CreditCardOutlined',

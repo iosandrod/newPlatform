@@ -15,39 +15,46 @@ const router = createRouter(
     history: createWebHistory(),
     routes,
   }),
-) // 
-
-let unAuthPath = /login|register|companyHome/g
+)
+let fLoad = true
+let unAuthPath = /login|register/g //
 router.beforeEach(async (to, from, next) => {
-  next() //
-  // let p = to.path
-  // let fp = to.fullPath
-  // if (/\/$/.test(p)) {
-  //   p = p.slice(0, -1)
-  //   to.path = p //
-  // }
-  // if (/\/$/.test(fp)) {
-  //   fp = fp.slice(0, -1)
-  //   to.fullPath = fp //
-  // }
-  // if (unAuthPath.test(p)) {
-  //   next() //
-  // } //
-  // const isLogin = system.loginInfo
-  // if (isLogin == null) {
-  //   // let res = await http.init()
-  //   let res = null
-  //   if (res != null) {
-  //     next()
-  //   } else {
-  //     next()
-  //     // next({
-  //     //   // name: 'login', //
-  //     // })
-  //   }
-  // } else {
-  //   next() //
-  // }
+  if (fLoad == true) {
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        fLoad = false
+        resolve(true) //
+      }, 500) //
+    })
+  }//
+  let p = to.path
+  let fp = to.fullPath
+  if (/\/$/.test(p)) {
+    p = p.slice(0, -1)
+    to.path = p //
+  }
+  if (/\/$/.test(fp)) {
+    fp = fp.slice(0, -1)
+    to.fullPath = fp //
+  }
+  if (unAuthPath.test(p)) {
+    next()
+  } //
+  const isLogin = system.loginInfo
+  if (isLogin == null) {
+    // let res = await http.init()
+    let res = null //
+    if (res != null) {
+      next()
+    } else {
+      // next()
+      next({
+        path: '/login', //
+      })
+    }
+  } else {
+    next() //
+  }
 })
 // 注册导航守卫
 export default router

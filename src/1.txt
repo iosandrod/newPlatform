@@ -6724,3 +6724,29 @@ function handleCommand(command: string) {
     // let currentIndexContain = _table.currentIndexContain
     // container['currentRowIndex'] = row //
     // container['updateCanvas'] = () => {
+
+       // {
+    //   label: '登录方式',
+    //   field: 'loginType',
+    //   type: 'select',
+    //   required: true,
+    //   options: {
+    //     options: [
+    //       { label: '邮箱登录', value: 'email' },
+    //       { label: '用户名登录', value: 'username' },
+    //     ],
+    //   },
+    // },
+    // { field: 'email', type: 'string', label: '邮箱', required: true },
+
+
+     // {
+        //   field: 'companyName',
+        //   label: '公司名称',
+        //   required: true,
+        // },
+        // {
+        //   field: 'companyCnName',
+        //   label: '公司中文名',
+        //   required: true,
+        // },

@@ -72,6 +72,10 @@ export class Client {}
 //
 export type createConfig = {}
 export const createClient = (config) => {
+  // debugger//
+  let fullHost = window.location.host // erp.dxf.life
+  let hostname = window.location.hostname // erp.dxf.life
+  let subdomain = hostname.split('.')[0] // erp
   let port = location.port
   let userid = config.userid
   let appName = config.appName
@@ -79,11 +83,13 @@ export const createClient = (config) => {
   if (appName != null && userid != 'undefined') {
     _key = `/${appName}_${userid}`
   }
-  // let _host = `http://localhost:3031`
-  // let _host = `http://localhost:3031/erp_2`//
-  let _host = `http://localhost:3031${_key}`
-  // if (port == '3004') {
-  //   _host = `${_host}/erp_2` //
+  // let baseUrl = `http://47.92.84.152:3031`
+  let baseUrl = `http://${'localhost:3031'}` //
+  let _host = `${baseUrl}${_key}`
+  // if (subdomain == 'erp') {
+  //   if (userid == null) {
+  //     return
+  //   }
   // }
   const socket = io(_host, {
     transports: ['websocket'],
@@ -97,18 +103,21 @@ export const createClient = (config) => {
   socket.on('login', () => {
     console.log('登陆了') //
   })
-  socket.on('connected login', (data) => {
-    // console.log(data, 'testData') //
-    system.loginInfo = {
-      user: data, //
+  socket.on('connected login', async (data) => {
+    let appName = await system.getCurrentApp()
+    if (appName == 'platform') {
+      //
+      system.loginInfo = {
+        user: data,
+      }
     }
-  })
+  }) //
   const client = socketio(socket)
   let app = feathers()
   app.configure(client)
   app.set('connection', socket)
   app.configure(init()) //
-  return app //
+  return app
 }
 export const client = createClient({})
 // export const client: any = {
@@ -132,7 +141,7 @@ export class myHttp {
       this.client = this.mainClient
       return
     }
-    let userid = config.userid
+    let userid = config.userid //
     if (userid == null || userid == 0) {
       this.client = this.mainClient
       return //

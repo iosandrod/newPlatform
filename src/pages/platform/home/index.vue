@@ -93,7 +93,7 @@
           >
             <div class="flex items-center mb-2">
               <i :class="app.icon + ' text-24 mr-2'" />
-              <span class="text-lg font-semibold">{{ app.name }}</span>
+              <span class="text-lg font-semibold">{{ app.cnName }}</span>
             </div>
             <div class="mb-4 text-sm text-gray-600">{{ app.description }}</div>
             <div class="text-right">
@@ -128,6 +128,7 @@
 
 <script setup lang="ts">
 import { System } from '@/system'
+import { onMounted } from 'vue'
 import { computed, inject } from 'vue'
 import { ref } from 'vue' //
 let systemIns: System = inject('systemIns') //
@@ -136,13 +137,18 @@ interface AppItem {
   name: string
   description: string
   icon: string
-}
-
+  cnName: string //
+} //
+onMounted(async () => {
+  let allApp = await systemIns.getAllApps()
+  console.log(allApp) //
+})
 // 应用列表数据
 const apps = ref<AppItem[]>([
   {
     id: 1,
-    name: '低代码系统',
+    name: 'erp',
+    cnName: '低代码ERP应用配置',
     description: '配置化构建应用', //
     icon: 'el-icon-data-analysis',
   },

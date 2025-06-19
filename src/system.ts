@@ -852,10 +852,23 @@ export class System extends Base {
     }
   }
   async loginUser(data) {
+    let currentApp = await this.getCurrentApp()
+    if (currentApp != 'platform') {
+      let userid = data.userid
+      if (userid == null) {
+        this.confirmMessage('请选择账套', 'error')
+        return
+      } //
+      let http = this.getHttp()
+      http.changeClient({
+        userid,
+        appName: currentApp,
+      }) //
+    }
     let h = this.getHttp()
-    h.changeClient(data) //
+    
     let _res = await h.loginUser(data) //
-    return _res
+    return _res//
   }
   getAllApp() {
     //使用mock数据//
@@ -868,8 +881,7 @@ export class System extends Base {
   async initAllApp() {
     try {
       let http = this.getHttp()
-      let _data = await http.post('company', 'getAllApp')
-      // console.log(_data, '所有应用') //
+      let _data = await http.post('company', 'getAllApp') //
       this.systemApp = _data //
     } catch (error) {
       this.confirmErrorMessage('获取应用失败') //
@@ -881,14 +893,25 @@ export class System extends Base {
     try {
       let http = this.getHttp() //
       await http.create('company', { appName: name }) //
+      this.confirmMessage('安装成功') //
     } catch (error) {
       this.confirmErrorMessage('安装失败') //
     }
   }
-  async openApp(name) {
-    let canOpen = true //
+  async openApp(name, openConfig = {}) {
+    let canOpen = true
     try {
+      let query = new URLSearchParams(openConfig).toString()
       //打开app
+      let config = await this.getHttp().post('company', 'getAppConfig', {
+        appName: name,
+      }) //
+      let url = config.url //
+      if (url) {
+        url = `${url}?${query}` //
+        //打开新窗口
+        window.open(url)
+      } //
     } catch (error) {}
   }
   confirmErrorMessage(content) {
@@ -1681,5 +1704,12 @@ export class System extends Base {
     let userinfo = this.getUserInfo()
     return userinfo?.user?.username //
   }
-}
-export const system = reactive(new System()) //
+  async getAllAppCompany(config) {
+    //
+    let http = this.getHttp()
+    let res = await http.post('company', 'getAllAppCompany', config) //
+    let _res = res //
+    return _res
+  }
+} //
+export const system = reactive(new System())
