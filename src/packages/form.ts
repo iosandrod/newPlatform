@@ -92,7 +92,6 @@ export class Form extends Base {
   originalData = {}
   tableDataMap: any = {}
   tableConfigMap = {}
-  static component = formCom
   pageType = 'form' //
   cachePlugin: any
   formIns?: any
@@ -445,7 +444,7 @@ export class Form extends Base {
       let form: VxeFormInstance = this.getRef('form')
       // let items = form.getItems()
       form.validate(async (err) => {
-        err=err||{}//
+        err = err || {} //
         let _arr = Object.values(err)
         if (_arr.length == 0) {
           let _validateFn = this.config.validate
@@ -1865,7 +1864,15 @@ export class Form extends Base {
   }
   openDialog(dConfig, dialogName = null) {
     let _dialog = new Dialog(dConfig)
-    this.dialogArr.push(_dialog) //
+    let dName = dConfig.dialogName
+    let hasDialog: Dialog = this.dialogArr.find((d) => {
+      return d.getDialogName() == dName && Boolean(dName)
+    })
+    if (hasDialog) {
+      hasDialog.open() //
+    } else {
+      this.dialogArr.push(_dialog) //
+    }
   }
   onColumnConfigChange(config) {}
   onTableConfigChange(config) {}

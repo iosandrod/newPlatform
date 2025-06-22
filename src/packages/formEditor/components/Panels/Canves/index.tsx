@@ -64,7 +64,7 @@ export default defineComponent({
       const Layout = (
         <LayoutDragGable
           data-layout-type={'root'}
-          class={[unref(isEditModel) && ns.e('wrap'), 'h-full', ..._class]}
+          class={[unref(isEditModel) && ns.e('wrap'), 'h-full w-full', ..._class]}
           data={state.store}
           parent={state.store}
           isRoot

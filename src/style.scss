@@ -1,7 +1,9 @@
-  .w-full {
-    width: 100%;
-  }
+.w-full {
+  width: 100%;
+}
 
+
+   
   @for $i from 1 through 2000 {
     .w-#{$i} {
       width: #{$i}px;
@@ -35,7 +37,16 @@
       padding-bottom: #{$i}px !important;
     }
   }
-
+ @for $i from 1 through 2000 {
+    .px-#{$i} {
+      padding-top: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .py-#{$i} {
+      padding-bottom: #{$i}px !important;
+    }
+  }
   @for $i from 1 through 2000 {
     .ml-#{$i} {
       margin-left: #{$i}px !important;
@@ -56,3 +67,13 @@
       margin-bottom: #{$i}px !important;
     }
   }
+   @for $i from 1 through 2000 {
+    .p-#{$i} {
+      padding: #{$i}px !important;
+    }
+  }
+//  @for $i from 1 through 2000 {
+//     .space-y-#{$i} {
+//       padding: #{$i}px !important;
+//     }
+//   }

@@ -198,6 +198,7 @@ export default defineComponent({
             <ElMenu
               ref={registerMenuRef}
               {...props}
+              uniqueOpened={menuIns.getUniqueOpen()}
               defaultOpeneds={menuIns.getMenuDefaultOpeneds()} //
               v-slots={{
                 default: () => items,

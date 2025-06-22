@@ -130,4 +130,8 @@ export class Dialog extends Base {
     }
     return showFooter //
   }
+  getDialogName() {
+    let dialogName = this.config.dialogName
+    return dialogName //
+  }
 }

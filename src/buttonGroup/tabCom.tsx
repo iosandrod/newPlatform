@@ -237,7 +237,11 @@ export default defineComponent({
                             <div>x</div>
                           </div>
                         )
+                        if (el.config.closeable == false) {
+                          closeIcon = null //
+                        }
                       }
+
                       let height = el.tab.getTabHeight()
                       let mHeight = el.tab.getTabMinHeight()
                       let dragCom = (

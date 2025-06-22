@@ -335,7 +335,12 @@ export class PageDesign extends Form {
       let tName = item.getTableName()
       return tName
     })
-    if (tableName == this.getTableName()) {
+    console.log(tableName, this.getRealTableName()) //
+    if (
+      tableName == this.getTableName() ||
+      tableName == this.getRealTableName()
+    ) {
+      //
       for (let dTable of allDetailTable) {
         this.getDetailTableData(dTable) //
       } //
@@ -762,7 +767,7 @@ export class PageDesign extends Form {
         label: tCnName,
         value: tName,
       }
-    }) //
+    })
     let rTableOptions = this.getAllRelateTable().map((t) => {
       let tName = t.getTableName()
       let tCnName = t.getTableCnName()
@@ -1007,6 +1012,7 @@ export class PageDesign extends Form {
       tableName: tName, //
       name: tName,
       order: this.tabOrder,
+      closeable: this.config.closeable, //
     }
   }
   async designPageDialog() {
@@ -1061,7 +1067,8 @@ export class PageDesign extends Form {
     _data = { ...searchDialog, ..._data } ////
     let _data1 = this.getLayoutData()
     _data1.searchDialog = _data //
-    await this.getSystem().updateCurrentPageDesign(_data1) //
+    this.saveTableDesign({ refresh: false }) //
+    // await this.getSystem().updateCurrentPageDesign(_data1) //
   }
   async selectExcelFile() {
     let sd = new Promise(async (resolve, reject) => {
@@ -1713,10 +1720,10 @@ export class PageDesign extends Form {
   }
   async printTemplate() {}
   //简易删除
-  async deleteTableRows(_tableName?: any) {
+  async deleteTableRows(_tableName?: any, _curRow?: any) {
     //
     //删除模式
-    let curRow = this.getCurRow()
+    let curRow = _curRow || this.getCurRow()
     let sys = this.getSystem()
     let _state = curRow['_rowState']
     if (_state == 'add') {
@@ -1790,7 +1797,7 @@ export class PageDesign extends Form {
       } catch (error) {}
       _obj[key] = value //
     })
-    
+
     let _columns = _obj.columns || []
     return _columns
   }
@@ -1879,5 +1886,10 @@ export class PageDesign extends Form {
   }
   async confirmEditEntity(config: any) {
     await this.getSystem().confirmEditEntity(config, this)
+  }
+  getAllForm() {
+    let items = this.items
+    let forms = items.filter((e) => e.getType() == 'dform')
+    return forms
   }
 }

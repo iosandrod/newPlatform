@@ -84,6 +84,9 @@ export default defineComponent({
               onChange={(v) => {
                 updateValue(v)
               }}
+              onInput={(v) => {
+                updateValue(v) //
+              }}
               {...column.getBindConfig()} //
               modelValue={modelValue.value}
             ></InputCom>

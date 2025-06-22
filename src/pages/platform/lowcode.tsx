@@ -124,61 +124,7 @@ export default defineComponent({
                     return com
                   },
                   dropdown: () => {
-                    let btnArr = [
-                      {
-                        label: '设计菜单',
-                        fn: async () => {
-                          await system.designSystemNavs()
-                        },
-                      },
-                      {
-                        label: '切换平台',
-                        fn: async () => {
-                          let currentDesign = system.getCurrentPageDesign()
-                          let plat = currentDesign.getCurrentPlatform() //
-                          if (plat == 'pc') {
-                            currentDesign.switchPlatform('mobile')
-                          } else {
-                            currentDesign.switchPlatform('pc')
-                          }
-                        },
-                      },
-                      {
-                        label: '当前页面设计',
-                        fn: async () => {
-                          let currentPageDesign = system.getCurrentPageDesign()
-                          currentPageDesign.setCurrentDesign(true) //
-                        },
-                      },
-                      {
-                        label: '退出页面设计',
-                        fn: async () => {
-                          system.refreshPageDesign() //
-                        },
-                      },
-                      {
-                        label: '保存页面设计',
-                        fn: async () => {
-                          let currentPageDesign = system.getCurrentPageDesign()
-                          await currentPageDesign.saveTableDesign()
-                        },
-                      },
-                      {
-                        label: '同步当前列',
-                        fn: async () => {
-                          let currentPageDesign = system.getCurrentPageDesign()
-                          await currentPageDesign.syncErpTableColumns() //
-                        },
-                      },
-                      {
-                        label: '打印页面',
-                        fn: async () => {
-                          let pageDesign = system.getCurrentPageDesign()
-                          let layout = pageDesign.getLayoutData()
-                          console.log(layout) //
-                        },
-                      },
-                    ]
+                    let btnArr = systemIns.getGlobalDropDown()
                     let bsComs = btnArr.map((item) => {
                       let c = (
                         <div class="py-1">
@@ -249,20 +195,27 @@ export default defineComponent({
                     return com
                   },
                   dropdown: () => {
+                    let items = systemIns.getUserDropDown()
+                    let itemsCom = items.map((item) => {
+                      let com = (
+                        <div class="py-1">
+                          <div
+                            href="#"
+                            class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                          >
+                            {item.label}
+                          </div>
+                        </div>
+                      )
+                      return com
+                    })
                     let com = (
                       <div
                         class="  mt-2 w-120 bg-white border border-gray-200 rounded-lg shadow-lg
             transition-opacity
            "
                       >
-                        <div class="py-1">
-                          <div
-                            href="#"
-                            class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                          >
-                            个人中心
-                          </div>
-                        </div>
+                        {itemsCom}
                       </div>
                     )
                     return com

@@ -114,12 +114,29 @@ export default defineComponent({
                 'items-center',
                 'flex',
               ]
+              let _class1 = [
+                'h-full w-full pl-10 pr-10  rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition',
+              ]
+              let maskCom = null
               if (disabled == true) {
-                _class.push('is-disabled') //
+                // _class.push('is-disabled') //
+                _class.push('') //
+                _class1.push('is-disabled cursor-not-allowed')
+                maskCom = (
+                  <div
+                    class="absolute top-0 left-0 w-full h-full  cursor-not-allowed opacity-0"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      e.preventDefault() //
+                    }}
+                  ></div>
+                )
+              } else {
+                _class1.push('cursor-pointer')
               }
               let com = (
                 <div
-                  class={[..._class, 'pt-2 pb-2 pl-1 pr-1']}
+                  class={[..._class, 'pt-2 pb-2 pl-1 pr-1 relative']}
                   style={{
                     minWidth: `${btn.getButtonWidth()}px`,
                     position: 'relative',
@@ -134,9 +151,15 @@ export default defineComponent({
                       {btn?.getLabel()}
                     </div>
                   </ContextmenuItem> */}
-                  <button class="px-4 py-1.5 rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition">
-                    {btn?.getLabel()}
-                  </button>
+                  <div
+                    class={[
+                      ..._class1,
+                      'flex justify-center items-center h-full w-full',
+                    ]}
+                  >
+                    <button class={[]}>{btn?.getLabel()}</button>
+                  </div>
+                  {maskCom}
                 </div>
               )
               let com1 = null

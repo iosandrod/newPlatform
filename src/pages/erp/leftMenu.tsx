@@ -15,10 +15,14 @@ export default defineComponent({
     systemIns.getHttp().registerEvent('navs changed', () => {
       systemIns.refreshMenuData() //
       //
-    })
+    })//
     return () => {
       let leftMenu = (
         <menuCom
+          onContextmenu={(config) => {
+            let event = config.event
+            systemIns.openContextMenu(event)
+          }}
           onItemClick={(item) => {
             systemIns.onMenuItemClick(item)
           }}

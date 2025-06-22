@@ -177,7 +177,7 @@ export class Button extends Base {
       let page: PageDesign = _config.page
       if (page) {
         page.setCurrentLoading(false) //
-        page.getSystem().confirmMessageBox(error?.message || error, 'error') //
+        // page.getSystem().confirmMessageBox(error?.message || error, 'error') //
       }
     }
   }

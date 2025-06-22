@@ -21,7 +21,7 @@ export const mainUse = {
       }
       setTimeout(() => {
         instance.getTableData() //
-      }, 1000);
+      }, 1000)
     },
   ],
   getTableData: [
@@ -76,7 +76,6 @@ export const mainUse = {
       let instance: PageDesign = context.instance
       let allRelateTables = instance.getAllRelateTable() //
       let row = context.row
-      // debugger //
       for (let table of allRelateTables) {
         let options = table.config.options //
         //获取关联字段
@@ -109,6 +108,7 @@ export const editUse = {
     async (context, next) => {
       let instance: PageDesign = context.instance
       instance.setCurrentLoading(true) //
+      await instance.validate()
       await next().finally(async () => {
         setTimeout(() => {
           instance.setCurrentLoading(false)

@@ -1,4 +1,4 @@
-import { computed, defineComponent, inject } from 'vue'
+import { computed, defineComponent, inject, onMounted } from 'vue'
 import tableCom from '@/table/tableCom'
 import { PageDesign } from '@ER/pageDesign'
 import { PageDesignItem } from '@ER/pageItem'
@@ -38,6 +38,33 @@ export default defineComponent({
     })
     const pageDesign: PageDesign = inject('pageDesign')
     let tableType = item?.getTableType()
+    onMounted(() => {
+      if (tableType == 'relate') {
+        // registerTable(fitem)
+        let treeConfig = item.config?.options?.treeConfig
+        let autoColumnSize = treeConfig?.autoColumnSize
+        if (Boolean(autoColumnSize)) {
+          let fieldOutCom: HTMLDivElement = item.getRef('fieldOutCom') //
+          if (fieldOutCom) {
+            let bound = fieldOutCom.getBoundingClientRect()
+            let width = bound.width
+            let columns = item.getRef('fieldCom')?.getShowColumns()
+            let col0 = columns[0]
+            // console.log(col0, 'testCol0') ////
+            if (col0) {
+              let field = col0.field ///
+              let tCol = item
+                .getTableColumns()
+                .find((col) => col.field == field)
+              if (tCol) {
+                tCol.width = width
+                col0.width = width //
+              } //
+            }
+          }
+        }
+      }
+    })
     //只能有个一个pageDesign//
     const registerTable = (ins) => {
       pageDesign.registerRef(tableName, ins) //
@@ -45,7 +72,7 @@ export default defineComponent({
       fitem.registerRef('fieldCom', ins) ////
     } //
     let openDesignHeader = (config) => {
-      console.log(config, 'testConfig') //
+      // console.log(config, 'testConfig') //
       if (_design == null) {
         return //
       }
@@ -77,6 +104,9 @@ export default defineComponent({
         <div
           class="  w-full box-border "
           style={{ minHeight: '200px', padding: '4px' }}
+          ref={(ins) => {
+            item.registerRef('fieldOutCom', ins)
+          }}
         >
           <erTable
             onTableConfigChange={(config) => {

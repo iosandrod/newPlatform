@@ -631,7 +631,7 @@ export class Column extends Base {
     return width
   }
   async updateBindValue(config) {
-    //
+    // debugger //
     let value = config.value //值
     let row = config.row //行
     let field = config.field || this.getField()
@@ -933,7 +933,7 @@ export class Column extends Base {
     return 'RGB(204, 224, 255)'
   }
   getBorderColor() {
-    return 'rgb(229,231,235)' //
+    return 'rgb(210,190,215)' //
   }
   getCurrentRowColor(_bg?: string) {
     let bg = _bg || 'rgb(220,232,240)'
@@ -1110,7 +1110,11 @@ export class Column extends Base {
     this.table.onColumnResize({
       originColumn: this.config, //
     })
-    this.table.loadColumns() //
+    this.table.clearSelected()
+    setTimeout(() => {
+      this.table.loadColumns()
+      this.table.loadFooterColumn()//
+    }, 100)
   }
   setFrozen(type) {
     let config = this.config
@@ -1121,7 +1125,11 @@ export class Column extends Base {
     this.table.onColumnResize({
       originColumn: this.config, //
     })
-    this.table.loadColumns()
+    this.table.clearSelected()
+    setTimeout(() => {
+      this.table.loadColumns()
+      this.table.loadFooterColumn()
+    }, 100) //
   }
   setOrder(n: number) {
     //
@@ -1250,6 +1258,6 @@ export class Column extends Base {
     }
   }
   getFontSize() {
-    return 8
+    return 14
   }
 }

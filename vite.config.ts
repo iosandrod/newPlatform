@@ -5,7 +5,7 @@ import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import svgLoader from 'vite-svg-loader'
-import tailwindcss from '@tailwindcss/vite'
+// import tailwindcss from '@tailwindcss/vite'
 import UnoCSS from 'unocss/vite'
 const resolve = path.resolve
 const isProduction = process.env.NODE_ENV === 'production'
@@ -64,6 +64,7 @@ export default ({ command, mode }) => {
       outDir: isAppBuild ? 'dist_app' : 'dist',
     },
     plugins: [
+      // tailwindcss(),
       vue({
         // template: {
         //   transformAssetUrls: {
@@ -74,7 +75,6 @@ export default ({ command, mode }) => {
         //   },
         // },
       }),
-      tailwindcss(),
       vueJsx(),
       UnoCSS(), //
       // Components({

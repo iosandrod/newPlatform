@@ -5,15 +5,15 @@
     >
       <!-- 左侧宣传/Logo 区 -->
       <div
-        class="flex-col hidden w-1/2 text-white lg:flex bg-gradient-to-br from-blue-500 to-blue-600"
+        class="flex-col  w-1/2 text-white  bg-gradient-to-br from-blue-500 to-blue-600"
       >
         <div class="w-full h-full">
-          <img alt="Bangboss" class="h-full mb-6" />
+          <!-- <img alt="Bangboss" class="h-full mb-6" /> -->
         </div>
       </div>
       <!-- 右侧表单区 -->
-      <div class="flex flex-col w-full h-full p-8 lg:w-1/2">
-        <h2 class="mb-8 text-3xl font-bold text-gray-900">登录</h2>
+      <div class="flex flex-col w-1/2 h-full p-8  ">
+        <h2 class=" w-full flex justify-center mb-8 text-3xl font-bold text-gray-900">登录</h2>
         <!-- 登录表单组件 -->
         <div>
           <er-form ref="fins" v-bind="loginFConfig" />
@@ -39,7 +39,7 @@
         <!-- 登录按钮 -->
         <button
           @click="loginFn"
-          class="w-full py-2 mb-8 font-medium text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
+          class="cursor-pointer w-full py-2 mb-8 font-medium text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
         >
           登录
         </button>
@@ -88,7 +88,7 @@ onMounted(() => {
 const data = reactive({
   appName: 'platform',
   userid: 1,
-  loginType: 'email',
+  loginType: 'email', 
   email: '1151685410@qq.com',
   password: '1',
   _unUseCaptcha: true,

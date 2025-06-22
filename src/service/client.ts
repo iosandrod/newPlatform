@@ -72,25 +72,33 @@ export class Client {}
 //
 export type createConfig = {}
 export const createClient = (config) => {
-  // debugger//
+  let _appName = localStorage.getItem('appName')
+  let _userid = localStorage.getItem('userid')
   let fullHost = window.location.host // erp.dxf.life
   let hostname = window.location.hostname // erp.dxf.life
   let subdomain = hostname.split('.')[0] // erp
   let port = location.port
   let userid = config.userid
+  if (userid == null) {
+    userid = _userid
+  } //
   let appName = config.appName
+  if (appName == null) {
+    appName = _appName //
+  }
   let _key = '' //
   if (appName != null && userid != 'undefined') {
     _key = `/${appName}_${userid}`
   }
-  // let baseUrl = `http://47.92.84.152:3031`
   let baseUrl = `http://${'localhost:3031'}` //
+  let _base = import.meta.env.VITE_BASEURL
+  let isProd = import.meta.env.VITE_ENVIRONMENT
+  console.log(isProd, 'isProd') //
+  if (isProd == 'production') {
+    baseUrl = _base //
+  } //
+  // console.log(_base, 'testBase')//
   let _host = `${baseUrl}${_key}`
-  // if (subdomain == 'erp') {
-  //   if (userid == null) {
-  //     return
-  //   }
-  // }
   const socket = io(_host, {
     transports: ['websocket'],
     extraHeaders: {
@@ -111,8 +119,8 @@ export const createClient = (config) => {
         user: data,
       }
     }
-  }) //
-  const client = socketio(socket)
+  })
+  let client = socketio(socket)
   let app = feathers()
   app.configure(client)
   app.set('connection', socket)
@@ -120,14 +128,9 @@ export const createClient = (config) => {
   return app
 }
 export const client = createClient({})
-// export const client: any = {
-//   get: () => {
-//     return {
-//       emit: () => {},
-//     }
-//   },
-//   authenticate: () => {},
-// } //
+export const mainClient = createClient({
+  isMain: true, //
+})
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
@@ -152,19 +155,19 @@ export class myHttp {
   async init() {
     let token = localStorage.getItem('feathers-jwt')
     if (token) {
-      // try {
-      //   let res = await this?.client?.authenticate({
-      //     strategy: 'jwt',
-      //     accessToken: token, //
-      //     _unUseCaptcha: true,
-      //   }) //
-      //   system.confirmMessage('登录成功') //
-      //   system.loginInfo = res //
-      //   return res
-      // } catch (error) {
-      //   console.error(error, '登录失败')
-      //   localStorage.removeItem('feathers-jwt') //
-      // }
+      try {
+        // debugger //
+        let res = await this.client.authenticate({
+          accessToken: token,
+          _unUseCaptcha: true,
+          strategy: 'jwt',
+        })
+        system.loginInfo = res //
+        return res
+      } catch (error) {
+        console.log('默认登录失败') //
+        // console.error(error, '登录失败') //
+      }
     }
   }
   async registerUser(data) {
@@ -416,47 +419,3 @@ export class myHttp {
 }
 
 export const http = new myHttp()
-
-/* 
-feathers: {
-    provider: 'socketio',
-    headers: {
-      host: 'localhost:3031',
-      connection: 'Upgrade',
-      pragma: 'no-cache',
-      'cache-control': 'no-cache',
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0',    
-      upgrade: 'websocket',
-      origin: 'http://localhost:3003',
-      'sec-websocket-version': '13',
-      'accept-encoding': 'gzip, deflate, br, zstd',
-      'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,fr;q=0.5',
-      cookie: 'session=U2FsdGVkX1/8m7tAhv2rq4Pbjsd8DSbsri1CXZ3/DrkZ6xv/YGE1bbXA5gosoyewwOyoHKvqmvgKOrhcWetEn8hw7P8nOxCE1QuIIdo6bY07MOCnERli9o5lpoOGozUB/x4XbJmg3UApx5guO+cX/g==; Hm_lvt_52eb07460b7dc3e27bb80c78c0988671=1743073927',
-      'sec-websocket-key': 'Afbxp7rAlhCjcDFzQXLMDA==',
-      'sec-websocket-extensions': 'permessage-deflate; client_max_window_bits',
-      authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE3NTAwNDc3MjQsImV4cCI6MTc1MDEzNDEyNCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjEiLCJqdGkiOiJiM2Q3ODZhOC0wNTQ4LTRkZGMtYTIyYS00NTc4Y2RjZGUxN2YifQ.f0nLDh680HhW0MyK-Nrz_aEgmTG1QovFqx_1GvUgh0Q'
-    },
-    authentication: {
-      strategy: 'jwt',
-      accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE3NTAwNDc3MjQsImV4cCI6MTc1MDEzNDEyNCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjEiLCJqdGkiOiJiM2Q3ODZhOC0wNTQ4LTRkZGMtYTIyYS00NTc4Y2RjZGUxN2YifQ.f0nLDh680HhW0MyK-Nrz_aEgmTG1QovFqx_1GvUgh0Q'
-    },
-    user: {
-      id: 1,
-      createdAt: '2025-05-24 09:13:24',
-      updatedAt: '2025-05-24 09:13:24',
-      username: 'dxf',
-      email: '1151685410@qq.com',
-      password: '$2b$10$mtmxQd1lFzh6ORBsVOsfvOzH2XN107xINOtc3AmggeDO9.CfXztXm',
-      appName: null,
-      companyName: 'newC',
-      companyCnName: '新公司',
-      companyType: null,
-      companyId: null,
-      phone: null,
-      avatar: '/images/7332066ce14ee350ac57f9d74393a604d7c7ba4fdd3e15f3a47daa59bbc647f9.jpg',
-      companyLogo: '/images/7332066ce14ee350ac57f9d74393a604d7c7ba4fdd3e15f3a47daa59bbc647f9.jpg'
-    }
-  },
-
-
-*/

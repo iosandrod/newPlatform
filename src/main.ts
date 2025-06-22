@@ -9,7 +9,7 @@ import Vant, { Locale } from 'vant'
 import enUS from 'vant/es/locale/lang/en-US'
 import 'element-plus/dist/index.css'
 import 'vant/lib/index.css'
-import './mainStyle.css'
+
 import './homeStyle.css'
 import 'vxe-table/lib/style.css'
 import 'vxe-pc-ui/styles/all.scss'
@@ -51,6 +51,7 @@ import SvgIcon from '@/audit/components/SvgIcon/index.vue'
 import vFocus from '@/audit/directive/focus'
 import '@/audit/styles/index.scss' //
 //@ts-ignore
+
 import pinia from '@/audit/stores'
 // import "@arco-design/web-vue/dist/arco.css";
 
@@ -59,7 +60,17 @@ app.directive('focus', vFocus)
 import Vuex from 'vuex'
 import printTemplateModule from '@/printTemplate/stores/modules/index.js'
 import './style.js'
-
+import PrintDesign from '@/printTemplate/components/index.js'
+import store from '@/printTemplate/stores/index.js'
+import wangCom from './wangEditor/wangCom'
+// import { registerAntdComp } from './audit/antd'
+// import { registerIconsComp } from './audit/icons'
+import ArcoVue from '@arco-design/web-vue'
+import ArcoVueIcon from '@arco-design/web-vue/es/icon'
+import NaiveChatP from './chat'//
+import './style.scss' //
+import './assets/tailwind.css'//
+import './mainStyle.css'
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -99,16 +110,8 @@ Base.prototype._router = router
 Base.prototype.getAllComponent = () => componentObj
 //@ts-ignore
 // Table.component = tableCom
-import PrintDesign from '@/printTemplate/components/index.js'
-import store from '@/printTemplate/stores/index.js'
-import wangCom from './wangEditor/wangCom'
-// import { registerAntdComp } from './audit/antd'
-// import { registerIconsComp } from './audit/icons'
-import ArcoVue from '@arco-design/web-vue'
-import ArcoVueIcon from '@arco-design/web-vue/es/icon'
-import NaiveChatP from './chat'//
-import './style.scss' //
 
+// import './assets/tailwind.css'
 app.use(NaiveChatP)
 app.use(ArcoVueIcon)
 app.use(ArcoVue)

@@ -28,7 +28,9 @@ import { Menu } from './menu/menu'
 import { BMenu } from './buttonGroup/bMenu'
 import { ChatClass } from './chat/chatClass'
 import { Contact } from './chat'
+import pageCom from '@ER/pageCom'
 export class System extends Base {
+  staticComArr: any[] = []
   hasInitRoutes = false
   allApp: any = [] //
   systemApp: any = []
@@ -328,25 +330,44 @@ export class System extends Base {
     this.searchTableMap[tableName] = _d //
     return _d //
   }
+  setStaticComArr(arr) {
+    this.staticComArr = arr
+  }
+  getStaticComArr() {
+    return this.staticComArr || [] //
+  }
   async createPageDesign(config: { tableName: string } | string) {
     if (typeof config == 'string') {
       config = {
         tableName: config,
       }
-    } //
+    }
+    // debugger //
     let tableName = config.tableName
     let _design = this.tableMap[tableName]
     if (_design) {
-      return _design //
-    }
+      return _design
+    } //
     let layoutConfig = await this.getPageLayout(tableName) //
-    // let f = layoutConfig.fields
-    // debugger//
-    // f = f.filter((e) => e.type != null) //
-    // layoutConfig.layout.pc=[layoutConfig.layout.pc[0]]
-    // layoutConfig.layout.mobile=[layoutConfig.layout.mobile[0]]//
-    // layoutConfig.fields = f //
     if (layoutConfig == null) {
+      let staticCom = this.getStaticComArr()
+      if (staticCom.map((e) => e.name).includes(tableName)) {
+        let item = staticCom.find((e) => e.name == tableName)
+        let obj = {
+          tabTitle: item.title,
+          tableCnName: item.title, //
+          tableName: item.name, //
+          closeable: item.closeable,
+        }
+        let pageDesign = new MainPageDesign(obj) //
+        pageDesign.tableName = tableName //
+        pageDesign.setLayoutData({
+          pc: [],
+          mobile: [],
+        })
+        this.tableMap[tableName] = pageDesign //
+        return pageDesign
+      }
       this.confirmErrorMessage('找不到模块') //
       return Promise.reject('找不到模块') //
     }
@@ -864,11 +885,13 @@ export class System extends Base {
         userid,
         appName: currentApp,
       }) //
+      localStorage.setItem('appName', currentApp)
+      localStorage.setItem('userid', userid) //
     }
     let h = this.getHttp()
-    
+
     let _res = await h.loginUser(data) //
-    return _res//
+    return _res //
   }
   getAllApp() {
     //使用mock数据//
@@ -1344,18 +1367,54 @@ export class System extends Base {
   getTabContextItems() {
     let _items = [
       {
-        label: '页面配置',
-        fn: async () => {
-          await this.designCurrentPageConfig()
-        },
-      }, //
-      {
-        label: '查询表单设计',
-        fn: async () => {
-          let pageDesign = this.getCurrentPageDesign()
-          await pageDesign.designSearchForm()
-        },
-      }, //
+        label: '设计功能',
+        items: [
+          {
+            label: '页面参数配置', //
+            fn: async () => {
+              await this.designCurrentPageConfig()
+            },
+          },
+          {
+            label: '查询表单设计',
+            fn: async () => {
+              let pageDesign = this.getCurrentPageDesign()
+              await pageDesign.designSearchForm()
+            },
+          },
+          {
+            label: '页面整体设计',
+            fn: async () => {
+              let pageDesign = this.getCurrentPageDesign()
+              // await pageDesign.setCurrentDesign() //
+              let config = pageDesign.config
+              let _config = _.cloneDeep(config)
+              let _p: any = pageDesign
+              let _construct = _p.__proto__.constructor
+              // console.log(_construct) //
+              let newD = new _construct(_config)
+              newD.setLayoutData(_config) //
+              newD.setCurrentDesign(true) //
+              let dialogConfig = {
+                title: '页面整体设计',
+                width: 1,
+                height: 1,
+                createFn: () => {
+                  return {
+                    component: pageCom,
+                    props: {
+                      formIns: newD,
+                    },
+                  }
+                },
+                confirmFn: () => {},
+              }
+              await this.openDialog(dialogConfig) //
+            },
+          },
+        ],
+      },
+
       {
         label: '同步列',
         fn: async () => {
@@ -1364,7 +1423,7 @@ export class System extends Base {
         },
       },
       {
-        label: '重新加载当前页面',
+        label: '重新加载', //
         fn: async () => {
           this.refreshPageDesign() //
         },
@@ -1461,7 +1520,16 @@ export class System extends Base {
         } //
       }, //
     }
-    let _d = await this.getSystem().createConfirmEditDesign(_config) //
+    let _d: editPageDesign = await this.getSystem().createConfirmEditDesign(
+      _config,
+    )
+    if (config.editType == 'delete') {
+      if (config.curRow == null) {
+        return
+      } //
+      await _d.deleteTableRows(null, config.curRow)
+      return
+    }
     let _dialogConfig = {
       width: 0.8,
       height: 0.8, //
@@ -1558,9 +1626,13 @@ export class System extends Base {
       }
       this.hasInitRoutes = true //
       nextTick(() => {
+        // debugger //
+        if (_path == '/') {
+          _path = '/home' //
+        } //
         router.push({
           path: _path,
-        }) //
+        })
       }) //
     } //
   }
@@ -1583,25 +1655,60 @@ export class System extends Base {
   getSysContextItems() {
     let _items = [
       {
-        label: '设计当前菜单',
+        label: '编辑当前菜单',
         fn: () => {
           let menu: Menu = this.getRef('leftMenu')
           let curItem = menu.curContextMenu
           this.designMenuItem(curItem) //
         },
       },
+      {
+        label: '新增菜单子菜单',
+        fn: () => {
+          let menu: Menu = this.getRef('leftMenu')
+          let curItem = menu.curContextMenu
+          let id = curItem.id
+          this.designMenuItem({ pid: id }, 'add') ////
+        },
+      },
+      {
+        label: '新增菜单',
+        fn: () => {
+          let menu: Menu = this.getRef('leftMenu')
+          let curItem = menu.curContextMenu
+          // this.designMenuItem(curItem) //
+          this.designMenuItem({ pid: curItem.pid }, 'add')
+        },
+      },
+      {
+        label: '删除当前菜单',
+        fn: () => {
+          let menu: Menu = this.getRef('leftMenu')
+          let curItem = menu.curContextMenu
+          this.deleteMenuItem(curItem)
+        },
+      },
     ]
     return _items
   }
-  async designMenuItem(item) {
+  async designMenuItem(item, editType = 'edit') {
     if (item == null) {
       return
     }
     await this.confirmEditEntity({
       tableName: 'navs',
-      editType: 'edit',
+      editType: editType, //
+      curRow: item,
+      row: item, //
+    })
+  }
+  async deleteMenuItem(item) {
+    let en = this.confirmEditEntity({
+      tableName: 'navs',
+      editType: 'delete', //
       curRow: item,
     })
+    return //
   }
   async openContextMenu(e) {
     let menu: BMenu = this.getRef('contextmenu')
@@ -1710,6 +1817,126 @@ export class System extends Base {
     let res = await http.post('company', 'getAllAppCompany', config) //
     let _res = res //
     return _res
+  }
+  getGlobalDropDown() {
+    let system = this
+    let items = [
+      {
+        label: '设计菜单',
+        fn: async () => {
+          await system.designSystemNavs()
+        },
+      },
+      {
+        label: '切换平台',
+        fn: async () => {
+          let currentDesign = system.getCurrentPageDesign()
+          let plat = currentDesign.getCurrentPlatform() //
+          if (plat == 'pc') {
+            currentDesign.switchPlatform('mobile')
+          } else {
+            currentDesign.switchPlatform('pc')
+          }
+        },
+      },
+      {
+        label: '当前页面设计',
+        fn: async () => {
+          let currentPageDesign = system.getCurrentPageDesign()
+          currentPageDesign.setCurrentDesign(true) //
+        },
+      },
+      {
+        label: '退出页面设计',
+        fn: async () => {
+          system.refreshPageDesign() //
+        },
+      },
+      {
+        label: '保存页面设计',
+        fn: async () => {
+          let currentPageDesign = system.getCurrentPageDesign()
+          await currentPageDesign.saveTableDesign()
+        },
+      },
+      {
+        label: '同步当前列',
+        fn: async () => {
+          let currentPageDesign = system.getCurrentPageDesign()
+          await currentPageDesign.syncErpTableColumns() //
+        },
+      },
+      {
+        label: '打印页面',
+        fn: async () => {
+          let pageDesign = system.getCurrentPageDesign()
+          let layout = pageDesign.getLayoutData()
+          console.log(layout) //
+        },
+      },
+      // {
+      //   label: '同步应用数据',
+      //   fn: async () => {
+      //     //
+      //     let appName = await system.getCurrentApp() //
+      //     if (appName == 'platform') {
+      //       return
+      //     }
+      //     let http = system.getHttp()
+      //     await http.post('entity', 'syncTableData', [
+      //       'navs',
+      //       'entity',
+      //       'columns', //
+      //     ])
+      //     this.confirmMessage('同步成功')
+      //   },
+      // },
+    ]
+    return items
+  }
+  getUserDropDown() {
+    let _this = this
+    let items = [
+      {
+        label: '用户用心',
+        fn: async () => {
+          _this.routeOpen('userinfo') //
+        },
+      },
+      {
+        label: '退出登录',
+        fn: async () => {},
+      },
+    ]
+    return items
+  }
+  onTableTabClose(config) {
+    let systemIns = this //
+    let item = config.item
+    let name = item.name
+    let page = systemIns.getTargetDesign(name) //
+    page.tabHidden = true
+    let pre = config.pre
+    let modelValue = config.modelValue
+    if (modelValue != item.name) {
+      return //
+    }
+    let _n = pre
+    if (_n == null) {
+      _n = config.next
+    }
+    if (_n == null) {
+      _n = {
+        name: 'home',
+      }
+    }
+    // if (pre) {
+    //   systemIns.routeOpen(pre.name) //
+    // } else if (config.next) {
+    //   systemIns.routeOpen(config.next.name) //
+    // }
+    let _name = _n.name
+    systemIns.routeOpen(_name) //
   }
 } //
 export const system = reactive(new System())

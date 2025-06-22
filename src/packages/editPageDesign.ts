@@ -3,6 +3,7 @@ import { PageDesign } from './pageDesign'
 import { useHooks } from './utils/decoration'
 import { Table } from '@/table/table'
 import { getFlatTreeData } from './utils'
+import { Form } from './form'
 
 export class editPageDesign extends PageDesign {
   isEdit = true
@@ -98,7 +99,11 @@ export class editPageDesign extends PageDesign {
       let tName = item.getTableName()
       return tName
     })
-    if (tableName == this.getTableName()) {
+    if (
+      tableName == this.getTableName() ||
+      tableName == this.getRealTableName()
+    ) {
+      //
       for (let dTable of allDetailTable) {
         this.getDetailTableData(dTable) //
       } //
@@ -118,7 +123,6 @@ export class editPageDesign extends PageDesign {
     let obj1 = {}
     for (const col of columns) {
       // if(col.field=='cSdOrderNo'){//
-      //   debugger//
       // }
       let defaultValue = await this._getDefaultValue(col)
       if (defaultValue) {
@@ -178,7 +182,26 @@ export class editPageDesign extends PageDesign {
     curRow['_relateData'] = _t
     return curRow
   }
-  async validate() {} //
+  async validate() {
+    let f = this.getAllForm()
+    let fs: Form[] = f.map((item) => {
+      return item.getRef('fieldCom')
+    })
+    for (const _f of fs) {
+      if (_f) {
+        await _f.validate()
+      }
+    }
+    let allTables = this.getAllTable()
+    let tRefs = allTables.map((item) => {
+      return item.getRef('fieldCom')
+    })
+    for (const _t of tRefs) {
+      if (_t) {
+        await _t.validate()
+      }
+    } //
+  } //
   setCurrentDesign(status: boolean = true) {
     //
     let configMap = this.tableConfigMap //

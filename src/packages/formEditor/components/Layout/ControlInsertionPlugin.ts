@@ -331,7 +331,6 @@ function ControlInsertionPlugin(ER: Form) {
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
       setTimeout(() => {
-        console.log(ER, 'fdsjklsdfjlskdfdsl') //
       }, 100)
       if (!prevEl || !e.activeSortable) {
         return false

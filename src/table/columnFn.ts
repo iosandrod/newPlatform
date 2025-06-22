@@ -332,9 +332,10 @@ export const getDefault = (column: Column) => {
     if (_this.getField() == 'pid') {
     }
     let _bounds = [0, 0, 0, 20]
+    let fSize = _this.getFontSize()
     let locationName = createText({
       text: `${_value}`, //
-      fontSize: 16,
+      fontSize: fSize, //
       x: 0,
       y: 0,
       // fontFamily: 'sans-serif',
@@ -342,21 +343,6 @@ export const getDefault = (column: Column) => {
       boundsPadding: _bounds, //
       lineDashOffset: 0,
     })
-    // let formSize = _this.getFontSize()
-    // let svg = createSvgTextString(`${_value}`, width, height, 12) //
-    // console.log(svg, 'svg') //
-    // let locationName = createImage({
-    //   x: 0,
-    //   y: 0,
-    //   //     image: `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-    //   //   <text x="0" y="${
-    //   //     height / 2 - formSize / 2
-    //   //   }" font-family="Arial" font-size="${formSize}px" fill="black">
-    //   //     ${`${_value}`}
-    //   //   </text>
-    //   // </svg>`,
-    //   image:svg,//
-    // })
     let _g = createGroup({
       width: width,
       height,
@@ -388,7 +374,7 @@ export const getDefault = (column: Column) => {
           let arr = []
           let t = createText({
             text: v[0], //
-            fontSize: 16,
+            fontSize: fSize,
             fill: 'red',
             boundsPadding: [0, 0, 0, 0],
             lineDashOffset: 0,
@@ -397,7 +383,7 @@ export const getDefault = (column: Column) => {
             //
             let t1 = createText({
               text: _value.slice(0, v.index), //
-              fontSize: 16,
+              fontSize: fSize,
               // fontFamily: 'sans-serif',
               fill: 'black',
               boundsPadding: [0, 0, 0, 0],
@@ -409,7 +395,7 @@ export const getDefault = (column: Column) => {
           if (i == _vArr.length - 1 && v.index + v[0].length < _value.length) {
             let t2 = createText({
               text: _value.slice(v.index + v[0].length), //
-              fontSize: 14,
+              fontSize: fSize,
               // fontFamily: 'sans-serif',
               fill: 'black',
               boundsPadding: [0, 0, 0, 0],

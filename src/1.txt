@@ -6750,3 +6750,244 @@ function handleCommand(command: string) {
         //   label: '公司中文名',
         //   required: true,
         // },
+
+
+        /* 
+feathers: {
+    provider: 'socketio',
+    headers: {
+      host: 'localhost:3031',
+      connection: 'Upgrade',
+      pragma: 'no-cache',
+      'cache-control': 'no-cache',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0',    
+      upgrade: 'websocket',
+      origin: 'http://localhost:3003',
+      'sec-websocket-version': '13',
+      'accept-encoding': 'gzip, deflate, br, zstd',
+      'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,fr;q=0.5',
+      cookie: 'session=U2FsdGVkX1/8m7tAhv2rq4Pbjsd8DSbsri1CXZ3/DrkZ6xv/YGE1bbXA5gosoyewwOyoHKvqmvgKOrhcWetEn8hw7P8nOxCE1QuIIdo6bY07MOCnERli9o5lpoOGozUB/x4XbJmg3UApx5guO+cX/g==; Hm_lvt_52eb07460b7dc3e27bb80c78c0988671=1743073927',
+      'sec-websocket-key': 'Afbxp7rAlhCjcDFzQXLMDA==',
+      'sec-websocket-extensions': 'permessage-deflate; client_max_window_bits',
+      authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE3NTAwNDc3MjQsImV4cCI6MTc1MDEzNDEyNCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjEiLCJqdGkiOiJiM2Q3ODZhOC0wNTQ4LTRkZGMtYTIyYS00NTc4Y2RjZGUxN2YifQ.f0nLDh680HhW0MyK-Nrz_aEgmTG1QovFqx_1GvUgh0Q'
+    },
+    authentication: {
+      strategy: 'jwt',
+      accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE3NTAwNDc3MjQsImV4cCI6MTc1MDEzNDEyNCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjEiLCJqdGkiOiJiM2Q3ODZhOC0wNTQ4LTRkZGMtYTIyYS00NTc4Y2RjZGUxN2YifQ.f0nLDh680HhW0MyK-Nrz_aEgmTG1QovFqx_1GvUgh0Q'
+    },
+    user: {
+      id: 1,
+      createdAt: '2025-05-24 09:13:24',
+      updatedAt: '2025-05-24 09:13:24',
+      username: 'dxf',
+      email: '1151685410@qq.com',
+      password: '$2b$10$mtmxQd1lFzh6ORBsVOsfvOzH2XN107xINOtc3AmggeDO9.CfXztXm',
+      appName: null,
+      companyName: 'newC',
+      companyCnName: '新公司',
+      companyType: null,
+      companyId: null,
+      phone: null,
+      avatar: '/images/7332066ce14ee350ac57f9d74393a604d7c7ba4fdd3e15f3a47daa59bbc647f9.jpg',
+      companyLogo: '/images/7332066ce14ee350ac57f9d74393a604d7c7ba4fdd3e15f3a47daa59bbc647f9.jpg'
+    }
+  },
+
+
+*/
+
+// try {
+      //   let res = await this?.client?.authenticate({
+      //     strategy: 'jwt',
+      //     accessToken: token, //
+      //     _unUseCaptcha: true,
+      //   }) //
+      //   system.confirmMessage('登录成功') //
+      //   system.loginInfo = res //
+      //   return res
+      // } catch (error) {
+      //   console.error(error, '登录失败')
+      //   localStorage.removeItem('feathers-jwt') //
+      // }
+
+      // export const client: any = {
+//   get: () => {
+//     return {
+//       emit: () => {},
+//     }
+//   },
+//   authenticate: () => {},
+// } //
+
+ // let f = layoutConfig.fields
+    // debugger//
+    // f = f.filter((e) => e.type != null) //
+    // layoutConfig.layout.pc=[layoutConfig.layout.pc[0]]
+    // layoutConfig.layout.mobile=[layoutConfig.layout.mobile[0]]//
+    // layoutConfig.fields = f //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  @for $i from 1 through 2000 {
+    .w-#{$i} {
+      width: #{$i}px;
+    }
+  }
+  .h-full {
+    height: 100%;
+  }
+  @for $i from 1 through 2000 {
+    .h-#{$i} {
+      height: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .pl-#{$i} {
+      padding-left: #{$i}px !important;
+    }
+  } 
+  @for $i from 1 through 2000 {
+    .pr-#{$i} {
+      padding-right: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .pt-#{$i} {
+      padding-top: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .pb-#{$i} {
+      padding-bottom: #{$i}px !important;
+    }
+  }
+
+  @for $i from 1 through 2000 {
+    .ml-#{$i} {
+      margin-left: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .mr-#{$i} {
+      margin-right: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .mt-#{$i} {
+      margin-top: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .mb-#{$i} {
+      margin-bottom: #{$i}px !important;
+    }
+  }
+   @for $i from 1 through 2000 {
+    .p-#{$i} {
+      padding: #{$i}px !important;
+    }
+  }
+ @for $i from 1 through 2000 {
+    .space-y-#{$i} {
+      padding: #{$i}px !important;
+    }
+  }
+   //
+              // let com = (
+              //   <div class="cursor-pointer   pl-10 pr-10 -mb-px text-blue-500   focus:outline-none">
+              //     <div>{item.getLabel()}</div>
+              //   </div>
+              // )
+
+              <template>
+  <mainVue></mainVue>
+</template>
+<script setup lang="ts">
+import { system } from '@/system'
+import { onMounted } from 'vue'
+import mainVue from '../index.vue'
+onMounted(async () => {
+  let http = system.getHttp()
+  http.registerEvent('permissions created', (data) => {})
+})
+</script>
+
+
+
+ <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+            <div
+              onClick={() => {
+                system.getRouter().back() ////
+              }}
+              class="cursor-pointer flex items-center text-blue-600 hover:text-blue-800"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-20 w-20 mr-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              <span>返回</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-gray-700">欢迎</span>
+              <span class="font-medium">13798134216</span>
+              <img alt="头像" class="h-32 w-32 rounded-full" />
+            </div>
+          </header>
+
+          // import tailwindcss from '@tailwindcss/postcss'
+// import autoprefixer from 'autoprefixer'
+// module.exports = {
+//   plugins: [tailwindcss(), autoprefixer()], //
+// }
+// postcss.config.cjs
+// const tailwindcss = require('@tailwindcss/postcss')
+// const autoprefixer = require('autoprefixer')
+
+// module.exports = {
+//   plugins: [tailwindcss(), autoprefixer()],
+// }
+
+// let formSize = _this.getFontSize()
+    // let svg = createSvgTextString(`${_value}`, width, height, 12) //
+    // console.log(svg, 'svg') //
+    // let locationName = createImage({
+    //   x: 0,
+    //   y: 0,
+    //   //     image: `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+    //   //   <text x="0" y="${
+    //   //     height / 2 - formSize / 2
+    //   //   }" font-family="Arial" font-size="${formSize}px" fill="black">
+    //   //     ${`${_value}`}
+    //   //   </text>
+    //   // </svg>`,
+    //   image:svg,//
+    // })

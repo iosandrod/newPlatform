@@ -170,7 +170,14 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
                   },
                 ],
               },
-            },
+            },{
+              field: 'autoColumnSize',
+              label: '列适应',
+              type: 'boolean',
+              options: {
+                
+              },
+            }
           ],
         },
       },

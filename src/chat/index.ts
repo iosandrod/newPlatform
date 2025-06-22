@@ -1,5 +1,5 @@
 // import '@unocss/reset/tailwind.css'
-import 'uno.css'
+// import 'uno.css'
 import type { App, Plugin } from 'vue'
 import { NaiveChat, NaiveChatPlugin } from './naive-chat'
 

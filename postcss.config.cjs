@@ -1,6 +1,7 @@
 module.exports = {
   plugins: {
-    '@tailwindcss/postcss': {},
+    "tailwindcss/nesting": "postcss-nesting",  // ✅ 注意是字符串 key
+    tailwindcss: {},
     autoprefixer: {},
   },
 }

@@ -288,7 +288,7 @@ export class Table extends Base {
     let tableName = this.config.tableName
     return tableName //
   }
-  updateOptions(opt: BaseTableConstructorOptions) {
+  updateOptions(opt?: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
       const oldOptions = instance.options
@@ -397,7 +397,7 @@ export class Table extends Base {
     let dragMode = this.getDragMode()
     let table = new ListTable({
       dragOrder: dragMode, //
-      frozenColCount: this.frozenColCount,
+      // frozenColCount: this.frozenColCount,
       padding: {},
       //ts-ignore
       headerEditor: (args) => {
@@ -669,16 +669,24 @@ export class Table extends Base {
       console.error(error) //
     }
   }
-  render() {
+  render(reset = false) {
     const rootDiv = this.getRef('root')
     let footDiv = this.getRef('footerDiv')
     let _instance = this.instance
     if (_instance != null) {
+      if (reset) {
+        _instance.release()
+        this.createInstance(rootDiv) //
+      }
     } else {
       this.createInstance(rootDiv)
     }
     let footerInstance = this.footerInstance
     if (footerInstance != null) {
+      if (reset) {
+        footerInstance.release()
+        this.createFooterInstance(footDiv) //
+      }
     } else {
       this.createFooterInstance(footDiv) //
     }
@@ -703,26 +711,45 @@ export class Table extends Base {
     console.time(n) //
     let fro = instance.options.frozenColCount
     let right = instance.options.rightFrozenColCount //
+
     let myFro = this.frozenColCount
     let showRowSeriesNumber = this.getShowSeriesNumber()
     if (showRowSeriesNumber) {
       myFro = myFro + 1 //
     }
     let myRight = this.rightFrozenColCount
-    let footerInstance = this.getFooterInstance()
-    if (myRight > 0 && myRight != right) {
-      instance.options.rightFrozenColCount = myRight //
-      if (footerInstance != null) {
-        footerInstance.options.rightFrozenColCount = myRight
+    let footerInstance = this.getFooterInstance() //
+    let status = myRight > 0 && myRight != right
+    let status1 = myFro > 0 && myFro != fro
+    if (status || status1) {
+      if (fro != null || right != null) {
+        // debugger //
+        //重新绘制表格
+        this.render(true) //
+        return
+      }
+      //@ts-ignore
+      if (myRight > 0 && myRight != right) {
+        instance.options.rightFrozenColCount = myRight
+        // instance.setFrozenColCount(myFro)
+        // instance._resetFrozenColCount()
+        if (footerInstance != null) {
+          footerInstance.options.rightFrozenColCount = myRight
+        }
+      }
+      if (myFro > 0 && myFro != fro) {
+        instance.options.frozenColCount = myFro //
+        if (footerInstance != null) {
+          footerInstance.options.frozenColCount = myFro
+        } //
       }
     }
-    if (myFro > 0 && myFro != fro) {
-      instance.options.frozenColCount = myFro //
-      if (footerInstance != null) {
-        footerInstance.options.frozenColCount = myFro
-      } //
-    }
-    instance.updateColumns(_columns) //
+    // instance.clearColWidthCache()
+    //@ts-ignore
+    instance.updateColumns(_columns, { clearColWidthCache: true }) //
+    // instance.clearColWidthCache()
+    // setTimeout(() => {
+    // }, 100)
     let footerIns = this.getFooterInstance()
     console.timeEnd(n) //
   }
@@ -736,7 +763,10 @@ export class Table extends Base {
     if (instance == null) {
       return //
     }
-    instance.updateColumns(_columns) ////
+    //@ts-ignore
+    instance.updateColumns(_columns, { clearColWidthCache: true }) ////
+    // setTimeout(() => {
+    // }, 100)
   }
   getTreeRecords(re?: any[]) {
     let ins = this.getInstance()
@@ -1102,7 +1132,7 @@ export class Table extends Base {
       let cCol = this.controllerColumn
       _col1.push(cCol.getColumnProps())
       count += 1 //
-    }
+    } //
     this.frozenColCount = _count
     this.rightFrozenColCount = count //
     // console.log('frozenColCount', _count, 'rightFrozenColCount', count) //
@@ -1155,11 +1185,7 @@ export class Table extends Base {
   }
   loadColumns() {
     try {
-      // console.log('load columns sdfjsldkfjsdlfsd') //
       let columns = this.getShowColumns()
-      // columns = columns.map((col) => {
-      //   return { field: col.field }
-      // }) //
       this.templateProps.columns = columns //
     } catch (error) {
       console.log('加载列出错了')
@@ -1503,7 +1529,8 @@ export class Table extends Base {
     let _row = ins.getRowAt(config.canvas.y)
     let col = _col.col
     let row = _row.row //
-    let field: string = ins.getBodyField(col, row) as any
+    // let field: string = ins.getBodyField(col, row) as any
+    let field = ins.getHeaderField(col, row) //
     let tColumn = _this.getFlatColumns().find((col) => col.getField() == field)
     let width = tColumn.getColumnWidth()
     _this.columnFilterConfig.width = width + 60 //
@@ -1929,6 +1956,10 @@ export class Table extends Base {
       }
     }
   }
+  clearSelected() {
+    let ins = this.getInstance()
+    ins.clearSelected() //
+  }
   startEditCell(col, row, value, isTitle = false) {
     // if (1 == 1) {
     //   return //
@@ -2133,7 +2164,7 @@ export class Table extends Base {
     return contextItems
   }
   getDefaultHeaderRowHeight() {
-    return 40
+    return 30 //
   }
   getIsFilterTable() {
     let config = this.config
@@ -2684,7 +2715,7 @@ export class Table extends Base {
           resolve(true) //
         } else {
           //
-          this.getSystem().confirmMessage(tErr, 'error') //
+          // this.getSystem().confirmMessage(tErr, 'error') //
           reject(tErr) //
         } //
       } else {
@@ -2814,7 +2845,8 @@ export class Table extends Base {
     if (fOp) {
       fOp.rowSeriesNumber = _col
       fIns.updateOption(fOp) //
-    } //
+    }
+    // setTimeout(() => {}, 500)
   } //
   onCellDblClick(config) {
     let col = config.col //

@@ -100,12 +100,12 @@ export const baseinfoType = (item: FormItem) => {
   obj.onChange = (config) => {}
   obj.clearable = true
   obj.onInput = (config) => {
-    //
     let value = config.value
+    item.updateBindData({ value })//
     item.getTinyTableSearchData({
       value: value,
     })
-  } //
+  }
   return obj
 }
 export const colorType = (item: FormItem) => {

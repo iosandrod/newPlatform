@@ -187,10 +187,13 @@ export class MainPageDesign extends PageDesign {
       tableName: this.getRealTableName(),
       isDialog: true, //
     })
+    let enName = this.getTableName()
     let dialogConfig = {
       width: 0.8,
+      dialogName: `${enName}_dialog`, //
       height: 0.8, //
       title: '编辑',
+      destroyOnClose: false,
       // showFooter: false,
       buttons: [
         {
