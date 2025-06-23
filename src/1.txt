@@ -6913,7 +6913,7 @@ feathers: {
   }
    //
               // let com = (
-              //   <div class="cursor-pointer   pl-10 pr-10 -mb-px text-blue-500   focus:outline-none">
+              //   <div class="pl-10 pr-10 -mb-px text-blue-500 cursor-pointer focus:outline-none">
               //     <div>{item.getLabel()}</div>
               //   </div>
               // )
@@ -6933,16 +6933,16 @@ onMounted(async () => {
 
 
 
- <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+ <header class="flex items-center justify-between px-6 py-4 bg-white shadow">
             <div
               onClick={() => {
                 system.getRouter().back() ////
               }}
-              class="cursor-pointer flex items-center text-blue-600 hover:text-blue-800"
+              class="flex items-center text-blue-600 cursor-pointer hover:text-blue-800"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-20 w-20 mr-1"
+                class="w-20 h-20 mr-1"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -6959,7 +6959,7 @@ onMounted(async () => {
             <div class="flex items-center space-x-3">
               <span class="text-gray-700">欢迎</span>
               <span class="font-medium">13798134216</span>
-              <img alt="头像" class="h-32 w-32 rounded-full" />
+              <img alt="头像" class="w-32 h-32 rounded-full" />
             </div>
           </header>
 
@@ -6991,3 +6991,496 @@ onMounted(async () => {
     //   // </svg>`,
     //   image:svg,//
     // })
+
+     <!-- 第三方登录按钮 -->
+        <!-- <div class="flex justify-center space-x-6">
+          <button type="button">
+            <img
+              alt="WeChat"
+              class="w-10 h-10"
+            />
+          </button>
+          <button type="button">
+            <img
+              alt="QQ"
+              class="w-10 h-10"
+            />
+          </button>
+        </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <template>
+  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div
+      class="flex w-full max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg"
+    >
+      <!-- 左侧宣传/Logo 区 -->
+      <div
+        class="flex-col hidden w-1/2 text-white lg:flex bg-gradient-to-br from-blue-500 to-blue-600"
+      >
+        <div class="w-full h-full">
+          <img alt="Bangboss" class="h-full mb-6" />
+        </div>
+      </div>
+      <div class="flex flex-col w-full h-full p-8 lg:w-1/2">
+        <h2 class="mb-8 text-3xl font-bold text-gray-900">登录</h2>
+        <div>
+          <er-form ref="fins" v-bind="loginFConfig" />
+        </div>
+        <div class="flex justify-center w-full my-4" v-html="code"></div>
+        <div class="flex items-center justify-between mb-6">
+          <label class="flex items-center text-gray-700">
+            <input
+              type="checkbox"
+              class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <span class="ml-2">记住我</span>
+          </label>
+          <div
+            class="text-blue-600 cursor-pointer"
+            @click="system.routeTo('register')"
+          >
+            忘记密码?
+          </div>
+        </div>
+        <button
+          @click="loginFn"
+          class="w-full py-2 mb-8 font-medium text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
+        >
+          登录
+        </button>
+        <div class="flex items-center mb-8 text-gray-500">
+          <span class="flex-1 border-t"></span>
+          <span class="px-4 text-sm">
+            <span
+              class="text-blue-600 cursor-pointer"
+              @click="system.routeTo('register')"
+            >
+              立即注册
+            </span>
+          </span>
+          <span class="flex-1 border-t"></span>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { reactive, ref, onMounted } from 'vue'
+import { system } from '@/system'
+
+interface Company {
+  appName: string
+  appCnName?: string
+  companyName: string
+  companyCnName?: string
+  userid: number
+}
+
+const data = reactive({
+  appName: 'platform',
+  userid: 0,
+  loginType: 'email',
+  email: '1151685410@qq.com',
+  password: '1',
+  _unUseCaptcha: true,
+})
+
+const loginFConfig: any = reactive({
+  labelWidth: 70,
+  data,
+  items: [
+    {
+      label: '登录方式',
+      field: 'loginType',
+      type: 'select',
+      required: true,
+      options: {
+        options: [
+          { label: '邮箱登录', value: 'email' },
+          { label: '用户名登录', value: 'username' },
+        ],
+      },
+    },
+    { field: 'email', type: 'string', label: '邮箱', required: true },
+    {
+      field: 'password',
+      type: 'string',
+      label: '密码',
+      required: true,
+      options: { password: true },
+    },
+    {
+      field: 'userid',
+      type: 'select',
+      label: '公司',
+      required: true,
+      options: { options: [] },
+    },
+    {
+      field: 'appName',
+      type: 'select',
+      label: '应用',
+      required: true,
+      options: { options: [] },
+    },
+    { field: '_captcha', label: '验证码', type: 'string' },
+  ],
+  itemSpan: 24,
+})
+
+async function getCompanyFn() {
+  const all: Company[] = await system.getAllRegisterCompany()
+  loginFConfig.items[3].options.options = all.map((item) => ({
+    label: item.companyCnName || item.companyName,
+    value: item.userid,
+  }))
+  loginFConfig.items[4].options.options = all.map((item) => ({
+    label: item.appCnName || item.appName,
+    value: item.appName,
+  }))
+}
+
+onMounted(getCompanyFn)
+
+const code = ref<string>('')
+const cdata = ref<string>('')
+
+async function loadCaptcha() {
+  const res = await system.createCaptcha('authentication_create')
+  code.value = res.data
+  cdata.value = res.text
+}
+
+onMounted(loadCaptcha)
+
+const fins = ref<any>(null)
+
+async function loginFn() {
+  const form = fins.value as any
+  await form.validate()
+  await system.loginUser(data)
+}
+</script>
+
+
+{/* <button
+              onClick={() => {
+                console.log(_reg2.value, 'testReg2') //
+              }}
+            >
+              测试1
+            </button> */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <template>
+  <div class="flex flex-col h-screen">
+    <!-- Header -->
+    <header
+      class="flex items-center justify-between px-5 text-white bg-blue-600 shadow-md h-60"
+    >
+      <!-- Logo -->
+      <div class="text-2xl font-bold">低代码应用中心</div>
+      <!-- Navigation Menu -->
+      <el-menu
+        mode="horizontal"
+        :default-active="activeHeader"
+        background-color="transparent"
+        text-color="#ffffff"
+        active-text-color="#ffe58f"
+        class="flex-1 mx-10"
+      >
+        <el-menu-item index="1" class="px-4">Home</el-menu-item>
+        <el-menu-item index="2" class="px-4">About</el-menu-item>
+        <el-menu-item index="3" class="px-4">Contact</el-menu-item>
+      </el-menu>
+      <!-- User Module -->
+      <div class="flex items-center ml-5">
+        <template v-if="isLoggedIn">
+          <div class="flex items-center space-x-2">
+            <el-dropdown
+              type="primary"
+              @click="handleCommand"
+              placement="bottom-end"
+              class="h-40 px-4 rounded-lg"
+            >
+              <span class="flex items-center space-x-2">
+                <span class="font-medium text-white">
+                  {{ systemIns.getUserName() }}
+                </span>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="profile" @click="(e) => {}">
+                    个人中心
+                  </el-dropdown-item>
+                  <el-dropdown-item command="support">
+                    联系客服
+                  </el-dropdown-item>
+                  <el-dropdown-item divided command="author">
+                    联系作者
+                  </el-dropdown-item>
+                  <el-dropdown-item command="promo">获取优惠</el-dropdown-item>
+                  <el-dropdown-item
+                    @click="
+                      (e) => {
+                        systemIns.logout() //
+                      }
+                    "
+                    command="logout"
+                  >
+                    退出登录
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
+        </template>
+        <template v-else>
+          <el-button type="primary" size="small" @click="login">
+            Login
+          </el-button>
+        </template>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1">
+      <!-- Sidebar Menu -->
+      <aside class="bg-gray-100 w-200">
+        <el-menu :default-active="activeSidebar" class="w-full">
+          <el-menu-item index="1" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-menu"></i>
+            应用列表
+          </el-menu-item>
+        </el-menu>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="flex-1 p-5 overflow-auto bg-gray-50">
+        <div
+          class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-20"
+        >
+          <el-card
+            v-for="app in apps"
+            :key="app.id"
+            class="transition-transform transform hover:-translate-y-2"
+          >
+            <div class="flex items-center mb-2">
+              <i :class="app.icon + ' text-24 mr-2'" />
+              <span class="text-lg font-semibold">{{ app.cnName }}</span>
+            </div>
+            <div class="mb-4 text-sm">{{ app.description }}</div>
+            <div class="text-right">
+              <el-button
+                type="primary"
+                @click="() => systemIns.installApp(app.name)"
+                size="small"
+              >
+                安装
+              </el-button>
+              <el-button
+                type="primary"
+                @click="() => systemIns.openApp(app.name)"
+                size="small"
+              >
+                进入
+              </el-button>
+            </div>
+          </el-card>
+        </div>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer
+      class="flex items-center justify-center h-40 text-gray-500 bg-gray-100"
+    >
+      © 2025 MyApp Platform
+    </footer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { System } from '@/system'
+import { onMounted } from 'vue'
+import { computed, inject } from 'vue'
+import { ref } from 'vue' //
+let systemIns: System = inject('systemIns') //
+interface AppItem {
+  id: number
+  name: string
+  description: string
+  icon: string
+  cnName: string //
+} //
+onMounted(async () => {
+  let allApp = await systemIns.getAllApps()
+  console.log(allApp) //
+})
+// 应用列表数据
+const apps = ref<AppItem[]>([
+  {
+    id: 1,
+    name: 'erp',
+    cnName: '低代码ERP应用配置',
+    description: '配置化构建应用', //
+    icon: 'el-icon-data-analysis',
+  },
+])
+
+// 菜单激活状态
+const activeHeader = ref('1')
+const activeSidebar = ref('1')
+
+// 用户登录状态及信息
+const isLoggedIn = computed(() => {
+  let loginInfo = systemIns.loginInfo
+  if (loginInfo) {
+    return true
+  }
+  return false
+})
+
+let user = computed(() => {
+  let loginInfo = systemIns.loginInfo
+  if (loginInfo) {
+    return loginInfo
+  }
+  return {} //
+})
+
+// 登录与登出方法 (替换为实际逻辑)
+function login() {
+  systemIns.routeTo('/login') //
+}
+
+function logout() {
+  systemIns.logout() //
+}
+
+function handleCommand(command: string) {
+  // if (command === 'profile') {
+  //   // 跳转到个人中心
+  //   console.log('Go to profile')
+  // } else if (command === 'logout') {
+  //   logout() //
+  // }
+}
+</script>
+
+
+// {
+      //   label: '同步应用数据',
+      //   fn: async () => {
+      //     //
+      //     let appName = await system.getCurrentApp() //
+      //     if (appName == 'platform') {
+      //       return
+      //     }
+      //     let http = system.getHttp()
+      //     await http.post('entity', 'syncTableData', [
+      //       'navs',
+      //       'entity',
+      //       'columns', //
+      //     ])
+      //     this.confirmMessage('同步成功')
+      //   },
+      // },
+
+       {/* <div class="py-1">
+                          <div
+                            href="#"
+                            class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                          >
+                            个人中心
+                          </div>
+                        </div> */}
+
+
+                         let pageDesign = this.getCurrentPageDesign()
+              // await pageDesign.setCurrentDesign() //
+              let config = pageDesign.config
+              let _config = _.cloneDeep(config)
+              let _p: any = pageDesign
+              let _construct = _p.__proto__.constructor
+              // console.log(_construct) //
+              let newD = new _construct(_config)
+              newD.setLayoutData(_config) //
+              newD.setCurrentDesign(true) //
+              let dialogConfig = {
+                title: '页面整体设计',
+                width: 1,
+                height: 1,
+                createFn: () => {
+                  return {
+                    component: pageCom,
+                    props: {
+                      formIns: newD,
+                    },
+                  }
+                },
+                confirmFn: () => {},
+              }
+              await this.openDialog(dialogConfig) //
+
+               // let http = this.getHttp() //
+      // let _res = await http.create('users', data) //
+      // let row = _res[0] //
+      // return row //

@@ -41,6 +41,7 @@ export default defineComponent({
     const registerMenu = (el) => {
       systemIns.registerRef('leftMenu', el) //
     }
+    let userid = systemIns.getLocalItem('userid')
     const ns = systemIns.hooks.useNamespace('Home')
     const fn = async () => {
       let menuData = await systemIns.getMenuData()
@@ -70,7 +71,8 @@ export default defineComponent({
           onTabChange={(config) => {
             system.onMainTabChange(config)
           }}
-          showCloseIcon={true} //
+          showCloseIcon={true}
+          showConfigIcon={true}
           items={systemIns.getTabItems()}
           modelValue={systemIns.getTabModelValue()}
           showContextMenu={true}
@@ -169,8 +171,13 @@ export default defineComponent({
                   default: () => {
                     let com = (
                       <div class="flex items-center h-35 pl-10 pr-10 space-x-1   bg-blue-500 text-white rounded-md hover:bg-pink-600">
+                        <span>{userid}</span>
                         <span>
-                          {system.getUserInfo()?.user?.username || '登录'}
+                          {system.getUserInfo()?.user?.username
+                            ? `${`用户:${
+                                system.getUserInfo()?.user?.username
+                              }`}`
+                            : ''}
                         </span>
                       </div>
                     )
@@ -200,14 +207,6 @@ export default defineComponent({
             transition-opacity
            "
                       >
-                        {/* <div class="py-1">
-                          <div
-                            href="#"
-                            class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
-                          >
-                            个人中心
-                          </div>
-                        </div> */}
                         {itemsCom}
                       </div>
                     )

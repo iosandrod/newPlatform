@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full">
+  <div class="w-full h-full" v-loading="system.pageLoading">
     <router-view></router-view>
   </div>
 </template>

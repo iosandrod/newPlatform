@@ -51,27 +51,28 @@ export default defineComponent({
           label: '密码',
           required: true,
           validate: (config) => {
-            let data = config.data
-            let confirmPassword = data.confirmPassword
-            let password = data.password
-            if (password != confirmPassword) {
-              return '密码校验不一致'
-            }
-            return
+            // let data = config.data
+            // let confirmPassword = data.confirmPassword
+            // let password = data.password
+            // if (password != confirmPassword) {
+            //   return '密码校验不一致'
+            // }
+            // return
           },
-        },
+        }, 
         {
           field: 'confirmPassword',
           label: '确认密码',
           required: true,
           validate: (config) => {
+            //
             let data = config.data
-            let confirmPassword = data.confirmPassword
+            let confirmPassword = data.confirmPassword //
             let password = data.password
             if (password != confirmPassword) {
               return '密码校验不一致'
-            }
-            return //
+            } //
+            return
           },
         },
         {

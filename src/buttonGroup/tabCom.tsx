@@ -12,6 +12,10 @@ export default defineComponent({
     height: {
       type: Number,
     },
+    showConfigIcon: {
+      type: Boolean,
+      default: false,
+    },
     onTabChange: {
       type: Function, //
     },
@@ -241,7 +245,6 @@ export default defineComponent({
                           closeIcon = null //
                         }
                       }
-
                       let height = el.tab.getTabHeight()
                       let mHeight = el.tab.getTabMinHeight()
                       let dragCom = (
@@ -322,3 +325,5 @@ export default defineComponent({
     }
   },
 })
+
+

@@ -24,6 +24,7 @@ import { Dropdown } from '@/menu/dropdown'
 import { SearchPageDesign } from './searchPageDesign'
 import { useTimeout } from './utils/decoration'
 import { platform } from 'os'
+import { VxeFormDefines, VxeFormItem, VxeFormItemProps } from 'vxe-pc-ui'
 
 export type FormOptions = {
   items: Field[]
@@ -1078,7 +1079,12 @@ export class FormItem extends Base {
   }
   createFormRules() {
     let required = this.config.required
-    let rArr = [] //
+    // let _config:VxeFormDefines.FormRule={
+    //   validator: async (config) => {
+
+    //   },
+    // }
+    let rArr: any[] = [] //
     if (required == true) {
       let _fn = (config) => {
         let { itemValue, rule, rules, data, field } = config
@@ -1099,7 +1105,7 @@ export class FormItem extends Base {
     if (typeof validate == 'function') {
       rArr.push({
         validator: async (config) => {
-          let { itemValue, rule, rules, data, field } = config
+          let { itemValue, rule, rules, data, field } = config //
           let _value = await validate(config)
           if (typeof _value == 'string') {
             return Promise.reject(new Error(_value)) //

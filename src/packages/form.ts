@@ -442,7 +442,6 @@ export class Form extends Base {
   async validate() {
     return new Promise(async (resolve, reject) => {
       let form: VxeFormInstance = this.getRef('form')
-      // let items = form.getItems()
       form.validate(async (err) => {
         err = err || {} //
         let _arr = Object.values(err)

@@ -67,9 +67,9 @@ import wangCom from './wangEditor/wangCom'
 // import { registerIconsComp } from './audit/icons'
 import ArcoVue from '@arco-design/web-vue'
 import ArcoVueIcon from '@arco-design/web-vue/es/icon'
-import NaiveChatP from './chat'//
+import NaiveChatP from './chat' //
 import './style.scss' //
-import './assets/tailwind.css'//
+import './assets/tailwind.css' //
 import './mainStyle.css'
 //@ts-ignore
 self.MonacoEnvironment = {
@@ -109,9 +109,7 @@ Base.prototype._router = router
 //@ts-ignore
 Base.prototype.getAllComponent = () => componentObj
 //@ts-ignore
-// Table.component = tableCom
 
-// import './assets/tailwind.css'
 app.use(NaiveChatP)
 app.use(ArcoVueIcon)
 app.use(ArcoVue)

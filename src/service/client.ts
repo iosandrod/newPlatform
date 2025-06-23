@@ -12,6 +12,7 @@ import {
   AuthenticationRequest,
   AuthenticationResult,
 } from '@feathersjs/authentication'
+import { nextTick } from 'vue'
 export const defaultStorage: any = getDefaultStorage()
 const defaults: AuthenticationClientOptions = {
   header: 'Authorization',
@@ -23,6 +24,16 @@ const defaults: AuthenticationClientOptions = {
   path: '/authentication',
   Authentication: AuthenticationClient,
   storage: defaultStorage,
+} //
+let queryString = window.location.search.slice(1)
+let params = new URLSearchParams(queryString)
+let obj = Object.fromEntries(params.entries()) || {}
+// console.log(obj, 'testObj123123') //
+let userid = obj?.userid
+if (userid != null) {
+  nextTick(() => {
+    system.setLocalItem('userid', userid)
+  })
 }
 class myAuth extends AuthenticationClient {
   constructor(app: any, op: any) {
@@ -73,7 +84,7 @@ export class Client {}
 export type createConfig = {}
 export const createClient = (config) => {
   let _appName = localStorage.getItem('appName')
-  let _userid = localStorage.getItem('userid')
+  let _userid = localStorage.getItem('userid') //
   let fullHost = window.location.host // erp.dxf.life
   let hostname = window.location.hostname // erp.dxf.life
   let subdomain = hostname.split('.')[0] // erp
@@ -93,19 +104,23 @@ export const createClient = (config) => {
   let baseUrl = `http://${'localhost:3031'}` //
   let _base = import.meta.env.VITE_BASEURL
   let isProd = import.meta.env.VITE_ENVIRONMENT
-  console.log(isProd, 'isProd') //
   if (isProd == 'production') {
     baseUrl = _base //
-  } //
-  // console.log(_base, 'testBase')//
+  }
   let _host = `${baseUrl}${_key}`
+  if (config?.isMain === true) {
+    _host = baseUrl //
+  }
+  if (appName == 'platform') {
+    _host = baseUrl //
+  }
   const socket = io(_host, {
     transports: ['websocket'],
     extraHeaders: {
-      authorization: localStorage.getItem('feathers-jwt'), //
+      authorization: localStorage.getItem('feathers-jwt'),
     },
     auth: {
-      authorization: localStorage.getItem('feathers-jwt'), //
+      authorization: localStorage.getItem('feathers-jwt'),
     },
   })
   socket.on('login', () => {
@@ -153,29 +168,39 @@ export class myHttp {
     this.client = _client //
   }
   async init() {
-    let token = localStorage.getItem('feathers-jwt')
-    if (token) {
-      try {
-        // debugger //
-        let res = await this.client.authenticate({
-          accessToken: token,
-          _unUseCaptcha: true,
-          strategy: 'jwt',
-        })
-        system.loginInfo = res //
-        return res
-      } catch (error) {
-        console.log('默认登录失败') //
-        // console.error(error, '登录失败') //
+    nextTick(async () => {
+      let token = localStorage.getItem('feathers-jwt')
+      if (token) {
+        try {
+          let app = system.getCurrentApp()
+          let res = await this.client.authenticate({
+            accessToken: token,
+            _unUseCaptcha: true,
+            strategy: 'jwt',
+          })
+          // system.confirmMessage('默认登录成功') //
+          console.log('系统默认登录成功')
+          system.loginInfo = res //
+        } catch (error) {
+          // console.log('默认登录失败') //
+          console.error(error, '默认登录失败') //
+          // console.error(error, '登录失败') //
+        }
+      } else {
+        system.loginInfo = null
       }
-    }
+    })
+
+    // system.hasDefaultLogin = true
   }
+  setSystemLoading(status) {}
   async registerUser(data) {
     try {
       let _res = await this.create('users', data)
       console.log(_res, 'test_res') //
       system.confirmMessage('注册成功')
       let r = system.getRouter()
+
       r.push('login') //
     } catch (error) {
       system.confirmMessage(`注册失败,${error?.message}`, 'error') //
@@ -186,6 +211,7 @@ export class myHttp {
       //
       let http = this
       data.strategy = 'local' ////
+      console.log('用户登录', data)
       let _res = await http.client.authenticate(data) //
       system.loginInfo = _res //
       // console.log(_res, 'testRes') //

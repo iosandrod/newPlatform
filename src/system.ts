@@ -30,6 +30,7 @@ import { ChatClass } from './chat/chatClass'
 import { Contact } from './chat'
 import pageCom from '@ER/pageCom'
 export class System extends Base {
+  pageLoading = false
   staticComArr: any[] = []
   hasInitRoutes = false
   allApp: any = [] //
@@ -342,7 +343,6 @@ export class System extends Base {
         tableName: config,
       }
     }
-    // debugger //
     let tableName = config.tableName
     let _design = this.tableMap[tableName]
     if (_design) {
@@ -430,7 +430,6 @@ export class System extends Base {
       return _design //
     }
     let layoutConfig = await this.getPageEditLayout(editTableName) //
-    // debugger//
     let _d = new editPageDesign(layoutConfig) //
     if (config.isDialog) {
       _d.isDialog = true //
@@ -462,7 +461,6 @@ export class System extends Base {
       | string,
   ) {
     //
-    // debugger //
     if (typeof config == 'string') {
       config = {
         tableName: config,
@@ -861,11 +859,8 @@ export class System extends Base {
   }
   async registerUser(data) {
     try {
-      // let http = this.getHttp() //
-      // let _res = await http.create('users', data) //
-      // let row = _res[0] //
-      // return row //
       let http = this.getHttp()
+      this.setSystemLoading(true)
       await http.registerUser(data) //
     } catch (error) {
       const message = error.message || ''
@@ -873,20 +868,29 @@ export class System extends Base {
     }
   }
   async loginUser(data) {
+    // debugger//
     let currentApp = await this.getCurrentApp()
     if (currentApp != 'platform') {
       let userid = data.userid
       if (userid == null) {
         this.confirmMessage('请选择账套', 'error')
         return
-      } //
+      }
+      if (userid <= 0) {
+        this.confirmMessage('请选择账套', 'error')
+        return //
+      }
       let http = this.getHttp()
       http.changeClient({
         userid,
         appName: currentApp,
-      }) //
-      localStorage.setItem('appName', currentApp)
-      localStorage.setItem('userid', userid) //
+      })
+      this.setLocalItem('appName', currentApp)
+      this.setLocalItem('userid', userid) 
+    } else {
+      if (data.userid != null) {
+        return
+      }
     }
     let h = this.getHttp()
 
@@ -923,19 +927,24 @@ export class System extends Base {
   }
   async openApp(name, openConfig = {}) {
     let canOpen = true
+    let userid = this.getUserId() //
+    openConfig = { ...openConfig, userid } //
     try {
       let query = new URLSearchParams(openConfig).toString()
       //打开app
       let config = await this.getHttp().post('company', 'getAppConfig', {
         appName: name,
-      }) //
-      let url = config.url //
+      })
+      // console.log(config) //
+      let url = config?.url //
       if (url) {
         url = `${url}?${query}` //
         //打开新窗口
         window.open(url)
       } //
-    } catch (error) {}
+    } catch (error) {
+      this.confirmErrorMessage('打开失败') //
+    }
   }
   confirmErrorMessage(content) {
     if (typeof content != 'string') {
@@ -1327,7 +1336,7 @@ export class System extends Base {
   }
   async logout() {
     let http = this.getClient()
-    await http.logoutUser()
+    await http.logoutUser() //
   }
   async onMenuItemClick(item) {
     // console.log('左侧菜单点击', item)//
@@ -1353,7 +1362,7 @@ export class System extends Base {
       return
     }
     let r = this.getRouter()
-    r.push(path)
+    r.push(path) //
   }
   async updateUserInfo() {
     let user = this.loginInfo.user //
@@ -1385,36 +1394,17 @@ export class System extends Base {
           {
             label: '页面整体设计',
             fn: async () => {
-              let pageDesign = this.getCurrentPageDesign()
-              // await pageDesign.setCurrentDesign() //
-              let config = pageDesign.config
-              let _config = _.cloneDeep(config)
-              let _p: any = pageDesign
-              let _construct = _p.__proto__.constructor
-              // console.log(_construct) //
-              let newD = new _construct(_config)
-              newD.setLayoutData(_config) //
-              newD.setCurrentDesign(true) //
-              let dialogConfig = {
-                title: '页面整体设计',
-                width: 1,
-                height: 1,
-                createFn: () => {
-                  return {
-                    component: pageCom,
-                    props: {
-                      formIns: newD,
-                    },
-                  }
-                },
-                confirmFn: () => {},
-              }
-              await this.openDialog(dialogConfig) //
+              await this.designCurrentPage() //
             },
           },
         ],
       },
-
+      {
+        label: '布局设计',
+        fn: async () => {
+          let pageDesign = this.designCurrentPage() //
+        },
+      },
       {
         label: '同步列',
         fn: async () => {
@@ -1624,12 +1614,15 @@ export class System extends Base {
       for (const r of targetRoutes) {
         router.addRoute('pageIndex', r)
       }
-      this.hasInitRoutes = true //
+      this.hasInitRoutes = true
+      let query = curRou.query
+      // console.log(query, 'testQuery') //
       nextTick(() => {
-        // debugger //
-        if (_path == '/') {
-          _path = '/home' //
-        } //
+        // console.log('sfkjslfjslkfsjlkfsd')//
+        let _path1 = _path.split('?')[0]
+        if (_path1 == '/') {
+          _path = '/home'
+        }
         router.push({
           path: _path,
         })
@@ -1637,12 +1630,22 @@ export class System extends Base {
     } //
   }
   async getCurrentApp() {
-    let host = window.location.host
-    let port = window.location.port
-    if (port == '3004') {
-      return 'erp'
+    let envi = process.env.VITE_ENVIRONMENT || 'development'
+    let curUrl = window.location.host.split(':')[0]?.split('.')[0] //
+    let apparr = ['erp', 'platform']
+    let _appName = null
+    if (apparr.includes(curUrl)) {
+      _appName = curUrl
     }
-    return 'platform' //
+    if (envi == 'development') {
+      let host = window.location.host
+      let port = window.location.port
+      if (port == '3004') {
+        _appName = 'erp'
+      }
+    }
+    _appName = _appName || 'platform' //
+    return _appName //
   }
   getGlobRoute() {
     let vueF = generateRoutes()
@@ -1874,23 +1877,6 @@ export class System extends Base {
           console.log(layout) //
         },
       },
-      // {
-      //   label: '同步应用数据',
-      //   fn: async () => {
-      //     //
-      //     let appName = await system.getCurrentApp() //
-      //     if (appName == 'platform') {
-      //       return
-      //     }
-      //     let http = system.getHttp()
-      //     await http.post('entity', 'syncTableData', [
-      //       'navs',
-      //       'entity',
-      //       'columns', //
-      //     ])
-      //     this.confirmMessage('同步成功')
-      //   },
-      // },
     ]
     return items
   }
@@ -1905,7 +1891,9 @@ export class System extends Base {
       },
       {
         label: '退出登录',
-        fn: async () => {},
+        fn: async () => {
+          _this.logout()
+        },
       },
     ]
     return items
@@ -1937,6 +1925,41 @@ export class System extends Base {
     // }
     let _name = _n.name
     systemIns.routeOpen(_name) //
+  }
+  async designCurrentPage(name?: any) {
+    let pageDesign = null
+    if (name) {
+      pageDesign = this.getTargetDesign(name)
+    } else {
+      pageDesign = this.getCurrentPageDesign() //
+    }
+    let config = pageDesign.config
+    let _config = _.cloneDeep(config)
+    let _p: any = pageDesign
+    let _construct = _p.__proto__.constructor
+    // console.log(_construct) //
+    let newD = new _construct(_config)
+    newD.setLayoutData(_config) //
+    newD.setCurrentDesign(true) //
+    let dialogConfig = {
+      title: '页面整体设计',
+      width: 1,
+      height: 1,
+      createFn: () => {
+        return {
+          component: pageCom,
+          props: {
+            formIns: newD,
+          },
+        }
+      },
+      confirmFn: () => {},
+    }
+    await this.openDialog(dialogConfig) //
+  }
+  setSystemLoading(status) {
+    let bool = Boolean(status)
+    this.pageLoading = bool //
   }
 } //
 export const system = reactive(new System())

@@ -372,7 +372,6 @@ export default defineComponent({
 
     const computeSelectLabel = computed(() => {
       const { modelValue, remote, multiple } = props
-      console.log(modelValue, 'testModelValue') //
       const multiMaxCharNum = computeMultiMaxCharNum.value
       if (XEUtils.eqNull(modelValue)) {
         return ''
