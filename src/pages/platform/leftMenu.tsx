@@ -3,7 +3,7 @@ import { System } from '@/system'
 import { defineComponent, inject } from 'vue'
 
 export default defineComponent({
-  name: 'LeftMenu',
+  name: 'LeftMenu', //
   components: {
     menuCom,
   },
@@ -24,6 +24,7 @@ export default defineComponent({
             systemIns.openContextMenu(event)
           }}
           onItemClick={(item) => {
+            console.log(item,'testItem isClient')
             systemIns.onMenuItemClick(item)
           }}
           items={systemIns.getMenuItems()}

@@ -365,13 +365,14 @@ export class Column extends Base {
           }
           let field = config.field
           let value = row[field] //
+          let label = null
           if (type == 'select') {
             let options = _this.getSelectOptions()
             let value = config.row[field]
             let _label = options.find((item) => item.value == value)?.label
-            return _label || value //
-          } ////
-          return value
+            label = _label
+          }
+          return label || value //
         }
       }
     }
@@ -1113,7 +1114,7 @@ export class Column extends Base {
     this.table.clearSelected()
     setTimeout(() => {
       this.table.loadColumns()
-      this.table.loadFooterColumn()//
+      this.table.loadFooterColumn() //
     }, 100)
   }
   setFrozen(type) {

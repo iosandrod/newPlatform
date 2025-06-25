@@ -23,7 +23,17 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         },
       },
       {
-        label: '添加默认按钮', //
+        label: '添加主页默认按钮', //
+        fn: (config) => {
+          let _t: Table = config.parent
+          let curRow = _t.getCurRow()
+          let _defaultButtons = JSON.parse(JSON.stringify(defaultButtons))
+          _t.config.data.splice(0)
+          _t.config.data.push(..._defaultButtons)
+        },
+      }, //
+      {
+        label: '添加编辑页默认按钮',
         fn: (config) => {
           let _t: Table = config.parent
           let curRow = _t.getCurRow()

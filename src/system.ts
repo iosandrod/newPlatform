@@ -22,7 +22,7 @@ import { SearchPageDesign } from '@ER/searchPageDesign'
 import codeEditorCom from './codeEditor/codeEditorCom'
 import CodeEditor from './codeEditor/codeEditor'
 import wangCom from './wangEditor/wangCom'
-import { createColumnSelect } from './systemFn'
+import { changePassword, createColumnSelect, installApp } from './systemFn'
 import { generateRoutes } from '@/router/register'
 import { Menu } from './menu/menu'
 import { BMenu } from './buttonGroup/bMenu'
@@ -886,7 +886,7 @@ export class System extends Base {
         appName: currentApp,
       })
       this.setLocalItem('appName', currentApp)
-      this.setLocalItem('userid', userid) 
+      this.setLocalItem('userid', userid)
     } else {
       if (data.userid != null) {
         return
@@ -917,19 +917,15 @@ export class System extends Base {
   //安装app
   async installApp(name) {
     //
-    try {
-      let http = this.getHttp() //
-      await http.create('company', { appName: name }) //
-      this.confirmMessage('安装成功') //
-    } catch (error) {
-      this.confirmErrorMessage('安装失败') //
-    }
+    await installApp(this, name) //
   }
   async openApp(name, openConfig = {}) {
-    let canOpen = true
-    let userid = this.getUserId() //
-    openConfig = { ...openConfig, userid } //
     try {
+      let canOpen = await this.getHttp().post('users', 'canOpenApp', {
+        appName: name,
+      }) //
+      let userid = this.getUserId() //
+      openConfig = { ...openConfig, userid } //
       let query = new URLSearchParams(openConfig).toString()
       //打开app
       let config = await this.getHttp().post('company', 'getAppConfig', {
@@ -943,7 +939,7 @@ export class System extends Base {
         window.open(url)
       } //
     } catch (error) {
-      this.confirmErrorMessage('打开失败') //
+      this.confirmErrorMessage(`打开${name}失败,${error?.message}`) //
     }
   }
   confirmErrorMessage(content) {
@@ -965,13 +961,11 @@ export class System extends Base {
       userid: id,
     })
     this.allApp = allCompany //
+    return allCompany //
   }
   getUserInfo() {
     let loginInfo = this.loginInfo //
     return loginInfo
-  }
-  enterApp(name) {
-    //
   }
   async designCurrentPageConfig() {
     let curPage = this.getCurrentPageDesign()
@@ -1347,7 +1341,7 @@ export class System extends Base {
     let _d = await this.getHttp().hTable(tableName)
     if (_d == false) {
       return
-    } //
+    }
     this.routeOpen(tableName) //
   }
   getIsLogin() {
@@ -1456,7 +1450,8 @@ export class System extends Base {
     let allArgs = [...optionsField].flat().filter((item) => {
       return !allKeys.includes(item)
     }) //
-    let options = await this.getHttp().runCustomMethod(
+    console.log(allArgs, 'testAray') //
+    let options = await this.getHttp().post(
       'columns',
       'getOptionsFieldSelect',
       allArgs,
@@ -1649,7 +1644,6 @@ export class System extends Base {
   }
   getGlobRoute() {
     let vueF = generateRoutes()
-    // console.log(vueF, 'testRoutes') //
     return vueF //
   }
   copyValue(v) {
@@ -1874,7 +1868,8 @@ export class System extends Base {
         fn: async () => {
           let pageDesign = system.getCurrentPageDesign()
           let layout = pageDesign.getLayoutData()
-          console.log(layout) //
+          // console.log(layout) //
+          console.log(system, 'testSystem') //
         },
       },
     ]
@@ -1961,5 +1956,48 @@ export class System extends Base {
     let bool = Boolean(status)
     this.pageLoading = bool //
   }
+  async getAllAccountCompany(data) {
+    let http = this.getHttp()
+    let res = await http.post('company', 'getAllAccountCompany', data)
+    // console.log(res, 'testRes123123')//
+    let _res = res
+    return _res
+  }
+  async changePassword() {
+    await changePassword(this)
+  } //
+  async getDefaultEditButtons() {
+    let http = this.getHttp()
+    let res = await http.post('entity', 'getDefaultButtons', {
+      type: 'edit',
+    })
+    console.log(res, 'testRes') //
+  }
+  async getDefaultMainButtons() {
+    let http = this.getHttp()
+    let res = await http.post('entity', 'getDefaultButtons', {
+      type: 'main',
+    })
+  }
+  async checkIsAdmin() {
+    //
+  }
+  getPlatformHomeHeader() {
+    return [
+      {
+        label: 'Home',
+        name: 'home',
+      },
+      {
+        label: 'About',
+        name: 'about',
+      },
+      {
+        label: 'Contact',
+        name: 'contact', //
+      },
+    ]
+  }
+  getCardButtons() {}
 } //
 export const system = reactive(new System())

@@ -71,6 +71,7 @@ import NaiveChatP from './chat' //
 import './style.scss' //
 import './assets/tailwind.css' //
 import './mainStyle.css'
+import './changeCalStyle.scss'
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {

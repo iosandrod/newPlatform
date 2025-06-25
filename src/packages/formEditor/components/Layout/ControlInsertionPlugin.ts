@@ -330,8 +330,7 @@ function ControlInsertionPlugin(ER: Form) {
     dragStart(e) {}
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
-      setTimeout(() => {
-      }, 100)
+      setTimeout(() => {}, 100)
       if (!prevEl || !e.activeSortable) {
         return false
       }
@@ -339,6 +338,7 @@ function ControlInsertionPlugin(ER: Form) {
       // 获取拖拽元素的真实DOM结构
       let oldEl = getDragElement(dragEl)
       // 判断当前拖拽的元素是否是 'block' 类型
+      // console.log(oldEl,'testOld')//
       let isBlock =
         _.get(e, 'activeSortable.options.dataSource', false) === 'block'
       if (isBlock) {
@@ -352,7 +352,7 @@ function ControlInsertionPlugin(ER: Form) {
             '该字段已经存在,请不要重复添加',
             'error',
           ) //
-          resetStates() //
+          resetStates()
           return
         }
       }
@@ -424,8 +424,9 @@ function ControlInsertionPlugin(ER: Form) {
               // isInRootDiv,
             )
             newElement = {
-              type: 'inline',
-              columns: [newElement], //
+              ...ER.createNodeIdKey('inline'),
+              // type: 'inline',
+              columns: [newElement],
             }
             // let list = _node.list
             _node.context.appendBlockNode(newElement) ////
@@ -514,7 +515,8 @@ function ControlInsertionPlugin(ER: Form) {
                   // isInRootDiv,
                 )
                 newElement = {
-                  type: 'inline',
+                  ...ER.createNodeIdKey('inline'),
+                  // type: 'inline',
                   columns: [newElement], //
                 }
                 // let list = _node.list

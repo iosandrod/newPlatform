@@ -231,7 +231,6 @@ export default defineComponent({
     provide('tableIns', tableIns)
     onMounted(() => {
       //
-      console.log('表格挂在了') //
       tableIns.onMounted() //
     })
     watch(
@@ -247,9 +246,9 @@ export default defineComponent({
       tableIns.registerRef('root', el) //注册实例//
     } //
     onMounted(() => {
-      nextTick(() => {
-        tableIns.render()
-      })
+      tableIns.render()
+      // nextTick(() => {
+      // })
     }) //
     onUnmounted(() => {
       tableIns.onUnmounted()
@@ -489,45 +488,24 @@ export default defineComponent({
             {...inputProps}
             v-slots={{
               buttons: () => {
-                // let com = (
-                //   <buttonGroupCom
-                //     buttonWidth={40}
-                //     items={[
-                //       {
-                //         label: '<<',
-                //         fn: () => {
-                //           tableIns.jumpToSearchNext(true) //
-                //         }, //
-                //       },
-                //       {
-                //         label: '>>',
-                //         fn: () => {
-                //           tableIns.jumpToSearchNext() //
-                //         },
-                //       },
-                //       {
-                //         label: 'X',
-                //         fn: () => {
-                //           tableIns.showGlobalSearch(false) //
-                //         },
-                //       },
-                //     ]}
-                //   ></buttonGroupCom>
-                // )
                 let com = (
                   <div class="flex items-center space-x-2 p-2 bg-gray-100 rounded-t-md border-b">
                     <button
-                      onClick={() => {
-                        tableIns.jumpToSearchNext()
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        tableIns.jumpToSearchNext(true)//
                       }}
                       class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200 transition"
                       title="上一页"
                     >
                       &laquo;
-                    </button> 
+                    </button>
                     <button
-                      onClick={() => {
-                        tableIns.jumpToSearchNext(true)
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        tableIns.jumpToSearchNext(false)
                       }}
                       class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200 transition"
                       title="下一页"

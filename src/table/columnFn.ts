@@ -55,12 +55,22 @@ export const getCheckbox = (column: Column) => {
 
     let t1: VTable.ListTable = table
 
-    let _value: string = value
+    let _value: string = value //
     let record = table.getCellOriginRecord(col, row)
-    let bg = _this.getIndexColor(row, record) //
+    if (_this.table?.useCache) {
+      let _index = record['_index']
+      let field = _this.getField() //
+      let _con = _this.table.getCacheContainer(_index, field)
+      if (_con) {
+        return {
+          rootContainer: _con,
+          renderDefault: false,
+        }
+      }
+    } //
+    let bg = _this.getIndexColor(row, record)
     if (record?._index == _this.table.tableData?.curRow?._index) {
       bg = _this.getCurrentRowColor()
-      // console.log('update') //
     }
     const { height, width } = rect ?? table.getCellRect(col, row)
     let _height = height
@@ -227,6 +237,17 @@ export const getSerialLayout = (column: Column) => {
     }
 
     const record = table.getCellOriginRecord(col, row)
+    if (_this.table.useCache == true) {
+      let _index = record._index //
+      let f = _this.getField()
+      let _con = _this.table.getCacheContainer(_index, f)
+      if (_con != null) {
+        return {
+          rootContainer: _con,
+          renderDefault: false, //
+        }
+      } //
+    }
     let count = _table.getInstance().visibleRowCount
     _this.table.onCellVisible({
       field: _this.getField(),
@@ -248,11 +269,6 @@ export const getDefault = (column: Column) => {
   let _this = column.getTable().columnsMap[column.getField()] //
   // console.log(isProxy(_this), 'isProxy')
   let customLayout = (args) => {
-    // if (1 == 1) {
-    //   return {
-    //     renderDefault: true,
-    //   }
-    // }
     let { table, row, col, rect, value } = args
     let t1: VTable.ListTable = table
     let _value: string = value //
@@ -261,6 +277,22 @@ export const getDefault = (column: Column) => {
       return {
         rootContainer: null,
         renderDefault: false, //
+      }
+    }
+    if (_this.table.useCache == true) {
+      let _index = record._index //
+      let f = _this.getField()
+      let _con = _this.table.getCacheContainer(_index, f) //
+      if (_con) {
+        let currentResizeField = _this.table.currentResizeField //
+        if (currentResizeField === f) {
+        } else {
+         
+          return {
+            rootContainer: _con,
+            renderDefault: false, //
+          }
+        }
       }
     }
     record = record || {} //

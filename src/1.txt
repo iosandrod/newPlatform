@@ -7484,3 +7484,432 @@ function handleCommand(command: string) {
       // let _res = await http.create('users', data) //
       // let row = _res[0] //
       // return row //
+
+      // console.log(allCompany, 'testCompany')//
+      // const all: any[] = await system.getAllRegisterCompany()
+      // loginFConfig.items[3].options.options = all.map((item) => ({
+      //   label: item.companyCnName || item.companyName,
+      //   value: item.userid,
+      // }))
+      // loginFConfig.items[4].options.options = all.map((item) => ({
+      //   label: item.appCnName || item.appName,
+      //   value: item.appName,
+      // }))
+
+       // {
+        //   label: '登录方式',
+        //   field: 'loginType',
+        //   type: 'select',
+        //   required: true,
+        //   options: {
+        //     options: [
+        //       { label: '邮箱登录', value: 'email' },
+        //       { label: '用户名登录', value: 'username' },
+        //     ],
+        //   },
+        // },
+
+
+         {/* <button type="button"></button>
+                  <div class="h-40">
+                    <button
+                      type="button"
+                      class="h-full px-4 py-2 ml-10 text-blue-500 transition border border-blue-500 rounded hover:bg-blue-50"
+                    >
+                      修改密码
+                    </button>
+                    <button
+                      onClick={() => {
+                        system.updateUserInfo() //
+                      }}
+                      class="h-full px-6 py-2 ml-10 text-white transition bg-blue-600 rounded hover:bg-blue-700"
+                    >
+                      保存
+                    </button>
+                  </div> */}
+
+
+                  /* 
+let _data = await this.getHttp().find('navs')
+    let tableConfig = {
+      showHeaderButtons: false, //
+      enableDragRow: true,
+      treeConfig: {
+        id: 'id',
+        parentId: 'pid',
+        rootId: 0,
+      },
+      contextItems: [
+        {
+          label: '添加菜单',
+          fn: async (config) => {
+            let p = config.parent
+            console.log('parent', p) //
+          },
+        },
+        {
+          label: '添加子菜单', //
+          fn: async () => {},
+        },
+      ],
+      buttons: [],
+      columns: [
+        {
+          field: 'id',
+          title: 'id',
+          tree: true,
+          frozen: 'left',
+        },
+        {
+          field: 'navname', //
+          title: '导航名称',
+          editType: 'string', //
+          width: 200, //
+        },
+        {
+          field: 'tableName',
+          editType: 'string', //
+          title: '表格或者视图名称',
+        },
+        {
+          field: 'status',
+          title: '是否启用', //
+          editType: 'boolean', //
+        },
+      ],
+      data: _data,
+      height: 600,
+      width: 800, //
+      dragRowFn: (config) => {
+        return true //
+      },
+      confirmFn: async (dialog) => {
+        let data = dialog.getRef('innerCom').getFlatTreeData()
+        // console.log(data, 'testData')//
+        let _data1 = data.filter((item) => {
+          return item['_rowState'] == 'change'
+        })
+        // console.log(_data1)//
+        let http = this.getHttp()
+        await http.patch('navs', _data1) //
+        this.confirmMessage('更新菜单成功') ////
+        this.clearCacheValue('getMenuData') //
+        await this.getMenuData() //
+      },
+      dragRowAfterFn: (config) => {
+        let data = config.data
+        data.forEach((item, i) => {
+          item['_rowState'] = 'change'
+          item['sort'] = Number(i) + 1 ////
+        })
+      },
+      showRowSeriesNumber: true,
+    }
+    await this.confirmTable(tableConfig) //
+    return tableConfig
+
+
+*/
+ //
+    // let config = this.config
+    // let onColumnResize = config.onColumnResize
+    // if (typeof onColumnResize == 'function') {
+    //   onColumnResize(_config) //
+    // }
+    // console.log(_config, 'onColumnResize') //
+
+     // if(currentResizeField==f){
+          //   console.log('缓存', _con) ////
+          // }
+          // console.log('缓存', _con) //
+           // let com = (
+                //   <buttonGroupCom
+                //     buttonWidth={40}
+                //     items={[
+                //       {
+                //         label: '<<',
+                //         fn: () => {
+                //           tableIns.jumpToSearchNext(true) //
+                //         }, //
+                //       },
+                //       {
+                //         label: '>>',
+                //         fn: () => {
+                //           tableIns.jumpToSearchNext() //
+                //         },
+                //       },
+                //       {
+                //         label: 'X',
+                //         fn: () => {
+                //           tableIns.showGlobalSearch(false) //
+                //         },
+                //       },
+                //     ]}
+                //   ></buttonGroupCom>
+                // )
+
+                 // console.log(
+          //   isProxy(record),
+          //   'isProxy(record)',
+          //   isProxy(config.column),
+          // )
+
+
+          //  @for $i from 1 through 2000 {
+//     .space-y-#{$i} {
+//       padding: #{$i}px !important;
+//     }
+//   }
+
+/* 
+<template>
+  <div class="w-full h-full">
+    <lowcode>
+      <template #default="path">
+        <keep-alive>
+          <design :key="path" ></design>
+        </keep-alive>
+      </template>
+    </lowcode>
+  </div>
+</template>
+<script setup lang="ts">
+import design from './design'
+import lowcode from './lowcode'
+</script>
+<style lang="scss"></style>
+
+
+*/
+
+
+
+
+// @for $i from 1 through 2000 {
+//   .w-#{$i} {
+//     width: #{$i}px;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .h-#{$i} {
+//     height: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .pl-#{$i} {
+//     padding-left: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .pr-#{$i} {
+//     padding-right: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .pt-#{$i} {
+//     padding-top: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .pb-#{$i} {
+//     padding-bottom: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .px-#{$i} {
+//     padding-top: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .py-#{$i} {
+//     padding-bottom: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .ml-#{$i} {
+//     margin-left: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .mr-#{$i} {
+//     margin-right: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .mt-#{$i} {
+//     margin-top: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .mb-#{$i} {
+//     margin-bottom: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .p-#{$i} {
+//     padding: #{$i}px !important;
+//   }
+// }
+// 定义一个属性映射：class prefix → CSS 属性（可带 !important）
+
+ // return (
+                  //   <ElDropdownMenu
+                  //     onClick={(e) => {
+                  //       console.log(e)
+                  //       let command = e.command
+
+                  //     }}
+                  //   >
+                  //     <ElDropdownItem command="profile">
+                  //       个人中心
+                  //     </ElDropdownItem>
+                  //     <ElDropdownItem command="support">
+                  //       联系客服
+                  //     </ElDropdownItem>
+                  //     <ElDropdownItem divided command="author">
+                  //       联系作者
+                  //     </ElDropdownItem>
+                  //     <ElDropdownItem command="promo">获取优惠</ElDropdownItem>
+                  //     <ElDropdownItem command="logout">退出登录</ElDropdownItem>
+                  //   </ElDropdownMenu>
+                  // )
+
+
+                   /*   let com=<div class="flex flex-col h-screen">
+    <header
+      class="flex items-center justify-between px-5 text-white bg-blue-600 shadow-md h-60"
+    >
+      <div class="text-2xl font-bold">低代码应用中心</div>
+      <el-menu
+        mode={"horizontal"}
+        // :default-active="activeHeader"
+        default-active="1"
+        background-color="transparent"
+        text-color="#ffffff"
+        active-text-color="#ffe58f"
+        class="flex-1 mx-10"
+      >
+        <el-menu-item index="1" class="px-4">Home</el-menu-item>
+        <el-menu-item index="2" class="px-4">About</el-menu-item>
+        <el-menu-item index="3" class="px-4">Contact</el-menu-item>
+      </el-menu>
+      <div class="flex items-center ml-5">
+        <template v-if="isLoggedIn">
+          <div class="flex items-center space-x-2">
+            <el-dropdown
+              type="primary"
+              @click="handleCommand"
+              placement="bottom-end"
+              class="h-40 px-4 rounded-lg"
+            >
+              <span class="flex items-center space-x-2">
+                <span class="font-medium text-white">
+                  {{ systemIns.getUserName() }}
+                </span>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="profile" @click="(e) => {}">
+                    个人中心
+                  </el-dropdown-item>
+                  <el-dropdown-item command="support">
+                    联系客服
+                  </el-dropdown-item>
+                  <el-dropdown-item divided command="author">
+                    联系作者
+                  </el-dropdown-item>
+                  <el-dropdown-item command="promo">获取优惠</el-dropdown-item>
+                  <el-dropdown-item
+                    @click="
+                      (e) => {
+                        systemIns.logout() //
+                      }
+                    "
+                    command="logout"
+                  >
+                    退出登录
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
+        </template>
+        <template v-else>
+          <el-button type="primary" size="small" @click="login">
+            Login
+          </el-button>
+        </template>
+      </div>
+    </header>
+
+    <div class="flex flex-1">
+      <!-- Sidebar Menu -->
+      <aside class="bg-gray-100 w-200">
+        <el-menu :default-active="activeSidebar" class="w-full">
+          <el-menu-item index="1" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-menu"></i>
+            应用列表
+          </el-menu-item>
+        </el-menu>
+      </aside>
+
+      <main class="flex-1 p-5 overflow-auto bg-gray-50">
+        <div
+          class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-20"
+        >
+          <el-card
+            v-for="app in apps"
+            :key="app.id"
+            class="transition-transform transform hover:-translate-y-2"
+          >
+            <div class="flex items-center mb-2">
+              <i :class="app.icon + ' text-24 mr-2'" />
+              <span class="text-lg font-semibold">{{ app.cnName }}</span>
+            </div>
+            <div class="mb-4 text-sm">{{ app.description }}</div>
+            <div class="text-right">
+              <el-button
+                type="primary"
+                @click="() => systemIns.installApp(app.name)"
+                size="small"
+              >
+                安装
+              </el-button>
+              <el-button
+                type="primary"
+                @click="() => systemIns.openApp(app.name)"
+                size="small"
+              >
+                进入
+              </el-button>
+            </div>
+          </el-card>
+        </div>
+      </main>
+    </div>
+
+    <footer
+      class="flex items-center justify-center h-40 text-gray-500 bg-gray-100"
+    >
+      © 2025 MyApp Platform
+    </footer>
+  </div> */
+
+   /* 
+      
+          <ElMenuItem index="1" class="px-4">
+            Home
+          </ElMenuItem>
+          <ElMenuItem index="2" class="px-4">
+            About
+          </ElMenuItem>
+          <ElMenuItem index="3" class="px-4">
+            Contact
+          </ElMenuItem>
+      */
+
+
+       "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.1.4",

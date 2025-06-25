@@ -1,9 +1,11 @@
+import { System } from '@/system'
 import { defineComponent, inject, onMounted, reactive, ref } from 'vue'
 
 export default defineComponent({
   name: 'Login',
   setup() {
     let localUserid = localStorage.getItem('userid')
+    let _opt = ref([])
     const data = reactive({
       // appName: 'platform',
       appName: 'erp',
@@ -17,30 +19,13 @@ export default defineComponent({
       labelWidth: 70,
       data,
       items: [
-        // {
-        //   label: '登录方式',
-        //   field: 'loginType',
-        //   type: 'select',
-        //   required: true,
-        //   options: {
-        //     options: [
-        //       { label: '邮箱登录', value: 'email' },
-        //       { label: '用户名登录', value: 'username' },
-        //     ],
-        //   },
-        // },
         {
           field: 'userid',
           type: 'select',
           label: '选择账套',
           required: true,
           options: {
-            options: [
-              {
-                label: '默认账套',
-                value: 1,
-              },
-            ], //
+            options: _opt,
           },
         },
         { field: 'email', type: 'string', label: '账号', required: true },
@@ -69,19 +54,30 @@ export default defineComponent({
       ],
       itemSpan: 24,
     })
+    let system: System = inject('systemIns') //
     async function getCompanyFn() {
-      // const all: any[] = await system.getAllRegisterCompany()
-      // loginFConfig.items[3].options.options = all.map((item) => ({
-      //   label: item.companyCnName || item.companyName,
-      //   value: item.userid,
-      // }))
-      // loginFConfig.items[4].options.options = all.map((item) => ({
-      //   label: item.appCnName || item.appName,
-      //   value: item.appName,
-      // }))
+      // console.log(system.getHttp().getClientBaseUrl())//
+      let allCompany = await system.getAllAccountCompany({
+        appName: 'erp',
+      })
+      let appOptions = allCompany.map((item: any) => {
+        let v = item.userid
+        let label = item.cnName //
+        if (!label) {
+          //
+          label = `账套${v}`
+        }
+        return {
+          label: label, //
+          value: item.userid, //
+        }
+      })
+      _opt.value = appOptions //
     }
 
-    onMounted(getCompanyFn)
+    onMounted(async () => {
+      await getCompanyFn()
+    })
 
     const code = ref<string>('')
     const cdata = ref<string>('')
@@ -100,7 +96,6 @@ export default defineComponent({
       await form.validate()
       await system.loginUser(data)
     }
-    let system: any = inject('systemIns')
     return () => {
       let _com = (
         <div class="flex items-center justify-center min-h-screen bg-gray-100">

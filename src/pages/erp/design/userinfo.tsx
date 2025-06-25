@@ -49,34 +49,18 @@ export default defineComponent({
               <div class="">
                 <erForm data={data.value} {...fConfig}></erForm>
                 <div class="flex items-center justify-end pt-6 border-t">
-                  {/* <button type="button"></button>
-                  <div class="h-40">
-                    <button
-                      type="button"
-                      class="px-4 ml-10 h-full py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 transition"
-                    >
-                      修改密码
-                    </button>
-                    <button
-                      onClick={() => {
-                        system.updateUserInfo() //
-                      }}
-                      class="px-6 py-2 ml-10 h-full bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                    >
-                      保存
-                    </button>
-                  </div> */}
+                 
                   <erButtonGroup
                     items={[
                       {
                         label: '修改密码',
-                        onClick: () => {
-                          system.routeTo('password')
+                        fn: () => {
+                          system.changePassword()
                         },
                       },
                       {
                         label: '保存',
-                        onClick: () => {
+                        fn: () => {
                           system.updateUserInfo() //
                         },
                       }, //

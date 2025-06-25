@@ -28,7 +28,6 @@ import * as equal from '@/packages/utils/equal'
 import { BaseTableConstructorOptions } from '@visactor/vtable/es/ts-types/base-table'
 import { BMenu } from '@/buttonGroup/bMenu'
 import {
-  //
   checkbox_state_change,
   checkboxChange,
   click_cell,
@@ -37,7 +36,7 @@ import {
   mousedown_cell,
   mouseenter_cell,
   mouseleave_cell,
-  resize_column,
+  resize_column, //
   scroll,
   selected_cell,
   sort_click,
@@ -59,6 +58,8 @@ import { InputEditor } from './editor/string'
 import { Row } from 'vant'
 import { containerMap } from './columnFn'
 export class Table extends Base {
+  useCache = false
+  selectCacheCell: any = []
   isTreeIconClick = false
   isDragHeader = false
   runClearSelect = false
@@ -464,7 +465,6 @@ export class Table extends Base {
       },
       sortState: [],
       theme: createTheme() as any,
-      // defaultRowHeight: this.getDefaultRowHeight(), //
       defaultRowHeight: this.getDefaultRowHeight(), //
       heightMode: 'standard', //
       defaultHeaderRowHeight: this.getDefaultHeaderRowHeight(), //
@@ -483,7 +483,6 @@ export class Table extends Base {
         isShowOverflowTextTooltip: true, //
       },
       rowSeriesNumber: _sConfig as any, //
-      // editCellTrigger: 'click',
       customConfig: {
         createReactContainer: true, //
       },
@@ -1506,7 +1505,11 @@ export class Table extends Base {
     if (value == this.globalConfig.value) {
       return
     }
+    // this.setUseCache(true)
     this.globalConfig.value = value
+    setTimeout(() => {
+      // this.setUseCache(false) //
+    }, 4000) //
     if (this.globalConfig.value.length > 0) {
       this.showCustomLayout = true
     } else {
@@ -1575,7 +1578,9 @@ export class Table extends Base {
           ..._data.map((row) => {
             let obj = {
               ...row, //
+              //@ts-ignore
               [field]: row[field], //
+              //@ts-ignore
               _value: row[field],
             }
             return obj //
@@ -1729,144 +1734,278 @@ export class Table extends Base {
       this.columnFilterConfig.filterConfig = [] //
     }
   }
+  // jumpToSearchNext(pre = false) {
+  //   //
+  //   let ins = this.getInstance() //
+  //   // let select = ins.getSelectedCellInfos()
+  //   let select = this.selectCacheCell //
+  //   let _d = select?.[0]?.[0]
+  //   if (_d?.originData == null) {
+  //     select = [] //
+  //   }
+  //   // console.log(select) //
+  //   let globalValue = this.globalConfig.value
+  //   if (globalValue.length == 0) {
+  //     return //
+  //   }
+  //   let records = this.getShowRecords()
+  //   let field = null
+  //   let rowIndex = null
+  //   if (select.length == 0) {
+  //     if (pre == true) {
+  //       for (let i = records.length - 1; i >= 0; i--) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find(([key, value]) => {
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             return reg.test(_value1) //
+  //           }
+  //         })
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     } else {
+  //       for (let i = 0; i < records.length; i++) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find(([key, value]) => {
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             return reg.test(_value1) //
+  //           }
+  //         })
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     let _d = select[0][0]
+  //     let _field = _d.field //
+  //     let originData = select[0][0].originData
+  //     let index = records.findIndex((item) => item == originData)
+  //     if (pre == true) {
+  //       for (let i = index; i >= 0; i--) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find((item) => {
+  //           let [key, value] = item
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             let status = reg.test(_value1) //
+  //             if (i == index) {
+  //               let allCols = this.templateProps.columns
+  //               let lastAllField = allCols.findIndex(
+  //                 (item) => item.field == _field, //
+  //               )
+  //               let lastFields = allCols //
+  //                 .slice(lastAllField + 1) //
+  //                 .map((item) => item.field)
+  //               if (!lastFields.includes(key)) {
+  //                 status = false //
+  //               }
+  //             }
+  //             return status
+  //           }
+  //         }) //
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     } else {
+  //       for (let i = index; i < records.length; i++) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find((item) => {
+  //           let [key, value] = item
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             let status = reg.test(_value1) //
+  //             if (i == index) {
+  //               let allCols = this.templateProps.columns
+  //               let lastAllField = allCols.findIndex(
+  //                 (item) => item.field == _field, //
+  //               )
+  //               let lastFields = allCols //
+  //                 .slice(lastAllField + 1) //
+  //                 .map((item) => item.field)
+  //               if (!lastFields.includes(key)) {
+  //                 status = false //
+  //               }
+  //             }
+  //             return status
+  //           }
+  //         }) //
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     }
+  //   }
+  //   if (field == null || rowIndex == null) {
+  //     return
+  //   }
+  //   let addr = ins.getCellAddrByFieldRecord(field, rowIndex) //
+  //   ins.selectCell(addr.col, addr.row) //
+  // }
   jumpToSearchNext(pre = false) {
-    //
-    let ins = this.getInstance() //
-    let select = ins.getSelectedCellInfos()
-    let globalValue = this.globalConfig.value
-    if (globalValue.length == 0) {
-      return //
+    const ins = this.getInstance()
+    const query = this.globalConfig.value?.trim()
+    if (!query) return
+
+    const regex = new RegExp(query, 'i')
+    const records = this.getShowRecords()
+    if (!records.length) return
+
+    // Prepare fields list excluding non-searchable keys
+    const allFields = this.templateProps.columns
+      .map((col) => col.field)
+      .filter((field) => field !== '_index' && field !== '_shtml')
+
+    // Determine starting row and initial fields slice
+    const sel = this.selectCacheCell?.[0]?.[0]
+    let startRow = pre ? records.length - 1 : 0
+    let initialFields = allFields //
+
+    if (sel?.originData) {
+      startRow = records.findIndex((r) => r === sel.originData)
+      const curIdx = allFields.indexOf(sel.field)
+      // On the same row, skip fields before/after current based on direction
+      initialFields = pre
+        ? allFields.slice(0, curIdx)
+        : allFields.slice(curIdx + 1)
     }
-    let records = this.getShowRecords()
-    let field = null
-    let rowIndex = null
-    if (select.length == 0) {
-      if (pre == true) {
-        for (let i = records.length - 1; i >= 0; i--) {
-          let row = records[i]
-          let _value = Object.entries(row).find(([key, value]) => {
-            if (
-              key != '_index' &&
-              key != '_shtml' &&
-              typeof value != 'boolean' &&
-              typeof value != 'object'
-            ) {
-              let reg = new RegExp(globalValue, 'gi')
-              let _value1 = `${value}` //
-              return reg.test(_value1) //
-            }
-          })
-          if (_value != null) {
-            field = _value[0]
-            rowIndex = i
-            break
-          }
-        }
-      } else {
-        for (let i = 0; i < records.length; i++) {
-          let row = records[i]
-          let _value = Object.entries(row).find(([key, value]) => {
-            if (
-              key != '_index' &&
-              key != '_shtml' &&
-              typeof value != 'boolean' &&
-              typeof value != 'object'
-            ) {
-              let reg = new RegExp(globalValue, 'gi')
-              let _value1 = `${value}` //
-              return reg.test(_value1) //
-            }
-          })
-          if (_value != null) {
-            field = _value[0]
-            rowIndex = i
-            break
-          }
-        }
-      }
-    } else {
-      let _d = select[0][0]
-      let _field = _d.field //
-      let originData = select[0][0].originData
-      let index = records.findIndex((item) => item == originData)
-      if (pre == true) {
-        for (let i = index; i >= 0; i--) {
-          let row = records[i]
-          let _value = Object.entries(row).find((item) => {
-            let [key, value] = item
-            if (
-              key != '_index' &&
-              key != '_shtml' &&
-              typeof value != 'boolean' &&
-              typeof value != 'object'
-            ) {
-              let reg = new RegExp(globalValue, 'gi')
-              let _value1 = `${value}` //
-              let status = reg.test(_value1) //
-              if (i == index) {
-                let allCols = this.templateProps.columns
-                let lastAllField = allCols.findIndex(
-                  (item) => item.field == _field, //
-                )
-                let lastFields = allCols //
-                  .slice(lastAllField + 1) //
-                  .map((item) => item.field)
-                if (!lastFields.includes(key)) {
-                  status = false //
-                }
-              }
-              return status
-            }
-          }) //
-          if (_value != null) {
-            field = _value[0]
-            rowIndex = i
-            break
-          }
-        }
-      } else {
-        for (let i = index; i < records.length; i++) {
-          let row = records[i]
-          let _value = Object.entries(row).find((item) => {
-            let [key, value] = item
-            if (
-              key != '_index' &&
-              key != '_shtml' &&
-              typeof value != 'boolean' &&
-              typeof value != 'object'
-            ) {
-              let reg = new RegExp(globalValue, 'gi')
-              let _value1 = `${value}` //
-              let status = reg.test(_value1) //
-              if (i == index) {
-                let allCols = this.templateProps.columns
-                let lastAllField = allCols.findIndex(
-                  (item) => item.field == _field, //
-                )
-                let lastFields = allCols //
-                  .slice(lastAllField + 1) //
-                  .map((item) => item.field)
-                if (!lastFields.includes(key)) {
-                  status = false //
-                }
-              }
-              return status
-            }
-          }) //
-          if (_value != null) {
-            field = _value[0]
-            rowIndex = i
-            break
+
+    const step = pre ? -1 : 1
+
+    // Iterate rows
+    for (let i = startRow; i >= 0 && i < records.length; i += step) {
+      const row = records[i]
+      // Choose which fields to check on this row
+      const fields = i === startRow ? initialFields : allFields
+
+      for (const field of fields) {
+        const val = row[field]
+        // Only primitive values
+        if (
+          val != null &&
+          typeof val !== 'object' &&
+          typeof val !== 'boolean'
+        ) {
+          if (regex.test(String(val))) {
+            const addr = ins.getCellAddrByFieldRecord(field, i)
+            return ins.selectCell(addr.col, addr.row)
           }
         }
       }
     }
-    if (field == null || rowIndex == null) {
-      return
-    }
-    let addr = ins.getCellAddrByFieldRecord(field, rowIndex) //
-    ins.selectCell(addr.col, addr.row) //
+    // No match found; optionally wrap-around with this.jumpToSearchNext(!pre)
   }
+  // jumpToSearchNext(pre = false) {
+  //   let ins = this.getInstance()
+  //   // let selectedInfos = ins.getSelectedCellInfos()
+  //   let selectedInfos = this.selectCacheCell //
+  //   // console.log('selectedInfos', selectedInfos)//
+  //   let query = this.globalConfig.value?.trim()
+  //   if (!query) return
+
+  //   // Compile regex once without global flag (we only need test)
+  //   const regex = new RegExp(query, 'i')
+  //   const records = this.getShowRecords()
+  //   const allCols = this.templateProps.columns.map((col) => col.field)
+  //   let startRow
+  //   let currentField = null
+  //   if (selectedInfos.length > 0) {
+  //     const sel = selectedInfos[0][0]
+  //     const origin = sel.originData
+  //     const currentRow = records.findIndex((r) => r === origin)
+  //     startRow = currentRow
+  //     currentField = sel.field
+  //   } else {
+  //     // No selection: start from first or last
+  //     startRow = pre ? records.length - 1 : 0
+  //   }
+
+  //   const step = pre ? -1 : 1
+
+  //   // Search rows in direction
+  //   for (
+  //     let rowIndex = startRow;
+  //     rowIndex >= 0 && rowIndex < records.length;
+  //     rowIndex += step
+  //   ) {
+  //     const row = records[rowIndex]
+  //     // Determine fields to search in this row
+  //     let fields = allCols.filter((field) => {
+  //       const val = row[field]
+  //       return (
+  //         field !== '_index' &&
+  //         field !== '_shtml' &&
+  //         typeof val !== 'boolean' &&
+  //         typeof val !== 'object'
+  //       )
+  //     })
+
+  //     // If same row as start, skip fields before/after currentField
+  //     if (currentField && rowIndex === startRow) {
+  //       const idx = allCols.indexOf(currentField)
+  //       fields = pre
+  //         ? allCols.slice(0, idx) // before currentField when searching backwards
+  //         : allCols.slice(idx + 1) // after currentField when searching forwards
+  //     }
+
+  //     // Scan fields
+  //     let _this = this
+  //     for (const field of fields) {
+  //       const val = row[field]
+  //       if (regex.test(String(val))) {
+  //         const addr = ins.getCellAddrByFieldRecord(field, rowIndex)
+  //         ins.selectCell(addr.col, addr.row)
+  //         nextTick(() => {
+  //           //
+  //           // let selectInfo = ins.getSelectedCellInfos() //
+  //           // console.log('selectInfo', selectInfo) ////
+  //         })
+  //         return
+  //       }
+  //     }
+  //   }
+
+  //   // No match found
+  //   // Optionally, could wrap-around: remove comments to enable
+  //   // if (!pre) this.jumpToSearchNext(true);
+  // }
+
   getCurrentVisibleRecords() {
     let ins = this.getInstance() //
     let currentScrollRecords = ins.getBodyVisibleRowRange()
@@ -2132,7 +2271,7 @@ export class Table extends Base {
     } //
   }
   designCurrentColumn() {}
-  getCacheContain(row) {}
+  // getCacheContain(row) {}
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -2199,7 +2338,6 @@ export class Table extends Base {
     return 130
   }
   changeSortOrder(orderFieldArr: { field: string; order: number }[]) {
-    // debugger//
     let old1 = orderFieldArr.map((f) => f.field)
     old1.forEach((f, i) => {
       let columns = this.getFlatColumns()
@@ -2247,7 +2385,6 @@ export class Table extends Base {
         }
       },
       (nv) => {
-        // debugger//
         if (this.isDragHeader == true) {
           let _x = nv.x
           if (_x < x) {
@@ -2482,13 +2619,6 @@ export class Table extends Base {
     return //
   }
   onColumnResize(_config) {
-    //
-    // let config = this.config
-    // let onColumnResize = config.onColumnResize
-    // if (typeof onColumnResize == 'function') {
-    //   onColumnResize(_config) //
-    // }
-    // console.log(_config, 'onColumnResize') //
     let column = _config.originColumn
     column.width = _config?.width || column.width
     let onDesignColumn = this.config.onDesignColumn
@@ -2556,7 +2686,6 @@ export class Table extends Base {
     }
   }
   expandTargetRows(rows, hiddenOther = true) {
-    // debugger//
     let setExpand = (row: any, status = true) => {
       let _expanded = row['_expanded']
       if (_expanded == null) {
@@ -2720,7 +2849,8 @@ export class Table extends Base {
         } //
       } else {
         let _index = _row['_index']
-        this.validateMap[_index] = [err] //
+        this.validateMap[_index] = [err]
+        // debugger//
         this.showErrorTopTip() //
         reject(err)
       }
@@ -2732,7 +2862,7 @@ export class Table extends Base {
     if (Object.keys(validateMap).length == 0) {
       return
     }
-    let _index = Object.keys(validateMap)[0]
+    let _index = Object.keys(validateMap).slice(-1).pop() //
     let err = validateMap[_index][0] //
     // console.log(err) ////
     let ins = this.getInstance()
@@ -2875,6 +3005,23 @@ export class Table extends Base {
       }
     }
   } //
+  getCacheContainer(_index, filed) {
+    let _containerMap = containerMap
+    let id = this.id //
+    let _map = _containerMap[id]
+    if (_map == null) {
+      return null
+    }
+    let map = _map[_index]
+    if (map == null) {
+      return null
+    }
+    let c = map[filed]
+    if (c != null) {
+      // console.log(c) //
+    }
+    return c?.container //
+  }
   onCellVisible(config) {
     let field = config.field //
     let record = config.record
@@ -2947,6 +3094,12 @@ export class Table extends Base {
       column: column, //
     }
     if (typeof fieldFormat == 'function') {
+      if (field == 'cSTCode') {
+        // if(record.cSTCode){
+        //   debugger//
+        // }
+        // console.log(_value1,'sfsdf')  //
+      }
       let _value1 = fieldFormat(obj1)
       if (_value1 == null) {
         _value1 = '' //
@@ -2960,11 +3113,6 @@ export class Table extends Base {
       // let column=ref(config.column)
       let _w1 = watch(
         () => {
-          // console.log(
-          //   isProxy(record),
-          //   'isProxy(record)',
-          //   isProxy(config.column),
-          // )
           let _value = fieldFormat(obj1) //
           return _value
         },
@@ -3037,5 +3185,17 @@ export class Table extends Base {
     } //
     // console.log('行高度', height)//
     return height
+  }
+  setUseCache(status) {
+    if (typeof status !== 'boolean') {
+      return
+    } //
+    if (1 == 1) {
+      return //
+    }
+    // if (status == false) {
+    //   return //
+    // }
+    this.useCache = status
   }
 }

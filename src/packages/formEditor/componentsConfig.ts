@@ -35,6 +35,7 @@ export const createFieldConfig = (f: Form) => {
       allFields.push({
         type: type,
         label: col.title || col.field,
+        title: col.title || col.field,//
         icon: 'input',
         key: '',
         field: col.field, //

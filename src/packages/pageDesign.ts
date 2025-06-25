@@ -253,6 +253,9 @@ export class PageDesign extends Form {
         tableName: getDataConfig,
       }
     }
+    if(this.isDesign==true){
+      return//
+    }
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
     let query = getDataConfig.query

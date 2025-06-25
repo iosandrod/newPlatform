@@ -8,6 +8,9 @@ export const mainUse = {
       let allTable = instance.getAllTable().map((t) => {
         return t.config
       })
+      if (instance.isDesign == true) {
+        return //
+      }
       for (let ta of allTable) {
         let tableType = ta.options?.tableType
         let options = ta.options?.relateConfig //
@@ -19,9 +22,10 @@ export const mainUse = {
           }
         } //
       }
+      instance.setCurrentLoading(true) //
       setTimeout(() => {
         instance.getTableData() //
-      }, 1000)
+      }, 300) //
     },
   ],
   getTableData: [

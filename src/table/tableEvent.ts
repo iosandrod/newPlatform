@@ -172,7 +172,11 @@ export const selected_cell = (table: Table) => {
       let lastR = ranges.slice(-1)[0]
       let start = lastR.start //
       let end = lastR.end
+      let _select=ins.getSelectedCellInfos()//
+      console.log(_select,'sfsfsfs;;')//
       _this.selectCache = config //
+      _this.selectCacheCell=_select
+      // console.log(config)//
       if (start.col == end.col) {
         let field = ins.getBodyField(start.col, start.row)
         let rArr = []
@@ -347,6 +351,7 @@ export const resize_column = (table: Table) => {
     name: 'resize_column',
     keyName: 'resize_column',
     callback: (config) => {
+      _this.setUseCache(true) //
       let col = config.col //
       let _col: Column = table.getCurrentResizeCol(col)
       if (_col == null) {
@@ -369,6 +374,7 @@ export const resize_column = (table: Table) => {
     name: 'resize_column_end',
     keyName: 'resize_column_end',
     callback: (config) => {
+      _this.setUseCache(false) //
       let _col = table.currentResizeField
       let _col1 = table.getFlatColumns().find((col) => {
         return col.getField() == _col

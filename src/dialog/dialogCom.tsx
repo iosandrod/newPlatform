@@ -324,7 +324,7 @@ export default defineComponent({
     let registerInnerCom = (e) => dialog.registerRef('innerCom', e) ////
     return () => {
       let com = (
-        <div>
+        <div class="my-scope">
           <ModalCom
             v-slots={{
               default: () => {

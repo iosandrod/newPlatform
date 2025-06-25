@@ -276,6 +276,7 @@ export default defineComponent({
         editType: 'date',
       }) ////
       let _fConfig1 = tFConfig
+      com = null
       // com = ( //
       //   <div class="w-full h-500">
       //     <er-form

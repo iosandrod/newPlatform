@@ -25,7 +25,7 @@ export const createColumnSelect = async (sys: System, tableName) => {
   let columnSelect = _this.columnSelectOptions
   let arr = columnSelect[tableName] //
   let _cols = null
- 
+
   if (arr == null) {
     let query = null
     if (Array.isArray(tableName)) {
@@ -68,86 +68,77 @@ export const createColumnSelect = async (sys: System, tableName) => {
   }
 }
 
-
-
-/* 
-let _data = await this.getHttp().find('navs')
-    let tableConfig = {
-      showHeaderButtons: false, //
-      enableDragRow: true,
-      treeConfig: {
-        id: 'id',
-        parentId: 'pid',
-        rootId: 0,
-      },
-      contextItems: [
+export const changePassword = async (_this: System) => {
+  try {
+    let fConfig = {
+      title: '修改密码',
+      width: 300,
+      height: 200,
+      itemSpan: 24,
+      items: [
         {
-          label: '添加菜单',
-          fn: async (config) => {
-            let p = config.parent
-            console.log('parent', p) //
-          },
+          type: 'input',
+          label: '旧密码',
+          field: 'oldPassword',
         },
         {
-          label: '添加子菜单', //
-          fn: async () => {},
+          type: 'input',
+          label: '新密码',
+          field: 'newPassword', //
         },
       ],
-      buttons: [],
-      columns: [
-        {
-          field: 'id',
-          title: 'id',
-          tree: true,
-          frozen: 'left',
-        },
-        {
-          field: 'navname', //
-          title: '导航名称',
-          editType: 'string', //
-          width: 200, //
-        },
-        {
-          field: 'tableName',
-          editType: 'string', //
-          title: '表格或者视图名称',
-        },
-        {
-          field: 'status',
-          title: '是否启用', //
-          editType: 'boolean', //
-        },
-      ],
-      data: _data,
-      height: 600,
-      width: 800, //
-      dragRowFn: (config) => {
-        return true //
-      },
-      confirmFn: async (dialog) => {
-        let data = dialog.getRef('innerCom').getFlatTreeData()
-        // console.log(data, 'testData')//
-        let _data1 = data.filter((item) => {
-          return item['_rowState'] == 'change'
-        })
-        // console.log(_data1)//
-        let http = this.getHttp()
-        await http.patch('navs', _data1) //
-        this.confirmMessage('更新菜单成功') ////
-        this.clearCacheValue('getMenuData') //
-        await this.getMenuData() //
-      },
-      dragRowAfterFn: (config) => {
-        let data = config.data
-        data.forEach((item, i) => {
-          item['_rowState'] = 'change'
-          item['sort'] = Number(i) + 1 ////
-        })
-      },
-      showRowSeriesNumber: true,
+      confirmFn: () => {},
     }
-    await this.confirmTable(tableConfig) //
-    return tableConfig
+    let _data = await _this.confirmForm(fConfig) // //
+    // console.log(_data, 'test_data') //
+    // return _data
+    let http = _this.getHttp()
+    let res = await http.post('users', 'updatePassword', _data) //
+  } catch (error) {
+    console.error(error)
+    _this.confirmErrorMessage(`修改密码失败${error?.message}`) //
+  }
+}
 
+export const installApp = async (_this: System, name) => {
+  let fConfig = {
+    data: {
+      fromid: 0, //
+    },
+    title: '安装配置',
+    width: 400, //
+    height: 300,
+    itemSpan: 24,
+    items: [
+      {
+        type: 'input',
+        label: '安装名称', //
+        field: 'cnName', //
+        value: name,
+      },
+      {
+        type: 'select',
+        label: '账套数据', //
+        field: 'fromid', //
+        options: {
+          options: [
+            {
+              label: '默认账套', //
+              value: 0, //
+            },
+          ],
+        },
+      },
+    ],
+    confirmFn: () => {},
+  }
+  let _data = await _this.confirmForm(fConfig) //
 
-*/
+  // try {
+  //   let http = _this.getHttp() //
+  //   await http.create('company', { ..._data, appName: name }) //
+  //   _this.confirmMessage('安装成功')
+  // } catch (error) {
+  //   _this.confirmErrorMessage('安装失败') //
+  // }
+}

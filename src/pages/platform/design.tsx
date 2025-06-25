@@ -4,7 +4,7 @@ import { PageDesign } from '@ER/pageDesign'
 import { computed, defineComponent, inject, provide, ref } from 'vue'
 import { VxePager } from 'vxe-pc-ui'
 export default defineComponent({
-  name: 'Design',
+  name: 'PlatformDesign',
   props: {
     tableName: {
       type: String,

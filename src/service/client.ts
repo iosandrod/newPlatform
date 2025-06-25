@@ -13,6 +13,7 @@ import {
   AuthenticationResult,
 } from '@feathersjs/authentication'
 import { nextTick } from 'vue'
+import axios from 'axios'
 export const defaultStorage: any = getDefaultStorage()
 const defaults: AuthenticationClientOptions = {
   header: 'Authorization',
@@ -34,6 +35,44 @@ if (userid != null) {
   nextTick(() => {
     system.setLocalItem('userid', userid)
   })
+}
+export const createAxios = (config) => {
+  let _appName = localStorage.getItem('appName')
+  let _userid = localStorage.getItem('userid') //
+  let fullHost = window.location.host // erp.dxf.life
+  let hostname = window.location.hostname // erp.dxf.life
+  let subdomain = hostname.split('.')[0] // erp
+  let port = location.port
+  let userid = config.userid
+  if (userid == null) {
+    userid = _userid
+  } //
+  let appName = config.appName
+  if (appName == null) {
+    appName = _appName //
+  }
+  let _key = '' //
+  if (appName != null && userid != 'undefined') {
+    _key = `/${appName}_${userid}`
+  }
+  let baseUrl = `http://${'localhost:3031'}` //
+  let _base = import.meta.env.VITE_BASEURL
+  let isProd = import.meta.env.VITE_ENVIRONMENT
+  if (isProd == 'production') {
+    baseUrl = _base //
+  }
+  let _host = `${baseUrl}${_key}`
+  if (config?.isMain === true) {
+    _host = baseUrl //
+  }
+  if (appName == 'platform') {
+    _host = baseUrl //
+  }
+  let axiosInstance = axios.create({
+    baseURL: _host,
+    timeout: 60000,
+  })
+  return axiosInstance //
 }
 class myAuth extends AuthenticationClient {
   constructor(app: any, op: any) {
@@ -139,20 +178,24 @@ export const createClient = (config) => {
   let app = feathers()
   app.configure(client)
   app.set('connection', socket)
-  app.configure(init()) //
+  app.configure(init())
+  app.set('baseUrl', _host)
   return app
 }
 export const client = createClient({})
 export const mainClient = createClient({
   isMain: true, //
 })
+export const axiosClient = createAxios({
+  isMain: true, //
+}) //
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
   mainClient = client
   constructor() {
     this.init()
-  }
+  } //
   changeClient(config) {
     let appName = config.appName
     if (appName == null || appName == 'platform') {
@@ -442,6 +485,11 @@ export class myHttp {
     let _res = await this.runCustomMethod(tableName, 'batchDelete', data)
     return _res //
   }
+  async getClientBaseUrl() {
+    let client = this.client
+    let baseUrl = client.get('baseUrl')
+    return baseUrl
+  } //
 }
 
 export const http = new myHttp()

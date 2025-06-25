@@ -1866,9 +1866,9 @@ export class Form extends Base {
     let dName = dConfig.dialogName
     let hasDialog: Dialog = this.dialogArr.find((d) => {
       return d.getDialogName() == dName && Boolean(dName)
-    })
+    }) //
     if (hasDialog) {
-      hasDialog.open() //
+      hasDialog.open()
     } else {
       this.dialogArr.push(_dialog) //
     }

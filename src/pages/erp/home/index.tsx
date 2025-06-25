@@ -1,2 +1,2 @@
-import indexVue from '../index.vue'
+import indexVue from '..'
 export default indexVue //

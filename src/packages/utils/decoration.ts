@@ -303,3 +303,12 @@ export function useDelay(config?: { delay?: number }): any {
     return descriptor
   }
 }
+export function useFinally(config?: any) {
+  //
+   return function (target, key, descriptor?: any) {
+    let oldFn = descriptor.value
+    if (isAsyncFunction(oldFn)) {
+    } else {
+    }
+  }
+}
