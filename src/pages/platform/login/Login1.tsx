@@ -44,8 +44,6 @@ import { Table } from '@/table/table'
 import { PageDesignItem } from '@ER/pageItem'
 import { getDesignTableConfig } from '@/table/tabFConfig'
 import { MainPageDesign } from '@ER/mainPageDesign'
-import { VTable } from '@visactor/vue-vtable'
-import * as VTableGantt from '@visactor/vtable-gantt'
 export default defineComponent({
   components: {
     pVue,

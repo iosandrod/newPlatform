@@ -14,7 +14,6 @@ import {
   reactive,
 } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
-import { ListTable } from '@visactor/vue-vtable'
 import { tableV2Props, ClickOutside } from 'element-plus'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { nextTick } from 'vue'
@@ -27,7 +26,7 @@ import TableFitlerCom from './tableFilterCom'
 import InputCom from '@/input/inputCom'
 import { Table } from './table'
 import { VxeLoading } from 'vxe-pc-ui'
-import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow'
+import { GanttTable } from './ganttTable'
 
 // new ListTable()
 //核心表格组件
@@ -54,6 +53,10 @@ export default defineComponent({
     buttons: {
       type: Array,
     },
+    isGantt: {
+      type: Boolean,
+      default: false,
+    }, //
     isFilterTable: {
       type: Boolean,
       default: false,
@@ -221,7 +224,11 @@ export default defineComponent({
     if (props.tableIns) {
       tableIns = props.tableIns as any
     } else {
-      tableIns = new Table(props) //
+      if (props.isGantt == true) {
+        tableIns = new GanttTable(props)
+      } else {
+        tableIns = new Table(props) //
+      }
     } //
     if (props.mainTableName != null) {
       //@ts-ignore
@@ -494,7 +501,7 @@ export default defineComponent({
                       onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()
-                        tableIns.jumpToSearchNext(true)//
+                        tableIns.jumpToSearchNext(true) //
                       }}
                       class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200 transition"
                       title="上一页"
@@ -562,7 +569,7 @@ export default defineComponent({
           }}
           ref={registerRootDiv}
         ></div>,
-        [],
+        [[{}]],
       ) //
       let tBodyCom = withDirectives(
         <div

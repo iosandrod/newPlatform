@@ -15,4 +15,3 @@ export const staticCom = {
     component: () => defineAsyncComponent(() => import('./userinfo')), //
   },
 }
-//

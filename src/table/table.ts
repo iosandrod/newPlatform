@@ -20,7 +20,6 @@ import {
   ListTable,
   ListTableConstructorOptions,
 } from '@visactor/vtable'
-import { VTable } from '@visactor/vue-vtable'
 import { method } from 'lodash'
 import { exportVTableToExcel } from '@visactor/vtable-export'
 import _ from 'lodash'
@@ -388,7 +387,7 @@ export class Table extends Base {
     }
     return fn
   }
-  createInstance(rootDiv) {
+  getCreateInstanceOptions(rootDiv) {
     let _this = this
     let showRowSeriesNumber = this.getShowSeriesNumber()
     let _sConfig: ColumnDefine = null
@@ -396,7 +395,7 @@ export class Table extends Base {
       _sConfig = this.seriesNumberColumn.getColumnProps() //
     }
     let dragMode = this.getDragMode()
-    let table = new ListTable({
+    let opt = {
       dragOrder: dragMode, //
       // frozenColCount: this.frozenColCount,
       padding: {},
@@ -487,7 +486,19 @@ export class Table extends Base {
         createReactContainer: true, //
       },
       //头部的
-    }) //
+    }
+    return opt
+  }
+  createInstance(rootDiv) {
+    let _this = this
+    let showRowSeriesNumber = this.getShowSeriesNumber()
+    let _sConfig: ColumnDefine = null
+    if (showRowSeriesNumber) {
+      _sConfig = this.seriesNumberColumn.getColumnProps() //
+    }
+    let dragMode = this.getDragMode()
+    let opt = this.getCreateInstanceOptions(rootDiv) as any
+    let table = new ListTable(opt)
     table.on('change_header_position_start', (e) => {
       let record = table.getRecordByCell(e.col, e.row)
       let isDragHeader = false
@@ -3190,12 +3201,7 @@ export class Table extends Base {
     if (typeof status !== 'boolean') {
       return
     } //
-    if (1 == 1) {
-      return //
-    }
-    // if (status == false) {
-    //   return //
-    // }
+
     this.useCache = status
   }
 }

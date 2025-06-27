@@ -248,7 +248,7 @@ export const getSerialLayout = (column: Column) => {
         }
       } //
     }
-    let count = _table.getInstance().visibleRowCount
+    let count = _table.getInstance()?.visibleRowCount || table?.visibleRowCount //
     _this.table.onCellVisible({
       field: _this.getField(),
       record,
@@ -287,7 +287,6 @@ export const getDefault = (column: Column) => {
         let currentResizeField = _this.table.currentResizeField //
         if (currentResizeField === f) {
         } else {
-         
           return {
             rootContainer: _con,
             renderDefault: false, //
@@ -332,7 +331,7 @@ export const getDefault = (column: Column) => {
       boundsPadding: [0, 0, 0, 0], //
     })
     let _table = _this.getTable() //
-    let count = _table.getInstance().visibleRowCount //
+    let count = _table.getInstance()?.visibleRowCount || table?.visibleRowCount //
     let obj123 = {
       container: container,
       record: record,
@@ -496,9 +495,13 @@ export const getDefault = (column: Column) => {
         overflow: 'hidden',
         alignItems: 'center',
       })
+      console.log(t, _level, 'testT') //
       let icon = createImage({
         image: t,
-        cursor: 'pointer', //
+        cursor: 'pointer',
+        x: 0,
+        y: 0, //
+        width: 15, //
         height: height / 2,
         overflow: 'hidden',
         fill: 'black',

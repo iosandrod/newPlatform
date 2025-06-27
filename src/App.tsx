@@ -1,10 +1,18 @@
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, withDirectives } from 'vue'
 import { ref, onMounted, getCurrentInstance, inject, provide } from 'vue'
 import { erFormEditor } from '@ER/formEditor'
 import { globalConfig } from '@ER/formEditor/componentsConfig'
 import { RouterView } from 'vue-router'
 import { system } from './system'
 import dialogCom from './dialog/dialogCom'
+import { comText } from './comTest'
+import {
+  getGanttColumns,
+  getGanttRecords,
+  getOptions,
+} from './table/ganttTableFn'
+//@ts-ignore
+window.CONTAINER_ID = 'main_app'
 export default defineComponent({
   components: {
     dialogCom, //
@@ -33,17 +41,35 @@ export default defineComponent({
         return <dialogCom dialogIns={d}></dialogCom>
       })
       let com = <RouterView></RouterView>
-      return (
+      return withDirectives(
         <div
+          id="main_app" //
           style={{
             height: '100vh',
             width: '100vw',
             overflow: 'hidden', //
           }}
         >
-          {com}
-          {dArr}
-        </div>
+          {/* {com}
+          {dArr} */}
+          <div style={{ height: '500px', width: '100%' }} class="">
+            <erTable
+              isGantt={true}
+              // {...getOptions()} //
+              data={getGanttRecords()}
+              columns={getGanttColumns()}
+            ></erTable>
+          </div>
+        </div>,
+        [
+          [
+            {
+              mounted: async () => {
+                // comText() //
+              },
+            },
+          ],
+        ],
       )
     }
   },
