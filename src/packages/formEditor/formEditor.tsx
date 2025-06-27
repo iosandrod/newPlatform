@@ -39,8 +39,15 @@ import { staticData, testData1 } from './testData'
 import { validate } from 'uuid'
 import { Form } from '@ER/form'
 import fieldCom from '@/menu/fieldCom'
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 export const getDefaultFormEditProps = () => {
   return {
+    disabledFn: {
+      type: Function, //
+    },
+    itemDisabled: {
+      type: Function,
+    }, //
     isTabForm: {
       type: Boolean,
       default: false,
@@ -316,7 +323,18 @@ export default defineComponent({
       formIns.tableName = tName
     }
     return () => {
-      let nextForm = formIns.nextForm //
+      let btnCom = null
+      if (formIns.isDesign == true) {
+        btnCom = (
+          <div class="justify-center flex">
+            <ButtonGroupCom
+              style={{}}
+              items={formIns.getControllerButtons()}
+            ></ButtonGroupCom>
+            <div>{formIns.state.platform}</div>
+          </div>
+        )
+      }
       let _fieldCom = null
       let _ConfigCom = null
       if (formIns.isDesign == true) {
@@ -327,8 +345,11 @@ export default defineComponent({
               height: '100%',
               overflowY: 'hidden',
             }}
+            class="flex flex-col"
           >
-            <fieldMenu></fieldMenu>
+            <div class="flex-1">
+              <fieldMenu></fieldMenu>
+            </div>
           </div>
         )
         _ConfigCom = (
@@ -347,6 +368,7 @@ export default defineComponent({
           <div class="flex h-full w-full bg-white overflow-x-hidden overflow-y-auto flex-row">
             <div class="h-full overflow-hidden">{_fieldCom}</div>
             <div class="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
+              {btnCom}
               {isShow.value &&
                 withDirectives(<CanvesPanel data={state.store} />, [
                   [vClickOutside, onClickOutside],
@@ -358,9 +380,6 @@ export default defineComponent({
         </div>
       )
       //如果是设计模式就使用面包屑
-      if (nextForm != null && formIns.isDesign == true) {
-        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
-      } ////
       return com //
     }
   },

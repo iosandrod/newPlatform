@@ -245,7 +245,9 @@ export function useHooks(config?: Function): any {
           return fn.call(ctx.instance, ctx, () => dispatch(i + 1))
         }
         // 所有中间件执行完，调用原方法
-        return original.apply(ctx.instance, ctx.args)
+        let _res = await original.apply(ctx.instance, ctx.args)
+        //@ts-ignore
+        ctx.result = _res //
       }
       return dispatch(0)
     }
@@ -299,5 +301,14 @@ export function useDelay(config?: { delay?: number }): any {
       }
     }
     return descriptor
+  }
+}
+export function useFinally(config?: any) {
+  //
+   return function (target, key, descriptor?: any) {
+    let oldFn = descriptor.value
+    if (isAsyncFunction(oldFn)) {
+    } else {
+    }
   }
 }

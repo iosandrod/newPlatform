@@ -1,5 +1,5 @@
 // import './css.js'
-import { createApp } from 'vue' //
+import { createApp, nextTick } from 'vue' //
 import App from './App' //
 import router from '@/router'
 import elementPlus from 'element-plus'
@@ -8,11 +8,9 @@ const app = createApp(App)
 import Vant, { Locale } from 'vant'
 import enUS from 'vant/es/locale/lang/en-US'
 import 'element-plus/dist/index.css'
-import 'element-plus/dist/index.css'
 import 'vant/lib/index.css'
-import './mainStyle.css'
+
 import './homeStyle.css'
-import './style.scss' //
 import 'vxe-table/lib/style.css'
 import 'vxe-pc-ui/styles/all.scss'
 // import 'default-passive-events' //
@@ -40,11 +38,40 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import formCom from '@ER/formCom'
 import formEditor from '@ER/formEditor/formEditor'
 import pageCom from '@ER/pageCom'
+// import 'ant-design-vue/dist/antd.css' //
 import '@/printTemplate/assets/main.scss'
 import 'remixicon/fonts/remixicon.css'
+import '@arco-design/web-vue/es/message/style/css'
+import '@arco-design/web-vue/es/modal/style/css'
+import '@arco-design/web-vue/es/notification/style/css'
+import Vue3Dragscroll from 'vue3-dragscroll'
+import AddNode from '@/audit/components/flow/AddNode.vue'
+import NodeWrap from '@/audit/components/flow/NodeWrap.vue'
+import SvgIcon from '@/audit/components/SvgIcon/index.vue'
+import vFocus from '@/audit/directive/focus'
+import '@/audit/styles/index.scss' //
+//@ts-ignore
+
+import pinia from '@/audit/stores'
+// import "@arco-design/web-vue/dist/arco.css";
+
+app.directive('focus', vFocus)
+// import "virtual:svg-icons-register";
 import Vuex from 'vuex'
 import printTemplateModule from '@/printTemplate/stores/modules/index.js'
-
+import './style.js'
+import PrintDesign from '@/printTemplate/components/index.js'
+import store from '@/printTemplate/stores/index.js'
+import wangCom from './wangEditor/wangCom'
+// import { registerAntdComp } from './audit/antd'
+// import { registerIconsComp } from './audit/icons'
+import ArcoVue from '@arco-design/web-vue'
+import ArcoVueIcon from '@arco-design/web-vue/es/icon'
+import NaiveChatP from './chat' //
+import './style.scss' //
+import './assets/tailwind.css' //
+import './mainStyle.css'
+import './changeCalStyle.scss'
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -79,31 +106,44 @@ Base.prototype.system = system //
 Base.prototype.http = http ////
 //@ts-ignore
 Base.prototype._router = router
+
 //@ts-ignore
 Base.prototype.getAllComponent = () => componentObj
 //@ts-ignore
-// Table.component = tableCom
-import PrintDesign from '@/printTemplate/components/index.js'
-import store from '@/printTemplate/stores/index.js'
-import wangCom from './wangEditor/wangCom'
+
+app.use(NaiveChatP)
+app.use(ArcoVueIcon)
+app.use(ArcoVue)
 app.use(PrintDesign, {
   store,
 }) //
 app.use(store) //
+app.use(pinia) //
 registerEdit()
 Locale.use('en-US', enUS)
+// registerAntdComp(app)
+// registerIconsComp(app)
 app.use(Vant)
 app.component('wangEditor', wangCom)
+app.use(Vue3Dragscroll)
 app.component('erButton', buttonCom)
 app.component('erButtonGroup', buttonGroupCom)
-app.component('erForm', formEditor) //
+// app.component('erForm', formEditor) //
+app.component('erForm', formCom)
+// app.component('erForm', formEditor)
+app.component('erFormEditor', formEditor)
+app.component('erPage', pageCom) //
+app.component('SvgIcon', SvgIcon)
 app.component('erTable', tableCom)
 app.component('erDropdown', dropdownCom)
 app.component('erSelect', selectCom) //
+app.component('AddNode', AddNode)
+app.component('NodeWrap', NodeWrap)
 app.use(context) //
 app.use(VxeTable) //
 app.use(VxeUIAll)
 app.use(router)
+
 app.use(elementPlus) //
 app.mount('#app')
 //

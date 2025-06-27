@@ -40,6 +40,7 @@ export const selectType = (item: FormItem) => {
   let options = item.getSelectOptions()
   obj.options = options
   obj.multiple = item.getMultiple() //
+  obj.onInput = (config) => {} //
   obj.onChange = (config) => {
     let value = config.value
     if (Array.isArray(value)) {
@@ -48,15 +49,17 @@ export const selectType = (item: FormItem) => {
       })
       value = _value //
     }
-    item.updateBindData({ value }) //
+    item.updateBindData({ value })
   }
-  return obj
+  return obj //
 }
 
 export const stableType = (item: FormItem) => {
   let obj = defaultType(item) //
   obj.onChange = (config) => {}
-  obj.onInput = (config) => {} //
+  obj.onInput = (config) => {
+    console.log(config, 'testConfig') //
+  } //
   obj.readonly = true //
   obj.clearable = false //
   obj.modelValue = item.getBindShowValue()
@@ -68,7 +71,7 @@ export const codeType = (item: FormItem) => {
   obj.onInput = (config) => {} //
   obj.readonly = true //
   obj.clearable = false //
-  obj.modelValue = item.getBindShowValue()
+  // obj.modelValue = item.getBindShowValue()
   return obj
 }
 export const booleanType = (item: FormItem) => {
@@ -97,8 +100,12 @@ export const baseinfoType = (item: FormItem) => {
   obj.onChange = (config) => {}
   obj.clearable = true
   obj.onInput = (config) => {
-    console.log('baseinfoInput') //
-  } //
+    let value = config.value
+    item.updateBindData({ value })//
+    item.getTinyTableSearchData({
+      value: value,
+    })
+  }
   return obj
 }
 export const colorType = (item: FormItem) => {

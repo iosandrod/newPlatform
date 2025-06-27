@@ -10,9 +10,10 @@ import {
   watch,
   watchEffect,
   withDirectives,
+  onDeactivated,
+  reactive,
 } from 'vue'
 import { ListTableConstructorOptions } from '@visactor/vtable'
-import { ListTable } from '@visactor/vue-vtable'
 import { tableV2Props, ClickOutside } from 'element-plus'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { nextTick } from 'vue'
@@ -25,6 +26,7 @@ import TableFitlerCom from './tableFilterCom'
 import InputCom from '@/input/inputCom'
 import { Table } from './table'
 import { VxeLoading } from 'vxe-pc-ui'
+import { GanttTable } from './ganttTable'
 
 // new ListTable()
 //核心表格组件
@@ -51,6 +53,10 @@ export default defineComponent({
     buttons: {
       type: Array,
     },
+    isGantt: {
+      type: Boolean,
+      default: false,
+    }, //
     isFilterTable: {
       type: Boolean,
       default: false,
@@ -124,21 +130,25 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    enableDragColumn: {
-      type: Boolean,
-      default: false,
-    },
     dragRowFn: {
       type: Function, //
     },
     dragRowAfterFn: {
       type: Function, //
     },
+    enableDragColumn: {
+      type: Boolean,
+      default: false,
+    },
     dragColumnFn: {
       type: Function,
     },
     dragColumnAfterFn: {
       type: Function, //
+    },
+    showCheckAll: {
+      type: Boolean,
+      default: true,
     },
     showHeaderContext: {
       type: Boolean,
@@ -200,14 +210,26 @@ export default defineComponent({
     detailTableConfig: {
       type: Object,
     },
+    rowHeight: {
+      type: Number,
+      default: 30, //
+    },
+    calHeight: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any
     if (props.tableIns) {
       tableIns = props.tableIns as any
     } else {
-      tableIns = new Table(props) //
-    }
+      if (props.isGantt == true) {
+        tableIns = new GanttTable(props)
+      } else {
+        tableIns = new Table(props) //
+      }
+    } //
     if (props.mainTableName != null) {
       //@ts-ignore
       tableIns.tableName = props.mainTableName
@@ -215,6 +237,7 @@ export default defineComponent({
     expose({ _instance: tableIns })
     provide('tableIns', tableIns)
     onMounted(() => {
+      //
       tableIns.onMounted() //
     })
     watch(
@@ -230,9 +253,9 @@ export default defineComponent({
       tableIns.registerRef('root', el) //注册实例//
     } //
     onMounted(() => {
-      nextTick(() => {
-        tableIns.render()
-      })
+      tableIns.render()
+      // nextTick(() => {
+      // })
     }) //
     onUnmounted(() => {
       tableIns.onUnmounted()
@@ -360,7 +383,8 @@ export default defineComponent({
       (newValue, oldValue) => {
         let [newData, newLen] = newValue as any //
         let [oldData, oldLen] = oldValue as any
-        if (newValue != oldValue) {
+        if (newData != oldData) {
+          //
           tableIns.setData(newData)
           let treeConfig = props.treeConfig
           let expand = treeConfig?.expand
@@ -370,19 +394,22 @@ export default defineComponent({
             })
           }
           if (expand == 'first') {
-            tableIns.expandTargetRows(newValue) //
+            tableIns.expandTargetRows(newData) //
           }
         } else {
           //添加行的
-          let addRows = newData.map((row) => {
-            return !oldData.includes(row)
+          // let addRows = newData.filter((row) => {
+          //   return !oldData.includes(row)
+          // })
+          // //@ts-ignore
+          // tableIns.addRows({ rows: addRows, isProps: true })
+          // let removeRows = oldData.filter((row) => {
+          //   return !newData.includes(row) //
+          // })
+          // tableIns.delRows(removeRows)
+          newData.forEach((row) => {
+            tableIns.initDataRow(row) //
           })
-          //@ts-ignore
-          tableIns.addRows({ rows: addRows, isProps: true })
-          let removeRows = oldData.map((row) => {
-            return !newData.includes(row) //
-          })
-          tableIns.delRows(removeRows)
         }
         // if (!Array.isArray(e)) {
         //   e = [] //
@@ -398,15 +425,47 @@ export default defineComponent({
     const registerFooterDiv = (el) => {
       tableIns.registerRef('footerDiv', el) //
     }
+    const registerSearchDiv = (el) => {
+      tableIns.registerRef('searchDiv', el) //
+    }
+    let bodyStyle: any = reactive({
+      minHeight: '200px', //
+    })
+    // vShow, tableIns.globalConfig.show
+    watch(
+      () => tableIns.globalConfig.show,
+      (e) => {
+        nextTick(() => {
+          if (props.calHeight == true) {
+            let sRef = tableIns.getRef('bodyDiv') //
+            if (sRef == null) {
+              return
+            }
+            // debugger //
+            let bound = sRef.getBoundingClientRect()
+            if (e == true) {
+              let _height = Math.round(bound.height)
+              let _height1 = _height - 40
+              bodyStyle.flex = ''
+              bodyStyle.height = `${_height1}px !important`
+              // bodyStyle.display = 'none' //
+            } else {
+              bodyStyle.flex = 1 //
+              bodyStyle.height = '100%' //
+            }
+          } //
+        })
+      },
+      {
+        immediate: true, //
+      },
+    )
+    let registerBodyDiv = (el) => {
+      tableIns.registerRef('bodyDiv', el)
+    }
     return () => {
       let com = null
-      com = withDirectives(
-        <div
-          style={{ width: '100%', height: '100%', minHeight: '200px' }}
-          ref={registerRootDiv}
-        ></div>,
-        [],
-      ) //
+
       let menuCom = <TableMenuCom></TableMenuCom>
       // if (props.showHeaderContext === false) {
       //   menuCom = null //
@@ -421,12 +480,13 @@ export default defineComponent({
         filterTCom = <TableFitlerCom tableIns={tableIns}></TableFitlerCom>
       }
       // const inputProps = tableIns.getGlobalSearchProps()
-      const globalSearchInput = withDirectives(
+      let globalSearchInput = withDirectives(
         <div
+          ref={registerSearchDiv}
           style={{
             width: '100%',
-            height: '40px',
             display: 'flex',
+            overflow: 'hidden',
             alignItems: 'center',
           }}
         >
@@ -436,29 +496,39 @@ export default defineComponent({
             v-slots={{
               buttons: () => {
                 let com = (
-                  <buttonGroupCom
-                    buttonWidth={40}
-                    items={[
-                      {
-                        label: '<<',
-                        fn: () => {
-                          tableIns.jumpToSearchNext(true) //
-                        }, //
-                      },
-                      {
-                        label: '>>',
-                        fn: () => {
-                          tableIns.jumpToSearchNext() //
-                        },
-                      },
-                      {
-                        label: 'X',
-                        fn: () => {
-                          tableIns.showGlobalSearch(false) //
-                        },
-                      },
-                    ]}
-                  ></buttonGroupCom>
+                  <div class="flex items-center space-x-2 p-2 bg-gray-100 rounded-t-md border-b">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        tableIns.jumpToSearchNext(true) //
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200 transition"
+                      title="上一页"
+                    >
+                      &laquo;
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        tableIns.jumpToSearchNext(false)
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200 transition"
+                      title="下一页"
+                    >
+                      &raquo;
+                    </button>
+                    <button
+                      onClick={() => {
+                        tableIns.showGlobalSearch(false)
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-white bg-red-500 border border-red-600 rounded-md shadow-sm hover:bg-red-600 transition"
+                      title="关闭"
+                    >
+                      X
+                    </button>
+                  </div>
                 )
                 return com //
               },
@@ -474,9 +544,7 @@ export default defineComponent({
             position: 'absolute',
             bottom: 0,
             height: `${tableIns.getDefaultHeaderRowHeight()}px`, //
-            // borderLeft: '1px solid RGBA(30, 40, 60,0)',
-            // borderRight: '1px solid RGBA(30, 40, 60,0)',
-            // border: '1px solid RGBA(30, 40, 60,1)',
+
             boxSizing: 'border-box',
             width: '100%',
           }}
@@ -488,11 +556,21 @@ export default defineComponent({
         <div
           style={{
             height: `${tableIns.getDefaultHeaderRowHeight()}px`,
-            // border: '1px solid RGBA(30, 40, 60,1)', //
           }}
         ></div>,
         [[vShow, tableIns.getShowCalColumns()]],
       )
+      com = withDirectives(
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            minHeight: '200px',
+          }}
+          ref={registerRootDiv}
+        ></div>,
+        [[{}]],
+      ) //
       let tBodyCom = withDirectives(
         <div
           onClick={(e) => {
@@ -502,6 +580,7 @@ export default defineComponent({
             }
             tableIns.outClick(e, true) //
           }}
+          ref={registerBodyDiv}
           style={{
             flex: 1,
             width: '100%', //
@@ -509,8 +588,9 @@ export default defineComponent({
             position: 'relative',
             display: 'flex',
             flexDirection: 'column', //
-            border: '1px solid RGBA(30, 40, 60)',
+            border: '1px solid #ccc',
             boxSizing: 'border-box',
+            ...bodyStyle,
           }} //
         >
           <div
@@ -542,12 +622,13 @@ export default defineComponent({
       let outCom = (
         <div
           style={{
-            minHeight: '200px', //
+            // minHeight: '200px', //
             width: '100%',
             height: '100%',
             display: 'flex', //
             flexDirection: 'column',
             position: 'relative',
+            boxSizing: 'border-box',
           }}
         >
           {loadingCom}

@@ -1,11 +1,41 @@
-import { defineComponent, isReactive, onUnmounted, watchEffect, withDirectives } from 'vue'
-import { ClickOutside as vClickOutside, ElMessage, ElDialog, ElScrollbar, ElContainer, ElHeader, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from 'element-plus'
-import { defineProps, defineEmits, ref, reactive, computed, provide, getCurrentInstance, nextTick, onMounted, watch, defineExpose } from 'vue'
+import {
+  defineComponent,
+  isReactive,
+  onUnmounted,
+  watchEffect,
+  withDirectives,
+} from 'vue'
+import {
+  ClickOutside as vClickOutside,
+  ElMessage,
+  ElDialog,
+  ElScrollbar,
+  ElContainer,
+  ElHeader,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElButton,
+} from 'element-plus'
+import {
+  defineProps,
+  defineEmits,
+  ref,
+  reactive,
+  computed,
+  provide,
+  getCurrentInstance,
+  nextTick,
+  onMounted,
+  watch,
+  defineExpose,
+} from 'vue'
 import fieldMenu from '@/menu/fieldCom'
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
 import DeviceSwitch from '@ER/formEditor/components/DeviceSwitch.vue'
 import Icon from '@ER/icon'
+import pageTreeCom from './pageTreeCom'
 import hooks from '@ER/hooks'
 import utils from '@ER/utils'
 import _ from 'lodash'
@@ -17,12 +47,17 @@ import { PageDesign } from './pageDesign'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import DialogCom from '@/dialog/dialogCom'
 import { VxeLoading } from 'vxe-pc-ui'
+import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 export const getDefaultPageProps = () => {
   return {
     itemSpan: {
       type: Number,
       default: 6,
-    }, //
+    },
+    platform: {
+      type: String,
+      default: 'pc', //
+    },
     items: {
       default: () => [],
     },
@@ -55,7 +90,7 @@ export const getDefaultPageProps = () => {
       default: true,
     },
     isShowI18n: {
-      type: Boolean,
+      type: Boolean, //
       default: true,
     },
     dragMode: {
@@ -91,6 +126,7 @@ export default defineComponent({
     fieldMenu,
     fieldCom,
     ContextmenuCom,
+    pageTreeCom,
   },
   name: 'Everright-form-editor',
   props: getDefaultPageProps(), //
@@ -145,7 +181,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      }
+      },
     )
     let layout = formIns.layout
     let _state = formIns.state
@@ -191,7 +227,7 @@ export default defineComponent({
       () => props.data,
       (val) => {
         formIns.setData(val) //
-      }
+      },
     )
     provide('pageDesign', formIns) //
     provide('formIns', formIns)
@@ -209,7 +245,9 @@ export default defineComponent({
     let setSelection = formIns.setSelection.bind(formIns) //
     setSelection(state.config)
     const syncLayout = formIns.syncLayout.bind(formIns)
-    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(formIns)
+    const getLayoutDataByplatform = formIns.getLayoutDataByplatform.bind(
+      formIns,
+    )
     const switchPlatform = formIns.switchPlatform.bind(formIns)
     const canvesScrollRef = ref('')
     const fireEvent = (type, data) => {
@@ -280,7 +318,7 @@ export default defineComponent({
       },
       {
         immediate: true,
-      }
+      },
     )
     watch(
       () => state.selected,
@@ -290,7 +328,7 @@ export default defineComponent({
       {
         deep: true,
         immediate: true,
-      }
+      },
     )
     const onClickOutside = () => {}
 
@@ -332,8 +370,10 @@ export default defineComponent({
             style={{
               minWidth: '200px',
             }}
+            class="flex flex-col"
           >
             <fieldMenu></fieldMenu>
+            {/* <pageTreeCom formIns={formIns}></pageTreeCom> */}
           </div>
         )
         _ConfigCom = (
@@ -346,14 +386,33 @@ export default defineComponent({
           </div>
         )
       }
-      let loadingCom = <VxeLoading modelValue={formIns.pageLoading}></VxeLoading>
+      let loadingCom = (
+        <VxeLoading modelValue={formIns.pageLoading}></VxeLoading>
+      )
+      let btnsCom = null
+      if (formIns.isDesign == true) {
+        btnsCom = (
+          <div class="flex justify-center w-full">
+            <ButtonGroupCom
+              items={formIns.getControllerButtons()}
+            ></ButtonGroupCom>
+            <div>{formIns.state.platform}</div>
+          </div>
+        )
+      }
       let com = (
         <div class="h-full w-full overflow-hidden bg-white">
           {loadingCom}
           <div class="flex h-full w-full bg-white overflow-hidden flex-row">
             {contextCom}
             {_fieldCom}
-            <div class="flex-1 flex flex-col overflow-hidden">{isShow.value && withDirectives(<CanvesPanel data={state.store} />, [[vClickOutside, onClickOutside]])}</div>
+            <div class="flex-1 flex flex-col overflow-hidden">
+              {btnsCom}
+              {isShow.value &&
+                withDirectives(<CanvesPanel data={state.store} />, [
+                  [vClickOutside, onClickOutside],
+                ])}
+            </div>
             {_ConfigCom}
           </div>
           {_arr}
@@ -361,9 +420,7 @@ export default defineComponent({
         </div>
       )
       //如果是设计模式就使用面包屑
-      if (nextForm != null && formIns.isDesign == true) {
-        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
-      } //
+      //
       return com //
     }
   },

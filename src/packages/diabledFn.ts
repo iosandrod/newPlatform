@@ -1,3 +1,4 @@
+import { Button } from '@/buttonGroup/button'
 import { PageDesign } from './pageDesign'
 
 export const stateObj = {
@@ -77,5 +78,74 @@ export const runObj = {
   editTableRows: async (config) => {
     let page: PageDesign = config.page //
     await page.editTableRows() //
+  },
+  printTemplate: async (config) => {
+    let page: PageDesign = config.page //
+    await page.printTemplate() //
+  },
+  deleteTableRows: async (config) => {
+    let page: PageDesign = config.page //
+    await page.deleteTableRows() //
+  },
+  addRelateTableRow: async (config) => {
+    let page: PageDesign = config.page //
+    let items = page.items
+    let com = items.filter((item) => {
+      let fieldCom = item.getRef('fieldCom')
+      return fieldCom == config?.button?.group && fieldCom != null
+    })
+    let com0 = com[0]
+    if (com0 == null) {
+      return
+    }
+    let id = com0.id
+    let curEntity = page.getTheCloseEntity(id)
+    if (curEntity == null) {
+      page.getSystem().confirmMessage('未找到当前实体', 'warning')
+      return
+    }
+    let tableName = curEntity.options.tableName
+    page.addRelateTableRow(tableName) //
+  },
+  editRelateTableRow: async (config) => {
+    let page: PageDesign = config.page //
+    let items = page.items
+    let com = items.filter((item) => {
+      let fieldCom = item.getRef('fieldCom')
+      return fieldCom == config?.button?.group && fieldCom != null
+    })
+    let com0 = com[0]
+    if (com0 == null) {
+      return
+    }
+    let id = com0.id
+    let curEntity = page.getTheCloseEntity(id)
+    if (curEntity == null) {
+      page.getSystem().confirmMessage('未找到当前实体', 'warning')
+      return
+    }
+    let tableName = curEntity.options.tableName
+    page.editRelateTableRow(tableName) //
+  },
+  deleteRelateTableRow: async (config) => {
+    //
+    let page:PageDesign = config.page //
+    let items = page.items
+    let com = items.filter((item) => {
+      let fieldCom = item.getRef('fieldCom')
+      return fieldCom == config?.button?.group && fieldCom != null
+    })
+    let com0 = com[0]
+    if (com0 == null) {
+      return
+    }
+    let id = com0.id
+    let curEntity = page.getTheCloseEntity(id)
+    if (curEntity == null) {
+      page.getSystem().confirmMessage('未找到当前实体', 'warning')
+      return
+    }
+    let tableName = curEntity.options.tableName
+    page.deleteRelateTableRow(tableName) //
   },
 }

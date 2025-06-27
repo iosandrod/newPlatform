@@ -1,6 +1,33 @@
 import { PageDesign } from '@ER/pageDesign'
 import _ from 'lodash' //
 export const mainUse = {
+  pageInit: [
+    async (context, next) => {
+      await next()
+      let instance: PageDesign = context.instance
+      let allTable = instance.getAllTable().map((t) => {
+        return t.config
+      })
+      if (instance.isDesign == true) {
+        return //
+      }
+      for (let ta of allTable) {
+        let tableType = ta.options?.tableType
+        let options = ta.options?.relateConfig //
+        let initGetData = options?.initGetData
+
+        if (tableType == 'relate') {
+          if (Boolean(initGetData)) {
+            await instance.getRelateTreeData(ta?.options?.tableName)
+          }
+        } //
+      }
+      instance.setCurrentLoading(true) //
+      setTimeout(() => {
+        instance.getTableData() //
+      }, 300) //
+    },
+  ],
   getTableData: [
     //处理查询控件的表单
     async (context, next) => {
@@ -24,9 +51,14 @@ export const mainUse = {
         context.queryArr = queryArr
       }
       queryArr.push(...searchWhere) //
-      // let result = _.merge({}, query, searchWhere)
-      // fArg.query = result
+      //处理左侧树的查询条件
+      let relateArr = await instance.getRelateSearchWheres()
+      // console.log(relateArr, 'relateArr') ////
+      if (relateArr.length > 0) {
+        queryArr.push(...relateArr) //
+      }
       instance.setCurrentLoading(true)
+      //树的设置
       //获取全局的查询条件
       await next().finally(() => {
         setTimeout(() => {
@@ -43,6 +75,36 @@ export const mainUse = {
       instance.setCurrentEdit()
     },
   ],
+  addMainTableRow: [
+    async (context, next) => {
+      let instance: PageDesign = context.instance
+      let allRelateTables = instance.getAllRelateTable() //
+      let row = context.row
+      for (let table of allRelateTables) {
+        let options = table.config.options //
+        //获取关联字段
+        // let relateConfig = options?.relateConfig //
+        let relateKey = options?.relateKey //
+        let treeConfig = options?.treeConfig || {} //
+        let mainRelateKey = options?.mainRelateKey //
+        let tableName = options?.tableName //
+        if (Boolean(relateKey) && Boolean(mainRelateKey)) {
+          let _curRow = instance.getCurRow(tableName)
+          let _value = _curRow?.[relateKey]
+          let rootId = treeConfig?.rootId
+          if (_value == rootId) {
+            _value = null
+          }
+          if (_value != null) {
+            if (row) {
+              row[mainRelateKey] = _value //
+            }
+          }
+        }
+      }
+      await next()
+    },
+  ],
 }
 
 export const editUse = {
@@ -50,6 +112,7 @@ export const editUse = {
     async (context, next) => {
       let instance: PageDesign = context.instance
       instance.setCurrentLoading(true) //
+      await instance.validate()
       await next().finally(async () => {
         setTimeout(() => {
           instance.setCurrentLoading(false)

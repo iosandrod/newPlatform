@@ -3,67 +3,99 @@ import { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'index',
-    component: () => import('@/pages/companyPage'), //
+    name: 'pageIndex',
+    component: () => import('@/pages/pageIndex.vue'), //
     meta: {
-      title: '首页',
-      renderMenu: false,
       icon: 'CreditCardOutlined',
     },
     children: [
-      //
       {
-        path: 'home',
-        name: 'home', //
-        component: () => import('@/pages/home/Home'),
+        path: 'testPage',
+        name: 'testPage', //
+        component: () => import('@/pages/platform/login/Login1'), //
+        meta: {
+          icon: 'CreditCardOutlined',
+        },
       },
       {
-        path: 'companyHome',
-        name: 'companyHome', //
-        component: () => import('@/pages/companyPage'), //
-      },
-    ],
-  },
-  {
-    path: '/testPage',
-    name: 'testPage', //
-    component: () => import('@/pages/login/Login'), //
-  },
-  {
-    path: '/login',
-    name: 'login',
-    meta: {
-      view: 'blank',
-    },
-    component: () => import('@/pages/login/Login'),
-  },
-  {
-    path: '/companyLogin',
-    name: 'companyLogin',
-    component: () => import('@/pages/login/companyLogin'),
-  },
-  {
-    path: '/companyRegister',
-    name: 'companyRegister',
-    component: () => import('@/pages/login/companyRegister'),
-  },
-  {
-    path: '/companyUserInfo',
-    name: 'companyUserInfo',
-    component: () => import('@/pages/user/userInfo'), //
-  },
-  {
-    path: '/',
-    name: 'entity', //
-    component: () => import('@/pages/index'), //
-    children: [
-      {
-        path: ':tableName',
-        name: 'entityTable',
-        component: () => import('@/pages/design/index'), //
+        path: 'chat',
+        name: 'chat',
+        component: () => import('@/pages/platform/chat/App.vue'),
+        meta: {
+          icon: 'CreditCardOutlined',
+        },
       },
     ],
   },
 ]
-
 export default routes
+
+/* 
+
+ // children: [
+    //   //
+    //   {
+    //     path: 'home',
+    //     name: 'home', //
+    //     component: () => import('@/pages/platform/home/Home'),
+    //   },
+    //   // {
+    //   //   path: 'companyHome',
+    //   //   name: 'companyHome', //
+    //   //   component: () => import('@/pages/companyPage'), //
+    //   // },
+    //   {
+    //     path: 'companyHome',
+    //     name: 'companyHome', //
+    //     component: () => import('@/pages/home/cHome.vue'), //
+    //   },
+    // ],
+*/
+
+/* 
+// {
+  //   path: '/companyHome',
+  //   name: 'companyHome', //
+  //   component: () => import('@/pages/companyPage'), //
+  // },
+  // {
+  //   path: '/testPage',
+  //   name: 'testPage', //
+  //   component: () => import('@/pages/platform/login/Login'), //
+  // },
+  // {
+  //   path: '/login',
+  //   name: 'login',
+  //   meta: {
+  //     view: 'blank',
+  //   },
+  //   component: () => import('@/pages/platform/login/Login'),
+  // },
+  // {
+  //   path: '/login',
+  //   name: 'login',
+  //   component: () => import('@/pages/platform/login/login'),
+  // },
+  // {
+  //   path: '/register',
+  //   name: 'register',
+  //   component: () => import('@/pages/platform/login/register'),
+  // },
+  // {
+  //   path: '/companyUserInfo',
+  //   name: 'companyUserInfo',
+  //   component: () => import('@/pages/platform/user/userInfo'), //
+  // },
+  // {
+  //   path: '/',
+  //   name: 'entity', //
+  //   component: () => import('@/pages/erp/index'), //
+  //   children: [
+  //     {
+  //       path: ':tableName',
+  //       name: 'entityTable',
+  //       component: () => import('@/pages/erp/design/index'), //
+  //     },
+  //   ],
+  // },
+*/

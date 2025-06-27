@@ -43,9 +43,10 @@ export default defineComponent({
         {
           label: '更换ID',
           fn: async () => {
-            let data = tableIns.getData()
-            let d0 = data[0]
-            d0['id'] = d0['id'] + 1 //
+            // let data = tableIns.getData()
+            // let d0 = data[0]
+            // d0['id'] = d0['id'] + 1 //
+            tableIns.updateCanvas() //
           },
         },
       ] //
@@ -62,7 +63,7 @@ export default defineComponent({
           let index = mergeButtons.findIndex((item1) => {
             return item1.key == key
           })
-          if (index != i) { 
+          if (index != i) {
             return false
           }
         }

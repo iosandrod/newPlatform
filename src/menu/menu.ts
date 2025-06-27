@@ -4,6 +4,7 @@ import { MenuItem } from './menuitem'
 export class Menu extends Base {
   isOpenAll = false
   config: any
+  curContextMenu: any
   menuitems: MenuItem[] = []
   searchValue = '' ////
   constructor(config) {
@@ -57,7 +58,7 @@ export class Menu extends Base {
     })
     this.isOpenAll = true
   }
-  openItem(keys: any) { } //
+  openItem(keys: any) {} //
   getMenuDefaultOpeneds() {
     let _items = null
     _items = this.config.defaultOpeneds || []
@@ -85,7 +86,7 @@ export class Menu extends Base {
     let config = this.config
     let onItemClick = config.onItemClick
     if (typeof onItemClick == 'function') {
-      onItemClick(item.config)//
+      onItemClick(item.config) //
     }
   }
   getLastMenuItems() {
@@ -97,5 +98,8 @@ export class Menu extends Base {
     let menuitems = this.menuitems
     menuitems.push(item) //
   }
-  removeMenuItem(id: any) { }
+  removeMenuItem(id: any) {}
+  getUniqueOpen() {
+    return true
+  }
 }

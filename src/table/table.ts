@@ -8,6 +8,10 @@ import {
   triggerRef,
   toRaw,
   watch,
+  isReactive,
+  reactive,
+  isProxy,
+  ref,
 } from 'vue'
 import { Column } from './column'
 import { CheckboxColumn } from './checkboxColumn' //
@@ -16,7 +20,6 @@ import {
   ListTable,
   ListTableConstructorOptions,
 } from '@visactor/vtable'
-import { VTable } from '@visactor/vue-vtable'
 import { method } from 'lodash'
 import { exportVTableToExcel } from '@visactor/vtable-export'
 import _ from 'lodash'
@@ -24,7 +27,6 @@ import * as equal from '@/packages/utils/equal'
 import { BaseTableConstructorOptions } from '@visactor/vtable/es/ts-types/base-table'
 import { BMenu } from '@/buttonGroup/bMenu'
 import {
-  //
   checkbox_state_change,
   checkboxChange,
   click_cell,
@@ -33,7 +35,7 @@ import {
   mousedown_cell,
   mouseenter_cell,
   mouseleave_cell,
-  resize_column,
+  resize_column, //
   scroll,
   selected_cell,
   sort_click,
@@ -55,6 +57,9 @@ import { InputEditor } from './editor/string'
 import { Row } from 'vant'
 import { containerMap } from './columnFn'
 export class Table extends Base {
+  useCache = false
+  selectCacheCell: any = []
+  isTreeIconClick = false
   isDragHeader = false
   runClearSelect = false
   treeConfig: any = null
@@ -167,12 +172,7 @@ export class Table extends Base {
     let newIndex = row._index || ''
     this.timeout['updateRecords__now'] = true
     let tableName = this.getTableName()
-    // let design = this.getMainPageDesign()
-    // if (design && tableName != null) {
-    //   if (isProps == false) {
-    //     design.setCurRow(row, tableName)
-    //   }
-    // }
+
     let onCurRowChange = this.config.onCurRowChange
     if (typeof onCurRowChange == 'function') {
       onCurRowChange({ row: row, oldRow: oldCurRow }) //
@@ -277,18 +277,24 @@ export class Table extends Base {
     if (_row == null) {
       return //
     }
-    this.setCurRow(_row) //
+    setTimeout(() => {
+      let record = this.getInstance()?.records?.[0]
+      if (record) {
+        this.setCurRow(record) //
+      }
+    }, 800)
   }
   getTableName() {
     let tableName = this.config.tableName
     return tableName //
   }
-  updateOptions(opt: BaseTableConstructorOptions) {
+  updateOptions(opt?: BaseTableConstructorOptions) {
     let instance = this.getInstance() //
     if (instance != null) {
       const oldOptions = instance.options
-      _.merge(oldOptions, opt) //
-      instance.updateOption(oldOptions) //
+      _.merge(oldOptions, opt)
+      instance.updateOption(oldOptions)
+      // instance.frozenBodyDomContainer
     }
   }
   getListTableOption() {}
@@ -381,7 +387,7 @@ export class Table extends Base {
     }
     return fn
   }
-  createInstance(rootDiv) {
+  getCreateInstanceOptions(rootDiv) {
     let _this = this
     let showRowSeriesNumber = this.getShowSeriesNumber()
     let _sConfig: ColumnDefine = null
@@ -389,9 +395,9 @@ export class Table extends Base {
       _sConfig = this.seriesNumberColumn.getColumnProps() //
     }
     let dragMode = this.getDragMode()
-    // console.log(dragMode) //
-    let table = new ListTable({
+    let opt = {
       dragOrder: dragMode, //
+      // frozenColCount: this.frozenColCount,
       padding: {},
       //ts-ignore
       headerEditor: (args) => {
@@ -458,7 +464,7 @@ export class Table extends Base {
       },
       sortState: [],
       theme: createTheme() as any,
-      defaultRowHeight: 30,
+      defaultRowHeight: this.getDefaultRowHeight(), //
       heightMode: 'standard', //
       defaultHeaderRowHeight: this.getDefaultHeaderRowHeight(), //
       container: rootDiv, //
@@ -476,12 +482,23 @@ export class Table extends Base {
         isShowOverflowTextTooltip: true, //
       },
       rowSeriesNumber: _sConfig as any, //
-      // editCellTrigger: 'click',
       customConfig: {
         createReactContainer: true, //
       },
       //头部的
-    }) ////
+    }
+    return opt
+  }
+  createInstance(rootDiv) {
+    let _this = this
+    let showRowSeriesNumber = this.getShowSeriesNumber()
+    let _sConfig: ColumnDefine = null
+    if (showRowSeriesNumber) {
+      _sConfig = this.seriesNumberColumn.getColumnProps() //
+    }
+    let dragMode = this.getDragMode()
+    let opt = this.getCreateInstanceOptions(rootDiv) as any
+    let table = new ListTable(opt)
     table.on('change_header_position_start', (e) => {
       let record = table.getRecordByCell(e.col, e.row)
       let isDragHeader = false
@@ -560,6 +577,7 @@ export class Table extends Base {
     let fListTable = ListTable
     let table = new fListTable({
       autoFillHeight: true,
+      frozenColCount: this.frozenColCount,
       multipleSort: true, //
       sortState: [],
       defaultRowHeight: 30,
@@ -661,16 +679,24 @@ export class Table extends Base {
       console.error(error) //
     }
   }
-  render() {
+  render(reset = false) {
     const rootDiv = this.getRef('root')
     let footDiv = this.getRef('footerDiv')
     let _instance = this.instance
     if (_instance != null) {
+      if (reset) {
+        _instance.release()
+        this.createInstance(rootDiv) //
+      }
     } else {
       this.createInstance(rootDiv)
     }
     let footerInstance = this.footerInstance
     if (footerInstance != null) {
+      if (reset) {
+        footerInstance.release()
+        this.createFooterInstance(footDiv) //
+      }
     } else {
       this.createFooterInstance(footDiv) //
     }
@@ -695,26 +721,45 @@ export class Table extends Base {
     console.time(n) //
     let fro = instance.options.frozenColCount
     let right = instance.options.rightFrozenColCount //
+
     let myFro = this.frozenColCount
     let showRowSeriesNumber = this.getShowSeriesNumber()
     if (showRowSeriesNumber) {
       myFro = myFro + 1 //
     }
     let myRight = this.rightFrozenColCount
-    let footerInstance = this.getFooterInstance()
-    if (myRight > 0 && myRight != right) {
-      instance.options.rightFrozenColCount = myRight //
-      if (footerInstance != null) {
-        footerInstance.options.rightFrozenColCount = myRight
+    let footerInstance = this.getFooterInstance() //
+    let status = myRight > 0 && myRight != right
+    let status1 = myFro > 0 && myFro != fro
+    if (status || status1) {
+      if (fro != null || right != null) {
+        // debugger //
+        //重新绘制表格
+        this.render(true) //
+        return
+      }
+      //@ts-ignore
+      if (myRight > 0 && myRight != right) {
+        instance.options.rightFrozenColCount = myRight
+        // instance.setFrozenColCount(myFro)
+        // instance._resetFrozenColCount()
+        if (footerInstance != null) {
+          footerInstance.options.rightFrozenColCount = myRight
+        }
+      }
+      if (myFro > 0 && myFro != fro) {
+        instance.options.frozenColCount = myFro //
+        if (footerInstance != null) {
+          footerInstance.options.frozenColCount = myFro
+        } //
       }
     }
-    if (myFro > 0 && myFro != fro) {
-      instance.options.frozenColCount = myFro //
-      if (footerInstance != null) {
-        footerInstance.options.frozenColCount = myFro
-      } //
-    }
-    instance.updateColumns(_columns) //
+    // instance.clearColWidthCache()
+    //@ts-ignore
+    instance.updateColumns(_columns, { clearColWidthCache: true }) //
+    // instance.clearColWidthCache()
+    // setTimeout(() => {
+    // }, 100)
     let footerIns = this.getFooterInstance()
     console.timeEnd(n) //
   }
@@ -728,7 +773,10 @@ export class Table extends Base {
     if (instance == null) {
       return //
     }
-    instance.updateColumns(_columns) ////
+    //@ts-ignore
+    instance.updateColumns(_columns, { clearColWidthCache: true }) ////
+    // setTimeout(() => {
+    // }, 100)
   }
   getTreeRecords(re?: any[]) {
     let ins = this.getInstance()
@@ -766,6 +814,7 @@ export class Table extends Base {
       //
       //@ts-ignore
       let record = tableIns.dataMap[k]
+
       let index = records.indexOf(record)
       if (index != -1) {
         _arr.push(record)
@@ -773,6 +822,7 @@ export class Table extends Base {
         _iArr1.push(k)
       }
     }
+    // console.log(tableIns.dataMap, '更新的index') ////
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
       console.time(uuid) //
@@ -796,7 +846,6 @@ export class Table extends Base {
         }
         let Arr = Object.values(cArr)
         Arr.forEach((c: any) => {
-          // c.updateCanvas() //
           let updateFn = c.updateFn
           if (typeof updateFn == 'function') {
             updateFn() //
@@ -805,10 +854,6 @@ export class Table extends Base {
       })
       nextTick(() => {
         this.updateSelectRange()
-        // if (this.runClearSelect == true) {
-        //   this.getInstance().clearSelected()
-        //   this.runClearSelect = false //
-        // }
       }) //
       // ins.changeCellValue(0, 0, '')//
       console.timeEnd(uuid) //
@@ -826,11 +871,15 @@ export class Table extends Base {
     let _select = ins.getSelectedCellRanges()
     let t = this.templateEditCell
     let t1 = this.runClearSelect
+    console.log('渲染了') //
+    ins.render() ////
+    nextTick(() => {
+      ins.render() //
+    })
     if (t || t1) {
       this.runClearSelect = false //
       return
     } //
-    ins.render() ////
     // ins.selectCells(_select) //
     console.timeEnd(_id) //
     console.log('消耗时间') //
@@ -1045,17 +1094,13 @@ export class Table extends Base {
   }
   getShowColumns() {
     let columns = this.getColumns()
-    // if (1 == 1) {
-    //   let _columns = columns.map((col) => {
-    //     return { field: col.getField(), width: 100 }
-    //   })
-    //   return _columns //
-    // }
+    //是否显示
     let _cols = columns.filter((col) => {
       return col.getIsShow()
-    })
+    }) //
     let _col1 = _cols.map((col) => {
-      return col.getColumnProps()
+      let _col = toRaw(col) //
+      return _col.getColumnProps()
     })
     // if (1 == 1) {
     //   return _col1 //
@@ -1097,9 +1142,10 @@ export class Table extends Base {
       let cCol = this.controllerColumn
       _col1.push(cCol.getColumnProps())
       count += 1 //
-    }
+    } //
     this.frozenColCount = _count
     this.rightFrozenColCount = count //
+    // console.log('frozenColCount', _count, 'rightFrozenColCount', count) //
     return _col1 ////
   }
   //返回bool//
@@ -1150,9 +1196,6 @@ export class Table extends Base {
   loadColumns() {
     try {
       let columns = this.getShowColumns()
-      // columns = columns.map((col) => {
-      //   return { field: col.field }
-      // }) //
       this.templateProps.columns = columns //
     } catch (error) {
       console.log('加载列出错了')
@@ -1314,6 +1357,12 @@ export class Table extends Base {
   registerHooks(hConfig?: any) {}
   getInstance() {
     let instance = this.instance
+    if (isReactive(this)) {
+      instance = instance
+    } else {
+      //@ts-ignore
+      instance = instance?.value
+    }
     if (instance == null) {
       return null
     }
@@ -1349,8 +1398,11 @@ export class Table extends Base {
         return
       }
     }
+    // _arr = _arr.filter((item) => {
+    //   return Boolean(item) != false
+    // }) //
     _arr.forEach((item) => {
-      if (item._rowState == null) {
+      if (item?._rowState == null) {
         Object.defineProperties(item, {
           _rowState: { value: 'add', enumerable: false, writable: true },
         })
@@ -1371,7 +1423,7 @@ export class Table extends Base {
             row: lastD,
           }) ////
         },
-      }) //
+      })
     }
   }
   addBeforeMethod(config) {
@@ -1464,7 +1516,11 @@ export class Table extends Base {
     if (value == this.globalConfig.value) {
       return
     }
+    // this.setUseCache(true)
     this.globalConfig.value = value
+    setTimeout(() => {
+      // this.setUseCache(false) //
+    }, 4000) //
     if (this.globalConfig.value.length > 0) {
       this.showCustomLayout = true
     } else {
@@ -1480,45 +1536,50 @@ export class Table extends Base {
     }
   }
   openColumnFilter(config) {
+    let _this = reactive(this)
     //
-    let ins = this.getInstance()
+    let ins = _this.getInstance()
     let _col = ins.getColAt(config.canvas.x)
     let _row = ins.getRowAt(config.canvas.y)
     let col = _col.col
     let row = _row.row //
-    let field: string = ins.getBodyField(col, row) as any
-    let tColumn = this.getFlatColumns().find((col) => col.getField() == field)
+    // let field: string = ins.getBodyField(col, row) as any
+    let field = ins.getHeaderField(col, row) //
+    let tColumn = _this.getFlatColumns().find((col) => col.getField() == field)
     let width = tColumn.getColumnWidth()
-    this.columnFilterConfig.width = width + 60 //
+    _this.columnFilterConfig.width = width + 60 //
+    if (_this.columnFilterConfig.width < 300) {
+      _this.columnFilterConfig.width = 300 //
+    }
     // let event = config.event
     let client = config.client
     let x = client.x
     let y = client.y
-    let oldColumnFilter = this.currentFilterColumn
-    this.currentFilterColumn = tColumn //
-    this.columnFilterConfig.x = x
-    this.columnFilterConfig.y = y //
-    const pulldownMenu: Dropdown = this.getRef('columnDropdown')
+    let oldColumnFilter = _this.currentFilterColumn
+    _this.currentFilterColumn = tColumn //
+    _this.columnFilterConfig.x = x
+    _this.columnFilterConfig.y = y //
+    const pulldownMenu: Dropdown = _this.getRef('columnDropdown')
     if (pulldownMenu == null) {
       return
     }
-    this.permission.canCloseColumnFilter = false
-    if (this.timeout['closeColumnFilter']) {
+    _this.permission.canCloseColumnFilter = false
+    if (_this.timeout['closeColumnFilter']) {
       clearTimeout(this.timeout['closeColumnFilter'])
-      this.timeout['closeColumnFilter'] = null
+      _this.timeout['closeColumnFilter'] = null
     } //
-    this.timeout['closeColumnFilter'] = setTimeout(() => {
-      this.permission.canCloseColumnFilter = true
+    _this.timeout['closeColumnFilter'] = setTimeout(() => {
+      _this.permission.canCloseColumnFilter = true
     }, 200)
     nextTick(() => {
       pulldownMenu.showDropdown() //
       nextTick(() => {
-        const filterTable: Table = this.getRef('columnFilterTable')
+        const filterTable: Table = _this.getRef('columnFilterTable')
         let _config = [tColumn].map((col) => {
           return col.config
         })
-        let _data = this.getInstance().records
-        let _d = this.getFlatTreeData(_data) //
+        let _data = _this.getInstance().records
+        let _d = _this.getFlatTreeData(_data) //
         _data = _d //
         if (oldColumnFilter != null && oldColumnFilter === tColumn) {
           return //
@@ -1527,7 +1588,10 @@ export class Table extends Base {
           //
           ..._data.map((row) => {
             let obj = {
+              ...row, //
+              //@ts-ignore
               [field]: row[field], //
+              //@ts-ignore
               _value: row[field],
             }
             return obj //
@@ -1538,6 +1602,10 @@ export class Table extends Base {
           return _data1.findIndex((item1) => item1._value == _value) == i
         })
         _config = _.cloneDeep(_config) //
+        let col0 = _config[0]
+        if (width < 240) {
+          col0.width = 240 //
+        }
         if (filterTable == null) {
           return //
         }
@@ -1677,144 +1745,278 @@ export class Table extends Base {
       this.columnFilterConfig.filterConfig = [] //
     }
   }
+  // jumpToSearchNext(pre = false) {
+  //   //
+  //   let ins = this.getInstance() //
+  //   // let select = ins.getSelectedCellInfos()
+  //   let select = this.selectCacheCell //
+  //   let _d = select?.[0]?.[0]
+  //   if (_d?.originData == null) {
+  //     select = [] //
+  //   }
+  //   // console.log(select) //
+  //   let globalValue = this.globalConfig.value
+  //   if (globalValue.length == 0) {
+  //     return //
+  //   }
+  //   let records = this.getShowRecords()
+  //   let field = null
+  //   let rowIndex = null
+  //   if (select.length == 0) {
+  //     if (pre == true) {
+  //       for (let i = records.length - 1; i >= 0; i--) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find(([key, value]) => {
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             return reg.test(_value1) //
+  //           }
+  //         })
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     } else {
+  //       for (let i = 0; i < records.length; i++) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find(([key, value]) => {
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             return reg.test(_value1) //
+  //           }
+  //         })
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     let _d = select[0][0]
+  //     let _field = _d.field //
+  //     let originData = select[0][0].originData
+  //     let index = records.findIndex((item) => item == originData)
+  //     if (pre == true) {
+  //       for (let i = index; i >= 0; i--) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find((item) => {
+  //           let [key, value] = item
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             let status = reg.test(_value1) //
+  //             if (i == index) {
+  //               let allCols = this.templateProps.columns
+  //               let lastAllField = allCols.findIndex(
+  //                 (item) => item.field == _field, //
+  //               )
+  //               let lastFields = allCols //
+  //                 .slice(lastAllField + 1) //
+  //                 .map((item) => item.field)
+  //               if (!lastFields.includes(key)) {
+  //                 status = false //
+  //               }
+  //             }
+  //             return status
+  //           }
+  //         }) //
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     } else {
+  //       for (let i = index; i < records.length; i++) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find((item) => {
+  //           let [key, value] = item
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             let status = reg.test(_value1) //
+  //             if (i == index) {
+  //               let allCols = this.templateProps.columns
+  //               let lastAllField = allCols.findIndex(
+  //                 (item) => item.field == _field, //
+  //               )
+  //               let lastFields = allCols //
+  //                 .slice(lastAllField + 1) //
+  //                 .map((item) => item.field)
+  //               if (!lastFields.includes(key)) {
+  //                 status = false //
+  //               }
+  //             }
+  //             return status
+  //           }
+  //         }) //
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     }
+  //   }
+  //   if (field == null || rowIndex == null) {
+  //     return
+  //   }
+  //   let addr = ins.getCellAddrByFieldRecord(field, rowIndex) //
+  //   ins.selectCell(addr.col, addr.row) //
+  // }
   jumpToSearchNext(pre = false) {
-    //
-    let ins = this.getInstance() //
-    let select = ins.getSelectedCellInfos()
-    let globalValue = this.globalConfig.value
-    if (globalValue.length == 0) {
-      return //
+    const ins = this.getInstance()
+    const query = this.globalConfig.value?.trim()
+    if (!query) return
+
+    const regex = new RegExp(query, 'i')
+    const records = this.getShowRecords()
+    if (!records.length) return
+
+    // Prepare fields list excluding non-searchable keys
+    const allFields = this.templateProps.columns
+      .map((col) => col.field)
+      .filter((field) => field !== '_index' && field !== '_shtml')
+
+    // Determine starting row and initial fields slice
+    const sel = this.selectCacheCell?.[0]?.[0]
+    let startRow = pre ? records.length - 1 : 0
+    let initialFields = allFields //
+
+    if (sel?.originData) {
+      startRow = records.findIndex((r) => r === sel.originData)
+      const curIdx = allFields.indexOf(sel.field)
+      // On the same row, skip fields before/after current based on direction
+      initialFields = pre
+        ? allFields.slice(0, curIdx)
+        : allFields.slice(curIdx + 1)
     }
-    let records = this.getShowRecords()
-    let field = null
-    let rowIndex = null
-    if (select.length == 0) {
-      if (pre == true) {
-        for (let i = records.length - 1; i >= 0; i--) {
-          let row = records[i]
-          let _value = Object.entries(row).find(([key, value]) => {
-            if (
-              key != '_index' &&
-              key != '_shtml' &&
-              typeof value != 'boolean' &&
-              typeof value != 'object'
-            ) {
-              let reg = new RegExp(globalValue, 'gi')
-              let _value1 = `${value}` //
-              return reg.test(_value1) //
-            }
-          })
-          if (_value != null) {
-            field = _value[0]
-            rowIndex = i
-            break
-          }
-        }
-      } else {
-        for (let i = 0; i < records.length; i++) {
-          let row = records[i]
-          let _value = Object.entries(row).find(([key, value]) => {
-            if (
-              key != '_index' &&
-              key != '_shtml' &&
-              typeof value != 'boolean' &&
-              typeof value != 'object'
-            ) {
-              let reg = new RegExp(globalValue, 'gi')
-              let _value1 = `${value}` //
-              return reg.test(_value1) //
-            }
-          })
-          if (_value != null) {
-            field = _value[0]
-            rowIndex = i
-            break
-          }
-        }
-      }
-    } else {
-      let _d = select[0][0]
-      let _field = _d.field //
-      let originData = select[0][0].originData
-      let index = records.findIndex((item) => item == originData)
-      if (pre == true) {
-        for (let i = index; i >= 0; i--) {
-          let row = records[i]
-          let _value = Object.entries(row).find((item) => {
-            let [key, value] = item
-            if (
-              key != '_index' &&
-              key != '_shtml' &&
-              typeof value != 'boolean' &&
-              typeof value != 'object'
-            ) {
-              let reg = new RegExp(globalValue, 'gi')
-              let _value1 = `${value}` //
-              let status = reg.test(_value1) //
-              if (i == index) {
-                let allCols = this.templateProps.columns
-                let lastAllField = allCols.findIndex(
-                  (item) => item.field == _field, //
-                )
-                let lastFields = allCols //
-                  .slice(lastAllField + 1) //
-                  .map((item) => item.field)
-                if (!lastFields.includes(key)) {
-                  status = false //
-                }
-              }
-              return status
-            }
-          }) //
-          if (_value != null) {
-            field = _value[0]
-            rowIndex = i
-            break
-          }
-        }
-      } else {
-        for (let i = index; i < records.length; i++) {
-          let row = records[i]
-          let _value = Object.entries(row).find((item) => {
-            let [key, value] = item
-            if (
-              key != '_index' &&
-              key != '_shtml' &&
-              typeof value != 'boolean' &&
-              typeof value != 'object'
-            ) {
-              let reg = new RegExp(globalValue, 'gi')
-              let _value1 = `${value}` //
-              let status = reg.test(_value1) //
-              if (i == index) {
-                let allCols = this.templateProps.columns
-                let lastAllField = allCols.findIndex(
-                  (item) => item.field == _field, //
-                )
-                let lastFields = allCols //
-                  .slice(lastAllField + 1) //
-                  .map((item) => item.field)
-                if (!lastFields.includes(key)) {
-                  status = false //
-                }
-              }
-              return status
-            }
-          }) //
-          if (_value != null) {
-            field = _value[0]
-            rowIndex = i
-            break
+
+    const step = pre ? -1 : 1
+
+    // Iterate rows
+    for (let i = startRow; i >= 0 && i < records.length; i += step) {
+      const row = records[i]
+      // Choose which fields to check on this row
+      const fields = i === startRow ? initialFields : allFields
+
+      for (const field of fields) {
+        const val = row[field]
+        // Only primitive values
+        if (
+          val != null &&
+          typeof val !== 'object' &&
+          typeof val !== 'boolean'
+        ) {
+          if (regex.test(String(val))) {
+            const addr = ins.getCellAddrByFieldRecord(field, i)
+            return ins.selectCell(addr.col, addr.row)
           }
         }
       }
     }
-    if (field == null || rowIndex == null) {
-      return
-    }
-    let addr = ins.getCellAddrByFieldRecord(field, rowIndex) //
-    ins.selectCell(addr.col, addr.row) //
+    // No match found; optionally wrap-around with this.jumpToSearchNext(!pre)
   }
+  // jumpToSearchNext(pre = false) {
+  //   let ins = this.getInstance()
+  //   // let selectedInfos = ins.getSelectedCellInfos()
+  //   let selectedInfos = this.selectCacheCell //
+  //   // console.log('selectedInfos', selectedInfos)//
+  //   let query = this.globalConfig.value?.trim()
+  //   if (!query) return
+
+  //   // Compile regex once without global flag (we only need test)
+  //   const regex = new RegExp(query, 'i')
+  //   const records = this.getShowRecords()
+  //   const allCols = this.templateProps.columns.map((col) => col.field)
+  //   let startRow
+  //   let currentField = null
+  //   if (selectedInfos.length > 0) {
+  //     const sel = selectedInfos[0][0]
+  //     const origin = sel.originData
+  //     const currentRow = records.findIndex((r) => r === origin)
+  //     startRow = currentRow
+  //     currentField = sel.field
+  //   } else {
+  //     // No selection: start from first or last
+  //     startRow = pre ? records.length - 1 : 0
+  //   }
+
+  //   const step = pre ? -1 : 1
+
+  //   // Search rows in direction
+  //   for (
+  //     let rowIndex = startRow;
+  //     rowIndex >= 0 && rowIndex < records.length;
+  //     rowIndex += step
+  //   ) {
+  //     const row = records[rowIndex]
+  //     // Determine fields to search in this row
+  //     let fields = allCols.filter((field) => {
+  //       const val = row[field]
+  //       return (
+  //         field !== '_index' &&
+  //         field !== '_shtml' &&
+  //         typeof val !== 'boolean' &&
+  //         typeof val !== 'object'
+  //       )
+  //     })
+
+  //     // If same row as start, skip fields before/after currentField
+  //     if (currentField && rowIndex === startRow) {
+  //       const idx = allCols.indexOf(currentField)
+  //       fields = pre
+  //         ? allCols.slice(0, idx) // before currentField when searching backwards
+  //         : allCols.slice(idx + 1) // after currentField when searching forwards
+  //     }
+
+  //     // Scan fields
+  //     let _this = this
+  //     for (const field of fields) {
+  //       const val = row[field]
+  //       if (regex.test(String(val))) {
+  //         const addr = ins.getCellAddrByFieldRecord(field, rowIndex)
+  //         ins.selectCell(addr.col, addr.row)
+  //         nextTick(() => {
+  //           //
+  //           // let selectInfo = ins.getSelectedCellInfos() //
+  //           // console.log('selectInfo', selectInfo) ////
+  //         })
+  //         return
+  //       }
+  //     }
+  //   }
+
+  //   // No match found
+  //   // Optionally, could wrap-around: remove comments to enable
+  //   // if (!pre) this.jumpToSearchNext(true);
+  // }
+
   getCurrentVisibleRecords() {
     let ins = this.getInstance() //
     let currentScrollRecords = ins.getBodyVisibleRowRange()
@@ -1886,9 +2088,14 @@ export class Table extends Base {
     let config = this.config
     let ins = this.getInstance()
     let beforeEditCell = config.onBeforeEditCell
+    let tableState = this.tableState
+    if (tableState == 'scan') {
+      return false
+    }
     if (typeof beforeEditCell == 'function') {
       let re = ins.getRecordByCell(col, row)
-      let f = ins.getBodyField(col, row)
+      let f: any = ins.getBodyField(col, row)
+      value = value || re[f]
       let _status = beforeEditCell({
         row: re,
         field: f,
@@ -1898,6 +2105,10 @@ export class Table extends Base {
         return false
       }
     }
+  }
+  clearSelected() {
+    let ins = this.getInstance()
+    ins.clearSelected() //
   }
   startEditCell(col, row, value, isTitle = false) {
     // if (1 == 1) {
@@ -2071,7 +2282,7 @@ export class Table extends Base {
     } //
   }
   designCurrentColumn() {}
-  getCacheContain(row) {}
+  // getCacheContain(row) {}
   setEventMap(map = {}) {
     Object.entries(map).forEach(([key, value]) => {
       let _callback = value['callback']
@@ -2103,7 +2314,7 @@ export class Table extends Base {
     return contextItems
   }
   getDefaultHeaderRowHeight() {
-    return 40
+    return 30 //
   }
   getIsFilterTable() {
     let config = this.config
@@ -2138,7 +2349,6 @@ export class Table extends Base {
     return 130
   }
   changeSortOrder(orderFieldArr: { field: string; order: number }[]) {
-    // debugger//
     let old1 = orderFieldArr.map((f) => f.field)
     old1.forEach((f, i) => {
       let columns = this.getFlatColumns()
@@ -2186,7 +2396,6 @@ export class Table extends Base {
         }
       },
       (nv) => {
-        // debugger//
         if (this.isDragHeader == true) {
           let _x = nv.x
           if (_x < x) {
@@ -2264,7 +2473,7 @@ export class Table extends Base {
     //
     let _config = null
     let parentId = config?.parentId
-    let id = config?.id
+    let id = config?.id //
     if (parentId != null || id != null) {
       _config = config
       return
@@ -2347,7 +2556,7 @@ export class Table extends Base {
     return false
   }
   openTreeRow(col, row) {
-    //
+    console.log(col, row, 'openTreeRow') //
     let ins = this.getInstance() //
     let record = ins.getRecordByCell(col, row) //
     let f = ins.getBodyField(col, row)
@@ -2397,23 +2606,35 @@ export class Table extends Base {
       let _d = this.getTreeDataByPid(pid)
       data = _d.children
     }
-    let index1 = data.indexOf(r1)
-    let index2 = data.indexOf(r2)
-    data.splice(index1, 1)
-    data.splice(index2, 0, r1) //
+    //顶层的节点
+    if (this.templateProps.data.includes(r1)) {
+      let index1 = data.indexOf(r1)
+      let index2 = data.indexOf(r2)
+      data.splice(index1, 1) //
+      data.splice(index2, 0, r1) //
+    }
+
     let config = this.config
     let dragRowAfterFn = config.dragRowAfterFn
     if (typeof dragRowAfterFn == 'function') {
+      //
       dragRowAfterFn({ startRow: r1, endRow: r2, data })
     }
+    nextTick(() => {
+      // console.log(data, 'testData') //
+      this.updateCanvas() //
+      // nextTick(() => {
+      //   console.log(this.getInstance().records, 'testRecords')//
+      // })
+    })
     return //
   }
   onColumnResize(_config) {
-    //
-    let config = this.config
-    let onColumnResize = config.onColumnResize
-    if (typeof onColumnResize == 'function') {
-      onColumnResize(_config) //
+    let column = _config.originColumn
+    column.width = _config?.width || column.width
+    let onDesignColumn = this.config.onDesignColumn
+    if (typeof onDesignColumn == 'function') {
+      onDesignColumn(column, column, false) //
     }
   }
   hiddenColumn(field) {
@@ -2451,8 +2672,8 @@ export class Table extends Base {
     }
   }
   onColumnsDesign(cols: any[]) {
-    // debugger//
     let updateCols = cols.filter((col) => {
+      //
       let rowState = col['_rowState']
       return rowState == 'change'
     })
@@ -2463,6 +2684,10 @@ export class Table extends Base {
     let config = {
       addCols: addCols,
       updateCols: updateCols,
+      // otherCols: cols.filter((col) => {
+      //   return !addCols.includes(col) && !updateCols.includes(col)
+      // }), //
+      allCols: cols,
       tableName: this.getTableName(),
     }
     let ccnfig = this.config
@@ -2484,6 +2709,7 @@ export class Table extends Base {
       row['_expanded'] = status //
       let col = 'collapse'
       if (status == true) {
+        //scss less vuex
         col = 'expand'
       }
       row['hierarchyState'] = col //
@@ -2510,7 +2736,7 @@ export class Table extends Base {
       let pRow = this.dataMap[pIndex]
       this.getFlatParent(pRow, arr)
     }
-    return arr
+    return [...arr, row] //
   }
   expandAllTreeRow(status = true, level: any = 'all') {
     let allRows = this.getFlatTreeData()
@@ -2629,12 +2855,13 @@ export class Table extends Base {
           resolve(true) //
         } else {
           //
-          this.getSystem().confirmMessage(tErr, 'error') //
+          // this.getSystem().confirmMessage(tErr, 'error') //
           reject(tErr) //
         } //
       } else {
         let _index = _row['_index']
-        this.validateMap[_index] = [err] //
+        this.validateMap[_index] = [err]
+        // debugger//
         this.showErrorTopTip() //
         reject(err)
       }
@@ -2646,10 +2873,11 @@ export class Table extends Base {
     if (Object.keys(validateMap).length == 0) {
       return
     }
-    let _index = Object.keys(validateMap)[0]
+    let _index = Object.keys(validateMap).slice(-1).pop() //
     let err = validateMap[_index][0] //
     // console.log(err) ////
     let ins = this.getInstance()
+    // ins.autoFillHeight
     let field = err.field
     let row = err.row //
     let _index1 = this.getFlatTreeData().findIndex((r) => r['_index'] == _index)
@@ -2758,7 +2986,8 @@ export class Table extends Base {
     if (fOp) {
       fOp.rowSeriesNumber = _col
       fIns.updateOption(fOp) //
-    } //
+    }
+    // setTimeout(() => {}, 500)
   } //
   onCellDblClick(config) {
     let col = config.col //
@@ -2787,10 +3016,31 @@ export class Table extends Base {
       }
     }
   } //
+  getCacheContainer(_index, filed) {
+    let _containerMap = containerMap
+    let id = this.id //
+    let _map = _containerMap[id]
+    if (_map == null) {
+      return null
+    }
+    let map = _map[_index]
+    if (map == null) {
+      return null
+    }
+    let c = map[filed]
+    if (c != null) {
+      // console.log(c) //
+    }
+    return c?.container //
+  }
   onCellVisible(config) {
     let field = config.field //
     let record = config.record
-    let _index = record._index //
+    if (record == null) {
+      console.log(config, 'record没有') //
+      return //
+    }
+    let _index = record?._index //
     let _containerMap = containerMap
     let id = this.id //
     let id1 = `${id}_arr`
@@ -2831,29 +3081,50 @@ export class Table extends Base {
     map1[field] = config
     let fieldFormat = config.fieldFormat
     let _v = null
+    let column = this.columnsMap[field] || config.column
+    if (column == null) {
+      if (field == 'checkboxField') {
+        column = this.checkboxColumn
+      }
+      if (field == 'seriesNumber') {
+        column = this.seriesNumberColumn //
+      }
+    }
+    // console.log(
+    //   isProxy(this),
+    //   isProxy(record),
+    //   isProxy(column),
+    //   field,
+    //   'isProxy',
+    // )
+    let obj1 = {
+      row: record, //
+      field: field,
+      table: this,
+      col: column,
+      column: column, //
+    }
     if (typeof fieldFormat == 'function') {
-      let _value1 = fieldFormat({
-        row: record, //
-        field: field,
-        table: this,
-        col: config.column,
-      })
+      if (field == 'cSTCode') {
+        // if(record.cSTCode){
+        //   debugger//
+        // }
+        // console.log(_value1,'sfsdf')  //
+      }
+      let _value1 = fieldFormat(obj1)
       if (_value1 == null) {
         _value1 = '' //
       }
       let _watch = map1[`watch_arr`]
       if (_watch == null) {
-        _watch = []
+        // _watch = []
+        _watch = {} //
         map1[`watch_arr`] = _watch
       }
+      // let column=ref(config.column)
       let _w1 = watch(
         () => {
-          let _value = fieldFormat({
-            row: record, //
-            field: field,
-            table: this,
-            col: config.column,
-          })
+          let _value = fieldFormat(obj1) //
           return _value
         },
         (v) => {
@@ -2864,7 +3135,12 @@ export class Table extends Base {
           // immediate: true,
         },
       )
-      _watch.push(_w1) //
+      // _watch.push(_w1) //
+      if (_watch[field] != null) {
+        let fn = _watch[field]
+        fn() //
+      }
+      _watch[field] = _w1
       _v = _value1
     }
     return _v
@@ -2897,6 +3173,13 @@ export class Table extends Base {
       watchArr.forEach((item) => {
         item() //
       })
+      obj1[`watch_arr`] = null
+    } else {
+      if (typeof watchArr == 'object') {
+        Object.values(watchArr).forEach((item: any) => {
+          item()
+        })
+      }
     }
     obj1[`watch_arr`] = null //
   }
@@ -2904,6 +3187,21 @@ export class Table extends Base {
   clearCache() {
     let id = this.id
     let _containerMap = containerMap
-    _containerMap[id] = null
+    _containerMap[id] = null //
+  }
+  getDefaultRowHeight() {
+    let height = Number(this.config?.rowHeight)
+    if (isNaN(height)) {
+      height = 30
+    } //
+    // console.log('行高度', height)//
+    return height
+  }
+  setUseCache(status) {
+    if (typeof status !== 'boolean') {
+      return
+    } //
+
+    this.useCache = status
   }
 }

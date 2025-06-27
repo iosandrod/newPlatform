@@ -1,4 +1,5 @@
 import { Base } from '@ER/base'
+import { nextTick } from 'vue'
 import { VxeSelectInstance } from 'vxe-pc-ui'
 
 export class Select extends Base {
@@ -11,14 +12,13 @@ export class Select extends Base {
     this.config = config //
   }
   getModelValue() {
-    //
     let searchValue = this.searchValue
     let showSearchValue = this.showSearchValue
-    if (searchValue.length > 0 || showSearchValue) {
+    if (searchValue?.length > 0 || showSearchValue) {
       return searchValue //
     }
     let config = this.config
-    let modelValue = config.modelValue
+    let modelValue = config.modelValue //
     if (modelValue == null) {
       modelValue = '' //
     }
@@ -33,12 +33,23 @@ export class Select extends Base {
     let oldS = this.searchValue
     if (oldS.length > 0 && value.length == 0) {
       this.showSearchValue = true //
-    } //
+    }
+    let config = this.config
+    let onChange = config.onChange
+    if (typeof onChange == 'function') {
+      //允许非下拉值的更新
+      let enableOther = config.enableOther
+      if (enableOther == true) {
+        onChange({
+          value: value, //
+        })
+      }
+    }
     this.searchValue = value //
   }
   getSelectPanelVisible() {
     let reg: VxeSelectInstance = this.getRef('select')
-    let isShow = reg.isPanelVisible() 
+    let isShow = reg.isPanelVisible()
     return isShow //
   }
   onChange(value) {
@@ -52,9 +63,19 @@ export class Select extends Base {
   onVisibleChange(visible) {
     this.panelVisible = visible
     if (visible == false) {
+      // let modelValue = this.getModelValue()
+      // if (modelValue != null) {
+      //   this.searchValue = modelValue
+      // } else {
+      //   this.searchValue = '' //
+      // }
       this.searchValue = '' //
       this.showSearchValue = false
     }
+    // nextTick(() => {
+    //   //什么时候把modelValue改了呢
+    //   console.log(this, this.getModelValue()) //
+    // })
   }
   getOptions() {
     let config = this.config

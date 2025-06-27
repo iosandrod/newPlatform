@@ -120,7 +120,11 @@ export default defineComponent({
                       v-slots={slots}
                     ></dragGableWrap>
                   )
-                  return com1
+                  return (
+                    <div style={{ maxHeight: '300px' }} class="overflow-auto ">
+                      {com1}
+                    </div>
+                  )
                 },
               }}
             ></menuCom>

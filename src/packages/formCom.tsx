@@ -63,6 +63,10 @@ const getDefaultFormEditProps = () => {
       type: Function,
       default: () => {},
     },
+    platform: {
+      type: String,
+      default: 'pc',
+    },
     formIns: {
       type: Object,
     },
@@ -77,7 +81,13 @@ const getDefaultFormEditProps = () => {
     tableName: {
       type: String,
     },
-  } ///
+    itemDisabled: {
+      type: Function, //
+    },
+    disabledFn: {
+      type: Function, //
+    },
+  }
 }
 export default defineComponent({
   components: {},
@@ -128,6 +138,7 @@ export default defineComponent({
         fIns.setLayoutData(props.layoutData) //
       }
     }
+    // debugger //
     fIns.setCurrentDesign(false)
     if (props.isDesign == true) {
       fIns.setCurrentDesign(true) //
@@ -187,7 +198,7 @@ export default defineComponent({
       fIns.registerRef('contextMenu', el) //
     }
     return () => {
-      let com = <erForm formIns={fIns}></erForm>
+      let com = <erFormEditor formIns={fIns}></erFormEditor>
       let buttonG = null
       let hBtns = fIns.getHeaderButtons()
       if (hBtns.length > 0) {

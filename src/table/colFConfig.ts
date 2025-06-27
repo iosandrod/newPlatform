@@ -12,7 +12,70 @@ const enableTypes = [
   'cascader',
   'region',
 ]
-export const getDFConfig = (_this, data) => {
+export const getBaseInfoEditConfig = (_this, tableName) => {
+  return {
+    itemSpan: 12,
+    items: [
+      {
+        field: 'tableName',
+        label: '表名',
+        type: 'string', //
+      },
+      {
+        field: 'bindColumns', //
+        label: '绑定字段',
+        span: 24, //
+        type: 'stable',
+        options: {
+          openBefore: async (config) => {
+            let item: FormItem = config?.item //
+            let data = config.data //
+            let options = item.config.options
+            let columns = options.columns
+            let col1 = columns[1]
+            let col0 = columns[0]
+            if (data?.tableName == null) {
+              return '请先选择表名' //
+            }
+            col1.tableName = data.tableName
+            col0.tableName = tableName
+            return //
+          },
+          showTable: false, //
+          tableTitle: '绑定参照表',
+          tableState: 'edit',
+          columns: [
+            {
+              field: 'key',
+              title: '当前字段',
+              editType: 'select',
+              columnSelect: true,
+              tableName: tableName, //
+            },
+            {
+              field: 'targetKey',
+              title: '值',
+              editType: 'select',
+              columnSelect: true,
+              tableName: tableName,
+            },
+          ],
+        },
+      },
+      {
+        field: 'showColumns',
+        label: '显示字段',
+        type: 'select',
+        options: {
+          columnSelect: true,
+          multiple: true,
+          tableName: tableName, //
+        },
+      },
+    ],
+  }
+}
+export const getDFConfig = (_this, data, tableName1?: any) => {
   let dType = data['defaultValueType']
   let fType = 'string'
 
@@ -24,12 +87,16 @@ export const getDFConfig = (_this, data) => {
     //
     fType = 'code'
   }
-  let tableName = null
+  let tableName = null //
   if (_this && _this.getRealTableName) {
     // tableName = _this.getRealTableName()
     tableName = _this.getTableName() //
   }
-  let titles = ['基本信息', '编辑信息']
+  let realTableName = data['tableName']
+  if (realTableName) {
+    tableName = realTableName //
+  }
+  let titles = ['基本信息', '编辑信息', '查询信息'] //
   let fConfig = {
     itemSpan: 12,
     data: data,
@@ -128,15 +195,27 @@ export const getDFConfig = (_this, data) => {
         tabTitle: titles[1],
         type: fType, ////
         options: {
-          //
           tableName: tableName,
-        },
+          ...data,
+        }, //
       }, //
       {
         label: '格式化',
         field: 'fieldFormat',
         tabTitle: titles[0],
         type: 'code', //
+        options: {
+          tableName: tableName, //
+        },
+      },
+      {
+        label: '背景色',
+        field: 'bgColor',
+        type: 'code', //
+        tabTitle: titles[0],
+        options: {
+          tableName: tableName, //
+        },
       },
       {
         label: '默认值类型',
@@ -178,8 +257,26 @@ export const getDFConfig = (_this, data) => {
         },
       },
       {
+        field: 'addDisabled',
+        label: '新增禁用',
+        tabTitle: titles[1],
+        type: 'boolean', //
+      },
+      {
+        field: 'editDisabled',
+        label: '编辑禁用',
+        tabTitle: titles[1],
+        type: 'boolean',
+      },
+      {
+        field: 'required',
+        label: '必填',
+        tabTitle: titles[1], //
+        type: 'boolean',
+      },
+      {
         field: 'itemChange',
-        label: '数据变化',
+        label: '值更新事件',
         tabTitle: titles[1],
         type: 'code', //
       },
@@ -212,68 +309,26 @@ export const getDFConfig = (_this, data) => {
         type: 'sform',
         tabTitle: titles[1], //
         label: '参照表配置',
+        options: getBaseInfoEditConfig(_this, tableName), //
+      },
+      {
+        field: 'optionsField',
+        label: '下拉字段配置', //
+        tabTitle: titles[1],
+        type: 'baseinfo', //
         options: {
-          itemSpan: 12,
-          items: [
-            {
-              field: 'tableName',
-              label: '表名',
-              type: 'string', //
-            },
-            {
-              field: 'bindColumns', //
-              label: '绑定字段',
-              span: 24, //
-              tabTitle: titles[1],
-              type: 'stable',
-              options: {
-                openBefore: async (config) => {
-                  let item: FormItem = config?.item //
-                  let data = config.data //
-                  let options = item.config.options
-                  let columns = options.columns
-                  let col1 = columns[1]
-                  if (data?.tableName == null) {
-                    return '请先选择表名' //
-                  }
-                  col1.tableName = data.tableName
-                  return //
-                },
-                showTable: false, //
-                tableTitle: '绑定参照表',
-                tableState: 'edit',
-                columns: [
-                  {
-                    field: 'key',
-                    title: '当前字段',
-                    editType: 'select',
-                    columnSelect: true,
-                    tableName: tableName, //
-                  },
-                  {
-                    field: 'targetKey',
-                    title: '值',
-                    editType: 'select',
-                    columnSelect: true,
-                    tableName: tableName,
-                  },
-                ],
+          baseinfoConfig: {
+            tableName: 'DataDictionary',
+            bindColumns: [
+              {
+                key: 'optionsField',
+                targetKey: 'DictionaryName', //
               },
-            },
-            {
-              field: 'showColumns',
-              label: '显示字段',
-              type: 'select',
-              options: {
-                columnSelect: true,
-                multiple: true,
-                tableName: tableName, //
-              },
-            },
-          ],
+            ], //
+            searchColumns: ['DictionaryName', 'Remark'], //
+          },
         },
       },
-
       {
         label: '选择项',
         field: 'options',
@@ -297,6 +352,13 @@ export const getDFConfig = (_this, data) => {
             },
           ],
         },
+      },
+      {
+        field: 'searchField',
+        label: '查询字段',
+        tabTitle: titles[2],
+        type: 'string', //
+        options: {},
       },
     ],
   }
@@ -341,7 +403,7 @@ export const getAllColTypes = () => {
       value: 'code', //
     },
   ]
-}
+} //
 //
 
 export const getDCConfig = (_this: any, config) => {
@@ -414,8 +476,16 @@ export const getDCConfig = (_this: any, config) => {
       {
         field: 'hidden',
         title: '是否隐藏',
-        type: 'boolean',
+        type: 'boolean', //
+        enableSelect: true, //允许批量修改//
         editType: 'boolean', //
+      },
+      {
+        field: 'editType',
+        title: '编辑类型',
+        type: 'string',
+        editType: 'select', //
+        options: getAllColTypes(), //
       },
       {
         field: 'primary',

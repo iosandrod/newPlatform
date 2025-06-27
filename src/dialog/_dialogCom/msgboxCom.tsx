@@ -21,13 +21,13 @@ export default defineComponent({
     let type = props.type
     let color = ''
     if (type == 'error') {
-      color = 'red'
+      color = 'rgb(255, 0, 0)'
     }
     if (type == 'warning') {
-      color = 'yellow'
+      color = 'rgb(255, 153, 0)'
     }
     if (type == 'success') {
-      color = 'green'
+      color = 'rgb(0, 255, 0)' //
     }
     let style = {
       color: color,

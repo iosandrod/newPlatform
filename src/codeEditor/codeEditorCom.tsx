@@ -3,6 +3,7 @@ import CodeEditor from './codeEditor'
 import { system } from '@/system'
 import tableCom from '@/table/tableCom'
 import tabCom from '@/buttonGroup/tabCom'
+import { Table } from '@/table/table'
 
 export default defineComponent({
   name: 'CodeEditorCom',
@@ -40,7 +41,10 @@ export default defineComponent({
     })
     expose({ _instance: editor })
     let sys = system
-    let mainDesign = sys.getDesignByTableName(props.tableName)
+    let mainDesign = sys.getDesignByTableName(props.tableName) //
+    if (mainDesign == null) {
+      mainDesign = sys.getCurrentPageDesign() //
+    }
     let allCols = mainDesign?.getColumnSelectTreeData()
     let allMethods = mainDesign?.getMergeMethodsSelect() //--
     let infoConfig = null
@@ -90,11 +94,24 @@ export default defineComponent({
         },
         {
           label: '编辑方法',
-          fn: async () => {},
+          fn: async (config) => {
+            //
+            let parent: Table = config.parent
+            let curRow = parent.getCurRow()
+            let sys = system
+            let _config = {
+              modelValue: curRow.code, //
+              tableName: props.tableName, //
+            }
+            let _value = await sys.openCodeDialog(_config) //
+            console.log(_value, 'testValue') //
+            // let mainDesign = sys.getDesignByTableName(props.tableName)
+          },
         },
       ],
       showCheckboxColumn: false, //
-      tableState: 'edit',
+      // tableState: 'edit',
+      tableState: 'scan',
       columns: [
         {
           field: 'name', //

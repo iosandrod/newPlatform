@@ -214,5 +214,8 @@ export const createDefaultTemplate = (design: PageDesign, config) => {
     ],
     logic: {},
   }
+  if (1 == 1) {
+    return null
+  }
   return obj
 }

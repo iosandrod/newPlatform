@@ -72,7 +72,17 @@ const ContextmenuItem = defineComponent({
 
   render() {
     return (
-      <li class={[this.classes, 'h-30']} onClick={this.handleClick} onContextmenu={this.handleContextmenu} onMouseenter={this.handleMouseenter} onMouseleave={this.handleMouseleave}>
+      <li
+        class={[this.classes, 'h-30']}
+        onClick={this.handleClick}
+        onMousedown={(evt: Event) => {
+          evt.preventDefault()
+          evt.stopPropagation() //
+        }}
+        onContextmenu={this.handleContextmenu}
+        onMouseenter={this.handleMouseenter}
+        onMouseleave={this.handleMouseleave}
+      >
         {this.$slots.default?.()}
       </li>
     )

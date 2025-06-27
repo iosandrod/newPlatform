@@ -89,6 +89,10 @@ export default defineComponent({
       >,
       default: null,
     },
+    enableOther: {
+      type: Boolean,
+      default: false,
+    },
     defaultConfig: Object as PropType<VxeSelectPropTypes.DefaultConfig>,
     clearable: Boolean as PropType<VxeSelectPropTypes.Clearable>,
     placeholder: String as PropType<VxeSelectPropTypes.Placeholder>,
@@ -201,7 +205,6 @@ export default defineComponent({
                 let option = config.option
                 let label = option.label
                 let value = option.value
-                // console.log(config)
                 let com = (
                   <div class="w-full flex flex-row justify-between pl-5 pr-5">
                     <div>{label}</div>

@@ -41,6 +41,8 @@ import baseinfoPc from './Baseinfo/pc'
 import baseinfoMobile from './Baseinfo/mobile' //
 import colorPc from './Color/pc'
 import colorMobile from './Color/mobile'
+import ganttPc from './Gantt/pc'
+import ganttMobile from './Gantt/mobile' //
 export const typeMap = {
   image: {
     pc: imagePc,
@@ -121,6 +123,10 @@ export const typeMap = {
   color: {
     pc: colorPc,
     mobile: colorMobile, //
-  }, //
+  },
+  gantt: {
+    pc: ganttPc,
+    mobile: ganttMobile, //
+  },
 }
 export default {}

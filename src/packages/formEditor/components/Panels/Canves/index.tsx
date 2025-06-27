@@ -35,9 +35,27 @@ export default defineComponent({
       if (formIns.pageType !== 'form') {
         TagComponent = 'div' //
       } //
-      let typeProps = hooks.useProps(state, state, unref(isPc), true)
+
+      // let typeProps = hooks.useProps(state, state, unref(isPc), true)
       //@ts-ignore
-     
+      /* 
+         state: StateType,
+    data,
+    isPc = true,
+    isRoot = false,
+    specialHandling,
+    t,
+    ExtraParams,
+      */
+      let typeProps = hooks.useProps({
+        isPc: unref(isPc),
+        isEditModel: unref(isEditModel),
+        isRoot: true,
+        formIns: formIns,
+        data: state,
+        ExtraParams: {},
+        state: state, //
+      })
       let _class = []
       //如果是编辑
       if (!unref(isEditModel)) {
@@ -46,7 +64,7 @@ export default defineComponent({
       const Layout = (
         <LayoutDragGable
           data-layout-type={'root'}
-          class={[unref(isEditModel) && ns.e('wrap'), 'h-full', ..._class]}
+          class={[unref(isEditModel) && ns.e('wrap'), 'h-full w-full', ..._class]}
           data={state.store}
           parent={state.store}
           isRoot
@@ -61,7 +79,7 @@ export default defineComponent({
         )
       }
       let rules = formIns.createFormRules()
-   
+
       let inCom = (
         <div class="h-full w-full">
           {bar}
@@ -76,7 +94,7 @@ export default defineComponent({
             data={formIns.getData()}
           >
             {Layout}
-          </TagComponent>     
+          </TagComponent>
         </div>
       )
       let _inCom = (

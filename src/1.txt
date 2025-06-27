@@ -5991,3 +5991,1932 @@ export const formConfig = {
 //     }
 //   }
 // }
+ // let _format = column.getFormat()
+    // _value = _format({
+    //   row: record,
+    //   col: column,
+    //   field: column.getField(),
+    //   table: column.table,
+    // })
+
+
+ // let _length = 200 //
+      // rowStart = rowStart - _length
+      // if (rowStart < 0) {
+      //   rowStart = 0 //
+      // }
+      // rowEnd = rowEnd + _length
+
+      // let currentIndexContain = _table.currentIndexContain
+      // //显示在视图上
+      // let _arr = currentIndexContain[_index]
+      // if (_arr == null) {
+      //   currentIndexContain[_index] = {}
+      //   _arr = currentIndexContain[_index] //
+      // }
+      // let field = _this.getField()
+      // _arr[field] = container //
+      // } else {
+      // let currentIndexContain = _table.currentIndexContain //
+      // delete currentIndexContain[_index]
+      // }
+
+
+       // console.log(fitem,item,'tseetitem')//
+                // let addCols = config.addCols || []
+                // let updateCols = config.updateCols || []
+                // let allCols = [...addCols, ...updateCols]
+                // item.config.columns = allCols //
+
+
+
+                   {
+        type: 'table',
+        label: '表格布局',
+        icon: 'tableStokeP2',
+        id: '',
+        rows: [
+          {
+            type: 'tr',
+            columns: [
+              {
+                type: 'td',
+                options: {
+                  colspan: 1,
+                  rowspan: 1,
+                  isMerged: false,
+                },
+                list: [],
+                style: {},
+              },
+            ],
+          },
+        ],
+        options: {
+          width: 100,
+          widthType: '%',
+        },
+      },
+       // if (1 == 1) {
+    //   let _columns = columns.map((col) => {
+    //     return { field: col.getField(), width: 100 }
+    //   })
+    //   return _columns //
+    // }
+      //   let dropCom = (
+      //     <DropdownCom
+      //       v-slots={{
+      //         default: () => {
+      //           return com
+      //         },
+      //         dropdown: () => {
+      //           return <div class="h-300 w-200 bg-red"></div>
+      //         },
+      //       }}
+      //     ></DropdownCom>
+      //   )
+      //   let _com = dropCom //
+
+       // let tRef: Table = this.getRef(tableName)
+    // let curRow = null
+    // let _tableName = this.getTableName()
+    // if (tRef == null) {
+    //   curRow = this.tableDataMap[_tableName]?.curRow ////
+    // } else {
+    //   curRow = tRef.getCurRow()
+    // }
+    // return curRow //
+
+     let minRow = Math.min(startX.value, r)
+      let maxRow = Math.max(startX.value, r)
+      let minCol = Math.min(startY.value, c)
+      let maxCol = Math.max(startY.value, c)
+      let changed = true
+
+      // 🚀 不断扩展合并范围直到稳定
+
+      // 🚀 迭代扩展区域，直到稳定
+      while (changed) {
+        changed = false
+
+        for (let row = minRow; row <= maxRow; row++) {
+          for (let col = minCol; col <= maxCol; col++) {
+            const layout = layoutDetail?.[row - 1]?.[col - 1]
+            if (!layout || layout.colSpan === 0 || layout.rowSpan === 0)
+              continue
+
+            const rowSpan = layout.rowSpan ?? 1
+            const colSpan = layout.colSpan ?? 1
+
+            const rowEnd = row + rowSpan - 1
+            const colEnd = col + colSpan - 1
+
+            const rowStart = row
+            const colStart = col
+
+            if (rowStart < minRow) {
+              minRow = rowStart
+              changed = true
+            }
+            if (colStart < minCol) {
+              minCol = colStart
+              changed = true
+            }
+            if (rowEnd > maxRow) {
+              maxRow = rowEnd
+              changed = true
+            }
+            if (colEnd > maxCol) {
+              maxCol = colEnd
+              changed = true
+            }
+          }
+        }
+      }
+
+      // ✅ 最终结果是扩展后的矩形区域
+
+      // let startLayout = tableLayout?.[startX.value - 1]?.[startY.value - 1]
+      // if (startLayout?.colSpan > 1) {
+      //   c = c + startLayout.colSpan - 1
+      // }
+      // if (startLayout?.rowSpan > 1) {
+      //   r = r + startLayout.rowSpan - 1 //
+      // }
+      // if (layout?.colSpan > 1) {
+      //   c = c + layout.colSpan - 1
+      // }
+      // if (layout?.rowSpan > 1) {
+      //   r = r + layout.rowSpan - 1
+      // }
+
+       // endX.value = r
+        // endY.value = c
+        // endX.value = maxRow
+        // endY.value = maxCol
+
+
+
+         for (let rr = 1; rr <= tableConfig.rows; rr++) {
+          const idx = (rr - 1) * tableConfig.cols + (c - 1)
+          const info = tableConfig.layoutDetail[idx]
+          if (info.colSpan === curConfig.colSpan) {
+            tableData[`${rr}-${c}`].width =
+              (rect.width + dX) / Number(props.scale)
+          }
+        }
+        // 同一行高度
+        for (let cc = 1; cc <= tableConfig.cols; cc++) {
+          const idx = (r - 1) * tableConfig.cols + (cc - 1)
+          const info = tableConfig.layoutDetail[idx]
+          if (info.rowSpan === curConfig.rowSpan) {
+            tableData[`${r}-${cc}`].height =
+              (rect.height + dY) / Number(props.scale)
+          }
+        }
+
+         // const startIndex = (sx - 1) * tableConfig.cols + (sy - 1)
+      // const groupId = tableConfig.layoutDetail[startIndex].groupId
+      // if (!groupId) return
+      // tableConfig.layoutDetail.forEach((info) => {
+      //   if (info.groupId === groupId) {
+      //     info.rowSpan = 1
+      //     info.colSpan = 1
+      //     delete info.groupId
+      //   }
+      // })
+
+
+      // if (this.runClearSelect == true) {
+        //   this.getInstance().clearSelected()
+        //   this.runClearSelect = false //
+        // }
+
+
+         // if (show.value == false) {
+      //   return null
+      // }
+      // if (1 == 1) {
+      //   let com = (
+      //     <div class="h-400 w-400">
+      //       <TableCom
+      //         {..._config}
+      //         showHeaderButtons={true}
+      //         buttons={[
+      //           {
+      //             label: '更新',
+      //             fn: async (config) => {
+      //               console.log('更新') //
+      //               let table: Table = config.parent //
+      //               // console.log(config) ////
+      //               let fData = table.getFlatTreeData()
+      //               let _data = fData.filter((item) => {
+      //                 let _rowState = item['_rowState']
+      //                 return _rowState == 'change'
+      //               })
+      //               console.log(_data) //
+      //             },
+      //           },
+      //         ]}
+      //       ></TableCom>
+      //     </div>
+      //   )
+      //   return com //
+      // }
+
+       // systemIns.getHttp().registerEvent('permissions patched', () => {
+    //   //   debugger //
+    //   console.log('权限修改了') //
+    //   //   systemIns.getMenuData() //
+    // }) //
+
+     // let tMapData = this.getTableRefData(tableName) //
+    // let row = config.row
+    // tMapData['curRow'] = row //
+
+
+    if (tableName == 't_PurOrder') {
+      debugger //
+    } ////
+
+
+     let _data = this.getLayoutData()
+    //@ts-ignore
+    _data.tableName = this.getMainTableName()
+    let http = this.getHttp()
+    let _res = await http.create('entity', _data) // //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <template>
+  <div class="flex flex-col h-screen">
+    <!-- Header -->
+    <header class="flex items-center justify-between px-5 text-white bg-blue-600 shadow-md h-60">
+      <!-- Logo -->
+      <div class="text-2xl font-bold">MyApp Platform</div>
+      <!-- Navigation Menu -->
+      <el-menu
+        mode="horizontal"
+        :default-active="activeHeader"
+        background-color="transparent"
+        text-color="#ffffff"
+        active-text-color="#ffe58f"
+        class="flex-1 mx-10"
+      >
+        <el-menu-item index="1" class="px-4">Home</el-menu-item>
+        <el-menu-item index="2" class="px-4">About</el-menu-item>
+        <el-menu-item index="3" class="px-4">Contact</el-menu-item>
+      </el-menu>
+      <!-- User Module -->
+      <div class="flex items-center ml-5">
+        <template v-if="isLoggedIn">
+  <div class="flex items-center space-x-2">
+    <el-dropdown
+      split-button
+      type="primary"
+      @click="logout"
+      placement="bottom-end"
+      class="h-40 px-4 rounded-lg"
+    >
+      <span class="flex items-center space-x-2">
+        <img :src="user.avatar" alt="avatar" class="w-40 h-40 rounded-full" />
+        <span class="font-medium">{{ user.name }}</span>
+      </span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item command="profile">个人中心</el-dropdown-item>
+          <el-dropdown-item command="support">联系客服</el-dropdown-item>
+          <el-dropdown-item divided command="author">联系作者</el-dropdown-item>
+          <el-dropdown-item command="promo">获取优惠</el-dropdown-item>
+          <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </div>
+</template>
+        <template v-else>
+          <el-button type="primary" size="small" @click="login">Login</el-button>
+        </template>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1">
+      <!-- Sidebar Menu -->
+      <aside class="bg-gray-100 w-200">
+        <el-menu :default-active="activeSidebar" class="w-full">
+          <el-menu-item index="1" class="flex items-center h-40 px-4"><i class="mr-2 el-icon-menu"></i>Dashboard</el-menu-item>
+          <el-menu-item index="2" class="flex items-center h-40 px-4"><i class="mr-2 el-icon-setting"></i>Settings</el-menu-item>
+          <el-menu-item index="3" class="flex items-center h-40 px-4"><i class="mr-2 el-icon-user"></i>Profile</el-menu-item>
+          <el-menu-item index="4" class="flex items-center h-40 px-4"><i class="mr-2 el-icon-document"></i>Reports</el-menu-item>
+        </el-menu>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="flex-1 p-5 overflow-auto bg-gray-50">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-20">
+          <el-card v-for="app in apps" :key="app.id" class="transition-transform transform hover:-translate-y-2">
+            <div class="flex items-center mb-2">
+              <i :class="app.icon + ' text-24 mr-2'" />
+              <span class="text-lg font-semibold">{{ app.name }}</span>
+            </div>
+            <div class="mb-4 text-sm text-gray-600">{{ app.description }}</div>
+            <div class="text-right"><el-button type="primary" size="small">Open</el-button></div>
+          </el-card>
+        </div>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="flex items-center justify-center h-40 text-gray-500 bg-gray-100">
+      © 2025 MyApp Platform
+    </footer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+interface AppItem {
+  id: number;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+// 应用列表数据
+const apps = ref<AppItem[]>([
+  { id: 1, name: 'Analytics', description: 'View data insights', icon: 'el-icon-data-analysis' },
+  { id: 2, name: 'Tasks', description: 'Manage your tasks', icon: 'el-icon-check' },
+  { id: 3, name: 'Messages', description: 'Check your messages', icon: 'el-icon-message' },
+  { id: 4, name: 'Settings', description: 'Configure your preferences', icon: 'el-icon-setting' }
+]);
+
+// 菜单激活状态
+const activeHeader = ref('1');
+const activeSidebar = ref('1');
+
+// 用户登录状态及信息
+const isLoggedIn = ref(false);
+const user = ref({ name: 'User Name', avatar: 'https://via.placeholder.com/40' });
+
+// 登录与登出方法 (替换为实际逻辑)
+function login() {
+  isLoggedIn.value = true;
+}
+
+function logout() {
+  isLoggedIn.value = false;
+}
+
+function handleCommand(command: string) {
+  if (command === 'profile') {
+    // 跳转到个人中心
+    console.log('Go to profile');
+  } else if (command === 'logout') {
+    logout();
+  }
+}
+</script>
+
+
+ <!-- <el-menu-item index="2" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-setting"></i>
+            Settings
+          </el-menu-item>
+          <el-menu-item index="3" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-user"></i>
+            Profile
+          </el-menu-item>
+          <el-menu-item index="4" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-document"></i>
+            Reports 
+          </el-menu-item> -->
+          // const routes: RouteRecordRaw[] = []
+  // Object.entries(pages).forEach(([filePath, module]) => {
+  //   // filePath 示例: '../views/user/profile/index.vue'
+  //   // 拆分：['..','views','user','profile','index.vue'] -> 取 ['user','profile']
+  //   const segments = filePath.split('/').slice(2, -1)
+  //   console.log(segments, 'segments')
+  //   let appName=segments[1]
+  //   // 如果没有 segments，说明是 views/index.vue -> 根路由
+  //   if (segments.length === 0) {
+  //     routes.push({
+  //       path: '/',
+  //       name: 'home',
+  //       component: module.default,
+  //     })
+  //     return
+  //   }
+
+  //   // 递归插入到 routes 中
+  //   let parentArray = routes
+  //   segments.forEach((seg, idx) => {
+  //     const isLast = idx === segments.length - 1
+  //     const routePath = idx === 0 ? `/${seg}` : seg
+  //     let route = parentArray.find((r) => r.path === routePath)
+  //     if (!route) {
+  //       route = {
+  //         path: routePath,
+  //         name: seg,
+  //         // 只有最末层才挂载 component
+  //         component: isLast ? module.default : undefined,
+  //         children: [],
+  //       }
+  //       parentArray.push(route)
+  //     } else if (isLast) {
+  //       // 如果上次只创建了空壳，这里补上 component
+  //       route.component = module.default
+  //     }
+
+  //     // 下一层挂载在 children
+  //     if (!route.children) route.children = []
+  //     parentArray = route.children
+  //   })
+  // })
+
+  // router.addRoute('pageIndex', {
+      //   path: 'companyHome',
+      //   name: 'companyHome', //
+      //   component: () => import('@/pages/platform/home/erpHome.vue'), //
+      //   meta: {
+      //     icon: 'CreditCardOutlined',
+      //   },
+      // })
+
+
+       // chunkFileNames: (chunk) => {
+    //   return 'assets/' + chunk.name + '.[hash]' + '.' + timestamp + '.js'
+    // },
+    // assetFileNames: (asset) => {
+    //   const name = asset.name
+    //   if (name && (name.endsWith('.css') || name.endsWith('.js'))) {
+    //     const names = name.split('.')
+    //     const extname = names.splice(names.length - 1, 1)[0]
+    //     return `assets/${names.join('.')}.[hash].${timestamp}.${extname}`
+    //   }
+    //   return 'assets/' + asset.name
+    // },
+    if (nextForm != null && formIns.isDesign == true) {
+        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
+      } ////
+
+
+      if (nextForm != null && formIns.isDesign == true) {
+        com = <Everright-form-editor formIns={nextForm}></Everright-form-editor>
+      }
+
+
+
+  
+
+
+         if (store.length == 1) {
+          let n0 = store[0]
+          let pContext = n0.context
+          let pp = pContext.parent
+          if (pp.type == 'col') {
+            let pp1 = pp.context.parent
+            if (pp1.type == 'grid') {
+              let pp1columns = pp1.columns
+              if (pp1columns.length == 1) {
+                let pp1Context = pp1?.context // is inline
+                let pppparent = pp1Context?.parent //is Array
+                let ppppContext = pppparent?.context
+                let ppppparent = ppppContext?.parent
+                if (ppppparent == ER.state.store) {
+                  //
+                  // debugger
+                  newElement = ER.wrapElement(
+                    _.cloneDeep(oldEl),
+                    inserRowIndex !== '',
+                    true,
+                    isBlock,
+                    true,
+                  )
+                  inserRowIndex = ppppparent.findIndex(
+                    (node) => node.id == pppparent.id,
+                  )
+                  store = ER.state.store //
+                  preP = ER.state.store //
+                  // ER.state.store.splice(inserRowIndex, 0, newElement) //
+                }
+              }
+            }
+          }
+        }
+
+        let isInRootDiv = false
+      if (inserRowIndex !== '') {
+        let store = []
+        store = Array.isArray(prevSortable?.options?.parent)
+          ? prevSortable?.options.parent
+          : prevSortable?.options?.parent?.list
+        // 在指定的索引位置插入新元素
+        let _store = ER.state.store
+        if (_store == store) {
+          isInRootDiv = true //
+        }
+      } //
+
+      // state.store = newData
+        // state.store.forEach((e) => {
+        //   utils.addContext({ node: e, parent: state.store, form: this }) //
+        // })
+
+
+        {/* <router-view
+                  v-slots={{
+                    default: (config) => {
+                      const { Component, route } = config
+                      if (!Component) {
+                        return <div></div>
+                      }
+                      const FullPath = route.fullPath
+                      let _com = (
+                        <KeepAlive>
+                          <Component key={FullPath} />
+                        </KeepAlive>
+                      ) //
+                      return _com
+                    },
+                  }}
+                ></router-view> */}
+
+                // let _data = data.map((_row) => {
+      //   let row = { ..._row } //
+      //   let children = row.columns || []
+      //   let list = row.list || []
+      //   let rows = row.rows || []
+      //   children = [...children, ...list, ...rows]
+      //   if (Array.isArray(children) && children.length > 0) {
+      //     return [row, ...fn(children)]
+      //   }
+      //   return [row]
+      // })
+      // return _data.flat()
+      // let design = this.getMainPageDesign()
+    // if (design && tableName != null) {
+    //   if (isProps == false) {
+    //     design.setCurRow(row, tableName)
+    //   }
+    // }
+
+    /* 
+      async function fn() {
+    let tRef = this.getRef('t_CustomerCls')
+    let curRow = tRef.getCurRow()
+    let _curRow = null
+    if (curRow == null) {
+        this.getSystem().confirmMessage('请选择一行进行编辑')
+        return 
+        // _curRow = {
+        //     cParentClsNo: '0'
+        // }
+    } else {
+        // let id = curRow['cClsNo']
+        // _curRow = {
+        //     cParentClsNo: id
+        // }
+    }
+    await this.confirmEditEntity({
+        tableName: 't_CustomerCls',
+        curRow: _curRow,
+        editType: "edit"
+    })
+}
+    */
+
+    let realTableName = this.getRealTableName()
+    let erpTable = await this.getHttp().find('sys_ErpTable', {
+      tableName: realTableName,
+    }) //
+    // console.log(erpTable) //
+    let row = erpTable[0]
+    let _obj: any = {}
+    Object.entries(row).forEach(([key, value]) => {
+      try {
+        let _v = JSON.parse(value as any)
+        if (typeof _v == 'object' || Array.isArray(_v)) {
+          //
+          value = _v //
+        }
+      } catch (error) {}
+      _obj[key] = value //
+    })
+    let _columns = this.getTableConfig().columns
+    _columns = JSON.parse(JSON.stringify(_columns))
+    // console.log(_obj) ////
+    let columns = _obj.columns || []
+
+
+    // let _columns = this.getTableConfig().columns
+    // _columns = JSON.parse(JSON.stringify(_columns))
+
+     function handleEventMessageClick() {
+      alert('点击了Event消息')
+    }
+
+    function handleSetValue() {
+      naiveChatRef.value?.setValue('you wife is charming')
+    }
+
+    function handleAvatarRounded() {
+      rounded.value = rounded.value === 4 ? 40 : 4
+    }
+
+       // let createContactId = 10011
+    // function handleAddContact() {
+    //   createContactId += 1
+    //   naiveChatRef.value?.appendContact({
+    //     id: createContactId,
+    //     nickname: `好友${createContactId}`,
+    //     avatar: '',
+    //     index: 'H',
+    //   })
+    // }
+ const userInfo = {
+      nickname: 'King',
+      avatar:
+        'https://thirdwx.qlogo.cn/mmopen/vi_32/RMksZlPP4myx9pbGzt3PmV2FNIpia8hVHpUXbHM0RfbJtsSMEWCLicbvGuJRMpoAam3sZclNo0YtOnvJ0a8eMtyQ/132',
+      id: 1000,
+    }
+
+
+      <div style={{ display: 'flex', gap: '12px', padding: '20px 0' }}>
+            {/* <button onClick={handleAddContact}>添加一个联系人</button> */}
+            {/* <button onClick={handleSendEventMessage}>发送一条Event消息</button> */}
+            {/* <button onClick={handleSetValue}>给输入框插入内容</button> */}
+            {/* <button onClick={handleAvatarRounded}>切换头像形状</button> */}
+            {/* <button onClick={handleAppendMessage}>梁老师发来一条消息</button>
+            <button onClick={handleRemoveMessage}>删除一条消息</button>
+            <button onClick={handleSendMessage}>发送一条消息</button> */}
+            {/* <button onClick={handleUpdateMessage}>修改一条消息</button> */}
+            {/* <button onClick={handleUpdateContact}>修改联系人</button> */}
+          </div>
+
+          {/* <div style={{ display: 'flex', gap: '12px' }}>
+            <button onClick={handleAddContact}>添加一个联系人</button>
+            <button onClick={handleSendEventMessage}>发送一条Event消息</button>
+            <button onClick={handleSetValue}>给输入框插入内容</button>
+            <button onClick={handleAvatarRounded}>切换头像形状</button>
+          </div> */}
+
+          <div
+            style={{ marginTop: '50px', textAlign: 'center', color: '#4B5563' }}
+          >
+            {/* 你可以在此处添加更多内容 */}
+          </div>
+
+          // router.addRoute('pageIndex', {
+//   path: 'companyHome',
+//   name: 'companyHome', //
+//   component: () => import('@/pages/platform/home/erpHome.vue'), //
+//   meta: {
+//     icon: 'CreditCardOutlined',
+//   },
+// })
+// nextTick(() => {
+//   router.push({
+//     name: 'companyHome',
+//   })
+// })
+
+ // let t = createText({
+    //   text: value, //
+    //   fontSize: 14,
+    //   fill: 'black',
+    //   fontWeight: 'bold',
+    // })
+    // container.add(t) //
+    /*
+
+      */
+
+    // let _index = record['_index'] //
+    // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
+    // let rowStart = scrollConfig?.rowStart
+    // let rowEnd = scrollConfig?.rowEnd
+    // if (rowStart == null || rowEnd == null) {
+    //   rowStart = 0
+    //   rowEnd = 0
+    // }
+    // let _row = row
+    // let currentIndexContain = _table.currentIndexContain
+    // container['currentRowIndex'] = row //
+    // container['updateCanvas'] = () => {
+
+       // {
+    //   label: '登录方式',
+    //   field: 'loginType',
+    //   type: 'select',
+    //   required: true,
+    //   options: {
+    //     options: [
+    //       { label: '邮箱登录', value: 'email' },
+    //       { label: '用户名登录', value: 'username' },
+    //     ],
+    //   },
+    // },
+    // { field: 'email', type: 'string', label: '邮箱', required: true },
+
+
+     // {
+        //   field: 'companyName',
+        //   label: '公司名称',
+        //   required: true,
+        // },
+        // {
+        //   field: 'companyCnName',
+        //   label: '公司中文名',
+        //   required: true,
+        // },
+
+
+        /* 
+feathers: {
+    provider: 'socketio',
+    headers: {
+      host: 'localhost:3031',
+      connection: 'Upgrade',
+      pragma: 'no-cache',
+      'cache-control': 'no-cache',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36 Edg/137.0.0.0',    
+      upgrade: 'websocket',
+      origin: 'http://localhost:3003',
+      'sec-websocket-version': '13',
+      'accept-encoding': 'gzip, deflate, br, zstd',
+      'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6,fr;q=0.5',
+      cookie: 'session=U2FsdGVkX1/8m7tAhv2rq4Pbjsd8DSbsri1CXZ3/DrkZ6xv/YGE1bbXA5gosoyewwOyoHKvqmvgKOrhcWetEn8hw7P8nOxCE1QuIIdo6bY07MOCnERli9o5lpoOGozUB/x4XbJmg3UApx5guO+cX/g==; Hm_lvt_52eb07460b7dc3e27bb80c78c0988671=1743073927',
+      'sec-websocket-key': 'Afbxp7rAlhCjcDFzQXLMDA==',
+      'sec-websocket-extensions': 'permessage-deflate; client_max_window_bits',
+      authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE3NTAwNDc3MjQsImV4cCI6MTc1MDEzNDEyNCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjEiLCJqdGkiOiJiM2Q3ODZhOC0wNTQ4LTRkZGMtYTIyYS00NTc4Y2RjZGUxN2YifQ.f0nLDh680HhW0MyK-Nrz_aEgmTG1QovFqx_1GvUgh0Q'
+    },
+    authentication: {
+      strategy: 'jwt',
+      accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJpYXQiOjE3NTAwNDc3MjQsImV4cCI6MTc1MDEzNDEyNCwiYXVkIjoiaHR0cHM6Ly95b3VyZG9tYWluLmNvbSIsInN1YiI6IjEiLCJqdGkiOiJiM2Q3ODZhOC0wNTQ4LTRkZGMtYTIyYS00NTc4Y2RjZGUxN2YifQ.f0nLDh680HhW0MyK-Nrz_aEgmTG1QovFqx_1GvUgh0Q'
+    },
+    user: {
+      id: 1,
+      createdAt: '2025-05-24 09:13:24',
+      updatedAt: '2025-05-24 09:13:24',
+      username: 'dxf',
+      email: '1151685410@qq.com',
+      password: '$2b$10$mtmxQd1lFzh6ORBsVOsfvOzH2XN107xINOtc3AmggeDO9.CfXztXm',
+      appName: null,
+      companyName: 'newC',
+      companyCnName: '新公司',
+      companyType: null,
+      companyId: null,
+      phone: null,
+      avatar: '/images/7332066ce14ee350ac57f9d74393a604d7c7ba4fdd3e15f3a47daa59bbc647f9.jpg',
+      companyLogo: '/images/7332066ce14ee350ac57f9d74393a604d7c7ba4fdd3e15f3a47daa59bbc647f9.jpg'
+    }
+  },
+
+
+*/
+
+// try {
+      //   let res = await this?.client?.authenticate({
+      //     strategy: 'jwt',
+      //     accessToken: token, //
+      //     _unUseCaptcha: true,
+      //   }) //
+      //   system.confirmMessage('登录成功') //
+      //   system.loginInfo = res //
+      //   return res
+      // } catch (error) {
+      //   console.error(error, '登录失败')
+      //   localStorage.removeItem('feathers-jwt') //
+      // }
+
+      // export const client: any = {
+//   get: () => {
+//     return {
+//       emit: () => {},
+//     }
+//   },
+//   authenticate: () => {},
+// } //
+
+ // let f = layoutConfig.fields
+    // debugger//
+    // f = f.filter((e) => e.type != null) //
+    // layoutConfig.layout.pc=[layoutConfig.layout.pc[0]]
+    // layoutConfig.layout.mobile=[layoutConfig.layout.mobile[0]]//
+    // layoutConfig.fields = f //
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+  @for $i from 1 through 2000 {
+    .w-#{$i} {
+      width: #{$i}px;
+    }
+  }
+  .h-full {
+    height: 100%;
+  }
+  @for $i from 1 through 2000 {
+    .h-#{$i} {
+      height: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .pl-#{$i} {
+      padding-left: #{$i}px !important;
+    }
+  } 
+  @for $i from 1 through 2000 {
+    .pr-#{$i} {
+      padding-right: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .pt-#{$i} {
+      padding-top: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .pb-#{$i} {
+      padding-bottom: #{$i}px !important;
+    }
+  }
+
+  @for $i from 1 through 2000 {
+    .ml-#{$i} {
+      margin-left: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .mr-#{$i} {
+      margin-right: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .mt-#{$i} {
+      margin-top: #{$i}px !important;
+    }
+  }
+  @for $i from 1 through 2000 {
+    .mb-#{$i} {
+      margin-bottom: #{$i}px !important;
+    }
+  }
+   @for $i from 1 through 2000 {
+    .p-#{$i} {
+      padding: #{$i}px !important;
+    }
+  }
+ @for $i from 1 through 2000 {
+    .space-y-#{$i} {
+      padding: #{$i}px !important;
+    }
+  }
+   //
+              // let com = (
+              //   <div class="pl-10 pr-10 -mb-px text-blue-500 cursor-pointer focus:outline-none">
+              //     <div>{item.getLabel()}</div>
+              //   </div>
+              // )
+
+              <template>
+  <mainVue></mainVue>
+</template>
+<script setup lang="ts">
+import { system } from '@/system'
+import { onMounted } from 'vue'
+import mainVue from '../index.vue'
+onMounted(async () => {
+  let http = system.getHttp()
+  http.registerEvent('permissions created', (data) => {})
+})
+</script>
+
+
+
+ <header class="flex items-center justify-between px-6 py-4 bg-white shadow">
+            <div
+              onClick={() => {
+                system.getRouter().back() ////
+              }}
+              class="flex items-center text-blue-600 cursor-pointer hover:text-blue-800"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-20 h-20 mr-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              <span>返回</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-gray-700">欢迎</span>
+              <span class="font-medium">13798134216</span>
+              <img alt="头像" class="w-32 h-32 rounded-full" />
+            </div>
+          </header>
+
+          // import tailwindcss from '@tailwindcss/postcss'
+// import autoprefixer from 'autoprefixer'
+// module.exports = {
+//   plugins: [tailwindcss(), autoprefixer()], //
+// }
+// postcss.config.cjs
+// const tailwindcss = require('@tailwindcss/postcss')
+// const autoprefixer = require('autoprefixer')
+
+// module.exports = {
+//   plugins: [tailwindcss(), autoprefixer()],
+// }
+
+// let formSize = _this.getFontSize()
+    // let svg = createSvgTextString(`${_value}`, width, height, 12) //
+    // console.log(svg, 'svg') //
+    // let locationName = createImage({
+    //   x: 0,
+    //   y: 0,
+    //   //     image: `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+    //   //   <text x="0" y="${
+    //   //     height / 2 - formSize / 2
+    //   //   }" font-family="Arial" font-size="${formSize}px" fill="black">
+    //   //     ${`${_value}`}
+    //   //   </text>
+    //   // </svg>`,
+    //   image:svg,//
+    // })
+
+     <!-- 第三方登录按钮 -->
+        <!-- <div class="flex justify-center space-x-6">
+          <button type="button">
+            <img
+              alt="WeChat"
+              class="w-10 h-10"
+            />
+          </button>
+          <button type="button">
+            <img
+              alt="QQ"
+              class="w-10 h-10"
+            />
+          </button>
+        </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <template>
+  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div
+      class="flex w-full max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg"
+    >
+      <!-- 左侧宣传/Logo 区 -->
+      <div
+        class="flex-col hidden w-1/2 text-white lg:flex bg-gradient-to-br from-blue-500 to-blue-600"
+      >
+        <div class="w-full h-full">
+          <img alt="Bangboss" class="h-full mb-6" />
+        </div>
+      </div>
+      <div class="flex flex-col w-full h-full p-8 lg:w-1/2">
+        <h2 class="mb-8 text-3xl font-bold text-gray-900">登录</h2>
+        <div>
+          <er-form ref="fins" v-bind="loginFConfig" />
+        </div>
+        <div class="flex justify-center w-full my-4" v-html="code"></div>
+        <div class="flex items-center justify-between mb-6">
+          <label class="flex items-center text-gray-700">
+            <input
+              type="checkbox"
+              class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <span class="ml-2">记住我</span>
+          </label>
+          <div
+            class="text-blue-600 cursor-pointer"
+            @click="system.routeTo('register')"
+          >
+            忘记密码?
+          </div>
+        </div>
+        <button
+          @click="loginFn"
+          class="w-full py-2 mb-8 font-medium text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
+        >
+          登录
+        </button>
+        <div class="flex items-center mb-8 text-gray-500">
+          <span class="flex-1 border-t"></span>
+          <span class="px-4 text-sm">
+            <span
+              class="text-blue-600 cursor-pointer"
+              @click="system.routeTo('register')"
+            >
+              立即注册
+            </span>
+          </span>
+          <span class="flex-1 border-t"></span>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { reactive, ref, onMounted } from 'vue'
+import { system } from '@/system'
+
+interface Company {
+  appName: string
+  appCnName?: string
+  companyName: string
+  companyCnName?: string
+  userid: number
+}
+
+const data = reactive({
+  appName: 'platform',
+  userid: 0,
+  loginType: 'email',
+  email: '1151685410@qq.com',
+  password: '1',
+  _unUseCaptcha: true,
+})
+
+const loginFConfig: any = reactive({
+  labelWidth: 70,
+  data,
+  items: [
+    {
+      label: '登录方式',
+      field: 'loginType',
+      type: 'select',
+      required: true,
+      options: {
+        options: [
+          { label: '邮箱登录', value: 'email' },
+          { label: '用户名登录', value: 'username' },
+        ],
+      },
+    },
+    { field: 'email', type: 'string', label: '邮箱', required: true },
+    {
+      field: 'password',
+      type: 'string',
+      label: '密码',
+      required: true,
+      options: { password: true },
+    },
+    {
+      field: 'userid',
+      type: 'select',
+      label: '公司',
+      required: true,
+      options: { options: [] },
+    },
+    {
+      field: 'appName',
+      type: 'select',
+      label: '应用',
+      required: true,
+      options: { options: [] },
+    },
+    { field: '_captcha', label: '验证码', type: 'string' },
+  ],
+  itemSpan: 24,
+})
+
+async function getCompanyFn() {
+  const all: Company[] = await system.getAllRegisterCompany()
+  loginFConfig.items[3].options.options = all.map((item) => ({
+    label: item.companyCnName || item.companyName,
+    value: item.userid,
+  }))
+  loginFConfig.items[4].options.options = all.map((item) => ({
+    label: item.appCnName || item.appName,
+    value: item.appName,
+  }))
+}
+
+onMounted(getCompanyFn)
+
+const code = ref<string>('')
+const cdata = ref<string>('')
+
+async function loadCaptcha() {
+  const res = await system.createCaptcha('authentication_create')
+  code.value = res.data
+  cdata.value = res.text
+}
+
+onMounted(loadCaptcha)
+
+const fins = ref<any>(null)
+
+async function loginFn() {
+  const form = fins.value as any
+  await form.validate()
+  await system.loginUser(data)
+}
+</script>
+
+
+{/* <button
+              onClick={() => {
+                console.log(_reg2.value, 'testReg2') //
+              }}
+            >
+              测试1
+            </button> */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <template>
+  <div class="flex flex-col h-screen">
+    <!-- Header -->
+    <header
+      class="flex items-center justify-between px-5 text-white bg-blue-600 shadow-md h-60"
+    >
+      <!-- Logo -->
+      <div class="text-2xl font-bold">低代码应用中心</div>
+      <!-- Navigation Menu -->
+      <el-menu
+        mode="horizontal"
+        :default-active="activeHeader"
+        background-color="transparent"
+        text-color="#ffffff"
+        active-text-color="#ffe58f"
+        class="flex-1 mx-10"
+      >
+        <el-menu-item index="1" class="px-4">Home</el-menu-item>
+        <el-menu-item index="2" class="px-4">About</el-menu-item>
+        <el-menu-item index="3" class="px-4">Contact</el-menu-item>
+      </el-menu>
+      <!-- User Module -->
+      <div class="flex items-center ml-5">
+        <template v-if="isLoggedIn">
+          <div class="flex items-center space-x-2">
+            <el-dropdown
+              type="primary"
+              @click="handleCommand"
+              placement="bottom-end"
+              class="h-40 px-4 rounded-lg"
+            >
+              <span class="flex items-center space-x-2">
+                <span class="font-medium text-white">
+                  {{ systemIns.getUserName() }}
+                </span>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="profile" @click="(e) => {}">
+                    个人中心
+                  </el-dropdown-item>
+                  <el-dropdown-item command="support">
+                    联系客服
+                  </el-dropdown-item>
+                  <el-dropdown-item divided command="author">
+                    联系作者
+                  </el-dropdown-item>
+                  <el-dropdown-item command="promo">获取优惠</el-dropdown-item>
+                  <el-dropdown-item
+                    @click="
+                      (e) => {
+                        systemIns.logout() //
+                      }
+                    "
+                    command="logout"
+                  >
+                    退出登录
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
+        </template>
+        <template v-else>
+          <el-button type="primary" size="small" @click="login">
+            Login
+          </el-button>
+        </template>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex flex-1">
+      <!-- Sidebar Menu -->
+      <aside class="bg-gray-100 w-200">
+        <el-menu :default-active="activeSidebar" class="w-full">
+          <el-menu-item index="1" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-menu"></i>
+            应用列表
+          </el-menu-item>
+        </el-menu>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="flex-1 p-5 overflow-auto bg-gray-50">
+        <div
+          class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-20"
+        >
+          <el-card
+            v-for="app in apps"
+            :key="app.id"
+            class="transition-transform transform hover:-translate-y-2"
+          >
+            <div class="flex items-center mb-2">
+              <i :class="app.icon + ' text-24 mr-2'" />
+              <span class="text-lg font-semibold">{{ app.cnName }}</span>
+            </div>
+            <div class="mb-4 text-sm">{{ app.description }}</div>
+            <div class="text-right">
+              <el-button
+                type="primary"
+                @click="() => systemIns.installApp(app.name)"
+                size="small"
+              >
+                安装
+              </el-button>
+              <el-button
+                type="primary"
+                @click="() => systemIns.openApp(app.name)"
+                size="small"
+              >
+                进入
+              </el-button>
+            </div>
+          </el-card>
+        </div>
+      </main>
+    </div>
+
+    <!-- Footer -->
+    <footer
+      class="flex items-center justify-center h-40 text-gray-500 bg-gray-100"
+    >
+      © 2025 MyApp Platform
+    </footer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { System } from '@/system'
+import { onMounted } from 'vue'
+import { computed, inject } from 'vue'
+import { ref } from 'vue' //
+let systemIns: System = inject('systemIns') //
+interface AppItem {
+  id: number
+  name: string
+  description: string
+  icon: string
+  cnName: string //
+} //
+onMounted(async () => {
+  let allApp = await systemIns.getAllApps()
+  console.log(allApp) //
+})
+// 应用列表数据
+const apps = ref<AppItem[]>([
+  {
+    id: 1,
+    name: 'erp',
+    cnName: '低代码ERP应用配置',
+    description: '配置化构建应用', //
+    icon: 'el-icon-data-analysis',
+  },
+])
+
+// 菜单激活状态
+const activeHeader = ref('1')
+const activeSidebar = ref('1')
+
+// 用户登录状态及信息
+const isLoggedIn = computed(() => {
+  let loginInfo = systemIns.loginInfo
+  if (loginInfo) {
+    return true
+  }
+  return false
+})
+
+let user = computed(() => {
+  let loginInfo = systemIns.loginInfo
+  if (loginInfo) {
+    return loginInfo
+  }
+  return {} //
+})
+
+// 登录与登出方法 (替换为实际逻辑)
+function login() {
+  systemIns.routeTo('/login') //
+}
+
+function logout() {
+  systemIns.logout() //
+}
+
+function handleCommand(command: string) {
+  // if (command === 'profile') {
+  //   // 跳转到个人中心
+  //   console.log('Go to profile')
+  // } else if (command === 'logout') {
+  //   logout() //
+  // }
+}
+</script>
+
+
+// {
+      //   label: '同步应用数据',
+      //   fn: async () => {
+      //     //
+      //     let appName = await system.getCurrentApp() //
+      //     if (appName == 'platform') {
+      //       return
+      //     }
+      //     let http = system.getHttp()
+      //     await http.post('entity', 'syncTableData', [
+      //       'navs',
+      //       'entity',
+      //       'columns', //
+      //     ])
+      //     this.confirmMessage('同步成功')
+      //   },
+      // },
+
+       {/* <div class="py-1">
+                          <div
+                            href="#"
+                            class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+                          >
+                            个人中心
+                          </div>
+                        </div> */}
+
+
+                         let pageDesign = this.getCurrentPageDesign()
+              // await pageDesign.setCurrentDesign() //
+              let config = pageDesign.config
+              let _config = _.cloneDeep(config)
+              let _p: any = pageDesign
+              let _construct = _p.__proto__.constructor
+              // console.log(_construct) //
+              let newD = new _construct(_config)
+              newD.setLayoutData(_config) //
+              newD.setCurrentDesign(true) //
+              let dialogConfig = {
+                title: '页面整体设计',
+                width: 1,
+                height: 1,
+                createFn: () => {
+                  return {
+                    component: pageCom,
+                    props: {
+                      formIns: newD,
+                    },
+                  }
+                },
+                confirmFn: () => {},
+              }
+              await this.openDialog(dialogConfig) //
+
+               // let http = this.getHttp() //
+      // let _res = await http.create('users', data) //
+      // let row = _res[0] //
+      // return row //
+
+      // console.log(allCompany, 'testCompany')//
+      // const all: any[] = await system.getAllRegisterCompany()
+      // loginFConfig.items[3].options.options = all.map((item) => ({
+      //   label: item.companyCnName || item.companyName,
+      //   value: item.userid,
+      // }))
+      // loginFConfig.items[4].options.options = all.map((item) => ({
+      //   label: item.appCnName || item.appName,
+      //   value: item.appName,
+      // }))
+
+       // {
+        //   label: '登录方式',
+        //   field: 'loginType',
+        //   type: 'select',
+        //   required: true,
+        //   options: {
+        //     options: [
+        //       { label: '邮箱登录', value: 'email' },
+        //       { label: '用户名登录', value: 'username' },
+        //     ],
+        //   },
+        // },
+
+
+         {/* <button type="button"></button>
+                  <div class="h-40">
+                    <button
+                      type="button"
+                      class="h-full px-4 py-2 ml-10 text-blue-500 transition border border-blue-500 rounded hover:bg-blue-50"
+                    >
+                      修改密码
+                    </button>
+                    <button
+                      onClick={() => {
+                        system.updateUserInfo() //
+                      }}
+                      class="h-full px-6 py-2 ml-10 text-white transition bg-blue-600 rounded hover:bg-blue-700"
+                    >
+                      保存
+                    </button>
+                  </div> */}
+
+
+                  /* 
+let _data = await this.getHttp().find('navs')
+    let tableConfig = {
+      showHeaderButtons: false, //
+      enableDragRow: true,
+      treeConfig: {
+        id: 'id',
+        parentId: 'pid',
+        rootId: 0,
+      },
+      contextItems: [
+        {
+          label: '添加菜单',
+          fn: async (config) => {
+            let p = config.parent
+            console.log('parent', p) //
+          },
+        },
+        {
+          label: '添加子菜单', //
+          fn: async () => {},
+        },
+      ],
+      buttons: [],
+      columns: [
+        {
+          field: 'id',
+          title: 'id',
+          tree: true,
+          frozen: 'left',
+        },
+        {
+          field: 'navname', //
+          title: '导航名称',
+          editType: 'string', //
+          width: 200, //
+        },
+        {
+          field: 'tableName',
+          editType: 'string', //
+          title: '表格或者视图名称',
+        },
+        {
+          field: 'status',
+          title: '是否启用', //
+          editType: 'boolean', //
+        },
+      ],
+      data: _data,
+      height: 600,
+      width: 800, //
+      dragRowFn: (config) => {
+        return true //
+      },
+      confirmFn: async (dialog) => {
+        let data = dialog.getRef('innerCom').getFlatTreeData()
+        // console.log(data, 'testData')//
+        let _data1 = data.filter((item) => {
+          return item['_rowState'] == 'change'
+        })
+        // console.log(_data1)//
+        let http = this.getHttp()
+        await http.patch('navs', _data1) //
+        this.confirmMessage('更新菜单成功') ////
+        this.clearCacheValue('getMenuData') //
+        await this.getMenuData() //
+      },
+      dragRowAfterFn: (config) => {
+        let data = config.data
+        data.forEach((item, i) => {
+          item['_rowState'] = 'change'
+          item['sort'] = Number(i) + 1 ////
+        })
+      },
+      showRowSeriesNumber: true,
+    }
+    await this.confirmTable(tableConfig) //
+    return tableConfig
+
+
+*/
+ //
+    // let config = this.config
+    // let onColumnResize = config.onColumnResize
+    // if (typeof onColumnResize == 'function') {
+    //   onColumnResize(_config) //
+    // }
+    // console.log(_config, 'onColumnResize') //
+
+     // if(currentResizeField==f){
+          //   console.log('缓存', _con) ////
+          // }
+          // console.log('缓存', _con) //
+           // let com = (
+                //   <buttonGroupCom
+                //     buttonWidth={40}
+                //     items={[
+                //       {
+                //         label: '<<',
+                //         fn: () => {
+                //           tableIns.jumpToSearchNext(true) //
+                //         }, //
+                //       },
+                //       {
+                //         label: '>>',
+                //         fn: () => {
+                //           tableIns.jumpToSearchNext() //
+                //         },
+                //       },
+                //       {
+                //         label: 'X',
+                //         fn: () => {
+                //           tableIns.showGlobalSearch(false) //
+                //         },
+                //       },
+                //     ]}
+                //   ></buttonGroupCom>
+                // )
+
+                 // console.log(
+          //   isProxy(record),
+          //   'isProxy(record)',
+          //   isProxy(config.column),
+          // )
+
+
+          //  @for $i from 1 through 2000 {
+//     .space-y-#{$i} {
+//       padding: #{$i}px !important;
+//     }
+//   }
+
+/* 
+<template>
+  <div class="w-full h-full">
+    <lowcode>
+      <template #default="path">
+        <keep-alive>
+          <design :key="path" ></design>
+        </keep-alive>
+      </template>
+    </lowcode>
+  </div>
+</template>
+<script setup lang="ts">
+import design from './design'
+import lowcode from './lowcode'
+</script>
+<style lang="scss"></style>
+
+
+*/
+
+
+
+
+// @for $i from 1 through 2000 {
+//   .w-#{$i} {
+//     width: #{$i}px;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .h-#{$i} {
+//     height: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .pl-#{$i} {
+//     padding-left: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .pr-#{$i} {
+//     padding-right: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .pt-#{$i} {
+//     padding-top: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .pb-#{$i} {
+//     padding-bottom: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .px-#{$i} {
+//     padding-top: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .py-#{$i} {
+//     padding-bottom: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .ml-#{$i} {
+//     margin-left: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .mr-#{$i} {
+//     margin-right: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .mt-#{$i} {
+//     margin-top: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .mb-#{$i} {
+//     margin-bottom: #{$i}px !important;
+//   }
+// }
+// @for $i from 1 through 2000 {
+//   .p-#{$i} {
+//     padding: #{$i}px !important;
+//   }
+// }
+// 定义一个属性映射：class prefix → CSS 属性（可带 !important）
+
+ // return (
+                  //   <ElDropdownMenu
+                  //     onClick={(e) => {
+                  //       console.log(e)
+                  //       let command = e.command
+
+                  //     }}
+                  //   >
+                  //     <ElDropdownItem command="profile">
+                  //       个人中心
+                  //     </ElDropdownItem>
+                  //     <ElDropdownItem command="support">
+                  //       联系客服
+                  //     </ElDropdownItem>
+                  //     <ElDropdownItem divided command="author">
+                  //       联系作者
+                  //     </ElDropdownItem>
+                  //     <ElDropdownItem command="promo">获取优惠</ElDropdownItem>
+                  //     <ElDropdownItem command="logout">退出登录</ElDropdownItem>
+                  //   </ElDropdownMenu>
+                  // )
+
+
+                   /*   let com=<div class="flex flex-col h-screen">
+    <header
+      class="flex items-center justify-between px-5 text-white bg-blue-600 shadow-md h-60"
+    >
+      <div class="text-2xl font-bold">低代码应用中心</div>
+      <el-menu
+        mode={"horizontal"}
+        // :default-active="activeHeader"
+        default-active="1"
+        background-color="transparent"
+        text-color="#ffffff"
+        active-text-color="#ffe58f"
+        class="flex-1 mx-10"
+      >
+        <el-menu-item index="1" class="px-4">Home</el-menu-item>
+        <el-menu-item index="2" class="px-4">About</el-menu-item>
+        <el-menu-item index="3" class="px-4">Contact</el-menu-item>
+      </el-menu>
+      <div class="flex items-center ml-5">
+        <template v-if="isLoggedIn">
+          <div class="flex items-center space-x-2">
+            <el-dropdown
+              type="primary"
+              @click="handleCommand"
+              placement="bottom-end"
+              class="h-40 px-4 rounded-lg"
+            >
+              <span class="flex items-center space-x-2">
+                <span class="font-medium text-white">
+                  {{ systemIns.getUserName() }}
+                </span>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="profile" @click="(e) => {}">
+                    个人中心
+                  </el-dropdown-item>
+                  <el-dropdown-item command="support">
+                    联系客服
+                  </el-dropdown-item>
+                  <el-dropdown-item divided command="author">
+                    联系作者
+                  </el-dropdown-item>
+                  <el-dropdown-item command="promo">获取优惠</el-dropdown-item>
+                  <el-dropdown-item
+                    @click="
+                      (e) => {
+                        systemIns.logout() //
+                      }
+                    "
+                    command="logout"
+                  >
+                    退出登录
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
+        </template>
+        <template v-else>
+          <el-button type="primary" size="small" @click="login">
+            Login
+          </el-button>
+        </template>
+      </div>
+    </header>
+
+    <div class="flex flex-1">
+      <!-- Sidebar Menu -->
+      <aside class="bg-gray-100 w-200">
+        <el-menu :default-active="activeSidebar" class="w-full">
+          <el-menu-item index="1" class="flex items-center h-40 px-4">
+            <i class="mr-2 el-icon-menu"></i>
+            应用列表
+          </el-menu-item>
+        </el-menu>
+      </aside>
+
+      <main class="flex-1 p-5 overflow-auto bg-gray-50">
+        <div
+          class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-20"
+        >
+          <el-card
+            v-for="app in apps"
+            :key="app.id"
+            class="transition-transform transform hover:-translate-y-2"
+          >
+            <div class="flex items-center mb-2">
+              <i :class="app.icon + ' text-24 mr-2'" />
+              <span class="text-lg font-semibold">{{ app.cnName }}</span>
+            </div>
+            <div class="mb-4 text-sm">{{ app.description }}</div>
+            <div class="text-right">
+              <el-button
+                type="primary"
+                @click="() => systemIns.installApp(app.name)"
+                size="small"
+              >
+                安装
+              </el-button>
+              <el-button
+                type="primary"
+                @click="() => systemIns.openApp(app.name)"
+                size="small"
+              >
+                进入
+              </el-button>
+            </div>
+          </el-card>
+        </div>
+      </main>
+    </div>
+
+    <footer
+      class="flex items-center justify-center h-40 text-gray-500 bg-gray-100"
+    >
+      © 2025 MyApp Platform
+    </footer>
+  </div> */
+
+   /* 
+      
+          <ElMenuItem index="1" class="px-4">
+            Home
+          </ElMenuItem>
+          <ElMenuItem index="2" class="px-4">
+            About
+          </ElMenuItem>
+          <ElMenuItem index="3" class="px-4">
+            Contact
+          </ElMenuItem>
+      */
+
+
+       "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.1.4",
+
+     if (1 == 1) {
+      return //
+    }
+    // if (status == false) {
+    //   return //
+    // }

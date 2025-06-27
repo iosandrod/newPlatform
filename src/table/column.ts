@@ -80,6 +80,13 @@ export class Column extends Base {
       let arr = ops || []
       options = arr //
     }
+    let optionsField = this.config.optionsField
+    if (typeof optionsField == 'string' && optionsField.length > 0) {
+      let system = this.getSystem()
+      let ops = system.fieldSelectOptions[optionsField]
+      let arr = ops || []
+      options = arr //
+    }
     return options //
   } //
   setHidden(bool) {
@@ -100,11 +107,11 @@ export class Column extends Base {
     let config = this.config
     let disableColumnResize = config.disableColumnResize
     if (disableColumnResize == null) {
-      let table = this.table
+      let table = this.getTable()
       disableColumnResize = table.getDisableColumnResize()
     }
     if (1 == 1) {
-      return true //
+      // return true //
     }
     return disableColumnResize
   }
@@ -112,7 +119,7 @@ export class Column extends Base {
     let _config = this.config
     let tableName = _config.tableName
     if (tableName == null) {
-      tableName = this.table.getTableName()
+      tableName = this.getTable().getTableName()
     }
     return tableName //
   }
@@ -140,7 +147,19 @@ export class Column extends Base {
 
   init(): void {
     super.init() //
+    this.initOptionsField()
     this.setColumns()
+  }
+  initOptionsField() {
+    let options = this.config
+    let optionsField = options?.optionsField
+    if (optionsField == null) {
+      return
+    }
+    if (optionsField.length > 0) {
+      let sys = this.getSystem()
+      sys.createOptionsFieldSelect(optionsField) //
+    }
   }
   getCanHidden() {
     let _this = reactive(this)
@@ -162,7 +181,7 @@ export class Column extends Base {
     return false ////
   }
   hiddenEditor() {
-    let table = this.table
+    let table = this.getTable()
     let ins = table.getInstance()
     ins.completeEditCell() //
   }
@@ -194,9 +213,7 @@ export class Column extends Base {
         alignItems: 'center', //
         boundsPadding: [0, 0, 0, 0],
       })
-      container.on('dragover', (e) => {
-        console.log('is drag') //
-      })
+
       let _g = createGroup({
         width: width,
         height,
@@ -276,9 +293,11 @@ export class Column extends Base {
       container.on('mouseleave', () => {
         controllerGroup.attribute.background = '' //
         let image = g1._lastChild
-        let item = _this.table.columnFilterConfig.filterConfig.find(
-          (item) => item.field == _this.getField(),
-        )
+        let item = _this
+          .getTable()
+          .columnFilterConfig.filterConfig.find(
+            (item) => item.field == _this.getField(),
+          )
         if (item != null) {
           let indexArr = item.indexArr
           if (indexArr.length > 0) {
@@ -308,7 +327,7 @@ export class Column extends Base {
     return hCustomLayout
   }
   addColumn(col: any) {
-    let table = this.table
+    let table = this.getTable()
     let columns = this.columns
     let column = new Column(col, table)
     columns.push(column) //
@@ -336,21 +355,24 @@ export class Column extends Base {
       }
       if (typeof fieldFormat !== 'function') {
         fieldFormat = (config) => {
-          let type = this.getEditType()
+          let _this = config.column || config.col //
+          if (_this == null) {
+          }
+          let type = _this.getEditType()
           let row = config.row
           if (row == null) {
-            console.log(config)
             return '' //
           }
           let field = config.field
           let value = row[field] //
+          let label = null
           if (type == 'select') {
-            let options = this.getSelectOptions()
+            let options = _this.getSelectOptions()
             let value = config.row[field]
             let _label = options.find((item) => item.value == value)?.label
-            return _label || value //
-          } ////
-          return value
+            label = _label
+          }
+          return label || value //
         }
       }
     }
@@ -365,15 +387,18 @@ export class Column extends Base {
     }
     let bgColor = this.getBgColor()
     if (typeof bgColor == 'function') {
-      let color1 = bgColor(record) //
+      let color1 = bgColor({
+        row: record,
+        data: this.getTable().templateProps.data,
+      })
       if (color1 != null) {
         color = color1 //
-      }
+      } //
     }
     return color
   }
   getMergeCell() {
-    let table = this.table
+    let table = this.getTable()
     let isMergeCell = table.isMergeCell
   }
   getMergeCellColor() {
@@ -381,7 +406,7 @@ export class Column extends Base {
     return color
   }
   getColumnProps(isFooter = false) {
-    let table = this.table
+    let table = this.getTable()
     let config = this.config
     let _columns = this.columns.map((col) => {
       if (isFooter == true) {
@@ -401,9 +426,11 @@ export class Column extends Base {
     }
     let hIconColor = '#1890ff'
     let enterType = 'mouseenter_cell'
-    let item = _this.table.columnFilterConfig.filterConfig.find(
-      (item) => item.field == _this.getField(),
-    )
+    let item = _this
+      .getTable()
+      .columnFilterConfig.filterConfig.find(
+        (item) => item.field == _this.getField(),
+      )
     if (item != null) {
       let indexArr = item.indexArr
       if (indexArr.length > 0) {
@@ -413,7 +440,7 @@ export class Column extends Base {
     }
     //@ts-ignore
     let customLayout = undefined
-    if (this.table.showCustomLayout == true) {
+    if (this.getTable().showCustomLayout == true) {
       customLayout = this.getCustomLayout() //
     }
     //@ts-ignore
@@ -463,10 +490,10 @@ export class Column extends Base {
     }
     let f = this.getField()
     let v = r[f]
-    if (v === '1') {
+    if (v == '1') {
       v = true
     }
-    if (v === '0') {
+    if (v == '0') {
       v = false //
     }
     v = Boolean(v)
@@ -474,7 +501,7 @@ export class Column extends Base {
   }
   getIsTree() {
     let _t = false
-    let isTree = this.table.getIsTree()
+    let isTree = this.getTable().getIsTree()
     let tree = this.config.tree
     if (isTree == true && tree == true) {
       _t = true //
@@ -483,7 +510,7 @@ export class Column extends Base {
   }
   getCalculateValue() {
     let _this = this
-    let table = this.table //
+    let table = this.getTable() //
     let field = this.getField()
     if (this.effectPool[`${this.id}_cal`] == null) {
       let _data = table.templateProps.data //
@@ -582,8 +609,8 @@ export class Column extends Base {
     return field //
   }
   getColumnWidth() {
-    let isFilterTable = this.table.getIsFilterTable()
-    let table = this.table
+    let isFilterTable = this.getTable().getIsFilterTable()
+    let table = this.getTable()
     let config = this.config
     let width = config.width
     if (isFilterTable == true) {
@@ -598,28 +625,35 @@ export class Column extends Base {
     }
     if (width == null) {
       //
-      let table = this.table
+      let table = this.getTable()
       let defaultWidth = table.getDefaultWidth()
       width = defaultWidth
     }
     return width
   }
   async updateBindValue(config) {
-    //
+    // debugger //
     let value = config.value //值
     let row = config.row //行
     let field = config.field || this.getField()
-    let table = this.table
+    let table = this.getTable()
     if (config.validate === false) {
       row[field] = value //
       return true
     }
     let _res = await this.validateValue({ ...config, table })
     if (_res == true) {
+      let oldv = row[field]
+      if (oldv == value) {
+        return true
+      }
       row[field] = value //
+      if (row['_rowState'] == 'unChange') {
+        row['_rowState'] = 'change' //
+      }
       return true
     } else {
-      let table = this.table //
+      let table = this.getTable() //
       //@ts-ignore
       table.validateMap[row._index] = [_res] //
     }
@@ -672,7 +706,7 @@ export class Column extends Base {
     return type
   }
   getIsEditField() {
-    let table = this.table
+    let table = this.getTable()
     let isEdit = table.getIsEditTable()
     if (isEdit == false) {
       return false //
@@ -793,7 +827,7 @@ export class Column extends Base {
       </svg>
        `
     }
-    let sortCache = this.table.sortCache
+    let sortCache = this.getTable().sortCache
     let v = sortCache.find((s) => s.field == this.getField())
     let s = Boolean(v)
     let order = v?.order
@@ -820,7 +854,7 @@ export class Column extends Base {
     })
     topImage.on('click', (config: any) => {
       let field = this.getField()
-      this.table.headerSortClick({
+      this.getTable().headerSortClick({
         field,
         order: 'asc',
         type: this.getColType(), //
@@ -828,7 +862,7 @@ export class Column extends Base {
     })
     bottomImage.on('click', () => {
       let field = this.getField()
-      this.table.headerSortClick({
+      this.getTable().headerSortClick({
         field,
         order: 'desc',
         type: this.getColType(),
@@ -840,28 +874,35 @@ export class Column extends Base {
   }
   getExpandIcon(status = false) {
     let t = null
-    if (status) {
-      //
-      t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <rect width="24" height="24" rx="4" fill="#007AFF" />
-  <path d="M12 16L6 10H18L12 16Z" fill="#FFFFFF" />
-</svg>`
-    } else {
-      t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-  <rect width="24" height="24" rx="4" fill="#007AFF" />
-  <path d="M9 6L15 12L9 18V6Z" fill="#FFFFFF" />
-</svg>
-`
-    }
+        if (status) {
+          //
+          t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <rect width="24" height="24" rx="4" fill="#007AFF" />
+      <path d="M12 16L6 10H18L12 16Z" fill="#FFFFFF" />
+    </svg>`
+        } else {
+          t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <rect width="24" height="24" rx="4" fill="#007AFF" />
+      <path d="M9 6L15 12L9 18V6Z" fill="#FFFFFF" />
+    </svg>
+    `
+        } //
+    // if (status) {
+    //   t = `<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${'red'}"></path></svg>`
+    // } else {
+    //   ;`<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${'red'}"></path></svg>`
+    // }
     return t
   }
   createFilter(config: any) {
     let height = config.height
     let hIconColor = '#1890ff' //
     let _this = this
-    let item = _this.table.columnFilterConfig.filterConfig.find(
-      (item) => item.field == _this.getField(),
-    )
+    let item = _this
+      .getTable()
+      .columnFilterConfig.filterConfig.find(
+        (item) => item.field == _this.getField(),
+      )
     if (item != null) {
       let indexArr = item.indexArr
       if (indexArr.length > 0) {
@@ -872,6 +913,8 @@ export class Column extends Base {
       image: `<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${hIconColor}"></path></svg>`,
       width: 16,
       height: 16, //
+      x: 0,
+      y: 0,//
       textureColor: hIconColor,
       cursor: 'pointer',
       visible: hIconColor == 'red' ? true : false, //
@@ -889,7 +932,7 @@ export class Column extends Base {
       boundsPadding: [0, 0, 0, 0],
     })
     g1.on('click', (config) => {
-      this.table.openColumnFilter(config)
+      this.getTable().openColumnFilter(config)
     }) //三角形
     g1.add(image)
     return g1
@@ -898,7 +941,7 @@ export class Column extends Base {
     return 'RGB(204, 224, 255)'
   }
   getBorderColor() {
-    return 'rgb(229,231,235)' //
+    return 'rgb(210,190,215)' //
   }
   getCurrentRowColor(_bg?: string) {
     let bg = _bg || 'rgb(220,232,240)'
@@ -906,7 +949,7 @@ export class Column extends Base {
   }
   getCustomLayout() {
     let editType = this.getEditType()
-    if (editType == 'boolean' && this.table.tableState == 'edit') {
+    if (editType == 'boolean' && this.getTable().tableState == 'edit') {
       let _layout = this.getCheckboxCustomLayout()
       return _layout //
     }
@@ -920,13 +963,13 @@ export class Column extends Base {
     if (defaultValue == null) {
       return {} //
     }
-    let table = this.table
+    let table = this.getTable()
     let design = table?.getMainPageDesign()
     design = design || _config?.design //
     let curRow = design?.getCurRow()
     let obj1 = {
       column: this,
-      table: this.table,
+      table: this.getTable(),
       item: this,
       design: design,
       curRow: curRow,
@@ -1071,14 +1114,30 @@ export class Column extends Base {
   }
   setNoFrozen() {
     let config = this.config //
-    config.frozen = null //
+    config.frozen = null
+    this.table.onColumnResize({
+      originColumn: this.config, //
+    })
+    this.table.clearSelected()
+    setTimeout(() => {
+      this.table.loadColumns()
+      this.table.loadFooterColumn() //
+    }, 100)
   }
   setFrozen(type) {
     let config = this.config
     if (!['left', 'right'].includes(type)) {
       return
     }
-    config.frozen = type ////
+    config.frozen = type
+    this.table.onColumnResize({
+      originColumn: this.config, //
+    })
+    this.table.clearSelected()
+    setTimeout(() => {
+      this.table.loadColumns()
+      this.table.loadFooterColumn()
+    }, 100) //
   }
   setOrder(n: number) {
     //
@@ -1113,7 +1172,6 @@ export class Column extends Base {
     return this.templateTableConfig
   }
   getBaseInfoConfig() {
-    // debugger //
     return this.config.baseinfoConfig
   }
   getBaseInfoTableName() {
@@ -1122,7 +1180,6 @@ export class Column extends Base {
     return tableName
   }
   async openBaseInfoTable() {
-    // debugger //
     let sys = this.getSystem() //
     let tableName = this.getBaseInfoTableName() //
     if (tableName == null) {
@@ -1158,6 +1215,7 @@ export class Column extends Base {
   onFocus(config) {}
 
   confirmTinyTableRow(row) {
+    //
     let bConfig = this.getBaseInfoConfig() //
     let bindColumns = bConfig?.bindColumns || []
     if (Array.isArray(bindColumns) && bindColumns.length > 0) {
@@ -1193,10 +1251,21 @@ export class Column extends Base {
   }
   getCheckDisabled() {
     //
-    let tableState = this.table.tableState
+    let tableState = this.getTable().tableState
     if (tableState == 'scan') {
       return true
     }
     return false //
+  }
+  getTable() {
+    let table = this.table
+    if (isReactive(table)) {
+      return table
+    } else {
+      return reactive(table) //
+    }
+  }
+  getFontSize() {
+    return 14
   }
 }

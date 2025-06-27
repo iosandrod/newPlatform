@@ -19,7 +19,7 @@ export default defineComponent({
       return _config
     })
     return () => {
-      return <ElInput {..._value.value}></ElInput>
+      return <div class="h-40 w-full">input组件</div>
     }
   },
 })

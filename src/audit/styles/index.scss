@@ -1,0 +1,20 @@
+@use "./transition.scss" as *;
+@use "./arco.scss" as *;
+@use "./app.scss" as *;
+ 
+  
+
+@font-face {
+  font-family: iconfont-approval-admin;
+  src: url("@/audit/styles/fonts/approval-admin.woff2") format("woff2"),
+       url("@/audit/styles/fonts/approval-admin.woff") format("woff"),
+       url("@/audit/styles/fonts/approval-admin.ttf") format("truetype");
+}
+
+.iconfont-approval-admin {
+  font-family: iconfont-approval-admin !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 100%;
+}

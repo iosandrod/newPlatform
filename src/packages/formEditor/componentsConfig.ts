@@ -26,7 +26,6 @@ export const createGlobalConfig = () => {
 }
 export const createFieldConfig = (f: Form) => {
   let d: PageDesign = f.getCurrentPageDesign()
-  // debugger//
   let allFields = []
   if (d != null) {
     let columns = d.config.columns || [] //
@@ -36,6 +35,7 @@ export const createFieldConfig = (f: Form) => {
       allFields.push({
         type: type,
         label: col.title || col.field,
+        title: col.title || col.field,//
         icon: 'input',
         key: '',
         field: col.field, //
@@ -58,6 +58,10 @@ export const createFieldConfig = (f: Form) => {
       })
     }
   } //
+  if (allFields.length == 0) {
+    debugger //
+  }
+  // console.log(allFields.map((f) => f.field)) //
   const fieldsConfig = [
     {
       name: '预设字段',
@@ -69,9 +73,8 @@ export const createFieldConfig = (f: Form) => {
       id: 'field',
       children: [
         {
-          type: 'input',
+          type: 'string',
           label: '单行文本',
-          icon: 'input',
           key: '',
           id: '',
           options: {
@@ -79,7 +82,7 @@ export const createFieldConfig = (f: Form) => {
             isShowWordLimit: false,
             renderType: 1,
             disabled: false,
-            showPassword: false,
+            showPassword: false, //
             defaultValue: '',
             placeholder: '',
             labelWidth: 100,

@@ -1,9 +1,13 @@
-import { FormItem } from '@ER/formitem';
-import { ElInput } from 'element-plus';
-import { defineComponent } from 'vue';
+import inputCom from '@/input/inputCom'
+import FormCom from '@ER/formCom'
+import { FormItem } from '@ER/formitem'
+import { PageDesign } from '@ER/pageDesign'
+import { PageDesignItem } from '@ER/pageItem'
+import { ElInput } from 'element-plus'
+import { computed, defineComponent, inject } from 'vue'
 
 export default defineComponent({
-  name: 'InputPc',
+  name: 'DFormPc',
   inheritAttrs: false,
   customOptions: {},
   props: {
@@ -11,12 +15,64 @@ export default defineComponent({
     params: Object,
   },
   setup(props) {
-    //
-    const params = props.params;
-    const formitem: FormItem = params.formitem;
-    const bindConfig = formitem.getBindConfig();
+    const params = props.params
+    const formitem: PageDesignItem = params.formitem
+    let fConfig = computed(() => {
+      // debugger //
+      let _config = formitem.getFormConfig() //
+      return _config
+    })
+    //@ts-ignore
+    let pageD: PageDesign = inject('pageDesign', {}) //
+    let mainPage: PageDesign = inject('mainPageDesign', null) //
+    const registerRef = (el) => {
+      formitem.registerRef('fieldCom', el) //
+    }
+    const data = computed(() => {
+      let _data = formitem.getdBindData()
+      return _data
+    })
+    let tableName = null //
+    if (mainPage != null) {
+      tableName = mainPage.getTableName() //
+    } //
+    let itemTName = formitem.getOptions().tableName
     return () => {
-      return <ElInput {...bindConfig.value}></ElInput>;
-    };
+      let _com = (
+        <div class="h-full w-full" style={{ minHeight: '36px' }}>
+          <FormCom
+            ref={registerRef}
+            {...fConfig.value}
+            disabled={formitem.getFormDisabled({
+              tableName,
+            })}
+            disabledFn={(config) => {
+              let field = config.field
+              if (itemTName == tableName) {
+                //主页面表单
+                if (mainPage != null) {
+                  let cols = mainPage.getTableConfig().columns || []
+                  let col = cols.find((col) => col.field == field)
+                  let addDisabled = col?.addDisabled
+                  let editDisabled = col?.editDisabled
+                  let pageEditState = mainPage.tableState
+                  if (pageEditState == 'add') {
+                    if (addDisabled == 1) {
+                      return true
+                    }
+                  } else if (pageEditState == 'edit') {
+                    if (editDisabled == 1) {
+                      return true
+                    }
+                  }
+                }
+              }
+            }} //
+            data={data.value}
+          ></FormCom>
+        </div>
+      )
+      return _com
+    }
   },
-});
+}) //

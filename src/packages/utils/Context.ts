@@ -372,7 +372,7 @@ export class Context {
     let allCols = this.state.columns || []
     let allSpan = allCols
       .map((col) => col.options.span)
-      .reduce((pre, cur) => pre + cur)
+      .reduce((pre, cur) => pre + cur, 0) //
     if (allSpan >= 24) return
     let subSpan = 24 - allSpan
     const arr = this.arr

@@ -29,7 +29,7 @@
         </div>
       </template>
     </PtdDesigner>
-
+ 
     <PtdViewer
       v-if="viewerVisible"
       :component-data="componentData"
@@ -39,15 +39,12 @@
       v-model:visible="viewerVisible"
       :need-toast="false"
     />
-
     <TemplateViews
       v-if="templateVisible"
       v-model:visible="templateVisible"
       @load="loadTemp"
     />
-
-   
-  </div>
+  </div> 
 </template>
 
 <script setup>

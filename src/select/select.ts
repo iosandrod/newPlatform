@@ -77,6 +77,10 @@ function getOptUniqueId() {
 export default defineComponent({
   name: 'VxeSelect',
   props: {
+    enableOther: {
+      type: Boolean,
+      default: false,
+    }, //
     modelValue: [String, Number, Boolean, Array] as PropType<
       VxeSelectPropTypes.ModelValue
     >,
@@ -443,9 +447,10 @@ export default defineComponent({
       const { optFullValMaps } = internalData
       const labelField = computeLabelField.value
       const cacheItem = reactData.reactFlag ? optFullValMaps[value] : null
-      return cacheItem
+      let _value = cacheItem
         ? cacheItem.item[labelField as 'label']
-        : XEUtils.toValueString(value)
+        : XEUtils.toValueString(value) //
+      return _value
     }
 
     const cacheItemMap = (datas: any[]) => {

@@ -12,7 +12,7 @@ import {
   _testData,
   entityData,
 } from './formEditor/testData'
-import { useHooks, useOnce, useRunAfter } from './utils/decoration'
+import { useHooks, useOnce, useRunAfter, useTimeout } from './utils/decoration'
 import { getDefaultPageProps } from './pageCom'
 import { testBtnData } from './formEditor/testData1'
 import {
@@ -48,6 +48,7 @@ interface Filter {
 }
 export class PageDesign extends Form {
   isEdit = false
+  timeout: any = {}
   isConfirm = false //
   isDialog = false
   tabHidden = false //
@@ -147,6 +148,11 @@ export class PageDesign extends Form {
     }
   }
   addFormItem(config): any {
+    let id = config?.id
+    let hasItem = this.items.find((item) => item.id == id)
+    if (hasItem) {
+      return //
+    }
     let type = config.type
     if (type == 'buttonGroup') {
       config.type = 'buttongroup' //
@@ -211,6 +217,18 @@ export class PageDesign extends Form {
       ) //
       return
     }
+    if (curRow == null) {
+      let refData = this.getTableRefData(dTableName.tableName)
+      if (refData) {
+        refData['data'] = [] //
+      }
+      return
+    }
+    let _value = curRow[mainRelateKey]
+    if (_value === '' || _value == null) {
+      this.getSystem().confirmMessage(`主单据没有关联值`, 'warning') //
+      return //
+    }
     let query = {
       [relateKey]: curRow[mainRelateKey],
     }
@@ -222,7 +240,7 @@ export class PageDesign extends Form {
     })
     return res
   }
-
+  // @useTimeout({ number: 500 })
   async getTableData(
     getDataConfig: any = {
       tableName: this.getTableName(),
@@ -234,6 +252,9 @@ export class PageDesign extends Form {
       getDataConfig = {
         tableName: getDataConfig,
       }
+    }
+    if(this.isDesign==true){
+      return//
     }
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
@@ -268,11 +289,24 @@ export class PageDesign extends Form {
       })
       .flat()
       .filter((d) => d != null)
+
     let _query = this.buildQuery(_arr)
-    query = { ...query, ..._query } //
-    let res = await http.get(tableName, 'find', query)
+    query = { ...query, ..._query }
+    // let viewTable = this.config.viewTableName
+    let tableConfig = this.getTableConfig(tableName)
+    let viewTable = tableConfig.viewTableName //
+    let _t = tableName
+    let config: any = {}
+    if (typeof viewTable == 'string' && viewTable.length > 0) {
+      config.viewTable = viewTable
+    }
+    // console.log(config, 'testConfig')
+    let res = await http.find(_t, query, config) //
     let dataMap = this.getTableRefData(tableName)
-    dataMap['data'] = res //
+    dataMap['data'] = res
+    if (res.length == 0 && tableName == this.getTableName()) {
+      this.setCurRow(null) //
+    }
     let evName = `${tableName}_getTableData` //
     let _config = {
       event: evName,
@@ -290,12 +324,26 @@ export class PageDesign extends Form {
       data: row,
       event: evName,
     }
+    let tableConfig = this.getTableConfig(tableName) //
+    let tableType = tableConfig?.tableType
+    if (tableType == 'relate') {
+      let relateConfig = tableConfig?.relateConfig
+      let curRowChange = relateConfig?.curRowChange
+      if (Boolean(curRowChange)) {
+        this.getTableData() //
+      }
+    }
     await this.publishEvent(_config)
     let allDetailTable: string[] = this.getAllDetailTable().map((item) => {
       let tName = item.getTableName()
       return tName
     })
-    if (tableName == this.getTableName()) {
+    console.log(tableName, this.getRealTableName()) //
+    if (
+      tableName == this.getTableName() ||
+      tableName == this.getRealTableName()
+    ) {
+      //
       for (let dTable of allDetailTable) {
         this.getDetailTableData(dTable) //
       } //
@@ -423,25 +471,23 @@ export class PageDesign extends Form {
       this.getSystem().refreshPageDesign() //
     })
   }
-  async createTableDesign() {
-    let _data = this.getLayoutData()
-    //@ts-ignore
-    _data.tableName = this.getMainTableName()
-    let http = this.getHttp()
-    let _res = await http.create('entity', _data) // //
-    // console.log(_res)
-  }
+  async createTableDesign() {} //
   async updateTableDesign(lastConfig?: any) {
-    //
     let _data = this.getLayoutData() //
     let http = this.getHttp()
     let _config = this.config //
-    let _config1 = { ..._config, ..._data, ...lastConfig, id: _config.id }
-    await http.patch(`entity`, _config1) //
+    let _config1 = {
+      ..._config,
+      ..._data,
+      ...lastConfig,
+      id: _config.id,
+      platform: this.config?.platform || 'pc', //
+    }
+    await http.patch(`entity`, _config1)
     this.getSystem().confirmMessage('保存成功', 'success') //
   }
   getMainTableName() {
-    let config = this.config
+    let config = this.config //
     let tableName = config.tableName
     if (!tableName) {
       tableName = this.tableName
@@ -570,6 +616,118 @@ export class PageDesign extends Form {
     } //
     return _config //
   }
+  //添加类别
+  async addRelateTableRow(tableName?: any, row?: any) {
+    let _config = tableName
+    if (typeof tableName == 'string') {
+      _config = {
+        tableName,
+      }
+    }
+    tableName = _config.tableName
+    let dataRef = this.getTableRefData(tableName) //
+    let tConfig = this.getTableConfig(tableName)
+    let treeConfig = tConfig.treeConfig
+    if (treeConfig == null) {
+      return
+    }
+    let id = treeConfig.id
+    let parentId = treeConfig.parentId
+    let rootId = treeConfig.rootId //
+    let curRow = this.getCurRow(tableName)
+    let parentValue = curRow?.[id] //
+    if (curRow == null) {
+      parentValue = rootId
+    }
+    await this.getSystem().confirmEditEntity({
+      tableName,
+      curRow: {
+        //
+        [parentId]: parentValue, //
+      },
+      editType: 'add', //
+    })
+  } //
+  async editRelateTableRow(tableName?: any, row?: any) {
+    //
+    let _config = tableName
+    if (typeof tableName == 'string') {
+      _config = {
+        tableName,
+      }
+    }
+    tableName = _config.tableName //
+
+    tableName = _config.tableName
+    let dataRef = this.getTableRefData(tableName) //
+    let tConfig = this.getTableConfig(tableName)
+    let treeConfig = tConfig.treeConfig
+    if (treeConfig == null) {
+      return
+    } //
+    let curRow = this.getCurRow(tableName)
+    let keyColumn = tConfig.keyColumn
+    if (keyColumn == null) {
+      this.getSystem().confirmMessage('未设置主键', 'warning') //
+      return
+    }
+    if (curRow == null || curRow[keyColumn] == null) {
+      this.getSystem().confirmMessage('请选择一行数据', 'warning') //
+      return
+    }
+    await this.confirmEditEntity({
+      tableName,
+      curRow: curRow,
+      editType: 'edit',
+    })
+  }
+  async deleteRelateTableRow(tableName?: any, row?: any) {
+    //
+    let _config = tableName
+    if (typeof tableName == 'string') {
+      _config = {
+        tableName,
+      }
+    }
+    tableName = _config.tableName //
+
+    tableName = _config.tableName
+    let dataRef = this.getTableRefData(tableName) //
+    let tConfig = this.getTableConfig(tableName)
+    let treeConfig = tConfig.treeConfig
+    if (treeConfig == null) {
+      return
+    } //
+    let curRow = this.getCurRow(tableName)
+    let keyColumn = tConfig.keyColumn
+    if (keyColumn == null) {
+      this.getSystem().confirmMessage('未设置主键', 'warning') //
+      return
+    }
+    if (curRow == null || curRow[keyColumn] == null) {
+      this.getSystem().confirmMessage('请选择一行数据', 'warning') //
+      return
+    }
+    let http = this.getHttp()
+    let children = curRow.children
+    if (children?.length > 0) {
+      this.getSystem().confirmMessage('当前数据有子节点，无法删除')
+      return
+    } //
+    let sys = this.getSystem()
+    let state = await sys.confirmMessageBox('是否删除当前行数据') //
+    let mainName = this.getRealTableName() //
+    let mainData = this.getTableRefData(mainName)
+    let data = mainData.data
+    if (data?.length > 0) {
+      this.getSystem().confirmMessage('当前主表数据有类别关联，无法删除') //
+      return
+    }
+    if (state) {
+      await http.delete(tableName, curRow) //
+      this.getSystem().confirmMessage('删除数据成功') //
+    }
+  }
   async addDetailTableRow(tableName?: string, row?: any) {
     //
     let tTable: Table = this.getRef(tableName)
@@ -612,9 +770,29 @@ export class PageDesign extends Form {
         label: tCnName,
         value: tName,
       }
-    }) //
-    let arr = [{ label: tCnName, value: tableName }, ...dTableOptions]
+    })
+    let rTableOptions = this.getAllRelateTable().map((t) => {
+      let tName = t.getTableName()
+      let tCnName = t.getTableCnName()
+      return {
+        label: tCnName,
+        value: tName,
+      }
+    })
+    let arr = [
+      { label: tCnName, value: tableName },
+      ...dTableOptions,
+      ...rTableOptions,
+    ] //
     return arr //
+  }
+  getAllRelateTable() {
+    let allTable = this.getAllTable()
+    let rTables = allTable.filter((t) => {
+      let isRelate = t.getEntityType()
+      return isRelate == 'relate'
+    })
+    return rTables
   }
   async saveEditPageData() {
     let realTableName = this.getRealTableName() //
@@ -655,15 +833,6 @@ export class PageDesign extends Form {
     }
   }
   getCurRow(tableName = this.getRealTableName()) {
-    // let tRef: Table = this.getRef(tableName)
-    // let curRow = null
-    // let _tableName = this.getTableName()
-    // if (tRef == null) {
-    //   curRow = this.tableDataMap[_tableName]?.curRow ////
-    // } else {
-    //   curRow = tRef.getCurRow()
-    // }
-    // return curRow //
     let curRow = this.tableDataMap[tableName]?.curRow
     return curRow //
   }
@@ -754,10 +923,18 @@ export class PageDesign extends Form {
             //两个都要保存
             await this.getHttp().patch('columns', _d)
           }
+          let _options = currentFItemConfig?.options || {}
+          if (Array.isArray(_options)) {
+            _options = {}
+            if (currentFItemConfig?.['options']) {
+              currentFItemConfig['options'] = _options
+            }
+          }
           Object.entries(_obj).forEach(([key, value]) => {
-            //
-            currentFItemConfig[key] = value //
+            _options[key] = value //
           })
+          let type = _obj?.type
+          currentFItemConfig['type'] = type || currentFItemConfig['type']
           await this.saveTableDesign() //
         },
         visible: computed(() => {
@@ -838,6 +1015,7 @@ export class PageDesign extends Form {
       tableName: tName, //
       name: tName,
       order: this.tabOrder,
+      closeable: this.config.closeable, //
     }
   }
   async designPageDialog() {
@@ -892,7 +1070,8 @@ export class PageDesign extends Form {
     _data = { ...searchDialog, ..._data } ////
     let _data1 = this.getLayoutData()
     _data1.searchDialog = _data //
-    await this.getSystem().updateCurrentPageDesign(_data1) //
+    this.saveTableDesign({ refresh: false }) //
+    // await this.getSystem().updateCurrentPageDesign(_data1) //
   }
   async selectExcelFile() {
     let sd = new Promise(async (resolve, reject) => {
@@ -1005,7 +1184,6 @@ export class PageDesign extends Form {
         row.tableName = this.getRealTableName() //
         return row
       }) //
-    console.log(addCols, 'fjdkldsjkls') //
     let _res = await this.getHttp().create('columns', addCols)
     this.getSystem().confirmMessage('同步成功', 'success') //
     this.getSystem().refreshPageDesign() //
@@ -1038,7 +1216,8 @@ export class PageDesign extends Form {
         operator: searchOperator,
         value: data[searchF],
       }
-      if (obj1.value != null) {
+      if (obj1.value != null && obj1.value != '') {
+        //
         _arr.push(obj1)
       }
     }
@@ -1072,6 +1251,18 @@ export class PageDesign extends Form {
   }
   confirmFieldSelect() {
     //
+  }
+  getFlatTreeData(_data: any) {
+    let data = _data
+    return data
+      .map((row) => {
+        let children = row.children
+        if (children && children?.length > 0) {
+          return [row, ...this.getFlatTreeData(children)]
+        }
+        return [row]
+      })
+      .flat()
   }
   getSaveData() {
     let tableName = this.getTableName() //
@@ -1206,6 +1397,10 @@ export class PageDesign extends Form {
           _obj[name] = _arr
         }
         let fn = h.code //
+        let enable = h.enable
+        if (enable == 0) {
+          continue
+        } //
         if (typeof fn == 'string') {
           let _fn = stringToFunction(fn) //
           if (typeof _fn == 'function') {
@@ -1216,7 +1411,14 @@ export class PageDesign extends Form {
     } //
     return _obj //
   }
-  getTreeConfig() {}
+  getTreeConfig() {
+    let config = this.config
+    let treeConfig = config.treeConfig
+    return treeConfig
+  }
+  getTreeRootId() {}
+  getTreeId() {}
+  getTreeParentId() {}
   onTableConfigChange(config) {
     let tableName = config.tableName //
     if (tableName == null) {
@@ -1238,9 +1440,6 @@ export class PageDesign extends Form {
       return //
     }
     this.setCurRow(config.row, tableName) //
-    // let tMapData = this.getTableRefData(tableName) //
-    // let row = config.row
-    // tMapData['curRow'] = row //
   }
   async saveTableData(config?: any) {}
   getKeyColumn() {
@@ -1331,6 +1530,29 @@ export class PageDesign extends Form {
       })
       this.getHttp().registerEvent(key, _fn) //
     })
+    let allTable = this.getAllRelateTable() //
+    let allConfigs = allTable.map((t) => {
+      return t.config
+    }) //
+    for (const table of allConfigs) {
+      let options = table.options
+      let tableName = options.tableName //
+      let relateConfig = options?.relateConfig || {}
+      let listenChanged = relateConfig.listenChanged //
+      if (Boolean(listenChanged) == false) {
+        continue
+      }
+      let _key = 'changed'
+      let key = `${tableName} ${_key}`
+      let fn = () => {
+        this.getRelateTreeData(tableName)
+      }
+      this.entityEventManagerArr.push({
+        key: key,
+        fn: fn,
+      })
+      this.getHttp().registerEvent(key, fn) //
+    }
   }
   clearEntityEvent() {
     let entityEvent = this.entityEventManagerArr
@@ -1409,5 +1631,268 @@ export class PageDesign extends Form {
     if (show != false) {
       return true
     }
+  }
+  async getRelateTreeData(tableName) {
+    console.log(tableName, 'testTableName') //
+  }
+  async editRelateTreeData(tableName: any) {
+    //
+  }
+  setKeyColumn(key: string) {
+    this.config.keyColumn = key
+  }
+  setKeyCodeColumn(key: string) {
+    this.config.keyCodeColumn = key
+  } //
+  //进入打印
+  async getRelateSearchWheres() {
+    /* 
+      async function fn(context, next) {
+    let row = this.getCustomerClssCurRow()
+    let _fn = (data) => {
+        let _data = data.map(row => {
+            let children = row.children
+            let d1 = [row]
+            if (Array.isArray(children) && children.length > 0) {
+                return [row, ..._fn(children)]
+            }
+            return [row]
+        })
+        return _data.flat()
+    }
+    if (row == null) {
+        //没有客户类别就是跳出
+        return
+    }
+    let rows = _fn([row])
+    let rowsArg = rows.map(row => {
+        return row['cClsNo']
+    })
+    console.log(rows, 'testRows')
+    let query = context.queryArr
+    // let cClsNo = row['cClsNo']
+    let obj = {
+        cClsNo: rowsArg
+    }
+    query.push(obj)
+    await next()
+}
+    */
+    let allTable = this.getAllTable()
+      .filter((item) => {
+        let type = item.config?.options?.tableType //
+        if (type == 'relate') {
+          return true
+        }
+      })
+      .map((item) => item.getTableName()) //
+    let _fn = (data) => {
+      let _data = data.map((row) => {
+        let children = row.children
+        if (Array.isArray(children) && children.length > 0) {
+          return [row, ..._fn(children)]
+        }
+        return [row]
+      })
+      return _data.flat()
+    }
+    let _arr = []
+    for (let name of allTable) {
+      let tableData = this.getTableRefData(name)
+      let tableConfig = this.getTableConfig(name)
+      let curRow = tableData.curRow //
+      let relateKey = tableConfig?.relateKey
+      let mainRelateKey = tableConfig?.mainRelateKey
+      if (relateKey == null || mainRelateKey == null) {
+        this.getSystem().confirmMessage(`${name}未设置关联字段`, 'warning') //
+        continue
+      }
+      if (curRow == null) {
+        continue
+      }
+      let rows = _fn([curRow])
+      let rowsArg = rows.map((row) => {
+        return row[relateKey]
+      })
+      let _queryArr = _arr
+      _queryArr.push({
+        [mainRelateKey]: rowsArg,
+      }) //
+    }
+    return _arr //
+  }
+  async printTemplate() {}
+  //简易删除
+  async deleteTableRows(_tableName?: any, _curRow?: any) {
+    //
+    //删除模式
+    let curRow = _curRow || this.getCurRow()
+    let sys = this.getSystem()
+    let _state = curRow['_rowState']
+    if (_state == 'add') {
+      let dRef = this.getTableRefData(_tableName)
+      let _data = dRef.data
+      let _index = _data.indexOf(curRow)
+      if (_index > -1) {
+        _data.splice(_index, 1)
+      } //
+      return
+    }
+    let status = await sys.confirmMessageBox('确定删除吗', 'warning')
+    if (!status) {
+      return
+    } //
+    let http = this.getHttp()
+    let tableName = this.getRealTableName()
+    await http.batchDelete(tableName, curRow) //
+    sys.confirmMessage('删除成功', 'success') //
+    this.getTableData() //
+  }
+
+  async syncErpTableColumns() {
+    //
+    let realTableName = this.getRealTableName()
+    let columns = await this.getOldErpTableColumns(realTableName)
+    let _columns = this.getTableConfig().columns
+    _columns = JSON.parse(JSON.stringify(_columns))
+    for (let col of columns) {
+      let f = col.field
+      let c = _columns.find((c) => {
+        return c.field == f
+      })
+      let keys = [
+        {
+          key: 'title',
+          myKey: 'title',
+        },
+        {
+          key: 'width',
+          myKey: 'width',
+        },
+      ]
+      if (c) {
+        for (let key of keys) {
+          if (col[key.key] != null) {
+            c[key.myKey] = col[key.key]
+          }
+        } //
+      }
+    }
+    _columns.forEach((e) => {
+      e['_rowState'] = 'change'
+    }) //
+    this.getHttp().patch('columns', _columns) //
+    this.getSystem().confirmMessage('同步成功', 'success') //
+  }
+  async getOldErpTableColumns(tableName) {
+    let erpTable = await this.getHttp().find('sys_ErpTable', {
+      tableName: tableName,
+    })
+    let row = erpTable[0]
+    let _obj: any = {}
+    Object.entries(row).forEach(([key, value]) => {
+      try {
+        let _v = JSON.parse(value as any)
+        if (typeof _v == 'object' || Array.isArray(_v)) {
+          //
+          value = _v //
+        }
+      } catch (error) {}
+      _obj[key] = value //
+    })
+
+    let _columns = _obj.columns || []
+    return _columns
+  }
+  //最近距离
+  getTheCloseEntity(_id: string) {
+    let state = this.state
+    let store = state.store //
+    let fn = (data) => {
+      let _data = data.map((row) => {
+        // if (row.id == null) {
+        //   debugger //
+        // }
+        let _row = { ...row }
+        let children = row.columns || []
+        let list = row.list || []
+        let rows = row.rows || [] //
+        children = [...children, ...list, ...rows]
+        if (Array.isArray(children) && children.length > 0) {
+          let _c = fn(children)
+          _row.children = _c
+        }
+        return _row
+      })
+      return _data
+    }
+    let fData = fn(store)
+    let _this = this
+    function findEntityInSubtree(node: any): any | null {
+      if (node.type === 'entity') return node
+      for (const child of node.children || []) {
+        const found = findEntityInSubtree(child)
+        if (found) return found
+      }
+      return null
+    }
+
+    function findNearestEntity(root: any, targetId: string): any | null {
+      const idToNode = new Map<string, any>()
+      const childToParent = new Map<any, any>()
+
+      // 建立 id 和 parent 映射
+      function buildMaps(node: any, parent: any | null = null) {
+        idToNode.set(node.id, node)
+        if (parent) childToParent.set(node, parent)
+        for (const child of node.children || []) {
+          buildMaps(child, node)
+        }
+      }
+
+      buildMaps(root)
+
+      const targetNode = idToNode.get(targetId)
+      if (!targetNode) return null
+
+      let currentNode: any | undefined = targetNode
+      while (currentNode) {
+        const parent = childToParent.get(currentNode)
+
+        if (parent) {
+          // 查找当前节点的兄弟节点（包括它们的子孙）
+          for (const sibling of parent.children || []) {
+            if (sibling === currentNode) continue
+            const found = findEntityInSubtree(sibling)
+            if (found) return found
+          }
+        }
+
+        // 如果 parent 本身是 entity，也可以返回
+        if (parent && parent.type === 'entity') {
+          return parent
+        }
+
+        // 向上继续找
+        currentNode = parent
+      }
+
+      return null
+    }
+    let root = {
+      id: this.uuid(),
+      type: 'root',
+      children: fData,
+    }
+    let nextNode = findNearestEntity(root, _id)
+    return nextNode
+  }
+  async confirmEditEntity(config: any) {
+    await this.getSystem().confirmEditEntity(config, this)
+  }
+  getAllForm() {
+    let items = this.items
+    let forms = items.filter((e) => e.getType() == 'dform')
+    return forms
   }
 }

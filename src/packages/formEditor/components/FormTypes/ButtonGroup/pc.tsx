@@ -32,8 +32,17 @@ export default defineComponent({
     }
     return () => {
       let com = (
-        <div onContextmenu={_context} class="w-full h-full bg-white overflow-hidden flex items-center " style={{ minHeight: '30px' }}>
-          <ButtonGroupCom {..._value.value}></ButtonGroupCom>
+        <div
+          onContextmenu={_context}
+          class="w-full h-full bg-white overflow-hidden flex items-center "
+          style={{ minHeight: '30px' }}
+        >
+          <ButtonGroupCom
+            ref={(el) => {
+              formitem.registerRef('fieldCom', el)
+            }}
+            {..._value.value}
+          ></ButtonGroupCom>
         </div>
       )
       return com

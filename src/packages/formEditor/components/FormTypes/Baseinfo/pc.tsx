@@ -40,7 +40,7 @@ export default defineComponent({
       let com = ( //
         <div
           class="h-full w-full flex items-center"
-          style={{ minHeight: '36px', height: '36px' }} //
+          style={{ minHeight: '30px', height: '30px' }} //
         >
           <inputCom
             ref={registerRef}
@@ -69,19 +69,7 @@ export default defineComponent({
           ></inputCom>
         </div>
       ) //
-      //   let dropCom = (
-      //     <DropdownCom
-      //       v-slots={{
-      //         default: () => {
-      //           return com
-      //         },
-      //         dropdown: () => {
-      //           return <div class="h-300 w-200 bg-red"></div>
-      //         },
-      //       }}
-      //     ></DropdownCom>
-      //   )
-      //   let _com = dropCom //
+    
       let _com = com //
       return _com //
     }

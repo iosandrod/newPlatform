@@ -1,4 +1,7 @@
-@tailwind utilities;
+/* src/assets/tailwind.css */
+
+/* @import 'tailwindcss'; */
+
 @keyframes slowFade {
     0% { opacity: 0; transform: scale(0.5); }
     100% { opacity: 1; transform: scale(1); }
@@ -62,6 +65,7 @@ ul, ol {
 .is-disabled {
   pointer-events: none !important;
   opacity: 0.5;
+  cursor: not-allowed !important;
 }
 
 .formEditor .el-main{
@@ -269,3 +273,17 @@ li {
   .vxe-pulldown--content{
     height: 100%;
   }
+
+  :root {
+  --vxe-ui-form-item-min-height-default: 40px !important;
+}
+.vxe-form--item{
+  min-height: 36px !important;
+}
+
+.vxe-form--item-content{
+  padding-bottom: 5px !important;
+}
+/* .Everright-formEditor-TabsLayout .el-tabs__content{
+  height: 0px !important;
+} */

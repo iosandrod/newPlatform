@@ -12,6 +12,10 @@ export default defineComponent({
     height: {
       type: Number,
     },
+    showConfigIcon: {
+      type: Boolean,
+      default: false,
+    },
     onTabChange: {
       type: Function, //
     },
@@ -38,6 +42,9 @@ export default defineComponent({
     useDefaultClass: {
       type: Boolean,
       default: true,
+    },
+    onCloseClick: {
+      type: Function,
     },
   },
   components: {
@@ -128,7 +135,7 @@ export default defineComponent({
         _class = [] ////
       } //
       let dCom = tabIns.tabitems.map((el, index) => {
-        let _class = ['hidden','h-full']
+        let _class = ['hidden', 'h-full']
         let _default = slots.default
         let _name = el.getTabName() //
         let com1 = null
@@ -221,10 +228,22 @@ export default defineComponent({
                       if (props.showCloseIcon == true) {
                         //
                         closeIcon = (
-                          <div class="cursor-pointer h-full flex items-center">
-                            <div>X</div>
+                          <div
+                            ref={(el1) => {
+                              el.registerRef('closeIcon', el1)
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              tabIns.hiddenItem(el)
+                            }}
+                            class="absolute hidden cursor-pointer h-full  justify-center items-center right-1"
+                          >
+                            <div>x</div>
                           </div>
                         )
+                        if (el.config.closeable == false) {
+                          closeIcon = null //
+                        }
                       }
                       let height = el.tab.getTabHeight()
                       let mHeight = el.tab.getTabMinHeight()
@@ -250,6 +269,18 @@ export default defineComponent({
                             onContextmenu={(e) => {
                               e.preventDefault()
                               tabIns.openContextMenu(e, el)
+                            }}
+                            onMouseenter={(e) => {
+                              let icon = el.getRef('closeIcon')
+                              if (icon) {
+                                icon.style.display = 'flex'
+                              }
+                            }}
+                            onMouseleave={(e) => {
+                              let icon = el.getRef('closeIcon')
+                              if (icon) {
+                                icon.style.display = 'none'
+                              }
                             }}
                             class={'no-select flex items-center h-full'}
                             style={el.getSlotItemStyle()}
@@ -294,3 +325,5 @@ export default defineComponent({
     }
   },
 })
+
+

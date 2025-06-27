@@ -241,6 +241,9 @@ export default defineComponent({
             break
           default:
             let formitem = formIns.items.find((item) => item.id === element.id)
+            if (formitem.config != element) {
+              formitem.config = element
+            }
             if (formitem == null) {
               return null
             }
@@ -288,8 +291,8 @@ export default defineComponent({
                     tCom = null //
                   }
                   innerCom = (
-                    <div class="flex flex-row h-full">
-                      {tCom}
+                    <div class="flex flex-row h-full ">
+                      {/* {tCom} */}
                       <TypeComponent
                         item={formitem}
                         key={`${element.id}__${element.type}`}
@@ -344,12 +347,13 @@ export default defineComponent({
                                     if (mainPage) {
                                       //@ts-ignore
                                       mainPage.currentContextItem = {
+                                        //@ts-ignore
                                         config: {
                                           type: 'dform',
                                         },
                                       }
                                       let _config = formitem.config
-                                      mainPage.currentFItemConfig=_config
+                                      mainPage.currentFItemConfig = _config
                                       //@ts-ignore
                                     }
                                     e.preventDefault()

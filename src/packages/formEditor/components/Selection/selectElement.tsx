@@ -181,17 +181,20 @@ export default {
       return false //
     })
     const heightScaleElement = ref()
+    let isDrag = false
     onMounted(() => {
       if (!unref(isEditModel)) return false
       let hoverEl = elementRef.value.$el || elementRef.value
       let widthScaleEl = widthScaleElement.value
       hoverEl.addEventListener('mouseover', (e) => {
+        if (isDrag) return
         if (!state.widthScaleLock) {
           isHover.value = true
         }
         e.stopPropagation()
       })
       hoverEl.addEventListener('mouseout', (e) => {
+        if (isDrag) return
         if (isShowCell.value) return false
         isHover.value = false
         e.stopPropagation()
@@ -300,6 +303,7 @@ export default {
       if (isShowHeightScale.value && heightScaleEl) {
         //
         heightScaleEl.addEventListener('mousedown', (e) => {
+          isDrag = true
           let offsetParent = hoverEl.offsetParent
           let offsetParentWidth = offsetParent.offsetWidth //
           let columnWidth = offsetParentWidth / 24
@@ -307,6 +311,9 @@ export default {
           const oldY = e.clientY
           const oldHeight = hoverEl.offsetHeight
           let _newHeight = null
+          // if (props.data.style) {
+          //   props.data.style.height = '' //
+          // }
           const onMouseMove = (e) => {
             const isRootEl =
               formIns.state.store.findIndex(
@@ -317,11 +324,17 @@ export default {
             }
             let newY = e.clientY
             let subHeight = newY - oldY
-            hoverEl.style.height = oldHeight + subHeight + 'px' //
+            hoverEl.style.height = `${oldHeight + subHeight + 'px'}` //
             _newHeight = oldHeight + subHeight + 'px'
+            // console.log(props.data.style)//
+            // console.log(_newHeight,'testNewHeight')//
+            // if (props?.data?.style) {
+            //   props.data.style.height = _newHeight //
+            // }
           }
 
           const onMouseUp = () => {
+            isDrag = false //
             document.removeEventListener('mouseup', onMouseUp)
             document.removeEventListener('mousemove', onMouseMove)
             state.heightScaleLock = isScale.value = false
@@ -361,9 +374,11 @@ export default {
         ..._slots,
         default: () => {
           let dComArr = []
-          let defaultCom = _slots.default()
           let arr = []
-          arr.push(defaultCom)
+          if (_slots.default) {
+            let defaultCom = _slots?.default()
+            arr.push(defaultCom)
+          } //
           if (unref(isEditModel)) {
             if (ER.props.dragMode === 'icon') {
               let _com = (
@@ -486,7 +501,7 @@ export default {
                 ></Icon>
               )
               iconArr.push(_icon)
-            }//
+            } //
             let _com = <div class={[ns.e('bottomRight')]}>{iconArr}</div>
             arr.push(_com)
             if (props.hasMask) {

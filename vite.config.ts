@@ -5,26 +5,14 @@ import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import svgLoader from 'vite-svg-loader'
-import tailwindcss from '@tailwindcss/vite'
+// import tailwindcss from '@tailwindcss/vite'
+import UnoCSS from 'unocss/vite'
 const resolve = path.resolve
 const isProduction = process.env.NODE_ENV === 'production'
 
 const timestamp = new Date().getTime()
 const prodRollupOptions = {
-  output: {
-    // chunkFileNames: (chunk) => {
-    //   return 'assets/' + chunk.name + '.[hash]' + '.' + timestamp + '.js'
-    // },
-    // assetFileNames: (asset) => {
-    //   const name = asset.name
-    //   if (name && (name.endsWith('.css') || name.endsWith('.js'))) {
-    //     const names = name.split('.')
-    //     const extname = names.splice(names.length - 1, 1)[0]
-    //     return `assets/${names.join('.')}.[hash].${timestamp}.${extname}`
-    //   }
-    //   return 'assets/' + asset.name
-    // },
-  },
+  output: {},
 }
 // vite 配置
 export default ({ command, mode }) => {
@@ -76,6 +64,7 @@ export default ({ command, mode }) => {
       outDir: isAppBuild ? 'dist_app' : 'dist',
     },
     plugins: [
+      // tailwindcss(),
       vue({
         // template: {
         //   transformAssetUrls: {
@@ -86,8 +75,8 @@ export default ({ command, mode }) => {
         //   },
         // },
       }),
-      tailwindcss(),
       vueJsx(),
+      UnoCSS(), //
       // Components({
       //   resolvers: [
       //     AntDesignVueResolver({

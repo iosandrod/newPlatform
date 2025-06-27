@@ -5,14 +5,12 @@ import {
   // system,
   System,
 } from '@/system'
-import pool from 'workerpool'
 import { myHttp } from '@/service/client'
 import { Router } from 'vue-router'
 import { PageDesign } from '@ER/pageDesign'
-export const workerPool = pool.pool()
 export class Base {
   entityEventManager: { [key: string]: Array<any> } = {}
-  entityEventManagerArr=[]
+  entityEventManagerArr = []
   pageLoading = false
   _once: { [key: string]: boolean } = {}
   cacheMethod: {
@@ -57,13 +55,11 @@ export class Base {
   }
   async runPoolFn(fn, ...args) {
     if (typeof fn !== 'function') {
+      //
       return
     }
-    return await workerPool.exec(fn, args)
   }
-  getWorkerPool() {
-    return workerPool
-  }
+  getWorkerPool() {}
   constructor() {
     this.id = this.uuid() //
     return reactive(this) //
@@ -191,11 +187,27 @@ export class Base {
     // console.log(connection, 'connection') //
     let eventName = `${tableName} ${event}`
     connection.on(eventName, (data) => {
-      let fn=config.fn
-      if(typeof fn == 'function'){
+      let fn = config.fn
+      if (typeof fn == 'function') {
         fn(data)
       }
       // console.log('event', eventName, data)//
     })
   }
-}
+  setLocalItem(key: string, value: any) {
+    if (typeof value == 'object') {
+      if (value != null) {
+        value = JSON.stringify(value)
+      }
+    }
+    localStorage.setItem(key, value) //
+  } //
+  getLocalItem(key: string) {
+    let _item = localStorage.getItem(key) //
+    try {
+      let v = JSON.parse(_item)
+      _item = v
+    } catch (error) {}
+    return _item //
+  }
+} //

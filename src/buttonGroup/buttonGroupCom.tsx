@@ -1,7 +1,13 @@
 import { itemGroup } from '@/buttonGroup/buttonGroup'
 import { defineComponent, inject, toRaw, watch } from 'vue'
 import tabCom from '@/buttonGroup/tabCom'
-import { ElButton, ClickOutside, ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
+import {
+  ElButton,
+  ClickOutside,
+  ElMenu,
+  ElMenuItem,
+  ElSubMenu,
+} from 'element-plus'
 import { Button } from './button'
 import MenuCom from '@/menu/menuCom'
 import dropdownCom from '@/menu/dropdownCom'
@@ -22,6 +28,9 @@ export default defineComponent({
     ClickOutside,
   },
   props: {
+    tableName: {
+      type: String, //
+    },
     buttonWidth: {
       type: Number,
       default: 50, //
@@ -37,8 +46,11 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup(props, { attrs, slots, emit }) {
+  setup(props, { attrs, slots, emit, expose }) {
     let group = new itemGroup(props, props._class as any)
+    expose({
+      _instance: group,
+    }) //
     const ns = group.hooks.useNamespace('buttonGroupCom')
     const btnG = group.hooks.useNamespace('buttonMenuCom')
     let currentMainPage = inject('pageDesign', {}) //
@@ -69,7 +81,7 @@ export default defineComponent({
         for (const item of delItems) {
           group.delItem(item)
         }
-      }
+      },
     )
     let mainPage: PageDesign = inject('mainPageDesign', null)
     if (mainPage != null) {
@@ -96,13 +108,35 @@ export default defineComponent({
             item: (el: Button) => {
               let btn = el.config.button //
               let disabled = btn.getDisabled()
-              let _class = ['v-contextmenu', 'h-35', 'items-center', 'flex']
+              let _class = [
+                // 'v-contextmenu',
+                'h-35',
+                'items-center',
+                'flex',
+              ]
+              let _class1 = [
+                'h-full w-full pl-10 pr-10  rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition',
+              ]
+              let maskCom = null
               if (disabled == true) {
-                _class.push('is-disabled') //
+                // _class.push('is-disabled') //
+                _class.push('') //
+                _class1.push('is-disabled cursor-not-allowed')
+                maskCom = (
+                  <div
+                    class="absolute top-0 left-0 w-full h-full  cursor-not-allowed opacity-0"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      e.preventDefault() //
+                    }}
+                  ></div>
+                )
+              } else {
+                _class1.push('cursor-pointer')
               }
               let com = (
                 <div
-                  class={_class}
+                  class={[..._class, 'pt-2 pb-2 pl-1 pr-1 relative']}
                   style={{
                     minWidth: `${btn.getButtonWidth()}px`,
                     position: 'relative',
@@ -112,9 +146,20 @@ export default defineComponent({
                     runBtnFn(btn)
                   }}
                 >
-                  <ContextmenuItem>
-                    <div class="h-full flex items-center">{btn?.getLabel()}</div>
-                  </ContextmenuItem>
+                  {/* <ContextmenuItem>
+                    <div class="h-full flex items-center">
+                      {btn?.getLabel()}
+                    </div>
+                  </ContextmenuItem> */}
+                  <div
+                    class={[
+                      ..._class1,
+                      'flex justify-center items-center h-full w-full',
+                    ]}
+                  >
+                    <button class={[]}>{btn?.getLabel()}</button>
+                  </div>
+                  {maskCom}
                 </div>
               )
               let com1 = null
@@ -156,7 +201,11 @@ export default defineComponent({
                                 const btn = item.button
                                 let disabled = btn.getDisabled()
                                 return (
-                                  <div class={[{ 'is-disabled': disabled }]} style={{ width: '100%' }} onClick={() => runBtnFn(btn)}>
+                                  <div
+                                    class={[{ 'is-disabled': disabled }]}
+                                    style={{ width: '100%' }}
+                                    onClick={() => runBtnFn(btn)}
+                                  >
                                     {btn.getLabel()}
                                   </div>
                                 ) //

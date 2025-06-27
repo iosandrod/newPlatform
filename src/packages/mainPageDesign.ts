@@ -4,9 +4,10 @@ import pageCom from './pageCom'
 import { PageDesign } from './pageDesign'
 import { useHooks } from './utils/decoration'
 import { ImportPageDesign } from './importPageDesign'
-import { VxeUI } from 'vxe-pc-ui'
 //
 import * as XLSX from 'xlsx'
+import { Form } from './form'
+import { nextTick } from 'vue'
 export class MainPageDesign extends PageDesign {
   //
   @useHooks((config) => {
@@ -76,6 +77,8 @@ export class MainPageDesign extends PageDesign {
       await http.runCustomMethod('columns', 'batchUpdate', config) //
       this.getSystem().confirmMessage('列数据更新成功', 'success') ////
       this.getSystem().refreshPageDesign() //
+    } else {
+      this.saveTableDesign({ refresh: false }) //
     }
   }
 
@@ -184,10 +187,13 @@ export class MainPageDesign extends PageDesign {
       tableName: this.getRealTableName(),
       isDialog: true, //
     })
+    let enName = this.getTableName()
     let dialogConfig = {
       width: 0.8,
+      dialogName: `${enName}_dialog`, //
       height: 0.8, //
       title: '编辑',
+      destroyOnClose: false,
       // showFooter: false,
       buttons: [
         {
@@ -204,6 +210,109 @@ export class MainPageDesign extends PageDesign {
             let p: Dialog = config.parent
             let com: editPageDesign = p.getRef('innerCom') //
             com.saveTableDesign() //
+          },
+        },
+        {
+          label: '同步老数据',
+          fn: async (config) => {
+            let oldTableColumn = await this.getSystem().getOldErpTableColumns(
+              this.getRealTableName(),
+            ) //
+            // console.log(oldTableColumn, 'oldTableColumn') ////
+            let _columns = oldTableColumn.filter((col) => {
+              return Boolean(col.editType) == true
+            })
+            // let _column1 = _columns.map(c => c.editTitle)
+            //tab ->form
+            let _f = _columns.reduce((res, col) => {
+              //
+              let tabName = col.tabName
+              let _arr = res[tabName]
+              if (!_arr) {
+                _arr = []
+                res[tabName] = _arr
+              } //
+              _arr.push(col)
+              return res
+            }, {})
+            let obj1 = Object.values(_f).map((items: any[]) => {
+              let arr = []
+              for (let item of items) {
+                //
+                let field: any = {
+                  options: {},
+                  field: item.field, //
+                }
+                let editType = item.editType
+                //类型
+                field.type = editType.toLowerCase() //
+                if (field.type == 'bool') {
+                  field.type = 'boolean' //
+                }
+                if (
+                  ![
+                    'image',
+                    'buttongroup',
+                    'string',
+                    'input',
+                    'entity',
+                    'stable',
+                    'number',
+                    'sform',
+                    'radio',
+                    'select',
+                    'divider',
+                    'dform',
+                    'code',
+                    'time',
+                    'date',
+                    'datetime',
+                    'checkbox',
+                    'boolean',
+                    'baseinfo',
+                    'color',
+                    'gantt',
+                  ].includes(field.type)
+                ) {
+                  field.type = 'string' ////
+                }
+                if (['int', 'float', 'number'].includes(field.type)) {
+                  field.type = 'number' //
+                }
+
+                let options = item.options
+                field.label = item.editTitle //
+                let optionsField = item.optionsField //
+                options.optionsField = optionsField //
+                options.options = options //
+                options.required = item.required //
+                arr.push(field)
+              }
+              return arr //
+            })
+            let f = obj1[0] //
+            let p: Dialog = config.parent
+            let com: editPageDesign = p.getRef('innerCom') //
+            let items = com.items
+            let allF = items
+              .filter((item) => {
+                return item.config.type == 'dform'
+              })
+              .map((f) => {
+                // return f.getRef('fieldCom')
+                return f
+              })
+            allF.forEach((f1, i) => {
+              //
+              let f = f1.getRef('fieldCom')
+              let _f: Form = f
+              _f.setItems(obj1[i]) //
+              nextTick(() => {
+                let layout = _f.getLayoutData() //
+                let options = f1.getOptions()
+                options.layoutData = layout //
+              })
+            })
           },
         },
       ],
@@ -234,6 +343,12 @@ export class MainPageDesign extends PageDesign {
           }) //
         }
         if (_editType == 'add') {
+          let allDetailConfig = Object.values(page.tableDataMap).map(
+            (t: any) => {
+              // let data = t?.data
+              t.data = [] //
+            },
+          )
           page.addMainTableRow(_config) //
         }
       }, //
@@ -252,8 +367,8 @@ export class MainPageDesign extends PageDesign {
   })
   async saveTableData(config = this.getSaveData()) {
     let tName = this.getRealTableName()
-    let http = this.getHttp()
-    // await http.runCustomMethod(tName, 'batchUpdate', config) //批量更新//
+    let http = this.getHttp() //
+    // await http.runCustomMethod(tName, 'batchUpdate', config) //批量更新
     await http.batchUpdate(tName, config) //
     this.getSystem().confirmMessage('数据保存成功', 'success') //
     this.getTableData() //
@@ -285,9 +400,83 @@ export class MainPageDesign extends PageDesign {
       ) //
     }
     if (pageEditType == 'default') {
+      this.setCurrentEdit() //
     }
     if (pageEditType == 'dialog') {
       this.openEditDialog('edit') //
     }
+  }
+  async getRelateTreeData(tableName: any): Promise<void> {
+    if (typeof tableName == 'string') {
+      tableName = {
+        tableName: tableName,
+      }
+    }
+    let _tableName = tableName.tableName
+    let http = this.getHttp()
+    let _data = await http.find(_tableName)
+    let dataRef = this.getTableRefData(_tableName)
+    let tConfig = this.getTableConfig(_tableName) //
+    let treeConfig = tConfig?.treeConfig || {}
+    let rootValue = treeConfig?.rootId || '0' //
+    let _parentId = treeConfig?.parentId
+    let id = treeConfig?.id
+    let buildTreeData = (data, parentId = rootValue) => {
+      let _data = data
+        .filter((item) => item[_parentId] == parentId)
+        .map((item) => ({
+          ...item,
+          children: buildTreeData(data, item[id]),
+        }))
+      return _data
+    }
+    let data1 = buildTreeData(_data)
+    let rootCnValue = treeConfig?.rootCnValue || '客户类别'
+    let treeColF = tConfig.columns.find((col) => {
+      return col.isTree == true
+    })?.field
+    let _data2 = [
+      {
+        [id]: rootValue,
+        [treeColF]: rootCnValue,
+        children: data1,
+      },
+    ]
+    dataRef['data'] = _data2 //
+    // this.getSystem().confirmMessage('加载树数据成功123') //
+  }
+  async editRelateTreeData(tableName) {
+    if (typeof tableName == 'string') {
+      tableName = {
+        tableName: tableName,
+      }
+    }
+    let _tableName = tableName.tableName
+    let tRef = this.getRef(_tableName)
+    if (tRef == null) {
+      return
+    }
+    let curRow = tRef.getCurRow()
+    let tConfig = this.getTableConfig(_tableName)
+    let keyColumn = tConfig.keyColumn
+    let treeConfig = tConfig?.treeConfig || {}
+    let rootValue = treeConfig?.rootValue
+    let id = treeConfig?.id
+    let _value = curRow[id]
+    if (_value == rootValue && rootValue != null) {
+      //
+      this.getSystem().confirmMessage('不能编辑根节点')
+      return
+    }
+    if (curRow == null) {
+      this.getSystem().confirmMessage('请选择一行进行编辑') //
+      return
+    }
+    await this.confirmEditEntity({
+      tableName: _tableName,
+      curRow: curRow,
+      keyColumn,
+      editType: 'edit', //
+    })
   }
 } //

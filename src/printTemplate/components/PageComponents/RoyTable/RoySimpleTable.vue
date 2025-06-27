@@ -102,7 +102,15 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, computed, watch, onMounted } from 'vue'
+import {
+  defineComponent,
+  nextTick,
+  ref,
+  reactive,
+  computed,
+  watch,
+  onMounted,
+} from 'vue'
 import { useStore } from 'vuex'
 import {
   Context,
@@ -219,7 +227,6 @@ export default defineComponent({
     const startY = ref(-1)
     const endX = ref(-1)
     const endY = ref(-1)
-
     // 右键菜单项
     const contextMenu = reactive([
       {
@@ -297,7 +304,7 @@ export default defineComponent({
       }
       if (!preSettled || init) {
         // 生成初始 layoutDetail
-        reRenderTableLayout()
+        // reRenderTableLayout()
         // 根据行数、列数生成默认 tableData
         for (let r = 1; r <= tableConfig.rows; r++) {
           for (let c = 1; c <= tableConfig.cols; c++) {
@@ -356,24 +363,40 @@ export default defineComponent({
     }
 
     function isNeedShow(row, col) {
-      return !hiddenTdMaps.value[`${row}_${col}`]
+      // return !hiddenTdMaps.value[`${row}_${col}`]
+      let layout = tableConfig.layoutDetail?.[row]?.[col]
+      // console.log(layout, tableConfig.layoutDetail, row, col, 'layout') //
+      if (layout?.colSpan == 0 || layout?.rowSpan == 0) {
+        return false
+      }
+      return true //
     }
 
     function getIsActiveCell(row, col) {
-      const idx = (row - 1) * tableConfig.cols + (col - 1)
-      return selectedCells.value.includes(idx)
+      // const idx = (row - 1) * tableConfig.cols + (col - 1)
+      // return selectedCells.value.includes(idx)
+      return (
+        selectedCells.value.findIndex(
+          (item) => item[0] == row && item[1] == col,
+        ) !== -1
+      ) //
     }
 
     function getItColSpan(row, col) {
-      const idx = (row - 1) * tableConfig.cols + (col - 1)
-      const info = tableConfig.layoutDetail[idx]
-      return info?.colSpan || 1
+      // const idx = (row - 1) * tableConfig.cols + (col - 1)
+      // const info = tableConfig.layoutDetail[idx]
+      // return info?.colSpan || 1
+      let arr = tableConfig.layoutDetail?.[row - 1]
+      let obj = arr?.[col - 1]
+      return obj?.colSpan || 1
     }
-
     function getItRowSpan(row, col) {
-      const idx = (row - 1) * tableConfig.cols + (col - 1)
-      const info = tableConfig.layoutDetail[idx]
-      return info?.rowSpan || 1
+      // const idx = (row - 1) * tableConfig.cols + (col - 1)
+      // const info = tableConfig.layoutDetail[idx]
+      // return info?.rowSpan || 1
+      let arr = tableConfig.layoutDetail?.[row - 1]
+      let obj = arr?.[col - 1]
+      return obj?.rowSpan || 1 //
     }
 
     function handleCellMouseDown(e, r, c) {
@@ -392,39 +415,140 @@ export default defineComponent({
           const idx = (r - 1) * tableConfig.cols + (c - 1)
           startX.value = r
           startY.value = c
-          selectedCells.value = [idx]
+          selectedCells.value = [[r, c]] //
         }
         return
       }
       const idx = (r - 1) * tableConfig.cols + (c - 1)
       startX.value = r
       startY.value = c
-      selectedCells.value = [idx]
+      selectedCells.value = [[r, c]] //]
       endX.value = endY.value = -1
-      selectionHold.value = idx
+      selectionHold.value = [r, c] //
     }
 
     function handleCellMouseEnter(r, c) {
+      // if ((selectionHold.value = -1)) return //
+      let layoutDetail = tableConfig.layoutDetail
+      let _r = r
+      let _c = c
+      let layout = layoutDetail?.[r - 1]?.[c - 1]
+
+      let startLayout = layoutDetail?.[startX.value - 1]?.[startY.value - 1]
+      if (r == startX.value && c == startY.value) {
+        if (selectionHold.value != -1) {
+          endX.value = r
+          endY.value = c
+          rendSelectedCell()
+        }
+        return
+      }
+
+      // if (startLayout?.colSpan > 1) {
+      //   c = c + startLayout.colSpan - 1
+      // }
+      // if (startLayout?.rowSpan > 1) {
+      //   r = r + startLayout.rowSpan - 1 //
+      // }
+      // if (layout?.colSpan > 1) {
+      //   c = c + layout.colSpan - 1
+      // }
+      // if (layout?.rowSpan > 1) {
+      //   r = r + layout.rowSpan - 1
+      // }
       if (selectionHold.value !== -1) {
         endX.value = r
         endY.value = c
         rendSelectedCell()
       }
+      console.log(
+        'startX',
+        startX.value,
+        'startY',
+        startY.value,
+        'endX',
+        endX.value,
+        'endY',
+        endY.value,
+      ) //
+      // console.log(selectedCells.value, 'testValue') //
     }
 
     function rendSelectedCell() {
-      const sx = Math.min(startX.value, endX.value)
-      const sy = Math.min(startY.value, endY.value)
-      const ex = Math.max(startX.value, endX.value)
-      const ey = Math.max(startY.value, endY.value)
-      const sels = []
-      for (let rr = 1; rr <= tableConfig.rows; rr++) {
-        for (let cc = 1; cc <= tableConfig.cols; cc++) {
-          if (rr >= sx && rr <= ex && cc >= sy && cc <= ey) {
-            sels.push((rr - 1) * tableConfig.cols + (cc - 1))
+      // let layoutDetail = tableConfig.layoutDetail
+      // const sx = Math.min(startX.value, endX.value)
+      // const sy = Math.min(startY.value, endY.value)
+      // const ex = Math.max(startX.value, endX.value)
+      // const ey = Math.max(startY.value, endY.value)
+      // const sels = []
+      // for (let rr = 1; rr <= tableConfig.rows; rr++) {
+      //   for (let cc = 1; cc <= tableConfig.cols; cc++) {
+      //     if (rr >= sx && rr <= ex && cc >= sy && cc <= ey) {
+      //       // sels.push((rr - 1) * tableConfig.cols + (cc - 1))
+      //       sels.push([rr, cc])
+      //     } //
+      //   }
+      // }
+      // selectedCells.value = sels //
+      const layoutDetail = tableConfig.layoutDetail
+
+      let sx = Math.min(startX.value, endX.value)
+      let sy = Math.min(startY.value, endY.value)
+      let ex = Math.max(startX.value, endX.value)
+      let ey = Math.max(startY.value, endY.value)
+
+      let changed = true
+
+      // 🚀 迭代扩展，只要有任何合并单元格跟现有区域有交集，就把它整体并入
+      while (changed) {
+        changed = false
+
+        for (let r = 1; r <= tableConfig.rows; r++) {
+          for (let c = 1; c <= tableConfig.cols; c++) {
+            const layout = layoutDetail?.[r - 1]?.[c - 1]
+            if (!layout || layout.colSpan === 0 || layout.rowSpan === 0)
+              continue
+
+            const rowSpan = layout.rowSpan ?? 1
+            const colSpan = layout.colSpan ?? 1
+            const r1 = r
+            const r2 = r + rowSpan - 1
+            const c1 = c
+            const c2 = c + colSpan - 1
+
+            // 判断这个合并单元格是否与当前区域有交集
+            const isOverlap = !(r2 < sx || r1 > ex || c2 < sy || c1 > ey)
+
+            if (isOverlap) {
+              if (r1 < sx) {
+                sx = r1
+                changed = true
+              }
+              if (r2 > ex) {
+                ex = r2
+                changed = true
+              }
+              if (c1 < sy) {
+                sy = c1
+                changed = true
+              }
+              if (c2 > ey) {
+                ey = c2
+                changed = true
+              }
+            }
           }
         }
       }
+
+      // ✅ 生成最终选中格子
+      const sels = []
+      for (let rr = sx; rr <= ex; rr++) {
+        for (let cc = sy; cc <= ey; cc++) {
+          sels.push([rr, cc])
+        }
+      }
+
       selectedCells.value = sels
     }
 
@@ -439,50 +563,124 @@ export default defineComponent({
     }
 
     function reRenderTableLayout() {
-      const total = tableConfig.rows * tableConfig.cols
-      const arr = []
-      for (let i = 0; i < total; i++) {
-        arr.push({ uniId: getUuid(), colSpan: 1, rowSpan: 1 })
-      }
-      tableConfig.layoutDetail = arr
+      // const total = tableConfig.rows * tableConfig.cols
+      // const arr = []
+      // for (let i = 0; i < total; i++) {
+      //   arr.push({ uniId: getUuid(), colSpan: 1, rowSpan: 1 })
+      // }
+      // tableConfig.layoutDetail = arr
     }
-
+    function resetLayout() {
+      // tableConfig.layoutDetail = tableConfig.layoutDetail.filter((item) => {
+      //   let colSpan = item.colSpan
+      //   let rowSpan = item.rowSpan
+      //   if (colSpan === 1 && rowSpan === 1) {
+      //     return false
+      //   }
+      //   return true
+      // }) //
+    }
     function addRow() {
+      console.log(
+        JSON.parse(JSON.stringify(tableConfig)),
+        JSON.parse(JSON.stringify(tableData)),
+        'tableConfig, tableData',
+      )
+      // function reRenderTableLayout() {
+      //   const total = tableConfig.rows * tableConfig.cols
+      //   const arr = []
+      //   for (let i = 0; i < total; i++) {
+      //     arr.push({ uniId: getUuid(), colSpan: 1, rowSpan: 1 })
+      //   }
+      //   tableConfig.layoutDetail = arr
+      // }
       tableConfig.rows++
       const newR = tableConfig.rows
       for (let c = 1; c <= tableConfig.cols; c++) {
-        const firstCell = tableData[`1-${c}`]
+        let firstCell = tableData[`1-${c}`] //
         tableData[`${newR}-${c}`] = {
           ...deepCopy(defaultTableCell),
-          width: firstCell ? firstCell.width : defaultTableCell.width,
+          // width: firstCell ? firstCell.width : defaultTableCell.width,
+          width: defaultTableCell.width,
           id: getUuid(),
         }
-      }
-      reRenderTableLayout()
+        // tableConfig.layoutDetail.push({
+        //   uniId: getUuid(),
+        //   colSpan: 1,
+        //   rowSpan: 1,
+        // }) //
+      } //
+      resetLayout()
+      // // 找当前列上面单元格
+      // reRenderTableLayout()
+      //123123123
+      nextTick(() => {
+        // console.log(tableConfig, tableData, 'tableConfig, tableData') //
+        console.log(
+          JSON.parse(JSON.stringify(tableConfig)),
+          JSON.parse(JSON.stringify(tableData)),
+          'tableConfig, tableData',
+        )
+      })
     }
 
     function addCol() {
+      console.log(
+        JSON.parse(JSON.stringify(tableConfig)),
+        JSON.parse(JSON.stringify(tableData)),
+        'tableConfig, tableData',
+      )
       tableConfig.cols++
       const newC = tableConfig.cols
       for (let r = 1; r <= tableConfig.rows; r++) {
-        const firstCell = tableData[`${r}-1`]
         tableData[`${r}-${newC}`] = {
           ...deepCopy(defaultTableCell),
-          height: firstCell ? firstCell.height : defaultTableCell.height,
+          height: defaultTableCell.height, //
+          width: defaultTableCell.width, //
           id: getUuid(),
         }
       }
-      reRenderTableLayout()
+      resetLayout() //
+      nextTick(() => {
+        console.log(
+          JSON.parse(JSON.stringify(tableConfig)),
+          JSON.parse(JSON.stringify(tableData)),
+          'tableConfig, tableData',
+        )
+      }) //
     }
 
     function mergeCell() {
-      const sx = Math.min(startX.value, endX.value)
-      const sy = Math.min(startY.value, endY.value)
-      const ex = Math.max(startX.value, endX.value)
-      const ey = Math.max(startY.value, endY.value)
-      const startIndex = (sx - 1) * tableConfig.cols + (sy - 1)
-      const groupId = getUuid()
+      let _selectedCells = selectedCells.value
+      let leftTopCell = null
+      let rightBottomCell = null
 
+      for (const [r, c] of _selectedCells) {
+        if (
+          !leftTopCell ||
+          r < leftTopCell[0] ||
+          (r === leftTopCell[0] && c < leftTopCell[1])
+        ) {
+          leftTopCell = [r, c]
+        }
+        if (
+          !rightBottomCell ||
+          r > rightBottomCell[0] ||
+          (r === rightBottomCell[0] && c > rightBottomCell[1])
+        ) {
+          rightBottomCell = [r, c]
+        }
+      }
+      // let sx = Math.min(startX.value, endX.value)
+      // let sy = Math.min(startY.value, endY.value)
+      // let ex = Math.max(startX.value, endX.value)
+      // let ey = Math.max(startY.value, endY.value)
+      const sx = leftTopCell[0]
+      const sy = leftTopCell[1]
+      const ex = rightBottomCell[0]
+      const ey = rightBottomCell[1] //
+      // const startIndex = (sx - 1) * tableConfig.cols + (sy - 1)
+      const groupId = getUuid()
       if (
         sx === -1 ||
         sy === -1 ||
@@ -496,53 +694,156 @@ export default defineComponent({
 
       for (let rr = sx; rr <= ex; rr++) {
         for (let cc = sy; cc <= ey; cc++) {
-          const idx = (rr - 1) * tableConfig.cols + (cc - 1)
-          const info = tableConfig.layoutDetail[idx]
+          // const idx = (rr - 1) * tableConfig.cols + (cc - 1)
+          // let info = tableConfig.layoutDetail[idx]
+          // if (info == null) {
+          //   tableConfig.layoutDetail[idx] = {
+          //     uniId: getUuid(),
+          //     colSpan: 1,
+          //     rowSpan: 1,
+          //   }
+          //   info = tableConfig.layoutDetail[idx]
+          // } //
+          let layoutDetail = tableConfig.layoutDetail
+          let rowArr = layoutDetail[rr - 1]
+          if (!rowArr) {
+            rowArr = []
+            layoutDetail[rr - 1] = rowArr
+          }
+          let info = rowArr[cc - 1]
+          if (!info) {
+            info = {}
+            rowArr[cc - 1] = info
+          }
           info.groupId = groupId
+          // if (idx === startIndex) {
+          if (rr === sx && cc === sy) {
+            let startCell = tableData[`${sx}-${sy}`]
+            let endCell = tableData[`${ex}-${ey}`]
+            let endLayout = layoutDetail?.[ex - 1]?.[ey - 1] //
+            if (endLayout?.colSpan == 0 && endLayout?.rowSpan == 0) {
+              let _ex = null
+              let _ey = null
+              let found = false
+              let mergeX = null
+              let mergeY = null
 
-          if (idx === startIndex) {
-            const startCell = tableData[`${sx}-${sy}`]
-            const endCell = tableData[`${ex}-${ey}`]
+              for (let i = ex; i >= 1; i--) {
+                for (let j = ey; j >= 1; j--) {
+                  const layout = layoutDetail?.[i - 1]?.[j - 1]
+                  if (!layout) continue
+
+                  const colSpan = layout.colSpan ?? 1
+                  const rowSpan = layout.rowSpan ?? 1
+
+                  // 判断 (ex, ey) 是否在当前 layout 的合并范围内
+                  if (
+                    colSpan >= 1 &&
+                    rowSpan >= 1 &&
+                    i + rowSpan - 1 >= ex &&
+                    j + colSpan - 1 >= ey
+                  ) {
+                    mergeX = i
+                    mergeY = j
+                    found = true
+                    break
+                  }
+                }
+                if (found) {
+                  _ex = mergeX
+                  _ey = mergeY
+                  break //
+                }
+              }
+              if (_ex) {
+                endCell = tableData[`${_ex}-${_ey}`]
+                endLayout = layoutDetail[_ex - 1][_ey - 1] //
+              }
+            }
             const startRect = document
               .getElementById(`roy-component-${startCell.id}`)
               .getBoundingClientRect()
             const endRect = document
               .getElementById(`roy-component-${endCell.id}`)
               .getBoundingClientRect()
-
             startCell.width = Math.abs(endRect.x - startRect.x) + endRect.width
             startCell.height =
               Math.abs(endRect.y - startRect.y) + endRect.height
-
             info.rowSpan = ex - sx + 1
             info.colSpan = ey - sy + 1
           } else {
-            const cellInfo = tableConfig.layoutDetail[idx]
-            cellInfo.rowSpan = 0
-            cellInfo.colSpan = 0
+            // const cellInfo = tableConfig?.layoutDetail?.[idx] //
+            // if (cellInfo) {
+            //   cellInfo.colSpan = 0
+            //   cellInfo.rowSpan = 0
+            // }
+            info.rowSpan = 0
+            info.colSpan = 0 //
           }
         }
       }
     }
 
+    // function splitCell() {
+    //   const sx = startX.value
+    //   const sy = startY.value
+    //   if (sx === -1 || sy === -1) {
+    //     toast('请选中要拆分的单元格')
+    //     return
+    //   }
+    //   let layoutDetail = tableConfig.layoutDetail
+
+    //   let rowArr = layoutDetail?.[sx - 1]?.[sy - 1]
+    //   if (!rowArr) {
+    //     return
+    //   }
+    //   let rowSpan=rowArr.rowSpan
+    //   let colSpan=rowArr.colSpan
+
+    // }
     function splitCell() {
       const sx = startX.value
       const sy = startY.value
+
       if (sx === -1 || sy === -1) {
         toast('请选中要拆分的单元格')
         return
       }
-      const startIndex = (sx - 1) * tableConfig.cols + (sy - 1)
-      const groupId = tableConfig.layoutDetail[startIndex].groupId
-      if (!groupId) return
 
-      tableConfig.layoutDetail.forEach((info) => {
-        if (info.groupId === groupId) {
-          info.rowSpan = 1
-          info.colSpan = 1
-          delete info.groupId
+      const layoutDetail = tableConfig.layoutDetail
+      const mainLayout = layoutDetail?.[sx - 1]?.[sy - 1]
+
+      if (!mainLayout || (mainLayout.colSpan <= 1 && mainLayout.rowSpan <= 1)) {
+        toast('当前单元格未合并，无需拆分')
+        return
+      }
+
+      const rowSpan = mainLayout.rowSpan
+      const colSpan = mainLayout.colSpan
+
+      // 遍历该合并区域，恢复所有被合并格子
+      for (let r = sx; r < sx + rowSpan; r++) {
+        for (let c = sy; c < sy + colSpan; c++) {
+          const layout = layoutDetail?.[r - 1]?.[c - 1]
+          if (layout) {
+            layout.colSpan = 1
+            layout.rowSpan = 1
+          }
+
+          // 如果 tableData 中某格被 width/height = 0，也还原为默认
+          const key = `${r}-${c}`
+          if (tableData[key]) {
+            tableData[key].width ||= defaultTableCell.width
+            tableData[key].height ||= defaultTableCell.height
+          }
         }
-      })
+      }
+
+      // 最后清除主格的合并信息
+      layoutDetail[sx - 1][sy - 1].colSpan = 1
+      layoutDetail[sx - 1][sy - 1].rowSpan = 1
+
+      toast('拆分成功')
     }
 
     function menyItemCmd(cmd) {
@@ -589,12 +890,13 @@ export default defineComponent({
       e.stopPropagation()
       e.preventDefault()
       const elementData = tableData[`${r}-${c}`]
-      const curIndex = (r - 1) * tableConfig.cols + (c - 1)
-      const curConfig = tableConfig.layoutDetail[curIndex]
+      // const curIndex = (r - 1) * tableConfig.cols + (c - 1)
+      // const curConfig = tableConfig.layoutDetail[curIndex]
+      let curConfig = tableConfig.layoutDetail?.[r - 1]?.[c - 1]
       if (!elementData) return
       const cellEl = document.getElementById(`roy-component-${elementData.id}`)
       if (!cellEl) {
-        debugger //
+        // debugger //
         return
       }
 
@@ -602,25 +904,22 @@ export default defineComponent({
         const rect = cellEl.getBoundingClientRect()
         const dX = moveEvent.movementX
         const dY = moveEvent.movementY
-
         // 同一列宽度
         for (let rr = 1; rr <= tableConfig.rows; rr++) {
-          const idx = (rr - 1) * tableConfig.cols + (c - 1)
-          const info = tableConfig.layoutDetail[idx]
-          if (info.colSpan === curConfig.colSpan) {
+          let info = tableConfig.layoutDetail?.[rr - 1]?.[c - 1]
+          if (info?.colSpan === curConfig?.colSpan) {
             tableData[`${rr}-${c}`].width =
               (rect.width + dX) / Number(props.scale)
           }
         }
         // 同一行高度
         for (let cc = 1; cc <= tableConfig.cols; cc++) {
-          const idx = (r - 1) * tableConfig.cols + (cc - 1)
-          const info = tableConfig.layoutDetail[idx]
-          if (info.rowSpan === curConfig.rowSpan) {
+          let info = tableConfig.layoutDetail?.[r - 1]?.[cc - 1]
+          if (info?.rowSpan === curConfig?.rowSpan) {
             tableData[`${r}-${cc}`].height =
               (rect.height + dY) / Number(props.scale)
           }
-        }
+        } //
       }
 
       function onUp() {

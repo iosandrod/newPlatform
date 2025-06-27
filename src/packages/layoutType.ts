@@ -102,7 +102,7 @@ export type Field = {
   key?: string
   id?: string
   field?: string
-  options?: FieldOptions
+  options?: any
   style?: {
     width: {
       pc: string

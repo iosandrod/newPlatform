@@ -330,6 +330,7 @@ function ControlInsertionPlugin(ER: Form) {
     dragStart(e) {}
     drop(e) {
       // 如果没有之前的元素 (prevEl) 或者当前事件没有一个活动的sortable实例，则直接返回
+      setTimeout(() => {}, 100)
       if (!prevEl || !e.activeSortable) {
         return false
       }
@@ -337,6 +338,7 @@ function ControlInsertionPlugin(ER: Form) {
       // 获取拖拽元素的真实DOM结构
       let oldEl = getDragElement(dragEl)
       // 判断当前拖拽的元素是否是 'block' 类型
+      // console.log(oldEl,'testOld')//
       let isBlock =
         _.get(e, 'activeSortable.options.dataSource', false) === 'block'
       if (isBlock) {
@@ -350,24 +352,12 @@ function ControlInsertionPlugin(ER: Form) {
             '该字段已经存在,请不要重复添加',
             'error',
           ) //
-          resetStates() //
+          resetStates()
           return
         }
       }
       // 从事件对象中获取拖拽的元素 (dragEl) 和目标元素 (target)
 
-      let isInRootDiv = false
-      if (inserRowIndex !== '') {
-        let store = []
-        store = Array.isArray(prevSortable?.options?.parent)
-          ? prevSortable?.options.parent
-          : prevSortable?.options?.parent?.list
-        // 在指定的索引位置插入新元素
-        let _store = ER.state.store
-        if (_store == store) {
-          isInRootDiv = true //
-        }
-      } //
       // let _oldEl1=_.cloneDeep(oldEl)
       let _parent = prevSortable?.options?.parent //
       if (_parent == ER.state.store && inserColIndex !== '') {
@@ -431,11 +421,12 @@ function ControlInsertionPlugin(ER: Form) {
               inserRowIndex !== '',
               true,
               isBlock,
-              isInRootDiv,
+              // isInRootDiv,
             )
             newElement = {
-              type: 'inline',
-              columns: [newElement], //
+              ...ER.createNodeIdKey('inline'),
+              // type: 'inline',
+              columns: [newElement],
             }
             // let list = _node.list
             _node.context.appendBlockNode(newElement) ////
@@ -521,10 +512,11 @@ function ControlInsertionPlugin(ER: Form) {
                   inserRowIndex !== '',
                   true,
                   isBlock,
-                  isInRootDiv,
+                  // isInRootDiv,
                 )
                 newElement = {
-                  type: 'inline',
+                  ...ER.createNodeIdKey('inline'),
+                  // type: 'inline',
                   columns: [newElement], //
                 }
                 // let list = _node.list
@@ -557,12 +549,15 @@ function ControlInsertionPlugin(ER: Form) {
           }
         }
       } //
+      if (oldEl.type == 'grid') {
+        // isInRootDiv = false
+      } //
       let newElement = ER.wrapElement(
         _.cloneDeep(oldEl),
         inserRowIndex !== '',
         true,
         isBlock,
-        isInRootDiv,
+        // isInRootDiv,
       )
       // 克隆并包装拖拽的元素，以便插入到新位置
       // let newElement = ER.wrapElement(
@@ -587,7 +582,7 @@ function ControlInsertionPlugin(ER: Form) {
             return
           }
           oldEl.context.delete()
-        }
+        } //
       }
       if (inserRowIndex !== '') {
         let store = [] //
@@ -598,40 +593,7 @@ function ControlInsertionPlugin(ER: Form) {
         } //
         //只有一个元素
         let preP = prevSortable.options.parent
-        if (store.length == 1) {
-          let n0 = store[0]
-          let pContext = n0.context
-          let pp = pContext.parent
-          if (pp.type == 'col') {
-            let pp1 = pp.context.parent
-            if (pp1.type == 'grid') {
-              let pp1columns = pp1.columns
-              if (pp1columns.length == 1) {
-                let pp1Context = pp1?.context // is inline
-                let pppparent = pp1Context?.parent //is Array
-                let ppppContext = pppparent?.context
-                let ppppparent = ppppContext?.parent
-                if (ppppparent == ER.state.store) {
-                  //
-                  // debugger
-                  newElement = ER.wrapElement(
-                    _.cloneDeep(oldEl),
-                    inserRowIndex !== '',
-                    true,
-                    isBlock,
-                    true,
-                  )
-                  inserRowIndex = ppppparent.findIndex(
-                    (node) => node.id == pppparent.id,
-                  )
-                  store = ER.state.store //
-                  preP = ER.state.store //
-                  // ER.state.store.splice(inserRowIndex, 0, newElement) //
-                }
-              }
-            }
-          }
-        }
+
         // 在指定的索引位置插入新元素
         store.splice(inserRowIndex, 0, newElement)
         let _node = store[inserRowIndex]

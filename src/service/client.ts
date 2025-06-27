@@ -12,6 +12,8 @@ import {
   AuthenticationRequest,
   AuthenticationResult,
 } from '@feathersjs/authentication'
+import { nextTick } from 'vue'
+import axios from 'axios'
 export const defaultStorage: any = getDefaultStorage()
 const defaults: AuthenticationClientOptions = {
   header: 'Authorization',
@@ -23,6 +25,54 @@ const defaults: AuthenticationClientOptions = {
   path: '/authentication',
   Authentication: AuthenticationClient,
   storage: defaultStorage,
+} //
+let queryString = window.location.search.slice(1)
+let params = new URLSearchParams(queryString)
+let obj = Object.fromEntries(params.entries()) || {}
+// console.log(obj, 'testObj123123') //
+let userid = obj?.userid
+if (userid != null) {
+  nextTick(() => {
+    system.setLocalItem('userid', userid)
+  })
+}
+export const createAxios = (config) => {
+  let _appName = localStorage.getItem('appName')
+  let _userid = localStorage.getItem('userid') //
+  let fullHost = window.location.host // erp.dxf.life
+  let hostname = window.location.hostname // erp.dxf.life
+  let subdomain = hostname.split('.')[0] // erp
+  let port = location.port
+  let userid = config.userid
+  if (userid == null) {
+    userid = _userid
+  } //
+  let appName = config.appName
+  if (appName == null) {
+    appName = _appName //
+  }
+  let _key = '' //
+  if (appName != null && userid != 'undefined') {
+    _key = `/${appName}_${userid}`
+  }
+  let baseUrl = `http://${'localhost:3031'}` //
+  let _base = import.meta.env.VITE_BASEURL
+  let isProd = import.meta.env.VITE_ENVIRONMENT
+  if (isProd == 'production') {
+    baseUrl = _base //
+  }
+  let _host = `${baseUrl}${_key}`
+  if (config?.isMain === true) {
+    _host = baseUrl //
+  }
+  if (appName == 'platform') {
+    _host = baseUrl //
+  }
+  let axiosInstance = axios.create({
+    baseURL: _host,
+    timeout: 60000,
+  })
+  return axiosInstance //
 }
 class myAuth extends AuthenticationClient {
   constructor(app: any, op: any) {
@@ -72,62 +122,129 @@ export class Client {}
 //
 export type createConfig = {}
 export const createClient = (config) => {
+  let _appName = localStorage.getItem('appName')
+  let _userid = localStorage.getItem('userid') //
+  let fullHost = window.location.host // erp.dxf.life
+  let hostname = window.location.hostname // erp.dxf.life
+  let subdomain = hostname.split('.')[0] // erp
   let port = location.port
-  // console.log(port, 'testPort') //
-  let _host = `http://localhost:3031`
-  if (port == '3004') {
-    _host = `${_host}/erp_1` //
+  let userid = config.userid
+  if (userid == null) {
+    userid = _userid
+  } //
+  let appName = config.appName
+  if (appName == null) {
+    appName = _appName //
+  }
+  let _key = '' //
+  if (appName != null && userid != 'undefined') {
+    _key = `/${appName}_${userid}`
+  }
+  let baseUrl = `http://${'localhost:3031'}` //
+  let _base = import.meta.env.VITE_BASEURL
+  let isProd = import.meta.env.VITE_ENVIRONMENT
+  if (isProd == 'production') {
+    baseUrl = _base //
+  }
+  let _host = `${baseUrl}${_key}`
+  if (config?.isMain === true) {
+    _host = baseUrl //
+  }
+  if (appName == 'platform') {
+    _host = baseUrl //
   }
   const socket = io(_host, {
     transports: ['websocket'],
+    extraHeaders: {
+      authorization: localStorage.getItem('feathers-jwt'),
+    },
+    auth: {
+      authorization: localStorage.getItem('feathers-jwt'),
+    },
   })
-  const client = socketio(socket)
+  socket.on('login', () => {
+    console.log('登陆了') //
+  })
+  socket.on('connected login', async (data) => {
+    let appName = await system.getCurrentApp()
+    if (appName == 'platform') {
+      //
+      system.loginInfo = {
+        user: data,
+      }
+    }
+  })
+  let client = socketio(socket)
   let app = feathers()
   app.configure(client)
   app.set('connection', socket)
-  app.configure(init()) //
-
-  return app //
+  app.configure(init())
+  app.set('baseUrl', _host)
+  return app
 }
 export const client = createClient({})
-// export const client: any = {
-//   get: () => {
-//     return {
-//       emit: () => {},
-//     }
-//   },
-// } //
+export const mainClient = createClient({
+  isMain: true, //
+})
+export const axiosClient = createAxios({
+  isMain: true, //
+}) //
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client = client
+  mainClient = client
   constructor() {
     this.init()
+  } //
+  changeClient(config) {
+    let appName = config.appName
+    if (appName == null || appName == 'platform') {
+      this.client = this.mainClient
+      return
+    }
+    let userid = config.userid //
+    if (userid == null || userid == 0) {
+      this.client = this.mainClient
+      return //
+    }
+    let _client = createClient(config)
+    this.client = _client //
   }
   async init() {
-    let token = localStorage.getItem('feathers-jwt')
-    if (token) {
-      try {
-        //
-        let res = await this?.client?.authenticate({
-          strategy: 'jwt',
-          accessToken: token, //
-          _unUseCaptcha: true,
-        }) //
-        system.loginInfo = res //
-        return res
-      } catch (error) {
-        console.error(error, '登录失败') //
-        localStorage.removeItem('feathers-jwt') //
+    nextTick(async () => {
+      let token = localStorage.getItem('feathers-jwt')
+      if (token) {
+        try {
+          let app = system.getCurrentApp()
+          let res = await this.client.authenticate({
+            accessToken: token,
+            _unUseCaptcha: true,
+            strategy: 'jwt',
+          })
+          // system.confirmMessage('默认登录成功') //
+          console.log('系统默认登录成功')
+          system.loginInfo = res //
+        } catch (error) {
+          // console.log('默认登录失败') //
+          console.error(error, '默认登录失败') //
+          // console.error(error, '登录失败') //
+        }
+      } else {
+        system.loginInfo = null
       }
-    }
+    })
+
+    // system.hasDefaultLogin = true
   }
+  setSystemLoading(status) {}
   async registerUser(data) {
     try {
       let _res = await this.create('users', data)
       console.log(_res, 'test_res') //
       system.confirmMessage('注册成功')
       let r = system.getRouter()
-      r.push('companyLogin') //
+
+      r.push('login') //
     } catch (error) {
       system.confirmMessage(`注册失败,${error?.message}`, 'error') //
     }
@@ -137,13 +254,14 @@ export class myHttp {
       //
       let http = this
       data.strategy = 'local' ////
+      console.log('用户登录', data)
       let _res = await http.client.authenticate(data) //
       system.loginInfo = _res //
       // console.log(_res, 'testRes') //
       system.confirmMessage('登录成功') //
       let router = system.getRouter()
-      router.push('/companyHome') // //
-      return _res ////
+      router.push('/home')
+      return _res
     } catch (error) {
       system.confirmMessage(`登录失败,${error?.message}`, 'error') //
     }
@@ -153,7 +271,7 @@ export class myHttp {
       let client = this.client //
       await client.logout() //
       let router = system.getRouter()
-      router.push('/companyLogin') //
+      router.push('/login') //
       system.loginInfo = null //
     } catch (error) {
       console.error('登出信息报错') //
@@ -161,7 +279,7 @@ export class myHttp {
   }
   redirectToLogin() {
     let router = system.getRouter()
-    router.push('/companyLogin') //
+    router.push('/login') //
   }
   async post(tableName, method, params = {}, query = {}): Promise<any> {
     let connection = this?.client?.get('connection')
@@ -172,6 +290,7 @@ export class myHttp {
         params,
         query,
         (data, err) => {
+          console.log(method, 'testMethod', data, err, 'sdjfklsf') //
           let isError = false
           let error = null //
           let _data = null
@@ -221,9 +340,14 @@ export class myHttp {
     let _res = await this.post(tableName, me, data)
     return _res //
   }
-  async find(tableName, query = {}): Promise<any> {
-    let _data = await this.get(tableName, 'find', query) //
-    return _data
+  async find(tableName, query = {}, config?: any): Promise<any> {
+    // let _data = await this.get(tableName, 'find', query) //
+    // return _data
+    let _data = await this.runCustomMethod(tableName, 'getTableData', {
+      query,
+      ...config,
+    })
+    return _data //
   }
   async get(tableName, method, query?: any): Promise<any> {
     let connection = this?.client?.get('connection')
@@ -298,8 +422,10 @@ export class myHttp {
         }, //
       )
     })
+  } //
+  async delete(tableName, params = {}, query = {}) {
+    await this.batchDelete(tableName, params) //
   }
-  async delete(tableName, params = {}, query = {}) {}
   async getPageLayout(navName) {
     let data = await this.get('entity', 'find', {
       tableName: navName,
@@ -316,12 +442,10 @@ export class myHttp {
     console.time('uploadFile')
     let uri = await this.fileToDataURL(file)
     console.timeEnd('uploadFile')
-    console.log('转化时间分析') //
     let obj = {
       uri: uri,
       fileName: fileName,
     } //
-    console.log(obj, 'testObj') //
     let _res = await this.create('uploads', obj) //
     return _res
   }
@@ -356,6 +480,16 @@ export class myHttp {
     let _res = await this.runCustomMethod(tableName, 'batchUpdate', data)
     return _res //
   }
+  async batchDelete(tableName, data) {
+    console.log('批量删除数据', tableName, data) //
+    let _res = await this.runCustomMethod(tableName, 'batchDelete', data)
+    return _res //
+  }
+  async getClientBaseUrl() {
+    let client = this.client
+    let baseUrl = client.get('baseUrl')
+    return baseUrl
+  } //
 }
 
 export const http = new myHttp()

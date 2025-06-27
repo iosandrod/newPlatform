@@ -54,7 +54,12 @@ export const itemCom = defineComponent({
         )
       } else {
         com = (
-          <ContextmenuItem {...item.config}>
+          <ContextmenuItem
+            {...item.config}
+            onClick={() => {
+              item.onClick()
+            }}
+          >
             {{
               default: () => {
                 let _slot = slots.itemSlot
@@ -71,12 +76,7 @@ export const itemCom = defineComponent({
                   _class.push('is-disabled')
                 }
                 return (
-                  <div
-                    class={[..._class, 'h-full w-full flex items-center ']}
-                    onClick={() => {
-                      item.onClick()
-                    }}
-                  >
+                  <div class={[..._class, 'h-full w-full flex items-center ']}>
                     {_com}
                   </div>
                 )
@@ -147,7 +147,7 @@ export default defineComponent({
         mIns.setItems(newV) //
       },
     )
-    let mP: PageDesign = inject('mainPageDesign',null)//
+    let mP: PageDesign = inject('mainPageDesign', null) //
     if (mP != null) {
       let tName = mP.getTableName()
       mIns.tableName = tName //

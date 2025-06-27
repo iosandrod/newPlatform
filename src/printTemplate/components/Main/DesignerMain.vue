@@ -7,6 +7,7 @@
       </template>
     </ToolBar>
     <div
+      class='w-full h-full'
       @dragover.prevent="handleDragOver"
       @drop.prevent.stop="handleDrop"
       @mousedown="handleMouseDown"

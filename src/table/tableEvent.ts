@@ -62,8 +62,10 @@ export const click_cell = (table: Table) => {
       setTimeout(() => {
         table.isContainerClick = false
       }, 0)
-      // console.log(config, 'is click cell') //
-      table.openTreeRow(config.col, config.row) //
+      let isTreeIconClick = table.isTreeIconClick
+      if (isTreeIconClick) {
+        table.openTreeRow(config.col, config.row) //
+      }
       let field = config.field //
       let originData = config.originData //
       let tCol = table.getLastFlatColumns().find((col) => {
@@ -170,7 +172,11 @@ export const selected_cell = (table: Table) => {
       let lastR = ranges.slice(-1)[0]
       let start = lastR.start //
       let end = lastR.end
+      let _select=ins.getSelectedCellInfos()//
+      console.log(_select,'sfsfsfs;;')//
       _this.selectCache = config //
+      _this.selectCacheCell=_select
+      // console.log(config)//
       if (start.col == end.col) {
         let field = ins.getBodyField(start.col, start.row)
         let rArr = []
@@ -195,6 +201,47 @@ export const selected_cell = (table: Table) => {
             table.permission.canChangecheckbox = true
           }, 0)
           // table.updateCanvas() //
+        }
+        let targetCol = table.getFlatColumns().find((col) => {
+          return col.getField() == field
+        })
+        if (targetCol == null) {
+          return
+        }
+        let config = targetCol.config
+        let enableSelect = config.enableSelect
+        if (enableSelect == true) {
+          let _start = start.row
+          let _end = end.row
+          if (_start > _end) {
+            _start = end.row
+            _end = start.row
+          }
+          let rArr = []
+          for (let i = _start; i <= _end; i++) {
+            let check = table.checkCanEditCell(start.col, i, null)
+            if (check == false) {
+              continue
+            }
+            let record = ins.getRecordByCell(start.col, i) //
+            // record.checkboxField = !record.checkboxField
+            rArr.push(record)
+          }
+          for (let row of rArr) {
+            let oldValue = row[targetCol.getField()]
+            let bool = Boolean(oldValue)
+            let nv = null
+            if (bool == true) {
+              nv = 0
+            } else {
+              nv = 1
+            }
+            targetCol.updateBindValue({
+              value: nv,
+              field: targetCol.getField(),
+              row,
+            }) //
+          }
         }
       }
     },
@@ -304,6 +351,7 @@ export const resize_column = (table: Table) => {
     name: 'resize_column',
     keyName: 'resize_column',
     callback: (config) => {
+      _this.setUseCache(true) //
       let col = config.col //
       let _col: Column = table.getCurrentResizeCol(col)
       if (_col == null) {
@@ -326,6 +374,7 @@ export const resize_column = (table: Table) => {
     name: 'resize_column_end',
     keyName: 'resize_column_end',
     callback: (config) => {
+      _this.setUseCache(false) //
       let _col = table.currentResizeField
       let _col1 = table.getFlatColumns().find((col) => {
         return col.getField() == _col

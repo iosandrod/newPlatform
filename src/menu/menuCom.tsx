@@ -10,6 +10,9 @@ const subMenu = defineComponent({
   props: {
     item: {},
     ...menuProps,
+    onContextmenu: {
+      type: Function, //
+    },
   },
   setup(props, { expose, slots, emit, attrs }) {
     const item: MenuItem = props.item as any
@@ -71,7 +74,13 @@ const subMenu = defineComponent({
                     let c = dragSlot(item)
                     return c
                   }
-                  return <subMenu key={item.id} item={item} v-slots={slots}></subMenu> //
+                  return (
+                    <subMenu
+                      key={item.id}
+                      item={item}
+                      v-slots={slots}
+                    ></subMenu>
+                  ) //
                 })
                 return items
               },
@@ -87,7 +96,11 @@ const subMenu = defineComponent({
           ></ElSubMenu>
         )
       }
-      let _com1 = <div ref={registerRoot}>{_com}</div>
+      let _com1 = (
+        <div onContextmenu={(e) => item.onContextmenu(e)} ref={registerRoot}>
+          {_com}
+        </div>
+      )
       return _com1 //
     }
   },
@@ -111,6 +124,9 @@ export default defineComponent({
     onItemClick: {
       type: Function,
     },
+    onContextmenu: {
+      type: Function,
+    },
   },
   setup(props, { expose, slots }) {
     const menuIns = new Menu(props) //
@@ -119,13 +135,13 @@ export default defineComponent({
       () => props.items,
       (newValue, oldValue) => {
         menuIns.setMenuItems(newValue) //
-      }
+      },
     )
     watch(
       () => menuIns.searchValue,
       (newValue, oldValue) => {
         menuIns.resetItemShow()
-      }
+      },
     )
     let btns = [
       {
@@ -182,6 +198,7 @@ export default defineComponent({
             <ElMenu
               ref={registerMenuRef}
               {...props}
+              uniqueOpened={menuIns.getUniqueOpen()}
               defaultOpeneds={menuIns.getMenuDefaultOpeneds()} //
               v-slots={{
                 default: () => items,

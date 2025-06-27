@@ -1,25 +1,76 @@
 import { VTable } from '@visactor/vue-vtable'
 import { Column } from './column'
-import { toRaw } from 'vue'
+import { nextTick, toRaw, isProxy } from 'vue'
 import {
   CheckBox,
   createGroup,
   createImage,
   createText,
 } from '@visactor/vtable/es/vrender'
+import * as d3 from 'd3'
+import { render } from 'bwip-js'
+function createSvgTextString(text, width, height, fontSize, lineHeight = 1.2) {
+  // 1. 创建一个脱离文档的 SVG 容器
+  const svg = d3
+    .create('svg')
+    .attr('xmlns', 'http://www.w3.org/2000/svg')
+    .attr('width', width)
+    .attr('height', height)
+
+  // 2. 拆分多行
+  const lines = text.split('\n')
+
+  // 3. 在 SVG 里插入 <text>，设置起始坐标 (x, y)
+  //    y 设为 fontSize，让第一行基线刚好在这个位置
+  const textEl = svg
+    .append('text')
+    .attr('x', 0)
+    .attr('y', fontSize)
+    .attr('font-family', 'Arial, sans-serif')
+    .attr('font-size', fontSize)
+    .attr('fill', 'black')
+
+  // 4. 对每一行都添加一个 <tspan>
+  lines.forEach((line, i) => {
+    const t = textEl
+      .append('tspan')
+      .attr('x', 0)
+      // 第一行不需额外 dy，后续行按照行高累加
+      .attr('dy', i === 0 ? 0 : fontSize * lineHeight)
+      .text(line)
+  })
+
+  // 5. 序列化并返回
+  return new XMLSerializer().serializeToString(svg.node())
+}
 export const containerMap = {}
 export const getCheckbox = (column: Column) => {
-  let _this = column
+  let _this = column.getTable().columnsMap[column.getField()] //
+  if (column.getField() == 'checkboxField') {
+    //@ts-ignore
+    _this = column.getTable().checkboxColumn //
+  }
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
+
     let t1: VTable.ListTable = table
 
-    let _value: string = value
+    let _value: string = value //
     let record = table.getCellOriginRecord(col, row)
-    let bg = _this.getIndexColor(row, record) //
-    if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+    if (_this.table?.useCache) {
+      let _index = record['_index']
+      let field = _this.getField() //
+      let _con = _this.table.getCacheContainer(_index, field)
+      if (_con) {
+        return {
+          rootContainer: _con,
+          renderDefault: false,
+        }
+      }
+    } //
+    let bg = _this.getIndexColor(row, record)
+    if (record?._index == _this.table.tableData?.curRow?._index) {
       bg = _this.getCurrentRowColor()
-      console.log('update') //
     }
     const { height, width } = rect ?? table.getCellRect(col, row)
     let _height = height
@@ -98,13 +149,17 @@ export const getCheckbox = (column: Column) => {
       // let record = table.getCellOriginRecord(col, row)
       //基本的样式
       let bg = _this.getIndexColor(row, record)
-      if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+      if (record?._index == _this.table.tableData?.curRow?._index) {
         bg = _this.getCurrentRowColor() //
       } //
       container.setAttribute('background', bg)
       let f = _this.getField()
       let c = record[f] //
       c = _this.getIsChecked(record)
+      let num = Number(c)
+      if (!isNaN(num)) {
+        c = num //
+      }
       // console.log(record, c, 'record') ////
       checkbox1.attribute.checked = Boolean(c) //
       checkbox1.render() //
@@ -117,6 +172,7 @@ export const getCheckbox = (column: Column) => {
       updateFn,
       container,
       rowCount: count + 400, //
+      fieldFormat: _this.getFormat(),
     })
     // let _length = 200 //
     // rowStart = rowStart - _length
@@ -171,39 +227,28 @@ export const getSerialLayout = (column: Column) => {
       justifyContent: 'center',
       background: gb,
     })
-    // let t = createText({
-    //   text: value, //
-    //   fontSize: 14,
-    //   fill: 'black',
-    //   fontWeight: 'bold',
-    // })
-    // container.add(t) //
-    /*
 
-      */
-
-    // let _index = record['_index'] //
-    // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() ////
-    // let rowStart = scrollConfig?.rowStart
-    // let rowEnd = scrollConfig?.rowEnd
-    // if (rowStart == null || rowEnd == null) {
-    //   rowStart = 0
-    //   rowEnd = 0
-    // }
-    // let _row = row
-    // let currentIndexContain = _table.currentIndexContain
-    // container['currentRowIndex'] = row //
-    // container['updateCanvas'] = () => {
     let updateFn = () => {
       let bg = _this.getIndexColor(row)
-      if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+      if (record?._index == _this.table.tableData?.curRow?._index) {
         bg = _this.getCurrentRowColor()
       } //
       container.setAttribute('background', bg) //
     }
 
     const record = table.getCellOriginRecord(col, row)
-    let count = _table.getInstance().visibleRowCount
+    if (_this.table.useCache == true) {
+      let _index = record._index //
+      let f = _this.getField()
+      let _con = _this.table.getCacheContainer(_index, f)
+      if (_con != null) {
+        return {
+          rootContainer: _con,
+          renderDefault: false, //
+        }
+      } //
+    }
+    let count = _table.getInstance()?.visibleRowCount || table?.visibleRowCount //
     _this.table.onCellVisible({
       field: _this.getField(),
       record,
@@ -221,22 +266,37 @@ export const getSerialLayout = (column: Column) => {
 }
 
 export const getDefault = (column: Column) => {
-  let _this = column
+  let _this = column.getTable().columnsMap[column.getField()] //
+  // console.log(isProxy(_this), 'isProxy')
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
     let t1: VTable.ListTable = table
     let _value: string = value //
-    let record = table.getCellOriginRecord(col, row)
-    // let _format = column.getFormat()
-    // _value = _format({
-    //   row: record,
-    //   col: column,
-    //   field: column.getField(),
-    //   table: column.table,
-    // })
-
+    let record = t1.getRecordByCell(col, row) //
+    if (record == null) {
+      return {
+        rootContainer: null,
+        renderDefault: false, //
+      }
+    }
+    if (_this.table.useCache == true) {
+      let _index = record._index //
+      let f = _this.getField()
+      let _con = _this.table.getCacheContainer(_index, f) //
+      if (_con) {
+        let currentResizeField = _this.table.currentResizeField //
+        if (currentResizeField === f) {
+        } else {
+          return {
+            rootContainer: _con,
+            renderDefault: false, //
+          }
+        }
+      }
+    }
+    record = record || {} //
     let bg = _this.getIndexColor(row, record) //
-    if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+    if (record?._index == _this.table.tableData?.curRow?._index) {
       bg = _this.getCurrentRowColor()
     }
     const { height, width } = rect ?? table.getCellRect(col, row)
@@ -270,8 +330,8 @@ export const getDefault = (column: Column) => {
       alignItems: 'center',
       boundsPadding: [0, 0, 0, 0], //
     })
-    let _table = _this.table
-    let count = _table.getInstance().visibleRowCount //
+    let _table = _this.getTable() //
+    let count = _table.getInstance()?.visibleRowCount || table?.visibleRowCount //
     let obj123 = {
       container: container,
       record: record,
@@ -289,23 +349,24 @@ export const getDefault = (column: Column) => {
       container.setAttribute('background', _this.getHoverColor()) ///
     })
     container.on('mouseout', () => {
+      // debugger//
       let color = container._oldColor
-      if (record == _this.table.tableData.curRow) {
+      if (record['_index'] == _this.table.tableData?.curRow?._index) {
         color = _this.getCurrentRowColor() //
       } else {
         if ((color = _this.getCurrentRowColor())) {
           color = _this.getIndexColor(row, record)
         }
-      } //
+      }
       container.setAttribute('background', color)
     })
     if (_this.getField() == 'pid') {
-      // console.log(value, 'testValue') //
     }
     let _bounds = [0, 0, 0, 20]
+    let fSize = _this.getFontSize()
     let locationName = createText({
       text: `${_value}`, //
-      fontSize: 16,
+      fontSize: fSize, //
       x: 0,
       y: 0,
       // fontFamily: 'sans-serif',
@@ -326,12 +387,12 @@ export const getDefault = (column: Column) => {
     })
     if (_this.getIsTree() == true) {
       // _g.attribute.x = width - 60
-      let level = record._level
+      let level = record?._level
       if (level > 0) {
-        let num = level * 20
+        let num = level * 20 //
         _g.attribute.x = num //
       }
-    }
+    } //
     let globalValue = _this.table.globalConfig.value
     if (globalValue.length > 0) {
       let container = _g
@@ -344,7 +405,7 @@ export const getDefault = (column: Column) => {
           let arr = []
           let t = createText({
             text: v[0], //
-            fontSize: 16,
+            fontSize: fSize,
             fill: 'red',
             boundsPadding: [0, 0, 0, 0],
             lineDashOffset: 0,
@@ -353,7 +414,7 @@ export const getDefault = (column: Column) => {
             //
             let t1 = createText({
               text: _value.slice(0, v.index), //
-              fontSize: 16,
+              fontSize: fSize,
               // fontFamily: 'sans-serif',
               fill: 'black',
               boundsPadding: [0, 0, 0, 0],
@@ -365,7 +426,7 @@ export const getDefault = (column: Column) => {
           if (i == _vArr.length - 1 && v.index + v[0].length < _value.length) {
             let t2 = createText({
               text: _value.slice(v.index + v[0].length), //
-              fontSize: 14,
+              fontSize: fSize,
               // fontFamily: 'sans-serif',
               fill: 'black',
               boundsPadding: [0, 0, 0, 0],
@@ -434,15 +495,25 @@ export const getDefault = (column: Column) => {
         overflow: 'hidden',
         alignItems: 'center',
       })
+      console.log(t, _level, 'testT') //
       let icon = createImage({
         image: t,
-        cursor: 'pointer', //
+        cursor: 'pointer',
+        x: 0,
+        y: 0, //
+        width: 15, //
         height: height / 2,
         overflow: 'hidden',
         fill: 'black',
         boundsPadding: [0, 0, 0, 3 + _level * 16], //
         lineDashOffset: 0,
-      }) //
+      })
+      icon.on('click', (args) => {
+        column.table.isTreeIconClick = true //
+        nextTick(() => {
+          column.table.isTreeIconClick = false //
+        })
+      })
       _bounds[3] = 0 //
       _g2.add(icon)
       _g1.add(_g2) //
@@ -462,7 +533,7 @@ export const getDefault = (column: Column) => {
         // let record = table.getCellOriginRecord(col, row)
         //基本的样式
         let bg = _this.getIndexColor(row, record)
-        if (toRaw(record) == toRaw(_this.table.tableData.curRow)) {
+        if (record?._index == _this.table.tableData?.curRow?._index) {
           bg = _this.getCurrentRowColor() //
         } //
         container.setAttribute('background', bg)
@@ -481,26 +552,6 @@ export const getDefault = (column: Column) => {
         }
       } //
       obj123['updateFn'] = updateFn //
-      // let _length = 200 //
-      // rowStart = rowStart - _length
-      // if (rowStart < 0) {
-      //   rowStart = 0 //
-      // }
-      // rowEnd = rowEnd + _length
-
-      // let currentIndexContain = _table.currentIndexContain
-      // //显示在视图上
-      // let _arr = currentIndexContain[_index]
-      // if (_arr == null) {
-      //   currentIndexContain[_index] = {}
-      //   _arr = currentIndexContain[_index] //
-      // }
-      // let field = _this.getField()
-      // _arr[field] = container //
-      // } else {
-      // let currentIndexContain = _table.currentIndexContain //
-      // delete currentIndexContain[_index]
-      // }
     }
 
     return {
