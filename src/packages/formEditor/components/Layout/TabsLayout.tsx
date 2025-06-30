@@ -74,56 +74,20 @@ export default defineComponent({
         >
           <div class="h-full w-full flex flex-col">
             <el-tabs
-              class={[ns.b(), 'h-30']}
+              class={[ns.b(), 'h-35']}
               vModel={props.data.options.defaultValue}
               type={props.data.options.type}
               tabPosition={props.data.options.tabPosition}
             >
               {props.data.columns.map((element, index0) => {
-                //@ts-ignore
-                // let com= (
-                //   //@ts-ignore
-                //   <Selection
-                //     class={[ns.e('area'), 'h-full']}
-                //     tag="el-tab-pane"
-                //     label={element.label}
-                //     name={element.id}
-                //     data={element}
-                //     v-slots={{
-                //       label: (item) => {
-                //         let label = element.label || '选项'
-                //         return (
-                //           //
-                //           <div class="h-30 flex items-center">
-                //             <div>{label}</div>
-                //           </div>
-                //         )
-                //       }, //
-                //     }}
-                //     _slots={['label']}
-                //     parent={props.data}
-                //   >
-                //     <LayoutDragGable
-                //       class={['h-full', ..._class]}
-                //       data-layout-type={'tabs-col'}
-                //       data={element.list}
-                //       {...opt}
-                //       parent={element}
-                //     />
-                //   </Selection>
-                // )
-                // return com
                 let com = (
                   <el-tab-pane
                     v-slots={{
                       label: (item) => {
                         let label = element.label || '选项'
                         return (
-                          //
-                          // <div class="h-30 flex items-center">
-                          //   <div>{label}</div>
-                          // </div>
-                          <div class="h-30 px-4 py-2 border-x border-t border-gray-300 rounded-t-md text-gray-700 hover:bg-gray-100 flex justify-center items-center">
+                          
+                          <div class="h-35 px-4 py-2 border-x border-t border-gray-300 rounded-t-md text-gray-700 hover:bg-gray-100 flex justify-center items-center">
                             <div>{label}</div>
                           </div>
                         )

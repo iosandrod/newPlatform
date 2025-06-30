@@ -65,21 +65,22 @@ export default defineComponent({
         <tabCom
           height={40}
           onCloseClick={(config) => {
-            let item = config.item
-            let name = item.name
-            let page = systemIns.getTargetDesign(name) //
-            page.tabHidden = true
-            let pre = config.pre
-            let modelValue = config.modelValue
-            if (modelValue != item.name) {
-              return //
-            }
-            if (pre) {
-              systemIns.routeOpen(pre.name) //
-            } else if (config.next) {
-              //
-              systemIns.routeOpen(config.next.name) //
-            }
+            // let item = config.item
+            // let name = item.name
+            // let page = systemIns.getTargetDesign(name) //
+            // page.tabHidden = true
+            // let pre = config.pre
+            // let modelValue = config.modelValue
+            // if (modelValue != item.name) {
+            //   return //
+            // }
+            // if (pre) {
+            //   systemIns.routeOpen(pre.name) //
+            // } else if (config.next) {
+            //   //
+            //   systemIns.routeOpen(config.next.name) //
+            // }
+            system.onTableTabClose(config) //
           }}
           onTabChange={(config) => {
             system.onMainTabChange(config)
@@ -93,14 +94,11 @@ export default defineComponent({
             //
             item: (item) => {
               //
-              // let com = (
-              //   <div class="cursor-pointer   pl-10 pr-10 -mb-px text-blue-500   focus:outline-none">
-              //     <div>{item.getLabel()}</div>
-              //   </div>
-              // )
               let com = (
-                <div class="h-30 px-4 py-2 border-x border-t border-gray-300 rounded-t-md text-gray-700 hover:bg-gray-100 flex justify-center items-center">
-                  <div>{item.getLabel()}</div>
+                <div class="h-full px-20  border-x border-t border-gray-300 rounded-t-md text-gray-700 hover:bg-gray-100 flex justify-center items-center">
+                  <div class="h-full w-full flex justify-center items-center">
+                    <div>{item.getLabel()}</div>
+                  </div>
                 </div>
               )
               return com
@@ -226,7 +224,10 @@ export default defineComponent({
           </div>
         </header>
       )
-      let dCom = useSlots()?.default(currentRoutePath.value)
+      let dCom = null
+      if (useSlots()?.default) {
+        dCom = useSlots()?.default(currentRoutePath.value)
+      }
       let context = (
         <ContextmenuCom
           ref={(el) => systemIns.registerRef('contextmenu', el)}
@@ -235,7 +236,7 @@ export default defineComponent({
       )
       return (
         <div
-          class={[ns.b(), 'flex-col']}
+          class={[ns.b(), 'flex-col', 'my-scope']}
           style={{ display: 'flex', width: '100vw', height: '100vh' }}
         >
           {context}

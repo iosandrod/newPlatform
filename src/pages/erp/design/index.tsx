@@ -23,7 +23,6 @@ export default defineComponent({
     const system: System = inject('systemIns')
     const router = system.getRouter()
     system.setStaticComArr(Object.values(staticCom))
-    // debugger //
     let tableName = props.tableName
     let isDefaultPage = true
     if (tableName == null) {

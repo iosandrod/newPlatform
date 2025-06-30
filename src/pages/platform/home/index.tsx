@@ -99,7 +99,7 @@ export default defineComponent({
             <ElButton
               type="primary"
               onClick={() => {
-                console.log('登录') //
+                systemIns.routeTo('/login') //
               }}
             >
               Login

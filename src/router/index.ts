@@ -49,10 +49,10 @@ router.beforeEach(async (to, from, next) => {
     if (res != null) {
       next()
     } else {
-      debugger//
-      next({
-        path: '/login',
-      })
+      // next({
+      //   path: '/login',
+      // })
+      next() //
     }
   } else {
     next() //

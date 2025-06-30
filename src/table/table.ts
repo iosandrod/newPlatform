@@ -56,6 +56,7 @@ import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
 import { Row } from 'vant'
 import { containerMap } from './columnFn'
+import { Gantt } from '@visactor/vtable-gantt'
 export class Table extends Base {
   useCache = false
   selectCacheCell: any = []
@@ -733,7 +734,6 @@ export class Table extends Base {
     let status1 = myFro > 0 && myFro != fro
     if (status || status1) {
       if (fro != null || right != null) {
-        // debugger //
         //重新绘制表格
         this.render(true) //
         return
@@ -822,6 +822,7 @@ export class Table extends Base {
         _iArr1.push(k)
       }
     }
+    // debugger//
     // console.log(tableIns.dataMap, '更新的index') ////
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
@@ -855,7 +856,6 @@ export class Table extends Base {
       nextTick(() => {
         this.updateSelectRange()
       }) //
-      // ins.changeCellValue(0, 0, '')//
       console.timeEnd(uuid) //
     }
   }
@@ -1319,7 +1319,7 @@ export class Table extends Base {
     //@ts-ignore
     nextTick(() => {
       //
-      this.updateCanvas() ////
+      this.updateCanvas()
     })
   }
   scrollToRow(sConfig) {
@@ -1469,8 +1469,15 @@ export class Table extends Base {
     this.currentIndexContain = shallowRef({}) //
     console.log('更新了数据', records.length, 'dfjldskfjsdlfsdf') //
     instance.setRecords(records)
+    let ganttInstance = this.getGanttInstance()
+    if (ganttInstance != null) {
+      ganttInstance.setRecords(records)
+    }
     console.timeEnd(id)
     console.log('视图更新时间') //
+  }
+  getGanttInstance(): Gantt {
+    return null //
   }
   addAfterMethod(config) {
     config.type = 'after' //
@@ -2314,7 +2321,7 @@ export class Table extends Base {
     return contextItems
   }
   getDefaultHeaderRowHeight() {
-    return 30 //
+    return 35 //
   }
   getIsFilterTable() {
     let config = this.config
@@ -2861,14 +2868,12 @@ export class Table extends Base {
       } else {
         let _index = _row['_index']
         this.validateMap[_index] = [err]
-        // debugger//
         this.showErrorTopTip() //
         reject(err)
       }
     })
   }
   showErrorTopTip() {
-    // debugger//
     let validateMap = this.validateMap
     if (Object.keys(validateMap).length == 0) {
       return
@@ -2892,6 +2897,7 @@ export class Table extends Base {
           return config //
         }
         if (config.complete == true) {
+          //
           return config
         }
         if (hierarchyState == 'expand' && children.length > 0) {
@@ -2911,7 +2917,6 @@ export class Table extends Base {
     // console.log(addR, 'addR') //
 
     let fMes = err.message || '数据校验失败' //
-    // debugger//
     let sCol = addR.col - 2
     let sRow = addR.row - 2
     if (sCol < 0) {
@@ -3033,6 +3038,9 @@ export class Table extends Base {
     }
     return c?.container //
   }
+  onHeaderCellVisible(config) {
+    //
+  }
   onCellVisible(config) {
     let field = config.field //
     let record = config.record
@@ -3107,7 +3115,6 @@ export class Table extends Base {
     if (typeof fieldFormat == 'function') {
       if (field == 'cSTCode') {
         // if(record.cSTCode){
-        //   debugger//
         // }
         // console.log(_value1,'sfsdf')  //
       }
@@ -3201,7 +3208,6 @@ export class Table extends Base {
     if (typeof status !== 'boolean') {
       return
     } //
-
     this.useCache = status
-  }
+  } //
 }

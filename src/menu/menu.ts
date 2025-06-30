@@ -102,4 +102,15 @@ export class Menu extends Base {
   getUniqueOpen() {
     return true
   }
+  onContextmenu(e) {
+    e.preventDefault() //
+    e.stopPropagation() //
+    let menu = this //
+    let config = menu.config //
+    this.curContextMenu = null //
+    let onContextmenu = config.onContextmenu //
+    if (typeof onContextmenu == 'function') {
+      onContextmenu({ menu: menu, item: this, event: e, isRoot: true }) //
+    }
+  }
 }

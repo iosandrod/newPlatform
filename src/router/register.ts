@@ -200,6 +200,34 @@ export function generateRoutes(): RouteRecordRaw[] {
       item.push(_p) //
     }
   })
-  // console.log(res, 'testRes') //
+  let addPatchAny = (item) => {
+    let children = item.children
+    if (!Array.isArray(children)) {
+      return //
+    }
+    let path = item.path //
+    if (path == ':pathMatch(.*)*') {
+      return
+    }
+    let hasPath = children.find((v) => {
+      return v.path == ':pathMatch(.*)*'
+    })
+    if (hasPath == null) {
+      children.push({
+        path: ':pathMatch(.*)*',
+        name: `${item.name}-pathMatch(.*)*`,
+        component: item.component, //
+      })
+    }
+    children.forEach((v) => {
+      addPatchAny(v)
+    }) //
+  }
+  Object.values(res).forEach((items: any) => {
+    items.forEach((v) => {
+      addPatchAny(v) //
+    })
+  })
+  console.log(res, 'testRes') //
   return res as any
 }

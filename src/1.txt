@@ -7920,3 +7920,55 @@ import lowcode from './lowcode'
     // if (status == false) {
     //   return //
     // }
+
+     //
+              // let com = (
+              //   <div class="pl-10 pr-10 -mb-px text-blue-500 cursor-pointer focus:outline-none">
+              //     <div>{item.getLabel()}</div>
+              //   </div>
+              // )
+
+              //
+                          // <div class="flex items-center h-30">
+                          //   <div>{label}</div>
+                          // </div>
+
+                          // if (pre) {
+    //   systemIns.routeOpen(pre.name) //
+    // } else if (config.next) {
+    //   systemIns.routeOpen(config.next.name) //
+    // }
+
+     //@ts-ignore
+                // let com= (
+                //   //@ts-ignore
+                //   <Selection
+                //     class={[ns.e('area'), 'h-full']}
+                //     tag="el-tab-pane"
+                //     label={element.label}
+                //     name={element.id}
+                //     data={element}
+                //     v-slots={{
+                //       label: (item) => {
+                //         let label = element.label || '选项'
+                //         return (
+                //           //
+                //           <div class="flex items-center h-30">
+                //             <div>{label}</div>
+                //           </div>
+                //         )
+                //       }, //
+                //     }}
+                //     _slots={['label']}
+                //     parent={props.data}
+                //   >
+                //     <LayoutDragGable
+                //       class={['h-full', ..._class]}
+                //       data-layout-type={'tabs-col'}
+                //       data={element.list}
+                //       {...opt}
+                //       parent={element}
+                //     />
+                //   </Selection>
+                // )
+                // return com

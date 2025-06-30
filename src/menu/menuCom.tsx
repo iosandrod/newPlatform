@@ -194,7 +194,9 @@ export default defineComponent({
             ></vxe-input>
             {/* <er-button-group items={btns}></er-button-group> */}
           </div>
-          <div style={{ width: '100%', flex: 1, overflow: 'auto' }}>
+          <div onContextmenu={
+            (e) => menuIns.onContextmenu(e)
+          } style={{ width: '100%', flex: 1, overflow: 'auto' }}>
             <ElMenu
               ref={registerMenuRef}
               {...props}

@@ -194,9 +194,8 @@ export class Column extends Base {
     }
   } //
   getHeaderCustomLayout() {
-    // if (1 == 1) {
-    //   return null
-    // } //
+    //
+    let _this = this
     let hCustomLayout = (args) => {
       let { table, row, col, rect, value } = args
       let _value: string = value
@@ -230,7 +229,7 @@ export class Column extends Base {
       let tColor = this.getHeaderTextColor() //
       let locationName = createText({
         text: value, //
-        fontSize: 14,
+        fontSize: _this.getFontSize(),
         fill: tColor,
         overflow: 'hidden',
         // textureColor: 'blue',
@@ -288,8 +287,7 @@ export class Column extends Base {
           // g.attribute.visibleAll = true
           g.visibleAll(true) //
         }
-      })
-      let _this = this
+      }) //
       container.on('mouseleave', () => {
         controllerGroup.attribute.background = '' //
         let image = g1._lastChild
@@ -318,6 +316,10 @@ export class Column extends Base {
             g.visibleAll(false) //
           }
         }
+      }) //
+      _this.table.onHeaderCellVisible({
+        field: _this.getField(),
+        container: container, //
       })
       return {
         rootContainer: container,
@@ -614,7 +616,6 @@ export class Column extends Base {
     let config = this.config
     let width = config.width
     if (isFilterTable == true) {
-      // let sW = table.getSerialNumberWidth()
       let sW = 0
       let checkWidth = table.getCheckColumnWidth()
       let addW = sW + checkWidth
@@ -628,6 +629,9 @@ export class Column extends Base {
       let table = this.getTable()
       let defaultWidth = table.getDefaultWidth()
       width = defaultWidth
+    }
+    if (isNaN(Number(width))) {
+      width = 100
     }
     return width
   }
@@ -874,19 +878,19 @@ export class Column extends Base {
   }
   getExpandIcon(status = false) {
     let t = null
-        if (status) {
-          //
-          t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    if (status) {
+      //
+      t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <rect width="24" height="24" rx="4" fill="#007AFF" />
       <path d="M12 16L6 10H18L12 16Z" fill="#FFFFFF" />
     </svg>`
-        } else {
-          t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    } else {
+      t = `<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <rect width="24" height="24" rx="4" fill="#007AFF" />
       <path d="M9 6L15 12L9 18V6Z" fill="#FFFFFF" />
     </svg>
     `
-        } //
+    } //
     // if (status) {
     //   t = `<svg t="1707378931406" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1587" width="200" height="200"><path d="M741.248 79.68l-234.112 350.08v551.488l55.296 24.704v-555.776l249.152-372.544c8.064-32.96-10.496-59.712-41.152-59.712h-709.248c-30.464 0-49.28 26.752-41.344 59.712l265.728 372.544v432.256l55.36 24.704v-478.592l-248.896-348.864h649.216z m-68.032 339.648c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-14.016-27.264-30.848z m0 185.216c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.256-27.264-14.016-27.264-30.848z m0 185.28c0-16.832 12.096-30.592 27.264-30.848h277.888c15.232 0 27.712 13.824 27.712 30.848s-12.416 30.848-27.712 30.848h-277.888c-15.168-0.32-27.264-13.952-27.264-30.848z" p-id="1588" fill="${'red'}"></path></svg>`
     // } else {
@@ -914,7 +918,7 @@ export class Column extends Base {
       width: 16,
       height: 16, //
       x: 0,
-      y: 0,//
+      y: 0, //
       textureColor: hIconColor,
       cursor: 'pointer',
       visible: hIconColor == 'red' ? true : false, //
@@ -1250,7 +1254,7 @@ export class Column extends Base {
     input.hiddenDropdown() //
   }
   getCheckDisabled() {
-    //
+    if (this.getField() == 'checkboxField') return false //
     let tableState = this.getTable().tableState
     if (tableState == 'scan') {
       return true
@@ -1266,6 +1270,6 @@ export class Column extends Base {
     }
   }
   getFontSize() {
-    return 14
+    return 16
   }
 }

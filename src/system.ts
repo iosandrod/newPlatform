@@ -1,6 +1,6 @@
 import { nextTick, reactive } from 'vue'
 import _ from 'lodash'
-import { Client, client as _client, http, myHttp } from './service/client'
+import { Client, myHttp } from './service/client'
 import { Base } from '@ER/base'
 import { cacheValue, useDelay, useOnce } from '@ER/utils/decoration'
 import { PageDesign } from '@ER/pageDesign'
@@ -29,6 +29,14 @@ import { BMenu } from './buttonGroup/bMenu'
 import { ChatClass } from './chat/chatClass'
 import { Contact } from './chat'
 import pageCom from '@ER/pageCom'
+import { staticCom } from './pages/erp/design/staticCom'
+import { ganttStaticCom } from './pages/gantt/admin/ganttStaticCom'
+import platfomrStaticCom from './pages/platform/admin/platfomrStaticCom'
+const staticComMap = {
+  erp: staticCom,
+  gantt: ganttStaticCom,
+  platform: platfomrStaticCom,
+}
 export class System extends Base {
   pageLoading = false
   staticComArr: any[] = []
@@ -92,7 +100,7 @@ export class System extends Base {
   getCurrentShowPage() {}
   buildMenuTree(rows) {}
   getClient(): myHttp {
-    return http
+    return this.getHttp() //
   }
   getMenuProps() {}
   getMenuItems() {
@@ -348,6 +356,9 @@ export class System extends Base {
     if (_design) {
       return _design
     } //
+    if (tableName == 'admin') {
+      return
+    }
     let layoutConfig = await this.getPageLayout(tableName) //
     if (layoutConfig == null) {
       let staticCom = this.getStaticComArr()
@@ -396,7 +407,7 @@ export class System extends Base {
     })
     // await pageDesign.getTableData() //
     this.tableMap[tableName] = pageDesign //
-    return pageDesign
+    return pageDesign //
   }
   async onMainTabChange(config) {
     // console.log(config, 'testConfig')//
@@ -956,12 +967,22 @@ export class System extends Base {
     }
     let userInfo = this.getUserInfo()
     let user = userInfo.user
-    let id = user.id
+    let id = user.id //
     let allCompany = await this.getHttp().find('company', {
       userid: id,
     })
     this.allApp = allCompany //
     return allCompany //
+  }
+  async getInstallApp() {
+    let http = this.getHttp()
+    let _data = await http.post('company', 'getInstallApp') //
+    return _data //
+  }
+  async getEnterApp() {
+    let http = this.getHttp()
+    let _data = await http.post('company', 'getEnterApp') //
+    return _data //
   }
   getUserInfo() {
     let loginInfo = this.loginInfo //
@@ -1337,12 +1358,12 @@ export class System extends Base {
     let tableName = item.tableName
     if (Boolean(tableName) == false) {
       return
-    }
-    let _d = await this.getHttp().hTable(tableName)
-    if (_d == false) {
-      return
-    }
-    this.routeOpen(tableName) //
+    } //
+    // let _d = await this.getHttp().hTable(tableName)
+    // if (_d == false) {
+    //   return
+    // }
+    this.routeTo(`/admin/${tableName}`)
   }
   getIsLogin() {
     let loginConfig = this.loginInfo
@@ -1585,7 +1606,7 @@ export class System extends Base {
           userid,
           companyCnName,
         } //
-      }) //
+      })
     //加入平台
     _res.push({
       appName: 'platform',
@@ -1622,7 +1643,11 @@ export class System extends Base {
           path: _path,
         })
       }) //
-    } //
+    }
+    let _staticCom = staticComMap[app]
+    if (_staticCom) {
+      this.setStaticComArr(Object.values(_staticCom)) //
+    }
   }
   async getCurrentApp() {
     let envi = process.env.VITE_ENVIRONMENT || 'development'
@@ -1637,6 +1662,9 @@ export class System extends Base {
       let port = window.location.port
       if (port == '3004') {
         _appName = 'erp'
+      }
+      if (port == '3005') {
+        _appName = 'gantt' //
       }
     }
     _appName = _appName || 'platform' //
@@ -1673,10 +1701,14 @@ export class System extends Base {
         fn: () => {
           let menu: Menu = this.getRef('leftMenu')
           let curItem = menu.curContextMenu
-          // this.designMenuItem(curItem) //
+          if (curItem == null) {
+            curItem = {
+              pid: 0,
+            }
+          } //
           this.designMenuItem({ pid: curItem.pid }, 'add')
         },
-      },
+      }, //
       {
         label: '删除当前菜单',
         fn: () => {
@@ -1908,18 +1940,14 @@ export class System extends Base {
     if (_n == null) {
       _n = config.next
     }
-    if (_n == null) {
+    if (_n == null) {//
       _n = {
-        name: 'home',
+        name: 'admin/home',
       }
     }
-    // if (pre) {
-    //   systemIns.routeOpen(pre.name) //
-    // } else if (config.next) {
-    //   systemIns.routeOpen(config.next.name) //
-    // }
     let _name = _n.name
-    systemIns.routeOpen(_name) //
+    // systemIns.routeOpen(_name) //
+    this.routeTo(_name) //
   }
   async designCurrentPage(name?: any) {
     let pageDesign = null

@@ -170,9 +170,11 @@ export class InputEditor extends BaseEditor {
         }
         column.changeRowState(this.row) //
         if (this.isEditHeader) {
-          //
           column.table.onHeaderTitleChange({
             column: column.config,
+          })
+          nextTick(() => {
+            column.table.loadColumns() //
           })
         }
       }

@@ -253,8 +253,8 @@ export class PageDesign extends Form {
         tableName: getDataConfig,
       }
     }
-    if(this.isDesign==true){
-      return//
+    if (this.isDesign == true) {
+      return //
     }
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
@@ -1181,6 +1181,8 @@ export class PageDesign extends Form {
       })
       .map((row) => {
         row.id = null
+        delete row['createdAt']
+        delete row['updatedAt']
         row.tableName = this.getRealTableName() //
         return row
       }) //

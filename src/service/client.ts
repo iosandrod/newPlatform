@@ -1,6 +1,6 @@
 import io, { Socket } from 'socket.io-client'
 import socketio from '@feathersjs/socketio-client'
-import { feathers, Params } from '@feathersjs/feathers'
+import { Application, feathers, Params } from '@feathersjs/feathers'
 import auth, {
   AuthenticationClient,
   AuthenticationClientOptions,
@@ -121,7 +121,7 @@ const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
 export class Client {}
 //
 export type createConfig = {}
-export const createClient = (config) => {
+export const createClient = async (config) => {
   let _appName = localStorage.getItem('appName')
   let _userid = localStorage.getItem('userid') //
   let fullHost = window.location.host // erp.dxf.life
@@ -136,7 +136,11 @@ export const createClient = (config) => {
   if (appName == null) {
     appName = _appName //
   }
-  let _key = '' //
+  let _key = ''
+  appName = appName || (await system.getCurrentApp())
+  if (appName != 'platform') {
+    userid = userid || 1
+  }
   if (appName != null && userid != 'undefined') {
     _key = `/${appName}_${userid}`
   }
@@ -182,20 +186,22 @@ export const createClient = (config) => {
   app.set('baseUrl', _host)
   return app
 }
-export const client = createClient({})
-export const mainClient = createClient({
-  isMain: true, //
-})
+
 export const axiosClient = createAxios({
   isMain: true, //
 }) //
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
-  client = client
-  mainClient = client
+  client: Application
+  mainClient: Application
   constructor() {
+    this.initClient() //
     this.init()
   } //
+  async initClient() {
+    this.client = await createClient({})
+    this.mainClient = await createClient({ isMain: true })//
+  }
   changeClient(config) {
     let appName = config.appName
     if (appName == null || appName == 'platform') {
@@ -492,4 +498,4 @@ export class myHttp {
   } //
 }
 
-export const http = new myHttp()
+// export const http = new myHttp()

@@ -103,7 +103,10 @@ export default defineComponent({
       let com = (
         <div
           class="  w-full box-border "
-          style={{ minHeight: '200px', padding: '4px' }}
+          style={{
+            minHeight: '200px',
+            // padding: '4px'
+          }}
           ref={(ins) => {
             item.registerRef('fieldOutCom', ins)
           }}

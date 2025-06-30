@@ -20,7 +20,7 @@ import { PageDesign } from '@ER/pageDesign'
 import pageCom from '@ER/pageCom'
 import TableCom from '@/table/tableCom'
 import { Table } from '@/table/table'
-import LeftMenu from './leftMenu' //
+import LeftMenu from '@/pages/platform/leftMenu'// 
 import { useRoute } from 'vue-router'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import { Dropdown } from '@/menu/dropdown'

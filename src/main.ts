@@ -3,7 +3,6 @@ import { createApp, nextTick } from 'vue' //
 import App from './App' //
 import router from '@/router'
 import elementPlus from 'element-plus'
-import * as VueVTable from '@visactor/vue-vtable'
 const app = createApp(App)
 import Vant, { Locale } from 'vant'
 import enUS from 'vant/es/locale/lang/en-US'
@@ -27,7 +26,7 @@ import { Base } from '@/base/base' //w
 import './run' //
 import { system } from './system'
 import buttonGroupCom from './buttonGroup/buttonGroupCom'
-import { http } from './service/client'
+import { myHttp } from './service/client'
 import selectCom from './select/selectCom'
 import { Table } from './table/table'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
@@ -72,6 +71,7 @@ import './style.scss' //
 import './assets/tailwind.css' //
 import './mainStyle.css'
 import './changeCalStyle.scss'
+export const http=new myHttp()
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {

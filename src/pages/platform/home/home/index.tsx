@@ -16,7 +16,8 @@ export default defineComponent({
     ])
     const systemIns: System = inject('systemIns') //
     onMounted(async () => {
-      let _as =await systemIns.getAllApps()
+      let _as = await systemIns.getEnterApp()
+      apps.value = _as //
     })
     const activeSidebar = ref('1')
     return () => {
@@ -34,25 +35,25 @@ export default defineComponent({
             <div class="flex flex-wrap">
               {apps.value.map((app) => {
                 return (
-                  <ElCard class="transition-transform transform  ">
+                  <ElCard class="transition-transform transform  p-10 m-5">
                     <div class="flex items-center mb-2">
                       <i class={app.icon + ' text-24 mr-2'} />
                       <span class="text-lg font-semibold">{app.cnName}</span>
                     </div>
                     <div class="mb-4 text-sm">{app.description}</div>
                     <div class="text-right">
-                      <ElButton
+                      {/* <ElButton
                         type="primary"
                         class="bg-blue-500"
                         onClick={() => systemIns.installApp(app.name)}
                         size="small"
                       >
-                        <div class="">安装</div>
-                      </ElButton>
+                        <div class="is-disabled">安装</div>
+                      </ElButton> */}
                       <ElButton
                         class="bg-blue-500"
                         type="primary"
-                        onClick={() => systemIns.openApp(app.name)}
+                        onClick={() => systemIns.openApp(app.appName)} //
                         size="small"
                       >
                         <div class="">进入</div>
