@@ -99,8 +99,9 @@ export default defineComponent({
     return () => {
       let com = (
         <tabCom
+
           useDefaultClass={false}
-          class={`${ns.b()}`} //
+          class={[`${ns.b()}`,'my-scope']} //
           isDesign={group.isDesign}
           {...group.getTabProps()}
           height={40}

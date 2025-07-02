@@ -9,6 +9,7 @@ import { myHttp } from '@/service/client'
 import { Router } from 'vue-router'
 import { PageDesign } from '@ER/pageDesign'
 export class Base {
+  timeout = {} //
   entityEventManager: { [key: string]: Array<any> } = {}
   entityEventManagerArr = []
   pageLoading = false

@@ -11,11 +11,15 @@ import {
   getGanttRecords,
   getOptions,
 } from './table/ganttTableFn'
+import ERNodeVue from './ERNode'
+import flowCom from './logic/flowCom'
 //@ts-ignore
 window.CONTAINER_ID = 'main_app'
 export default defineComponent({
   components: {
     dialogCom, //
+    flowCom,
+    ERNodeVue, //
   },
   setup() {
     provide('globalConfig', globalConfig)
@@ -40,7 +44,14 @@ export default defineComponent({
       let dArr = diaArr.value.map((d) => {
         return <dialogCom dialogIns={d}></dialogCom>
       })
-      let com = <RouterView></RouterView>
+      let com = <RouterView></RouterView>//
+      com = (
+        <flowCom
+          {...comText()}
+          isERDiagram={true} //
+          getRemoteTables={true}
+        ></flowCom>
+      )
       return withDirectives(
         <div
           id="main_app" //

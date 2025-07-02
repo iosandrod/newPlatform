@@ -252,6 +252,10 @@ export class Table extends Base {
     }
   }
   setData(data) {
+    if (Array.isArray(data) == false) {
+      //
+      return
+    }
     this.currentIndexContain = shallowRef({})
     let oldD = this.tableData.data
     let _d1 = this.getFlatTreeData(oldD)
@@ -278,12 +282,12 @@ export class Table extends Base {
     if (_row == null) {
       return //
     }
-    setTimeout(() => {
-      let record = this.getInstance()?.records?.[0]
-      if (record) {
-        this.setCurRow(record) //
-      }
-    }, 800)
+    let curRowIndex = this.getCurRow()?._index
+    let dataMap = this.dataMap
+    let _row1 = dataMap[curRowIndex]
+    if (_row1 == null) {
+      this.tableData.curRow = null
+    } //
   }
   getTableName() {
     let tableName = this.config.tableName
@@ -464,7 +468,7 @@ export class Table extends Base {
         return null
       },
       sortState: [],
-      theme: createTheme() as any,
+      theme: createTheme(this) as any,
       defaultRowHeight: this.getDefaultRowHeight(), //
       heightMode: 'standard', //
       defaultHeaderRowHeight: this.getDefaultHeaderRowHeight(), //
@@ -547,6 +551,7 @@ export class Table extends Base {
     this.initEventListener() //
     this.loadColumns()
     this.loadData()
+
     // let _row = this.config.curRow
     // if (_row == null) {
     //   _row = this.templateProps.data[0]
@@ -577,6 +582,7 @@ export class Table extends Base {
     }
     let fListTable = ListTable
     let table = new fListTable({
+      // showHeader: false,
       autoFillHeight: true,
       frozenColCount: this.frozenColCount,
       multipleSort: true, //
@@ -661,12 +667,12 @@ export class Table extends Base {
     _col1 = [...lfsCols, ...sCols, ...rfsCols]
 
     if (_show) {
-      let cCol = this.checkboxColumn
+      let cCol = toRaw(this.checkboxColumn) //
       _col1.unshift(cCol.getFooterColumnProps())
     } //
     if (_show1 == true) {
       //
-      let cCol = this.controllerColumn
+      let cCol = toRaw(this.controllerColumn)
       _col1.push(cCol.getFooterColumnProps())
     }
     return _col1
@@ -851,11 +857,16 @@ export class Table extends Base {
           if (typeof updateFn == 'function') {
             updateFn() //
           }
+          const container = c.container
+          if (container?.stage?.render) {
+            //
+            container.stage?.render()
+          }
         })
       })
-      nextTick(() => {
-        this.updateSelectRange()
-      }) //
+      // nextTick(() => {
+      //   this.updateSelectRange()
+      // }) //
       console.timeEnd(uuid) //
     }
   }
@@ -1318,7 +1329,6 @@ export class Table extends Base {
     }
     //@ts-ignore
     nextTick(() => {
-      //
       this.updateCanvas()
     })
   }
@@ -1475,6 +1485,13 @@ export class Table extends Base {
     }
     console.timeEnd(id)
     console.log('视图更新时间') //
+    let curRow = this.getCurRow()
+    if (curRow == null) {
+      let row0 = records?.[0]
+      if (row0 != null) {
+        this.setCurRow(row0) //
+      }
+    }
   }
   getGanttInstance(): Gantt {
     return null //
@@ -3210,4 +3227,15 @@ export class Table extends Base {
     } //
     this.useCache = status
   } //
+  getControllerButtons() {
+    let config = this.config
+    let controllerButtons = config.controllerButtons
+    if (!Array.isArray(controllerButtons)) {
+      return []
+    }
+    return controllerButtons //
+  }
+  onControllerButtonClick(btn) {
+    console.log(btn, 'btnIsClick') //
+  }
 }

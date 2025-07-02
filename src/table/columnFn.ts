@@ -1,4 +1,3 @@
-import { VTable } from '@visactor/vue-vtable'
 import { Column } from './column'
 import { nextTick, toRaw, isProxy } from 'vue'
 import {
@@ -9,6 +8,8 @@ import {
 } from '@visactor/vtable/es/vrender'
 import * as d3 from 'd3'
 import { render } from 'bwip-js'
+import { VTable } from '@visactor/vtable-gantt'
+import { ListTable } from '@visactor/vtable'
 function createSvgTextString(text, width, height, fontSize, lineHeight = 1.2) {
   // 1. 创建一个脱离文档的 SVG 容器
   const svg = d3
@@ -53,7 +54,7 @@ export const getCheckbox = (column: Column) => {
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
 
-    let t1: VTable.ListTable = table
+    let t1: ListTable = table as any
 
     let _value: string = value //
     let record = table.getCellOriginRecord(col, row)
@@ -270,7 +271,7 @@ export const getDefault = (column: Column) => {
   // console.log(isProxy(_this), 'isProxy')
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
-    let t1: VTable.ListTable = table
+    let t1: ListTable = table
     let _value: string = value //
     let record = t1.getRecordByCell(col, row) //
     if (record == null) {
@@ -495,7 +496,6 @@ export const getDefault = (column: Column) => {
         overflow: 'hidden',
         alignItems: 'center',
       })
-      console.log(t, _level, 'testT') //
       let icon = createImage({
         image: t,
         cursor: 'pointer',
@@ -558,6 +558,97 @@ export const getDefault = (column: Column) => {
       rootContainer: container,
       // renderDefault: _isTree, //
       renderDefault: false, //
+    }
+  }
+  return customLayout
+}
+
+export const getControllButtons = (column: Column) => {
+  let _this = column.getTable().columnsMap[column.getField()] //
+  if (column.getField() == 'controllerField') {
+    _this = column.table.controllerColumn //
+  }
+  // console.log('获取了防守打法收到', 'getControllButtons')
+  let customLayout = (args) => {
+    let { table, row, col, rect } = args
+    let { height, width } = rect ?? table.getCellRect(col, row) //
+    let container = createGroup({
+      height: height - 2,
+      width: width - 2,
+      x: 1,
+      y: 1, //
+      display: 'flex',
+      // background: _this.getBgColor(), //
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-around',
+    })
+    const createButton = (config?: any) => {
+      let _rect = createGroup({
+        height: height - 6,
+        width: 50,
+        cursor: 'pointer',
+        background: _this.getButtonColor(), //
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cornerRadius: 5,
+        innerBorder: {
+          stroke: 'red',
+        },
+        // stroke: 'RGB(30, 40, 60)',
+      })
+      let test1 = createText({
+        text: config?.label, //
+        cursor: 'pointer',
+        fontSize: 14,
+        fill: _this.getButtonTextColor(), //
+        boundsPadding: [0, 0, 0, 0],
+        lineDashOffset: 0,
+      })
+      _rect.add(test1) //
+      _rect.on('mouseenter', () => {
+        let hoverColor = _this.getButtonColor(true)
+        _rect.setAttribute('background', hoverColor) //
+        _rect?.stage?.render()
+      })
+      _rect.on('mouseout', () => {
+        let hoverColor = _this.getButtonColor()
+        _rect.setAttribute('background', hoverColor) //
+        // _rect?.stage?.render()//
+      })
+      _rect.on('click', () => {
+        _this.table.onControllerButtonClick(config) //
+      })
+      return _rect
+    }
+    let allControllerBtns = _this.table.getControllerButtons()
+    for (const btn of allControllerBtns) {
+      let _rect = createButton(btn)
+      container.add(_rect) //
+    }
+    let record = table.getCellOriginRecord(col, row)
+    let updateFn = () => {
+      let bg = _this.getIndexColor(row, record)
+      if (record?._index == _this.table.tableData?.curRow?._index) {
+        bg = _this.getCurrentRowColor() //
+      } //
+      container.setAttribute('background', bg)
+    }
+    let count = _this.table.getInstance().visibleRowCount
+    _this.table.onCellVisible({
+      field: _this.getField(),
+      record,
+      row,
+      updateFn,
+      column: _this, //
+      container,
+      rowCount: count + 400, //
+      fieldFormat: _this.getFormat(),
+    })
+    return {
+      rootContainer: container,
+      renderDefault: false,
     }
   }
   return customLayout

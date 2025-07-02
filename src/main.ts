@@ -71,7 +71,7 @@ import './style.scss' //
 import './assets/tailwind.css' //
 import './mainStyle.css'
 import './changeCalStyle.scss'
-export const http=new myHttp()
+export const http = new myHttp()
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -145,5 +145,8 @@ app.use(VxeUIAll)
 app.use(router)
 
 app.use(elementPlus) //
-app.mount('#app')
+nextTick(() => {
+  //
+  app.mount('#app')
+})
 //

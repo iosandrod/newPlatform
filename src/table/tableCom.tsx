@@ -45,6 +45,10 @@ export default defineComponent({
       type: Boolean,
       default: false, //
     },
+    controllerButtons: {
+      type: Array,
+      default: () => [],
+    },
     ...tableV2Props,
     columns: {
       type: Array,
@@ -52,6 +56,11 @@ export default defineComponent({
     },
     buttons: {
       type: Array,
+    },
+    hiddenSelect: {
+      type: Boolean,
+      default: false, //
+      // default: true, //
     },
     isGantt: {
       type: Boolean,
@@ -217,6 +226,10 @@ export default defineComponent({
     calHeight: {
       type: Boolean,
       default: false,
+    },
+    showFooterTable: {
+      type: Boolean,
+      default: true,
     },
   },
   setup(props, { slots, attrs, emit, expose }) {
@@ -560,6 +573,10 @@ export default defineComponent({
         ></div>,
         [[vShow, tableIns.getShowCalColumns()]],
       )
+      // if (props.showFooterTable == false) {
+      //   calCom = null
+      //   calDiv = null //
+      // }
       com = withDirectives(
         <div
           style={{

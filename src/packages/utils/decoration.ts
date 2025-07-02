@@ -8,7 +8,7 @@ export function useTimeout(config) {
     let oldFn = descriptor.value
     let _args = null
     let number = config.number
-    let _key = config.key
+    let _key = config.key||key
     if (isAsyncFunction(oldFn)) {
       if (isNumber(number) && _key !== null) {
         descriptor.value = async function (...args) {

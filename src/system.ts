@@ -32,6 +32,7 @@ import pageCom from '@ER/pageCom'
 import { staticCom } from './pages/erp/design/staticCom'
 import { ganttStaticCom } from './pages/gantt/admin/ganttStaticCom'
 import platfomrStaticCom from './pages/platform/admin/platfomrStaticCom'
+import { globalStaticCom } from './globalStaticCom'
 const staticComMap = {
   erp: staticCom,
   gantt: ganttStaticCom,
@@ -107,7 +108,7 @@ export class System extends Base {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) {}
+  _getCacheValue(key) {} //
   getTabModelValue() {
     let route = this.getRouter()
     let r = route.currentRoute
@@ -340,7 +341,10 @@ export class System extends Base {
     return _d //
   }
   setStaticComArr(arr) {
-    this.staticComArr = arr
+    if (!Array.isArray(arr)) {
+      return //
+    }
+    this.staticComArr = [...arr, ...globalStaticCom] //
   }
   getStaticComArr() {
     return this.staticComArr || [] //
@@ -1688,7 +1692,7 @@ export class System extends Base {
         },
       },
       {
-        label: '新增菜单子菜单',
+        label: '新增子菜单', //
         fn: () => {
           let menu: Menu = this.getRef('leftMenu')
           let curItem = menu.curContextMenu
@@ -1904,6 +1908,13 @@ export class System extends Base {
           console.log(system, 'testSystem') //
         },
       },
+      {
+        label: '实体管理',
+        fn: async () => {
+          //
+          this.routeTo('/admin/realTable')
+        },
+      },
     ]
     return items
   }
@@ -1940,7 +1951,8 @@ export class System extends Base {
     if (_n == null) {
       _n = config.next
     }
-    if (_n == null) {//
+    if (_n == null) {
+      //
       _n = {
         name: 'admin/home',
       }
@@ -2027,5 +2039,10 @@ export class System extends Base {
     ]
   }
   getCardButtons() {}
+  async getRealTables() {
+    let http = this.getHttp() //
+    let res = await http.post('tableview', 'getAllTables')
+    return res
+  }
 } //
 export const system = reactive(new System())

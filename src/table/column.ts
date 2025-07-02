@@ -548,8 +548,18 @@ export class Column extends Base {
     }
     return this.templateCalValue
   }
-  getButtonColor() {
-    return 'RGB(22, 93, 255)'
+  getButtonColor(isHover = false) {
+    // return 'RGB(22, 93, 255)'
+    let color = 'RGB(219, 234, 254)'
+    if (isHover == true) {
+      color = `RGB(191, 219, 254)`
+      // color='red'
+    }
+    return color //
+  }
+  getButtonTextColor() {
+    let co = `RGB(29, 78, 216)`
+    return co
   }
   getFooterColumnProps() {
     let _this = this

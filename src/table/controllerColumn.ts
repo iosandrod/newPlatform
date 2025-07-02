@@ -34,6 +34,7 @@ import {
 } from '@visactor/vtable/es/ts-types'
 import { nextTick } from 'vue' //
 import { Column } from './column'
+import { getControllButtons } from './columnFn'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox']
 export class ControllerColumn extends Column {
   getEditType() {
@@ -47,6 +48,9 @@ export class ControllerColumn extends Column {
   }
   getWidth() {
     return 200
+  }
+  getCustomLayout() {
+    return getControllButtons(this)
   }
   getIsFrozen() {
     return true
@@ -67,54 +71,57 @@ export class ControllerColumn extends Column {
     if (isFooter) {
       _props.headerCustomLayout = null //
     } //
-    _props.customLayout = (args) => {
-      let { table, row, col, rect } = args
-      let { height, width } = rect ?? table.getCellRect(col, row) //
-      let container = createGroup({
-        height: height - 2,
-        width: width - 2,
-        x: 1,
-        y: 1, //
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-      })
-      const createButton = () => {
-        let _rect = createGroup({
-          height: height - 6,
-          width: 50,
-          cursor: 'pointer',
-          background: this.getButtonColor(), //
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cornerRadius: 5,
-          innerBorder: {
-            stroke: 'red',
-          },
-          stroke: 'RGB(30, 40, 60)',
-        })
-        let test1 = createText({
-          text: '按钮', //
-          cursor: 'pointer',
-          fontSize: 14,
-          fill: 'white',
-          boundsPadding: [0, 0, 0, 0],
-          lineDashOffset: 0,
-        })
-        _rect.add(test1) //
-        return _rect
-      }
-      let _rect = createButton()
-      let _rect1 = createButton()
-      container.add(_rect) //
-      container.add(_rect1) //
-      return {
-        rootContainer: container,
-        renderDefault: false,
-      }
-    }
+    // _props.customLayout = (args) => {
+    //   let { table, row, col, rect } = args
+    //   let { height, width } = rect ?? table.getCellRect(col, row) //
+    //   let container = createGroup({
+    //     height: height - 2,
+    //     width: width - 2,
+    //     x: 1,
+    //     y: 1, //
+    //     display: 'flex',
+    //     flexDirection: 'row',
+    //     alignItems: 'center',
+    //     justifyContent: 'space-around',
+    //   })
+    //   const createButton = (config?: any) => {
+    //     let _rect = createGroup({
+    //       height: height - 6,
+    //       width: 50,
+    //       cursor: 'pointer',
+    //       background: this.getButtonColor(), //
+    //       display: 'flex',
+    //       alignItems: 'center',
+    //       justifyContent: 'center',
+    //       cornerRadius: 5,
+    //       innerBorder: {
+    //         stroke: 'red',
+    //       },
+    //       stroke: 'RGB(30, 40, 60)',
+    //     })
+    //     let test1 = createText({
+    //       text: '按钮', //
+    //       cursor: 'pointer',
+    //       fontSize: 14,
+    //       fill: 'white',
+    //       boundsPadding: [0, 0, 0, 0],
+    //       lineDashOffset: 0,
+    //     })
+    //     _rect.add(test1) //
+    //     _rect.on('mouseover', () => {
+    //       console.log('hoverButtons') //
+    //     })
+    //     return _rect
+    //   }
+    //   let _rect = createButton()
+    //   let _rect1 = createButton()
+    //   container.add(_rect) //
+    //   container.add(_rect1) //
+    //   return {
+    //     rootContainer: container,
+    //     renderDefault: false,
+    //   }
+    // }
     //@ts-ignore
     _props.isFrozen = this.getIsFrozen()
     _props.title = ''

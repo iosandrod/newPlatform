@@ -7972,3 +7972,37 @@ import lowcode from './lowcode'
                 //   </Selection>
                 // )
                 // return com
+
+                 // let _tables = this.config.tables || []
+    // _tables.splice(0, _tables.length, ...tables) //
+     // refreshEdges(_config?: any) {
+  //   let tables = this.config?.tables || []
+  //   let edges: Edge[] = []
+  //   for (const sourceTable of tables) {
+  //     const sourceTableId = sourceTable.id || sourceTable.name //
+  //     const fields = sourceTable.fields || []
+
+  //     for (const field of fields) {
+  //       if (field.isForeign && field.ref) {
+  //         let sourceFieldName = field.name || field.fieldName
+  //         let targetTableId = field.ref.table
+  //         let targetFieldName = field.ref.field //
+  //         if (!targetTableId || !targetFieldName) continue
+
+  //         edges.push({
+  //           id: `e-${sourceTableId}-${sourceFieldName}-to-${targetTableId}-${targetFieldName}`,
+  //           source: sourceTableId,
+  //           sourceHandle: `field-${sourceFieldName}`,
+  //           target: targetTableId,
+  //           targetHandle: `field-${targetFieldName}`,
+  //           type: 'default',
+  //           animated: false,
+  //           label: `${sourceFieldName} → ${targetFieldName}`,
+  //         })
+  //       }
+  //     } //
+  //   } //
+  //   nextTick(() => {
+  //     this.templateProps.edges = edges
+  //   })
+  // }

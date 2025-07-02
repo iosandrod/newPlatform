@@ -199,10 +199,11 @@ export class myHttp {
     this.init()
   } //
   async initClient() {
+    // debugger//
     this.client = await createClient({})
-    this.mainClient = await createClient({ isMain: true })//
+    this.mainClient = await createClient({ isMain: true }) //
   }
-  changeClient(config) {
+  async changeClient(config) {
     let appName = config.appName
     if (appName == null || appName == 'platform') {
       this.client = this.mainClient
@@ -213,7 +214,7 @@ export class myHttp {
       this.client = this.mainClient
       return //
     }
-    let _client = createClient(config)
+    let _client = await createClient(config)
     this.client = _client //
   }
   async init() {
