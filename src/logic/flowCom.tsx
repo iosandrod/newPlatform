@@ -1,14 +1,19 @@
 import { defineComponent, nextTick, provide, watchEffect } from 'vue'
 import { VueFlow, FlowProps } from '@vue-flow/core'
+import { Background } from '@vue-flow/background'
 import { flowProps } from './loginComProps'
 import { Flow } from './flow'
 import ERNodeVue from '@/ERNode'
 import { TableFlow } from './tableFlow'
+import { Contextmenu } from '@/contextM'
+import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 export default defineComponent({
   //
   name: 'LoginCom',
   components: {
     VueFlow,
+    Background,
+    ContextmenuCom,
   },
   props: {
     ...flowProps,
@@ -16,6 +21,7 @@ export default defineComponent({
       type: Boolean,
       default: false, // 是否是ER图
     },
+
     tables: {
       type: Array,
       default: () => [],
@@ -47,12 +53,22 @@ export default defineComponent({
     // watchEffect(() => {}) //
     return () => {
       let leftTable = null
+      const context = (
+        <ContextmenuCom
+          items={flow.getContextItems()}
+          ref={(el) => flow.registerRef('contextmenu', el)}
+        ></ContextmenuCom>
+      )
       if (props.isERDiagram) {
         let columnTable = (
           <div class="h-full w-full">
             <erTable
+              ref={(el) => flow.registerRef('columnTable', el)} //
               data={flow.getColumnConfigData()}
               columns={flow.getColumnConfigColumns()}
+              showHeaderDefaultButtons={false}
+              showHeaderButtons={true}
+              buttons={flow.getColumnTableHeaderButtons()}
               showRowSeriesNumber={false}
               showCheckboxColumn={false} //
               showFooterTable={false} //
@@ -63,12 +79,15 @@ export default defineComponent({
           <div class="w-1/4 h-full overflow-hidden flex flex-col">
             <div class="h-1/3">
               <erTable
-                ref={(el) => flow.registerRef('leftTable', el)}
+                ref={(el) => flow.registerRef('tableTable', el)}
                 onCurRowChange={(row) => {
                   flow.onCurRowChange(row)
-                }} 
-                showControllerButtons={true} //
-                controllerButtons={flow.getTableControllerButtons()}
+                }}
+                showHeaderButtons={true}
+                showHeaderDefaultButtons={false}
+                buttons={flow.getTableHeaderButtons()}
+                // showControllerButtons={true} //
+                // controllerButtons={flow.getTableControllerButtons()}
                 showRowSeriesNumber={false}
                 showFooterTable={false} //
                 columns={flow.getTableConfigColumns()}
@@ -81,6 +100,7 @@ export default defineComponent({
       }
       let com = (
         <div class="h-full w-full flex flex-col">
+          {context}
           <div class="" style={{}}>
             <erButtonGroup items={flow.getControllButtons()}></erButtonGroup>
           </div>
@@ -102,7 +122,14 @@ export default defineComponent({
                 onNodeClick={(e) => {
                   flow.onNodeClick(e)
                 }}
-              />
+              >
+                <Background
+                  variant="dots"
+                  gap={16}
+                  color="#978686"
+                  size={1}
+                ></Background>
+              </VueFlow>
             </div>
           </div>
         </div>

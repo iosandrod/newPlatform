@@ -8,7 +8,7 @@ export function useTimeout(config) {
     let oldFn = descriptor.value
     let _args = null
     let number = config.number
-    let _key = config.key||key
+    let _key = config.key || key
     if (isAsyncFunction(oldFn)) {
       if (isNumber(number) && _key !== null) {
         descriptor.value = async function (...args) {
@@ -159,7 +159,8 @@ export function useRunAfter(config?: any) {
           result.then((res) => {
             _this.runAfter({
               methodName: key, //
-            })
+              table: _this,
+            }) //
           })
         }
         return result
@@ -305,7 +306,7 @@ export function useDelay(config?: { delay?: number }): any {
 }
 export function useFinally(config?: any) {
   //
-   return function (target, key, descriptor?: any) {
+  return function (target, key, descriptor?: any) {
     let oldFn = descriptor.value
     if (isAsyncFunction(oldFn)) {
     } else {

@@ -172,8 +172,7 @@ export class Table extends Base {
     let oldIndex = oldCurRow._index || '' //
     let newIndex = row._index || ''
     this.timeout['updateRecords__now'] = true
-    let tableName = this.getTableName()
-
+    let tableName = this.getTableName() //
     let onCurRowChange = this.config.onCurRowChange
     if (typeof onCurRowChange == 'function') {
       onCurRowChange({ row: row, oldRow: oldCurRow }) //

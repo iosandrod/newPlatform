@@ -118,10 +118,10 @@ export const comText = () => {
     tables: [
       ...[
         {
-          // id: 22,
+          id: 22,
           createdAt: '2025-07-02 20:47:10',
           updatedAt: '2025-07-02 20:47:10',
-          // checkboxField: true,//
+          checkboxField: true,//
           viewName: null,
           entityTableName: null,
           title: null,

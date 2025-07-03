@@ -10,7 +10,7 @@ export const createTheme = (table: Table) => {
       // cellBorderColor:'rgba(0, 0, 255, 0)',
       cellBorderLineWidth: 2,
       selectionFillMode: 'overlay',
-    }
+    } //
   } else {
     selectStyle = {
       cellBgColor: 'rgba(0, 0, 255,0.0)',

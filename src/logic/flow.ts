@@ -5,6 +5,7 @@ import { VueFlow } from '@vue-flow/core'
 import { nanoid } from 'nanoid'
 
 export class Flow extends Base {
+  selectionField: any
   selection: any //
   config: any
   nodes: Node[] = []
@@ -115,11 +116,9 @@ export class Flow extends Base {
     this.setSelection(row) //
   }
   setSelection(selection: any) {
-    console.log('setSelection', selection) //
-    let leftTable: Table = this.getRef('leftTable') //
+    let leftTable: Table = this.getRef('tableTable') //
     let curRow = leftTable?.getCurRow() //
     if (curRow != selection) {
-      // debugger //
       leftTable?.setCurRow(selection) //
     } //
     this.selection = selection

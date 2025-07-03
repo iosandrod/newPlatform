@@ -2044,5 +2044,31 @@ export class System extends Base {
     let res = await http.post('tableview', 'getAllTables')
     return res
   }
+  async addTableField(tableName, column) {
+    let fConfig = {
+      itemWidth: 12,
+      items: [
+        {
+          type: 'input',
+          label: '字段名称',
+          field: 'field',
+        },
+        {
+          type: 'select',
+          label: '字段类型',
+          field: 'type',
+        },
+      ],
+      data: column, //
+    }
+    let http = this.getHttp()
+    let res = await http.post('tableview', 'changeColumns', {
+      tableName,
+      column,
+      state: 'add',
+    })
+  }
+  editTableField(tableName, column) {}
+  removeTableField(tableName, column) {}
 } //
 export const system = reactive(new System())

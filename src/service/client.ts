@@ -122,6 +122,7 @@ export class Client {}
 //
 export type createConfig = {}
 export const createClient = async (config) => {
+  //
   let _appName = localStorage.getItem('appName')
   let _userid = localStorage.getItem('userid') //
   let fullHost = window.location.host // erp.dxf.life

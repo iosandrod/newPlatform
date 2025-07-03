@@ -1,8 +1,12 @@
 import { Edge } from '@vue-flow/core'
 import { Flow } from './flow'
 import dagre from 'dagre'
+import { Contextmenu } from '@/contextM'
 import { cacheValue, useTimeout } from '@ER/utils/decoration'
 import { isProxy, isReactive, nextTick, reactive } from 'vue'
+import { Dropdown } from '@/menu/dropdown'
+import { BMenu } from '@/buttonGroup/bMenu'
+import { Table } from '@/table/table'
 export class TableFlow extends Flow {
   templateProps: any = {
     nodes: [],
@@ -220,7 +224,9 @@ export class TableFlow extends Flow {
         label: '获取表格',
         icon: 'iconfont icon-table',
         fn: async () => {
+          debugger //
           let tables = await this.getRemoteTables() //
+          console.log(tables, 'testTables') //
           this.setRemoteTables(tables) ////
         },
       },
@@ -278,5 +284,82 @@ export class TableFlow extends Flow {
       width: '10px',
       height: '10px',
     }
+  }
+  @cacheValue()
+  getTableHeaderButtons() {
+    return [
+      {
+        label: '新增表',
+        icon: 'iconfont icon-layout',
+        fn: () => {
+          console.log('新增') //
+        },
+      },
+    ] //
+  }
+  @cacheValue() //
+  getColumnTableHeaderButtons() {
+    return [
+      {
+        label: '新增字段',
+        icon: 'iconfont icon-layout',
+        fn: () => {
+          let currentTableName = this.getCurrentSelectTableName()
+          console.log(currentTableName, 'testName') //
+        },
+      },
+      {
+        label: '更新字段',
+      },
+      {
+        label: '删除字段',
+      }, //
+    ]
+  }
+  getCurrentSelectTableName() {
+    let selection = this.getSelection()
+    let tableName = selection?.tableName
+    return tableName
+  }
+  addField(config) {}
+  onFieldClick(config) {
+    let f = config.field
+    this.selectionField = f //
+    let columnTable: Table = this.getRef('columnTable')
+    let hasRow = columnTable.getData().includes(f)
+    if (hasRow == false) {
+      //
+      columnTable.addAfterMethod({
+        methodName: 'updateCanvas',
+        fn: (config) => {
+          let table = config.table
+          table.setCurRow(f) //
+        },
+      })
+      return
+    } else {
+      columnTable.setCurRow(f)
+    }
+    // nextTick(() => {
+    // })
+  }
+  @cacheValue()
+  getContextItems() {
+    return [
+      {
+        label: '编辑字段',
+        fn: async () => {}, //
+      },
+    ]
+  }
+  onFieldContextClick(config) {
+    let field = config.field
+    this.selectionField = field
+    let context: BMenu = this.getRef('contextmenu')
+    let event = config.event
+    if (context == null) {
+      return
+    }
+    context.open(event) //
   }
 }
