@@ -114,7 +114,7 @@ export default defineComponent({
         pagin = null
       } //
       return (
-        <div class="h-full w-full flex flex-col">
+        <div class="h-full w-full flex flex-col my-scope">
           <div class="flex-1">
             <_com></_com>
           </div>

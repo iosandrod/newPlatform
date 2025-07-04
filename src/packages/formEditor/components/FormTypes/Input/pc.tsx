@@ -37,7 +37,7 @@ export default defineComponent({
       let com = (
         <div
           class="h-full w-full flex items-center"
-          style={{ minHeight: '36px', height: '36px' }} //
+          // style={{ minHeight: '36px', height: '36px' }} //
         >
           <inputCom
             ref={registerRef}

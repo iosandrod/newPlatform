@@ -8,7 +8,7 @@ import {
   ElMenu,
   ElMenuItem,
 } from 'element-plus'
-import { defineComponent, inject, ref } from 'vue'
+import { defineComponent, inject, onMounted, ref } from 'vue'
 import { RouterView } from 'vue-router'
 
 export default defineComponent({
@@ -23,6 +23,15 @@ export default defineComponent({
     function logout() {
       isLoggedIn.value = false
     }
+    let sys: System = inject('systemIns')
+    onMounted(async () => {
+      let route = sys.getRouter().currentRoute.path //
+      console.log(route, 'testRoute') //
+      if (/home$/.test(route) && [...route.match(/home/)].length < 2) {
+        let router = sys.getRouter()
+        router.push('/home/home') //
+      }
+    })
     let systemIns: System = inject('systemIns')
     return () => {
       const headerItems = systemIns.getPlatformHomeHeader()

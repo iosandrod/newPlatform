@@ -215,7 +215,7 @@ export default defineComponent({
                               // margin: '3px',
                               boxSizing: 'border-box',
                             }}
-                            class="cursor-pointer flex items-center h-30 px-3 bg-white text-blue-600 font-medium leading-none
+                            class="cursor-pointer flex items-center er-h-30 px-3 bg-white text-blue-600 font-medium leading-none
          box-border rounded-md shadow-sm border border-blue-300
          hover:bg-blue-50 transition"
                           >

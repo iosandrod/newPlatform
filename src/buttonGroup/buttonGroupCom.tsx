@@ -99,24 +99,18 @@ export default defineComponent({
     return () => {
       let com = (
         <tabCom
-
           useDefaultClass={false}
-          class={[`${ns.b()}`,'my-scope']} //
+          class={[`${ns.b()}`, 'my-scope', 'er-mb-3', 'er-mt-3']} //
           isDesign={group.isDesign}
           {...group.getTabProps()}
-          height={40}
+          height={32}
           v-slots={{
             item: (el: Button) => {
               let btn = el.config.button //
               let disabled = btn.getDisabled()
-              let _class = [
-                // 'v-contextmenu',
-                'h-35',
-                'items-center',
-                'flex',
-              ]
+              let _class = ['er-h-35', 'items-center', 'flex']
               let _class1 = [
-                'h-full w-full pl-10 pr-10  rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition',
+                'h-full w-full er-pl-10 er-pr-10  rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition',
               ]
               let maskCom = null
               if (disabled == true) {
@@ -130,7 +124,7 @@ export default defineComponent({
                       e.stopPropagation()
                       e.preventDefault() //
                     }}
-                  ></div>
+                  ></div> //
                 )
               } else {
                 _class1.push('cursor-pointer')

@@ -13,7 +13,8 @@ import {
   AuthenticationResult,
 } from '@feathersjs/authentication'
 import { nextTick } from 'vue'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
+import { reject } from 'lodash'
 export const defaultStorage: any = getDefaultStorage()
 const defaults: AuthenticationClientOptions = {
   header: 'Authorization',
@@ -36,7 +37,7 @@ if (userid != null) {
     system.setLocalItem('userid', userid)
   })
 }
-export const createAxios = (config) => {
+export const createAxios = async (config) => {
   let _appName = localStorage.getItem('appName')
   let _userid = localStorage.getItem('userid') //
   let fullHost = window.location.host // erp.dxf.life
@@ -51,7 +52,11 @@ export const createAxios = (config) => {
   if (appName == null) {
     appName = _appName //
   }
-  let _key = '' //
+  let _key = ''
+  appName = appName || (await system.getCurrentApp())
+  if (appName != 'platform') {
+    userid = userid || 1
+  }
   if (appName != null && userid != 'undefined') {
     _key = `/${appName}_${userid}`
   }
@@ -72,6 +77,33 @@ export const createAxios = (config) => {
     baseURL: _host,
     timeout: 60000,
   })
+  axiosInstance.interceptors.request.use(
+    function (config) {
+      let headers = config.headers //
+      let token = localStorage.getItem('feathers-jwt')
+      headers.Authorization = `${token}`
+      return config
+    },
+    function (error) {
+      // Do something with request error
+      return Promise.reject(error)
+    },
+  ) //
+  axiosInstance.interceptors.response.use(
+    function (response) {
+      // debugger //
+      let data = response?.data?.data //
+      if (data) {
+        return data //
+      } //
+      return response
+    },
+    function (error) {
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      return Promise.reject(error)
+    },
+  )
   return axiosInstance //
 }
 class myAuth extends AuthenticationClient {
@@ -122,7 +154,6 @@ export class Client {}
 //
 export type createConfig = {}
 export const createClient = async (config) => {
-  //
   let _appName = localStorage.getItem('appName')
   let _userid = localStorage.getItem('userid') //
   let fullHost = window.location.host // erp.dxf.life
@@ -195,6 +226,8 @@ const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client: Application
   mainClient: Application
+  axios: AxiosInstance
+  useAxios = true
   constructor() {
     this.initClient() //
     this.init()
@@ -203,6 +236,7 @@ export class myHttp {
     // debugger//
     this.client = await createClient({})
     this.mainClient = await createClient({ isMain: true }) //
+    this.axios = await createAxios({})
   }
   async changeClient(config) {
     let appName = config.appName
@@ -290,6 +324,21 @@ export class myHttp {
     router.push('/login') //
   }
   async post(tableName, method, params = {}, query = {}): Promise<any> {
+    if (this.useAxios == true) {
+      let axios = this.axios
+      let url = `${tableName}`
+      if (method) {
+        url = `${url}/${method}`
+      }
+      try {
+        let res = await axios.post(`${tableName}/${method}`, params, {
+          params: query,
+        })
+        return res
+      } catch (error) {
+        return Promise.reject(error) //
+      }
+    }
     let connection = this?.client?.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(

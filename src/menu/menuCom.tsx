@@ -181,10 +181,10 @@ export default defineComponent({
             style={{
               top: '0px',
               width: '100%',
-              paddingRight: '10px',
             }}
           >
             <vxe-input
+              placeholder="搜索"
               style={{ width: '100%' }}
               onChange={(e) => {
                 let value = e.value
@@ -194,9 +194,10 @@ export default defineComponent({
             ></vxe-input>
             {/* <er-button-group items={btns}></er-button-group> */}
           </div>
-          <div onContextmenu={
-            (e) => menuIns.onContextmenu(e)
-          } style={{ width: '100%', flex: 1, overflow: 'auto' }}>
+          <div
+            onContextmenu={(e) => menuIns.onContextmenu(e)}
+            style={{ width: '100%', flex: 1, overflow: 'auto' }}
+          >
             <ElMenu
               ref={registerMenuRef}
               {...props}

@@ -641,7 +641,7 @@ export class Column extends Base {
       width = defaultWidth
     }
     if (isNaN(Number(width))) {
-      width = 100
+      width = 200
     }
     return width
   }

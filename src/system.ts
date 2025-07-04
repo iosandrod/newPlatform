@@ -573,12 +573,23 @@ export class System extends Base {
       }
       let _config = {
         createFn,
-        confirmFn: (dialog: Dialog) => {
+        confirmFn: async (dialog: Dialog) => {
           let _confirmFn = formConfig.confirmFn //
           if (typeof _confirmFn == 'function') {
             _confirmFn(dialog) //
           }
+          let fIns: Form = dialog.getRef('innerCom')
           let _d = dialog.getRef('innerCom').getData()
+          let requiredValidate = formConfig.requiredValidate
+          if (requiredValidate == true) {
+            try {
+              let msg = await fIns.validate()
+            } catch (error) {
+              this.confirmErrorMessage('表单校验失败')
+              reject(error?.message)
+              return false
+            } //
+          }
           resolve(_d) //
         },
         width: formConfig.width || 800,
@@ -1343,7 +1354,7 @@ export class System extends Base {
     return 'normal' //
   }
   async designSystemNavs() {
-    this.routeOpen('navs') //
+    this.routeTo('/admin/navs') //
   }
 
   async enterCurrentPageDesign() {
@@ -1638,13 +1649,24 @@ export class System extends Base {
       let query = curRou.query
       // console.log(query, 'testQuery') //
       nextTick(() => {
+        // debugger //
         // console.log('sfkjslfjslkfsjlkfsd')//
         let _path1 = _path.split('?')[0]
+        // _path1=_path1.replace(/\/$/,'')
+        // debugger//
         if (_path1 == '/') {
           _path = '/home'
+          _path1 = '/home' //
+        }
+        // debugger//
+        let reg = /\/$/
+        _path = _path1 //
+        if (reg.test(_path)) {
+          _path = _path.replace(reg, '') //
         }
         router.push({
           path: _path,
+          query: query, //
         })
       }) //
     }
@@ -1861,6 +1883,12 @@ export class System extends Base {
         },
       },
       {
+        label: '设计实体',
+        fn: async () => {
+          await this.routeTo('/ERDesign') //
+        },
+      },
+      {
         label: '切换平台',
         fn: async () => {
           let currentDesign = system.getCurrentPageDesign()
@@ -1922,9 +1950,9 @@ export class System extends Base {
     let _this = this
     let items = [
       {
-        label: '用户用心',
+        label: '用户中心',
         fn: async () => {
-          _this.routeOpen('userinfo') //
+          _this.routeTo('/admin/userinfo') //
         },
       },
       {
@@ -2042,31 +2070,85 @@ export class System extends Base {
   async getRealTables() {
     let http = this.getHttp() //
     let res = await http.post('tableview', 'getAllTables')
+    console.log(res, 'allTables') //
     return res
   }
   async addTableField(tableName, column) {
+    if (!Boolean(tableName)) {
+      return
+    } //
+    let oldTableConfig = await this.getHttp().find('tableview', { tableName })
+    if (oldTableConfig.length == 0) {
+      return
+    } //
     let fConfig = {
-      itemWidth: 12,
+      itemSpan: 24, //
+      width: 350,
+      height: 400, //
       items: [
+        {
+          type: 'input',
+          label: '表名',
+          field: 'tableName',
+          disabled: true, //
+          required: true,
+        },
         {
           type: 'input',
           label: '字段名称',
           field: 'field',
+          validate: async (config) => {
+            let reg = /^[a-zA-Z][a-zA-Z0-9_]{0,29}$/
+            let value = config.value
+            if (!reg.test(value)) {
+              return '字段名称格式不正确'
+            } //
+          },
+          required: true,
         },
         {
           type: 'select',
           label: '字段类型',
           field: 'type',
+          required: true,
+          options: {
+            options: [
+              {
+                value: 'varchar',
+                label: '字符类型',
+              },
+              {
+                value: 'int',
+                label: '数字类型',
+              }, //
+            ],
+          },
         },
       ],
+      title: '新增字段',
+      requiredValidate: true,
+      validateFn: async (config) => {
+        let data = config.data
+        return '校验失败' //
+      },
       data: column, //
     }
-    let http = this.getHttp()
-    let res = await http.post('tableview', 'changeColumns', {
+    await this.confirmForm(fConfig) //
+    let http = this.getHttp() //
+    let _obj = {
       tableName,
       column,
       state: 'add',
-    })
+    }
+    // console.log(_obj, 'testRes') //
+    let res = await http.post('tableview', 'changeColumns', _obj) //
+    res = res[0] //
+    let columns = res.columns
+    // let _columns = columns.map((e) => {
+    //   return e.field
+    // })
+    await this.confirmMessage('字段添加成功', 'success')
+    return columns //
   }
   editTableField(tableName, column) {}
   removeTableField(tableName, column) {}

@@ -121,7 +121,7 @@ export const comText = () => {
           id: 22,
           createdAt: '2025-07-02 20:47:10',
           updatedAt: '2025-07-02 20:47:10',
-          checkboxField: true,//
+          // checkboxField: true,//
           viewName: null,
           entityTableName: null,
           title: null,
@@ -417,6 +417,7 @@ export const comText = () => {
           editDialogConfig: null,
           viewType: null,
           description: null,
+          checkboxField: true, //
           layout: null,
           tableName: 'uploads',
           data: {
@@ -4242,5 +4243,5 @@ export const comText = () => {
     nodeTypes: {
       erTable: 'ERNode', //
     },
-  }//
+  } //
 }

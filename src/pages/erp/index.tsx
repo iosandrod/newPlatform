@@ -1,10 +1,8 @@
 import { defineComponent, KeepAlive } from 'vue'
-import lowcode from './lowcode'
 import designVue from './design'
 export default defineComponent({
   name: 'PlatformIndex',
   components: {
-    lowcode,
     designVue, //
     KeepAlive,
   },

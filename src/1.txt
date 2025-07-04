@@ -8070,3 +8070,187 @@ import lowcode from './lowcode'
 //     }
 //   },
 // })
+
+// if (system.hasInitRoutes === false) {
+      //   return
+      // } //
+      // let dArr = diaArr.value.map((d) => {
+      //   return <dialogCom dialogIns={d}></dialogCom>
+      // })
+
+      // 保存视图信息（可用于 setTransform）
+
+    // console.log(viewportTransform)
+    // 设置数据（可用于后续 VueFlow 渲染）
+    // this.templateProps.nodes = layoutedNodes
+    // this.templateProps.edges = edges
+    // console.log('layoutedNodes', edges) //
+
+    // let rawNodes = this.getNodes(true)
+    // let edges = this.getEdges(true)
+    // let oldNodes = this.getNodes()
+    // let oldEdges = this.getEdges()
+    // // 创建 dagre 图
+    // let g = new dagre.graphlib.Graph()
+    // g.setDefaultEdgeLabel(() => ({}))
+    // g.setGraph({
+    //   rankdir: 'LR',
+    //   nodesep: 100,
+    //   ranksep: 100,
+    // })
+
+    // // 设置节点尺寸（用于布局）
+    // rawNodes.forEach((node) => {
+    //   g.setNode(node.id, {
+    //     width: 240,
+    //     height: 60 + (node.data.fields?.length || 0) * 28,
+    //   })
+    // })
+
+    // // 设置边
+    // edges.forEach((edge) => {
+    //   g.setEdge(edge.source, edge.target)
+    // })
+
+    // // 计算布局
+    // dagre.layout(g)
+
+    // // 更新节点位置
+    // let layoutedNodes = rawNodes.map((node) => {
+    //   let pos = g.node(node.id)
+    //   return {
+    //     ...node,
+    //     position: {
+    //       x: pos.x - 120, // 左上角对齐
+    //       y: pos.y - 30,
+    //     },
+    //   }
+    // })
+    // // ===== 计算自定义视图偏移与缩放 =====
+    // let allX = layoutedNodes.map((n) => n.position.x)
+    // let allY = layoutedNodes.map((n) => n.position.y)
+
+    // let allRight = layoutedNodes.map((n) => n.position.x + 240)
+    // let allBottom = layoutedNodes.map(
+    //   (n) => n.position.y + (60 + (n.data.fields?.length || 0) * 28),
+    // )
+
+    // let minX = Math.min(...allX)
+    // let maxX = Math.max(...allRight)
+    // let minY = Math.min(...allY)
+    // let maxY = Math.max(...allBottom)
+
+    // let contentWidth = maxX - minX
+    // let contentHeight = maxY - minY
+
+    // let container: HTMLDivElement = this.getRef('container')
+    // let containerRect = container.getBoundingClientRect()
+    // let viewportWidth = containerRect.width
+    // let viewportHeight = containerRect.height
+
+    // let zoomX = viewportWidth / (contentWidth + 100)
+    // let zoomY = viewportHeight / (contentHeight + 100)
+    // let zoom = Math.min(zoomX, zoomY, 1) // 最大缩放为1，防止放大
+
+    // // 计算偏移
+    // let offsetX = (viewportWidth - contentWidth * zoom) / 2 - minX * zoom
+    // let offsetY = (viewportHeight - contentHeight * zoom) / 2 - minY * zoom
+
+    // this.setNodes(layoutedNodes) // 设置节点
+    // this.setEdges(edges) // 设置边
+    // let viewportTransform = {
+    //   x: offsetX,
+    //   y: offsetY,
+    //   zoom,
+    // }
+    // if (isNaN(viewportTransform.x) || isNaN(viewportTransform.y)) {
+    //   return //
+    // }
+    // this.templateProps.viewport = viewportTransform
+    // this.getInstance().setTransform(viewportTransform) //
+     {/* <ElButton
+                        type="primary"
+                        class="bg-blue-500"
+                        onClick={() => systemIns.installApp(app.name)}
+                        size="small"
+                      >
+                        <div class="is-disabled">安装</div>
+                      </ElButton> */}
+                       // const rawNodes: any[] = this.getNodes(true)
+    // const edges: Edge[] = this.getEdges(true)
+
+    // // 根据 isInPanel 分组
+    // const oldNodes = rawNodes.filter((n) => n.isInPanel)
+    // let newNodes = rawNodes.filter((n) => !n.isInPanel)
+
+    // // 布局参数
+    // const NODE_WIDTH = 240
+    // const HEADER_HEIGHT = 60
+    // const ROW_HEIGHT = 28
+    // const H_SPACING = 100
+
+    // // 计算旧节点最大 X 边界
+    // const maxOldX =
+    //   oldNodes.length > 0
+    //     ? Math.max(...oldNodes.map((n) => n.position.x + NODE_WIDTH))
+    //     : 0
+
+    // // 只对 newNodes 布局
+    // if (newNodes.length > 0) {
+    //   const g = new dagre.graphlib.Graph()
+    //   g.setDefaultEdgeLabel(() => ({}))
+    //   // 水平排版，新节点内部间距可调
+    //   g.setGraph({ rankdir: 'LR', nodesep: 50, ranksep: 50 })
+
+    //   // 设置尺寸并加入 graph
+    //   newNodes.forEach((node) => {
+    //     const cols = node.data?.data?.columns ?? []
+    //     const nodeHeight = HEADER_HEIGHT + cols.length * ROW_HEIGHT
+    //     g.setNode(node.id, { width: NODE_WIDTH, height: nodeHeight })
+    //   })
+    //   // 仅添加新节点之间的边
+    //   edges
+    //     .filter(
+    //       (e) =>
+    //         newNodes.some((n) => n.id === e.source) &&
+    //         newNodes.some((n) => n.id === e.target),
+    //     )
+    //     .forEach((e) => g.setEdge(e.source, e.target))
+
+    //   // 执行 dagre 布局
+    //   dagre.layout(g)
+
+    //   // 计算布局后的坐标，并偏移到旧节点右侧
+    //   newNodes = newNodes.map((node) => {
+    //     const pos = g.node(node.id)
+    //     const cols = node.data?.data?.columns ?? []
+    //     const nodeHeight = HEADER_HEIGHT + cols.length * ROW_HEIGHT
+    //     return {
+    //       ...node,
+    //       position: {
+    //         x: maxOldX + H_SPACING + (pos.x - NODE_WIDTH / 2),
+    //         y: pos.y - nodeHeight / 2,
+    //       },
+    //     }
+    //   })
+    // }
+
+    // // 合并并应用
+    // const layouted = [...oldNodes, ...newNodes]
+    // this.setNodes(layouted)
+    // this.setEdges(edges)
+     // let item = config.item
+            // let name = item.name
+            // let page = systemIns.getTargetDesign(name) //
+            // page.tabHidden = true
+            // let pre = config.pre
+            // let modelValue = config.modelValue
+            // if (modelValue != item.name) {
+            //   return //
+            // }
+            // if (pre) {
+            //   systemIns.routeOpen(pre.name) //
+            // } else if (config.next) {
+            //   //
+            //   systemIns.routeOpen(config.next.name) //
+            // }

@@ -7,7 +7,14 @@ import { isProxy, isReactive, nextTick, reactive } from 'vue'
 import { Dropdown } from '@/menu/dropdown'
 import { BMenu } from '@/buttonGroup/bMenu'
 import { Table } from '@/table/table'
+import {
+  getForeignKeyConfigColumns,
+  getForeignKeyConfigData,
+} from './tableFlowFn'
 export class TableFlow extends Flow {
+  constructor(config) {
+    super(config) //
+  }
   templateProps: any = {
     nodes: [],
     edges: [],
@@ -18,7 +25,7 @@ export class TableFlow extends Flow {
     // ✅ 筛选出 checkboxField = true 的表格
     let selectedTables = tables.filter((t: any) => t.checkboxField === true) //
     // ✅ 转换为 VueFlow 节点数组
-    let nodes: Node[] = selectedTables.map((table: any, index: number) => {
+    let nodes = selectedTables.map((table: any, index: number) => {
       let id = table.fid
       if (id == null) {
         id = this.uuid()
@@ -28,14 +35,30 @@ export class TableFlow extends Flow {
         id: table.fid, //
         type: 'erTable',
         position: {
-          x: 100 + index * 300, // 自动横向排列
-          y: 100,
+          // x: 100 + index * 300, // 自动横向排列
+          // y: 100,
+          x: 0,
+          y: 0, //
         },
         data: table, //
       } as any
     }) //
     nextTick(() => {
-      this.templateProps._nodes = nodes //
+      let oldNodes = this.templateProps.nodes || []
+      let _arr = []
+      nodes.forEach((n) => {
+        let id = n.id
+        let oldNode = oldNodes.find((n) => n.id === id)
+        if (oldNode) {
+          _arr.unshift(n)
+          n.position = { ...oldNode.position }
+          n.isInPanel = true
+        } else {
+          n.isInPanel = false
+          _arr.push(n)
+        }
+      })
+      this.templateProps._nodes = _arr //
     })
   }
 
@@ -73,96 +96,69 @@ export class TableFlow extends Flow {
   getEdges(template = false) {
     if (template) return this.templateProps._edges
     return this.templateProps.edges
+  }
+  getInstanceViewPort() {
+    return this.getInstance().getViewport()
+  }
+  getInstanceZoom() {
+    let viewport = this.getInstanceViewPort()
+    return viewport.zoom
   } //
   @useTimeout({ number: 200 })
   autoFitView() {
-    let rawNodes = this.getNodes(true)
-    let edges = this.getEdges(true) //
-    // 创建 dagre 图
-    let g = new dagre.graphlib.Graph()
-    g.setDefaultEdgeLabel(() => ({}))
-    g.setGraph({
-      rankdir: 'LR',
-      nodesep: 100,
-      ranksep: 100,
-    })
+    const rawNodes: any[] = this.getNodes(true)
+    const edges: Edge[] = this.getEdges(true)
+    const zoom = this.getInstanceZoom()
+    // 分组
+    const oldNodes = rawNodes.filter((n) => n.isInPanel)
+    let newNodes = rawNodes.filter((n) => !n.isInPanel)
 
-    // 设置节点尺寸（用于布局）
-    rawNodes.forEach((node) => {
-      g.setNode(node.id, {
-        width: 240,
-        height: 60 + (node.data.fields?.length || 0) * 28,
-      })
-    })
+    // 布局参数
+    const NODE_WIDTH = 240
+    const HEADER_HEIGHT = 60
+    const ROW_HEIGHT = 28
+    const V_SPACING = 20 // 列内垂直间距
+    const H_SPACING = 100 // 列间水平间距
 
-    // 设置边
-    edges.forEach((edge) => {
-      g.setEdge(edge.source, edge.target)
-    })
+    // 画布高度
+    const container = this.getRef('container')
+    let { height: viewportHeight } = container.getBoundingClientRect()
+    viewportHeight = viewportHeight / zoom //
+    // 计算旧节点最右边界，作为新列起点
+    const maxOldX = oldNodes.length
+      ? Math.max(...oldNodes.map((n) => n.position.x + NODE_WIDTH))
+      : 0
+    let columnX = maxOldX + H_SPACING
+    let cursorY = 0 //
+    // 瀑布布局 newNodes
+    newNodes = newNodes.map((node) => {
+      const cols = node.data?.data?.columns ?? []
+      const nodeHeight = HEADER_HEIGHT + (cols.length + 1) * ROW_HEIGHT
 
-    // 计算布局
-    dagre.layout(g)
+      // 如果当前列剩余空间不足，换列
+      if (cursorY + nodeHeight > viewportHeight) {
+        columnX += NODE_WIDTH + H_SPACING
+        cursorY = 0
+      }
 
-    // 更新节点位置
-    let layoutedNodes = rawNodes.map((node) => {
-      let pos = g.node(node.id)
-      return {
+      // 放置位置
+      const placed: Node = {
         ...node,
         position: {
-          x: pos.x - 120, // 左上角对齐
-          y: pos.y - 30,
+          x: columnX,
+          y: cursorY,
         },
       }
+
+      // 下一个节点 Y 游标向下移动
+      cursorY += nodeHeight + V_SPACING
+      return placed
     })
-    // ===== 计算自定义视图偏移与缩放 =====
-    let allX = layoutedNodes.map((n) => n.position.x)
-    let allY = layoutedNodes.map((n) => n.position.y)
 
-    let allRight = layoutedNodes.map((n) => n.position.x + 240)
-    let allBottom = layoutedNodes.map(
-      (n) => n.position.y + (60 + (n.data.fields?.length || 0) * 28),
-    )
-
-    let minX = Math.min(...allX)
-    let maxX = Math.max(...allRight)
-    let minY = Math.min(...allY)
-    let maxY = Math.max(...allBottom)
-
-    let contentWidth = maxX - minX
-    let contentHeight = maxY - minY
-
-    let container: HTMLDivElement = this.getRef('container')
-    let containerRect = container.getBoundingClientRect()
-    let viewportWidth = containerRect.width
-    let viewportHeight = containerRect.height
-
-    let zoomX = viewportWidth / (contentWidth + 100)
-    let zoomY = viewportHeight / (contentHeight + 100)
-    let zoom = Math.min(zoomX, zoomY, 1) // 最大缩放为1，防止放大
-
-    // 计算偏移
-    let offsetX = (viewportWidth - contentWidth * zoom) / 2 - minX * zoom
-    let offsetY = (viewportHeight - contentHeight * zoom) / 2 - minY * zoom
-
-    // 保存视图信息（可用于 setTransform）
-
-    // console.log(viewportTransform)
-    // 设置数据（可用于后续 VueFlow 渲染）
-    // this.templateProps.nodes = layoutedNodes
-    // this.templateProps.edges = edges
-    // console.log('layoutedNodes', edges) //
-    this.setNodes(layoutedNodes) // 设置节点
-    this.setEdges(edges) // 设置边
-    let viewportTransform = {
-      x: offsetX,
-      y: offsetY,
-      zoom,
-    }
-    if (isNaN(viewportTransform.x) || isNaN(viewportTransform.y)) {
-      return //
-    }
-    this.templateProps.viewport = viewportTransform
-    // this.getInstance().setTransform(viewportTransform) //
+    // 合并并应用
+    const layouted = [...oldNodes, ...newNodes]
+    this.setNodes(layouted)
+    this.setEdges(edges)
   }
   setNodes(nodes) {
     if (!Array.isArray(nodes)) {
@@ -213,21 +209,28 @@ export class TableFlow extends Flow {
   }
   getControllButtons() {
     return [
-      {
-        label: '自动布局',
-        icon: 'iconfont icon-layout',
-        fn: () => {
-          this.autoFitView()
-        },
-      },
+      // {
+      //   label: '自动布局',
+      //   icon: 'iconfont icon-layout',
+      //   fn: () => {
+      //     this.autoFitView()
+      //   },
+      // },
       {
         label: '获取表格',
         icon: 'iconfont icon-table',
         fn: async () => {
-          debugger //
           let tables = await this.getRemoteTables() //
-          console.log(tables, 'testTables') //
+          // console.log(tables, 'testTables') //
           this.setRemoteTables(tables) ////
+        },
+      },
+      {
+        label: '获取zoom',
+        icon: 'iconfont icon-table',
+        fn: () => {
+          let zoom = this.getInstanceZoom()
+          console.log(zoom)
         },
       },
     ]
@@ -258,16 +261,16 @@ export class TableFlow extends Flow {
         title: '字段名',
       },
       {
-        field: 'cnName',
-        title: '中文名',
-      },
-      {
         field: 'type',
         title: '字段类型',
       },
       {
         field: 'default',
         title: '默认值',
+      },
+      {
+        field: 'cnName',
+        title: '中文名',
       },
     ]
   }
@@ -303,9 +306,14 @@ export class TableFlow extends Flow {
       {
         label: '新增字段',
         icon: 'iconfont icon-layout',
-        fn: () => {
-          let currentTableName = this.getCurrentSelectTableName()
-          console.log(currentTableName, 'testName') //
+        fn: async () => {
+          // let currentTableName = this.getCurrentSelectTableName() //
+          // let system = this.getSystem()
+
+          // await system.addTableField(currentTableName, {
+          //   tableName: currentTableName,
+          // }) //
+          this.addField({ tableName: this.getCurrentSelectTableName() })
         },
       },
       {
@@ -316,12 +324,32 @@ export class TableFlow extends Flow {
       }, //
     ]
   }
+
   getCurrentSelectTableName() {
     let selection = this.getSelection()
     let tableName = selection?.tableName
     return tableName
   }
-  addField(config) {}
+  async addField(config: any = {}) {
+    let tableName = config.tableName
+    if (tableName == null) {
+      return
+    } //
+    let sys = this.getSystem() //
+    let res = await sys.addTableField(tableName, { tableName: tableName }) //
+    let node = this.getNodeByTableName(tableName) //
+    let columns = this.getColumnsInNode(node)
+    columns.splice(0, columns.length, ...res) //
+    // node.data.data.columns.splice(0, node.data.data.columns.length, ...res)
+  }
+  getColumnsInNode(node) {
+    return node.data.data.columns
+  }
+  getNodeByTableName(tableName: string) {
+    let nodes = this.getNodes()
+    let node = nodes.find((node) => node.data.tableName == tableName)
+    return node
+  }
   onFieldClick(config) {
     let f = config.field
     this.selectionField = f //
@@ -362,4 +390,56 @@ export class TableFlow extends Flow {
     }
     context.open(event) //
   }
+  onNodeDrag(config) {
+    // console.log(this.templateProps.nodes, 'testNodes') ////
+    // console.log(config, 'testConfig') //
+    let node = config.node //
+    let id = node.id
+    let myNode = this.getNodeById(id)
+    let position = node.position
+    myNode.position.x = position.x
+    myNode.position.y = position.y //
+  }
+  getNodeById(id) {
+    return this.templateProps.nodes.find((n) => n.id === id)
+  }
+  onMove(config) {
+    let flowTransform = config.flowTransform
+    this.templateProps.flowTransform = flowTransform //
+  } //
+  onConnect(config) {
+    /* 
+    {
+    "source": "gXVCCYR-QEy5Ze-6tYl7p",
+    "sourceHandle": "field-taskid",
+    "target": "Kn_YQ52wfIOfako_QZgJr",
+    "targetHandle": "field-id"
+}
+    */
+    let source = config.source
+    let target = config.target
+    let sourceTable = this.getNodeById(source).data
+    let targetTable = this.getNodeById(target).data
+    let ins = this.getInstance() //
+    ins.addEdges([config]) //
+  }
+  onConnectStart(config) {
+    // console.log(config, 'onConnectStart') //
+  }
+  onConnectEnd(config) {
+    // console.log(config, 'onConnectEnd') //
+  }
+  getForeignKeyConfigData() {
+    let d = getForeignKeyConfigData(this)
+    return d
+  }
+  @cacheValue()
+  getForeignKeyConfigColumns() {
+    let d = getForeignKeyConfigColumns(this)
+    return d
+  }
+  @cacheValue()
+  getForeignKeyTableHeaderButtons() {
+    return []
+  } //
 }

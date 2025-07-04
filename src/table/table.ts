@@ -724,7 +724,6 @@ export class Table extends Base {
     let _columns = this.templateProps.columns || [] //
     let instance = this.getInstance()
     let n = Date.now().toString()
-    console.time(n) //
     let fro = instance.options.frozenColCount
     let right = instance.options.rightFrozenColCount //
 
@@ -759,14 +758,9 @@ export class Table extends Base {
         } //
       }
     }
-    // instance.clearColWidthCache()
     //@ts-ignore
     instance.updateColumns(_columns, { clearColWidthCache: true }) //
-    // instance.clearColWidthCache()
-    // setTimeout(() => {
-    // }, 100)
     let footerIns = this.getFooterInstance()
-    console.timeEnd(n) //
   }
   @useTimeout({
     number: 100, //
@@ -1183,7 +1177,7 @@ export class Table extends Base {
     return data ////
   }
   getDefaultWidth() {
-    return 100
+    return 150
   }
   setColumns(columns) {
     this.columns.splice(0) //
@@ -1474,16 +1468,14 @@ export class Table extends Base {
     }
     let records = data || instance.records
     let id = this.uuid() //
-    console.time(id)
+    // console.time(id)
     this.currentIndexContain = shallowRef({}) //
-    console.log('更新了数据', records.length, 'dfjldskfjsdlfsdf') //
     instance.setRecords(records)
     let ganttInstance = this.getGanttInstance()
     if (ganttInstance != null) {
       ganttInstance.setRecords(records)
     }
-    console.timeEnd(id)
-    console.log('视图更新时间') //
+    // console.timeEnd(id)
     let curRow = this.getCurRow()
     if (curRow == null) {
       let row0 = records?.[0]

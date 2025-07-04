@@ -42,14 +42,6 @@ export default defineComponent({
                     </div>
                     <div class="mb-4 text-sm">{app.description}</div>
                     <div class="text-right">
-                      {/* <ElButton
-                        type="primary"
-                        class="bg-blue-500"
-                        onClick={() => systemIns.installApp(app.name)}
-                        size="small"
-                      >
-                        <div class="is-disabled">安装</div>
-                      </ElButton> */}
                       <ElButton
                         class="bg-blue-500"
                         type="primary"

@@ -23,6 +23,7 @@ export class Tab extends Base {
     let config = this.config
     let items = config.items || []
     this.setItems(items)
+    // debugger //
     if (config.modelValue == null) {
       this.modelValue = this.tabitems?.[0]?.getTabName() //
     }

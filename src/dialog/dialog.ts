@@ -86,6 +86,7 @@ export class Dialog extends Base {
   } //
   async confirm() {
     let config = this.config
+    // debugger //
     let confirmFn = config.confirmFn
     if (typeof confirmFn == 'function') {
       try {

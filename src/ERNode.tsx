@@ -23,9 +23,12 @@ export default defineComponent({
     }
 
     const handleAddField = () => {
-      console.log('点击了新增字段按钮', props.data.tableId)
+      // console.log('点击了新增字段按钮', props.data.tableId)
       // 可以 emit 或直接调用 flow 方法
-      flow?.addField?.(props.data.tableId)
+      // flow?.addField?.(props.data.tableId)
+      flow.addField({
+        tableName: props.data.tableName, //
+      })
     }
 
     return () => (
@@ -36,8 +39,10 @@ export default defineComponent({
         </div>
 
         {/* 字段列表 */}
-        <ul class="px-2 py-1 space-y-1 text-sm">
-          {props.data.data.columns.map((field) => (
+        <ul class="px-2 py-1 space-y-1 text-sm overflow-hidden">
+          {flow.getColumnsInNode(props).map((
+            field, //
+          ) => (
             <li
               onClick={(e) =>
                 flow.onFieldClick({
@@ -69,8 +74,8 @@ export default defineComponent({
                 <span class="mr-1 text-green-500">🔗</span>
               ) : null}
 
-              <span class="flex-1">{field.field}</span>
-              <span class="text-xs text-gray-400">{field.type}</span>
+              <span class="flex-1 flex-wrap-reverse">{field.field}</span>
+              <span class="text-xs flex-none text-gray-400 ">{field.type}</span>
 
               <Handle
                 type="source"

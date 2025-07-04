@@ -320,6 +320,8 @@ export default defineComponent({
                                   data={element}
                                   params={typeProps}
                                   isFormInput={true}
+                                  style={{
+                                  }}
                                 ></TypeComponent>
                               )
                             },

@@ -119,7 +119,7 @@ export class TabItem extends Base {
         root.style.transform = null
       })
     }
-    console.log(index, 'testDindex')
+    // console.log(index, 'testDindex')
     this.dragConfig.dragIndex = index
   }
   getTabName() {
