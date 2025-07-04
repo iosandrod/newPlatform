@@ -321,6 +321,11 @@ export class TableFlow extends Flow {
       },
       {
         label: '删除字段',
+        fn: async () => {
+          await this.deleteField({
+            tableName: this.getCurrentSelectTableName(),
+          })
+        },
       }, //
     ]
   }
@@ -440,6 +445,22 @@ export class TableFlow extends Flow {
   }
   @cacheValue()
   getForeignKeyTableHeaderButtons() {
-    return []
+    return [
+      {
+        label: '添加外键',
+        fn: async () => {},
+      },
+      {
+        label: '删除外键',
+      },
+    ]
   } //
+  async deleteField(config) {
+    let tableName = config.tableName
+    let currentDesignField = this.selectionField //
+  }
+  async getSelectionField() {
+    let selectionField = this.selectionField
+    return selectionField //
+  }
 }

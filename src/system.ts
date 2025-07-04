@@ -2151,6 +2151,26 @@ export class System extends Base {
     return columns //
   }
   editTableField(tableName, column) {}
-  removeTableField(tableName, column) {}
+  async removeTableField(tableName, column) {
+    if (!Boolean(tableName)) {
+      return
+    } //
+    await this.confirmMessageBox('确定删除', 'warning') //
+    let http = this.getHttp() //
+    let _obj = {
+      tableName,
+      column,
+      state: 'delete', //
+    }
+    let res = await http.post('tableview', 'changeColumns', _obj) //
+    res = res?.[0] //
+    let columns = res?.columns
+    if (column == null) {
+      //
+      return
+    }
+    await this.confirmMessage('字段删除成功', 'success')
+    return columns //
+  }
 } //
 export const system = reactive(new System())
