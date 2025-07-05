@@ -8959,3 +8959,299 @@ import lowcode from './lowcode'
                                     {btn.getLabel()}
                                   </div>
                                 ) //
+
+
+
+                                 {/* <div class="flex flex-row flex-1 w-full overflow-auto">
+            <div class='' style={{ height: '100%' }}>{leftM}</div>
+            <div class="flex flex-col flex-1 h-full ">
+              <div class="w-full bg-white tab-line">{tableTab}</div>
+              <div class="flex-1 w-full overflow-auto ">{dCom}</div>
+            </div>
+          </div> */}
+
+
+          // let pageHeader = (
+      //   <header class="flex items-center h-5 page-header">
+      //     <div class="container flex items-center justify-between">
+      //       <div class="ml-40">
+      //         <er-dropdown
+      //           dropMode="hover"
+      //           v-slots={{
+      //             default: () => {
+      //               let com = (
+      //                 <div class="flex items-center px-3 py-1 space-x-1 text-white bg-blue-500 rounded-md hover:bg-pink-600">
+      //                   <span>系统功能</span>
+      //                 </div>
+      //               )
+      //               return com
+      //             },
+      //             dropdown: () => {
+      //               let btnArr = systemIns.getGlobalDropDown()
+      //               let bsComs = btnArr.map((item) => {
+      //                 let c = (
+      //                   <div class="py-1">
+      //                     <div
+      //                       class="block px-4 py-2 text-sm text-gray-800 cursor-pointer hover:bg-gray-100"
+      //                       onClick={() => {
+      //                         let fn = item.fn
+      //                         fn() //
+      //                       }}
+      //                     >
+      //                       {item.label}
+      //                     </div>
+      //                   </div>
+      //                 )
+      //                 return c
+      //               })
+      //               let com = (
+      //                 <div class="mt-2 transition-opacity bg-white border border-gray-200 rounded-lg shadow-lg w-120">
+      //                   {bsComs}
+      //                 </div>
+      //               )
+      //               return com //
+      //             },
+      //           }}
+      //         ></er-dropdown>
+      //       </div>
+      //       <div class="flex items-center justify-center flex-1 mx-8">
+      //         <er-dropdown
+      //           class="w-400"
+      //           ref={(el) => {
+      //             systemIns.registerRef('gSearch', el)
+      //           }}
+      //           v-slots={{
+      //             default: () => {
+      //               let com = (
+      //                 <input
+      //                   onFocus={() => {
+      //                     let _ref: Dropdown = systemIns.getRef('gSearch')
+      //                     _ref.showDropdown() //
+      //                   }}
+      //                   placeholder="全局查询"
+      //                   class="px-3 border border-gray-300 outline-none w-400 h-35 rounded-l-md"
+      //                 />
+      //               )
+      //               return com
+      //             },
+      //             dropdown: () => {
+      //               let com = <div class="w-400 h-400 bg-red"></div>
+      //               return com
+      //             },
+      //           }}
+      //         ></er-dropdown>
+      //       </div>
+
+      //       <div class="flex items-center space-x-4">
+      //         <img alt="avatar" class="w-8 h-8 rounded-full cursor-pointer" />
+      //         <er-dropdown
+      //           dropMode="hover"
+      //           v-slots={{
+      //             default: () => {
+      //               let com = (
+      //                 <div class="flex items-center px-3 py-1 space-x-1 text-white bg-blue-500 rounded-md hover:bg-pink-600">
+      //                   <span>
+      //                     {system.getUserInfo()?.user?.username || '登录'}
+      //                   </span>
+      //                 </div>
+      //               )
+      //               return com
+      //             },
+      //             dropdown: () => {
+      //               let items = systemIns.getUserDropDown()
+      //               let itemsCom = items.map((item) => {
+      //                 let com = (
+      //                   <div class="py-1">
+      //                     <div
+      //                       href="#"
+      //                       class="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-100"
+      //                     >
+      //                       {item.label}
+      //                     </div>
+      //                   </div>
+      //                 )
+      //                 return com
+      //               })
+      //               let com = (
+      //                 <div
+      //                   class="mt-2 transition-opacity bg-white border border-gray-200 rounded-lg shadow-lg w-120 //"
+      //                 >
+      //                   {itemsCom}
+      //                 </div>
+      //               )
+      //               return com
+      //             },
+      //           }}
+      //         ></er-dropdown>
+      //       </div>
+      //     </div>
+      //   </header>
+      // )
+
+      <el-aside :class="[ns.b()]" :width="ER.props.configPanelWidth">
+    <el-breadcrumb :class="[ns.e('breadcrumb')]" :separator-icon="() => (
+      h('svg', {
+        viewBox: '0 0 1024 1024',
+        xmlns: 'http://www.w3.org/2000/svg'
+      },
+        h('path', {
+          fill: 'currentColor',
+          d: 'M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z'
+        })
+      )
+    )" v-bind="utils.addTestId('configPanel:breadcrumb')">
+      <el-breadcrumb-item
+        @click="(index !== bars.length - 1 && item.node.value !== 'placeholder') && handleBreadcrumbClick(item.node)"
+        v-for="(item, index) in bars" :key="index">
+        {{ item.node.value === 'placeholder' ? '...' : item.label }}
+      </el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-form ref="form" :model="target" :rules="rules" label-width="120px" label-position="top">
+      <el-scrollbar>
+        <div :class="[ns.e('wrap')]">
+          <div v-if="isSelectAnyElement">
+            <PanelsConfigComponentsPropsPanel :key="target.id" />
+          </div>
+          <div v-if="isSelectRoot">
+            <GlobalConfigPanel></GlobalConfigPanel>
+          </div>
+        </div>
+      </el-scrollbar>
+    </el-form>
+  </el-aside>
+
+  const pageHeader = (
+        <header class="flex items-center justify-between w-full px-1 py-2 bg-white shadow">
+          {/* 左侧：功能下拉 */}
+          <div class="w-24">
+            <er-dropdown
+              dropMode="hover"
+              v-slots={{
+                default: () => (
+                  <button class="flex items-center h-10 px-2 text-white transition bg-blue-600 rounded hover:bg-blue-700">
+                    <span class="font-medium">系统功能</span>
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                ),
+                dropdown: () => (
+                  <div class="w-48 mt-2 bg-white border border-gray-200 rounded shadow-lg">
+                    {systemIns.getGlobalDropDown().map((item) => (
+                      <div
+                        class="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                        onClick={item.fn}
+                      >
+                        {item.label}
+                      </div>
+                    ))}
+                  </div>
+                ),
+              }}
+            />
+          </div>
+
+          {/* 中间：全局搜索 */}
+          <div class="flex-1 mx-6">
+            <er-dropdown
+              ref={(el) => systemIns.registerRef('gSearch', el)}
+              v-slots={{
+                default: () => (
+                  <div class="relative">
+                    <input
+                      type="text"
+                      placeholder="全局查询"
+                      class="w-full h-10 pl-4 pr-10 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
+                      onFocus={() => systemIns.getRef('gSearch').showDropdown()}
+                    />
+                    <svg
+                      class="absolute w-5 h-5 text-gray-400 transform -translate-y-1/2 right-3 top-1/2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1 0 6.65 6.65a7.5 7.5 0 0 0 10.6 10.6z"
+                      />
+                    </svg>
+                  </div>
+                ),
+                dropdown: () => (
+                  <div class="w-full mt-1 bg-white border border-gray-200 rounded shadow-lg">
+                    {/* 下拉内容 */}
+                  </div>
+                ),
+              }}
+            />
+          </div>
+
+          {/* 右侧：头像 + 用户下拉 */}
+          <div class="flex items-center space-x-4">
+            <img
+              src=""
+              alt="avatar"
+              class="w-10 h-10 border border-gray-300 rounded-full"
+            />
+            <er-dropdown
+              dropMode="hover"
+              v-slots={{
+                default: () => (
+                  <button class="flex items-center px-4 py-2 text-white transition bg-blue-600 rounded hover:bg-blue-700">
+                    <span class="font-medium">
+                      {system.getUserInfo()?.user?.username || '登录'}
+                    </span>
+                    <svg
+                      class="w-4 h-4 ml-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </button>
+                ),
+                dropdown: () => (
+                  <div class="mt-2 bg-white border border-gray-200 rounded shadow-lg w-44">
+                    {systemIns.getUserDropDown().map((item) => (
+                      <div
+                        class="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                        onClick={item.fn}
+                      >
+                        {item.label}
+                      </div>
+                    ))}
+                  </div>
+                ),
+              }}
+            />
+          </div>
+        </header>
+      )
+      // {
+      //   label: '添加子按钮',
+      //   fn: (config) => {
+      //     let _t: Table = config.parent
+      //     let curRow = _t.getCurRow()
+      //     if (curRow == null) {
+      //       return
+      //     }
+      //   }, //
+      // },

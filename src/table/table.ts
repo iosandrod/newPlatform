@@ -2324,6 +2324,11 @@ export class Table extends Base {
         writable: true,
       })
       this.dataMap[e._index] = e
+      Object.defineProperty(e, 'hierarchyState', {
+        writable: true,
+        value: '',
+        enumerable: false,
+      }) //
     }
     if (e['_shtml'] == null) {
       let _v = Object.entries(e).reduce((res, [k, v]) => {
@@ -2342,7 +2347,7 @@ export class Table extends Base {
         value: 'unChange',
         enumerable: false,
         writable: true, //
-      }) //
+      })
     }
     this.dataMap[e._index] = e //
     let children = e['children']

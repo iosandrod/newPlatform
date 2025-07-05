@@ -64,7 +64,7 @@ export default defineComponent({
       const Layout = (
         <LayoutDragGable
           data-layout-type={'root'}
-          class={[unref(isEditModel) && ns.e('wrap'), 'h-full w-full', ..._class]}
+          class={[unref(isEditModel) && ns.e('wrap'), 'h-full w-full overflow-x-hidden', ..._class]}
           data={state.store}
           parent={state.store}
           isRoot
@@ -81,8 +81,8 @@ export default defineComponent({
       let rules = formIns.createFormRules()
 
       let inCom = (
-        <div class="h-full w-full">
-          {bar}
+        <div class="h-full w-full overflow-x-hidden overflow-y-auto">
+          {/* {bar} */}
           <TagComponent
             customLayout={true}
             class={['h-full w-full flex flex-col']} //

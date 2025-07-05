@@ -1884,7 +1884,7 @@ export class System extends Base {
         },
       },
       {
-        label: '设计实体',
+        label: '实体建模',//
         fn: async () => {
           await this.routeTo('/ERDesign') //
         },

@@ -602,8 +602,7 @@ export const getDefault = (column: Column) => {
       container.add(_g1) //
 
       treeIcon = icon
-    }
-    // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() //
+    } //
     let scrollConfig = 1
     if (scrollConfig != null) {
       let updateFn = () => {
@@ -624,6 +623,7 @@ export const getDefault = (column: Column) => {
         locationName.setAttribute('text', _value)
         if (treeIcon != null) {
           let _expanded = record['_expanded']
+          // debugger //
           let t = _this.getExpandIcon(_expanded)
           if (record?.children?.length == 0) {
             t = null //

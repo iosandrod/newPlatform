@@ -8,7 +8,7 @@ import { getBaseInfoEditConfig } from '@/table/colFConfig'
 export const getButtonGroupTableConfig = (_this?: PageDesign) => {
   let tableName = _this.getRealTableName()
   let obj = {
-    showTable: true,
+    showTable: false,
     title: '按钮组设计', //
     tableState: 'edit',
     showControllerButtons: true,
@@ -32,52 +32,45 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
           table.addAfterMethod({
             methodName: 'updateCanvas',
             fn: () => {
-              table.openTreeRow({ data: data, status: true }) 
+              table.openTreeRow({ data: data, status: true })
             },
           })
         },
       },
     ],
     buttons: [
+      {
+        label: '添加', //
+      },
       // {
-      //   label: '添加子按钮',
+      //   label: '添加主页默认按钮', //
       //   fn: (config) => {
       //     let _t: Table = config.parent
       //     let curRow = _t.getCurRow()
-      //     if (curRow == null) {
-      //       return
-      //     }
-      //   }, //
+      //     let _defaultButtons = JSON.parse(JSON.stringify(defaultButtons))
+      //     _t.config.data.splice(0)
+      //     _t.config.data.push(..._defaultButtons)
+      //   },
+      // }, //
+      // {
+      //   label: '添加编辑页默认按钮',
+      //   fn: (config) => {
+      //     let _t: Table = config.parent
+      //     let curRow = _t.getCurRow()
+      //     let _defaultButtons = JSON.parse(JSON.stringify(defaultButtons))
+      //     _t.config.data.splice(0)
+      //     _t.config.data.push(..._defaultButtons)
+      //   },
       // },
-      {
-        label: '添加主页默认按钮', //
-        fn: (config) => {
-          let _t: Table = config.parent
-          let curRow = _t.getCurRow()
-          let _defaultButtons = JSON.parse(JSON.stringify(defaultButtons))
-          _t.config.data.splice(0)
-          _t.config.data.push(..._defaultButtons)
-        },
-      }, //
-      {
-        label: '添加编辑页默认按钮',
-        fn: (config) => {
-          let _t: Table = config.parent
-          let curRow = _t.getCurRow()
-          let _defaultButtons = JSON.parse(JSON.stringify(defaultButtons))
-          _t.config.data.splice(0)
-          _t.config.data.push(..._defaultButtons)
-        },
-      },
-      {
-        label: '设置默认关联按钮', //
-        fn: (config) => {
-          let _t: Table = config.parent //
-          let _defaultButtons = JSON.parse(JSON.stringify(defaultRelateButtons))
-          _t.config.data.splice(0)
-          _t.config.data.push(..._defaultButtons) //
-        },
-      },
+      // {
+      //   label: '设置默认关联按钮', //
+      //   fn: (config) => {
+      //     let _t: Table = config.parent //
+      //     let _defaultButtons = JSON.parse(JSON.stringify(defaultRelateButtons))
+      //     _t.config.data.splice(0)
+      //     _t.config.data.push(..._defaultButtons) //
+      //   },
+      // },
     ],
     treeConfig: {
       id: 'id',
@@ -233,11 +226,11 @@ export const getButtonGroupFConfig = (_this: PageDesign) => {
         },
       }, //
       {
-        title: '按钮',
+        title: '按钮设置', //
         field: 'items',
-        label: '',
+        label: '编辑按钮组', //
         type: 'stable', ////
-        hiddenTitle: true,
+        // hiddenTitle: true,
         options: getButtonGroupTableConfig(_this), //
       },
     ],

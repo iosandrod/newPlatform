@@ -1,12 +1,27 @@
 import utils from '@ER/utils'
 import hooks from '@ER/hooks/index'
-import { ref, computed, reactive, watch, onMounted, inject, h, defineComponent } from 'vue'
+import {
+  ref,
+  computed,
+  reactive,
+  watch,
+  onMounted,
+  inject,
+  h,
+  defineComponent,
+} from 'vue'
 import _ from 'lodash'
-import PanelsConfigComponentsPropsPanel from '@ER/formEditor/components/Panels/Config/components/PropsPanel.vue'
-import GlobalConfigPanel from './components/GlobalConfigPanel.vue' //
+// import PanelsConfigComponentsPropsPanel from '@ER/formEditor/components/Panels/Config/components/PropsPanel.vue'
+// import GlobalConfigPanel from './components/GlobalConfigPanel.vue' //
 import formBarBread from '@/bread/formBarBread'
 import fConfigPanel from './components/fConfigPanel'
-import { ElAside, ElBreadcrumb, ElBreadcrumbItem, ElForm, ElScrollbar } from 'element-plus'
+import {
+  ElAside,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElForm,
+  ElScrollbar,
+} from 'element-plus'
 import { Form } from '@ER/form'
 import FormCom from '@ER/formCom'
 export default defineComponent({
@@ -20,12 +35,25 @@ export default defineComponent({
   },
   components: {
     fConfigPanel,
-    PanelsConfigComponentsPropsPanel,
-    GlobalConfigPanel,
+    // PanelsConfigComponentsPropsPanel,
+    // GlobalConfigPanel,
     formBarBread,
   },
   setup(props, { emit, expose, slots }) {
-    const { state, isSelectAnyElement, isSelectField, isSelectRoot, setSelection, type, checkTypeBySelected, target, isSelectGrid, isSelectTabs, isSelectCollapse, isSelectTable } = hooks.useTarget()
+    const {
+      state,
+      isSelectAnyElement,
+      isSelectField,
+      isSelectRoot,
+      setSelection,
+      type,
+      checkTypeBySelected,
+      target,
+      isSelectGrid,
+      isSelectTabs,
+      isSelectCollapse,
+      isSelectTable,
+    } = hooks.useTarget()
     const ER: any = inject('Everright')
     const { t } = hooks.useI18n()
     const activeName0 = ref('props')
@@ -81,7 +109,11 @@ export default defineComponent({
       let nodes = ['root']
       let result = []
       if (!isSelectRoot.value) {
-        nodes = nodes.concat(target.value.context.parents.filter((e) => !/^(inline|tr)$/.test(e.type)))
+        nodes = nodes.concat(
+          target.value.context.parents.filter(
+            (e) => !/^(inline|tr)$/.test(e.type),
+          ),
+        )
       }
       if (nodes.length > 4) {
         result.push(nodes[0])
@@ -129,17 +161,27 @@ export default defineComponent({
       },
       {
         immediate: true,
-      }
+      },
     )
     return () => {
-      let lF = <FormCom key={formIns?.curDForm?.id} formIns={formIns?.curDForm}></FormCom>
+      let lF = (
+        <FormCom
+          key={formIns?.curDForm?.id}
+          formIns={formIns?.curDForm}
+        ></FormCom>
+      )
       if (formIns?.curDForm == null) {
         lF = null //
       }
       if (formIns?.curDForm?.id == null) {
         lF = null
       }
-      let lF1 = <FormCom key={formIns?.curSForm?.id} formIns={formIns?.curSForm}></FormCom>
+      let lF1 = (
+        <FormCom
+          key={formIns?.curSForm?.id}
+          formIns={formIns?.curSForm}
+        ></FormCom>
+      )
       if (formIns?.curSForm?.id == null) {
         lF1 = null //
       }
@@ -149,7 +191,10 @@ export default defineComponent({
             class={[ns.e('breadcrumb')]}
             separator-icon={() => (
               <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                <path fill="currentColor" d="M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z" />
+                <path
+                  fill="currentColor"
+                  d="M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z"
+                />
               </svg>
             )}
             {...utils.addTestId('configPanel:breadcrumb')}
@@ -158,7 +203,10 @@ export default defineComponent({
               <ElBreadcrumbItem
                 key={index}
                 onClick={() => {
-                  if (index !== bars.value.length - 1 && item.node.value !== 'placeholder') {
+                  if (
+                    index !== bars.value.length - 1 &&
+                    item.node.value !== 'placeholder'
+                  ) {
                     handleBreadcrumbClick(item.node)
                   }
                 }}
@@ -167,10 +215,17 @@ export default defineComponent({
               </ElBreadcrumbItem>
             ))}
           </ElBreadcrumb>
-          <ElForm ref="form" model={target} label-width="120px" label-position="top">
+          <ElForm
+            ref="form"
+            model={target}
+            label-width="120px"
+            label-position="top"
+          >
             <ElScrollbar>
               <div class={[ns.e('wrap')]}>
-                {isSelectAnyElement.value && <PanelsConfigComponentsPropsPanel key={target.value.id} />}
+                {/* {isSelectAnyElement.value && (
+                  // <PanelsConfigComponentsPropsPanel key={target.value.id} />
+                )} */}
                 {/* {isSelectRoot.value && <GlobalConfigPanel />} */}
                 {/* <fConfigPanel></fConfigPanel> */}
                 {lF1}

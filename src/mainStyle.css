@@ -407,3 +407,6 @@ z-index: 200;
   padding-left: 10px;
   padding-right: 10px;
 }
+.vxe-input{
+  max-height: 36px;
+}
