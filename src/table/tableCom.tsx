@@ -27,7 +27,8 @@ import InputCom from '@/input/inputCom'
 import { Table } from './table'
 import { VxeLoading } from 'vxe-pc-ui'
 import { GanttTable } from './ganttTable'
-
+import { onKeyStroke } from '@vueuse/core'
+import { useKeyboard } from '@ER/utils'
 // new ListTable()
 //核心表格组件
 export default defineComponent({
@@ -249,6 +250,19 @@ export default defineComponent({
     }
     expose({ _instance: tableIns })
     provide('tableIns', tableIns)
+    // onKeyStroke(
+    //   'ctrl+c',
+    //   (e) => {
+    //   },
+    //   { eventName: 'keyup' },
+    // )//
+    useKeyboard('ctrl+c', (e) => {
+      let root = tableIns.getRef('root')
+      let focusDiv = document.activeElement
+      if (root.contains(focusDiv)) {
+        tableIns.copyCurrentCell()
+      }
+    })
     onMounted(() => {
       //
       tableIns.onMounted() //

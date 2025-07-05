@@ -464,6 +464,7 @@ export class Column extends Base {
       },
       style: {
         borderColor: this.getBorderColor(),
+        color: 'rgba(0,0,0,0)', //
       },
       // fieldFormat: _this.getFormat(),
       headerCustomLayout: this.getHeaderCustomLayout(), //

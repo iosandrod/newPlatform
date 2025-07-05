@@ -38,6 +38,10 @@ export class Button extends Base {
   getLabel() {
     let config = this.config
     let label = config.label || '按钮' //
+    let buttons = this.buttons
+    if (buttons.length > 0) {
+      label = `${label}` //
+    }
     return label
   }
   showDropdown() {

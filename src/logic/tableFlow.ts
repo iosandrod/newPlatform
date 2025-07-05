@@ -216,21 +216,28 @@ export class TableFlow extends Flow {
       //     this.autoFitView()
       //   },
       // },
+      // {
+      //   label: '获取表格',
+      //   icon: 'iconfont icon-table',
+      //   fn: async () => {
+      //     let tables = await this.getRemoteTables() //
+      //     // console.log(tables, 'testTables') //
+      //     this.setRemoteTables(tables) ////
+      //   },
+      // },
+      // {
+      //   label: '获取zoom',
+      //   icon: 'iconfont icon-table',
+      //   fn: () => {
+      //     let zoom = this.getInstanceZoom()
+      //     console.log(zoom)
+      //   },
+      // },
       {
-        label: '获取表格',
-        icon: 'iconfont icon-table',
-        fn: async () => {
-          let tables = await this.getRemoteTables() //
-          // console.log(tables, 'testTables') //
-          this.setRemoteTables(tables) ////
-        },
-      },
-      {
-        label: '获取zoom',
+        label: '返回管理页面',
         icon: 'iconfont icon-table',
         fn: () => {
-          let zoom = this.getInstanceZoom()
-          console.log(zoom)
+          this.getSystem().routeTo('/admin') //
         },
       },
     ]
@@ -345,7 +352,6 @@ export class TableFlow extends Flow {
     let node = this.getNodeByTableName(tableName) //
     let columns = this.getColumnsInNode(node)
     columns.splice(0, columns.length, ...res) //
-    // node.data.data.columns.splice(0, node.data.data.columns.length, ...res)
   }
   getColumnsInNode(node) {
     return node.data.data.columns
@@ -359,6 +365,47 @@ export class TableFlow extends Flow {
     let f = config.field
     this.selectionField = f //
     let columnTable: Table = this.getRef('columnTable')
+    let data = config.data
+    this.setSelection(data) //
+    this.setselectionField(f)
+    // let hasRow = columnTable.getData().includes(f)
+    // if (hasRow == false) {
+    //   //
+    //   columnTable.addAfterMethod({
+    //     methodName: 'updateCanvas',
+    //     fn: (config) => {
+    //       let table = config.table
+    //       table.setCurRow(f) //
+    //     },
+    //   })
+    //   return
+    // } else {
+    //   columnTable.setCurRow(f)
+    // }
+    // nextTick(() => {
+    // })
+  }
+  @cacheValue()
+  getContextItems() {
+    return [
+      {
+        label: '编辑字段',
+        fn: async () => {}, //
+      },
+      {
+        label: '删除字段',
+        fn: async () => {
+          await this.deleteField({
+            tableName: this.getCurrentSelectTableName(), //
+          })
+        },
+      },
+    ]
+  }
+  setselectionField(field) {
+    this.selectionField = field
+    let columnTable: Table = this.getRef('columnTable')
+    let f = field //
     let hasRow = columnTable.getData().includes(f)
     if (hasRow == false) {
       //
@@ -373,21 +420,13 @@ export class TableFlow extends Flow {
     } else {
       columnTable.setCurRow(f)
     }
-    // nextTick(() => {
-    // })
-  }
-  @cacheValue()
-  getContextItems() {
-    return [
-      {
-        label: '编辑字段',
-        fn: async () => {}, //
-      },
-    ]
   }
   onFieldContextClick(config) {
-    let field = config.field
-    this.selectionField = field
+    let field = config.field //
+    let data = config.data
+    // debugger //
+    this.setSelection(data) //
+    this.setselectionField(field)
     let context: BMenu = this.getRef('contextmenu')
     let event = config.event
     if (context == null) {
@@ -457,7 +496,15 @@ export class TableFlow extends Flow {
   } //
   async deleteField(config) {
     let tableName = config.tableName
-    let currentDesignField = this.selectionField //
+    let currentDesignField = this.selectionField
+    if (currentDesignField == null) {
+      return
+    }
+    let sys = this.getSystem()
+    let _cols = await sys.removeTableField(tableName, currentDesignField) //
+    let node = this.getNodeByTableName(tableName)
+    let columns = this.getColumnsInNode(node)
+    columns.splice(0, columns.length, ..._cols) //
   }
   async getSelectionField() {
     let selectionField = this.selectionField

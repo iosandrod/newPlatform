@@ -401,3 +401,9 @@ z-index: 200;
 .flex-1{
   flex: 1;
 }
+
+.v-contextmenu-item{
+  padding: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+}

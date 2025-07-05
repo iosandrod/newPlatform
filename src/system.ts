@@ -39,6 +39,7 @@ const staticComMap = {
   platform: platfomrStaticCom,
 }
 export class System extends Base {
+  _keyboardListeners: any[] = []
   pageLoading = false
   staticComArr: any[] = []
   hasInitRoutes = false
@@ -1887,19 +1888,19 @@ export class System extends Base {
         fn: async () => {
           await this.routeTo('/ERDesign') //
         },
-      },
-      {
-        label: '切换平台',
-        fn: async () => {
-          let currentDesign = system.getCurrentPageDesign()
-          let plat = currentDesign.getCurrentPlatform() //
-          if (plat == 'pc') {
-            currentDesign.switchPlatform('mobile')
-          } else {
-            currentDesign.switchPlatform('pc')
-          }
-        },
-      },
+      }, //
+      // {
+      //   label: '切换平台',
+      //   fn: async () => {
+      //     let currentDesign = system.getCurrentPageDesign()
+      //     let plat = currentDesign.getCurrentPlatform() //
+      //     if (plat == 'pc') {
+      //       currentDesign.switchPlatform('mobile')
+      //     } else {
+      //       currentDesign.switchPlatform('pc')
+      //     }
+      //   },
+      // },
       {
         label: '当前页面设计',
         fn: async () => {
@@ -1920,29 +1921,29 @@ export class System extends Base {
           await currentPageDesign.saveTableDesign()
         },
       },
-      {
-        label: '同步当前列',
-        fn: async () => {
-          let currentPageDesign = system.getCurrentPageDesign()
-          await currentPageDesign.syncErpTableColumns() //
-        },
-      },
-      {
-        label: '打印页面',
-        fn: async () => {
-          let pageDesign = system.getCurrentPageDesign()
-          let layout = pageDesign.getLayoutData()
-          // console.log(layout) //
-          console.log(system, 'testSystem') //
-        },
-      },
-      {
-        label: '实体管理',
-        fn: async () => {
-          //
-          this.routeTo('/admin/realTable')
-        },
-      },
+      // {
+      //   label: '同步当前列',
+      //   fn: async () => {
+      //     let currentPageDesign = system.getCurrentPageDesign()
+      //     await currentPageDesign.syncErpTableColumns() //
+      //   },
+      // },
+      // {
+      //   label: '打印页面',
+      //   fn: async () => {
+      //     let pageDesign = system.getCurrentPageDesign()
+      //     let layout = pageDesign.getLayoutData()
+      //     // console.log(layout) //
+      //     console.log(system, 'testSystem') //
+      //   },
+      // },
+      // {
+      //   label: '实体管理',
+      //   fn: async () => {
+      //     //
+      //     this.routeTo('/admin/realTable')
+      //   },
+      // },
     ]
     return items
   }
@@ -2155,7 +2156,11 @@ export class System extends Base {
     if (!Boolean(tableName)) {
       return
     } //
-    await this.confirmMessageBox('确定删除', 'warning') //
+    let field = column?.field //
+    await this.confirmMessageBox(
+      `确定删除表${tableName}的${field}字段吗`,
+      'warning',
+    ) //
     let http = this.getHttp() //
     let _obj = {
       tableName,
@@ -2171,6 +2176,83 @@ export class System extends Base {
     }
     await this.confirmMessage('字段删除成功', 'success')
     return columns //
+  }
+  /**
+   * 注册一个全局键盘事件监听
+   * @param {Object} config
+   * @param {string} config.key        — 监听的键名，如 'Enter'、'a'、'Escape' 等（区分大小写）
+   * @param {boolean} [config.ctrlKey] — 是否要求按下 Ctrl，默认 false
+   * @param {boolean} [config.shiftKey]— 是否要求按下 Shift，默认 false
+   * @param {boolean} [config.altKey]  — 是否要求按下 Alt，默认 false
+   * @param {Function} config.callback— 键匹配时触发的回调，接收原生事件作为参数
+   * @returns {Function} — 调用即可取消本次监听
+   */
+  registerKeyboardEvent(config) {
+    const {
+      id,
+      key,
+      ctrlKey = false,
+      shiftKey = false,
+      altKey = false,
+      callback,
+    } = config
+    if (id == null) {
+      return //
+    }
+    if (typeof key !== 'string' || typeof callback !== 'function') {
+      throw new Error(
+        'registerKeyboardEvent: 参数 key 必须是字符串，callback 必须是函数',
+      )
+    }
+
+    // 事件处理函数
+    const handler = (e) => {
+      if (
+        e.key === key &&
+        e.ctrlKey === ctrlKey &&
+        e.shiftKey === shiftKey &&
+        e.altKey === altKey
+      ) {
+        callback(e)
+      }
+    }
+
+    // 添加到全局
+    window.addEventListener('keydown', handler)
+
+    // 记录到内部列表，以便后续清理
+    this._keyboardListeners.push({ id, config, handler })
+
+    // 返回一个取消监听的函数
+    return () => {
+      window.removeEventListener('keydown', handler)
+      // 从内部列表中移除
+      this._keyboardListeners = this._keyboardListeners.filter(
+        (item) => item.handler !== handler,
+      )
+    }
+  }
+  unregisterKeyboardEvent(id) {
+    if (id == null) {
+      return
+    }
+
+    let res = this._keyboardListeners.filter((item) => item.id == id)
+    res.forEach((item) => {
+      window.removeEventListener('keydown', item.handler)
+    })
+    this._keyboardListeners = this._keyboardListeners.filter(
+      (item) => item.id != id,
+    ) //
+  }
+  /**
+   * 取消所有通过 registerKeyboardEvent 注册的监听
+   */
+  unregisterAllKeyboardEvents() {
+    this._keyboardListeners.forEach((item) => {
+      window.removeEventListener('keydown', item.handler)
+    })
+    this._keyboardListeners = []
   }
 } //
 export const system = reactive(new System())

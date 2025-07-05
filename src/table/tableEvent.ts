@@ -59,12 +59,19 @@ export const click_cell = (table: Table) => {
     keyName: 'click_cell',
     callback: async (config) => {
       table.isContainerClick = true
+      // console.log(, 'testBtn') //
+      let controBtn = _this.currentClickButton
+      if (controBtn) {
+        nextTick(() => {
+          _this.runControllBtn({ ...config, button: controBtn })
+        })
+      }
       setTimeout(() => {
         table.isContainerClick = false
       }, 0)
       let isTreeIconClick = table.isTreeIconClick
       if (isTreeIconClick) {
-        table.openTreeRow(config.col, config.row) //
+        table.openTreeRow({col:config.col,row: config.row}) //
       }
       let field = config.field //
       let originData = config.originData //
@@ -172,10 +179,9 @@ export const selected_cell = (table: Table) => {
       let lastR = ranges.slice(-1)[0]
       let start = lastR.start //
       let end = lastR.end
-      let _select=ins.getSelectedCellInfos()//
-      console.log(_select,'sfsfsfs;;')//
+      let _select = ins.getSelectedCellInfos() //
       _this.selectCache = config //
-      _this.selectCacheCell=_select
+      _this.selectCacheCell = _select
       // console.log(config)//
       if (start.col == end.col) {
         let field = ins.getBodyField(start.col, start.row)
@@ -412,23 +418,23 @@ export const mouseenter_cell = (table: Table) => {
       let args = config
       const { col, row, targetIcon } = args
       const rect = tableInstance.getVisibleCellRangeRelativeRect({ col, row })
+      if (col == 0 && row == 0) {
+        return //
+      }
+      let field = tableInstance.getBodyField(col, row)
+      let record = tableInstance.getRecordByCell(col, row)
+      let column = table.getFlatColumns().find((c) => c.getField() == field)
+      let _index = record?._index
+      if (_index == null) {
+        return
+      }
+      let isShow = false
       if (table.getIsEditTable()) {
-        if (col == 0 && row == 0) {
-          return //
-        }
-        let field = tableInstance.getBodyField(col, row)
-        let record = tableInstance.getRecordByCell(col, row)
-        let _index = record?._index
-        if (_index == null) {
-          return
-        }
         let errMap = table.validateMap
         let errStr = errMap[_index]
         let _err = errStr?.find((row) => row.field == field)
         if (_err) {
-          //
           let fMes = _err.message || '数据校验失败' //
-          console.log(rect, 'testRect') //
           tableInstance.showTooltip(col, row, {
             content: fMes,
             referencePosition: { rect, placement: VTable.TYPES.Placement.top }, //TODO
@@ -444,7 +450,32 @@ export const mouseenter_cell = (table: Table) => {
               arrowMark: true,
             },
           })
+          isShow = true
         }
+      }
+      if (isShow == true) {
+        return
+      }
+      let container = _this.getCacheContainer(_index, field)
+      if (container == null) {
+        return
+      }
+      let templateTextWidth = container.templateTextWidth
+      if (rect.width < templateTextWidth) {
+        let templateText = container.templateText
+        tableInstance.showTooltip(col, row, {
+          content: templateText, //
+          referencePosition: { rect, placement: VTable.TYPES.Placement.top }, //TODO
+          style: {
+            bgColor: 'black',
+            //@ts-ignore
+            borderColor: 'white', //
+            color: 'white', //
+            //@ts-ignore
+            font: 'normal bold normal 14px/1 STKaiti',
+            arrowMark: true,
+          },
+        })
       }
     },
   })

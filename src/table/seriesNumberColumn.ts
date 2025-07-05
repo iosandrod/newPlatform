@@ -255,7 +255,7 @@ export class SeriesNumberColumn extends Column {
         // _g1.add(_g) //
         container.add(_g1) //
         _g1.on('click', () => {
-          this.table.openTreeRow(col, row) //
+          this.table.openTreeRow({col, row}) //
           nextTick(() => {
             // _this.table.updateIndexArr.add(_index)
           })

@@ -44,6 +44,69 @@ function createSvgTextString(text, width, height, fontSize, lineHeight = 1.2) {
   // 5. 序列化并返回
   return new XMLSerializer().serializeToString(svg.node())
 }
+const measureCanvas = document.createElement('canvas')
+const measureCtx = measureCanvas.getContext('2d')
+
+/**
+ * 同步测量文字宽高，并保证至少有最小值
+ */
+function measureTextSize(text, fontSize = 16, fontFamily = 'sans-serif') {
+  measureCtx.font = `${fontSize}px ${fontFamily}`
+  const m = measureCtx.measureText(text)
+  const width = Math.ceil(m.width)
+  // 上下 bounding box 不支持时，actualBoundingBoxAscent/Descent 可能为 undefined 或 0
+  const ascent = m.actualBoundingBoxAscent || fontSize
+  const descent = m.actualBoundingBoxDescent || 0
+  let height = Math.ceil(ascent + descent)
+  // 最低保证 height 要大于等于 fontSize
+  if (height < fontSize) {
+    height = Math.ceil(fontSize * 1.2)
+  }
+  return { width, height }
+}
+
+/**
+ * 同步版——OffscreenCanvas 渲染文字，保证每次都得到非 0 大小的画布
+ */
+function createAdaptiveTextImage(
+  text,
+  fontSize = 16,
+  fontFamily = 'sans-serif',
+  boundsPadding = 0,
+) {
+  // 1. 测量
+  const { width: measuredW, height: measuredH } = measureTextSize(
+    text,
+    fontSize,
+    fontFamily,
+  )
+  // 2. 确保至少有 1px 宽和 >= fontSize 高
+  const w = Math.max(measuredW, 1)
+  const h = Math.max(measuredH, fontSize)
+
+  // 3. OffscreenCanvas (不会进 DOM)
+  const off = new OffscreenCanvas(w, h)
+  const ctx = off.getContext('2d')
+  ctx.clearRect(0, 0, w, h)
+
+  // 4. 绘制文字
+  ctx.font = `${fontSize}px ${fontFamily}`
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = 'black'
+  ctx.fillText(text, w / 2, h / 2)
+
+  // 5. 交给 vrender，Canvas drawImage 时就不会是 0 大小了
+  return createImage({
+    image: off,
+    x: 0,
+    y: 0,
+    width: w,
+    height: h,
+    boundsPadding,
+  })
+}
+
 export const containerMap = {}
 export const getCheckbox = (column: Column) => {
   let _this = column.getTable().columnsMap[column.getField()] //
@@ -170,7 +233,8 @@ export const getCheckbox = (column: Column) => {
       field: _this.getField(),
       record,
       row,
-      updateFn,
+      _col: col,
+      updateFn, //
       container,
       rowCount: count + 400, //
       fieldFormat: _this.getFormat(),
@@ -254,6 +318,7 @@ export const getSerialLayout = (column: Column) => {
       field: _this.getField(),
       record,
       row,
+      _col: col,
       container,
       rowCount: count + 400, //
       updateFn: updateFn,
@@ -287,12 +352,14 @@ export const getDefault = (column: Column) => {
       if (_con) {
         let currentResizeField = _this.table.currentResizeField //
         if (currentResizeField === f) {
+          const { height, width } = rect ?? table.getCellRect(col, row)
+          _con.setAttribute('width', width) //
         } else {
-          return {
-            rootContainer: _con,
-            renderDefault: false, //
-          }
         }
+        return {
+          rootContainer: _con,
+          renderDefault: false, //
+        } //
       }
     }
     record = record || {} //
@@ -302,7 +369,8 @@ export const getDefault = (column: Column) => {
     }
     const { height, width } = rect ?? table.getCellRect(col, row)
     let _height = height
-    let _length1 = t1.records.length
+    // let _length1 = t1.records.length
+    let _length1 = t1.rowCount - 1 //
     if (_length1 == row) {
       _height = _height - 1 //
     }
@@ -338,6 +406,7 @@ export const getDefault = (column: Column) => {
       record: record,
       field: _this.getField(),
       row: row,
+      _col: col,
       rowCount: count + 400,
       fieldFormat: _this.getFormat(),
     }
@@ -363,18 +432,23 @@ export const getDefault = (column: Column) => {
     })
     if (_this.getField() == 'pid') {
     }
-    let _bounds = [0, 0, 0, 20]
+    let _bounds = [0, 0, 0, 10]
     let fSize = _this.getFontSize()
     let locationName = createText({
       text: `${_value}`, //
+      // text: [...String(_value).split('')], ////
       fontSize: fSize, //
-      x: 0,
+      x: 0, //
       y: 0,
+      // verticalMode: 1, //
       // fontFamily: 'sans-serif',
       fill: 'black',
       boundsPadding: _bounds, //
       lineDashOffset: 0,
     })
+    let _width1 = locationName.clipedWidth
+    container.templateTextWidth = _width1 //
+    container.templateText = _value //
     let _g = createGroup({
       width: width,
       height,
@@ -465,7 +539,11 @@ export const getDefault = (column: Column) => {
     container['currentRowIndex'] = row //
     let isTree = _this.getIsTree()
     let treeIcon = null
-    if (isTree == true && record?.['children']?.length > 0) {
+    // console.log(isTree,'数列123123')//
+    if (
+      isTree == true
+      // && record?.['children']?.length > 0
+    ) {
       container.removeChild(_g)
       let _g1 = createGroup({
         display: 'flex',
@@ -478,13 +556,13 @@ export const getDefault = (column: Column) => {
         alignItems: 'center',
         boundsPadding: [0, 0, 0, 0],
       })
-      //
+      // debugger //
+
       let _level = record['_level'] || 0
       // let t = `\u27A4`
       let t = null
       // console.log(record['_expanded'], 'record')
       t = _this.getExpandIcon(record['_expanded'])
-
       let _g2 = createGroup({
         width: 10,
         height: height / 2,
@@ -496,13 +574,16 @@ export const getDefault = (column: Column) => {
         overflow: 'hidden',
         alignItems: 'center',
       })
+      if (record?.children?.length == 0) {
+        t = null //
+      }
       let icon = createImage({
         image: t,
         cursor: 'pointer',
         x: 0,
         y: 0, //
         width: 15, //
-        height: height / 2,
+        height: 15, //
         overflow: 'hidden',
         fill: 'black',
         boundsPadding: [0, 0, 0, 3 + _level * 16], //
@@ -525,10 +606,6 @@ export const getDefault = (column: Column) => {
     // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() //
     let scrollConfig = 1
     if (scrollConfig != null) {
-      // let rowStart = scrollConfig.rowStart
-      // let rowEnd = scrollConfig.rowEnd
-      // let _row = row
-      // container['updateCanvas'] = () => {
       let updateFn = () => {
         // let record = table.getCellOriginRecord(col, row)
         //基本的样式
@@ -548,15 +625,16 @@ export const getDefault = (column: Column) => {
         if (treeIcon != null) {
           let _expanded = record['_expanded']
           let t = _this.getExpandIcon(_expanded)
+          if (record?.children?.length == 0) {
+            t = null //
+          } //
           treeIcon.setAttribute('image', t) //
         }
       } //
       obj123['updateFn'] = updateFn //
     }
-
     return {
-      rootContainer: container,
-      // renderDefault: _isTree, //
+      rootContainer: container, //
       renderDefault: false, //
     }
   }
@@ -606,6 +684,7 @@ export const getControllButtons = (column: Column) => {
         boundsPadding: [0, 0, 0, 0],
         lineDashOffset: 0,
       })
+      _rect.setAttribute('width', test1.clipedWidth) //
       _rect.add(test1) //
       _rect.on('mouseenter', () => {
         let hoverColor = _this.getButtonColor(true)
@@ -640,6 +719,7 @@ export const getControllButtons = (column: Column) => {
       field: _this.getField(),
       record,
       row,
+      _col: col,
       updateFn,
       column: _this, //
       container,

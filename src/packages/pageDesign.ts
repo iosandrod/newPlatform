@@ -962,7 +962,6 @@ export class PageDesign extends Form {
           let currentItem = this.currentContextItem
           let _type = currentItem?.config?.type
           if (_type == 'buttongroup') {
-            //
             return true
           }
           return false //
@@ -983,6 +982,13 @@ export class PageDesign extends Form {
     }
     items = _.cloneDeep(items)
     let tableConfig: any = getButtonGroupTableConfig(this) //
+    // items.forEach((e) => {
+    //   e.children = [
+    //     {
+    //       label: '111', //
+    //     },
+    //   ]
+    // })
     tableConfig.data = items
     tableConfig.height = 500
     tableConfig.width = 800

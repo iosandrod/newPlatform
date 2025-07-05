@@ -1,4 +1,4 @@
-import { computed } from 'vue'
+import { computed, isProxy, nextTick } from 'vue'
 import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
 import { Column } from '@/table/column'
@@ -9,19 +9,46 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
   let tableName = _this.getRealTableName()
   let obj = {
     showTable: true,
+    title: '按钮组设计', //
     tableState: 'edit',
-    buttons: [
+    showControllerButtons: true,
+    controllerButtons: [
       {
         label: '添加子按钮',
         fn: (config) => {
-          let _t: Table = config.parent
-          let curRow = _t.getCurRow()
-          if (curRow == null) {
-            return
+          // debugger //
+          let data = config.data
+          let table: Table = config.table //
+          let _index = data._index
+          data = table.dataMap[_index] //
+          let isTree = table.getIsTree() //
+          let children = data._children
+          if (!Array.isArray(children)) {
+            children = []
+            data.children = children
           }
-          // console.log('添加子按钮') //
+          let obj = {}
+          table.addRow(obj, data) //
+          table.addAfterMethod({
+            methodName: 'updateCanvas',
+            fn: () => {
+              table.openTreeRow({ data: data, status: true }) 
+            },
+          })
         },
       },
+    ],
+    buttons: [
+      // {
+      //   label: '添加子按钮',
+      //   fn: (config) => {
+      //     let _t: Table = config.parent
+      //     let curRow = _t.getCurRow()
+      //     if (curRow == null) {
+      //       return
+      //     }
+      //   }, //
+      // },
       {
         label: '添加主页默认按钮', //
         fn: (config) => {
@@ -52,10 +79,15 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         },
       },
     ],
+    treeConfig: {
+      id: 'id',
+      parentId: 'pid', //
+    },
     columns: [
       {
         field: 'id',
         title: '按钮ID',
+        tree: true,
         defaultValue: (config) => {
           //
           let item = config.item
@@ -177,10 +209,6 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
       },
     ],
     showRowSeriesNumber: true,
-    treeConfig: {
-      id: 'id',
-      parentId: 'pid',
-    },
     enableDragRow: true,
     dragRowFn: (config) => {
       return true

@@ -201,6 +201,15 @@ export const tableConfig: ListTableConstructorOptions = {
       width: 150,
     },
   ].slice(0, 5),
+  showControllerButtons: true,
+  controllerButtons: [
+    {
+      label: '按钮',
+      fn: () => {
+        console.log('123') //
+      },
+    },
+  ],
   // columns: [
   //   {
   //     column_name: 'iInterID',

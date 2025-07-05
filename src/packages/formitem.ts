@@ -947,7 +947,7 @@ export class FormItem extends Base {
       showRowSeriesNumber: false,
       showCheckboxColumn: false,
       showFooter: false,
-      showCalculate: false,
+      // showCalculate: false,
       ...options,
     } ////
     return _config

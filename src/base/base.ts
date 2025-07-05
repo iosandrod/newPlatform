@@ -99,12 +99,16 @@ export class Base {
       return
     }
   }
+  //
   onMounted() {}
   onUnmounted() {
     let keys = Object.keys(this.refPool)
     for (const key of keys) {
       this.unregisterRef(key) //
     }
+    let id = this.id
+    let sys = this.getSystem()
+    sys.unregisterKeyboardEvent(id)
   }
   getRef(key: any) {
     // return this.refPool[this._refPool[key]]//

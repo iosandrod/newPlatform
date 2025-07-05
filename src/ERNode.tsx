@@ -48,12 +48,14 @@ export default defineComponent({
                 flow.onFieldClick({
                   event: e,
                   field,
+                  data: props.data,
                 })
               }
               onContextmenu={(e) =>
                 flow.onFieldContextClick({
                   event: e,
                   field,
+                  data: props.data,
                 })
               }
               key={field.field}

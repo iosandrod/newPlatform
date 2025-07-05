@@ -10,12 +10,8 @@ export class GanttTable extends Table {
     let totalColWidth = this.templateProps.columns.reduce((pre, cur) => {
       return pre + cur.width
     }, 0) //
-    // debugger//
     let serWidth = opt.rowSeriesNumber.width //
     totalColWidth += serWidth
-    // if (totalColWidth > 400) {
-    //   totalColWidth = 400 //
-    // }
     opt = { ...opt, tableWidth: totalColWidth }
     //@ts-ignore
     let gantOptions: VTableGantt.GanttConstructorOptions = {
@@ -61,12 +57,12 @@ export class GanttTable extends Table {
         verticalLine: {
           lineColor: '#e1e4e8',
           lineWidth: 1,
-        //   lineDash: [5, 5], //
+          //   lineDash: [5, 5], //
         },
         horizontalLine: {
           lineColor: '#e1e4e8',
           lineWidth: 1,
-        //    lineDash: [5, 5], //
+          //    lineDash: [5, 5], //
         },
         backgroundColor: '#63a8ff',
         colWidth: 10,
@@ -161,7 +157,7 @@ export class GanttTable extends Table {
       })
     })
     this.initEventListener() //
-    this.loadColumns()
+    this.loadColumns() //
     this.loadData() //
   } //
   loadData() {

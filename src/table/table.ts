@@ -58,6 +58,7 @@ import { Row } from 'vant'
 import { containerMap } from './columnFn'
 import { Gantt } from '@visactor/vtable-gantt'
 export class Table extends Base {
+  currentClickButton: any
   useCache = false
   selectCacheCell: any = []
   isTreeIconClick = false
@@ -179,7 +180,7 @@ export class Table extends Base {
     }
     this.updateIndexArr.add(oldIndex)
     this.updateIndexArr.add(newIndex) //
-  } //
+  }
   getCurRow() {
     return this.tableData.curRow //
   }
@@ -947,6 +948,7 @@ export class Table extends Base {
       event(...args) //
     }
   }
+
   copyCurrentCell() {
     const instance = this.getInstance()
     let select = instance.getSelectedCellInfos()
@@ -966,7 +968,29 @@ export class Table extends Base {
       .map((item) => {
         return realColumns.find((column) => column.getField() === item)
       })
-    console.log(data, columns, 'testColumns') //
+    if (data.length == 0 || columns.length == 0) {
+      return
+    }
+    let v = ''
+    if (data.length == 1 && columns.length == 1) {
+      v = data[0][columns[0].getField()] //
+    } else {
+      let str = ``
+      for (let i = 0; i < data.length; i++) {
+        const item = data[i]
+        for (let j = 0; j < columns.length; j++) {
+          const column = columns[j]
+          if (j > 0) {
+            str += `${'\t'}${item[column.getField()]}`
+          } else {
+            str += `${item[column.getField()]}`
+          }
+        }
+        str += `\n`
+      }
+      v = str //
+    }
+    this.getSystem().copyValue(v) //
   }
   getArrBySelect() {
     let records = this.getInstance().records
@@ -1157,6 +1181,9 @@ export class Table extends Base {
     //
     let config = this.config
     let showCalculate = config.showCalculate
+    if (showCalculate == null) {
+      showCalculate = true //
+    }
     return showCalculate
   }
   getFlatTreeData(_data?: any, fn?: any): any[] {
@@ -1240,7 +1267,7 @@ export class Table extends Base {
     }
     let isTree = this.getIsTree()
     if (isTree) {
-      //
+      // debugger //
       let _data3 = this.filterTreeInPlace(_data1, (node) => {
         let status = true
         let globalValue = this.globalConfig.value
@@ -1273,6 +1300,7 @@ export class Table extends Base {
         return status //
       }) //
       this.templateProps.data = _data3 //
+      console.log(_data3, '加载的数据') //
     } else {
       if (globalValue.length > 0) {
         _data1 = _data1.filter((v) => {
@@ -1632,29 +1660,72 @@ export class Table extends Base {
       })
     })
   } //
-  addRow(row: any) {
-    let data = this.getData()
-    data.push(row) //
+  addRow(row: any, parentRow?: any) {
+    // debugger //
+    let _index = row['_index']
+    if (_index == null) {
+      let _level = parentRow?.['_level']
+      if (isNaN(_level)) {
+        _level = 0
+      } else {
+        _level += 1
+      }
+      this.initDataRow(row, _level) //
+    }
+    if (parentRow != null) {
+      let children = parentRow._children
+      if (!Array.isArray(children)) {
+        children = []
+        parentRow.children = children
+      }
+      children.push(row) //
+      // this.updateIndexArr.add(parentRow['_index']) //
+    } else {
+      let data = this.getData()
+      data.push(row) //
+    }
   }
   delCurRow() {
     let curRow = this.tableData.curRow
-    let showData = this.getData() //
-    let index = showData.indexOf(curRow) //
-    if (index == -1) {
+    // let showData = this.getData() //
+    // let ins = this.getInstance()
+    let showData = this.getData()
+    let _r = null
+    let pData = showData
+    let nextRow = null
+    if (this.getIsTree()) {
+      showData = this.getFlatTreeData(showData)
+      let pRow = showData.find((row) => {
+        let _children = row._children || []
+        if (_children.includes(curRow)) {
+          return true
+        }
+      })
+      if (pRow) {
+        let _children = pRow._children || []
+        let index = _children.indexOf(curRow)
+        _r = _children.splice(_children.indexOf(curRow), 1)
+        nextRow = _children[index - 1]
+        nextRow = nextRow || _children[0] || pRow
+      } //
+    } else {
+      let index = showData.indexOf(curRow)
+      if (index == -1) {
+        return
+      }
+      _r = showData.splice(index, 1) //
+      nextRow = showData[index - 1]
+      nextRow = nextRow || showData[0] //
+    }
+    if (_r == null) {
       return
     }
-    let _r = showData.splice(index, 1) //
     this.changeRowState(_r[0], 'delete')
     this.deleteArr.push(_r[0]) //
     nextTick(() => {
-      let _row = showData[index]
-      if (_row == null) {
-        _row = showData[index - 1]
-        if (_row == null) {
-          return
-        }
+      if (nextRow != null) {
+        this.setCurRow(nextRow) //
       }
-      this.setCurRow(_row) //
     })
   }
   getDisableColumnResize() {
@@ -2275,13 +2346,25 @@ export class Table extends Base {
     }
     this.dataMap[e._index] = e //
     let children = e['children']
+    if (this.getIsTree()) {
+      if (children == null) {
+        e.children = []
+      }
+      if (e['_level'] == null) {
+        Object.defineProperty(e, '_level', {
+          value: i,
+          enumerable: false,
+          writable: true, //
+        })
+      }
+    } //
     if (i > 0) {
       Object.defineProperty(e, '_level', {
         value: i,
         enumerable: false,
         writable: true, //
       })
-    }
+    } //
     if (Array.isArray(children) && children.length > 0) {
       //
       children.forEach((e1) => {
@@ -2570,15 +2653,16 @@ export class Table extends Base {
     } //
     return false
   }
-  openTreeRow(col, row) {
-    console.log(col, row, 'openTreeRow') //
+  openTreeRow(config) {
+    let { col, row, data: _r, status } = config //
     let ins = this.getInstance() //
-    let record = ins.getRecordByCell(col, row) //
-    let f = ins.getBodyField(col, row)
-    let _c = this.getColumns().find((c) => c.getField() == f)
-    if (_c?.getIsTree() != true) {
-      //
-      return
+    let record = _r || ins.getRecordByCell(col, row) //
+    if (col || row) {
+      let f = ins.getBodyField(col, row)
+      let _c = this.getColumns().find((c) => c.getField() == f)
+      if (_c?.getIsTree() != true) {
+        return
+      }
     }
     if (record == null) {
       return //
@@ -2587,16 +2671,40 @@ export class Table extends Base {
     this.updateIndexArr.add(_index) //
     let _expanded = Boolean(record._expanded)
     let _status = !_expanded
+    if (typeof status == 'boolean') {
+      _status = status
+      if (_status == _expanded) {
+        return //
+      }
+    }
     // let _row=ins
     Object.defineProperty(record, '_expanded', {
       value: _status,
       enumerable: false,
       writable: true,
     }) //
-    ins.toggleHierarchyState(col, row) ////
-    setTimeout(() => {
-      console.log(record, 'testRecords') //
-    }, 100)
+    if (col == null || row == null) {
+      // debugger //
+      let column = this.getFlatColumns()
+        .find((col) => {
+          return col.getIsTree() == true
+        })
+        ?.getField()
+      let _index = record?.['_index']
+      if (column != null && _index != null) {
+        let container = this.getCacheContainer(_index, column, true)
+        let _row = container?.row
+        let _col = container?._col //
+        if (_row == null || _col == null) {
+          return
+        } //
+        row = _row
+        col = _col
+      } //
+    }
+    if (col != null && row != null) {
+      ins.toggleHierarchyState(col, row)
+    }
   }
   setRowDragAble(status) {}
   getTreeDataByPid(pid) {
@@ -3029,7 +3137,7 @@ export class Table extends Base {
       }
     }
   } //
-  getCacheContainer(_index, filed) {
+  getCacheContainer(_index, filed, getObj = false) {
     let _containerMap = containerMap
     let id = this.id //
     let _map = _containerMap[id]
@@ -3042,7 +3150,9 @@ export class Table extends Base {
     }
     let c = map[filed]
     if (c != null) {
-      // console.log(c) //
+    }
+    if (getObj == true) {
+      return c
     }
     return c?.container //
   }
@@ -3227,6 +3337,18 @@ export class Table extends Base {
     return controllerButtons //
   }
   onControllerButtonClick(btn) {
-    console.log(btn, 'btnIsClick') //
+    //
+    this.currentClickButton = btn
+    nextTick(() => {
+      this.currentClickButton = null
+    })
+  }
+  async runControllBtn(config) {
+    let originData = config.originData //
+    let button = config.button
+    let fn = button?.fn
+    if (typeof fn == 'function') {
+      await fn({ data: originData, table: this }) //
+    }
   }
 }
