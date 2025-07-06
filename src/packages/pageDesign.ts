@@ -1169,32 +1169,17 @@ export class PageDesign extends Form {
       return
     }
     let tableName = this.getTableName()
-    // let tConfig = this.getTableConfig(tableName)
-    // console.log(tConfig, 'test_config')//
     let cols = this.getTableColumns(tableName)
     let columns = cols.map((col) => {
       return col?.config || col //
     })
-    // let columns = tConfig.columns
-    let tCols = await this.getHttp().find('columns', { tableName })
-    let addCols = columns
-      .filter((c) => {
-        return (
-          tCols.findIndex((tc) => {
-            return tc.field == c.field
-          }) == -1
-        )
-      })
-      .map((row) => {
-        row.id = null
-        delete row['createdAt']
-        delete row['updatedAt']
-        row.tableName = this.getRealTableName() //
-        return row
-      }) //
-    let _res = await this.getHttp().create('columns', addCols)
-    this.getSystem().confirmMessage('同步成功', 'success') //
-    this.getSystem().refreshPageDesign() //
+    let realTableName = this.getRealTableName()
+    await this.getSystem().syncRealColumns({
+      tableName,
+      columns,
+      realTableName,
+    }) //
+    this.getSystem().refreshPageDesign(tableName) //
   }
   getSearchWhere(data) {
     let columns = this.getTableColumns()

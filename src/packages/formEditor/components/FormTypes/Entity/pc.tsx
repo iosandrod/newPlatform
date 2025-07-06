@@ -194,7 +194,7 @@ export default defineComponent({
             }}
             onColumnConfigChange={(config) => {
               item.onColumnConfigChange(config)
-            }}
+            }} //
             rowHeight={item.getTableRowHeight()} //
           ></erTable>
         </div>

@@ -17,6 +17,7 @@ export const mainUse = {
         let initGetData = options?.initGetData
 
         if (tableType == 'relate') {
+          // debugger //
           if (Boolean(initGetData)) {
             await instance.getRelateTreeData(ta?.options?.tableName)
           }

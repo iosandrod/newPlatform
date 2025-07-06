@@ -9255,3 +9255,109 @@ import lowcode from './lowcode'
       //     }
       //   }, //
       // },
+
+       // let tConfig = this.getTableConfig(tableName)
+    // console.log(tConfig, 'test_config')//
+
+      let tableName = table.getTableName()
+        let fConfig = {
+          title: '同步列',
+          height: 200,
+          width: 300,
+          itemSpan: 24, //
+          data: {
+            tableName: tableName,
+          },
+          items: [
+            {
+              label: '表名',
+              field: 'tableName',
+              disabled: false, //
+              visible: true,
+              required: true,
+            },
+          ],
+        }
+        let system = table.getSystem()
+        let data = await system.confirmForm(fConfig)
+        // console.log(data) //
+        let _tableName = data.tableName
+        let _columns = await table.getSystem().getOldErpTableColumns(_tableName)
+        if (_columns.length == 0) {
+          return
+        }
+        let allCols = table.getFlatColumns().map((col) => {
+          return col.config
+        })
+        for (const col of _columns) {
+          let f = col.field
+          let c = allCols.find((c) => {
+            return c.field == f
+          })
+          let keys = [
+            {
+              key: 'title',
+              myKey: 'title',
+            },
+            {
+              key: 'width',
+              myKey: 'width',
+            },
+          ]
+          if (c) {
+            for (let key of keys) {
+              if (col[key.key] != null) {
+                c[key.myKey] = col[key.key]
+              }
+            } //
+          }
+        }
+
+
+        {
+          label: '更换ID',
+          fn: async () => {
+            // let data = tableIns.getData()
+            // let d0 = data[0]
+            // d0['id'] = d0['id'] + 1 //
+            tableIns.updateCanvas() //
+          },
+        },
+
+
+
+         // {
+      //   label: '切换平台',
+      //   fn: async () => {
+      //     let currentDesign = system.getCurrentPageDesign()
+      //     let plat = currentDesign.getCurrentPlatform() //
+      //     if (plat == 'pc') {
+      //       currentDesign.switchPlatform('mobile')
+      //     } else {
+      //       currentDesign.switchPlatform('pc')
+      //     }
+      //   },
+      // },
+      // {
+      //   label: '同步当前列',
+      //   fn: async () => {
+      //     let currentPageDesign = system.getCurrentPageDesign()
+      //     await currentPageDesign.syncErpTableColumns() //
+      //   },
+      // },
+      // {
+      //   label: '打印页面',
+      //   fn: async () => {
+      //     let pageDesign = system.getCurrentPageDesign()
+      //     let layout = pageDesign.getLayoutData()
+      //     // console.log(layout) //
+      //     console.log(system, 'testSystem') //
+      //   },
+      // },
+      // {
+      //   label: '实体管理',
+      //   fn: async () => {
+      //     //
+      //     this.routeTo('/admin/realTable')
+      //   },
+      // },

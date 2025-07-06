@@ -62,7 +62,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
   let _fConfig = {
     itemSpan: 12, //
     data: _obj, //
-    height: 500,
+    height: 700,
     width: 800, //
     isTabForm: true,
     items: [
@@ -170,14 +170,13 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
                   },
                 ],
               },
-            },{
+            },
+            {
               field: 'autoColumnSize',
               label: '列适应',
               type: 'boolean',
-              options: {
-                
-              },
-            }
+              options: {},
+            },
           ],
         },
       },
@@ -284,9 +283,9 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
       },
       {
         field: 'relateConfig',
-        label: '关联配置',
+        label: '类型表配置',
         type: 'sform',
-        tabTitle: titles[0],
+        tabTitle: titles[1],
         options: {
           itemSpan: 12,
           items: [

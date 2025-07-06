@@ -328,10 +328,13 @@ export class myHttp {
       let axios = this.axios
       let url = `${tableName}`
       if (method) {
-        url = `${url}/${method}`
+        if (!defaultMethod.includes(method)) {
+          url = `${url}/${method}`
+        }
       }
       try {
-        let res = await axios.post(`${tableName}/${method}`, params, {
+        let res = await axios.post(`${url}`, params, {
+          //
           params: query,
         })
         return res
@@ -424,62 +427,65 @@ export class myHttp {
     })
   }
   async patch(tableName, params = {}, query = {}): Promise<any> {
-    console.log('patch', params, query) //
-    let connection = this?.client?.get('connection')
-    return new Promise((resolve, reject) => {
-      connection.emit(
-        'patch', //
-        tableName,
-        params, //
-        query, //
-        (data, err) => {
-          let isError = false
-          let error = null //
-          let _data = null
-          let method = 'patch' //
-          if (defaultMethod.includes(method)) {
-            if (err) {
-              isError = false
-              // error = err
-              _data = err?.data || {}
-              if (err?.code == '401') {
-                isError = true
-                error = err //
-              }
-            } else {
-              isError = true
-              if (data?.code == '401') {
-                isError = true
-                error = data
-                system.confirmMessage('登录信息无效', 'error') //
-                this.redirectToLogin() //
-              } else {
-                // _data = data?.data || {}
-                error = data //
-              }
-            }
-          } else {
-            if (data) {
-              isError = true
-              error = data
-            } else {
-              isError = false
-              if (err?.code == '401') {
-                isError = true
-                error = err
-              }
-              _data = err?.data || {}
-            }
-          }
-          if (isError == true) {
-            reject(error)
-          }
-          let _data1 = _data
-          resolve(_data1) //
-        }, //
-      )
-    })
-  } //
+    // console.log('patch', params, query) //
+    // let connection = this?.client?.get('connection')
+    // return new Promise((resolve, reject) => {
+    //   connection.emit(
+    //     'patch', //
+    //     tableName,
+    //     params, //
+    //     query, //
+    //     (data, err) => {
+    //       let isError = false
+    //       let error = null //
+    //       let _data = null
+    //       let method = 'patch' //
+    //       if (defaultMethod.includes(method)) {
+    //         if (err) {
+    //           isError = false
+    //           // error = err
+    //           _data = err?.data || {}
+    //           if (err?.code == '401') {
+    //             isError = true
+    //             error = err //
+    //           }
+    //         } else {
+    //           isError = true
+    //           if (data?.code == '401') {
+    //             isError = true
+    //             error = data
+    //             system.confirmMessage('登录信息无效', 'error') //
+    //             this.redirectToLogin() //
+    //           } else {
+    //             // _data = data?.data || {}
+    //             error = data //
+    //           }
+    //         }
+    //       } else {
+    //         if (data) {
+    //           isError = true
+    //           error = data
+    //         } else {
+    //           isError = false
+    //           if (err?.code == '401') {
+    //             isError = true
+    //             error = err
+    //           }
+    //           _data = err?.data || {}
+    //         }
+    //       }
+    //       if (isError == true) {
+    //         reject(error)
+    //       }
+    //       let _data1 = _data
+    //       resolve(_data1) //
+    //     }, //
+    //   )
+    // })
+    let axios = this.axios
+    let _res = await axios.patch(`/${tableName}`, params, { params: query }) //
+    return _res
+  }//
   async delete(tableName, params = {}, query = {}) {
     await this.batchDelete(tableName, params) //
   }
@@ -490,7 +496,7 @@ export class myHttp {
     return data //
   }
   async create(tableName, data = {}) {
-    console.log('新增数据', tableName, data) //
+    // console.log('新增数据', tableName, data) //
     let _res = await this.post(tableName, 'create', data)
     return _res //
   } //

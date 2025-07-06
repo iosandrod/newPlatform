@@ -40,15 +40,7 @@ export default defineComponent({
           },
         },
 
-        {
-          label: '更换ID',
-          fn: async () => {
-            // let data = tableIns.getData()
-            // let d0 = data[0]
-            // d0['id'] = d0['id'] + 1 //
-            tableIns.updateCanvas() //
-          },
-        },
+        
       ] //
       let config = tableIns.config
       let showHeaderDefaultButtons = config.showHeaderDefaultButtons

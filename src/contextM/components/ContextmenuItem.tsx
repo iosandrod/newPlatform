@@ -73,7 +73,7 @@ const ContextmenuItem = defineComponent({
   render() {
     return (
       <li
-        class={[this.classes, 'er-h-32']}
+        class={[this.classes, 'er-h-32','flex justify-center items-center']}
         onClick={this.handleClick}
         onMousedown={(evt: Event) => {
           evt.preventDefault()

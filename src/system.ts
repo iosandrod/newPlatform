@@ -1439,8 +1439,8 @@ export class System extends Base {
       {
         label: '同步列',
         fn: async () => {
-          let pageDesign = this.getCurrentPageDesign()
-          await pageDesign.syncRealColumns()
+          // let pageDesign = this.getCurrentPageDesign()
+          // await pageDesign.syncRealColumns()
         },
       },
       {
@@ -1884,23 +1884,11 @@ export class System extends Base {
         },
       },
       {
-        label: '实体建模',//
+        label: '实体建模', //
         fn: async () => {
           await this.routeTo('/ERDesign') //
         },
       }, //
-      // {
-      //   label: '切换平台',
-      //   fn: async () => {
-      //     let currentDesign = system.getCurrentPageDesign()
-      //     let plat = currentDesign.getCurrentPlatform() //
-      //     if (plat == 'pc') {
-      //       currentDesign.switchPlatform('mobile')
-      //     } else {
-      //       currentDesign.switchPlatform('pc')
-      //     }
-      //   },
-      // },
       {
         label: '当前页面设计',
         fn: async () => {
@@ -1921,29 +1909,10 @@ export class System extends Base {
           await currentPageDesign.saveTableDesign()
         },
       },
-      // {
-      //   label: '同步当前列',
-      //   fn: async () => {
-      //     let currentPageDesign = system.getCurrentPageDesign()
-      //     await currentPageDesign.syncErpTableColumns() //
-      //   },
-      // },
-      // {
-      //   label: '打印页面',
-      //   fn: async () => {
-      //     let pageDesign = system.getCurrentPageDesign()
-      //     let layout = pageDesign.getLayoutData()
-      //     // console.log(layout) //
-      //     console.log(system, 'testSystem') //
-      //   },
-      // },
-      // {
-      //   label: '实体管理',
-      //   fn: async () => {
-      //     //
-      //     this.routeTo('/admin/realTable')
-      //   },
-      // },
+      {
+        label: '查看操作手册', //
+        fn: async () => {},
+      },
     ]
     return items
   }
@@ -1991,35 +1960,39 @@ export class System extends Base {
     this.routeTo(_name) //
   }
   async designCurrentPage(name?: any) {
-    let pageDesign = null
+    let pageDesign: MainPageDesign = null
     if (name) {
-      pageDesign = this.getTargetDesign(name)
+      pageDesign = this.getTargetDesign(name) as any
     } else {
-      pageDesign = this.getCurrentPageDesign() //
+      pageDesign = this.getCurrentPageDesign() as any
     }
-    let config = pageDesign.config
-    let _config = _.cloneDeep(config)
-    let _p: any = pageDesign
-    let _construct = _p.__proto__.constructor
-    // console.log(_construct) //
-    let newD = new _construct(_config)
-    newD.setLayoutData(_config) //
-    newD.setCurrentDesign(true) //
-    let dialogConfig = {
-      title: '页面整体设计',
-      width: 1,
-      height: 1,
-      createFn: () => {
-        return {
-          component: pageCom,
-          props: {
-            formIns: newD,
-          },
-        }
-      },
-      confirmFn: () => {},
+    if (pageDesign == null) {
+      return
     }
-    await this.openDialog(dialogConfig) //
+    pageDesign.setCurrentDesign(true) //
+    // let config = pageDesign.config
+    // let _config = _.cloneDeep(config)
+    // let _p: any = pageDesign
+    // let _construct = _p.__proto__.constructor
+    // // console.log(_construct) //
+    // let newD = new _construct(_config)
+    // newD.setLayoutData(_config) //
+    // newD.setCurrentDesign(true) //
+    // let dialogConfig = {
+    //   title: '页面整体设计',
+    //   width: 1,
+    //   height: 1,
+    //   createFn: () => {
+    //     return {
+    //       component: pageCom,
+    //       props: {
+    //         formIns: newD,
+    //       },
+    //     }
+    //   },
+    //   confirmFn: () => {},
+    // }
+    // await this.openDialog(dialogConfig) //
   }
   setSystemLoading(status) {
     let bool = Boolean(status)
@@ -2253,6 +2226,89 @@ export class System extends Base {
       window.removeEventListener('keydown', item.handler)
     })
     this._keyboardListeners = []
+  }
+  async syncRealColumns(config) {
+    let tableName = config.tableName
+    let realTableName = config.realTableName || tableName
+    let columns = config.columns
+    if (tableName == null || !Array.isArray(columns)) {
+      return
+    } //
+    let tCols = await this.getHttp().find('columns', { tableName })
+    let addCols = columns
+      .filter((c) => {
+        return (
+          tCols.findIndex((tc) => {
+            return tc.field == c.field
+          }) == -1
+        )
+      })
+      .map((row) => {
+        row.id = null
+        delete row['createdAt']
+        delete row['updatedAt']
+        row.tableName = realTableName //
+        return row
+      }) //
+    let _res = await this.getHttp().create('columns', addCols)
+    this.getSystem().confirmMessage('同步成功', 'success') //
+    // this.getSystem().refreshPageDesign() //
+  }
+  async syncOldColumns(config) {
+    let tableName = config.tableName
+    let fConfig = {
+      title: '同步列',
+      height: 200,
+      width: 300,
+      itemSpan: 24, //
+      data: {
+        tableName: tableName,
+      },
+      items: [
+        {
+          label: '表名',
+          field: 'tableName',
+          disabled: false, //
+          visible: true,
+          required: true,
+        },
+      ],
+    }
+    let system = this
+    let data = await system.confirmForm(fConfig)
+    // console.log(data) //
+    let _tableName = data.tableName
+    let _columns = await system.getOldErpTableColumns(_tableName)
+    if (_columns.length == 0) {
+      return
+    }
+    let allCols = config.columns
+    if (!Array.isArray(allCols)) {
+      return
+    }
+    for (const col of _columns) {
+      let f = col.field
+      let c = allCols.find((c) => {
+        return c.field == f
+      })
+      let keys = [
+        {
+          key: 'title',
+          myKey: 'title',
+        },
+        {
+          key: 'width',
+          myKey: 'width',
+        },
+      ]
+      if (c) {
+        for (let key of keys) {
+          if (col[key.key] != null) {
+            c[key.myKey] = col[key.key]
+          }
+        } //
+      }
+    }
   }
 } //
 export const system = reactive(new System())

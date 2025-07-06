@@ -5,10 +5,10 @@ import {
   // Transition,
   inject,
   nextTick,
-} from 'vue';
+} from 'vue'
 
-import ContextmenuIcon from './ContextmenuIcon';
-import { CLASSES } from '../constants';
+import ContextmenuIcon from './ContextmenuIcon'
+import { CLASSES } from '../constants'
 
 const ContextmenuSubmenu = defineComponent({
   name: 'VContextmenuSubmenu',
@@ -27,73 +27,73 @@ const ContextmenuSubmenu = defineComponent({
   emits: ['mouseenter', 'mouseleave'],
 
   setup(props, { emit }) {
-    const submenuRef = ref<HTMLDivElement | null>(null);
-    const autoAdjustPlacement = inject<boolean>('autoAdjustPlacement');
-    const placements = ref(['top', 'right']);
-    const hover = ref(false);
+    const submenuRef = ref<HTMLDivElement | null>(null)
+    const autoAdjustPlacement = inject<boolean>('autoAdjustPlacement')
+    const placements = ref(['top', 'right'])
+    const hover = ref(false)
     const handleMouseenter = (evt: Event) => {
-      if (props.disabled) return;
+      if (props.disabled) return
 
-      hover.value = true;
+      hover.value = true
 
-      emit('mouseenter', evt);
+      emit('mouseenter', evt)
 
       nextTick(() => {
-        const targetPlacements = [];
+        const targetPlacements = []
 
         if (autoAdjustPlacement) {
-          const { target } = evt;
-          const targetDimension = (
-            target as HTMLElement
-          ).getBoundingClientRect();
+          const { target } = evt
+          const targetDimension = (target as HTMLElement).getBoundingClientRect()
 
-          if (!submenuRef.value) return;
+          if (!submenuRef.value) return
 
-          const submenuWidth = submenuRef.value.clientWidth;
-          const submenuHeight = submenuRef.value.clientHeight;
+          const submenuWidth = submenuRef.value.clientWidth
+          const submenuHeight = submenuRef.value.clientHeight
 
           if (targetDimension.right + submenuWidth >= window.innerWidth) {
-            targetPlacements.push('left');
+            targetPlacements.push('left')
           } else {
-            targetPlacements.push('right');
+            targetPlacements.push('right')
           }
 
           if (targetDimension.bottom + submenuHeight >= window.innerHeight) {
-            targetPlacements.push('bottom');
+            targetPlacements.push('bottom')
           } else {
-            targetPlacements.push('top');
+            targetPlacements.push('top')
           }
         }
 
-        placements.value = targetPlacements;
-      });
-    };
+        placements.value = targetPlacements
+      })
+    }
 
     const handleMouseleave = (evt: Event) => {
-      if (props.disabled) return;
+      if (props.disabled) return
 
-      hover.value = false;
+      hover.value = false
 
-      emit('mouseleave', evt);
-    };
+      emit('mouseleave', evt)
+    }
 
     const titleClasses = computed(() => ({
       [CLASSES.contextmenuItem]: true,
       [CLASSES.contextmenuSubmenuTitle]: true,
       [CLASSES.contextmenuItemHover]: hover.value,
       [CLASSES.contextmenuItemDisabled]: props.disabled,
-    }));
+    }))
 
     const menusClasses = computed(() => ({
       [CLASSES.contextmenu]: true,
       [CLASSES.contextmenuSubmenuMenus]: true,
       [CLASSES.contextmenuSubmenuMenusTop]: placements.value.includes('top'),
-      [CLASSES.contextmenuSubmenuMenusRight]:
-        placements.value.includes('right'),
-      [CLASSES.contextmenuSubmenuMenusBottom]:
-        placements.value.includes('bottom'),
+      [CLASSES.contextmenuSubmenuMenusRight]: placements.value.includes(
+        'right',
+      ),
+      [CLASSES.contextmenuSubmenuMenusBottom]: placements.value.includes(
+        'bottom',
+      ),
       [CLASSES.contextmenuSubmenuMenusLeft]: placements.value.includes('left'),
-    }));
+    }))
 
     return {
       hover,
@@ -103,17 +103,17 @@ const ContextmenuSubmenu = defineComponent({
 
       handleMouseenter,
       handleMouseleave,
-    };
+    }
   },
 
   render() {
     return (
       <li
-        class={CLASSES.contextmenuSubmenu}
+        class={[CLASSES.contextmenuSubmenu, 'er-h-32']}
         onMouseenter={this.handleMouseenter}
         onMouseleave={this.handleMouseleave}
       >
-        <div class={this.titleClasses}>
+        <div class={[this.titleClasses,'h-full flex items-center er-pr-10 er-mr-10']} style=''> 
           {this.$slots.title?.() || this.title}
 
           <span class={CLASSES.contextmenuSubmenuArrow}>
@@ -129,8 +129,8 @@ const ContextmenuSubmenu = defineComponent({
         ) : null}
         {/* </Transition> */}
       </li>
-    );
+    )
   },
-});
+})
 
-export default ContextmenuSubmenu;
+export default ContextmenuSubmenu
