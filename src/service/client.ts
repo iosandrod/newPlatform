@@ -263,7 +263,7 @@ export class myHttp {
       let token = localStorage.getItem('feathers-jwt')
       if (token) {
         try {
-          let app =await system.getCurrentApp()
+          let app = await system.getCurrentApp()
           let res = await this.client.authenticate({
             accessToken: token,
             _unUseCaptcha: true,

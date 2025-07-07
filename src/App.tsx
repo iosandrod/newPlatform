@@ -1,4 +1,4 @@
-import { computed, defineComponent, withDirectives } from 'vue'
+import { computed, defineComponent, h, KeepAlive, withDirectives } from 'vue'
 import { ref, onMounted, getCurrentInstance, inject, provide } from 'vue'
 import { erFormEditor } from '@ER/formEditor'
 import { globalConfig } from '@ER/formEditor/componentsConfig'
@@ -41,7 +41,23 @@ export default defineComponent({
     })
     return () => {
       let dArr = <dialogArrCom dialogArr={diaArr.value}></dialogArrCom>
-      let com = <RouterView></RouterView> ////
+      // let com = <RouterView></RouterView> ////
+      let com = (
+        <RouterView
+          // v-slots={{
+          //   default: (config) => {
+          //     // console.log(config)
+          //     let route = config.route
+          //     let Component = config.Component
+          //     return (
+          //       <Component key={route.fullPath}></Component>
+          //       // <KeepAlive include={/admin/gi}>
+          //       // </KeepAlive>
+          //     )
+          //   },
+          // }}
+        ></RouterView>
+      )
       return withDirectives(
         <div
           id="main_app" //
@@ -53,7 +69,6 @@ export default defineComponent({
         >
           {com}
           {dArr}
-          
         </div>,
         [
           [

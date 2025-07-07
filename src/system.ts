@@ -22,7 +22,13 @@ import { SearchPageDesign } from '@ER/searchPageDesign'
 import codeEditorCom from './codeEditor/codeEditorCom'
 import CodeEditor from './codeEditor/codeEditor'
 import wangCom from './wangEditor/wangCom'
-import { changePassword, createColumnSelect, installApp } from './systemFn'
+import {
+  addTableField,
+  changePassword,
+  createColumnSelect,
+  installApp,
+  removeTableField,
+} from './systemFn'
 import { generateRoutes } from '@/router/register'
 import { Menu } from './menu/menu'
 import { BMenu } from './buttonGroup/bMenu'
@@ -344,7 +350,7 @@ export class System extends Base {
   setStaticComArr(arr) {
     if (!Array.isArray(arr)) {
       return //
-    }
+    } //
     this.staticComArr = [...arr, ...globalStaticCom] //
   }
   getStaticComArr() {
@@ -1333,6 +1339,7 @@ export class System extends Base {
     return 'normal' //
   }
   async designSystemNavs() {
+    //
     this.routeTo('/admin/navs') //
   }
 
@@ -1651,7 +1658,7 @@ export class System extends Base {
     }
     let _staticCom = staticComMap[app]
     if (_staticCom) {
-      this.setStaticComArr(Object.values(_staticCom)) //
+      this.setStaticComArr(Object.values(_staticCom))
     }
   }
   async getCurrentApp() {
@@ -1860,7 +1867,7 @@ export class System extends Base {
       {
         label: '实体建模', //
         fn: async () => {
-          await this.routeTo('/ERDesign') //
+          await this.routeTo('/admin/erDesign') //
         },
       }, //
       {
@@ -2041,107 +2048,11 @@ export class System extends Base {
     return res
   }
   async addTableField(tableName, column) {
-    if (!Boolean(tableName)) {
-      return
-    } //
-    let oldTableConfig = await this.getHttp().find('tableview', { tableName })
-    if (oldTableConfig.length == 0) {
-      return
-    } //
-    let fConfig = {
-      itemSpan: 24, //
-      width: 350,
-      height: 400, //
-      items: [
-        {
-          type: 'input',
-          label: '表名',
-          field: 'tableName',
-          disabled: true, //
-          required: true,
-        },
-        {
-          type: 'input',
-          label: '字段名称',
-          field: 'field',
-          validate: async (config) => {
-            let reg = /^[a-zA-Z][a-zA-Z0-9_]{0,29}$/
-            let value = config.value
-            if (!reg.test(value)) {
-              return '字段名称格式不正确'
-            } //
-          },
-          required: true,
-        },
-        {
-          type: 'select',
-          label: '字段类型',
-          field: 'type',
-          required: true,
-          options: {
-            options: [
-              {
-                value: 'varchar',
-                label: '字符类型',
-              },
-              {
-                value: 'int',
-                label: '数字类型',
-              }, //
-            ],
-          },
-        },
-      ],
-      title: '新增字段',
-      requiredValidate: true,
-      validateFn: async (config) => {
-        let data = config.data
-        return '校验失败' //
-      },
-      data: column, //
-    }
-    await this.confirmForm(fConfig) //
-    let http = this.getHttp() //
-    let _obj = {
-      tableName,
-      column,
-      state: 'add',
-    }
-    // console.log(_obj, 'testRes') //
-    let res = await http.post('tableview', 'changeColumns', _obj) //
-    res = res[0] //
-    let columns = res.columns
-    // let _columns = columns.map((e) => {
-    //   return e.field
-    // })
-    await this.confirmMessage('字段添加成功', 'success')
-    return columns //
+    return await addTableField(this, tableName, column)
   }
   editTableField(tableName, column) {}
   async removeTableField(tableName, column) {
-    if (!Boolean(tableName)) {
-      return
-    } //
-    let field = column?.field //
-    await this.confirmMessageBox(
-      `确定删除表${tableName}的${field}字段吗`,
-      'warning',
-    ) //
-    let http = this.getHttp() //
-    let _obj = {
-      tableName,
-      column,
-      state: 'delete', //
-    }
-    let res = await http.post('tableview', 'changeColumns', _obj) //
-    res = res?.[0] //
-    let columns = res?.columns
-    if (column == null) {
-      //
-      return
-    }
-    await this.confirmMessage('字段删除成功', 'success')
-    return columns //
+    return await removeTableField(this, tableName, column) //
   }
   /**
    * 注册一个全局键盘事件监听

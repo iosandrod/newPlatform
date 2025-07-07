@@ -40,7 +40,10 @@ export class editPageDesign extends PageDesign {
           let columns = this.config.columns || []
           let c = columns.find((c) => c.field == f1)
           if (c) {
-            f.label = c.title //
+            if (Boolean(c.title) && c.title != c.field) {
+              //
+              f.label = c.title //
+            }
           }
         }
       })

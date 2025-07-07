@@ -1,8 +1,14 @@
 import { defineComponent } from 'vue'
-
+import globalUserinfo from '@/pages/platform/globalUserinfo'
 export default defineComponent({
   name: 'GanttUserInfo', //
+  components: {
+    globalUserinfo,
+  },
   setup() {
-    return () => <div>userinfo</div>
+    return () => {
+      let com = <globalUserinfo></globalUserinfo>
+      return com //
+    }
   },
 })

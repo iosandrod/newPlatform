@@ -68,7 +68,7 @@ export default defineComponent({
     let currentRoutePath = computed(() => {
       let path = router.fullPath
       return path
-    })
+    }) //
     return () => {
       let leftM = (
         <div class="w-200 h-full overflow-auto">
@@ -141,7 +141,7 @@ export default defineComponent({
 
               {/* 主内容区 卡片化 + 渐变背景 */}
               <main class="flex-1 overflow-auto bg-gradient-to-b   p-1">
-                <div class="max-w-full h-full  bg-white rounded-lg shadow-lg p-1 w-full">
+                <div class="max-w-full h-full overflow-hidden  bg-white rounded-lg shadow-lg p-1 w-full">
                   {dCom}
                 </div>
               </main>

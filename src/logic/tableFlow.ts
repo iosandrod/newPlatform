@@ -98,12 +98,16 @@ export class TableFlow extends Flow {
     return this.templateProps.edges
   }
   getInstanceViewPort() {
+    let ins = this.getInstance()
+    if (ins == null) {
+      return
+    } //
     return this.getInstance().getViewport()
   }
   getInstanceZoom() {
     let viewport = this.getInstanceViewPort()
-    return viewport.zoom
-  } //
+    return viewport?.zoom || 1
+  } // //
   @useTimeout({ number: 200 })
   autoFitView() {
     const rawNodes: any[] = this.getNodes(true)
@@ -114,14 +118,17 @@ export class TableFlow extends Flow {
     let newNodes = rawNodes.filter((n) => !n.isInPanel)
 
     // 布局参数
-    const NODE_WIDTH = 240
-    const HEADER_HEIGHT = 60
-    const ROW_HEIGHT = 28
-    const V_SPACING = 20 // 列内垂直间距
-    const H_SPACING = 100 // 列间水平间距
+    let NODE_WIDTH = 240
+    let HEADER_HEIGHT = 60
+    let ROW_HEIGHT = 28
+    let V_SPACING = 20 // 列内垂直间距
+    let H_SPACING = 50 // 列间水平间距
 
     // 画布高度
     const container = this.getRef('container')
+    if (container == null) {
+      return //
+    }
     let { height: viewportHeight } = container.getBoundingClientRect()
     viewportHeight = viewportHeight / zoom //
     // 计算旧节点最右边界，作为新列起点
@@ -159,6 +166,7 @@ export class TableFlow extends Flow {
     const layouted = [...oldNodes, ...newNodes]
     this.setNodes(layouted)
     this.setEdges(edges)
+    console.log('自动布局', layouted) //
   }
   setNodes(nodes) {
     if (!Array.isArray(nodes)) {
@@ -233,13 +241,13 @@ export class TableFlow extends Flow {
       //     console.log(zoom)
       //   },
       // },
-      {
-        label: '返回管理页面',
-        icon: 'iconfont icon-table',
-        fn: () => {
-          this.getSystem().routeTo('/admin') //
-        },
-      },
+      // {
+      //   label: '返回管理页面',
+      //   icon: 'iconfont icon-table',
+      //   fn: () => {
+      //     this.getSystem().routeTo('/admin') //
+      //   },
+      // },
     ]
   }
   getTables() {
@@ -314,12 +322,6 @@ export class TableFlow extends Flow {
         label: '新增字段',
         icon: 'iconfont icon-layout',
         fn: async () => {
-          // let currentTableName = this.getCurrentSelectTableName() //
-          // let system = this.getSystem()
-
-          // await system.addTableField(currentTableName, {
-          //   tableName: currentTableName,
-          // }) //
           this.addField({ tableName: this.getCurrentSelectTableName() })
         },
       },

@@ -725,6 +725,9 @@ export class Table extends Base {
     let _columns = this.templateProps.columns || [] //
     let instance = this.getInstance()
     let n = Date.now().toString()
+    if (instance == null) {
+      return //
+    }
     let fro = instance.options.frozenColCount
     let right = instance.options.rightFrozenColCount //
 

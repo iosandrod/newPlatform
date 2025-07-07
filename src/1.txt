@@ -9572,3 +9572,29 @@ import lowcode from './lowcode'
                         // )
                          // let showData = this.getData() //
     // let ins = this.getInstance()
+
+
+    {
+          field: 'companyCnName',
+          label: '公司',
+          type: 'string', //
+        },
+
+
+        
+        {
+          field: 'companyLogo',
+          label: 'logo',
+          type: 'image', //
+          style: {
+            height: '200px',
+          },
+        },
+
+
+        // let currentTableName = this.getCurrentSelectTableName() //
+          // let system = this.getSystem()
+
+          // await system.addTableField(currentTableName, {
+          //   tableName: currentTableName,
+          // }) //

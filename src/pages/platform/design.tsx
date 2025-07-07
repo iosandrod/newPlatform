@@ -100,7 +100,7 @@ export default defineComponent({
         let pObj = en.value.getPaginateProps()
         // console.log(pObj, 'testPObj') //
         pagin = (
-          <div class="h-40 overflow-hidden">
+          <div class="er-h-40 overflow-hidden">
             <VxePager {...pObj}></VxePager>
           </div>
         ) //
@@ -114,7 +114,7 @@ export default defineComponent({
         pagin = null
       } //
       return (
-        <div class="h-full w-full flex flex-col my-scope">
+        <div class="h-full w-full flex flex-col  overflow-hidden">
           <div class="flex-1">
             <_com></_com>
           </div>

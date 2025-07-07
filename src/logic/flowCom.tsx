@@ -63,9 +63,9 @@ export default defineComponent({
         if (Array.isArray(value)) {
           value.forEach((table: any) => {
             let tableName = table.tableName
-            if (['task', 'resource', 'taskassignment'].includes(tableName)) {
-              table.checkboxField = true //
-            }
+            // if (['task', 'resource', 'taskassignment'].includes(tableName)) {
+            //   table.checkboxField = true //
+            // }
           })
         }
       },
@@ -141,7 +141,7 @@ export default defineComponent({
         )
         leftTable = (
           <div class="w-1/4 h-full overflow-hidden flex flex-col">
-            <div class="h-1/3">
+            <div class="flex-1">
               <erTable
                 ref={(el) => flow.registerRef('tableTable', el)}
                 onCurRowChange={(row) => {
@@ -158,7 +158,7 @@ export default defineComponent({
                 data={flow.getTables()}
               ></erTable>
             </div>
-            <div class="h-2/3 overflow-hidden">
+            <div class="flex-1 overflow-hidden">
               {
                 tabsLayout //
               }
@@ -169,9 +169,9 @@ export default defineComponent({
       let com = (
         <div class="h-full w-full flex flex-col">
           {context}
-          <div class="" style={{}}>
+          {/* <div class="er-h-32 overflow-hidden" style={{}}>
             <erButtonGroup items={flow.getControllButtons()}></erButtonGroup>
-          </div>
+          </div> */}
           <div
             ref={(el) => flow.registerRef('container', el)}
             class="flex-1 overflow-hidden w-full flex"
@@ -256,7 +256,14 @@ export default defineComponent({
           </div>
         </div>
       )
-      return com //
+      // return com //
+      let com1 = (
+        <div class="h-full flex flex-col er-pt-32">
+          <div class="absolute er-h-32"></div>
+          <div class="flex-1">{com}</div>
+        </div>
+      )
+      return com1 //
     } //
   }, //
 })

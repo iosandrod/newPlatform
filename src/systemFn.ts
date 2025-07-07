@@ -72,18 +72,20 @@ export const changePassword = async (_this: System) => {
   try {
     let fConfig = {
       title: '修改密码',
-      width: 300,
-      height: 200,
+      width: 400,
+      height: 300, //
       itemSpan: 24,
       items: [
         {
           type: 'input',
           label: '旧密码',
+          required: true,
           field: 'oldPassword',
         },
         {
           type: 'input',
           label: '新密码',
+          required: true, //
           field: 'newPassword', //
         },
       ],
@@ -141,4 +143,103 @@ export const installApp = async (_this: System, name) => {
   // } catch (error) {
   //   _this.confirmErrorMessage('安装失败') //
   // }
+}
+
+export const addTableField = async (_this: System, tableName, column) => {
+  if (!Boolean(tableName)) {
+    return
+  } //
+  let oldTableConfig = await _this.getHttp().find('tableview', { tableName })
+  if (oldTableConfig.length == 0) {
+    return
+  } //
+  let fConfig = {
+    itemSpan: 24, //
+    width: 350,
+    height: 400, //
+    items: [
+      {
+        type: 'input',
+        label: '表名',
+        field: 'tableName',
+        disabled: true, //
+        required: true,
+      },
+      {
+        type: 'input',
+        label: '字段名称',
+        field: 'field',
+        validate: async (config) => {
+          let reg = /^[a-zA-Z][a-zA-Z0-9_]{0,29}$/
+          let value = config.value
+          if (!reg.test(value)) {
+            return '字段名称格式不正确'
+          } //
+        },
+        required: true,
+      },
+      {
+        type: 'select',
+        label: '字段类型',
+        field: 'type',
+        required: true,
+        options: {
+          options: [
+            {
+              value: 'varchar',
+              label: '字符类型',
+            },
+            {
+              value: 'int',
+              label: '数字类型',
+            }, //
+          ],
+        },
+      },
+    ],
+    title: '新增字段',
+    requiredValidate: true,
+    validateFn: async (config) => {
+      let data = config.data
+      return '校验失败' //
+    },
+    data: column, //
+  }
+  await _this.confirmForm(fConfig) //
+  let http = _this.getHttp() //
+  let _obj = {
+    tableName,
+    column,
+    state: 'add',
+  } //
+  let res = await http.post('tableview', 'changeColumns', _obj) //
+  res = res[0] //
+  let columns = res.columns
+  await _this.confirmMessage('字段添加成功', 'success')
+  return columns //
+}
+export const removeTableField = async (_this: System, tableName, column) => {
+  if (!Boolean(tableName)) {
+    return
+  } //
+  let field = column?.field //
+  await _this.confirmMessageBox(
+    `确定删除表${tableName}的${field}字段吗`,
+    'warning',
+  ) //
+  let http = _this.getHttp() //
+  let _obj = {
+    tableName,
+    column,
+    state: 'delete', //
+  }
+  let res = await http.post('tableview', 'changeColumns', _obj) //
+  res = res?.[0] //
+  let columns = res?.columns
+  if (column == null) {
+    //
+    return
+  }
+  await _this.confirmMessage('字段删除成功', 'success')
+  return columns //
 }
