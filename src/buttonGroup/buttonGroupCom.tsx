@@ -138,6 +138,7 @@ export default defineComponent({
           <div
             class={[..._class, 'pl-1 pr-1 relative']}
             style={{
+              display: `${btn.getDisplay()}`, //
               minWidth: `${btn.getButtonWidth()}px`,
               position: 'relative',
               zIndex: 0,
@@ -189,28 +190,6 @@ export default defineComponent({
 
                       dropdown: () => {
                         let _items: Button = btn.getSubData()
-                        // console.log(_items, 'items123132') //
-                        // let menu = (
-                        //   <ContextmenuCom
-                        //     ref={(el) => btn.registerRef('contextmenu', el)}
-                        //     isTeleport={false}
-                        //     items={_items} //
-                        //     alwaysShow={true}
-                        //     v-slots={{
-                        //       itemSlot: (item) => {
-                        //         const btn = item.button
-                        //         let _com = getBtnCom(btn)
-                        //         return _com
-                        //       },
-                        //       subItemSlot: (item) => {
-                        //         const btn = item.button
-                        //         // return <div class={{}}>{btn.getLabel()}</div>
-                        //         let _com = getBtnCom(btn)
-                        //         return _com //
-                        //       },
-                        //     }}
-                        //   ></ContextmenuCom>
-                        // )
                         let menu = <div class="er-h-100 er-w-100 bg-red"></div>
                         menu = (
                           <ContextmenuCom

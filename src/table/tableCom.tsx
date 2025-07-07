@@ -42,6 +42,9 @@ export default defineComponent({
     tableName: {
       type: String,
     },
+    onCellCommand: {
+      type: Function,
+    },
     showControllerButtons: {
       type: Boolean,
       default: false, //

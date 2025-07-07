@@ -165,7 +165,7 @@ export class Button extends Base {
       } else {
         let defaultFn = config.defaultFn
         if (typeof defaultFn == 'string') {
-          let drun = this.getDefaultFnRun()
+          let drun = await this.getDefaultFnRun()
           let _fn = drun[defaultFn]
           if (typeof _fn == 'function') {
             let _fn1 = _fn.bind(page)
@@ -196,4 +196,29 @@ export class Button extends Base {
     }
     return width
   }
+  getDisplay() {
+    let config = this.config
+    let hidden = config.hidden
+    if (Boolean(hidden)) {
+      return 'none'
+    }
+    let hiddenFn = config.hiddenFn
+    if (typeof hiddenFn == 'string') {
+      try {
+        let _fn = stringToFunction(hiddenFn)
+        hiddenFn = _fn
+      } catch (error) {}
+    }
+    if (typeof hiddenFn == 'function') {
+      try {
+        let status = hiddenFn({ page: this.getMainPageDesign() })
+        if (status == true) {
+          return 'none'
+        }
+      } catch (error) {
+        return ''
+      }
+    }
+    return ''
+  } //
 }

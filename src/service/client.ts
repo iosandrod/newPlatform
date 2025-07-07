@@ -53,11 +53,14 @@ export const createAxios = async (config) => {
     appName = _appName //
   }
   let _key = ''
-  appName = appName || (await system.getCurrentApp())
-  if (appName != 'platform') {
-    userid = userid || 1
+  if (config.isMain == true) {
+  } else {
+    appName = appName || (await system.getCurrentApp())
   }
-  if (appName != null && userid != 'undefined') {
+  if (appName != 'platform') {
+    userid = userid || 1 //默认用户ID是1
+  }
+  if (appName != null && userid != 'undefined' && userid != null) {
     _key = `/${appName}_${userid}`
   }
   let baseUrl = `http://${'localhost:3031'}` //
@@ -91,7 +94,6 @@ export const createAxios = async (config) => {
   ) //
   axiosInstance.interceptors.response.use(
     function (response) {
-      // debugger //
       let data = response?.data?.data //
       if (data) {
         return data //
@@ -99,8 +101,12 @@ export const createAxios = async (config) => {
       return response
     },
     function (error) {
-      // Any status codes that falls outside the range of 2xx cause this function to trigger
-      // Do something with response error
+      // debugger //
+      let data = error?.response?.data
+      if (data) {
+        return Promise.reject(data)
+      } //
+
       return Promise.reject(error)
     },
   )
@@ -173,7 +179,7 @@ export const createClient = async (config) => {
   if (appName != 'platform') {
     userid = userid || 1
   }
-  if (appName != null && userid != 'undefined') {
+  if (appName != null && userid != 'undefined' && userid != null) {
     _key = `/${appName}_${userid}`
   }
   let baseUrl = `http://${'localhost:3031'}` //
@@ -219,13 +225,11 @@ export const createClient = async (config) => {
   return app
 }
 
-export const axiosClient = createAxios({
-  isMain: true, //
-}) //
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
   client: Application
   mainClient: Application
+  mainAxios: AxiosInstance //
   axios: AxiosInstance
   useAxios = true
   constructor() {
@@ -233,10 +237,10 @@ export class myHttp {
     this.init()
   } //
   async initClient() {
-    // debugger//
+    this.mainAxios = await createAxios({ isMain: true }) //
+    this.axios = await createAxios({})
     this.client = await createClient({})
     this.mainClient = await createClient({ isMain: true }) //
-    this.axios = await createAxios({})
   }
   async changeClient(config) {
     let appName = config.appName
@@ -251,13 +255,15 @@ export class myHttp {
     }
     let _client = await createClient(config)
     this.client = _client //
+    let _axios = await createAxios(config)
+    this.axios = _axios //
   }
   async init() {
     nextTick(async () => {
       let token = localStorage.getItem('feathers-jwt')
       if (token) {
         try {
-          let app = system.getCurrentApp()
+          let app =await system.getCurrentApp()
           let res = await this.client.authenticate({
             accessToken: token,
             _unUseCaptcha: true,
@@ -295,11 +301,9 @@ export class myHttp {
     try {
       //
       let http = this
-      data.strategy = 'local' ////
-      console.log('用户登录', data)
+      data.strategy = 'local'
       let _res = await http.client.authenticate(data) //
       system.loginInfo = _res //
-      // console.log(_res, 'testRes') //
       system.confirmMessage('登录成功') //
       let router = system.getRouter()
       router.push('/home')
@@ -323,6 +327,24 @@ export class myHttp {
     let router = system.getRouter()
     router.push('/login') //
   }
+  async mainPost(tableName, method, params = {}, query = {}) {
+    let axios = this.mainAxios
+    let url = `${tableName}`
+    if (method) {
+      if (!defaultMethod.includes(method)) {
+        url = `${url}/${method}`
+      }
+    }
+    try {
+      let res = await axios.post(`${url}`, params, {
+        //
+        params: query,
+      })
+      return res
+    } catch (error) {
+      return Promise.reject(error) //
+    }
+  }
   async post(tableName, method, params = {}, query = {}): Promise<any> {
     if (this.useAxios == true) {
       let axios = this.axios
@@ -339,6 +361,7 @@ export class myHttp {
         })
         return res
       } catch (error) {
+        console.error(error.code)
         return Promise.reject(error) //
       }
     }
@@ -485,7 +508,7 @@ export class myHttp {
     let axios = this.axios
     let _res = await axios.patch(`/${tableName}`, params, { params: query }) //
     return _res
-  }//
+  } //
   async delete(tableName, params = {}, query = {}) {
     await this.batchDelete(tableName, params) //
   }

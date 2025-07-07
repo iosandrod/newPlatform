@@ -42,13 +42,6 @@ export default defineComponent({
     return () => {
       let dArr = <dialogArrCom dialogArr={diaArr.value}></dialogArrCom>
       let com = <RouterView></RouterView> ////
-      // com = (
-      //   <flowCom
-      //     {...comText()}
-      //     isERDiagram={true} //
-      //     getRemoteTables={true}
-      //   ></flowCom>
-      // ) //
       return withDirectives(
         <div
           id="main_app" //
@@ -60,14 +53,7 @@ export default defineComponent({
         >
           {com}
           {dArr}
-          {/* <div style={{ height: '500px', width: '100%' }} class="">
-            <erTable
-              isGantt={true}
-              // {...getOptions()} //
-              data={getGanttRecords()}
-              columns={getGanttColumns()}
-            ></erTable>
-          </div> */}
+          
         </div>,
         [
           [

@@ -4,7 +4,7 @@ export default defineComponent({
   name: 'GanttIndex',
   setup() {
     return () => {
-      let com = <div>gantt</div>
+      let com = <div>404</div>
       return com //
     }
   },

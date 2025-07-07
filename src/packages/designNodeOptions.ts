@@ -74,6 +74,49 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
           _t.config.data.push(..._defaultButtons) //
         },
       },
+      {
+        label: '选择系统按钮',
+        fn: async (config) => {
+          let btnData = await _this.getSystem().getSelectButtons('main')
+
+          let tableConfig = {
+            showCheckboxColumn: true, //
+            columns: [
+              {
+                field: 'id',
+                title: '按钮ID',
+                tree: true,
+                defaultValue: (config) => {
+                  //
+                  let item = config.item
+                  let dValue = item?.uuid()
+                  return dValue
+                },
+              },
+              {
+                field: 'label',
+                title: '标题', ////
+                type: 'string',
+              },
+            ],
+            data: btnData,
+          }
+          let _data = await _this.getSystem().confirmTable(tableConfig)
+          // debugger //
+          let checkData = _data.filter((d) => {
+            return d.checkboxField == true
+          }) //
+          let parent: Table = config.parent
+          let oldData = parent.getFlatTreeData().map((d) => d.id)
+          checkData = checkData.filter((d) => {
+            return !oldData.includes(d.id)
+          }) //
+          // debugger //
+          parent.addRows({
+            rows: checkData,
+          }) //
+        },
+      },
     ],
     treeConfig: {
       id: 'id',
@@ -175,7 +218,6 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         editType: 'code',
       },
       {
-        //
         field: 'disabledDefaultFn',
         title: '通用禁用脚本',
         type: 'select',
@@ -202,6 +244,18 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
             value: 'exportTableRows',
           }, //
         ],
+      },
+      {
+        field: 'hidden',
+        title: '是否隐藏',
+        type: 'boolean',
+        editType: 'boolean',
+      },
+      {
+        field: 'hiddenFn',
+        title: '显示脚本',
+        type: 'string',
+        editType: 'code', //
       },
     ],
     showRowSeriesNumber: true,

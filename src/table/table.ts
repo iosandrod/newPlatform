@@ -1446,7 +1446,7 @@ export class Table extends Base {
       } //
       let data = this.getData()
       let lastD = data[data.length - 1]
-      this.setCurRow(lastD)
+      // this.setCurRow(lastD)
       this.addAfterMethod({
         methodName: 'updateCanvas', //
         fn: async () => {
@@ -1661,6 +1661,7 @@ export class Table extends Base {
     })
   } //
   addRow(row: any, parentRow?: any) {
+    // debugger//
     // debugger //
     let _index = row['_index']
     if (_index == null) {
@@ -1686,10 +1687,11 @@ export class Table extends Base {
     }
   }
   delCurRow() {
+    // debugger //
     let curRow = this.tableData.curRow
-    // let showData = this.getData() //
-    // let ins = this.getInstance()
+
     let showData = this.getData()
+    // let s = showData == this.config.data
     let _r = null
     let pData = showData
     let nextRow = null
@@ -1701,12 +1703,26 @@ export class Table extends Base {
           return true
         }
       })
+      if (pRow == null) {
+        showData = pData
+        if (showData.includes(curRow)) {
+          pRow = {
+            _children: showData,
+          }
+        }
+      }
       if (pRow) {
         let _children = pRow._children || []
         let index = _children.indexOf(curRow)
+        if (index == -1) {
+          return
+        }
         _r = _children.splice(_children.indexOf(curRow), 1)
         nextRow = _children[index - 1]
         nextRow = nextRow || _children[0] || pRow
+        if (nextRow['_index'] == null) {
+          nextRow = null
+        } //
       } //
     } else {
       let index = showData.indexOf(curRow)

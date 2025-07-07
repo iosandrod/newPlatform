@@ -533,7 +533,7 @@ export class PageDesign extends Form {
     })
     return _items
   }
-  async editTableRows() {
+  async editTableRows(_config?: any) {
     console.log('编辑当前行') //
   }
   async addEditTableRow() {
@@ -1887,5 +1887,24 @@ export class PageDesign extends Form {
     let items = this.items
     let forms = items.filter((e) => e.getType() == 'dform')
     return forms
+  }
+  async onTableCellCommand(config) {
+    let tableName = config.tableName
+    let command = config.command
+    let tableConfig = this.getTableConfig(tableName)
+    let _tableConfig = config.tableConfig //
+    let tableType = tableConfig?.tableType
+    if (tableName == this.getTableName()) {
+      tableType = 'main'
+    }
+    if (command == 'edit') {
+      if (tableType == 'main') {
+        let ref: Table = this.getRef(tableName)
+        let contextRow = ref.curContextRow //
+        this.editTableRows({
+          row: contextRow, //
+        })
+      }
+    } //
   }
 }

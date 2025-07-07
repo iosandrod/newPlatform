@@ -626,6 +626,9 @@ export class Column extends Base {
     let table = this.getTable()
     let config = this.config
     let width = config.width
+    // if (this.getField() == 'type_code') {
+    //   debugger //
+    // }
     if (isFilterTable == true) {
       let sW = 0
       let checkWidth = table.getCheckColumnWidth()
@@ -1054,36 +1057,9 @@ export class Column extends Base {
         this.disableHideCell = false //
       },
     }
-    // let createFn = () => {
-    //   //
-    //   return {
-    //     component: codeEditorCom,
-    //     props: {
-    //       ...codeConfig,
-    //       modelValue: value,
-    //       tableName,
-    //     },
-    //   }
-    // }
+
     this.disableHideCell = true
-    // sys.openDialog({
-    //   height: 600,
-    //   width: 1200,
-    //   createFn, //
-    //   confirmFn: (dialog: Dialog) => {
-    //     let com: CodeEditor = dialog.getRef('innerCom')
-    //     let bindValue = com.getBindValue() //
-    //     let updateFn = config?.updateFn
-    //     this.disableHideCell = false
-    //     if (typeof updateFn == 'function') {
-    //       // this.updateBindData({ value: bindValue }) ////
-    //       updateFn({ value: bindValue })
-    //     }
-    //   },
-    //   closeFn: () => {
-    //     this.disableHideCell = false //
-    //   },
-    // })
+
     sys.openCodeDialog(_config) //
   }
   getCodeConfig() {

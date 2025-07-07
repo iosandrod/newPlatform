@@ -56,6 +56,7 @@ export const itemCom = defineComponent({
         com = (
           <ContextmenuItem
             {...item.config}
+            disabled={item.getDisabled()}
             onClick={() => {
               item.onClick()
             }}
@@ -71,6 +72,7 @@ export const itemCom = defineComponent({
                 }
                 //@ts-ignore
                 let disabled = item.getDisabled()
+                // debugger //
                 let _class = []
                 if (disabled == true) {
                   _class.push('is-disabled')

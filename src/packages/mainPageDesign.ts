@@ -335,8 +335,8 @@ export class MainPageDesign extends PageDesign {
         if (_editType == 'edit') {
           let query: any = {}
           let keyColumn = this.getKeyColumn()
-          let curRow = this.getCurRow() //
-          let _id = curRow[keyColumn]
+          let curRow = _config.row || this.getCurRow() //
+          let _id = curRow[keyColumn] //
           query[keyColumn] = _id //
           page.getTableData({
             query: query,
@@ -374,8 +374,8 @@ export class MainPageDesign extends PageDesign {
     this.getTableData() //
     this.setCurrentView() //
   }
-  async editTableRows(): Promise<any> {
-    //
+  async editTableRows(editConfig?: any): Promise<any> {
+    let _config = editConfig || {}
     let pageEditType = this.config.pageEditType //
     if (pageEditType == 'page') {
       let keyColumn = this.getKeyColumn()
@@ -385,7 +385,7 @@ export class MainPageDesign extends PageDesign {
         this.getSystem().confirmMessage('请先设置主键字段', 'warning')
         return
       }
-      let curRow = this.getCurRow() //
+      let curRow = _config.row || this.getCurRow() //
       let _id = curRow[keyColumn] //
       // let _keyCode = curRow[keyCode] //
       this.getSystem().routeOpen(
@@ -403,7 +403,10 @@ export class MainPageDesign extends PageDesign {
       this.setCurrentEdit() //
     }
     if (pageEditType == 'dialog') {
-      this.openEditDialog('edit') //
+      this.openEditDialog({
+        editType: 'edit',
+        row: _config.row,
+      }) //
     }
   }
   async getRelateTreeData(tableName: any): Promise<void> {

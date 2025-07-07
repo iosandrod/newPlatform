@@ -138,7 +138,7 @@ export const getCheckbox = (column: Column) => {
     }
     const { height, width } = rect ?? table.getCellRect(col, row)
     let _height = height
-    let _length1 = t1.records.length
+    let _length1 = table.rowCount - 1 //
     if (_length1 == row) {
       _height = _height - 1 //
     }

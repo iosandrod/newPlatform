@@ -9361,3 +9361,214 @@ import lowcode from './lowcode'
       //     this.routeTo('/admin/realTable')
       //   },
       // },
+
+       getAllApp() {
+    let allApp = this.systemApp
+    if (allApp == null || !Array.isArray(allApp)) {
+      return []
+    }
+    return allApp
+  }
+
+  async getInstallApp() {
+    let http = this.getHttp()
+    let _data = await http.post('company', 'getInstallApp') //
+    return _data //
+  }
+
+   async getAllApps() {
+    if ((await this.getIsLogin()) == false) {
+      this.allApp = []
+      return //
+    }
+    let userInfo = this.getUserInfo()
+    let user = userInfo.user
+    let id = user.id //
+    let allCompany = await this.getHttp().find('company', {
+      userid: id,
+    })
+    this.allApp = allCompany //
+    return allCompany //
+  }
+   async getAllAppCompany(config) {
+    //
+    let http = this.getHttp()
+    let res = await http.post('company', 'getAllAppCompany', config) //
+    let _res = res //
+    return _res
+  }
+
+   // debugger //
+      // this.systemApp = _data
+
+       // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+
+      // {
+        //   field: 'userid',
+        //   type: 'select',
+        //   label: '公司',
+        //   required: true,
+        //   options: { options: [] },
+        // },
+        // {
+        //   field: 'appName',
+        //   type: 'select',
+        //   label: '应用',
+        //   required: true,
+        //   options: { options: [] },
+        // },
+
+
+          // {
+        //   label: '登录方式',
+        //   field: 'loginType',
+        //   type: 'select',
+        //   required: true,
+        //   options: {
+        //     options: [
+        //       { label: '邮箱登录', value: 'email' },
+        //       { label: '用户名登录', value: 'username' },
+        //     ],
+        //   },
+        // },
+
+
+
+         // {
+        //   field: 'userid',
+        //   type: 'select',
+        //   label: '公司',
+        //   required: true,
+        //   options: { options: [] },
+        // },
+        // {
+        //   field: 'appName',
+        //   type: 'select',
+        //   label: '应用',
+        //   required: true,
+        //   options: { options: [] },
+        // },
+
+         // const all: any[] = await system.getAllRegisterCompany()
+      // loginFConfig.items[3].options.options = all.map((item) => ({
+      //   label: item.companyCnName || item.companyName,
+      //   value: item.userid,
+      // }))
+      // loginFConfig.items[4].options.options = all.map((item) => ({
+      //   label: item.appCnName || item.appName,
+      //   value: item.appName,
+      // }))
+
+      reactive({
+      appName: 'platform',
+      // userid: 0,
+      loginType: 'email',
+      email: '1151685410@qq.com',
+      password: '1',
+      _unUseCaptcha: true,
+    })
+    
+
+    /* 
+    reactive({
+      labelWidth: 70,
+      data,
+      items: [
+        { field: 'email', type: 'string', label: '账号', required: true },
+        {
+          field: 'password', 
+          type: 'string',
+          label: '密码',
+          required: true,
+          options: { password: true },
+        },
+
+        { field: '_captcha', label: '验证码', type: 'string' },
+      ],
+      itemSpan: 24,
+    })
+    */
+
+
+      async function loadCaptcha() {
+      const res = await system.createCaptcha('authentication_create')
+      code.value = res.data
+      cdata.value = res.text
+    }
+    onMounted(loadCaptcha)
+
+
+     // com = (
+      //   <flowCom
+      //     {...comText()}
+      //     isERDiagram={true} //
+      //     getRemoteTables={true}
+      //   ></flowCom>
+      // ) //
+
+      {/* <div style={{ height: '500px', width: '100%' }} class="">
+            <erTable
+              isGantt={true}
+              // {...getOptions()} //
+              data={getGanttRecords()}
+              columns={getGanttColumns()}
+            ></erTable>
+          </div> */}
+
+
+           // sys.openDialog({
+    //   height: 600,
+    //   width: 1200,
+    //   createFn, //
+    //   confirmFn: (dialog: Dialog) => {
+    //     let com: CodeEditor = dialog.getRef('innerCom')
+    //     let bindValue = com.getBindValue() //
+    //     let updateFn = config?.updateFn
+    //     this.disableHideCell = false
+    //     if (typeof updateFn == 'function') {
+    //       // this.updateBindData({ value: bindValue }) ////
+    //       updateFn({ value: bindValue })
+    //     }
+    //   },
+    //   closeFn: () => {
+    //     this.disableHideCell = false //
+    //   },
+    // })
+
+     // let createFn = () => {
+    //   //
+    //   return {
+    //     component: codeEditorCom,
+    //     props: {
+    //       ...codeConfig,
+    //       modelValue: value,
+    //       tableName,
+    //     },
+    //   }
+    // }
+
+    // console.log(_items, 'items123132') //
+                        // let menu = (
+                        //   <ContextmenuCom
+                        //     ref={(el) => btn.registerRef('contextmenu', el)}
+                        //     isTeleport={false}
+                        //     items={_items} //
+                        //     alwaysShow={true}
+                        //     v-slots={{
+                        //       itemSlot: (item) => {
+                        //         const btn = item.button
+                        //         let _com = getBtnCom(btn)
+                        //         return _com
+                        //       },
+                        //       subItemSlot: (item) => {
+                        //         const btn = item.button
+                        //         // return <div class={{}}>{btn.getLabel()}</div>
+                        //         let _com = getBtnCom(btn)
+                        //         return _com //
+                        //       },
+                        //     }}
+                        //   ></ContextmenuCom>
+                        // )
+                         // let showData = this.getData() //
+    // let ins = this.getInstance()

@@ -895,7 +895,7 @@ export class System extends Base {
     }
   }
   async loginUser(data) {
-    // debugger//
+    // debugger //
     let currentApp = await this.getCurrentApp()
     if (currentApp != 'platform') {
       let userid = data.userid
@@ -907,8 +907,8 @@ export class System extends Base {
         this.confirmMessage('请选择账套', 'error')
         return //
       }
-      let http = this.getHttp()
-      http.changeClient({
+      let http = this.getHttp() //
+      await http.changeClient({
         userid,
         appName: currentApp,
       })
@@ -924,19 +924,15 @@ export class System extends Base {
     let _res = await h.loginUser(data) //
     return _res //
   }
-  getAllApp() {
-    //使用mock数据//
-    let allApp = this.systemApp
-    if (allApp == null || !Array.isArray(allApp)) {
-      return []
-    }
-    return allApp
-  }
-  async initAllApp() {
+
+  @cacheValue()
+  async getAllApp(): Promise<any> {
     try {
       let http = this.getHttp()
-      let _data = await http.post('company', 'getAllApp') //
-      this.systemApp = _data //
+      let _data = await http.mainPost('company', 'getAllApp') //
+
+      this.systemApp = _data
+      return _data //
     } catch (error) {
       this.confirmErrorMessage('获取应用失败') //
     }
@@ -948,6 +944,7 @@ export class System extends Base {
   }
   async openApp(name, openConfig = {}) {
     try {
+      //
       let canOpen = await this.getHttp().post('users', 'canOpenApp', {
         appName: name,
       }) //
@@ -958,7 +955,6 @@ export class System extends Base {
       let config = await this.getHttp().post('company', 'getAppConfig', {
         appName: name,
       })
-      // console.log(config) //
       let url = config?.url //
       if (url) {
         url = `${url}?${query}` //
@@ -966,6 +962,7 @@ export class System extends Base {
         window.open(url)
       } //
     } catch (error) {
+      console.log(error) //
       this.confirmErrorMessage(`打开${name}失败,${error?.message}`) //
     }
   }
@@ -975,25 +972,6 @@ export class System extends Base {
       return
     }
     this.confirmMessage(content, 'error')
-  }
-  async getAllApps() {
-    if ((await this.getIsLogin()) == false) {
-      this.allApp = []
-      return //
-    }
-    let userInfo = this.getUserInfo()
-    let user = userInfo.user
-    let id = user.id //
-    let allCompany = await this.getHttp().find('company', {
-      userid: id,
-    })
-    this.allApp = allCompany //
-    return allCompany //
-  }
-  async getInstallApp() {
-    let http = this.getHttp()
-    let _data = await http.post('company', 'getInstallApp') //
-    return _data //
   }
   async getEnterApp() {
     let http = this.getHttp()
@@ -1678,8 +1656,10 @@ export class System extends Base {
   }
   async getCurrentApp() {
     let envi = process.env.VITE_ENVIRONMENT || 'development'
-    let curUrl = window.location.host.split(':')[0]?.split('.')[0] //
-    let apparr = ['erp', 'platform']
+    let curUrl = window.location.host.split(':')[0]?.split('.')[0]
+    // let apparr = ['erp', 'platform']
+    let apparr = await this.getAllApp()
+    apparr = apparr.map((item) => item.appName) //
     let _appName = null
     if (apparr.includes(curUrl)) {
       _appName = curUrl
@@ -1867,13 +1847,7 @@ export class System extends Base {
     let userinfo = this.getUserInfo()
     return userinfo?.user?.username //
   }
-  async getAllAppCompany(config) {
-    //
-    let http = this.getHttp()
-    let res = await http.post('company', 'getAllAppCompany', config) //
-    let _res = res //
-    return _res
-  }
+
   getGlobalDropDown() {
     let system = this
     let items = [
@@ -1906,7 +1880,7 @@ export class System extends Base {
         label: '保存页面设计',
         fn: async () => {
           let currentPageDesign = system.getCurrentPageDesign()
-          await currentPageDesign.saveTableDesign()
+          await currentPageDesign.saveTableDesign() //
         },
       },
       {
@@ -1999,10 +1973,29 @@ export class System extends Base {
     this.pageLoading = bool //
   }
   async getAllAccountCompany(data) {
+    let getLabel = data.getLabel
+    let appName = data.appName || (await this.getCurrentApp())
     let http = this.getHttp()
-    let res = await http.post('company', 'getAllAccountCompany', data)
-    // console.log(res, 'testRes123123')//
+    let res = await http.post('company', 'getAllAccountCompany', {
+      appName: appName,
+    })
     let _res = res
+    if (getLabel == true) {
+      let allCompany = _res
+      let appOptions = allCompany.map((item: any) => {
+        let v = item.userid
+        let label = item.cnName //
+        if (!label) {
+          //
+          label = `账套${v}`
+        }
+        return {
+          label: label, //
+          value: item.userid, //
+        }
+      })
+      _res = appOptions
+    }
     return _res
   }
   async changePassword() {
@@ -2309,6 +2302,24 @@ export class System extends Base {
         } //
       }
     }
+  } //
+  async getSelectButtons(type = 'main') {
+    //
+    let http = this.getHttp()
+    let key = `${type}Buttons`
+    let res = await http.find('paramvalue', {
+      param_type: key,
+    })
+    let _res = res.map((item) => {
+      let param_code = item.param_code //编码
+      let param_value = item.param_value //具体的执行函数
+      let param_name = item.param_name //审核
+      item.label = param_name
+      item.fn = param_value
+      item.id = param_code
+      return item //
+    }) //
+    return _res
   }
 } //
 export const system = reactive(new System())

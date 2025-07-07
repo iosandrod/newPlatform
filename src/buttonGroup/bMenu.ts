@@ -81,7 +81,12 @@ export class BMenuItem extends Base {
   getDisabled() {
     let config = this.config //
     let disabled = config.disabled
-    if (typeof disabled === 'function') disabled = disabled({ menu: this })
+    if (typeof disabled === 'function') {
+      disabled = disabled({ menu: this })
+      if (disabled === true) {
+        return true
+      } //
+    }
     return disabled //
   }
   getVisible() {

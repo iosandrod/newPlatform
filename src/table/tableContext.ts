@@ -111,7 +111,7 @@ export const initContextMenu = (table: Table) => {
       label: '编辑',
       key: 'edit',
       disabled: () => {
-        return true
+        return false
       },
       visible: () => {
         let isHeaderContext = table.isHeaderContext //
@@ -120,6 +120,16 @@ export const initContextMenu = (table: Table) => {
         }
         return true //
       },
+      fn: async () => {
+        let config = table.config
+        let onCellCommand = config.onCellCommand
+        if (typeof onCellCommand == 'function') {
+          onCellCommand({
+            command: 'edit',
+            row: table.curContextRow, //
+          }) //
+        }
+      },
     },
     {
       label: '全局查询',
@@ -127,7 +137,6 @@ export const initContextMenu = (table: Table) => {
       disabled: false, //
       visible: true,
       fn: () => {
-        //
         table.showGlobalSearch(true) //
       },
     },

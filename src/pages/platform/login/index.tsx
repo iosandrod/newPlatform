@@ -17,18 +17,7 @@ export default defineComponent({
       labelWidth: 70,
       data,
       items: [
-        // {
-        //   label: '登录方式',
-        //   field: 'loginType',
-        //   type: 'select',
-        //   required: true,
-        //   options: {
-        //     options: [
-        //       { label: '邮箱登录', value: 'email' },
-        //       { label: '用户名登录', value: 'username' },
-        //     ],
-        //   },
-        // },
+      
         { field: 'email', type: 'string', label: '账号', required: true },
         {
           field: 'password',
@@ -37,34 +26,13 @@ export default defineComponent({
           required: true,
           options: { password: true },
         },
-        // {
-        //   field: 'userid',
-        //   type: 'select',
-        //   label: '公司',
-        //   required: true,
-        //   options: { options: [] },
-        // },
-        // {
-        //   field: 'appName',
-        //   type: 'select',
-        //   label: '应用',
-        //   required: true,
-        //   options: { options: [] },
-        // },
+       
         { field: '_captcha', label: '验证码', type: 'string' },
       ],
       itemSpan: 24,
     })
     async function getCompanyFn() {
-      // const all: any[] = await system.getAllRegisterCompany()
-      // loginFConfig.items[3].options.options = all.map((item) => ({
-      //   label: item.companyCnName || item.companyName,
-      //   value: item.userid,
-      // }))
-      // loginFConfig.items[4].options.options = all.map((item) => ({
-      //   label: item.appCnName || item.appName,
-      //   value: item.appName,
-      // }))
+     
     }
 
     onMounted(getCompanyFn)
