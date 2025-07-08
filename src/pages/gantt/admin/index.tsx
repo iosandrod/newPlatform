@@ -3,7 +3,7 @@ import lowcode from '@/pages/platform/lowcode'
 import designVue from '@/pages/platform/design'
 import DesignIndex from '@/pages/platform/designIndex'
 export default defineComponent({
-  name: 'PlatformIndex',
+  name: 'gtPlatformIndex',
   components: {
     DesignIndex, //
   },

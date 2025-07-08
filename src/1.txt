@@ -9598,3 +9598,161 @@ import lowcode from './lowcode'
           // await system.addTableField(currentTableName, {
           //   tableName: currentTableName,
           // }) //
+
+
+          {
+        label: '设计当前列',
+        fn: async () => {
+          debugger //
+          let currentDesignField = this.currentDField
+          let system = this.getSystem()
+          let currentContextItem = this.currentContextItem
+          let config = currentContextItem.config
+          let id = config.id
+          if (id == null) {
+            return
+          } //
+          let fCom: Table = currentContextItem.getRef('fieldCom')
+          // console.log(fCom, 'fCom') ////
+          let currentContextCol = fCom.curContextCol
+          let f = currentContextCol.getField()
+          let tName = currentContextCol.getTableName()
+          if (tName == this.getTableName()) {
+            await system.designTableColumns(tName, f) //批量修改//
+          } else {
+            let _config = _.cloneDeep(config) //
+            await system.designTargetColumn(_config) //
+          }
+        },
+        visible: computed(() => {
+          let currentItem = this.currentContextItem
+          let _type = currentItem?.config?.type
+          if (_type == 'entity') {
+            return true
+          }
+          return false //
+        }),
+        disabled: false,
+      },
+
+       registerKeyboardEvent(config) {
+    const {
+      id,
+      key,
+      ctrlKey = false,
+      shiftKey = false,
+      altKey = false,
+      callback,
+    } = config
+    if (id == null) {
+      return //
+    }
+    if (typeof key !== 'string' || typeof callback !== 'function') {
+      throw new Error(
+        'registerKeyboardEvent: 参数 key 必须是字符串，callback 必须是函数',
+      )
+    }
+
+    // 事件处理函数
+    const handler = (e) => {
+      if (
+        e.key === key &&
+        e.ctrlKey === ctrlKey &&
+        e.shiftKey === shiftKey &&
+        e.altKey === altKey
+      ) {
+        callback(e)
+      }
+    }
+
+    // 添加到全局
+    window.addEventListener('keydown', handler)
+
+    // 记录到内部列表，以便后续清理
+    this._keyboardListeners.push({ id, config, handler })
+
+    // 返回一个取消监听的函数
+    return () => {
+      window.removeEventListener('keydown', handler)
+      // 从内部列表中移除
+      this._keyboardListeners = this._keyboardListeners.filter(
+        (item) => item.handler !== handler,
+      )
+    }
+  }
+  unregisterKeyboardEvent(id) {
+    if (id == null) {
+      return
+    }
+
+    let res = this._keyboardListeners.filter((item) => item.id == id)
+    res.forEach((item) => {
+      window.removeEventListener('keydown', item.handler)
+    })
+    this._keyboardListeners = this._keyboardListeners.filter(
+      (item) => item.id != id,
+    ) //
+  }
+  /**
+   * 取消所有通过 registerKeyboardEvent 注册的监听
+   */
+  unregisterAllKeyboardEvents() {
+    this._keyboardListeners.forEach((item) => {
+      window.removeEventListener('keydown', item.handler)
+    })
+    this._keyboardListeners = []
+  }
+  async syncRealColumns(config) {
+    let tableName = config.tableName
+    let realTableName = config.realTableName || tableName
+    let columns = config.columns
+    if (tableName == null || !Array.isArray(columns)) {
+      return
+    } //
+    let tCols = await this.getHttp().find('columns', { tableName })
+    let addCols = columns
+      .filter((c) => {
+        return (
+          tCols.findIndex((tc) => {
+            return tc.field == c.field
+          }) == -1
+        )
+      })
+      .map((row) => {
+        row.id = null
+        delete row['createdAt']
+        delete row['updatedAt']
+        row.tableName = realTableName //
+        return row
+      }) //
+    let _res = await this.getHttp().create('columns', addCols)
+    this.getSystem().confirmMessage('同步成功', 'success') //
+    // this.getSystem().refreshPageDesign() //
+  }
+   // let config = pageDesign.config
+    // let _config = _.cloneDeep(config)
+    // let _p: any = pageDesign
+    // let _construct = _p.__proto__.constructor
+    // // console.log(_construct) //
+    // let newD = new _construct(_config)
+    // newD.setLayoutData(_config) //
+    // newD.setCurrentDesign(true) //
+    // let dialogConfig = {
+    //   title: '页面整体设计',
+    //   width: 1,
+    //   height: 1,
+    //   createFn: () => {
+    //     return {
+    //       component: pageCom,
+    //       props: {
+    //         formIns: newD,
+    //       },
+    //     }
+    //   },
+    //   confirmFn: () => {},
+    // }
+    // await this.openDialog(dialogConfig) //
+
+    let id = this.id
+    let sys = this.getSystem()
+    sys.unregisterKeyboardEvent(id)

@@ -78,7 +78,7 @@ function isPromise(val: any): val is Promise<any> {
     typeof val.catch === 'function'
   )
 }
-export function cacheValue(config?: Function) {
+export function    cacheValue(config?: Function) {
   let cacheReturnValue = function cacheReturnValue(
     target?: any,
     propertyKey?: string,

@@ -872,39 +872,6 @@ export class PageDesign extends Form {
       {
         label: '设计当前列',
         fn: async () => {
-          let currentDesignField = this.currentDField
-          let system = this.getSystem()
-          let currentContextItem = this.currentContextItem
-          let config = currentContextItem.config
-          let id = config.id
-          if (id == null) {
-            return
-          } //
-          let fCom: Table = currentContextItem.getRef('fieldCom')
-          // console.log(fCom, 'fCom') ////
-          let currentContextCol = fCom.curContextCol
-          let f = currentContextCol.getField()
-          let tName = currentContextCol.getTableName()
-          if (tName == this.getTableName()) {
-            await system.designTableColumns(tName, f) //批量修改//
-          } else {
-            let _config = _.cloneDeep(config) //
-            await system.designTargetColumn(_config) //
-          }
-        },
-        visible: computed(() => {
-          let currentItem = this.currentContextItem
-          let _type = currentItem?.config?.type
-          if (_type == 'entity') {
-            return true
-          }
-          return false //
-        }),
-        disabled: false,
-      },
-      {
-        label: '设计当前列',
-        fn: async () => {
           let cf = this.currentDField
           if (cf == null) {
             return
@@ -1906,5 +1873,14 @@ export class PageDesign extends Form {
         })
       }
     } //
+  }
+  getTableType() {
+    let tableName = this.getTableName()
+    let _nameArr = tableName.split('---')
+    let type = _nameArr[1]
+    if (['edit', 'search', 'import'].includes(type)) {
+      return type
+    } //
+    return 'main' //
   }
 }

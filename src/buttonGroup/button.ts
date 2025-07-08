@@ -2,6 +2,7 @@ import { Base } from '@/base/base'
 import { Dropdown } from '@/menu/dropdown'
 import { Table } from '@/table/table'
 import { runObj, stateObj } from '@ER/diabledFn'
+import { MainPageDesign } from '@ER/mainPageDesign'
 import { PageDesign } from '@ER/pageDesign'
 import { stringToFunction } from '@ER/utils'
 
@@ -140,23 +141,56 @@ export class Button extends Base {
     }
     return this
   }
-  getDefaultFnRun() {
+  async getDefaultFnRun(_config) {
+    let sys = this.getSystem()
+    let page: MainPageDesign = _config?.page
     let _runObj = runObj
+    let defaultFn = _config?.defaultFn
     let obj = _runObj
-    return obj
+    let _fn = null
+    if (page == null) {
+      _fn = obj[defaultFn]
+    } else {
+      let tableName = page.tableName
+      let type = page.getTableType()
+      type = type || 'main' //
+      let selectBtn = await sys.getSelectButtons(type)
+      let id = this.config.id
+      let _btn = null
+      if (
+        selectBtn
+          .map((item) => item.id)
+          .filter((id) => id != null)
+          .includes(id)
+      ) {
+        _btn = selectBtn.find((item) => item.id == id)
+      }
+      if (_btn != null) {
+        let param_value = _btn.param_value
+        if (Boolean(param_value) && typeof param_value == 'string') {
+          let _fn1 = stringToFunction(param_value)
+          _fn = _fn1
+        }
+      }
+    } //
+    if (typeof _fn == 'function') {
+      return _fn
+    }
+    let _fn1 = obj[defaultFn]
+    return _fn1
+    // return _fn
   }
   async runFn(_config) {
     try {
       let page = _config.page
       this.showDropdown() //
       let config = this.config
-      let fn = config.fn
+      let fn = config.fn //
       if (typeof fn == 'function') {
         fn = fn.bind(page)
         fn(_config)
       }
       if (typeof fn == 'string' && Boolean(fn)) {
-        //
         let _fn = stringToFunction(fn) //
         if (typeof _fn == 'function') {
           _fn = _fn.bind(page) //
@@ -164,14 +198,14 @@ export class Button extends Base {
         }
       } else {
         let defaultFn = config.defaultFn
-        if (typeof defaultFn == 'string') {
-          let drun = await this.getDefaultFnRun()
-          let _fn = drun[defaultFn]
-          if (typeof _fn == 'function') {
-            let _fn1 = _fn.bind(page)
-            await _fn1(_config) ////
-          }
+        let drun = await this.getDefaultFnRun({ ..._config, defaultFn })
+        let _fn = drun
+        if (typeof _fn == 'function') {
+          let _fn1 = _fn.bind(page)
+          await _fn1(_config) ////
         }
+        // if (typeof defaultFn == 'string') {
+        // }
       }
       if (this.parent != null) {
         this.hiddenDropdown() //
@@ -181,7 +215,6 @@ export class Button extends Base {
       let page: PageDesign = _config.page
       if (page) {
         page.setCurrentLoading(false) //
-        // page.getSystem().confirmMessageBox(error?.message || error, 'error') //
       }
     }
   }

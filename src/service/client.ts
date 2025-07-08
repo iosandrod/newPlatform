@@ -550,6 +550,10 @@ export class myHttp {
     let _d = await this.runCustomMethod('entity', 'hasEntity', tableName)
     return _d //
   }
+  registerTableEvent(tableName, event, fn) {
+    let key = `${tableName} ${event}`
+    this.registerEvent(key, fn)
+  } //
   registerEvent(event, fn) {
     let connection: Socket = this.client.get('connection')
     if (typeof fn !== 'function') {

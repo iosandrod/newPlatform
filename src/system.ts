@@ -1590,7 +1590,6 @@ export class System extends Base {
   async getAllRegisterCompany() {
     let http = this.getHttp()
     let res = await http.runCustomMethod('company', 'getAllRegisterCompany', {}) //
-    // console.log(res, 'testRes') ////
     let _res = res
       .map((re) => {
         let user = re.user
@@ -1951,29 +1950,7 @@ export class System extends Base {
       return
     }
     pageDesign.setCurrentDesign(true) //
-    // let config = pageDesign.config
-    // let _config = _.cloneDeep(config)
-    // let _p: any = pageDesign
-    // let _construct = _p.__proto__.constructor
-    // // console.log(_construct) //
-    // let newD = new _construct(_config)
-    // newD.setLayoutData(_config) //
-    // newD.setCurrentDesign(true) //
-    // let dialogConfig = {
-    //   title: '页面整体设计',
-    //   width: 1,
-    //   height: 1,
-    //   createFn: () => {
-    //     return {
-    //       component: pageCom,
-    //       props: {
-    //         formIns: newD,
-    //       },
-    //     }
-    //   },
-    //   confirmFn: () => {},
-    // }
-    // await this.openDialog(dialogConfig) //
+   
   }
   setSystemLoading(status) {
     let bool = Boolean(status)
@@ -2064,100 +2041,7 @@ export class System extends Base {
    * @param {Function} config.callback— 键匹配时触发的回调，接收原生事件作为参数
    * @returns {Function} — 调用即可取消本次监听
    */
-  registerKeyboardEvent(config) {
-    const {
-      id,
-      key,
-      ctrlKey = false,
-      shiftKey = false,
-      altKey = false,
-      callback,
-    } = config
-    if (id == null) {
-      return //
-    }
-    if (typeof key !== 'string' || typeof callback !== 'function') {
-      throw new Error(
-        'registerKeyboardEvent: 参数 key 必须是字符串，callback 必须是函数',
-      )
-    }
 
-    // 事件处理函数
-    const handler = (e) => {
-      if (
-        e.key === key &&
-        e.ctrlKey === ctrlKey &&
-        e.shiftKey === shiftKey &&
-        e.altKey === altKey
-      ) {
-        callback(e)
-      }
-    }
-
-    // 添加到全局
-    window.addEventListener('keydown', handler)
-
-    // 记录到内部列表，以便后续清理
-    this._keyboardListeners.push({ id, config, handler })
-
-    // 返回一个取消监听的函数
-    return () => {
-      window.removeEventListener('keydown', handler)
-      // 从内部列表中移除
-      this._keyboardListeners = this._keyboardListeners.filter(
-        (item) => item.handler !== handler,
-      )
-    }
-  }
-  unregisterKeyboardEvent(id) {
-    if (id == null) {
-      return
-    }
-
-    let res = this._keyboardListeners.filter((item) => item.id == id)
-    res.forEach((item) => {
-      window.removeEventListener('keydown', item.handler)
-    })
-    this._keyboardListeners = this._keyboardListeners.filter(
-      (item) => item.id != id,
-    ) //
-  }
-  /**
-   * 取消所有通过 registerKeyboardEvent 注册的监听
-   */
-  unregisterAllKeyboardEvents() {
-    this._keyboardListeners.forEach((item) => {
-      window.removeEventListener('keydown', item.handler)
-    })
-    this._keyboardListeners = []
-  }
-  async syncRealColumns(config) {
-    let tableName = config.tableName
-    let realTableName = config.realTableName || tableName
-    let columns = config.columns
-    if (tableName == null || !Array.isArray(columns)) {
-      return
-    } //
-    let tCols = await this.getHttp().find('columns', { tableName })
-    let addCols = columns
-      .filter((c) => {
-        return (
-          tCols.findIndex((tc) => {
-            return tc.field == c.field
-          }) == -1
-        )
-      })
-      .map((row) => {
-        row.id = null
-        delete row['createdAt']
-        delete row['updatedAt']
-        row.tableName = realTableName //
-        return row
-      }) //
-    let _res = await this.getHttp().create('columns', addCols)
-    this.getSystem().confirmMessage('同步成功', 'success') //
-    // this.getSystem().refreshPageDesign() //
-  }
   async syncOldColumns(config) {
     let tableName = config.tableName
     let fConfig = {
@@ -2214,6 +2098,10 @@ export class System extends Base {
       }
     }
   } //
+  @cacheValue((args) => {
+    // console.log('getSelectButtons', args)
+    return `${args}Buttons` //
+  })
   async getSelectButtons(type = 'main') {
     //
     let http = this.getHttp()
@@ -2226,11 +2114,26 @@ export class System extends Base {
       let param_value = item.param_value //具体的执行函数
       let param_name = item.param_name //审核
       item.label = param_name
-      item.fn = param_value
+      // item.fn = param_value
       item.id = param_code
       return item //
     }) //
-    return _res
+    return _res //
   }
-} //
+  async clearSelectButtons() {
+    this.clearCacheValue('getSelectButtons') //
+  }
+  async registerBaskEndEvent(tableName, event, fn) {
+    if (
+      tableName == null ||
+      event == null ||
+      fn == null ||
+      typeof fn !== 'function'
+    ) {
+      return
+    } //
+    let http = this.getHttp()
+    await http.registerTableEvent(tableName, event, fn)
+  }
+} 
 export const system = reactive(new System())

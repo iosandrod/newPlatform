@@ -7,4 +7,9 @@ export const globalStaticCom = [
     component: () =>
       defineAsyncComponent(() => import('./pages/platform/globalTableFlow')),
   },
+  {
+    title: '个人信息',
+    name: 'userinfo',
+    component: () =>      defineAsyncComponent(() => import('./pages/platform/globalUserinfo')),
+  },
 ]

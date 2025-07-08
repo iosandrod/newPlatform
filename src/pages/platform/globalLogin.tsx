@@ -39,8 +39,47 @@ export default defineComponent({
       code.value = res.data
       cdata.value = res.text
     }
-    let systemIns: System = inject('systemIns')
+    //
+    let _opt = ref([])
+    if (loginFConfig == null) {
+      loginFConfig = reactive({
+        labelWidth: 70,
+        items: [
+          {
+            field: 'userid',
+            type: 'select',
+            label: '选择账套',
+            required: true,
+            options: {
+              options: _opt,
+            },
+          },
+          { field: 'email', type: 'string', label: '账号', required: true },
+          {
+            field: 'password',
+            type: 'string',
+            label: '密码',
+            required: true,
+            options: { password: true },
+          },
 
+          { field: '_captcha', label: '验证码', type: 'string' },
+        ],
+        itemSpan: 24,
+      })
+    }
+    async function getCompanyFn() {
+      let allCompany = await system.getAllAccountCompany({
+        getLabel: true,
+      })
+      _opt.value = allCompany //
+    }
+    onMounted(async () => {
+      try {
+        //
+        await getCompanyFn()
+      } catch (error) {}
+    })
     onMounted(loadCaptcha) //
     const fins = ref<any>(null)
     async function loginFn() {
