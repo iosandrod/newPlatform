@@ -7,17 +7,14 @@ export default defineComponent({
     //
     const data = reactive({
       appName: 'platform',
-      // userid: 0,
-      loginType: 'email',
-      email: '1151685410@qq.com',
-      password: '1',
+      email: 'admin',
+      password: 'admin', //
       _unUseCaptcha: true,
     })
     const loginFConfig: any = reactive({
       labelWidth: 70,
       data,
       items: [
-      
         { field: 'email', type: 'string', label: '账号', required: true },
         {
           field: 'password',
@@ -26,14 +23,12 @@ export default defineComponent({
           required: true,
           options: { password: true },
         },
-       
+
         { field: '_captcha', label: '验证码', type: 'string' },
       ],
       itemSpan: 24,
     })
-    async function getCompanyFn() {
-     
-    }
+    async function getCompanyFn() {}
 
     onMounted(getCompanyFn)
 

@@ -1931,7 +1931,7 @@ export class System extends Base {
       {
         label: '管理应用',
         fn: async () => {
-          _this.routeTo('/admin/apps') //
+          _this.routeTo('/admin') //
         }, //
       },
       {
