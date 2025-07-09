@@ -7,6 +7,7 @@ import { defaultButtons, defaultRelateButtons } from './defaultButtons'
 import { getBaseInfoEditConfig } from '@/table/colFConfig'
 export const getButtonGroupTableConfig = (_this?: PageDesign) => {
   let tableName = _this.getRealTableName()
+  let type = _this.getTableType()
   let obj = {
     showTable: false,
     title: '按钮组设计', //
@@ -77,8 +78,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
       {
         label: '选择系统按钮',
         fn: async (config) => {
-          let btnData = await _this.getSystem().getSelectButtons('main')
-
+          let btnData = await _this.getSystem().getSelectButtons(type) //
           let tableConfig = {
             showCheckboxColumn: true, //
             columns: [
@@ -111,7 +111,9 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
           checkData = checkData.filter((d) => {
             return !oldData.includes(d.id)
           }) //
-          // debugger //
+          checkData.forEach((d) => {
+            d['checkboxField'] = false //
+          })
           parent.addRows({
             rows: checkData,
           }) //

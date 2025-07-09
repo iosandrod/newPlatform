@@ -2,6 +2,7 @@
 // const spacing = Object.fromEntries(
 //   Array.from({ length: 201 }, (_, i) => [i, `${i}px`])
 // )
+import { addIconSelectors } from '@iconify/tailwind'
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
@@ -11,5 +12,5 @@ module.exports = {
     // minHeight: spacing,
     // maxHeight: spacing,
   },
-  plugins: [],
+  plugins: [], //
 }

@@ -185,19 +185,7 @@ export default defineComponent({
                   <span class="flex-1 border-t"></span>
                 </div>
 
-                {/* <div class="flex justify-center space-x-6">
-                  <button type="button">
-                    <img
-                      src="/images/wcLogin.png"
-                      alt="WeChat"
-                      class="h-20 w-20"
-                    />
-                  </button>
-                  <button type="button">
-                    <img src="/images/qqLogin.png" alt="QQ" class="h-20 w-20" />
-                  </button>
-                 
-                </div> */}
+                
               </div>
             </div>
           </div>

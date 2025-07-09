@@ -1687,6 +1687,9 @@ export class System extends Base {
       if (port == '3005') {
         _appName = 'gantt' //
       }
+      if (port == '3006') {
+        _appName = 'print' //
+      }
     }
     _appName = _appName || 'platform' //
     return _appName //
@@ -1926,6 +1929,12 @@ export class System extends Base {
         },
       },
       {
+        label: '管理应用',
+        fn: async () => {
+          _this.routeTo('/admin/apps') //
+        }, //
+      },
+      {
         label: '退出登录',
         fn: async () => {
           _this.logout()
@@ -2118,7 +2127,6 @@ export class System extends Base {
     }
   } //
   @cacheValue((args) => {
-    // console.log('getSelectButtons', args)
     return `${args}Buttons` //
   })
   async getSelectButtons(type = 'main') {
@@ -2135,6 +2143,7 @@ export class System extends Base {
       item.label = param_name
       // item.fn = param_value
       item.id = param_code
+      item.checkboxField = false //
       return item //
     }) //
     return _res //

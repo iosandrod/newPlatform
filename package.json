@@ -4,13 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "cross-env VITE_ENVIRONMENT=development vite",
-    "dev:erp": "cross-env VITE_ENVIRONMENT=environment VITE_PORT=3004 vite",
-    "dev:gantt": "cross-env VITE_ENVIRONMENT=environment VITE_PORT=3005 vite",
+    "dev": "cross-env SASS_WARN_LEGACY=false VITE_ENVIRONMENT=development vite",
+    "dev:erp": "cross-env SASS_WARN_LEGACY=false VITE_ENVIRONMENT=environment VITE_PORT=3004 vite",
+    "dev:gantt": "cross-env SASS_WARN_LEGACY=false VITE_ENVIRONMENT=environment VITE_PORT=3005 vite",
+    "dev:print": "cross-env SASS_WARN_LEGACY=false VITE_ENVIRONMENT=environment VITE_PORT=3006 vite",
     "dev:pro": "cross-env VITE_ENVIRONMENT=production vite",
     "build": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build",
     "build:app": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build --mode app",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "upload": "scp -i C:/Users/Administrator/.ssh/id_rsa_platform -r ./dist/* root@47.92.84.152:/www/wwwroot/www.dxf.life"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
@@ -22,6 +24,7 @@
     "@iconify-json/carbon": "^1.1.17",
     "@iconify-json/mdi": "^1.1.53",
     "@iconify-json/ri": "^1.1.10",
+    "@iconify/tailwind": "^1.2.0",
     "@logicflow/core": "^2.0.16",
     "@logicflow/extension": "^2.0.21",
     "@types/lodash": "^4.17.12",
