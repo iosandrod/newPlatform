@@ -1883,4 +1883,6 @@ export class PageDesign extends Form {
     } //
     return 'main' //
   }
+  async auditCurRow() {}
+  async unAuditCurRow() {}
 }

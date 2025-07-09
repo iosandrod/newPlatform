@@ -261,6 +261,7 @@ export class editPageDesign extends PageDesign {
     } //
   })
   async saveTableData(config = this.getSaveData()) {
+    
     if (this.tableState == 'scan') {
       return //
     }

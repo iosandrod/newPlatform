@@ -179,6 +179,7 @@ export class System extends Base {
       }
       this.openDialog({
         ...config,
+        title: config.title || '代码编辑器', //
         height: 600,
         width: 1200,
         createFn,
@@ -613,7 +614,13 @@ export class System extends Base {
   } //
   async confirmTable(tableConfig: any): Promise<any[]> {
     return new Promise(async (resolve, reject) => {
-      let _table = new Table(tableConfig)
+      tableConfig.showCheckAll = true //
+      // if (tableConfig.showCheckAll == null) {
+      // }
+      if (tableConfig.showCheckboxColumn == null) {
+        tableConfig.showCheckboxColumn = true //
+      }
+      let _table = new Table(tableConfig) //
       let component = tableCom
       let createFn = () => {
         return {
@@ -628,6 +635,7 @@ export class System extends Base {
       let _config = {
         title: tableConfig?.title, //
         createFn,
+        showCheckAll: true, //
         width: _width || 600,
         height: _height || 400, //
         confirmFn: async (dialog: Dialog) => {
@@ -1893,6 +1901,18 @@ export class System extends Base {
         label: '查看操作手册', //
         fn: async () => {},
       },
+      {
+        label: '备份当前数据库',
+        fn: async () => {
+          system.backupDatabase()
+        },
+      },
+      {
+        label: '恢复数据库',
+        fn: async () => {
+          await system.restoreDatabase() //
+        },
+      },
     ]
     return items
   }
@@ -1950,7 +1970,6 @@ export class System extends Base {
       return
     }
     pageDesign.setCurrentDesign(true) //
-   
   }
   setSystemLoading(status) {
     let bool = Boolean(status)
@@ -2135,5 +2154,50 @@ export class System extends Base {
     let http = this.getHttp()
     await http.registerTableEvent(tableName, event, fn)
   }
-} 
+  //备份数据库
+  async backupDatabase() {
+    //
+    try {
+      let http = this.getHttp()
+      let res = await http.post('users', 'cacheDb')
+      this.getSystem().confirmMessage('数据库备份成功', 'success')
+    } catch (error) {
+      this.getSystem().confirmMessage('数据库备份失败', 'error') //
+    }
+  }
+  //恢复数据库
+  async restoreDatabase() {
+    //
+    try {
+      let http = this.getHttp()
+      let allDb = await http.post('users', 'getCacheDb')
+      // console.log(allDb) //
+      let tableConfig = {
+        title: '选择一个进行还原',
+        columns: [
+          {
+            field: 'date',
+            title: '备份日期',
+            width: 200,
+          },
+        ],
+        data: allDb,
+      } //
+      let d1 = await this.confirmTable(tableConfig)
+      let selectRow = d1.filter((d) => {
+        let check = d.checkboxField
+        return check == true
+      }) //
+      if (selectRow.length == 0 || selectRow.length > 1) {
+        this.getSystem().confirmMessage('请选择一个进行还原', 'warning')
+        return
+      }
+      let r0 = selectRow[0]
+      let res = await http.post('users', 'restoreDb', r0) //
+      this.getSystem().confirmMessage('数据库还原成功', 'success')
+    } catch (error) {
+      this.getSystem().confirmMessage('数据库还原失败', 'error') //
+    }
+  }
+}
 export const system = reactive(new System())

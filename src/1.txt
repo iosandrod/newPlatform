@@ -9756,3 +9756,24 @@ import lowcode from './lowcode'
     let id = this.id
     let sys = this.getSystem()
     sys.unregisterKeyboardEvent(id)
+
+    // let createFn = () => {
+    //   return {
+    //     component: codeEditorCom,
+    //     props: {
+    //       ...codeConfig,
+    //       modelValue: value,
+    //       tableName: tableName,
+    //     },
+    //   }
+    // }
+    // sys.openDialog({
+    //   height: 600,
+    //   width: 1200,
+    //   createFn, //
+    //   confirmFn: (dialog: Dialog) => {
+    //     let com: CodeEditor = dialog.getRef('innerCom')
+    //     let bindValue = com.getBindValue() //
+    //     this.updateBindData({ value: bindValue }) ////
+    //   },
+    // })

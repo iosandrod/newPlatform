@@ -370,8 +370,15 @@ export default {
           props.data.context.parent.columns.length < ER.props.inlineMax
         : props.hasCopy,
     )
+    const maskDbClick = (e) => {
+      if (props?.data?.type == 'dform') {
+        formIns.designForm(props) //
+      }
+    }
     return () => {
-      let maskNode = <div class={[ns.e('mask')]}></div>
+      let maskNode = (
+        <div ondblclick={(e) => maskDbClick(e)} class={[ns.e('mask')]}></div>
+      )
       let _attrs = useAttrs()
 
       let _slots = useSlots()

@@ -88,6 +88,7 @@ export const runObj = {
     await page.deleteTableRows() //
   },
   addRelateTableRow: async (config) => {
+    // debugger //
     let page: PageDesign = config.page //
     let items = page.items
     let com = items.filter((item) => {
@@ -129,7 +130,7 @@ export const runObj = {
   },
   deleteRelateTableRow: async (config) => {
     //
-    let page:PageDesign = config.page //
+    let page: PageDesign = config.page //
     let items = page.items
     let com = items.filter((item) => {
       let fieldCom = item.getRef('fieldCom')

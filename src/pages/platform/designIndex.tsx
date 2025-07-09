@@ -1,4 +1,4 @@
-import { defineComponent, inject, KeepAlive, onMounted } from 'vue'
+import { defineComponent, inject, KeepAlive, onMounted, computed } from 'vue'
 import lowcode from '@/pages/platform/lowcode'
 import designVue from '@/pages/platform/design'
 import { System } from '@/system'
@@ -9,15 +9,17 @@ export default defineComponent({
     //
     lowcode,
     unLogin,
-    designVue, //
+    designVue,//
     KeepAlive,
   },
   setup() {
     let sys: System = inject('systemIns')
-    let isLogin = sys.getIsLogin()
+    let isLogin = computed(() => {
+      return sys.getIsLogin()
+    })
     onMounted(() => {})
     return () => {
-      if (isLogin == false) {
+      if (isLogin.value == false) {
         return <unLogin></unLogin>
       }
       let com = (

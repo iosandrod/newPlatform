@@ -1028,26 +1028,7 @@ export class FormItem extends Base {
       },
     }
     sys.openCodeDialog(config) //
-    // let createFn = () => {
-    //   return {
-    //     component: codeEditorCom,
-    //     props: {
-    //       ...codeConfig,
-    //       modelValue: value,
-    //       tableName: tableName,
-    //     },
-    //   }
-    // }
-    // sys.openDialog({
-    //   height: 600,
-    //   width: 1200,
-    //   createFn, //
-    //   confirmFn: (dialog: Dialog) => {
-    //     let com: CodeEditor = dialog.getRef('innerCom')
-    //     let bindValue = com.getBindValue() //
-    //     this.updateBindData({ value: bindValue }) ////
-    //   },
-    // })
+    
   }
   openSFormDialog() {
     let options = { ...this.getOptions() } //

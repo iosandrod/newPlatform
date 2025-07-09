@@ -148,7 +148,8 @@ export class Button extends Base {
     let defaultFn = _config?.defaultFn
     let obj = _runObj
     let _fn = null
-    if (page == null) {
+    if (page == null || Object.keys(page).length == 0) {
+      //
       _fn = obj[defaultFn]
     } else {
       let tableName = page.tableName
@@ -213,7 +214,8 @@ export class Button extends Base {
     } catch (error) {
       console.error(error) //
       let page: PageDesign = _config.page
-      if (page) {
+      if (page && page?.setCurrentLoading) {
+        //
         page.setCurrentLoading(false) //
       }
     }

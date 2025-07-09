@@ -335,6 +335,7 @@ export class Context {
   }
   delete() {
     //删除节点
+    // debugger //
     const arr = this.arr
     const node = this.node //
     let parent = this.parent //
@@ -357,6 +358,10 @@ export class Context {
                 }
               }
             }
+          }
+          //当前列只有自己一个
+          if (list.length == 0) {
+            pParent.context.delete() //
           }
         }
       }

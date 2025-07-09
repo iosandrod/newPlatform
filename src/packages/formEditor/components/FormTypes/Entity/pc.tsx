@@ -121,6 +121,17 @@ export default defineComponent({
           }}
         >
           <erTable
+            onDbCurRowChange={(config) => {
+              //
+              let tableName = item.getTableName()
+              let dTableName = _design.getRealTableName()
+              if (tableName == dTableName) {
+                let row = config.row
+                _design.editTableRows({
+                  row,
+                }) //
+              }
+            }}
             onCellCommand={(config) => {
               // debugger //
               let _config1 = item?.config?.options || {}
@@ -189,7 +200,7 @@ export default defineComponent({
               } else {
                 Object.entries(config).forEach(([key, value]) => {
                   col[key] = value //
-                })
+                }) //
                 _design.updateTableDesign() //
               }
             }}
