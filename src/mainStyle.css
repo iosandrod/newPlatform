@@ -414,3 +414,6 @@ z-index: 200;
 .el-menu--horizontal{
   border-bottom: 0px !important;
 }
+.vxe-modal--body-default{
+  /* padding:0 !important; */
+}

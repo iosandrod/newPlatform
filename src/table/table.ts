@@ -2054,16 +2054,20 @@ export class Table extends Base {
       return false
     }
     if (typeof beforeEditCell == 'function') {
-      let re = ins.getRecordByCell(col, row)
-      let f: any = ins.getBodyField(col, row)
-      value = value || re[f]
-      let _status = beforeEditCell({
-        row: re,
-        field: f,
-        value: value,
-      })
-      if (_status == false) {
-        return false
+      // debugger
+      // let re = ins.getRecordByCell(col, row)
+      let re=ins.getRecordByRowCol(col,row)
+      if(re!=null){
+        let f: any = ins.getBodyField(col, row)
+        value = value || re[f]
+        let _status = beforeEditCell({
+          row: re,
+          field: f,
+          value: value,
+        })
+        if (_status == false) {
+          return false
+        }
       }
     }
   }
@@ -3193,7 +3197,6 @@ export class Table extends Base {
   })
   onScroll(config) {
     let scrollConfig = this.scrollConfig
-    console.log(scrollConfig) //
   }
   clearCache() {
     let id = this.id

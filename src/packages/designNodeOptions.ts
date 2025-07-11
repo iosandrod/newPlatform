@@ -602,33 +602,33 @@ export const formitemTypeMap = (_this: PageDesign) => {
           type: 'stable', //
           options: {
             //
-            showTable: true,
+            showTable: false,
             showRowSeriesNumber: true, //
-            buttons: [
-              {
-                label: '新增',
-                key: 'add',
-                fn: () => {
-                  let select = _this.state.selected
-                  let context = select.context
-                  context.appendCol() //
-                },
-              },
-              {
-                label: '删除',
-                key: 'del',
-                fn: (config) => {
-                  let select = _this.state.selected
-                  let columns = select.columns
-                  let table: Table = config.parent
-                  let crow = table.getCurRow()
-                  let _index = columns.indexOf(crow)
-                  if (_index > -1) {
-                    columns.splice(_index, 1) //
-                  }
-                },
-              },
-            ],
+            // buttons: [
+            //   {
+            //     label: '新增',
+            //     key: 'add',
+            //     fn: () => {
+            //       let select = _this.state.selected
+            //       let context = select.context
+            //       context.appendCol() //
+            //     },
+            //   },
+            //   {
+            //     label: '删除',
+            //     key: 'del',
+            //     fn: (config) => {
+            //       let select = _this.state.selected
+            //       let columns = select.columns
+            //       let table: Table = config.parent
+            //       let crow = table.getCurRow()
+            //       let _index = columns.indexOf(crow)
+            //       if (_index > -1) {
+            //         columns.splice(_index, 1) //
+            //       }
+            //     },
+            //   },
+            // ],
             columns: [
               {
                 field: 'label', //

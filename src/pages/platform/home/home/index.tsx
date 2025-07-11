@@ -34,8 +34,8 @@ export default defineComponent({
     const uninstalledPage = ref(1)
     const uninstalledTotal = ref(0)
     const uninstalledApps = ref<any[]>([])
-    const getInsList = () => {
-      systemIns.getEnterApp().then((res: any) => {
+    const getInsList =async  () => {
+     await  systemIns.getEnterApp().then((res: any) => {
         installedApps.value = res
         installedTotal.value = res.length
         if(res.length==0){
@@ -43,15 +43,27 @@ export default defineComponent({
         }
       })
     }
-    const getUninsList = () => {
-      systemIns.getInstallApp().then((res: any) => {
+    const getUninsList = async () => {//
+      await systemIns.getInstallApp().then((res: any) => {
         uninstalledApps.value = res
         uninstalledTotal.value = res.length
       })
     }
+    const loadList=async ()=>{
+      await getInsList()
+      await getUninsList()
+    }
+    const installApp=async (app)=>{
+      try {
+  await systemIns.installApp(app)
+  await loadList()//
+        activeNames.value=['1']//
+} catch (error) {
+  
+}
+    }
     onMounted(async () => {
-      getInsList()
-      getUninsList() //
+      await loadList()
     })
     const activeSidebar = ref('1')
     const activeNames = ref<string[]>(['1'])
@@ -126,7 +138,9 @@ export default defineComponent({
                     let btn= <button
                         type="button"
                         class="bg-green-500 hover:bg-green-600 text-white font-medium px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-                        onClick={() => systemIns.installApp(app.appName)}
+                        onClick={async() => {
+                          installApp(app)
+                        }}
                       >
                         安装
                       </button> //

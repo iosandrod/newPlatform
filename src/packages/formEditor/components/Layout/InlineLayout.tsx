@@ -108,12 +108,12 @@ export default defineComponent({
         }
       }
       return (
-        <div class={[ns.b(), ..._class1]}>
+        <div class={[ns.b(), ..._class1,'min-h-7']}>
           <LayoutDragGable
             data-layout-type={'inline'}
             type={'inline'}
             {...dragOptions}
-            class={[..._class1]}
+            class={[..._class1,'min-h-7']}
             data={props.data.columns}
             parent={props.parent}
           />

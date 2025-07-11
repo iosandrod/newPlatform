@@ -100,12 +100,12 @@ export default defineComponent({
                 return com //
               })}
             </el-tabs>
-            <div class="flex-1 w-full flex">
+            <div class="flex-1 w-full  flex">
               {props.data.columns.map((element, index0) => {
                 let com = (
                   //@ts-ignore
                   <div
-                    class=" flex-1 h-full" //
+                    class=" flex-1 h-full overflow-hidden" //
                     ref={(el) => {
                       let id = element.id
                       refDiv[id] = el

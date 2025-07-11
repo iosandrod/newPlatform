@@ -102,10 +102,13 @@ export const changePassword = async (_this: System) => {
   }
 }
 
-export const installApp = async (_this: System, name) => {
+export const installApp = async (_this: System, app) => {
+  let name = app.appName
+  let cnName=app.cnName
   let fConfig = {
     data: {
-      fromid: 0, //
+      fromid: 1, //
+      cnName: cnName,//
     }, //
     title: '安装配置',
     width: 400, //
@@ -126,7 +129,7 @@ export const installApp = async (_this: System, name) => {
           options: [
             {
               label: '默认账套', //
-              value: 0, //
+              value: 1, //
             },
           ],
         },
@@ -135,14 +138,21 @@ export const installApp = async (_this: System, name) => {
     confirmFn: () => {},
   }
   let _data = await _this.confirmForm(fConfig) //
-
-  // try {
-  //   let http = _this.getHttp() //
-  //   await http.create('company', { ..._data, appName: name }) //
-  //   _this.confirmMessage('安装成功')
-  // } catch (error) {
-  //   _this.confirmErrorMessage('安装失败') //
-  // }
+  _this.setSystemLoading(true)
+  try {
+    let http = _this.getHttp() //
+    let res = await http.post('company', 'installApp', {
+      ..._data,
+      appName: name,
+    })
+    _this.setSystemLoading(false)
+    _this.confirmMessage('安装成功')
+    return res
+  } catch (error) {
+    _this.setSystemLoading(false) //
+    _this.confirmErrorMessage(`安装失败${error?.message}`)
+    return Promise.reject(error) //
+  }
 }
 
 export const addTableField = async (_this: System, tableName, column) => {

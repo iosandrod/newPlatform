@@ -59,7 +59,7 @@ export default defineComponent({
           hasDrag
           data={props.data}
           parent={props.parent}
-          class={['flex']}
+          class={['flex','min-h-7']}
           style={_style} //
         >
           <tag

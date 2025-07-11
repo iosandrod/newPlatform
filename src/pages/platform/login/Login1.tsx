@@ -28,7 +28,6 @@ import { getDFConfig } from '@/table/colFConfig'
 import uploadCom from '@/input/uploadCom'
 import SearchDialog from '@/dialog/_dialogCom/searchDialog'
 import inputCom from '@/input/inputCom'
-import { tFConfig } from '@ER/formEditor/testData'
 import selectCom from '@/select/selectCom'
 import pVue from '@/printTemplate/print.vue'
 import auditVue from '@/audit/App.vue' //
@@ -244,7 +243,7 @@ export default defineComponent({
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       }) ////
-      let _fConfig1 = tFConfig
+      
       let _com = (
         <div
           class="h-full"

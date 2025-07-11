@@ -29,8 +29,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
     'initGetData',
     'listenChanged', //
   */
-  let tName = _this.getTableName()
-
+  let tName = _this.getTableName() //
   let mainDesign = _this.form //
   let mN = mainDesign?.getRealTableName() || null
   let fd = []
