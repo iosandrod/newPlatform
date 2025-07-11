@@ -49,7 +49,7 @@ import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { createFooterTheme, createTheme } from './tableTheme' //
 import tableCom from './tableCom'
-import { createGroup, createText } from '@visactor/vtable/es/vrender'
+import { createGroup, createText, Text } from '@visactor/vtable/es/vrender'
 import { SeriesNumberColumn } from './seriesNumberColumn'
 import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
@@ -57,6 +57,8 @@ import { InputEditor } from './editor/string'
 import { Row } from 'vant'
 import { containerMap } from './columnFn'
 import { Gantt } from '@visactor/vtable-gantt'
+import { Group } from '@visactor/vtable/es/render/layout'
+import { createImagesArr, createTextArr } from './columnUtil'
 export class Table extends Base {
   currentClickButton: any
   useCache = false
@@ -799,7 +801,7 @@ export class Table extends Base {
     return _arr.flat()
   }
   @useTimeout({
-    number: 200, ////
+    number: 200, //
     key: 'updateRecords',
   }) //
   updateRecords() {
@@ -826,7 +828,6 @@ export class Table extends Base {
       }
     }
     // debugger//
-    // console.log(tableIns.dataMap, '更新的index') ////
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
       console.time(uuid) //
@@ -1303,7 +1304,6 @@ export class Table extends Base {
         return status //
       }) //
       this.templateProps.data = _data3 //
-      console.log(_data3, '加载的数据') //
     } else {
       if (globalValue.length > 0) {
         _data1 = _data1.filter((v) => {
@@ -1845,155 +1845,11 @@ export class Table extends Base {
     }
     _config.indexArr = [] //
     this.columnFilterConfig.filterConfig = [...oldFilterConfig] ////
-    console.log(_config, 'test_config') //
     if (all == true) {
       this.columnFilterConfig.filterConfig = [] //
     }
   }
-  // jumpToSearchNext(pre = false) {
-  //   //
-  //   let ins = this.getInstance() //
-  //   // let select = ins.getSelectedCellInfos()
-  //   let select = this.selectCacheCell //
-  //   let _d = select?.[0]?.[0]
-  //   if (_d?.originData == null) {
-  //     select = [] //
-  //   }
-  //   // console.log(select) //
-  //   let globalValue = this.globalConfig.value
-  //   if (globalValue.length == 0) {
-  //     return //
-  //   }
-  //   let records = this.getShowRecords()
-  //   let field = null
-  //   let rowIndex = null
-  //   if (select.length == 0) {
-  //     if (pre == true) {
-  //       for (let i = records.length - 1; i >= 0; i--) {
-  //         let row = records[i]
-  //         let _value = Object.entries(row).find(([key, value]) => {
-  //           if (
-  //             key != '_index' &&
-  //             key != '_shtml' &&
-  //             typeof value != 'boolean' &&
-  //             typeof value != 'object'
-  //           ) {
-  //             let reg = new RegExp(globalValue, 'gi')
-  //             let _value1 = `${value}` //
-  //             return reg.test(_value1) //
-  //           }
-  //         })
-  //         if (_value != null) {
-  //           field = _value[0]
-  //           rowIndex = i
-  //           break
-  //         }
-  //       }
-  //     } else {
-  //       for (let i = 0; i < records.length; i++) {
-  //         let row = records[i]
-  //         let _value = Object.entries(row).find(([key, value]) => {
-  //           if (
-  //             key != '_index' &&
-  //             key != '_shtml' &&
-  //             typeof value != 'boolean' &&
-  //             typeof value != 'object'
-  //           ) {
-  //             let reg = new RegExp(globalValue, 'gi')
-  //             let _value1 = `${value}` //
-  //             return reg.test(_value1) //
-  //           }
-  //         })
-  //         if (_value != null) {
-  //           field = _value[0]
-  //           rowIndex = i
-  //           break
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     let _d = select[0][0]
-  //     let _field = _d.field //
-  //     let originData = select[0][0].originData
-  //     let index = records.findIndex((item) => item == originData)
-  //     if (pre == true) {
-  //       for (let i = index; i >= 0; i--) {
-  //         let row = records[i]
-  //         let _value = Object.entries(row).find((item) => {
-  //           let [key, value] = item
-  //           if (
-  //             key != '_index' &&
-  //             key != '_shtml' &&
-  //             typeof value != 'boolean' &&
-  //             typeof value != 'object'
-  //           ) {
-  //             let reg = new RegExp(globalValue, 'gi')
-  //             let _value1 = `${value}` //
-  //             let status = reg.test(_value1) //
-  //             if (i == index) {
-  //               let allCols = this.templateProps.columns
-  //               let lastAllField = allCols.findIndex(
-  //                 (item) => item.field == _field, //
-  //               )
-  //               let lastFields = allCols //
-  //                 .slice(lastAllField + 1) //
-  //                 .map((item) => item.field)
-  //               if (!lastFields.includes(key)) {
-  //                 status = false //
-  //               }
-  //             }
-  //             return status
-  //           }
-  //         }) //
-  //         if (_value != null) {
-  //           field = _value[0]
-  //           rowIndex = i
-  //           break
-  //         }
-  //       }
-  //     } else {
-  //       for (let i = index; i < records.length; i++) {
-  //         let row = records[i]
-  //         let _value = Object.entries(row).find((item) => {
-  //           let [key, value] = item
-  //           if (
-  //             key != '_index' &&
-  //             key != '_shtml' &&
-  //             typeof value != 'boolean' &&
-  //             typeof value != 'object'
-  //           ) {
-  //             let reg = new RegExp(globalValue, 'gi')
-  //             let _value1 = `${value}` //
-  //             let status = reg.test(_value1) //
-  //             if (i == index) {
-  //               let allCols = this.templateProps.columns
-  //               let lastAllField = allCols.findIndex(
-  //                 (item) => item.field == _field, //
-  //               )
-  //               let lastFields = allCols //
-  //                 .slice(lastAllField + 1) //
-  //                 .map((item) => item.field)
-  //               if (!lastFields.includes(key)) {
-  //                 status = false //
-  //               }
-  //             }
-  //             return status
-  //           }
-  //         }) //
-  //         if (_value != null) {
-  //           field = _value[0]
-  //           rowIndex = i
-  //           break
-  //         }
-  //       }
-  //     }
-  //   }
-  //   if (field == null || rowIndex == null) {
-  //     return
-  //   }
-  //   let addr = ins.getCellAddrByFieldRecord(field, rowIndex) //
-  //   ins.selectCell(addr.col, addr.row) //
-  // }
+ 
   jumpToSearchNext(pre = false) {
     const ins = this.getInstance()
     const query = this.globalConfig.value?.trim()
@@ -3332,7 +3188,13 @@ export class Table extends Base {
     }
     obj1[`watch_arr`] = null //
   }
-  onScroll(config) {}
+  @useTimeout({
+    number: 300,
+  })
+  onScroll(config) {
+    let scrollConfig = this.scrollConfig
+    console.log(scrollConfig) //
+  }
   clearCache() {
     let id = this.id
     let _containerMap = containerMap
@@ -3374,5 +3236,199 @@ export class Table extends Base {
     if (typeof fn == 'function') {
       await fn({ data: originData, table: this }) //
     }
+  }
+  getFlatGroupChildren(group: Group) {
+    let arr = []
+    let children = group.getChildren()
+    if (Array.isArray(children)) {
+      arr = arr.concat(children)
+      children.forEach((item) => {
+        arr = arr.concat(this.getFlatGroupChildren(item))
+      })
+    }
+    return arr
+  }
+  getCellVisitConfig(config: any) {
+    let _this1 = this
+    let column: Column = config.column
+    let _this = column
+    let container: Group = config.container
+    let row = config.row
+    let col = config.col
+    let table: ListTable = config.table //
+    let record = table.getCellOriginRecord(col, row)
+    let count = table.visibleRowCount + 400
+    let obj: any = {
+      field: column.getField(),
+      record: record,
+      _col: column,
+      container,
+      rowCount: count,
+      fieldFormat: _this.getFormat(), //
+    }
+    // let updateFn = () => {}
+    let updateFn = null
+    if (
+      column.getEditType() == 'boolean' ||
+      column.getField() == 'checkboxField' //
+    ) {
+      updateFn = updateFn = () => {
+        //基本的样式
+        let bg = _this.getIndexColor(row, record)
+        if (record?._index == _this.table.tableData?.curRow?._index) {
+          bg = _this.getCurrentRowColor() //
+        } //
+        container.setAttribute('background', bg)
+        let f = _this.getField()
+        let c = record[f] //
+        c = _this.getIsChecked(record)
+        let num = Number(c)
+        if (!isNaN(num)) {
+          c = num //
+        }
+        let children = _this1.getFlatGroupChildren(container)
+        let checkbox1 = children.find((item) => item._checkIcon != null) //
+        if (checkbox1) {
+          checkbox1.attribute.checked = Boolean(c) //
+          checkbox1.render() //
+        }
+      }
+    }
+    if (column.getField() == 'seriesNumber') {
+      updateFn = () => {
+        let bg = _this.getIndexColor(row)
+        if (record?._index == _this.table.tableData?.curRow?._index) {
+          bg = _this.getCurrentRowColor()
+        } //
+        container.setAttribute('background', bg) //
+      }
+    }
+    if (column.getCustomType() == 'photo') {
+      updateFn = () => {
+        let bg = _this.getIndexColor(row, record)
+        if (record?._index == _this.table.tableData?.curRow?._index) {
+          bg = _this.getCurrentRowColor() //
+        } //
+        container.setAttribute('background', bg) //
+      }
+    }
+    if (typeof updateFn !== 'function') {
+      //
+      updateFn = () => {
+        // let record = table.getCellOriginRecord(col, row)
+        //基本的样式
+        let bg = _this.getIndexColor(row, record)
+        if (record?._index == _this.table.tableData?.curRow?._index) {
+          bg = _this.getCurrentRowColor() //
+        } //
+        container.setAttribute('background', bg)
+        let formatFn = _this.getFormat()
+        let _value = formatFn({
+          row: record,
+          col: _this,
+          table: _this.table,
+          field: _this.getField(), //
+        })
+        let child = _this1.getFlatGroupChildren(container) //
+        // console.log(child) //
+        // debugger //
+        let textG: Group = child.find((v) => v.isText == true)
+        if (textG != null) {
+          if (_this1.globalConfig.value?.length > 0) {
+            textG.removeAllChild() //
+            let newText = createTextArr(
+              column,
+              _value,
+              _this1.globalConfig.value,
+            ) //
+            let nChil = newText.getChildren()
+            for (const n of nChil) {
+              textG.add(n) //
+            }
+          } else {
+            let c: Text = textG.getChildren()[0] as any
+            c.setAttribute('text', _value)
+          }
+        }
+        if (column.getIsTree()) {
+          let treeIcon = child.find((v) => v.isExpand == true)
+          if (treeIcon) {
+            let _expanded = record['_expanded']
+            // debugger //
+            let t = _this.getExpandIcon(_expanded)
+            if (record?.children?.length == 0) {
+              t = null //
+            }
+            treeIcon.setAttribute('image', t) //
+          }
+        }
+      }
+    }
+    obj.updateFn = updateFn //
+    return obj
+  }
+  async onImageCellLoad(config: any) {
+    setTimeout(async () => {
+      try {
+        //
+        let _this1 = this
+        let column: Column = config.column
+        let _this = column
+        let container: Group = config.container
+        let row = config.row
+        let col = config.col
+        let table: ListTable = config.table //
+        let record = table.getCellOriginRecord(col, row)
+        let count = table.visibleRowCount + 400
+        if (record == null) {
+          return
+        }
+        let rowRange = table.getBodyVisibleRowRange() //
+        let start = rowRange.rowStart
+        let end = rowRange.rowEnd
+        if (row < start || row > end) {
+          return //
+        }
+        let _index = record._index
+        let field = column.getField()
+        let _container = this.getCacheContainer(_index, field)
+        if (_container == null) {
+          return
+        } //
+        let children = _this1.getFlatGroupChildren(_container)
+        let bindValue = record[field]
+        if (bindValue == null) {
+          return
+        }
+        let imageGroup = children.find((item) => item.isImage == true)
+        if (imageGroup == null) {
+          return //
+        } //
+        let _images = await _this1.getSystem().loadImage(bindValue) //
+        let targetData = _images.find((img) => {
+          return img.url == bindValue
+        })
+        if (targetData == null) {
+          return
+        } //
+        // console.log(targetData, 'testData') //
+        let base64 = targetData.base64
+        let { height, width } = container.attribute
+        let _h = height
+        if (height > width) {
+          _h = width
+        }
+        let images = createImagesArr([base64], { height: _h, width: _h }) //
+        imageGroup.removeAllChild()
+        for (const ig of images) {
+          imageGroup.add(ig)
+        }
+      } catch (error) {
+        return //
+      }
+    }, 1000) //
+  }
+  showScreenPhoto(imageData) {
+    this.getSystem().showScreenPhoto(imageData) //
   }
 }

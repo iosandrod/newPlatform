@@ -1,6 +1,6 @@
-import { System } from '@/system'
+import { System, system } from '@/system'
 import {
-  computed,
+  computed, //
   defineComponent,
   inject,
   onMounted,
@@ -9,50 +9,29 @@ import {
 } from 'vue'
 
 export default defineComponent({
-  name: 'globalLogin',
+  name: 'GlobalLogin',
   props: {
-    formConfig: {
-      type: Object,
-    },
+    formConfig: Object,
     formData: {
       type: Object,
       default: () => ({}),
     },
-    onLogin: {
-      type: Function,
-    },
-    onRegister: {
-      type: Function,
-    }, //
+    onLogin: Function,
+    onRegister: Function,
   },
   setup(props) {
-    let data = computed(() => {
-      let d = props.formData //
-      return d //
-    })
-    let localUserid = localStorage.getItem('userid') //
-    let loginFConfig: any = props.formConfig
-    let code = ref<string>('')
-    let cdata = ref<string>('')
-    async function loadCaptcha() {
-      const res = await system.createCaptcha('authentication_create')
-      code.value = res.data
-      cdata.value = res.text
-    }
     //
-    let _opt = ref([])
-    if (loginFConfig == null) {
-      loginFConfig = reactive({
+    const data = computed(() => props.formData)
+    const loginFConfig = reactive(
+      props.formConfig || {
         labelWidth: 70,
         items: [
           {
             field: 'userid',
             type: 'select',
-            label: '选择账套',
+            label: '账套',
             required: true,
-            options: {
-              options: _opt,
-            },
+            options: { options: [] },
           },
           { field: 'email', type: 'string', label: '账号', required: true },
           {
@@ -62,115 +41,114 @@ export default defineComponent({
             required: true,
             options: { password: true },
           },
-
           { field: '_captcha', label: '验证码', type: 'string' },
         ],
         itemSpan: 24,
-      })
+      },
+    )
+
+    const code = ref('')
+    const cdata = ref('')
+    const fins = ref(null)
+
+    const system: System = inject('systemIns')
+
+    const loadCaptcha = async () => {
+      const res = await system.createCaptcha('authentication_create')
+      code.value = res.data
+      cdata.value = res.text
     }
-    async function getCompanyFn() {
-      let allCompany = await system.getAllAccountCompany({
-        getLabel: true,
-      })
-      _opt.value = allCompany //
+    const getCompanyFn = async () => {
+      const allCompany = await system.getAllAccountCompany({ getLabel: true })
+      loginFConfig.items[0].options.options = allCompany
     }
-    onMounted(async () => {
-      try {
-        //
-        await getCompanyFn()
-      } catch (error) {}
-    })
-    onMounted(loadCaptcha) //
-    const fins = ref<any>(null)
-    async function loginFn() {
-      //   debugger //
-      const form = fins.value as any
+
+    const loginFn = async () => {
+      const form = fins.value
       await form.validate()
-      //   await system.loginUser(data)
-      let onLogin = props.onLogin
-      if (typeof onLogin == 'function') {
-        await onLogin(data.value) //
+      if (typeof props.onLogin === 'function') {
+        await props.onLogin(data.value)
       } else {
-        //
-        await system.loginUser(data) //
+        await system.loginUser(data.value) //
       }
     }
-    let system: System = inject('systemIns')
-    return () => {
-      let _com = (
-        <div class="flex items-center justify-center min-h-screen bg-gray-100">
-          <div class="flex w-full max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
-            <div class="flex-col hidden w-1/2 text-white lg:flex bg-gradient-to-br from-blue-500 to-blue-600">
-              <div class="w-full h-full">
-                <img alt="Bangboss" class="h-full mb-6" />
+
+    onMounted(async () => {
+      await getCompanyFn()
+      await loadCaptcha()
+    })
+
+    return () => (
+      <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-blue-200">
+        <div class="max-w-5xl w-full bg-white rounded-3xl shadow-xl overflow-hidden flex">
+          <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-indigo-500 to-indigo-700 text-white p-10 items-center justify-center">
+            <div class="text-center">
+              <img
+                src="/images/loginLogo.png"
+                alt="Logo"
+                class="w-36 mx-auto mb-6 rounded-lg shadow-lg"
+              />
+              <h2 class="text-3xl font-bold mb-2">欢迎回来</h2>
+              <p class="text-sm opacity-80">高效管理您的企业账户</p>
+            </div>
+          </div>
+
+          <div class="w-full lg:w-1/2 p-10 flex flex-col justify-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6 flex justify-center">
+              账户登录
+            </h2>
+
+            <er-form
+              ref={(el) => (fins.value = el)}
+              {...loginFConfig}
+              data={data.value}
+            />
+
+            <div
+              class="my-4 flex justify-center cursor-pointer"
+              innerHTML={code.value}
+              onClick={loadCaptcha}
+            ></div>
+
+            <div class="flex items-center justify-between text-sm text-gray-600 mb-4">
+              <label class="flex items-center">
+                <input
+                  type="checkbox"
+                  class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <span class="ml-2">记住我</span>
+              </label>
+              <div
+                class="text-indigo-600 cursor-pointer hover:underline"
+                onClick={() => system.routeTo('register')}
+              >
+                忘记密码？
               </div>
             </div>
-            <div class="flex flex-col w-full h-full p-8 lg:w-1/2 flex justify-center">
-              <div class="flex justify-center w-full h-full p-8 lg:w-1/2">
-                <h2 class="mb-8 text-3xl font-bold text-gray-900">登录</h2>
-              </div>
-              <div>
-                <er-form
-                  ref={(ref: any) => (fins.value = ref)}
-                  {...loginFConfig}
-                  data={data.value}
-                />
-              </div>
-              <div
-                onClick={() => {
-                  loadCaptcha()
-                }}
-                class="flex justify-center w-full my-4 cursor-pointer"
-                vHtml={code.value}
-              ></div>
-              <div class="flex items-center justify-between mb-6">
-                <label class="flex items-center text-gray-700">
-                  <input
-                    type="checkbox"
-                    class=" text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                  <span class="ml-2">记住我</span>
-                </label>
-                <div
-                  class="text-blue-600 cursor-pointer"
-                  // @click="system.routeTo('register')"
-                  onClick={() => {
-                    system.routeTo('register')
-                  }}
+
+            <button
+              onClick={loginFn}
+              class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-200"
+            >
+              登录
+            </button>
+
+            <div class="mt-6 flex items-center text-gray-500 text-sm">
+              <span class="flex-1 border-t"></span>
+              <span class="px-4">
+                没有账号？
+                <span
+                  class="text-indigo-600 cursor-pointer hover:underline ml-1"
+                  onClick={() => system.routeTo('/register')}
                 >
-                  忘记密码?
-                </div>
-              </div>
-              <button
-                class="w-full py-2 mb-8 font-medium text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
-                //   @click="loginFn"
-                onClick={() => {
-                  loginFn()
-                }}
-              >
-                登录
-              </button>
-              <div class="flex items-center mb-8 text-gray-500">
-                <span class="flex-1 border-t"></span>
-                <span class="px-4 text-sm">
-                  <span
-                    class="text-blue-600 cursor-pointer"
-                    //   @click="system.routeTo('register')"
-                    onClick={() => {
-                      system.routeTo('/register')
-                    }}
-                  >
-                    立即注册
-                  </span>
+                  立即注册
                 </span>
-                <span class="flex-1 border-t"></span>
-              </div>
+              </span>
+              <span class="flex-1 border-t"></span>
             </div>
           </div>
         </div>
-      )
-
-      return _com
-    }
+      </div>
+    )
   },
 })

@@ -71,7 +71,7 @@ export default defineComponent({
             <ElDropdown
               type="primary"
               placement="bottom-end"
-              class="h-40 px-4 rounded-lg"
+              class="px-4 rounded-lg"
               v-slots={{
                 dropdown: () => {
                   let items = systemIns.getUserDropDown()
@@ -117,19 +117,19 @@ export default defineComponent({
         )
       }
       let headerCom = (
-        <header class="flex items-center justify-between px-5 text-white bg-blue-600 shadow-md h-60">
+        <header class="flex items-center justify-between px-5 text-white bg-blue-600 shadow-md">
           <div class="text-2xl font-bold">低代码应用中心</div>
           {leftMenu}
           <div class="flex items-center ml-5">{rightMenu}</div>
         </header>
       )
       let footerCom = (
-        <footer class="flex items-center justify-center h-40 text-gray-500 bg-gray-100">
+        <footer class="flex items-center justify-center  text-gray-500 bg-gray-100">
           © 2025 MyApp Platform
         </footer>
       )
       let mainCom = (
-        <div class="flex flex-col h-screen my-scope">
+        <div class="flex flex-col h-screen">
           {headerCom}
           <div class="flex-1 w-full">
             <RouterView></RouterView>
@@ -141,3 +141,4 @@ export default defineComponent({
     }
   },
 })
+

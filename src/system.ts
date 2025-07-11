@@ -902,14 +902,19 @@ export class System extends Base {
     try {
       let http = this.getHttp()
       this.setSystemLoading(true)
-      await http.registerUser(data) //
+      await http.registerUser(data)
+      let { email } = data //
+      this.setLocalItem('loginEmail', email) //
+      this.routeTo('/login') //
+      this.setSystemLoading(false) //
+      this.confirmMessage('注册成功', 'success')
     } catch (error) {
       const message = error.message || ''
+      this.setSystemLoading(false) //
       this.confirmMessage(`注册失败,${message}`, 'error') //
     }
   }
   async loginUser(data) {
-    // debugger //
     let currentApp = await this.getCurrentApp()
     if (currentApp != 'platform') {
       let userid = data.userid
@@ -990,6 +995,11 @@ export class System extends Base {
   async getEnterApp() {
     let http = this.getHttp()
     let _data = await http.post('company', 'getEnterApp') //
+    return _data //
+  }
+  async getInstallApp(){
+    let http = this.getHttp()
+    let _data = await http.post('company', 'getInstallApp') //
     return _data //
   }
   getUserInfo() {
@@ -1933,6 +1943,11 @@ export class System extends Base {
         fn: async () => {
           _this.routeTo('/admin') //
         }, //
+      },{
+        label:"回到首页",
+        fn: async () => {
+          _this.routeTo('/home') //
+        },
       },
       {
         label: '退出登录',
@@ -1987,6 +2002,9 @@ export class System extends Base {
   async getAllAccountCompany(data) {
     let getLabel = data.getLabel
     let appName = data.appName || (await this.getCurrentApp())
+    if (appName == 'platform') {
+      return [] //
+    }
     let http = this.getHttp()
     let res = await http.post('company', 'getAllAccountCompany', {
       appName: appName,
@@ -2013,34 +2031,22 @@ export class System extends Base {
   async changePassword() {
     await changePassword(this)
   } //
-  async getDefaultEditButtons() {
-    let http = this.getHttp()
-    let res = await http.post('entity', 'getDefaultButtons', {
-      type: 'edit',
-    })
-    console.log(res, 'testRes') //
-  }
-  async getDefaultMainButtons() {
-    let http = this.getHttp()
-    let res = await http.post('entity', 'getDefaultButtons', {
-      type: 'main',
-    })
-  }
+
   async checkIsAdmin() {
     //
   }
   getPlatformHomeHeader() {
     return [
       {
-        label: 'Home',
+        label: '首页',
         name: 'home',
       },
       {
-        label: 'About',
+        label: '关于应用',
         name: 'about',
       },
       {
-        label: 'Contact',
+        label: '联系开发', //
         name: 'contact', //
       },
     ]
@@ -2207,6 +2213,52 @@ export class System extends Base {
     } catch (error) {
       this.getSystem().confirmMessage('数据库还原失败', 'error') //
     }
+  }
+  //
+  async loadImage(url) {
+    let http = this.getHttp()
+    let _image = await http.post(
+      'uploads',
+      'loadImages',
+      {
+        url,
+      },
+      true,
+    ) //
+    return _image //
+  }
+  showScreenPhoto(urlList) {
+    let _list = urlList
+    if (Boolean(urlList) == false) {
+      return
+    } //
+    if (typeof urlList == 'string') {
+      _list = [urlList]
+    }
+    if (!Array.isArray(_list)) {
+      return //
+    }
+    let _list1 = _list.map((item) => {
+      return {
+        url: item,
+      }
+    })
+    VxeUI.previewImage({
+      activeIndex: 1,
+      urlList: _list1,
+      downloadMethod: async (params) => {
+        debugger //
+        console.log(params, 'params')
+        return ''
+      },
+      showDownloadButton: true,
+
+      // urlList: [
+      //   { url: 'https://vxeui.com/resource/img/fj573.jpeg' },
+      //   { url: 'https://vxeui.com/resource/img/fj562.png' },
+      //   { url: 'https://vxeui.com/resource/img/fj187.jpg' },
+      // ],
+    })
   }
 }
 export const system = reactive(new System())

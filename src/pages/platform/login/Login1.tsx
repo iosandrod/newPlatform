@@ -204,7 +204,8 @@ export default defineComponent({
       com = (
         <div style={{ height: `${_data.height}px`, width: `100%` }}>
           <tableCom
-            {...tableConfig}
+            // {...tableConfig}
+            {...menuTConfig}
             contextItems={[
               {
                 label: '添加菜单',
@@ -233,9 +234,9 @@ export default defineComponent({
             dragRowFn={(config) => {
               return true //
             }}
-            treeConfig={null}
+            // treeConfig={null}
             // showControllerButtons={true}
-            tableState="scan"
+            tableState="edit"
           ></tableCom>
         </div>
       ) //

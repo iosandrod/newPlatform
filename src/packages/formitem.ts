@@ -1028,7 +1028,6 @@ export class FormItem extends Base {
       },
     }
     sys.openCodeDialog(config) //
-    
   }
   openSFormDialog() {
     let options = { ...this.getOptions() } //

@@ -410,3 +410,7 @@ z-index: 200;
 .vxe-input{
   max-height: 36px;
 }
+
+.el-menu--horizontal{
+  border-bottom: 0px !important;
+}

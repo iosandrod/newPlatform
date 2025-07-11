@@ -10070,3 +10070,928 @@ export default defineComponent({
             //   return '密码校验不一致'
             // }
             // return
+
+            // if (this.getField() == 'type_code') {
+    //   debugger //
+    // }
+
+    
+    // let _index = record['_index'] ////
+    // let _table = _this.table //
+    // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() //
+    // let rowStart = scrollConfig.rowStart
+    // let rowEnd = scrollConfig.rowEnd
+    // let _row = row
+    // container['currentRowIndex'] = row //
+    // container['updateCanvas'] = () => {
+      // let _length = 200 //
+    // rowStart = rowStart - _length
+    // if (rowStart < 0) {
+    //   rowStart = 0 //
+    // }
+    // rowEnd = rowEnd + _length
+    // if (_row >= rowStart && _row <= rowEnd) {
+    //   let currentIndexContain = _table.currentIndexContain
+    //   //显示在视图上
+    //   let _arr = currentIndexContain[_index]
+    //   if (_arr == null) {
+    //     currentIndexContain[_index] = {}
+    //     _arr = currentIndexContain[_index] //
+    //   }
+    //   let field = _this.getField()
+    //   _arr[field] = container //
+    // } else {
+    //   let currentIndexContain = _table.currentIndexContain //
+    //   delete currentIndexContain[_index] //
+    // }
+
+
+    //
+    // let updateFn = () => {
+    //   // let record = table.getCellOriginRecord(col, row)
+    //   //基本的样式
+    //   let bg = _this.getIndexColor(row, record)
+    //   if (record?._index == _this.table.tableData?.curRow?._index) {
+    //     bg = _this.getCurrentRowColor() //
+    //   } //
+    //   container.setAttribute('background', bg)
+    //   let f = _this.getField()
+    //   let c = record[f] //
+    //   c = _this.getIsChecked(record)
+    //   let num = Number(c)
+    //   if (!isNaN(num)) {
+    //     c = num //
+    //   } //
+    //   checkbox1.attribute.checked = Boolean(c) //
+    //   checkbox1.render() //
+    // }
+    // let count = _this.table.getInstance().visibleRowCount
+
+    // let updateFn = () => {
+    //   let bg = _this.getIndexColor(row)
+    //   if (record?._index == _this.table.tableData?.curRow?._index) {
+    //     bg = _this.getCurrentRowColor()
+    //   } //
+    //   container.setAttribute('background', bg) //
+    // }
+     // let count = _table.getInstance()?.visibleRowCount || table?.visibleRowCount //
+    // _this.table.onCellVisible(
+    //   {
+    //   field: _this.getField(),
+    //   record,
+    //   row,
+    //   _col: col,
+    //   container,
+    //   rowCount: count + 400, //
+    //   updateFn: updateFn,
+    // }) //
+
+
+
+
+
+    // let count = _table.getInstance()?.visibleRowCount || table?.visibleRowCount //
+    // let obj123 = {
+    //   container: container,
+    //   record: record,
+    //   field: _this.getField(),
+    //   row: row,
+    //   _col: col,
+    //   rowCount: count + 400,
+    //   fieldFormat: _this.getFormat(),
+    //   updateFn: () => {
+    //     // let record = table.getCellOriginRecord(col, row)
+    //     //基本的样式
+    //     let bg = _this.getIndexColor(row, record)
+    //     if (record?._index == _this.table.tableData?.curRow?._index) {
+    //       bg = _this.getCurrentRowColor() //
+    //     } //
+    //     container.setAttribute('background', bg)
+    //     let formatFn = _this.getFormat()
+    //     let _value = formatFn({
+    //       row: record,
+    //       col: _this,
+    //       table: _this.table,
+    //       field: _this.getField(), //
+    //     })
+    //     locationName.setAttribute('text', _value)
+    //     if (treeIcon != null) {
+    //       let _expanded = record['_expanded']
+    //       let t = _this.getExpandIcon(_expanded)
+    //       if (record?.children?.length == 0) {
+    //         t = null //
+    //       } //
+    //       treeIcon.setAttribute('image', t) //
+    //     }
+    //   },
+    // }
+    // if (_row >= rowStart && _row <= rowEnd) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       if (globalValue.length > 0) {
+      let container = _g
+      let reg = new RegExp(globalValue, 'gi') //
+      _value = `${value}` //
+      let vArr = _value.matchAll(reg)
+      let _vArr = [...vArr]
+      _vArr = _vArr
+        .map((v, i) => {
+          let arr = []
+          let t = createText({
+            text: v[0], //
+            fontSize: fSize,
+            fill: 'red',
+            boundsPadding: [0, 0, 0, 0],
+            lineDashOffset: 0,
+          })
+          if (i == 0 && v.index > 0) {
+            //
+            let t1 = createText({
+              text: _value.slice(0, v.index), //
+              fontSize: fSize,
+              // fontFamily: 'sans-serif',
+              fill: 'black',
+              boundsPadding: [0, 0, 0, 0],
+              lineDashOffset: 0,
+            })
+            arr.push(t1)
+          }
+          arr.push(t)
+          if (i == _vArr.length - 1 && v.index + v[0].length < _value.length) {
+            let t2 = createText({
+              text: _value.slice(v.index + v[0].length), //
+              fontSize: fSize,
+              // fontFamily: 'sans-serif',
+              fill: 'black',
+              boundsPadding: [0, 0, 0, 0],
+              lineDashOffset: 0,
+            })
+            arr.push(t2)
+          }
+          return arr
+        })
+        .flat()
+      if (_vArr.length > 0) {
+        _vArr.forEach((item) => {
+          //@ts-ignore
+          container.add(item) //
+        })
+      } else {
+        container.add(locationName) //
+      }
+    } else {
+      let container = _g
+      container.add(locationName)
+    }
+
+     if (_this.getField() == 'pid') {
+    }
+    // let _bounds = [0, 0, 0, 10]
+    // let fSize = _this.getFontSize()
+    // let locationName = createText({
+    //   text: `${_value}`, //
+    //   fontSize: fSize, //
+    //   x: 0, //
+    //   y: 0,
+    //   fill: 'black',
+    //   boundsPadding: _bounds, //
+    //   lineDashOffset: 0,
+    // })
+    // let _width1 = locationName.clipedWidth
+
+
+    let _g1 = createGroup({
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        height: height,
+        width: width,
+        overflow: 'hidden',
+        cursor: 'pointer',
+        alignItems: 'center',
+        boundsPadding: [0, 0, 0, 0],
+      })
+      let _level = record['_level'] || 0
+      // let t = `\u27A4`
+      let t = null
+      // console.log(record['_expanded'], 'record')
+      t = _this.getExpandIcon(record['_expanded'])
+      let _g2 = createGroup({
+        width: 10,
+        height: height / 2,
+        x: 0,
+        y: 0,
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        overflow: 'hidden',
+        alignItems: 'center',
+      })
+      if (record?.children?.length == 0) {
+        t = null //
+      }
+      let icon = createImage({
+        image: t,
+        cursor: 'pointer',
+        x: 0,
+        y: 0, //
+        width: 15, //
+        height: 15, //
+        overflow: 'hidden',
+        fill: 'black',
+        boundsPadding: [0, 0, 0, 3 + _level * 16], //
+        lineDashOffset: 0,
+      })
+      icon.on('click', (args) => {
+        column.table.isTreeIconClick = true //
+        nextTick(() => {
+          column.table.isTreeIconClick = false //
+        })
+      })
+      // _bounds[3] = 0 //
+      _g2.add(icon)
+      _g1.add(_g2) //
+      // _g1.add(locationName) //
+      container.add(_g1) //
+
+
+       // if (scrollConfig != null) {
+    // let updateFn = () => {
+    //   // let record = table.getCellOriginRecord(col, row)
+    //   //基本的样式
+    //   let bg = _this.getIndexColor(row, record)
+    //   if (record?._index == _this.table.tableData?.curRow?._index) {
+    //     bg = _this.getCurrentRowColor() //
+    //   } //
+    //   container.setAttribute('background', bg)
+    //   let formatFn = _this.getFormat()
+    //   let _value = formatFn({
+    //     row: record,
+    //     col: _this,
+    //     table: _this.table,
+    //     field: _this.getField(), //
+    //   })
+    //   locationName.setAttribute('text', _value)
+    //   if (treeIcon != null) {
+    //     let _expanded = record['_expanded']
+    //     let t = _this.getExpandIcon(_expanded)
+    //     if (record?.children?.length == 0) {
+    //       t = null //
+    //     } //
+    //     treeIcon.setAttribute('image', t) //
+    //   }
+    // } //
+    // obj123['updateFn'] = updateFn //
+    // } //
+
+     // locationName.setAttribute('text', _value)
+        // if (treeIcon != null) {
+        //   let _expanded = record['_expanded']
+        //   // debugger //
+        //   let t = _this.getExpandIcon(_expanded)
+        //   if (record?.children?.length == 0) {
+        //     t = null //
+        //   } //
+        //   treeIcon.setAttribute('image', t) //
+        // }
+
+
+
+        import { system } from '@/system'
+import { Form } from '@ER/form'
+import FormCom from '@ER/formCom'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
+
+export default defineComponent({
+  setup(props, ctx) {
+    let uName = Date.now().toString().slice(0, 4)
+    let d = reactive({
+      companyName: 'newC',
+      companyCnName: '新公司',
+      username: uName, //
+      email: '1151685410@qq.com',
+      password: '1',
+      confirmPassword: '1', //
+    })
+    let fn = async () => {
+      let d = await system.createCaptcha('users_create')
+      _html.value = d.data
+      vText.value = d.text //
+    }
+    onMounted(async () => {
+      await fn()
+    })
+    const fConfig = {
+      itemSpan: 24, //
+      labelWidth: 70,
+      items: [
+        {
+          field: 'companyName',
+          label: '公司名称',
+          required: true,
+        },
+        {
+          field: 'companyCnName',
+          label: '公司中文名',
+          required: true,
+        },
+        {
+          field: 'username', //
+          label: '管理账号',
+          required: true,
+        },
+        {
+          field: 'email',
+          label: '邮箱',
+          required: true,
+        },
+        {
+          field: 'password',
+          label: '密码',
+          required: true,
+          validate: (config) => {
+            // let data = config.data
+            // let confirmPassword = data.confirmPassword
+            // let password = data.password
+            // if (password != confirmPassword) {
+            //   return '密码校验不一致'
+            // }
+            // return
+          },
+        }, 
+        {
+          field: 'confirmPassword',
+          label: '确认密码',
+          required: true,
+          validate: (config) => {
+            //
+            let data = config.data
+            let confirmPassword = data.confirmPassword //
+            let password = data.password
+            if (password != confirmPassword) {
+              return '密码校验不一致'
+            } //
+            return
+          },
+        },
+        {
+          field: '_captcha',
+          label: '验证码',
+          required: true,
+        },
+      ],
+      validate: async (config) => {
+        let data = config.data
+        let password = data.password //
+        let confirmPassword = data.confirmPassword //
+        if (password != confirmPassword) {
+          return '密码校验不一致' //
+        }
+      },
+      data: d, //
+    }
+    const buttons = [
+      {
+        label: '注册',
+        fn: async () => {
+          let _d = d
+          let _f1: Form = _f.value as any
+          await _f1.validate() //
+          let res1 = await system.registerUser(_d) //
+        },
+      },
+      {
+        label: '刷新验证码',
+        fn: async () => {
+          await fn() //
+        },
+      },
+    ]
+    let registerFn = async () => {
+      let _d = d
+      let _f1: Form = _f.value as any
+      await _f1.validate() //
+      await system.registerUser(_d) //
+    }
+    let vText = ref('')
+    let _html = ref('')
+    let _f = ref('')
+    return () => {
+      let rF = <erForm ref={(e) => (_f.value = e)} {...fConfig}></erForm>
+      let svg = (
+        <div
+          class="cursor-pointer"
+          onClick={() => {
+            fn() //
+          }}
+          v-html={_html.value}
+        ></div>
+      )
+      let com = (
+        <div class="flex flex-row items-center w-full h-full">
+          <div class="w-600 "></div>
+          <div class="flex flex-col w-500">
+            {rF}
+            {svg}
+            <div>
+              <erButtonGroup items={buttons}></erButtonGroup>
+            </div>
+          </div>
+        </div>
+      )
+      // return com
+      let _com = (
+        <div class="flex items-center justify-center min-h-screen bg-gray-100">
+          <div class="flex w-full max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
+            <div class="flex-col hidden w-1/2 text-white lg:flex bg-gradient-to-br from-blue-500 to-blue-600 ">
+              <div class="w-full h-full">
+                <img
+                  src="/images/loginLogo.png"
+                  alt="Bangboss"
+                  class="h-full mb-6"
+                />
+              </div>
+            </div>
+
+            <div class="w-full p-8 lg:w-1/2">
+              <h2 class="mb-8 text-3xl font-bold text-gray-900">注册</h2>
+              <div>
+                {rF}
+                <div class="flex justify-center w-full">{svg}</div>
+                {/* <div class="flex items-center justify-between mb-6">
+                  <label class="flex items-center text-gray-700">
+                    <input
+                      type="checkbox"
+                      class="w-16 h-16 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span class="ml-2">记住我</span>
+                  </label>
+                  <div href="#" class="text-blue-600 cursor-pointer">
+                    忘记密码?
+                  </div>
+                </div> */}
+                <button
+                  onClick={registerFn}
+                  class="w-full py-2 mb-20 font-medium text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
+                >
+                  注册
+                </button>
+
+                <div class="flex items-center mb-20 text-gray-500">
+                  <span class="flex-1 border-t"></span>
+                  <span class="px-4 text-sm">
+                    已有账号
+                    <div
+                      onClick={() => {
+                        system.routeTo('login') //
+                      }}
+                      href="#"
+                      class="text-blue-600 cursor-pointer"
+                    >
+                      立即登录
+                    </div>
+                  </span>
+                  <span class="flex-1 border-t"></span>
+                </div>
+
+                {/* <div class="flex justify-center space-x-6">
+                  <button type="button">
+                    <img
+                      src="/images/wcLogin.png"
+                      alt="WeChat"
+                      class="w-20 h-20"
+                    />
+                  </button>
+                  <button type="button">
+                    <img src="/images/qqLogin.png" alt="QQ" class="w-20 h-20" />
+                  </button>
+                 
+                </div> */}
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+      return _com
+    }
+  },
+})
+
+
+ let com = (
+        <div class="flex flex-row items-center w-full h-full">
+          <div class="w-600 "></div>
+          <div class="flex flex-col w-500">
+            {rF}
+            {svg}
+            <div>
+              <erButtonGroup items={buttons}></erButtonGroup>
+            </div>
+          </div>
+        </div>
+      )
+
+      {/* <div class="flex items-center justify-between mb-6">
+                  <label class="flex items-center text-gray-700">
+                    <input
+                      type="checkbox"
+                      class="w-16 h-16 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <span class="ml-2">记住我</span>
+                  </label>
+                  <div href="#" class="text-blue-600 cursor-pointer">
+                    忘记密码?
+                  </div>
+                </div> */}
+                // v-slots={{
+          //   default: (config) => {
+          //     // console.log(config)
+          //     let route = config.route
+          //     let Component = config.Component
+          //     return (
+          //       <Component key={route.fullPath}></Component>
+          //       // <KeepAlive include={/admin/gi}>
+          //       // </KeepAlive>
+          //     )
+          //   },
+          // }}
+
+          onMounted(() => {
+  setTimeout(() => {
+    // let currentRoute = system.getRouter().currentRoute
+    // if ((currentRoute.fullPath = '/')) {
+    //   if (system.getIsLogin()) {
+    //     system.routeTo('/home') //
+    //   } else {
+    //     system.routeTo('/login') //
+    //   }
+    // }
+  }, 1000) //
+})
+
+
+// export default defineComponent({
+//   name: 'Login',
+//   setup() {
+//     //
+//     const data = reactive({
+//       appName: 'platform',
+//       email: 'admin',
+//       password: 'admin', //
+//       _unUseCaptcha: true,
+//     })
+//     const loginFConfig: any = reactive({
+//       labelWidth: 70,
+//       data,
+//       items: [
+//         { field: 'email', type: 'string', label: '账号', required: true },
+//         {
+//           field: 'password',
+//           type: 'string',
+//           label: '密码',
+//           required: true,
+//           options: { password: true },
+//         },
+
+//         { field: '_captcha', label: '验证码', type: 'string' },
+//       ],
+//       itemSpan: 24,
+//     })
+//     async function getCompanyFn() {}
+
+//     onMounted(getCompanyFn)
+
+//     const code = ref<string>('')
+//     const cdata = ref<string>('')
+
+//     async function loadCaptcha() {
+//       const res = await system.createCaptcha('authentication_create')
+//       code.value = res.data
+//       cdata.value = res.text
+//     }
+
+//     onMounted(loadCaptcha)
+
+//     const fins = ref<any>(null)
+//     async function loginFn() {
+//       const form = fins.value as any
+//       await form.validate()
+//       await system.loginUser(data)
+//     }
+//     let system: System = inject('systemIns')
+//     return () => {
+//       let _com = (
+//         <div class="flex items-center justify-center min-h-screen bg-gray-100">
+//           <div class="flex w-full max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
+//             <div class="flex-col hidden w-1/2 text-white lg:flex bg-gradient-to-br from-blue-500 to-blue-600">
+//               <div class="w-full h-full">
+//                 <img alt="Bangboss" class="h-full mb-6" />
+//               </div>
+//             </div>
+//             <div class="flex flex-col justify-center w-full h-full p-8 lg:w-1/2">
+//               <div class="flex justify-center w-full h-full p-8 lg:w-1/2">
+//                 <h2 class="mb-8 text-3xl font-bold text-gray-900">登录</h2>
+//               </div>
+//               <div>
+//                 <er-form
+//                   ref={(ref: any) => (fins.value = ref)}
+//                   {...loginFConfig}
+//                 />
+//               </div>
+//               <div
+//                 onClick={() => {
+//                   loadCaptcha()
+//                 }}
+//                 class="flex justify-center w-full my-4 cursor-pointer"
+//                 vHtml={code.value}
+//               ></div>
+//               <div class="flex items-center justify-between mb-6">
+//                 <label class="flex items-center text-gray-700">
+//                   <input
+//                     type="checkbox"
+//                     class="text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+//                   />
+//                   <span class="ml-2">记住我</span>
+//                 </label>
+//                 <div
+//                   class="text-blue-600 cursor-pointer"
+//                   // @click="system.routeTo('register')"
+//                   onClick={() => {
+//                     system.routeTo('register')
+//                   }}
+//                 >
+//                   忘记密码?
+//                 </div>
+//               </div>
+//               <button
+//                 class="w-full py-2 mb-8 font-medium text-white transition-colors bg-blue-600 rounded hover:bg-blue-700"
+//                 //   @click="loginFn"
+//                 onClick={() => {
+//                   loginFn()
+//                 }}
+//               >
+//                 登录
+//               </button>
+//               <div class="flex items-center mb-8 text-gray-500">
+//                 <span class="flex-1 border-t"></span>
+//                 <span class="px-4 text-sm">
+//                   <span
+//                     class="text-blue-600 cursor-pointer"
+//                     //   @click="system.routeTo('register')"
+//                     onClick={() => {
+//                       system.routeTo('/register')
+//                     }}
+//                   >
+//                     立即注册
+//                   </span>
+//                 </span>
+//                 <span class="flex-1 border-t"></span>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       )
+
+//       return _com
+//     }
+//   },
+// })
+
+// {
+        //   field: 'userid',
+        //   type: 'select',
+        //   label: '账套',
+        //   required: true,
+        //   options: { options: ref([]) },
+        // },
+
+        async getDefaultEditButtons() {
+    let http = this.getHttp()
+    let res = await http.post('entity', 'getDefaultButtons', {
+      type: 'edit',
+    })
+  }
+  async getDefaultMainButtons() {
+    let http = this.getHttp()
+    let res = await http.post('entity', 'getDefaultButtons', {
+      type: 'main',
+    })
+  }
+
+   // jumpToSearchNext(pre = false) {
+  //   //
+  //   let ins = this.getInstance() //
+  //   // let select = ins.getSelectedCellInfos()
+  //   let select = this.selectCacheCell //
+  //   let _d = select?.[0]?.[0]
+  //   if (_d?.originData == null) {
+  //     select = [] //
+  //   }
+  //   // console.log(select) //
+  //   let globalValue = this.globalConfig.value
+  //   if (globalValue.length == 0) {
+  //     return //
+  //   }
+  //   let records = this.getShowRecords()
+  //   let field = null
+  //   let rowIndex = null
+  //   if (select.length == 0) {
+  //     if (pre == true) {
+  //       for (let i = records.length - 1; i >= 0; i--) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find(([key, value]) => {
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             return reg.test(_value1) //
+  //           }
+  //         })
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     } else {
+  //       for (let i = 0; i < records.length; i++) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find(([key, value]) => {
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             return reg.test(_value1) //
+  //           }
+  //         })
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     let _d = select[0][0]
+  //     let _field = _d.field //
+  //     let originData = select[0][0].originData
+  //     let index = records.findIndex((item) => item == originData)
+  //     if (pre == true) {
+  //       for (let i = index; i >= 0; i--) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find((item) => {
+  //           let [key, value] = item
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             let status = reg.test(_value1) //
+  //             if (i == index) {
+  //               let allCols = this.templateProps.columns
+  //               let lastAllField = allCols.findIndex(
+  //                 (item) => item.field == _field, //
+  //               )
+  //               let lastFields = allCols //
+  //                 .slice(lastAllField + 1) //
+  //                 .map((item) => item.field)
+  //               if (!lastFields.includes(key)) {
+  //                 status = false //
+  //               }
+  //             }
+  //             return status
+  //           }
+  //         }) //
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     } else {
+  //       for (let i = index; i < records.length; i++) {
+  //         let row = records[i]
+  //         let _value = Object.entries(row).find((item) => {
+  //           let [key, value] = item
+  //           if (
+  //             key != '_index' &&
+  //             key != '_shtml' &&
+  //             typeof value != 'boolean' &&
+  //             typeof value != 'object'
+  //           ) {
+  //             let reg = new RegExp(globalValue, 'gi')
+  //             let _value1 = `${value}` //
+  //             let status = reg.test(_value1) //
+  //             if (i == index) {
+  //               let allCols = this.templateProps.columns
+  //               let lastAllField = allCols.findIndex(
+  //                 (item) => item.field == _field, //
+  //               )
+  //               let lastFields = allCols //
+  //                 .slice(lastAllField + 1) //
+  //                 .map((item) => item.field)
+  //               if (!lastFields.includes(key)) {
+  //                 status = false //
+  //               }
+  //             }
+  //             return status
+  //           }
+  //         }) //
+  //         if (_value != null) {
+  //           field = _value[0]
+  //           rowIndex = i
+  //           break
+  //         }
+  //       }
+  //     }
+  //   }
+  //   if (field == null || rowIndex == null) {
+  //     return
+  //   }
+  //   let addr = ins.getCellAddrByFieldRecord(field, rowIndex) //
+  //   ins.selectCell(addr.col, addr.row) //
+  // }
+  
+
+  {
+        id: 1,
+        name: 'erp',
+        cnName: '低代码ERP应用配置',
+        description: '配置化构建应用', //
+        icon: 'el-icon-data-analysis',
+        photo: '/images/erp.png',
+      },
+
+
+
+
+           <ElCollapse
+          accordion
+          modelValue={activeNames.value}
+          onUpdate:modelValue={(val: string[]) => (activeNames.value = val)}
+        >
+          <ElCollapseItem
+            name="1"
+          v-slots={{
+            title: () => {
+              let com=<span class="text-lg font-semibold">
+                已安装应用 ({installedTotal.value})
+              </span>
+              return com
+            },
+            default:()=>{
+              let com=<div class="mt-4">
+                <AppList lists={installedApps.value}></AppList>
+            </div>
+            return com
+            }
+          }}>
+          </ElCollapseItem>
+  <ElCollapseItem
+            name="2"
+            v-slots={{
+              title: () => {
+                let com=<span class="text-lg font-semibold">
+                可安装应用 ({uninstalledTotal.value})
+              </span>
+              return com
+            },
+            default:()=>{
+              let com=<div class="mt-4">
+                <AppList lists={uninstalledApps.value}></AppList>
+            </div>
+            return com
+            }
+          }}//
+          >
+          </ElCollapseItem>
+        </ElCollapse>

@@ -40,10 +40,10 @@ import { stringToFunction } from '@ER/utils'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { Dialog } from '@/dialog/dialog'
 import CodeEditor from '@/codeEditor/codeEditor'
-import { getCheckbox, getDefault } from './columnFn'
+import { getCheckbox, getDefault, getImageCustomLayout } from './columnFn'
 import { SearchPageDesign } from '@ER/searchPageDesign'
 import { Input } from '@/input/inputClass'
-let cellType = ['text', 'link', 'image', 'video', 'checkbox']
+let cellType = ['text', 'link', 'image', 'video', 'checkbox'] //
 export class Column extends Base {
   templateTableConfig = {
     columns: [],
@@ -132,7 +132,7 @@ export class Column extends Base {
     } //
     return title
   }
-  getType() {
+  getType(cell = true) {
     let config = this.config
     let type = config.type
     if (type == null || !cellType.includes(type)) {
@@ -455,7 +455,7 @@ export class Column extends Base {
       width: this.getColumnWidth(),
       showSort: true,
       title: this.getTitle(), //
-      cellType: this.getType(),
+      cellType: this.getType(true),
       headerStyle: {
         borderColor: this.getBorderColor(), //
       },
@@ -620,15 +620,13 @@ export class Column extends Base {
       field = this.id //
     } //
     return field //
-  }
+  } //
   getColumnWidth() {
     let isFilterTable = this.getTable().getIsFilterTable()
     let table = this.getTable()
     let config = this.config
     let width = config.width
-    // if (this.getField() == 'type_code') {
-    //   debugger //
-    // }
+
     if (isFilterTable == true) {
       let sW = 0
       let checkWidth = table.getCheckColumnWidth()
@@ -965,8 +963,21 @@ export class Column extends Base {
     let bg = _bg || 'rgb(220,232,240)'
     return bg
   }
+  getImageCustomLayout() {
+    let _layout = getImageCustomLayout(this)
+    return _layout //
+  }
+  getCustomType(){
+    let type=this.config.type
+    return type
+  }
   getCustomLayout() {
     let editType = this.getEditType()
+    let type = this.config.type
+    if (type == 'photo') {
+      let _layout = this.getImageCustomLayout()
+      return _layout //
+    } //
     if (editType == 'boolean' && this.getTable().tableState == 'edit') {
       let _layout = this.getCheckboxCustomLayout()
       return _layout //

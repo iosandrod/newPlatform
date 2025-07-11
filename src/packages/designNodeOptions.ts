@@ -7,8 +7,13 @@ import { defaultButtons, defaultRelateButtons } from './defaultButtons'
 import { getBaseInfoEditConfig } from '@/table/colFConfig'
 export const getButtonGroupTableConfig = (_this?: PageDesign) => {
   let tableName = _this.getRealTableName()
-  let type = _this.getTableType()
-  let obj = {
+  // let type = _this.getTableType()
+  let type = null
+  if (_this && _this.getTableType) {
+    //
+    type = _this.getTableType() //
+  }
+  let obj = {//
     showTable: false,
     title: '按钮组设计', //
     tableState: 'edit',

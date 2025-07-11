@@ -44,18 +44,7 @@ export default defineComponent({
       // let com = <RouterView></RouterView> ////
       let com = (
         <RouterView
-          // v-slots={{
-          //   default: (config) => {
-          //     // console.log(config)
-          //     let route = config.route
-          //     let Component = config.Component
-          //     return (
-          //       <Component key={route.fullPath}></Component>
-          //       // <KeepAlive include={/admin/gi}>
-          //       // </KeepAlive>
-          //     )
-          //   },
-          // }}
+          
         ></RouterView>
       )
       return withDirectives(

@@ -228,6 +228,5 @@ export function generateRoutes(): RouteRecordRaw[] {
       addPatchAny(v) //
     })
   })
-  console.log(res, 'testRes') //
   return res as any
 }

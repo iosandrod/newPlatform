@@ -288,13 +288,9 @@ export class myHttp {
   async registerUser(data) {
     try {
       let _res = await this.create('users', data)
-      console.log(_res, 'test_res') //
-      system.confirmMessage('注册成功')
-      let r = system.getRouter()
-
-      r.push('login') //
     } catch (error) {
-      system.confirmMessage(`注册失败,${error?.message}`, 'error') //
+      //
+      return Promise.reject(error) //
     }
   } //
   async loginUser(data) {
@@ -345,8 +341,14 @@ export class myHttp {
       return Promise.reject(error) //
     }
   }
-  async post(tableName, method, params = {}, query = {}): Promise<any> {
-    if (this.useAxios == true) {
+  async post(
+    tableName,
+    method,
+    params = {},
+    query = {},
+    useSocket = false,
+  ): Promise<any> {
+    if (this.useAxios == true && Boolean(useSocket) == false) {
       let axios = this.axios
       let url = `${tableName}`
       if (method) {
@@ -519,7 +521,7 @@ export class myHttp {
     return data //
   }
   async create(tableName, data = {}) {
-    // console.log('新增数据', tableName, data) //
+    //
     let _res = await this.post(tableName, 'create', data)
     return _res //
   } //

@@ -106,7 +106,7 @@ export const installApp = async (_this: System, name) => {
   let fConfig = {
     data: {
       fromid: 0, //
-    },
+    }, //
     title: '安装配置',
     width: 400, //
     height: 300,

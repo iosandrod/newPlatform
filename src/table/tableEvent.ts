@@ -20,20 +20,22 @@ export const scroll = (table: Table) => {
       _this.fatherScrollNum = Date.now()
       let childScrollNum = _this.childScrollNum
       let sub = childScrollNum - _this.fatherScrollNum
-      _this.onScroll(config) //
       if (sub < 0) {
         let scrollLeft = config.scrollLeft
         let ins = _this.getFooterInstance()
-        if (ins == null) return //
-        ins.setScrollLeft(scrollLeft) //
+        if (ins != null) {
+          ins.setScrollLeft(scrollLeft) //
+        } //
       }
       let range = table.getBodyVisibleCellRange()
       let _range = table.getBodyVisibleRowRange()
-      if (range == null) return //
-      const headerheight = table.columnHeaderLevelCount
-      range.rowStart = range.rowStart - headerheight
-      range.rowEnd = range.rowEnd - headerheight
-      _.merge(_this.scrollConfig, range)
+      if (range != null) {
+        const headerheight = table.columnHeaderLevelCount
+        range.rowStart = range.rowStart - headerheight
+        range.rowEnd = range.rowEnd - headerheight
+        _.merge(_this.scrollConfig, range)
+      }//
+      _this.onScroll(config) //
     },
   })
 }
@@ -71,7 +73,7 @@ export const click_cell = (table: Table) => {
       }, 0)
       let isTreeIconClick = table.isTreeIconClick
       if (isTreeIconClick) {
-        table.openTreeRow({col:config.col,row: config.row}) //
+        table.openTreeRow({ col: config.col, row: config.row }) //
       }
       let field = config.field //
       let originData = config.originData //
@@ -133,6 +135,10 @@ export const click_cell = (table: Table) => {
         let curEdit = table.getCurrentCellEdit()
         table.clearEditCell()
         table.setCurRow(originData) ////
+        let type = tCol.getCustomType()
+        if (type == 'photo') {
+          table.showScreenPhoto(originData[field])
+        }
       } //
     },
   })
@@ -461,6 +467,7 @@ export const mouseenter_cell = (table: Table) => {
         return
       }
       let templateTextWidth = container.templateTextWidth
+      console.log(templateTextWidth, 'sdfsfs') //
       if (rect.width < templateTextWidth) {
         let templateText = container.templateText
         tableInstance.showTooltip(col, row, {
