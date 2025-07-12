@@ -14266,3 +14266,26 @@ export const _editLayout = {
     this.getSystem().confirmMessage('同步成功', 'success') //
     // this.getSystem().refreshPageDesign() //
   
+
+  // fd = [
+    //   {
+    //     field: 'mainRelateKey',
+    //     label: '主单据关联字段',
+    //     type: 'string',
+    //     tabTitle: titles[0],
+    //     options: {
+    //       columnSelect: true,
+    //       tableName: mN, //
+    //     },
+    //   },
+    //   {
+    //     field: 'relateKey',
+    //     label: '当前关联字段',
+    //     type: 'string',
+    //     tabTitle: titles[0],
+    //     options: {
+    //       columnSelect: true,
+    //       tableName: tName,
+    //     },
+    //   },
+    // ]

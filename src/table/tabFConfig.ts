@@ -35,28 +35,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
   let mN = mainDesign?.getRealTableName() || null
   let fd = []
   if (mN != tName) {
-    // fd = [
-    //   {
-    //     field: 'mainRelateKey',
-    //     label: '主单据关联字段',
-    //     type: 'string',
-    //     tabTitle: titles[0],
-    //     options: {
-    //       columnSelect: true,
-    //       tableName: mN, //
-    //     },
-    //   },
-    //   {
-    //     field: 'relateKey',
-    //     label: '当前关联字段',
-    //     type: 'string',
-    //     tabTitle: titles[0],
-    //     options: {
-    //       columnSelect: true,
-    //       tableName: tName,
-    //     },
-    //   },
-    // ]
+    
   }
   let _obj = _.pick(_config, fields)
   let _fConfig = {
