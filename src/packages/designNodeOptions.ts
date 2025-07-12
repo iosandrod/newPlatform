@@ -13,7 +13,8 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
     //
     type = _this.getTableType() //
   }
-  let obj = {//
+  let obj = {
+    //
     showTable: false,
     title: '按钮组设计', //
     tableState: 'edit',
@@ -46,9 +47,84 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
     ],
     buttons: [
       {
-        label: '添加公共按钮', //
-        fn: (config) => {
-          let tableName = _this.tableType
+        label: '选择按钮类型', //
+        fn: async (config) => {
+          let fConfig = {
+            itemSpan: 24, //
+            items: [
+              {
+                field: 'type',
+                type: 'select',
+                required: true,
+                options: {
+                  options: [
+                    {
+                      label: '主页面',
+                      value: 'main',
+                    },
+                    {
+                      label: '编辑页面',
+                      value: 'edit',
+                    },
+                    {
+                      label: '搜索页面',
+                      value: 'search',
+                    },
+                    {
+                      label: '明细页面',
+                      value: 'detail',
+                    }, //
+                  ],
+                },
+              },
+            ],
+            data: {
+              type: type,
+            }, //
+            height: 200,
+            width: 300, //
+          }
+          let _d = await _this.getSystem().confirmForm(fConfig)
+          let _type = _d.type //
+          let btnData = await _this.getSystem().getSelectButtons(_type) //
+          let tableConfig = {
+            showCheckboxColumn: true, //
+            columns: [
+              {
+                field: 'id',
+                title: '按钮ID',
+                tree: true,
+                defaultValue: (config) => {
+                  //
+                  let item = config.item
+                  let dValue = item?.uuid()
+                  return dValue
+                },
+              },
+              {
+                field: 'label',
+                title: '标题', ////
+                type: 'string',
+              },
+            ],
+            data: btnData,
+          }
+          let _data = await _this.getSystem().confirmTable(tableConfig)
+          // debugger //
+          let checkData = _data.filter((d) => {
+            return d.checkboxField == true
+          }) //
+          let parent: Table = config.parent
+          let oldData = parent.getFlatTreeData().map((d) => d.id)
+          checkData = checkData.filter((d) => {
+            return !oldData.includes(d.id)
+          }) //
+          checkData.forEach((d) => {
+            d['checkboxField'] = false //
+          })
+          parent.addRows({
+            rows: checkData,
+          }) //
         },
       },
       {

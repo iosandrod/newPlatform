@@ -14237,3 +14237,32 @@ export const _editLayout = {
 }
 
 
+
+
+
+    let tableName = config.tableName
+    let realTableName = config.realTableName || tableName
+    let columns = config.columns
+    if (tableName == null || !Array.isArray(columns)) {
+      return
+    } //
+    let tCols = await this.getHttp().find('columns', { tableName })
+    let addCols = columns
+      .filter((c) => {
+        return (
+          tCols.findIndex((tc) => {
+            return tc.field == c.field
+          }) == -1
+        )
+      })
+      .map((row) => {
+        row.id = null
+        delete row['createdAt']
+        delete row['updatedAt']
+        row.tableName = realTableName //
+        return row
+      }) //
+    let _res = await this.getHttp().create('columns', addCols)
+    this.getSystem().confirmMessage('同步成功', 'success') //
+    // this.getSystem().refreshPageDesign() //
+  

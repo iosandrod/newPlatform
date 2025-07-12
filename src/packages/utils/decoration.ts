@@ -78,7 +78,7 @@ function isPromise(val: any): val is Promise<any> {
     typeof val.catch === 'function'
   )
 }
-export function    cacheValue(config?: Function) {
+export function cacheValue(config?: Function) {
   let cacheReturnValue = function cacheReturnValue(
     target?: any,
     propertyKey?: string,
@@ -269,7 +269,7 @@ export function useDelay(config?: { delay?: number }): any {
       descriptor.value = async function (...args: any[]) {
         return new Promise(async (resolve, reject) => {
           argsQueue.push(args) // 缓存每一次调用的参数
-
+          // debugger //
           if (timer) {
             clearTimeout(timer) // 重置延迟
           }

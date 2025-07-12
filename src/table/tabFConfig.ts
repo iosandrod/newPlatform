@@ -31,31 +31,32 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
   */
   let tName = _this.getTableName() //
   let mainDesign = _this.form //
+  // debugger //
   let mN = mainDesign?.getRealTableName() || null
   let fd = []
   if (mN != tName) {
-    fd = [
-      {
-        field: 'mainRelateKey',
-        label: '主单据关联字段',
-        type: 'string',
-        tabTitle: titles[0],
-        options: {
-          columnSelect: true,
-          tableName: mN, //
-        },
-      },
-      {
-        field: 'relateKey',
-        label: '当前关联字段',
-        type: 'string',
-        tabTitle: titles[0],
-        options: {
-          columnSelect: true,
-          tableName: tName,
-        },
-      },
-    ]
+    // fd = [
+    //   {
+    //     field: 'mainRelateKey',
+    //     label: '主单据关联字段',
+    //     type: 'string',
+    //     tabTitle: titles[0],
+    //     options: {
+    //       columnSelect: true,
+    //       tableName: mN, //
+    //     },
+    //   },
+    //   {
+    //     field: 'relateKey',
+    //     label: '当前关联字段',
+    //     type: 'string',
+    //     tabTitle: titles[0],
+    //     options: {
+    //       columnSelect: true,
+    //       tableName: tName,
+    //     },
+    //   },
+    // ]
   }
   let _obj = _.pick(_config, fields)
   let _fConfig = {
@@ -95,7 +96,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
             {
               field: 'relateKey',
               label: '当前关联字段',
-              type: 'string',
+              type: 'select', //
               options: {
                 columnSelect: true,
                 tableName: tName,
@@ -104,7 +105,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
             {
               field: 'mainRelateKey',
               label: '主单据关联字段',
-              type: 'string', //
+              type: 'select', //
               options: {
                 columnSelect: true,
                 tableName: mN, //
@@ -228,7 +229,12 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               label: '是否启用列拖拽',
               type: 'boolean',
               options: {},
-            }, //
+            },{
+              field: 'enableResizeColumn',
+              label: '是否启用列宽调整',
+              type: 'boolean',//
+              options: {},
+            }
           ],
         },
       },

@@ -110,12 +110,12 @@ export class PageDesignItem extends FormItem {
     return tConfig.tableCnName
   }
   getRelateKey() {
-    let options = this.getOptions()
-    return options.relateKey
+    let options = this.getOptions()?.detailTableConfig //
+    return options?.relateKey
   }
   getMainRelateKey() {
-    let options = this.getOptions()
-    return options.mainRelateKey
+    let options = this.getOptions()?.detailTableConfig //
+    return options?.mainRelateKey
   }
   onColumnResize(_config) {
     let f = this.form
@@ -264,5 +264,17 @@ export class PageDesignItem extends FormItem {
   getFormitemDisabled(config) {
     let field = config.field //
     let tableName = config.tableName
+  }
+  getDisabledColumnResize() {
+    let options = this.getOptions()
+    let dragConfig = options?.dragConfig
+    let enableResizeColumn = dragConfig?.enableResizeColumn //
+    if (enableResizeColumn == null) {
+      enableResizeColumn = true //
+    }
+    if (enableResizeColumn == 0) {
+      return true
+    } //
+    return !enableResizeColumn //
   }
 }

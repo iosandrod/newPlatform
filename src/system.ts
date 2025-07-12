@@ -997,7 +997,7 @@ export class System extends Base {
     let _data = await http.post('company', 'getEnterApp') //
     return _data //
   }
-  async getInstallApp(){
+  async getInstallApp() {
     let http = this.getHttp()
     let _data = await http.post('company', 'getInstallApp') //
     return _data //
@@ -1490,7 +1490,7 @@ export class System extends Base {
     let allArgs = [...optionsField].flat().filter((item) => {
       return !allKeys.includes(item)
     }) //
-    console.log(allArgs, 'testAray') //
+    // console.log(allArgs, 'testAray') //
     let options = await this.getHttp().post(
       'columns',
       'getOptionsFieldSelect',
@@ -1502,6 +1502,7 @@ export class System extends Base {
   }
   @useDelay()
   async createColumnSelect(tableName) {
+    // debugger //
     await createColumnSelect(this, tableName) //
     //
   }
@@ -1943,8 +1944,9 @@ export class System extends Base {
         fn: async () => {
           _this.routeTo('/admin') //
         }, //
-      },{
-        label:"回到首页",
+      },
+      {
+        label: '回到首页',
         fn: async () => {
           _this.routeTo('/home') //
         },
@@ -2259,6 +2261,14 @@ export class System extends Base {
       //   { url: 'https://vxeui.com/resource/img/fj187.jpg' },
       // ],
     })
+  }
+  async syncRealColumns(config) {
+    let tableName = config.tableName
+    let _res = await this.getHttp().post('columns', 'syncRealColumns', {
+      tableName,
+    })
+    this.confirmMessage('同步列成功') //
+    return _res //
   }
 }
 export const system = reactive(new System())

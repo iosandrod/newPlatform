@@ -174,7 +174,8 @@ export class FormItem extends Base {
       return //
     }
     let tableName = this.getTableName()
-
+    let f=this.getField()
+    console.log(f,'f',tableName,'tableName')
     this.getSystem().createColumnSelect(tableName)
   }
   initSTable() {
@@ -856,7 +857,6 @@ export class FormItem extends Base {
     } //
   } //
   async designForm() {
-    // debugger //
     let formConfig = this.getFormConfig() //
     let platform = this.form.getCurrentPlatform()
     let _config = _.cloneDeep(formConfig)

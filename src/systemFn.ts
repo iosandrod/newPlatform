@@ -66,6 +66,7 @@ export const createColumnSelect = async (sys: System, tableName) => {
     columnSelect[tableName] = _cols1 //
     columnSelect[_key] = true //
   }
+  console.log(columnSelect, 'testSelect') //
 }
 
 export const changePassword = async (_this: System) => {
@@ -104,11 +105,11 @@ export const changePassword = async (_this: System) => {
 
 export const installApp = async (_this: System, app) => {
   let name = app.appName
-  let cnName=app.cnName
+  let cnName = app.cnName
   let fConfig = {
     data: {
       fromid: 1, //
-      cnName: cnName,//
+      cnName: cnName, //
     }, //
     title: '安装配置',
     width: 400, //

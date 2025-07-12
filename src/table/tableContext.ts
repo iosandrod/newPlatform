@@ -213,20 +213,21 @@ export const initContextMenu = (table: Table) => {
         }
       },
     },
-    // {
-    //   label: '同步列',
-    //   key: 'syncRealColumns',
-    //   disabled: false, //
-    //   visible: true,
-    //   fn: async (config) => {
-    //     let sys = table.getSystem()
-    //     await sys.syncRealColumns({
-    //       //
-    //       tableName: table.getTableName(),
-    //       columns: table.getFlatColumns().map((col) => col?.config || col), ////
-    //     })
-    //   }, //
-    // },
+    {
+      label: '同步列',
+      key: 'syncRealColumns',
+      disabled: false, //
+      visible: true,
+      fn: async (config) => {
+        let sys = table.getSystem()
+        await sys.syncRealColumns({
+          //
+          tableName: table.getTableName(),
+          columns: table.getFlatColumns().map((col) => col?.config || col), ////
+        })
+        
+      }, //
+    },
   ]
   let contextItems = table.config.contextItems
   if (Array.isArray(contextItems) && contextItems.length > 0) {

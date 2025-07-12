@@ -121,6 +121,7 @@ export default defineComponent({
           }}
         >
           <erTable
+            disableColumnResize={item.getDisabledColumnResize()} //
             onDbCurRowChange={(config) => {
               //
               let tableName = item.getTableName()
