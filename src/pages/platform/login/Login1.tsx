@@ -30,7 +30,7 @@ import SearchDialog from '@/dialog/_dialogCom/searchDialog'
 import inputCom from '@/input/inputCom'
 import selectCom from '@/select/selectCom'
 import pVue from '@/printTemplate/print.vue'
-import auditVue from '@/audit/App.vue' //
+// import auditVue from '@/audit/App.vue' //
 import WangToolbar from '@/printTemplate/components/PageComponents/WangEditorVue/WangToolbar.vue'
 import WangEditor from '@/printTemplate/components/PageComponents/WangEditorVue/WangEditor.vue'
 import {
@@ -47,7 +47,7 @@ import * as VTableGantt from '@visactor/vtable-gantt' //
 export default defineComponent({
   components: {
     pVue,
-    auditVue,
+    // auditVue,
     inputCom, //
     uploadCom,
     codeEditorCom,

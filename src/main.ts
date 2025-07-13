@@ -44,18 +44,7 @@ import '@arco-design/web-vue/es/message/style/css'
 import '@arco-design/web-vue/es/modal/style/css'
 import '@arco-design/web-vue/es/notification/style/css'
 import Vue3Dragscroll from 'vue3-dragscroll'
-import AddNode from '@/audit/components/flow/AddNode.vue'
-import NodeWrap from '@/audit/components/flow/NodeWrap.vue'
-import SvgIcon from '@/audit/components/SvgIcon/index.vue'
-import vFocus from '@/audit/directive/focus'
-import '@/audit/styles/index.scss' //
-//@ts-ignore
 
-import pinia from '@/audit/stores'
-// import "@arco-design/web-vue/dist/arco.css";
-
-app.directive('focus', vFocus)
-// import "virtual:svg-icons-register";
 import Vuex from 'vuex'
 import printTemplateModule from '@/printTemplate/stores/modules/index.js'
 import './style.js'
@@ -118,7 +107,7 @@ app.use(PrintDesign, {
   store,
 }) //
 app.use(store) //
-app.use(pinia) //
+// app.use(pinia) //
 registerEdit()
 Locale.use('en-US', enUS)
 // registerAntdComp(app)
@@ -133,12 +122,11 @@ app.component('erForm', formCom)
 // app.component('erForm', formEditor)
 app.component('erFormEditor', formEditor)
 app.component('erPage', pageCom) //
-app.component('SvgIcon', SvgIcon)
+// app.component('SvgIcon', SvgIcon)
 app.component('erTable', tableCom)
 app.component('erDropdown', dropdownCom)
 app.component('erSelect', selectCom) //
-app.component('AddNode', AddNode)
-app.component('NodeWrap', NodeWrap)
+
 app.use(context) //
 app.use(VxeTable) //
 app.use(VxeUIAll)

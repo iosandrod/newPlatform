@@ -40,7 +40,12 @@ import { stringToFunction } from '@ER/utils'
 import codeEditorCom from '@/codeEditor/codeEditorCom'
 import { Dialog } from '@/dialog/dialog'
 import CodeEditor from '@/codeEditor/codeEditor'
-import { getCheckbox, getDefault, getImageCustomLayout } from './columnFn'
+import {
+  getCheckbox,
+  getDefault,
+  getImageCustomLayout,
+  getSerialLayout,
+} from './columnFn'
 import { SearchPageDesign } from '@ER/searchPageDesign'
 import { Input } from '@/input/inputClass'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox'] //
@@ -648,7 +653,6 @@ export class Column extends Base {
     return width
   }
   async updateBindValue(config) {
-    // debugger //
     let value = config.value //值
     let row = config.row //行
     let field = config.field || this.getField()
@@ -967,8 +971,8 @@ export class Column extends Base {
     let _layout = getImageCustomLayout(this)
     return _layout //
   }
-  getCustomType(){
-    let type=this.config.type
+  getCustomType() {
+    let type = this.config.type
     return type
   }
   getCustomLayout() {
@@ -978,6 +982,9 @@ export class Column extends Base {
       let _layout = this.getImageCustomLayout()
       return _layout //
     } //
+    if (this.getField() == 'seriesNumber') {
+      return getSerialLayout(this)
+    }
     if (editType == 'boolean' && this.getTable().tableState == 'edit') {
       let _layout = this.getCheckboxCustomLayout()
       return _layout //
@@ -1226,6 +1233,11 @@ export class Column extends Base {
         bindColumns = bindColumns[0]
         let field = bindColumns.targetKey
         let value = row[field]
+        let myF = this.getField()
+        this.cacheValueObj = {
+          //
+          [myF]: value,
+        }
         this.cacheValue = value //
       } else {
         let _obj = {}

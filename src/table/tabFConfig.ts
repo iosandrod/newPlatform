@@ -17,7 +17,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
     'keyCodeColumn', //
     'onCurRowChange', //
     'rowHeight', //
-    'viewTableName',
+    'dataSource',
     'mainRelateKey',
     'relateKey', //
     'dragConfig',
@@ -35,7 +35,6 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
   let mN = mainDesign?.getRealTableName() || null
   let fd = []
   if (mN != tName) {
-    
   }
   let _obj = _.pick(_config, fields)
   let _fConfig = {
@@ -53,8 +52,8 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
         disabled: true, //
       },
       {
-        field: 'viewTableName',
-        label: '视图表名',
+        field: 'dataSource',
+        label: '数据源', //
         tabTitle: titles[0],
         type: 'string', //
       },
@@ -208,12 +207,13 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               label: '是否启用列拖拽',
               type: 'boolean',
               options: {},
-            },{
+            },
+            {
               field: 'enableResizeColumn',
               label: '是否启用列宽调整',
-              type: 'boolean',//
+              type: 'boolean', //
               options: {},
-            }
+            },
           ],
         },
       },

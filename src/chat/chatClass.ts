@@ -111,7 +111,7 @@ export class ChatClass extends Base {
       type: 'event',
       toContactId: c.id,
       fromUser: userInfo,
-      sendTime: Date.now(),
+      sendTime: Date.now(), //
       status: 'success',
       fileName: undefined,
     }
@@ -137,3 +137,4 @@ export class ChatClass extends Base {
     naiveChatRef?.initContacts(contacts) //
   }
 }
+

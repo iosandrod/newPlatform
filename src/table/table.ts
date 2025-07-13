@@ -148,7 +148,7 @@ export class Table extends Base {
     colStart: 0,
     colEnd: 0,
   }
-  currentIndexContain = shallowRef({}) as any
+  // currentIndexContain = shallowRef({}) as any
   eventManager: {
     [key: string]: Array<{
       callback?: Function
@@ -258,7 +258,7 @@ export class Table extends Base {
       //
       return
     }
-    this.currentIndexContain = shallowRef({})
+    // this.currentIndexContain = shallowRef({})
     let oldD = this.tableData.data
     let _d1 = this.getFlatTreeData(oldD)
     let dM = this.dataMap
@@ -831,13 +831,13 @@ export class Table extends Base {
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
       console.time(uuid) //
-      let currentIndexContain = containerMap[this.id] || {} //
-      let updateKeys = Object.keys(currentIndexContain) //
+      let _containerMap = containerMap[this.id] || {} //
+      let updateKeys = Object.keys(_containerMap) //
       let _keys = updateKeys.filter((key) => {
         return _iArr1.includes(key)
       })
       let allContain = _keys.map((key) => {
-        return currentIndexContain[key] //
+        return _containerMap[key] //
       })
 
       if (this.getIsTree()) {
@@ -845,6 +845,7 @@ export class Table extends Base {
         // this.instance.setRecords(c) //
         // return
       }
+      let c1 = null
       allContain.forEach((cArr) => {
         if (cArr == null) {
           return //
@@ -854,17 +855,18 @@ export class Table extends Base {
           let updateFn = c.updateFn
           if (typeof updateFn == 'function') {
             updateFn() //
-          }
+          } //
           const container = c.container
           if (container?.stage?.render) {
-            //
-            container.stage?.render()
+            c1 = container
+            // c1.stage?.render()//
           }
         })
       })
-      // nextTick(() => {
-      //   this.updateSelectRange()
-      // }) //
+      if (c1) {
+        c1.stage?.render() //
+      } //
+      console.log('用时') //
       console.timeEnd(uuid) //
     }
   }
@@ -1486,8 +1488,34 @@ export class Table extends Base {
     } else {
       footerInstance.release() //
       this.footerInstance = null //
-    } //
-    this.currentIndexContain = shallowRef({}) //
+    }
+    let _map = containerMap[this.id]
+    if (_map) {
+      Object.entries(_map).forEach(([key, value]) => {
+        let watch_arr = value[`watch_arr`]
+        if (watch_arr == null) {
+          return
+        }
+        let _arr1 = Object.values(watch_arr)
+        if (Array.isArray(_arr1)) {
+          _arr1.forEach((item) => {
+            //
+            if (typeof item == 'function') {
+              item()
+              console.log(item, 'item')
+            }
+          })
+        }
+      })
+    }
+    containerMap[this.id] = null
+    containerMap[this.id + '_arr'] = null //
+    // console.log(
+    //   containerMap,
+    //   this.id,
+    //   containerMap[this.id],
+    //   'fjslkfjslkfsdfsd',
+    // ) //
   }
   @useRunAfter()
   @useTimeout({ number: 300, key: 'updateTimeout' })
@@ -1499,14 +1527,15 @@ export class Table extends Base {
     }
     let records = data || instance.records
     let id = this.uuid() //
-    // console.time(id)
-    this.currentIndexContain = shallowRef({}) //
+    console.time(id)
+    // this.currentIndexContain = shallowRef({}) //
     instance.setRecords(records)
     let ganttInstance = this.getGanttInstance()
     if (ganttInstance != null) {
       ganttInstance.setRecords(records)
     }
-    // console.timeEnd(id)
+    console.log('setData用时') //
+    console.timeEnd(id)
     let curRow = this.getCurRow()
     if (curRow == null) {
       let row0 = records?.[0]
@@ -1849,7 +1878,7 @@ export class Table extends Base {
       this.columnFilterConfig.filterConfig = [] //
     }
   }
- 
+
   jumpToSearchNext(pre = false) {
     const ins = this.getInstance()
     const query = this.globalConfig.value?.trim()
@@ -2056,8 +2085,8 @@ export class Table extends Base {
     if (typeof beforeEditCell == 'function') {
       // debugger
       // let re = ins.getRecordByCell(col, row)
-      let re=ins.getRecordByRowCol(col,row)
-      if(re!=null){
+      let re = ins.getRecordByRowCol(col, row)
+      if (re != null) {
         let f: any = ins.getBodyField(col, row)
         value = value || re[f]
         let _status = beforeEditCell({

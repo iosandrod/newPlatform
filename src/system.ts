@@ -1003,7 +1003,7 @@ export class System extends Base {
     return _data //
   }
   getUserInfo() {
-    let loginInfo = this.loginInfo //
+    let loginInfo = this.loginInfo?.user
     return loginInfo
   }
   async designCurrentPageConfig() {
@@ -1139,8 +1139,8 @@ export class System extends Base {
           },
         },
         {
-          label: '关联视图',
-          field: 'viewTableName', //
+          label: '数据源',
+          field: 'dataSource', //
           type: 'string', //
           tabTitle: tabTitles[0],
           options: {},
@@ -1817,7 +1817,7 @@ export class System extends Base {
         $like: `%${keyword}%`, //
       },
       id: {
-        $nin: [this.getUserInfo()?.user?.id], //
+        $nin: [this.getUserInfo()?.id], //
       },
     })
     return data //
@@ -1869,11 +1869,11 @@ export class System extends Base {
   }
   getUserId() {
     let userinfo = this.getUserInfo()
-    return userinfo?.user?.id
+    return userinfo?.id
   }
   getUserName() {
     let userinfo = this.getUserInfo()
-    return userinfo?.user?.username //
+    return userinfo?.username //
   }
 
   getGlobalDropDown() {
@@ -2269,6 +2269,20 @@ export class System extends Base {
     })
     this.confirmMessage('同步列成功') //
     return _res //
+  }
+
+  formatImgSrc(src) {
+    // let curEnv = import.meta.env.VITE_ENVIRONMENT || 'development' //
+    let curEnv = this.getEnvValue('VITE_ENVIRONMENT')
+    if (curEnv == 'development') {
+      return src //
+    }
+    let baseUrl = this.getEnvValue('VITE_BASEURL')
+    // let port = this.getEnvValue('VITE_BASEURL_PORT') //
+    return `${baseUrl}${src}` //
+  }
+  async selectRolePermissions() {
+    //
   }
 }
 export const system = reactive(new System())

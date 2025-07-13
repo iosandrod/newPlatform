@@ -184,7 +184,7 @@ export default defineComponent({
           {/* 右侧：头像 + 用户下拉 */}
           <div class="flex items-center space-x-4">
             <img
-              src=""
+              src={system.getUserInfo()}
               alt="avatar"
               class="w-10 h-10 rounded-full border border-gray-300"
             />
@@ -194,7 +194,7 @@ export default defineComponent({
                 default: () => (
                   <button class="flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                     <span class="font-medium">
-                      {system.getUserInfo()?.user?.username || '登录'}
+                      {system.getUserName() || '登录'}
                     </span>
                     <svg
                       class="ml-2 w-4 h-4"

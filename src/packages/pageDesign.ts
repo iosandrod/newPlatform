@@ -294,7 +294,7 @@ export class PageDesign extends Form {
     query = { ...query, ..._query }
     // let viewTable = this.config.viewTableName
     let tableConfig = this.getTableConfig(tableName)
-    let viewTable = tableConfig.viewTableName //
+    let viewTable = tableConfig.viewTableName1 //
     let _t = tableName
     let config: any = {}
     if (typeof viewTable == 'string' && viewTable.length > 0) {

@@ -10,7 +10,6 @@ import {
 import erForm from '@ER/formCom'
 import erFormEditor from '@ER/formEditor/formEditor'
 import tableEditor from '@/table/tableCom'
-import { formConfig } from '@ER/formEditor/testData'
 import menuCom from '@/menu/menuCom'
 import fieldCom from '@/menu/fieldCom'
 import { system } from '@/system'

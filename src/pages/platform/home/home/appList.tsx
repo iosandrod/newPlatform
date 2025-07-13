@@ -12,7 +12,7 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const systemIns: System = inject('systemIns')
-    const apps = computed(() => props.lists)
+    const apps = computed(() => props.lists)//
     return () => {
       let _lists = (
         <main class="flex-1 p-5 overflow-auto  min-w-60 bg-gray-50">
@@ -20,8 +20,9 @@ export default defineComponent({
             {apps.value.map((app: any) => {
               let btns = null
               if (slots?.buttons) {
-                btns= slots.buttons(app)
+                btns = slots.buttons(app)
               }
+              let url=systemIns.formatImgSrc(app.photo)
               let com = (
                 <ElCard
                   key={app.id}
@@ -31,7 +32,7 @@ export default defineComponent({
                     {/* 左侧图片 */}
                     <div class="flex-none w-32 h-32 rounded-xl overflow-hidden">
                       <img
-                        src={app.photo}
+                        src={url} //
                         alt={app.cnName}
                         class="w-full h-full object-cover"
                       />

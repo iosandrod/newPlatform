@@ -34,7 +34,7 @@ export const scroll = (table: Table) => {
         range.rowStart = range.rowStart - headerheight
         range.rowEnd = range.rowEnd - headerheight
         _.merge(_this.scrollConfig, range)
-      }//
+      } //
       _this.onScroll(config) //
     },
   })
@@ -135,9 +135,11 @@ export const click_cell = (table: Table) => {
         let curEdit = table.getCurrentCellEdit()
         table.clearEditCell()
         table.setCurRow(originData) ////
-        let type = tCol.getCustomType()
-        if (type == 'photo') {
-          table.showScreenPhoto(originData[field])
+        if (tCol) {
+          let type = tCol.getCustomType()
+          if (type == 'photo') {
+            table.showScreenPhoto(originData[field])
+          }
         }
       } //
     },
@@ -467,7 +469,6 @@ export const mouseenter_cell = (table: Table) => {
         return
       }
       let templateTextWidth = container.templateTextWidth
-      console.log(templateTextWidth, 'sdfsfs') //
       if (rect.width < templateTextWidth) {
         let templateText = container.templateText
         tableInstance.showTooltip(col, row, {

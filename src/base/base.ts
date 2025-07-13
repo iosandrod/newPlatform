@@ -213,4 +213,8 @@ export class Base {
     } catch (error) {}
     return _item //
   }
+  getEnvValue(key){
+    let _v=import.meta.env[key]
+    return _v
+  }
 } //
