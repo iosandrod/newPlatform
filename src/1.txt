@@ -14685,3 +14685,38 @@ getCustomLayout() {
     //   }
     // }
     // _props
+
+
+
+    /* 
+      async function fn(context, next) {
+    let row = this.getCustomerClssCurRow()
+    let _fn = (data) => {
+        let _data = data.map(row => {
+            let children = row.children
+            let d1 = [row]
+            if (Array.isArray(children) && children.length > 0) {
+                return [row, ..._fn(children)]
+            }
+            return [row]
+        })
+        return _data.flat()
+    }
+    if (row == null) {
+        //没有客户类别就是跳出
+        return
+    }
+    let rows = _fn([row])
+    let rowsArg = rows.map(row => {
+        return row['cClsNo']
+    })
+    console.log(rows, 'testRows')
+    let query = context.queryArr
+    // let cClsNo = row['cClsNo']
+    let obj = {
+        cClsNo: rowsArg
+    }
+    query.push(obj)
+    await next()
+}
+    */

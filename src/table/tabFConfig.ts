@@ -291,6 +291,26 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               type: 'boolean', //
               tabTitle: titles[0],
             },
+            {
+              field: 'relateKey',
+              label: '关联字段',
+              type: 'string',
+              tabTitle: titles[0],
+              options: {
+                columnSelect: true,
+                tableName: tName, //
+              },
+            },
+            {
+              field: 'mainRelateKey',
+              label: '主表关联字段',
+              type: 'string',
+              tabTitle: titles[0],
+              options: {
+                columnSelect: true,
+                tableName: mN, // //
+              },
+            },
           ],
         },
       },

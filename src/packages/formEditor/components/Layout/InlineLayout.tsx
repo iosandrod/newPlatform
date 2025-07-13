@@ -32,7 +32,7 @@ export default defineComponent({
     if (store == parent) {
       // console.log(props.data, '根部的inline') //
       let columns = props.data.columns
-      if (columns.length == 1 && columns[0].type != 'grid') {
+      if (columns.length == 1 && columns[0]?.type != 'grid') {
         // debugger //
         let _d = _.cloneDeep(props.data) //
         let el1 = formIns.wrapElement(_d, false, false, false, true) //
@@ -108,12 +108,12 @@ export default defineComponent({
         }
       }
       return (
-        <div class={[ns.b(), ..._class1,'min-h-7']}>
+        <div class={[ns.b(), ..._class1, 'min-h-7']}>
           <LayoutDragGable
             data-layout-type={'inline'}
             type={'inline'}
             {...dragOptions}
-            class={[..._class1,'min-h-7']}
+            class={[..._class1, 'min-h-7']}
             data={props.data.columns}
             parent={props.parent}
           />

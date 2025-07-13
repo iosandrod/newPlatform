@@ -71,6 +71,10 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
                       value: 'search',
                     },
                     {
+                      label: '类型页面',
+                      value: 'relate', //
+                    },
+                    {
                       label: '明细页面',
                       value: 'detail',
                     }, //

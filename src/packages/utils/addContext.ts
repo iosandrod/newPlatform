@@ -4,6 +4,9 @@ import { Context } from './Context'
 // 示例使用
 export const addContext = (config) => {
   //
+  // if(config.node==null){
+
+  // }
   if (config.form == null) {
     //
     // debugger//
@@ -11,7 +14,6 @@ export const addContext = (config) => {
   const { node, parent, fn } = config //
   if (node == null) {
     throw new Error('没有节点') //
-    return
   }
   let _context = new Context({
     node: node,

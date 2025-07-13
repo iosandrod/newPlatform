@@ -1032,6 +1032,7 @@ export class PageDesign extends Form {
     this.openDialog(dialogConfig)
   }
   async designSearchForm() {
+    // debugger //
     let searchDialog = this.config.searchDialog
     if (searchDialog == null) {
       searchDialog = {} //
@@ -1043,7 +1044,7 @@ export class PageDesign extends Form {
     _data = { ...searchDialog, ..._data } ////
     let _data1 = this.getLayoutData()
     _data1.searchDialog = _data //
-    this.saveTableDesign({ refresh: false }) //
+    this.saveTableDesign({ refresh: false, ..._data1 }) //
     // await this.getSystem().updateCurrentPageDesign(_data1) //
   }
   async selectExcelFile() {
@@ -1606,38 +1607,6 @@ export class PageDesign extends Form {
   } //
   //进入打印
   async getRelateSearchWheres() {
-    /* 
-      async function fn(context, next) {
-    let row = this.getCustomerClssCurRow()
-    let _fn = (data) => {
-        let _data = data.map(row => {
-            let children = row.children
-            let d1 = [row]
-            if (Array.isArray(children) && children.length > 0) {
-                return [row, ..._fn(children)]
-            }
-            return [row]
-        })
-        return _data.flat()
-    }
-    if (row == null) {
-        //没有客户类别就是跳出
-        return
-    }
-    let rows = _fn([row])
-    let rowsArg = rows.map(row => {
-        return row['cClsNo']
-    })
-    console.log(rows, 'testRows')
-    let query = context.queryArr
-    // let cClsNo = row['cClsNo']
-    let obj = {
-        cClsNo: rowsArg
-    }
-    query.push(obj)
-    await next()
-}
-    */
     let allTable = this.getAllTable()
       .filter((item) => {
         let type = item.config?.options?.tableType //
@@ -1661,8 +1630,9 @@ export class PageDesign extends Form {
       let tableData = this.getTableRefData(name)
       let tableConfig = this.getTableConfig(name)
       let curRow = tableData.curRow //
-      let relateKey = tableConfig?.relateKey
-      let mainRelateKey = tableConfig?.mainRelateKey
+      let _config1 = tableConfig?.relateConfig || {} //
+      let relateKey = _config1?.relateKey
+      let mainRelateKey = _config1?.mainRelateKey //
       if (relateKey == null || mainRelateKey == null) {
         this.getSystem().confirmMessage(`${name}未设置关联字段`, 'warning') //
         continue

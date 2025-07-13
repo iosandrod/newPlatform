@@ -38,6 +38,7 @@ export class Context {
       enumerable: false,
       configurable: true,
     })
+    //
     let nodes = []
     if (node.type === 'subform') {
       nodes = node.list[0]
@@ -322,7 +323,8 @@ export class Context {
     arr.splice(index + 1, 0, newNode)
   }
   addContext(node, parent?: any, fn?: any) {
-    if (typeof node != 'object') {
+    if (typeof node != 'object' || node == null) {
+      //
       return
     }
     fn && fn(node)
@@ -335,7 +337,6 @@ export class Context {
   }
   delete() {
     //删除节点
-    // debugger //
     const arr = this.arr
     const node = this.node //
     let parent = this.parent //
