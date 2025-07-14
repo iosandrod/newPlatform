@@ -127,6 +127,10 @@ export default defineComponent({
     onContextmenu: {
       type: Function,
     },
+    uniqueOpened: {
+      type: Boolean,
+      default: true, //
+    },
   },
   setup(props, { expose, slots }) {
     const menuIns = new Menu(props) //

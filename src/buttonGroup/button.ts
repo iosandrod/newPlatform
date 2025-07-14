@@ -154,9 +154,26 @@ export class Button extends Base {
     } else {
       let tableName = page.tableName
       let type = page.getTableType()
-      type = type || 'main' //
-      let selectBtn = await sys.getSelectButtons(type)
+      type = type
+      let _id = this.config.id
+      let allTypes = [
+        'main',
+        'edit',
+        'search',
+        'import',
+        'export',
+        'detail',
+        'relate',
+      ]
+      let _type = allTypes.find((item) => {
+        let _reg = new RegExp(`^${item}`)
+        if (_reg.test(_id)) {
+          return item
+        }
+      }) //
+      let selectBtn = await sys.getSelectButtons(_type)
       let id = this.config.id
+
       let _btn = null
       if (
         selectBtn
@@ -182,6 +199,7 @@ export class Button extends Base {
     // return _fn
   }
   async runFn(_config) {
+    // debugger //
     try {
       let page = _config.page
       this.showDropdown() //

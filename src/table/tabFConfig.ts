@@ -53,9 +53,49 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
       },
       {
         field: 'dataSource',
-        label: '数据源', //
+        label: '表格数据源', //
         tabTitle: titles[0],
-        type: 'string', //
+        type: 'sform', //
+        options: {
+          itemSpan: 12,
+          items: [
+            {
+              field: 'dataSourceType',
+              label: '数据类型', //
+              type: 'select', //
+              options: {
+                options: [
+                  {
+                    label: '普通类型',
+                    value: 'normal', //
+                  },
+                  {
+                    label: '函数类型',
+                    value: 'function',
+                  },
+                  {
+                    label: '接口类型',
+                    value: 'api', //
+                  }, //
+                  {
+                    label: '视图类型',
+                    value: 'view', //
+                  },
+                ],
+              },
+            },
+            {
+              field: 'dataSource',
+              label: '数据源',
+              type: 'code', //
+            },
+            {
+              field: 'viewTable',
+              label: '视图表',
+              type: 'select', //
+            },
+          ],
+        },
       },
       {
         field: 'realTableName',

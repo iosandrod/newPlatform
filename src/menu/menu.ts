@@ -7,6 +7,7 @@ export class Menu extends Base {
   curContextMenu: any
   menuitems: MenuItem[] = []
   searchValue = '' ////
+  uniqueOpened = false
   constructor(config) {
     super()
     this.config = config
@@ -100,7 +101,15 @@ export class Menu extends Base {
   }
   removeMenuItem(id: any) {}
   getUniqueOpen() {
-    return true
+    let uniqueOpened = this.config.uniqueOpened
+    if (typeof uniqueOpened !== 'boolean') {
+      uniqueOpened = true
+    }
+    let globalValue = this.searchValue
+    if (globalValue.length > 0) {
+      uniqueOpened = false
+    } //
+    return uniqueOpened //
   }
   onContextmenu(e) {
     e.preventDefault() //

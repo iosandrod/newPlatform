@@ -3144,14 +3144,15 @@ export class Table extends Base {
       column: column, //
     }
     if (typeof fieldFormat == 'function') {
-      if (field == 'cSTCode') {
-        // if(record.cSTCode){
-        // }
-        // console.log(_value1,'sfsdf')  //
-      }
-      let _value1 = fieldFormat(obj1)
-      if (_value1 == null) {
-        _value1 = '' //
+      //
+      let _value1 = ''
+      try {
+        _value1 = fieldFormat(obj1)
+        if (_value1 == null) {
+          _value1 = '' //
+        }
+      } catch (error) {
+        console.error(error) //
       }
       let _watch = map1[`watch_arr`]
       if (_watch == null) {
@@ -3162,8 +3163,10 @@ export class Table extends Base {
       // let column=ref(config.column)
       let _w1 = watch(
         () => {
-          let _value = fieldFormat(obj1) //
-          return _value
+          try {
+            let _value = fieldFormat(obj1) //
+            return _value
+          } catch (error) {}
         },
         (v) => {
           this.updateIndexArr.add(_index)

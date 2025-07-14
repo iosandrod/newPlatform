@@ -174,8 +174,8 @@ export class FormItem extends Base {
       return //
     }
     let tableName = this.getTableName()
-    let f=this.getField()
-    console.log(f,'f',tableName,'tableName')
+    let f = this.getField()
+    console.log(f, 'f', tableName, 'tableName')
     this.getSystem().createColumnSelect(tableName)
   }
   initSTable() {
@@ -1126,7 +1126,6 @@ export class FormItem extends Base {
     return obj //
   }
   openMainMenu(e, item) {
-    //
     let f = this.getField()
     let tableName = this.getTableName() //
     let sys = this.getSystem()
@@ -1135,6 +1134,11 @@ export class FormItem extends Base {
       return
     }
     d.currentDField = f
+    let formIns = item?.formIns //
+    // if (formIns) {
+    //   //
+    //   d.curCForm = formIns //
+    // }
     d.openContextMenu(e, item) //
   }
   getIsShowSearchIcon() {
@@ -1332,4 +1336,9 @@ export class FormItem extends Base {
     //
   }
   getFormDisabled(config: any) {}
+  getImageBindValue() {
+    let _value = this.getBindValue()
+    if (Boolean(_value)) {
+    } //
+  }
 } //

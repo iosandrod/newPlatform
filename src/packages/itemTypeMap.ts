@@ -101,7 +101,7 @@ export const baseinfoType = (item: FormItem) => {
   obj.clearable = true
   obj.onInput = (config) => {
     let value = config.value
-    item.updateBindData({ value })//
+    item.updateBindData({ value }) //
     item.getTinyTableSearchData({
       value: value,
     })
@@ -118,6 +118,17 @@ export const colorType = (item: FormItem) => {
   obj.onInput = (config) => {} //
   return obj
 }
+export const imageType = (item: FormItem) => {
+  let obj = defaultType(item) //
+  obj.onChange = (config) => {
+    let value = config.value
+    item.updateBindData({ value }) //
+  }
+  obj.clearable = true
+  obj.modelValue=item.getImageBindValue()
+  obj.onInput = (config) => {} //
+  return obj
+}
 export const itemTypeMap = {
   input: inputType,
   string: inputType,
@@ -129,4 +140,5 @@ export const itemTypeMap = {
   sform: sformType, //
   baseinfo: baseinfoType,
   color: colorType,
+  images: imageType,
 }

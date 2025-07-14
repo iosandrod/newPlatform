@@ -1016,6 +1016,8 @@ export class System extends Base {
     let fConfig = {
       isTabForm: true,
       itemSpan: 12,
+      height: 0.8,
+      width: 0.8, //
       items: [
         {
           tabTitle: tabTitles[0], //
@@ -1154,14 +1156,15 @@ export class System extends Base {
         },
         {
           field: 'hooks',
-          // label: '高级钩子函数编辑',
+          label: '高级钩子函数编辑',
           type: 'stable',
           tabTitle: tabTitles[0],
           span: 24,
-          hiddenTitle: true, //
+          // hiddenTitle: true, //
           options: {
             tableTitle: '高级钩子', //
             tableState: 'edit', //
+            showTable: false,
             columns: [
               {
                 field: 'name',
@@ -1214,7 +1217,7 @@ export class System extends Base {
                 editType: 'boolean', //
               },
             ],
-            showTable: true, //
+            // showTable: true, //
           },
         },
         {
@@ -1456,15 +1459,15 @@ export class System extends Base {
     return _items //
   }
   async confirmDesignForm(config = {}) {
-    //
+    let _config = _.cloneDeep(config)
     return new Promise(async (resolve, reject) => {
       let createFn = () => {
         return {
           component: formCom, //
           props: {
             layoutData: config,
+            ..._config, //
             isDesign: true,
-            ...config, //
           },
         }
       }
@@ -2138,7 +2141,6 @@ export class System extends Base {
     return `${args}Buttons` //
   })
   async getSelectButtons(type = 'main') {
-    //
     let http = this.getHttp()
     let key = `${type}Buttons`
     let res = await http.find('paramvalue', {

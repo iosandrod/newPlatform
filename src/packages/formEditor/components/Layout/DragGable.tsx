@@ -354,6 +354,7 @@ export default defineComponent({
                                   class="flex flex-row"
                                   onContextmenu={(e: MouseEvent) => {
                                     if (mainPage) {
+                                      mainPage.curDForm
                                       //@ts-ignore
                                       mainPage.currentContextItem = {
                                         //@ts-ignore
@@ -369,6 +370,7 @@ export default defineComponent({
                                     formitem.openMainMenu(e, {
                                       config: {
                                         type: 'dform',
+                                        formIns: formIns,
                                       }, //
                                     })
                                   }}

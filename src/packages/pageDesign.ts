@@ -618,6 +618,7 @@ export class PageDesign extends Form {
   }
   //添加类别
   async addRelateTableRow(tableName?: any, row?: any) {
+    // debugger //
     let _config = tableName
     if (typeof tableName == 'string') {
       _config = {
@@ -914,12 +915,22 @@ export class PageDesign extends Form {
           return false //
         }),
       },
-      // {
-      //   label: '设计其他',
-      //   fn: async () => {
-      //     console.log('设计其他') //
-      //   },
-      // },
+      {
+        label: '设计当前表单',
+        fn: async () => {
+          //
+          // console.log(this.curCForm, 'testDForm') //
+          let curContext = this.currentContextItem
+          // debugger //
+          //@ts-ignore
+          let formIns = curContext?.config?.formIns //
+          if (formIns != null) {
+            let sys = this.getSystem()
+            let config = formIns.config
+            await sys.confirmDesignForm(config) //
+          }
+        },
+      },
       {
         label: '设计按钮',
         fn: async () => {
