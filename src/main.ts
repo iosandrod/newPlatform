@@ -3,7 +3,6 @@ import { createApp, nextTick } from 'vue' //
 import App from './App' //
 import router from '@/router'
 import elementPlus from 'element-plus'
-import * as VueVTable from '@visactor/vue-vtable'
 const app = createApp(App)
 import Vant, { Locale } from 'vant'
 import enUS from 'vant/es/locale/lang/en-US'
@@ -27,7 +26,7 @@ import { Base } from '@/base/base' //w
 import './run' //
 import { system } from './system'
 import buttonGroupCom from './buttonGroup/buttonGroupCom'
-import { http } from './service/client'
+import { myHttp } from './service/client'
 import selectCom from './select/selectCom'
 import { Table } from './table/table'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
@@ -45,18 +44,7 @@ import '@arco-design/web-vue/es/message/style/css'
 import '@arco-design/web-vue/es/modal/style/css'
 import '@arco-design/web-vue/es/notification/style/css'
 import Vue3Dragscroll from 'vue3-dragscroll'
-import AddNode from '@/audit/components/flow/AddNode.vue'
-import NodeWrap from '@/audit/components/flow/NodeWrap.vue'
-import SvgIcon from '@/audit/components/SvgIcon/index.vue'
-import vFocus from '@/audit/directive/focus'
-import '@/audit/styles/index.scss' //
-//@ts-ignore
 
-import pinia from '@/audit/stores'
-// import "@arco-design/web-vue/dist/arco.css";
-
-app.directive('focus', vFocus)
-// import "virtual:svg-icons-register";
 import Vuex from 'vuex'
 import printTemplateModule from '@/printTemplate/stores/modules/index.js'
 import './style.js'
@@ -72,6 +60,7 @@ import './style.scss' //
 import './assets/tailwind.css' //
 import './mainStyle.css'
 import './changeCalStyle.scss'
+export const http = new myHttp()
 //@ts-ignore
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -118,7 +107,7 @@ app.use(PrintDesign, {
   store,
 }) //
 app.use(store) //
-app.use(pinia) //
+// app.use(pinia) //
 registerEdit()
 Locale.use('en-US', enUS)
 // registerAntdComp(app)
@@ -133,17 +122,19 @@ app.component('erForm', formCom)
 // app.component('erForm', formEditor)
 app.component('erFormEditor', formEditor)
 app.component('erPage', pageCom) //
-app.component('SvgIcon', SvgIcon)
+// app.component('SvgIcon', SvgIcon)
 app.component('erTable', tableCom)
 app.component('erDropdown', dropdownCom)
 app.component('erSelect', selectCom) //
-app.component('AddNode', AddNode)
-app.component('NodeWrap', NodeWrap)
+
 app.use(context) //
 app.use(VxeTable) //
 app.use(VxeUIAll)
 app.use(router)
 
 app.use(elementPlus) //
-app.mount('#app')
+nextTick(() => {
+  //
+  app.mount('#app')
+})
 //

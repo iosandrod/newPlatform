@@ -49,14 +49,18 @@ import { Dropdown } from '@/menu/dropdown'
 import { useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { createFooterTheme, createTheme } from './tableTheme' //
 import tableCom from './tableCom'
-import { createGroup, createText } from '@visactor/vtable/es/vrender'
+import { createGroup, createText, Text } from '@visactor/vtable/es/vrender'
 import { SeriesNumberColumn } from './seriesNumberColumn'
 import { initContextMenu } from './tableContext'
 import { ControllerColumn } from './controllerColumn'
 import { InputEditor } from './editor/string'
 import { Row } from 'vant'
 import { containerMap } from './columnFn'
+import { Gantt } from '@visactor/vtable-gantt'
+import { Group } from '@visactor/vtable/es/render/layout'
+import { createImagesArr, createTextArr } from './columnUtil'
 export class Table extends Base {
+  currentClickButton: any
   useCache = false
   selectCacheCell: any = []
   isTreeIconClick = false
@@ -144,7 +148,7 @@ export class Table extends Base {
     colStart: 0,
     colEnd: 0,
   }
-  currentIndexContain = shallowRef({}) as any
+  // currentIndexContain = shallowRef({}) as any
   eventManager: {
     [key: string]: Array<{
       callback?: Function
@@ -171,15 +175,14 @@ export class Table extends Base {
     let oldIndex = oldCurRow._index || '' //
     let newIndex = row._index || ''
     this.timeout['updateRecords__now'] = true
-    let tableName = this.getTableName()
-
+    let tableName = this.getTableName() //
     let onCurRowChange = this.config.onCurRowChange
     if (typeof onCurRowChange == 'function') {
       onCurRowChange({ row: row, oldRow: oldCurRow }) //
     }
     this.updateIndexArr.add(oldIndex)
     this.updateIndexArr.add(newIndex) //
-  } //
+  }
   getCurRow() {
     return this.tableData.curRow //
   }
@@ -251,7 +254,11 @@ export class Table extends Base {
     }
   }
   setData(data) {
-    this.currentIndexContain = shallowRef({})
+    if (Array.isArray(data) == false) {
+      //
+      return
+    }
+    // this.currentIndexContain = shallowRef({})
     let oldD = this.tableData.data
     let _d1 = this.getFlatTreeData(oldD)
     let dM = this.dataMap
@@ -277,12 +284,12 @@ export class Table extends Base {
     if (_row == null) {
       return //
     }
-    setTimeout(() => {
-      let record = this.getInstance()?.records?.[0]
-      if (record) {
-        this.setCurRow(record) //
-      }
-    }, 800)
+    let curRowIndex = this.getCurRow()?._index
+    let dataMap = this.dataMap
+    let _row1 = dataMap[curRowIndex]
+    if (_row1 == null) {
+      this.tableData.curRow = null
+    } //
   }
   getTableName() {
     let tableName = this.config.tableName
@@ -463,7 +470,7 @@ export class Table extends Base {
         return null
       },
       sortState: [],
-      theme: createTheme() as any,
+      theme: createTheme(this) as any,
       defaultRowHeight: this.getDefaultRowHeight(), //
       heightMode: 'standard', //
       defaultHeaderRowHeight: this.getDefaultHeaderRowHeight(), //
@@ -546,6 +553,7 @@ export class Table extends Base {
     this.initEventListener() //
     this.loadColumns()
     this.loadData()
+
     // let _row = this.config.curRow
     // if (_row == null) {
     //   _row = this.templateProps.data[0]
@@ -576,6 +584,7 @@ export class Table extends Base {
     }
     let fListTable = ListTable
     let table = new fListTable({
+      // showHeader: false,
       autoFillHeight: true,
       frozenColCount: this.frozenColCount,
       multipleSort: true, //
@@ -660,12 +669,12 @@ export class Table extends Base {
     _col1 = [...lfsCols, ...sCols, ...rfsCols]
 
     if (_show) {
-      let cCol = this.checkboxColumn
+      let cCol = toRaw(this.checkboxColumn) //
       _col1.unshift(cCol.getFooterColumnProps())
     } //
     if (_show1 == true) {
       //
-      let cCol = this.controllerColumn
+      let cCol = toRaw(this.controllerColumn)
       _col1.push(cCol.getFooterColumnProps())
     }
     return _col1
@@ -718,7 +727,9 @@ export class Table extends Base {
     let _columns = this.templateProps.columns || [] //
     let instance = this.getInstance()
     let n = Date.now().toString()
-    console.time(n) //
+    if (instance == null) {
+      return //
+    }
     let fro = instance.options.frozenColCount
     let right = instance.options.rightFrozenColCount //
 
@@ -733,7 +744,6 @@ export class Table extends Base {
     let status1 = myFro > 0 && myFro != fro
     if (status || status1) {
       if (fro != null || right != null) {
-        // debugger //
         //重新绘制表格
         this.render(true) //
         return
@@ -754,14 +764,9 @@ export class Table extends Base {
         } //
       }
     }
-    // instance.clearColWidthCache()
     //@ts-ignore
     instance.updateColumns(_columns, { clearColWidthCache: true }) //
-    // instance.clearColWidthCache()
-    // setTimeout(() => {
-    // }, 100)
     let footerIns = this.getFooterInstance()
-    console.timeEnd(n) //
   }
   @useTimeout({
     number: 100, //
@@ -796,7 +801,7 @@ export class Table extends Base {
     return _arr.flat()
   }
   @useTimeout({
-    number: 200, ////
+    number: 200, //
     key: 'updateRecords',
   }) //
   updateRecords() {
@@ -822,17 +827,17 @@ export class Table extends Base {
         _iArr1.push(k)
       }
     }
-    // console.log(tableIns.dataMap, '更新的index') ////
+    // debugger//
     tableIns.updateIndexArr.clear() //
     if (_arr.length != 0) {
       console.time(uuid) //
-      let currentIndexContain = containerMap[this.id] || {} //
-      let updateKeys = Object.keys(currentIndexContain) //
+      let _containerMap = containerMap[this.id] || {} //
+      let updateKeys = Object.keys(_containerMap) //
       let _keys = updateKeys.filter((key) => {
         return _iArr1.includes(key)
       })
       let allContain = _keys.map((key) => {
-        return currentIndexContain[key] //
+        return _containerMap[key] //
       })
 
       if (this.getIsTree()) {
@@ -840,6 +845,7 @@ export class Table extends Base {
         // this.instance.setRecords(c) //
         // return
       }
+      let c1 = null
       allContain.forEach((cArr) => {
         if (cArr == null) {
           return //
@@ -849,13 +855,18 @@ export class Table extends Base {
           let updateFn = c.updateFn
           if (typeof updateFn == 'function') {
             updateFn() //
+          } //
+          const container = c.container
+          if (container?.stage?.render) {
+            c1 = container
+            // c1.stage?.render()//
           }
         })
       })
-      nextTick(() => {
-        this.updateSelectRange()
-      }) //
-      // ins.changeCellValue(0, 0, '')//
+      if (c1) {
+        c1.stage?.render() //
+      } //
+      console.log('用时') //
       console.timeEnd(uuid) //
     }
   }
@@ -943,6 +954,7 @@ export class Table extends Base {
       event(...args) //
     }
   }
+
   copyCurrentCell() {
     const instance = this.getInstance()
     let select = instance.getSelectedCellInfos()
@@ -962,7 +974,29 @@ export class Table extends Base {
       .map((item) => {
         return realColumns.find((column) => column.getField() === item)
       })
-    console.log(data, columns, 'testColumns') //
+    if (data.length == 0 || columns.length == 0) {
+      return
+    }
+    let v = ''
+    if (data.length == 1 && columns.length == 1) {
+      v = data[0][columns[0].getField()] //
+    } else {
+      let str = ``
+      for (let i = 0; i < data.length; i++) {
+        const item = data[i]
+        for (let j = 0; j < columns.length; j++) {
+          const column = columns[j]
+          if (j > 0) {
+            str += `${'\t'}${item[column.getField()]}`
+          } else {
+            str += `${item[column.getField()]}`
+          }
+        }
+        str += `\n`
+      }
+      v = str //
+    }
+    this.getSystem().copyValue(v) //
   }
   getArrBySelect() {
     let records = this.getInstance().records
@@ -1153,6 +1187,9 @@ export class Table extends Base {
     //
     let config = this.config
     let showCalculate = config.showCalculate
+    if (showCalculate == null) {
+      showCalculate = true //
+    }
     return showCalculate
   }
   getFlatTreeData(_data?: any, fn?: any): any[] {
@@ -1173,7 +1210,7 @@ export class Table extends Base {
     return data ////
   }
   getDefaultWidth() {
-    return 100
+    return 150
   }
   setColumns(columns) {
     this.columns.splice(0) //
@@ -1236,7 +1273,7 @@ export class Table extends Base {
     }
     let isTree = this.getIsTree()
     if (isTree) {
-      //
+      // debugger //
       let _data3 = this.filterTreeInPlace(_data1, (node) => {
         let status = true
         let globalValue = this.globalConfig.value
@@ -1318,8 +1355,7 @@ export class Table extends Base {
     }
     //@ts-ignore
     nextTick(() => {
-      //
-      this.updateCanvas() ////
+      this.updateCanvas()
     })
   }
   scrollToRow(sConfig) {
@@ -1415,7 +1451,7 @@ export class Table extends Base {
       } //
       let data = this.getData()
       let lastD = data[data.length - 1]
-      this.setCurRow(lastD)
+      // this.setCurRow(lastD)
       this.addAfterMethod({
         methodName: 'updateCanvas', //
         fn: async () => {
@@ -1452,8 +1488,34 @@ export class Table extends Base {
     } else {
       footerInstance.release() //
       this.footerInstance = null //
-    } //
-    this.currentIndexContain = shallowRef({}) //
+    }
+    let _map = containerMap[this.id]
+    if (_map) {
+      Object.entries(_map).forEach(([key, value]) => {
+        let watch_arr = value[`watch_arr`]
+        if (watch_arr == null) {
+          return
+        }
+        let _arr1 = Object.values(watch_arr)
+        if (Array.isArray(_arr1)) {
+          _arr1.forEach((item) => {
+            //
+            if (typeof item == 'function') {
+              item()
+              console.log(item, 'item')
+            }
+          })
+        }
+      })
+    }
+    containerMap[this.id] = null
+    containerMap[this.id + '_arr'] = null //
+    // console.log(
+    //   containerMap,
+    //   this.id,
+    //   containerMap[this.id],
+    //   'fjslkfjslkfsdfsd',
+    // ) //
   }
   @useRunAfter()
   @useTimeout({ number: 300, key: 'updateTimeout' })
@@ -1466,11 +1528,24 @@ export class Table extends Base {
     let records = data || instance.records
     let id = this.uuid() //
     console.time(id)
-    this.currentIndexContain = shallowRef({}) //
-    console.log('更新了数据', records.length, 'dfjldskfjsdlfsdf') //
+    // this.currentIndexContain = shallowRef({}) //
     instance.setRecords(records)
+    let ganttInstance = this.getGanttInstance()
+    if (ganttInstance != null) {
+      ganttInstance.setRecords(records)
+    }
+    console.log('setData用时') //
     console.timeEnd(id)
-    console.log('视图更新时间') //
+    let curRow = this.getCurRow()
+    if (curRow == null) {
+      let row0 = records?.[0]
+      if (row0 != null) {
+        this.setCurRow(row0) //
+      }
+    }
+  }
+  getGanttInstance(): Gantt {
+    return null //
   }
   addAfterMethod(config) {
     config.type = 'after' //
@@ -1617,29 +1692,88 @@ export class Table extends Base {
       })
     })
   } //
-  addRow(row: any) {
-    let data = this.getData()
-    data.push(row) //
+  addRow(row: any, parentRow?: any) {
+    // debugger//
+    // debugger //
+    let _index = row['_index']
+    if (_index == null) {
+      let _level = parentRow?.['_level']
+      if (isNaN(_level)) {
+        _level = 0
+      } else {
+        _level += 1
+      }
+      this.initDataRow(row, _level) //
+    }
+    if (parentRow != null) {
+      let children = parentRow._children
+      if (!Array.isArray(children)) {
+        children = []
+        parentRow.children = children
+      }
+      children.push(row) //
+      // this.updateIndexArr.add(parentRow['_index']) //
+    } else {
+      let data = this.getData()
+      data.push(row) //
+    }
   }
   delCurRow() {
+    // debugger //
     let curRow = this.tableData.curRow
-    let showData = this.getData() //
-    let index = showData.indexOf(curRow) //
-    if (index == -1) {
+
+    let showData = this.getData()
+    // let s = showData == this.config.data
+    let _r = null
+    let pData = showData
+    let nextRow = null
+    if (this.getIsTree()) {
+      showData = this.getFlatTreeData(showData)
+      let pRow = showData.find((row) => {
+        let _children = row._children || []
+        if (_children.includes(curRow)) {
+          return true
+        }
+      })
+      if (pRow == null) {
+        showData = pData
+        if (showData.includes(curRow)) {
+          pRow = {
+            _children: showData,
+          }
+        }
+      }
+      if (pRow) {
+        let _children = pRow._children || []
+        let index = _children.indexOf(curRow)
+        if (index == -1) {
+          return
+        }
+        _r = _children.splice(_children.indexOf(curRow), 1)
+        nextRow = _children[index - 1]
+        nextRow = nextRow || _children[0] || pRow
+        if (nextRow['_index'] == null) {
+          nextRow = null
+        } //
+      } //
+    } else {
+      let index = showData.indexOf(curRow)
+      if (index == -1) {
+        return
+      }
+      _r = showData.splice(index, 1) //
+      nextRow = showData[index - 1]
+      nextRow = nextRow || showData[0] //
+    }
+    if (_r == null) {
       return
     }
-    let _r = showData.splice(index, 1) //
     this.changeRowState(_r[0], 'delete')
     this.deleteArr.push(_r[0]) //
     nextTick(() => {
-      let _row = showData[index]
-      if (_row == null) {
-        _row = showData[index - 1]
-        if (_row == null) {
-          return
-        }
+      if (nextRow != null) {
+        this.setCurRow(nextRow) //
       }
-      this.setCurRow(_row) //
     })
   }
   getDisableColumnResize() {
@@ -1740,155 +1874,11 @@ export class Table extends Base {
     }
     _config.indexArr = [] //
     this.columnFilterConfig.filterConfig = [...oldFilterConfig] ////
-    console.log(_config, 'test_config') //
     if (all == true) {
       this.columnFilterConfig.filterConfig = [] //
     }
   }
-  // jumpToSearchNext(pre = false) {
-  //   //
-  //   let ins = this.getInstance() //
-  //   // let select = ins.getSelectedCellInfos()
-  //   let select = this.selectCacheCell //
-  //   let _d = select?.[0]?.[0]
-  //   if (_d?.originData == null) {
-  //     select = [] //
-  //   }
-  //   // console.log(select) //
-  //   let globalValue = this.globalConfig.value
-  //   if (globalValue.length == 0) {
-  //     return //
-  //   }
-  //   let records = this.getShowRecords()
-  //   let field = null
-  //   let rowIndex = null
-  //   if (select.length == 0) {
-  //     if (pre == true) {
-  //       for (let i = records.length - 1; i >= 0; i--) {
-  //         let row = records[i]
-  //         let _value = Object.entries(row).find(([key, value]) => {
-  //           if (
-  //             key != '_index' &&
-  //             key != '_shtml' &&
-  //             typeof value != 'boolean' &&
-  //             typeof value != 'object'
-  //           ) {
-  //             let reg = new RegExp(globalValue, 'gi')
-  //             let _value1 = `${value}` //
-  //             return reg.test(_value1) //
-  //           }
-  //         })
-  //         if (_value != null) {
-  //           field = _value[0]
-  //           rowIndex = i
-  //           break
-  //         }
-  //       }
-  //     } else {
-  //       for (let i = 0; i < records.length; i++) {
-  //         let row = records[i]
-  //         let _value = Object.entries(row).find(([key, value]) => {
-  //           if (
-  //             key != '_index' &&
-  //             key != '_shtml' &&
-  //             typeof value != 'boolean' &&
-  //             typeof value != 'object'
-  //           ) {
-  //             let reg = new RegExp(globalValue, 'gi')
-  //             let _value1 = `${value}` //
-  //             return reg.test(_value1) //
-  //           }
-  //         })
-  //         if (_value != null) {
-  //           field = _value[0]
-  //           rowIndex = i
-  //           break
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     let _d = select[0][0]
-  //     let _field = _d.field //
-  //     let originData = select[0][0].originData
-  //     let index = records.findIndex((item) => item == originData)
-  //     if (pre == true) {
-  //       for (let i = index; i >= 0; i--) {
-  //         let row = records[i]
-  //         let _value = Object.entries(row).find((item) => {
-  //           let [key, value] = item
-  //           if (
-  //             key != '_index' &&
-  //             key != '_shtml' &&
-  //             typeof value != 'boolean' &&
-  //             typeof value != 'object'
-  //           ) {
-  //             let reg = new RegExp(globalValue, 'gi')
-  //             let _value1 = `${value}` //
-  //             let status = reg.test(_value1) //
-  //             if (i == index) {
-  //               let allCols = this.templateProps.columns
-  //               let lastAllField = allCols.findIndex(
-  //                 (item) => item.field == _field, //
-  //               )
-  //               let lastFields = allCols //
-  //                 .slice(lastAllField + 1) //
-  //                 .map((item) => item.field)
-  //               if (!lastFields.includes(key)) {
-  //                 status = false //
-  //               }
-  //             }
-  //             return status
-  //           }
-  //         }) //
-  //         if (_value != null) {
-  //           field = _value[0]
-  //           rowIndex = i
-  //           break
-  //         }
-  //       }
-  //     } else {
-  //       for (let i = index; i < records.length; i++) {
-  //         let row = records[i]
-  //         let _value = Object.entries(row).find((item) => {
-  //           let [key, value] = item
-  //           if (
-  //             key != '_index' &&
-  //             key != '_shtml' &&
-  //             typeof value != 'boolean' &&
-  //             typeof value != 'object'
-  //           ) {
-  //             let reg = new RegExp(globalValue, 'gi')
-  //             let _value1 = `${value}` //
-  //             let status = reg.test(_value1) //
-  //             if (i == index) {
-  //               let allCols = this.templateProps.columns
-  //               let lastAllField = allCols.findIndex(
-  //                 (item) => item.field == _field, //
-  //               )
-  //               let lastFields = allCols //
-  //                 .slice(lastAllField + 1) //
-  //                 .map((item) => item.field)
-  //               if (!lastFields.includes(key)) {
-  //                 status = false //
-  //               }
-  //             }
-  //             return status
-  //           }
-  //         }) //
-  //         if (_value != null) {
-  //           field = _value[0]
-  //           rowIndex = i
-  //           break
-  //         }
-  //       }
-  //     }
-  //   }
-  //   if (field == null || rowIndex == null) {
-  //     return
-  //   }
-  //   let addr = ins.getCellAddrByFieldRecord(field, rowIndex) //
-  //   ins.selectCell(addr.col, addr.row) //
-  // }
+
   jumpToSearchNext(pre = false) {
     const ins = this.getInstance()
     const query = this.globalConfig.value?.trim()
@@ -2093,16 +2083,20 @@ export class Table extends Base {
       return false
     }
     if (typeof beforeEditCell == 'function') {
-      let re = ins.getRecordByCell(col, row)
-      let f: any = ins.getBodyField(col, row)
-      value = value || re[f]
-      let _status = beforeEditCell({
-        row: re,
-        field: f,
-        value: value,
-      })
-      if (_status == false) {
-        return false
+      // debugger
+      // let re = ins.getRecordByCell(col, row)
+      let re = ins.getRecordByRowCol(col, row)
+      if (re != null) {
+        let f: any = ins.getBodyField(col, row)
+        value = value || re[f]
+        let _status = beforeEditCell({
+          row: re,
+          field: f,
+          value: value,
+        })
+        if (_status == false) {
+          return false
+        }
       }
     }
   }
@@ -2238,6 +2232,11 @@ export class Table extends Base {
         writable: true,
       })
       this.dataMap[e._index] = e
+      Object.defineProperty(e, 'hierarchyState', {
+        writable: true,
+        value: '',
+        enumerable: false,
+      }) //
     }
     if (e['_shtml'] == null) {
       let _v = Object.entries(e).reduce((res, [k, v]) => {
@@ -2256,17 +2255,29 @@ export class Table extends Base {
         value: 'unChange',
         enumerable: false,
         writable: true, //
-      }) //
+      })
     }
     this.dataMap[e._index] = e //
     let children = e['children']
+    if (this.getIsTree()) {
+      if (children == null) {
+        e.children = []
+      }
+      if (e['_level'] == null) {
+        Object.defineProperty(e, '_level', {
+          value: i,
+          enumerable: false,
+          writable: true, //
+        })
+      }
+    } //
     if (i > 0) {
       Object.defineProperty(e, '_level', {
         value: i,
         enumerable: false,
         writable: true, //
       })
-    }
+    } //
     if (Array.isArray(children) && children.length > 0) {
       //
       children.forEach((e1) => {
@@ -2314,7 +2325,7 @@ export class Table extends Base {
     return contextItems
   }
   getDefaultHeaderRowHeight() {
-    return 30 //
+    return 35 //
   }
   getIsFilterTable() {
     let config = this.config
@@ -2555,15 +2566,16 @@ export class Table extends Base {
     } //
     return false
   }
-  openTreeRow(col, row) {
-    console.log(col, row, 'openTreeRow') //
+  openTreeRow(config) {
+    let { col, row, data: _r, status } = config //
     let ins = this.getInstance() //
-    let record = ins.getRecordByCell(col, row) //
-    let f = ins.getBodyField(col, row)
-    let _c = this.getColumns().find((c) => c.getField() == f)
-    if (_c?.getIsTree() != true) {
-      //
-      return
+    let record = _r || ins.getRecordByCell(col, row) //
+    if (col || row) {
+      let f = ins.getBodyField(col, row)
+      let _c = this.getColumns().find((c) => c.getField() == f)
+      if (_c?.getIsTree() != true) {
+        return
+      }
     }
     if (record == null) {
       return //
@@ -2572,16 +2584,40 @@ export class Table extends Base {
     this.updateIndexArr.add(_index) //
     let _expanded = Boolean(record._expanded)
     let _status = !_expanded
+    if (typeof status == 'boolean') {
+      _status = status
+      if (_status == _expanded) {
+        return //
+      }
+    }
     // let _row=ins
     Object.defineProperty(record, '_expanded', {
       value: _status,
       enumerable: false,
       writable: true,
     }) //
-    ins.toggleHierarchyState(col, row) ////
-    setTimeout(() => {
-      console.log(record, 'testRecords') //
-    }, 100)
+    if (col == null || row == null) {
+      // debugger //
+      let column = this.getFlatColumns()
+        .find((col) => {
+          return col.getIsTree() == true
+        })
+        ?.getField()
+      let _index = record?.['_index']
+      if (column != null && _index != null) {
+        let container = this.getCacheContainer(_index, column, true)
+        let _row = container?.row
+        let _col = container?._col //
+        if (_row == null || _col == null) {
+          return
+        } //
+        row = _row
+        col = _col
+      } //
+    }
+    if (col != null && row != null) {
+      ins.toggleHierarchyState(col, row)
+    }
   }
   setRowDragAble(status) {}
   getTreeDataByPid(pid) {
@@ -2861,14 +2897,12 @@ export class Table extends Base {
       } else {
         let _index = _row['_index']
         this.validateMap[_index] = [err]
-        // debugger//
         this.showErrorTopTip() //
         reject(err)
       }
     })
   }
   showErrorTopTip() {
-    // debugger//
     let validateMap = this.validateMap
     if (Object.keys(validateMap).length == 0) {
       return
@@ -2892,6 +2926,7 @@ export class Table extends Base {
           return config //
         }
         if (config.complete == true) {
+          //
           return config
         }
         if (hierarchyState == 'expand' && children.length > 0) {
@@ -2911,7 +2946,6 @@ export class Table extends Base {
     // console.log(addR, 'addR') //
 
     let fMes = err.message || '数据校验失败' //
-    // debugger//
     let sCol = addR.col - 2
     let sRow = addR.row - 2
     if (sCol < 0) {
@@ -3016,7 +3050,7 @@ export class Table extends Base {
       }
     }
   } //
-  getCacheContainer(_index, filed) {
+  getCacheContainer(_index, filed, getObj = false) {
     let _containerMap = containerMap
     let id = this.id //
     let _map = _containerMap[id]
@@ -3029,9 +3063,14 @@ export class Table extends Base {
     }
     let c = map[filed]
     if (c != null) {
-      // console.log(c) //
+    }
+    if (getObj == true) {
+      return c
     }
     return c?.container //
+  }
+  onHeaderCellVisible(config) {
+    //
   }
   onCellVisible(config) {
     let field = config.field //
@@ -3105,15 +3144,15 @@ export class Table extends Base {
       column: column, //
     }
     if (typeof fieldFormat == 'function') {
-      if (field == 'cSTCode') {
-        // if(record.cSTCode){
-        //   debugger//
-        // }
-        // console.log(_value1,'sfsdf')  //
-      }
-      let _value1 = fieldFormat(obj1)
-      if (_value1 == null) {
-        _value1 = '' //
+      //
+      let _value1 = ''
+      try {
+        _value1 = fieldFormat(obj1)
+        if (_value1 == null) {
+          _value1 = '' //
+        }
+      } catch (error) {
+        console.error(error) //
       }
       let _watch = map1[`watch_arr`]
       if (_watch == null) {
@@ -3124,8 +3163,10 @@ export class Table extends Base {
       // let column=ref(config.column)
       let _w1 = watch(
         () => {
-          let _value = fieldFormat(obj1) //
-          return _value
+          try {
+            let _value = fieldFormat(obj1) //
+            return _value
+          } catch (error) {}
         },
         (v) => {
           this.updateIndexArr.add(_index)
@@ -3183,7 +3224,12 @@ export class Table extends Base {
     }
     obj1[`watch_arr`] = null //
   }
-  onScroll(config) {}
+  @useTimeout({
+    number: 300,
+  })
+  onScroll(config) {
+    let scrollConfig = this.scrollConfig
+  }
   clearCache() {
     let id = this.id
     let _containerMap = containerMap
@@ -3201,7 +3247,223 @@ export class Table extends Base {
     if (typeof status !== 'boolean') {
       return
     } //
-
     this.useCache = status
+  } //
+  getControllerButtons() {
+    let config = this.config
+    let controllerButtons = config.controllerButtons
+    if (!Array.isArray(controllerButtons)) {
+      return []
+    }
+    return controllerButtons //
+  }
+  onControllerButtonClick(btn) {
+    //
+    this.currentClickButton = btn
+    nextTick(() => {
+      this.currentClickButton = null
+    })
+  }
+  async runControllBtn(config) {
+    let originData = config.originData //
+    let button = config.button
+    let fn = button?.fn
+    if (typeof fn == 'function') {
+      await fn({ data: originData, table: this }) //
+    }
+  }
+  getFlatGroupChildren(group: Group) {
+    let arr = []
+    let children = group.getChildren()
+    if (Array.isArray(children)) {
+      arr = arr.concat(children)
+      children.forEach((item) => {
+        arr = arr.concat(this.getFlatGroupChildren(item))
+      })
+    }
+    return arr
+  }
+  getCellVisitConfig(config: any) {
+    let _this1 = this
+    let column: Column = config.column
+    let _this = column
+    let container: Group = config.container
+    let row = config.row
+    let col = config.col
+    let table: ListTable = config.table //
+    let record = table.getCellOriginRecord(col, row)
+    let count = table.visibleRowCount + 400
+    let obj: any = {
+      field: column.getField(),
+      record: record,
+      _col: column,
+      container,
+      rowCount: count,
+      fieldFormat: _this.getFormat(), //
+    }
+    // let updateFn = () => {}
+    let updateFn = null
+    if (
+      column.getEditType() == 'boolean' ||
+      column.getField() == 'checkboxField' //
+    ) {
+      updateFn = updateFn = () => {
+        //基本的样式
+        let bg = _this.getIndexColor(row, record)
+        if (record?._index == _this.table.tableData?.curRow?._index) {
+          bg = _this.getCurrentRowColor() //
+        } //
+        container.setAttribute('background', bg)
+        let f = _this.getField()
+        let c = record[f] //
+        c = _this.getIsChecked(record)
+        let num = Number(c)
+        if (!isNaN(num)) {
+          c = num //
+        }
+        let children = _this1.getFlatGroupChildren(container)
+        let checkbox1 = children.find((item) => item._checkIcon != null) //
+        if (checkbox1) {
+          checkbox1.attribute.checked = Boolean(c) //
+          checkbox1.render() //
+        }
+      }
+    }
+    if (column.getField() == 'seriesNumber') {
+      updateFn = () => {
+        let bg = _this.getIndexColor(row)
+        if (record?._index == _this.table.tableData?.curRow?._index) {
+          bg = _this.getCurrentRowColor()
+        } //
+        container.setAttribute('background', bg) //
+      }
+    }
+    if (column.getCustomType() == 'photo') {
+      updateFn = () => {
+        let bg = _this.getIndexColor(row, record)
+        if (record?._index == _this.table.tableData?.curRow?._index) {
+          bg = _this.getCurrentRowColor() //
+        } //
+        container.setAttribute('background', bg) //
+      }
+    }
+    if (typeof updateFn !== 'function') {
+      //
+      updateFn = () => {
+        // let record = table.getCellOriginRecord(col, row)
+        //基本的样式
+        let bg = _this.getIndexColor(row, record)
+        if (record?._index == _this.table.tableData?.curRow?._index) {
+          bg = _this.getCurrentRowColor() //
+        } //
+        container.setAttribute('background', bg)
+        let formatFn = _this.getFormat()
+        let _value = formatFn({
+          row: record,
+          col: _this,
+          table: _this.table,
+          field: _this.getField(), //
+        })
+        let child = _this1.getFlatGroupChildren(container) //
+        // console.log(child) //
+        // debugger //
+        let textG: Group = child.find((v) => v.isText == true)
+        if (textG != null) {
+          if (_this1.globalConfig.value?.length > 0) {
+            textG.removeAllChild() //
+            let newText = createTextArr(
+              column,
+              _value,
+              _this1.globalConfig.value,
+            ) //
+            let nChil = newText.getChildren()
+            for (const n of nChil) {
+              textG.add(n) //
+            }
+          } else {
+            let c: Text = textG.getChildren()[0] as any
+            c.setAttribute('text', _value)
+          }
+        }
+        if (column.getIsTree()) {
+          let treeIcon = child.find((v) => v.isExpand == true)
+          if (treeIcon) {
+            let _expanded = record['_expanded']
+            // debugger //
+            let t = _this.getExpandIcon(_expanded)
+            if (record?.children?.length == 0) {
+              t = null //
+            }
+            treeIcon.setAttribute('image', t) //
+          }
+        }
+      }
+    }
+    obj.updateFn = updateFn //
+    return obj
+  }
+  async onImageCellLoad(config: any) {
+    setTimeout(async () => {
+      try {
+        //
+        let _this1 = this
+        let column: Column = config.column
+        let _this = column
+        let container: Group = config.container
+        let row = config.row
+        let col = config.col
+        let table: ListTable = config.table //
+        let record = table.getCellOriginRecord(col, row)
+        let count = table.visibleRowCount + 400
+        if (record == null) {
+          return
+        }
+        let rowRange = table.getBodyVisibleRowRange() //
+        let start = rowRange.rowStart
+        let end = rowRange.rowEnd
+        if (row < start || row > end) {
+          return //
+        }
+        let _index = record._index
+        let field = column.getField()
+        let _container = this.getCacheContainer(_index, field)
+        if (_container == null) {
+          return
+        } //
+        let children = _this1.getFlatGroupChildren(_container)
+        let bindValue = record[field]
+        if (bindValue == null) {
+          return
+        }
+        let imageGroup = children.find((item) => item.isImage == true)
+        if (imageGroup == null) {
+          return //
+        } //
+        let _images = await _this1.getSystem().loadImage(bindValue) //
+        let targetData = _images.find((img) => {
+          return img.url == bindValue
+        })
+        if (targetData == null) {
+          return
+        } //
+        // console.log(targetData, 'testData') //
+        let base64 = targetData.base64
+        let { height, width } = container.attribute
+        let _h = height
+        if (height > width) {
+          _h = width
+        }
+        let images = createImagesArr([base64], { height: _h, width: _h }) //
+        imageGroup.removeAllChild()
+        for (const ig of images) {
+          imageGroup.add(ig)
+        }
+      } catch (error) {
+        return //
+      }
+    }, 1000) //
+  }
+  showScreenPhoto(imageData) {
+    this.getSystem().showScreenPhoto(imageData) //
   }
 }

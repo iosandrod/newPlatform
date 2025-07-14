@@ -7,7 +7,6 @@ export default defineComponent({
     let localUserid = localStorage.getItem('userid')
     let _opt = ref([])
     const data = reactive({
-      // appName: 'platform',
       appName: 'erp',
       loginType: 'email',
       email: '1151685410@qq.com',
@@ -36,20 +35,7 @@ export default defineComponent({
           required: true,
           options: { password: true },
         },
-        // {
-        //   field: 'userid',
-        //   type: 'select',
-        //   label: '公司',
-        //   required: true,
-        //   options: { options: [] },
-        // },
-        // {
-        //   field: 'appName',
-        //   type: 'select',
-        //   label: '应用',
-        //   required: true,
-        //   options: { options: [] },
-        // },
+
         { field: '_captcha', label: '验证码', type: 'string' },
       ],
       itemSpan: 24,

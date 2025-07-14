@@ -1,6 +1,6 @@
 import io, { Socket } from 'socket.io-client'
 import socketio from '@feathersjs/socketio-client'
-import { feathers, Params } from '@feathersjs/feathers'
+import { Application, feathers, Params } from '@feathersjs/feathers'
 import auth, {
   AuthenticationClient,
   AuthenticationClientOptions,
@@ -13,7 +13,8 @@ import {
   AuthenticationResult,
 } from '@feathersjs/authentication'
 import { nextTick } from 'vue'
-import axios from 'axios'
+import axios, { AxiosInstance } from 'axios'
+import { reject } from 'lodash'
 export const defaultStorage: any = getDefaultStorage()
 const defaults: AuthenticationClientOptions = {
   header: 'Authorization',
@@ -36,7 +37,7 @@ if (userid != null) {
     system.setLocalItem('userid', userid)
   })
 }
-export const createAxios = (config) => {
+export const createAxios = async (config) => {
   let _appName = localStorage.getItem('appName')
   let _userid = localStorage.getItem('userid') //
   let fullHost = window.location.host // erp.dxf.life
@@ -51,8 +52,15 @@ export const createAxios = (config) => {
   if (appName == null) {
     appName = _appName //
   }
-  let _key = '' //
-  if (appName != null && userid != 'undefined') {
+  let _key = ''
+  if (config.isMain == true) {
+  } else {
+    appName = appName || (await system.getCurrentApp())
+  }
+  if (appName != 'platform') {
+    userid = userid || 1 //默认用户ID是1
+  }
+  if (appName != null && userid != 'undefined' && userid != null) {
     _key = `/${appName}_${userid}`
   }
   let baseUrl = `http://${'localhost:3031'}` //
@@ -72,6 +80,36 @@ export const createAxios = (config) => {
     baseURL: _host,
     timeout: 60000,
   })
+  axiosInstance.interceptors.request.use(
+    function (config) {
+      let headers = config.headers //
+      let token = localStorage.getItem('feathers-jwt')
+      headers.Authorization = `${token}`
+      return config
+    },
+    function (error) {
+      // Do something with request error
+      return Promise.reject(error)
+    },
+  ) //
+  axiosInstance.interceptors.response.use(
+    function (response) {
+      let data = response?.data?.data //
+      if (data) {
+        return data //
+      } //
+      return response
+    },
+    function (error) {
+      // debugger //
+      let data = error?.response?.data
+      if (data) {
+        return Promise.reject(data)
+      } //
+
+      return Promise.reject(error)
+    },
+  )
   return axiosInstance //
 }
 class myAuth extends AuthenticationClient {
@@ -121,7 +159,7 @@ const init = (_options: Partial<AuthenticationClientOptions> = {}) => {
 export class Client {}
 //
 export type createConfig = {}
-export const createClient = (config) => {
+export const createClient = async (config) => {
   let _appName = localStorage.getItem('appName')
   let _userid = localStorage.getItem('userid') //
   let fullHost = window.location.host // erp.dxf.life
@@ -136,8 +174,12 @@ export const createClient = (config) => {
   if (appName == null) {
     appName = _appName //
   }
-  let _key = '' //
-  if (appName != null && userid != 'undefined') {
+  let _key = ''
+  appName = appName || (await system.getCurrentApp())
+  if (appName != 'platform') {
+    userid = userid || 1
+  }
+  if (appName != null && userid != 'undefined' && userid != null) {
     _key = `/${appName}_${userid}`
   }
   let baseUrl = `http://${'localhost:3031'}` //
@@ -182,21 +224,25 @@ export const createClient = (config) => {
   app.set('baseUrl', _host)
   return app
 }
-export const client = createClient({})
-export const mainClient = createClient({
-  isMain: true, //
-})
-export const axiosClient = createAxios({
-  isMain: true, //
-}) //
+
 const defaultMethod = ['find', 'get', 'create', 'patch', 'remove', 'update']
 export class myHttp {
-  client = client
-  mainClient = client
+  client: Application
+  mainClient: Application
+  mainAxios: AxiosInstance //
+  axios: AxiosInstance
+  useAxios = true
   constructor() {
+    this.initClient() //
     this.init()
   } //
-  changeClient(config) {
+  async initClient() {
+    this.mainAxios = await createAxios({ isMain: true }) //
+    this.axios = await createAxios({})
+    this.client = await createClient({})
+    this.mainClient = await createClient({ isMain: true }) //
+  }
+  async changeClient(config) {
     let appName = config.appName
     if (appName == null || appName == 'platform') {
       this.client = this.mainClient
@@ -207,15 +253,17 @@ export class myHttp {
       this.client = this.mainClient
       return //
     }
-    let _client = createClient(config)
+    let _client = await createClient(config)
     this.client = _client //
+    let _axios = await createAxios(config)
+    this.axios = _axios //
   }
   async init() {
     nextTick(async () => {
       let token = localStorage.getItem('feathers-jwt')
       if (token) {
         try {
-          let app = system.getCurrentApp()
+          let app = await system.getCurrentApp()
           let res = await this.client.authenticate({
             accessToken: token,
             _unUseCaptcha: true,
@@ -240,24 +288,18 @@ export class myHttp {
   async registerUser(data) {
     try {
       let _res = await this.create('users', data)
-      console.log(_res, 'test_res') //
-      system.confirmMessage('注册成功')
-      let r = system.getRouter()
-
-      r.push('login') //
     } catch (error) {
-      system.confirmMessage(`注册失败,${error?.message}`, 'error') //
+      //
+      return Promise.reject(error) //
     }
   } //
   async loginUser(data) {
     try {
       //
       let http = this
-      data.strategy = 'local' ////
-      console.log('用户登录', data)
+      data.strategy = 'local'
       let _res = await http.client.authenticate(data) //
       system.loginInfo = _res //
-      // console.log(_res, 'testRes') //
       system.confirmMessage('登录成功') //
       let router = system.getRouter()
       router.push('/home')
@@ -281,7 +323,50 @@ export class myHttp {
     let router = system.getRouter()
     router.push('/login') //
   }
-  async post(tableName, method, params = {}, query = {}): Promise<any> {
+  async mainPost(tableName, method, params = {}, query = {}) {
+    let axios = this.mainAxios
+    let url = `${tableName}`
+    if (method) {
+      if (!defaultMethod.includes(method)) {
+        url = `${url}/${method}`
+      }
+    }
+    try {
+      let res = await axios.post(`${url}`, params, {
+        //
+        params: query,
+      })
+      return res
+    } catch (error) {
+      return Promise.reject(error) //
+    }
+  }
+  async post(
+    tableName,
+    method,
+    params = {},
+    query = {},
+    useSocket = false,
+  ): Promise<any> {
+    if (this.useAxios == true && Boolean(useSocket) == false) {
+      let axios = this.axios
+      let url = `${tableName}`
+      if (method) {
+        if (!defaultMethod.includes(method)) {
+          url = `${url}/${method}`
+        }
+      }
+      try {
+        let res = await axios.post(`${url}`, params, {
+          //
+          params: query,
+        })
+        return res
+      } catch (error) {
+        console.error(error.code)
+        return Promise.reject(error) //
+      }
+    }
     let connection = this?.client?.get('connection')
     return new Promise((resolve, reject) => {
       connection.emit(
@@ -367,61 +452,64 @@ export class myHttp {
     })
   }
   async patch(tableName, params = {}, query = {}): Promise<any> {
-    console.log('patch', params, query) //
-    let connection = this?.client?.get('connection')
-    return new Promise((resolve, reject) => {
-      connection.emit(
-        'patch', //
-        tableName,
-        params, //
-        query, //
-        (data, err) => {
-          let isError = false
-          let error = null //
-          let _data = null
-          let method = 'patch' //
-          if (defaultMethod.includes(method)) {
-            if (err) {
-              isError = false
-              // error = err
-              _data = err?.data || {}
-              if (err?.code == '401') {
-                isError = true
-                error = err //
-              }
-            } else {
-              isError = true
-              if (data?.code == '401') {
-                isError = true
-                error = data
-                system.confirmMessage('登录信息无效', 'error') //
-                this.redirectToLogin() //
-              } else {
-                // _data = data?.data || {}
-                error = data //
-              }
-            }
-          } else {
-            if (data) {
-              isError = true
-              error = data
-            } else {
-              isError = false
-              if (err?.code == '401') {
-                isError = true
-                error = err
-              }
-              _data = err?.data || {}
-            }
-          }
-          if (isError == true) {
-            reject(error)
-          }
-          let _data1 = _data
-          resolve(_data1) //
-        }, //
-      )
-    })
+    // console.log('patch', params, query) //
+    // let connection = this?.client?.get('connection')
+    // return new Promise((resolve, reject) => {
+    //   connection.emit(
+    //     'patch', //
+    //     tableName,
+    //     params, //
+    //     query, //
+    //     (data, err) => {
+    //       let isError = false
+    //       let error = null //
+    //       let _data = null
+    //       let method = 'patch' //
+    //       if (defaultMethod.includes(method)) {
+    //         if (err) {
+    //           isError = false
+    //           // error = err
+    //           _data = err?.data || {}
+    //           if (err?.code == '401') {
+    //             isError = true
+    //             error = err //
+    //           }
+    //         } else {
+    //           isError = true
+    //           if (data?.code == '401') {
+    //             isError = true
+    //             error = data
+    //             system.confirmMessage('登录信息无效', 'error') //
+    //             this.redirectToLogin() //
+    //           } else {
+    //             // _data = data?.data || {}
+    //             error = data //
+    //           }
+    //         }
+    //       } else {
+    //         if (data) {
+    //           isError = true
+    //           error = data
+    //         } else {
+    //           isError = false
+    //           if (err?.code == '401') {
+    //             isError = true
+    //             error = err
+    //           }
+    //           _data = err?.data || {}
+    //         }
+    //       }
+    //       if (isError == true) {
+    //         reject(error)
+    //       }
+    //       let _data1 = _data
+    //       resolve(_data1) //
+    //     }, //
+    //   )
+    // })
+    let axios = this.axios
+    let _res = await axios.patch(`/${tableName}`, params, { params: query }) //
+    return _res
   } //
   async delete(tableName, params = {}, query = {}) {
     await this.batchDelete(tableName, params) //
@@ -433,7 +521,7 @@ export class myHttp {
     return data //
   }
   async create(tableName, data = {}) {
-    console.log('新增数据', tableName, data) //
+    //
     let _res = await this.post(tableName, 'create', data)
     return _res //
   } //
@@ -464,6 +552,10 @@ export class myHttp {
     let _d = await this.runCustomMethod('entity', 'hasEntity', tableName)
     return _d //
   }
+  registerTableEvent(tableName, event, fn) {
+    let key = `${tableName} ${event}`
+    this.registerEvent(key, fn)
+  } //
   registerEvent(event, fn) {
     let connection: Socket = this.client.get('connection')
     if (typeof fn !== 'function') {
@@ -492,4 +584,4 @@ export class myHttp {
   } //
 }
 
-export const http = new myHttp()
+// export const http = new myHttp()

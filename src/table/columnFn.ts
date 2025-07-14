@@ -1,4 +1,3 @@
-import { VTable } from '@visactor/vue-vtable'
 import { Column } from './column'
 import { nextTick, toRaw, isProxy } from 'vue'
 import {
@@ -9,6 +8,9 @@ import {
 } from '@visactor/vtable/es/vrender'
 import * as d3 from 'd3'
 import { render } from 'bwip-js'
+import { VTable } from '@visactor/vtable-gantt'
+import { ListTable } from '@visactor/vtable'
+import { createTextArr, getExpandIcon, getLocalStrWidth } from './columnUtil'
 function createSvgTextString(text, width, height, fontSize, lineHeight = 1.2) {
   // 1. 创建一个脱离文档的 SVG 容器
   const svg = d3
@@ -43,17 +45,80 @@ function createSvgTextString(text, width, height, fontSize, lineHeight = 1.2) {
   // 5. 序列化并返回
   return new XMLSerializer().serializeToString(svg.node())
 }
+const measureCanvas = document.createElement('canvas')
+const measureCtx = measureCanvas.getContext('2d')
+
+/**
+ * 同步测量文字宽高，并保证至少有最小值
+ */
+function measureTextSize(text, fontSize = 16, fontFamily = 'sans-serif') {
+  measureCtx.font = `${fontSize}px ${fontFamily}`
+  const m = measureCtx.measureText(text)
+  const width = Math.ceil(m.width)
+  // 上下 bounding box 不支持时，actualBoundingBoxAscent/Descent 可能为 undefined 或 0
+  const ascent = m.actualBoundingBoxAscent || fontSize
+  const descent = m.actualBoundingBoxDescent || 0
+  let height = Math.ceil(ascent + descent)
+  // 最低保证 height 要大于等于 fontSize
+  if (height < fontSize) {
+    height = Math.ceil(fontSize * 1.2)
+  }
+  return { width, height }
+}
+
+/**
+ * 同步版——OffscreenCanvas 渲染文字，保证每次都得到非 0 大小的画布
+ */
+function createAdaptiveTextImage(
+  text,
+  fontSize = 16,
+  fontFamily = 'sans-serif',
+  boundsPadding = 0,
+) {
+  // 1. 测量
+  const { width: measuredW, height: measuredH } = measureTextSize(
+    text,
+    fontSize,
+    fontFamily,
+  )
+  // 2. 确保至少有 1px 宽和 >= fontSize 高
+  const w = Math.max(measuredW, 1)
+  const h = Math.max(measuredH, fontSize)
+
+  // 3. OffscreenCanvas (不会进 DOM)
+  const off = new OffscreenCanvas(w, h)
+  const ctx = off.getContext('2d')
+  ctx.clearRect(0, 0, w, h)
+
+  // 4. 绘制文字
+  ctx.font = `${fontSize}px ${fontFamily}`
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = 'black'
+  ctx.fillText(text, w / 2, h / 2)
+
+  // 5. 交给 vrender，Canvas drawImage 时就不会是 0 大小了
+  return createImage({
+    image: off,
+    x: 0,
+    y: 0,
+    width: w,
+    height: h,
+    boundsPadding,
+  })
+}
+
 export const containerMap = {}
 export const getCheckbox = (column: Column) => {
   let _this = column.getTable().columnsMap[column.getField()] //
   if (column.getField() == 'checkboxField') {
     //@ts-ignore
-    _this = column.getTable().checkboxColumn //
+    _this = column.getTable().checkboxColumn
   }
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
 
-    let t1: VTable.ListTable = table
+    let t1: ListTable = table as any
 
     let _value: string = value //
     let record = table.getCellOriginRecord(col, row)
@@ -74,7 +139,7 @@ export const getCheckbox = (column: Column) => {
     }
     const { height, width } = rect ?? table.getCellRect(col, row)
     let _height = height
-    let _length1 = t1.records.length
+    let _length1 = table.rowCount - 1 //
     if (_length1 == row) {
       _height = _height - 1 //
     }
@@ -136,64 +201,22 @@ export const getCheckbox = (column: Column) => {
     }) //
     checkbox1.render()
     checkboxGroup.add(checkbox1)
-
-    // let _index = record['_index'] ////
-    // let _table = _this.table //
-    // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() //
-    // let rowStart = scrollConfig.rowStart
-    // let rowEnd = scrollConfig.rowEnd
-    // let _row = row
-    // container['currentRowIndex'] = row //
-    // container['updateCanvas'] = () => {
-    let updateFn = () => {
-      // let record = table.getCellOriginRecord(col, row)
-      //基本的样式
-      let bg = _this.getIndexColor(row, record)
-      if (record?._index == _this.table.tableData?.curRow?._index) {
-        bg = _this.getCurrentRowColor() //
-      } //
-      container.setAttribute('background', bg)
-      let f = _this.getField()
-      let c = record[f] //
-      c = _this.getIsChecked(record)
-      let num = Number(c)
-      if (!isNaN(num)) {
-        c = num //
-      }
-      // console.log(record, c, 'record') ////
-      checkbox1.attribute.checked = Boolean(c) //
-      checkbox1.render() //
-    }
-    let count = _this.table.getInstance().visibleRowCount
-    _this.table.onCellVisible({
-      field: _this.getField(),
-      record,
-      row,
-      updateFn,
+    let obj = _this.table.getCellVisitConfig({
+      ...args,
+      column: _this,
       container,
-      rowCount: count + 400, //
-      fieldFormat: _this.getFormat(),
     })
-    // let _length = 200 //
-    // rowStart = rowStart - _length
-    // if (rowStart < 0) {
-    //   rowStart = 0 //
-    // }
-    // rowEnd = rowEnd + _length
-    // if (_row >= rowStart && _row <= rowEnd) {
-    //   let currentIndexContain = _table.currentIndexContain
-    //   //显示在视图上
-    //   let _arr = currentIndexContain[_index]
-    //   if (_arr == null) {
-    //     currentIndexContain[_index] = {}
-    //     _arr = currentIndexContain[_index] //
-    //   }
-    //   let field = _this.getField()
-    //   _arr[field] = container //
-    // } else {
-    //   let currentIndexContain = _table.currentIndexContain //
-    //   delete currentIndexContain[_index] //
-    // }
+    _this.table.onCellVisible(obj) //
+    // _this.table.onCellVisible({
+    //   field: _this.getField(),
+    //   record,
+    //   row,
+    //   _col: col,
+    //   updateFn, //
+    //   container,
+    //   rowCount: count + 400, //
+    //   fieldFormat: _this.getFormat(),
+    // })
 
     return {
       rootContainer: container,
@@ -227,15 +250,6 @@ export const getSerialLayout = (column: Column) => {
       justifyContent: 'center',
       background: gb,
     })
-
-    let updateFn = () => {
-      let bg = _this.getIndexColor(row)
-      if (record?._index == _this.table.tableData?.curRow?._index) {
-        bg = _this.getCurrentRowColor()
-      } //
-      container.setAttribute('background', bg) //
-    }
-
     const record = table.getCellOriginRecord(col, row)
     if (_this.table.useCache == true) {
       let _index = record._index //
@@ -244,19 +258,17 @@ export const getSerialLayout = (column: Column) => {
       if (_con != null) {
         return {
           rootContainer: _con,
-          renderDefault: false, //
+          renderDefault: true, //
         }
       } //
     }
-    let count = _table.getInstance()?.visibleRowCount || table?.visibleRowCount //
-    _this.table.onCellVisible({
-      field: _this.getField(),
-      record,
-      row,
+    let obj = _this.table.getCellVisitConfig({
+      ...args,
+      column: _this,
       container,
-      rowCount: count + 400, //
-      updateFn: updateFn,
-    }) //
+    })
+    _this.table.onCellVisible(obj) //
+
     return {
       rootContainer: container,
       renderDefault: true, //
@@ -270,7 +282,7 @@ export const getDefault = (column: Column) => {
   // console.log(isProxy(_this), 'isProxy')
   let customLayout = (args) => {
     let { table, row, col, rect, value } = args
-    let t1: VTable.ListTable = table
+    let t1: ListTable = table
     let _value: string = value //
     let record = t1.getRecordByCell(col, row) //
     if (record == null) {
@@ -286,12 +298,14 @@ export const getDefault = (column: Column) => {
       if (_con) {
         let currentResizeField = _this.table.currentResizeField //
         if (currentResizeField === f) {
+          const { height, width } = rect ?? table.getCellRect(col, row)
+          _con.setAttribute('width', width) //
         } else {
-          return {
-            rootContainer: _con,
-            renderDefault: false, //
-          }
         }
+        return {
+          rootContainer: _con,
+          renderDefault: false, //
+        } //
       }
     }
     record = record || {} //
@@ -299,9 +313,10 @@ export const getDefault = (column: Column) => {
     if (record?._index == _this.table.tableData?.curRow?._index) {
       bg = _this.getCurrentRowColor()
     }
-    const { height, width } = rect ?? table.getCellRect(col, row)
+    let { height, width } = rect ?? table.getCellRect(col, row)
     let _height = height
-    let _length1 = t1.records.length
+    // let _length1 = t1.records.length
+    let _length1 = t1.rowCount - 1 //
     if (_length1 == row) {
       _height = _height - 1 //
     }
@@ -331,16 +346,12 @@ export const getDefault = (column: Column) => {
       boundsPadding: [0, 0, 0, 0], //
     })
     let _table = _this.getTable() //
-    let count = _table.getInstance()?.visibleRowCount || table?.visibleRowCount //
-    let obj123 = {
-      container: container,
-      record: record,
-      field: _this.getField(),
-      row: row,
-      rowCount: count + 400,
-      fieldFormat: _this.getFormat(),
-    }
-    // if (_row >= rowStart && _row <= rowEnd) {
+
+    let obj123 = _this.table.getCellVisitConfig({
+      ...args,
+      column: _this,
+      container,
+    })
     let _v = _table.onCellVisible(obj123)
     _value = _v //
     container.on('mouseenter', () => {
@@ -349,7 +360,6 @@ export const getDefault = (column: Column) => {
       container.setAttribute('background', _this.getHoverColor()) ///
     })
     container.on('mouseout', () => {
-      // debugger//
       let color = container._oldColor
       if (record['_index'] == _this.table.tableData?.curRow?._index) {
         color = _this.getCurrentRowColor() //
@@ -360,20 +370,13 @@ export const getDefault = (column: Column) => {
       }
       container.setAttribute('background', color)
     })
-    if (_this.getField() == 'pid') {
-    }
-    let _bounds = [0, 0, 0, 20]
-    let fSize = _this.getFontSize()
-    let locationName = createText({
-      text: `${_value}`, //
-      fontSize: fSize, //
-      x: 0,
-      y: 0,
-      // fontFamily: 'sans-serif',
-      fill: 'black',
-      boundsPadding: _bounds, //
-      lineDashOffset: 0,
-    })
+
+    let _width1 = getLocalStrWidth(_this, _value)
+    container.templateTextWidth = _width1 //
+    container.templateText = _value //
+    /* 
+    
+    */
     let _g = createGroup({
       width: width,
       height,
@@ -383,6 +386,9 @@ export const getDefault = (column: Column) => {
       flexDirection: 'row',
       flexWrap: 'wrap',
       overflow: 'hidden',
+      boundsPadding: [0, 0, 0, 0],
+      // scaleX: 10,
+      scrollX: 10,
       alignItems: 'center', //
     })
     if (_this.getIsTree() == true) {
@@ -394,61 +400,8 @@ export const getDefault = (column: Column) => {
       }
     } //
     let globalValue = _this.table.globalConfig.value
-    if (globalValue.length > 0) {
-      let container = _g
-      let reg = new RegExp(globalValue, 'gi') //
-      _value = `${value}` //
-      let vArr = _value.matchAll(reg)
-      let _vArr = [...vArr]
-      _vArr = _vArr
-        .map((v, i) => {
-          let arr = []
-          let t = createText({
-            text: v[0], //
-            fontSize: fSize,
-            fill: 'red',
-            boundsPadding: [0, 0, 0, 0],
-            lineDashOffset: 0,
-          })
-          if (i == 0 && v.index > 0) {
-            //
-            let t1 = createText({
-              text: _value.slice(0, v.index), //
-              fontSize: fSize,
-              // fontFamily: 'sans-serif',
-              fill: 'black',
-              boundsPadding: [0, 0, 0, 0],
-              lineDashOffset: 0,
-            })
-            arr.push(t1)
-          }
-          arr.push(t)
-          if (i == _vArr.length - 1 && v.index + v[0].length < _value.length) {
-            let t2 = createText({
-              text: _value.slice(v.index + v[0].length), //
-              fontSize: fSize,
-              // fontFamily: 'sans-serif',
-              fill: 'black',
-              boundsPadding: [0, 0, 0, 0],
-              lineDashOffset: 0,
-            })
-            arr.push(t2)
-          }
-          return arr
-        })
-        .flat()
-      if (_vArr.length > 0) {
-        _vArr.forEach((item) => {
-          //@ts-ignore
-          container.add(item) //
-        })
-      } else {
-        container.add(locationName) //
-      }
-    } else {
-      let container = _g
-      container.add(locationName)
-    }
+    let _text = createTextArr(_this, _value, globalValue)
+    _g.add(_text)
     container.add(_g) //
     container.on('mousedown', (args) => {
       if (_this.isMousedownRecord != null) {
@@ -459,104 +412,178 @@ export const getDefault = (column: Column) => {
         _this.isMousedownRecord = null
       }, 130)
     })
-    let _index = record['_index'] ////
-
     container['currentRowIndex'] = row //
     let isTree = _this.getIsTree()
     let treeIcon = null
-    if (isTree == true && record?.['children']?.length > 0) {
-      container.removeChild(_g)
-      let _g1 = createGroup({
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'nowrap',
-        height: height,
-        width: width,
-        overflow: 'hidden',
-        cursor: 'pointer',
-        alignItems: 'center',
-        boundsPadding: [0, 0, 0, 0],
-      })
-      //
-      let _level = record['_level'] || 0
-      // let t = `\u27A4`
-      let t = null
-      // console.log(record['_expanded'], 'record')
-      t = _this.getExpandIcon(record['_expanded'])
+    if (isTree == true) {
+      let icon = getExpandIcon(_this, record, height, width) //
+      treeIcon = icon
+      _g.insertBefore(treeIcon, _text) //
+    }
+    return {
+      rootContainer: container, //
+      renderDefault: false, //
+    }
+  }
+  return customLayout
+}
 
-      let _g2 = createGroup({
-        width: 10,
-        height: height / 2,
-        x: 0,
-        y: 0,
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        overflow: 'hidden',
-        alignItems: 'center',
-      })
-      console.log(t, _level, 'testT') //
-      let icon = createImage({
-        image: t,
+export const getControllButtons = (column: Column) => {
+  let _this = column.getTable().columnsMap[column.getField()] //
+  if (column.getField() == 'controllerField') {
+    _this = column.table.controllerColumn //
+  }
+  // console.log('获取了防守打法收到', 'getControllButtons')
+  let customLayout = (args) => {
+    let { table, row, col, rect } = args
+    let { height, width } = rect ?? table.getCellRect(col, row) //
+    let container = createGroup({
+      height: height - 2,
+      width: width - 2,
+      x: 1,
+      y: 1, //
+      display: 'flex',
+      // background: _this.getBgColor(), //
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-around',
+    })
+    const createButton = (config?: any) => {
+      let _rect = createGroup({
+        height: height - 6,
+        width: 50,
         cursor: 'pointer',
-        x: 0,
-        y: 0, //
-        width: 15, //
-        height: height / 2,
-        overflow: 'hidden',
-        fill: 'black',
-        boundsPadding: [0, 0, 0, 3 + _level * 16], //
+        background: _this.getButtonColor(), //
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cornerRadius: 5,
+        innerBorder: {
+          stroke: 'red',
+        },
+        // stroke: 'RGB(30, 40, 60)',
+      })
+      let test1 = createText({
+        text: config?.label, //
+        cursor: 'pointer',
+        fontSize: 14,
+        fill: _this.getButtonTextColor(), //
+        boundsPadding: [0, 0, 0, 0],
         lineDashOffset: 0,
       })
-      icon.on('click', (args) => {
-        column.table.isTreeIconClick = true //
-        nextTick(() => {
-          column.table.isTreeIconClick = false //
-        })
+      _rect.setAttribute('width', test1.clipedWidth) //
+      _rect.add(test1) //
+      _rect.on('mouseenter', () => {
+        let hoverColor = _this.getButtonColor(true)
+        _rect.setAttribute('background', hoverColor) //
+        _rect?.stage?.render()
       })
-      _bounds[3] = 0 //
-      _g2.add(icon)
-      _g1.add(_g2) //
-      _g1.add(locationName) //
-      container.add(_g1) //
-
-      treeIcon = icon
+      _rect.on('mouseout', () => {
+        let hoverColor = _this.getButtonColor()
+        _rect.setAttribute('background', hoverColor) //
+        // _rect?.stage?.render()//
+      })
+      _rect.on('click', () => {
+        _this.table.onControllerButtonClick(config) //
+      })
+      return _rect
     }
-    // let scrollConfig = _table.getInstance().getBodyVisibleRowRange() //
-    let scrollConfig = 1
-    if (scrollConfig != null) {
-      // let rowStart = scrollConfig.rowStart
-      // let rowEnd = scrollConfig.rowEnd
-      // let _row = row
-      // container['updateCanvas'] = () => {
-      let updateFn = () => {
-        // let record = table.getCellOriginRecord(col, row)
-        //基本的样式
-        let bg = _this.getIndexColor(row, record)
-        if (record?._index == _this.table.tableData?.curRow?._index) {
-          bg = _this.getCurrentRowColor() //
-        } //
-        container.setAttribute('background', bg)
-        let formatFn = _this.getFormat()
-        let _value = formatFn({
-          row: record,
-          col: _this,
-          table: _this.table,
-          field: _this.getField(), //
-        })
-        locationName.setAttribute('text', _value)
-        if (treeIcon != null) {
-          let _expanded = record['_expanded']
-          let t = _this.getExpandIcon(_expanded)
-          treeIcon.setAttribute('image', t) //
-        }
+    let allControllerBtns = _this.table.getControllerButtons()
+    for (const btn of allControllerBtns) {
+      let _rect = createButton(btn)
+      container.add(_rect) //
+    }
+    let record = table.getCellOriginRecord(col, row)
+    let updateFn = () => {
+      let bg = _this.getIndexColor(row, record)
+      if (record?._index == _this.table.tableData?.curRow?._index) {
+        bg = _this.getCurrentRowColor() //
       } //
-      obj123['updateFn'] = updateFn //
+      container.setAttribute('background', bg)
     }
-
+    let count = _this.table.getInstance().visibleRowCount
+    _this.table.onCellVisible({
+      field: _this.getField(),
+      record,
+      row,
+      _col: col,
+      updateFn,
+      column: _this, //
+      container,
+      rowCount: count + 400, //
+      fieldFormat: _this.getFormat(),
+    })
     return {
       rootContainer: container,
-      // renderDefault: _isTree, //
+      renderDefault: false,
+    }
+  }
+  return customLayout
+}
+
+export const getImageCustomLayout = (column: Column) => {
+  let _this = column.getTable().columnsMap[column.getField()] //
+  if (column.getField() == 'controllerField') {
+    _this = column.table.controllerColumn //
+  } //
+  let customLayout = (args) => {
+    const { table, row, col, rect, value } = args
+    const { height, width } = rect ?? table.getCellRect(col, row)
+    let rows = table.getRecordByCell(col, row)
+    let _table = _this.table
+    let curRow = _table.tableData.curRow
+    let gb = _this.getIndexColor(row)
+    if (curRow == rows) {
+      gb = _this.getCurrentRowColor() //
+    }
+    const container = createGroup({
+      height: height - 2,
+      width: width - 2,
+      x: 1,
+      y: 1, //
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: gb,
+    })
+    const record = table.getCellOriginRecord(col, row)
+    if (_this.table.useCache == true) {
+      let _index = record._index //
+      let f = _this.getField()
+      let _con = _this.table.getCacheContainer(_index, f)
+      if (_con != null) {
+        return {
+          rootContainer: _con,
+          renderDefault: true, //
+        }
+      } //
+    }
+    let obj = _this.table.getCellVisitConfig({
+      ...args,
+      column: _this,
+      container,
+    })
+    _this.table.onCellVisible(obj) //
+    let imageG = createGroup({
+      height: height - 2,
+      width: width - 2,
+      x: 1,
+      y: 1,
+      display: 'flex',
+      flexDirection: 'row', //
+      alignItems: 'center',
+      justifyContent: 'center',
+    })
+    imageG.isImage = true
+    container.add(imageG)
+    _this.table.onImageCellLoad({
+      ...args,
+      column: _this,
+      container: imageG,
+    })
+    return {
+      rootContainer: container,
       renderDefault: false, //
     }
   }

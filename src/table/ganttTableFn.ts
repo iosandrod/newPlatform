@@ -1,224 +1,109 @@
 import * as VTableGantt from '@visactor/vtable-gantt'
 export const getGanttRecords = () => {
   //
-  let records = [
+  const records = [
     {
-      id: 0,
-      name: 'Planning',
-      start: '2024-11-15',
-      end: '2024-11-21',
+      key: '0',
+      check: {
+        checked: false,
+        disable: true,
+      },
+      name: 'FA账期关闭',
+      planStartCalendar: '2025-01-01',
+      planFinishCalendar: '2025-01-03',
+      hierarchyState: 'expand',
+      keyNode: false,
+      timeConflict: false,
+      confirmed: false,
       children: [
         {
-          id: 1,
-          name: 'Michael Smith',
-          start: '2024-11-15',
-          end: '2024-11-17',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/wolf.jpg',
-        },
-        {
-          id: 2,
-          name: 'Emily',
-          start: '2024-11-17',
-          end: '2024-11-18',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/bear.jpg',
-        },
-        {
-          id: 3,
-          name: 'Rramily',
-          start: '2024-11-19',
-          end: '2024-11-20',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/bear.jpg',
-        },
-        {
-          id: 4,
-          name: 'Lichael Join',
-          start: '2024-11-18',
-          end: '2024-11-19',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/wolf.jpg',
+          key: '0,0',
+          check: {
+            checked: false,
+            disable: true,
+          },
+          name: 'FA账期关闭',
+          planStartCalendar: '2025-01-02 00:00:00',
+        //   planFinishCalendar: '2025-01-02 23:59:59',
+         planFinishCalendar: '2025-01-03 00:00:00',
+          hierarchyState: 'expand',
+          keyNode: true,
+          timeConflict: false,
+          confirmed: false,
         },
       ],
     },
     {
-      id: 300,
-      name: 'Research',
-      start: '2024-11-18',
-      end: '2024-11-21',
+      key: '1',
+      check: {
+        checked: false,
+        disable: true,
+      },
+      name: 'GL资金结账',
+      planStartCalendar: '2025-01-01 10:00:00',
+      planFinishCalendar: '2025-01-05 00:00:00',
+      hierarchyState: 'expand',
+      keyNode: false,
+      timeConflict: false,
+      confirmed: false,
       children: [
         {
-          id: 5,
-          name: 'Ryan',
-          start: '2024-11-18',
-          end: '2024-11-21',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/rabbit.jpg',
-        },
-      ],
-    },
-    {
-      name: 'Goal Setting',
-      start: '2024-11-18',
-      end: '2024-11-21',
-      children: [
-        {
-          id: 6,
-          name: 'Daniel Davis',
-          start: '2024-11-21',
-          end: '2024-11-22',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/cat.jpg',
+          key: '1,0',
+          check: {
+            checked: false,
+            disable: true,
+          },
+          name: '第三方提现中转核对',
+          planStartCalendar: '2025-01-02 10:30',
+          planFinishCalendar: '2025-01-03 12:00',
+          hierarchyState: 'expand',
+          keyNode: false,
+          timeConflict: false,
+          confirmed: false,
+        
         },
         {
-          id: 7,
-          name: 'Lauren',
-          start: '2024-11-18',
-          end: '2024-11-19',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/flower.jpg',
-        },
-      ],
-    },
-
-    {
-      name: 'Strategy',
-      start: '2024-11-20',
-      end: '2024-11-25',
-      children: [
-        {
-          id: 8,
-          name: 'Tacarah Siller',
-          start: '2024-11-20',
-          end: '2024-11-21',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/bear.jpg',
+          key: '1,1',
+          check: {
+            checked: false,
+            disable: true,
+          },
+          name: '红包提现流水入账',
+          planStartCalendar: '2025-01-03 10:30',
+          planFinishCalendar: '2025-01-03 12:00',
+          hierarchyState: 'expand',
+          keyNode: false,
+          timeConflict: false,
+          confirmed: false,
+         
         },
         {
-          id: 9,
-          name: 'Camentew Olision',
-          start: '2024-11-25',
-          end: '2024-11-26',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/wolf.jpg',
+          key: '1,2',
+          check: {
+            checked: false,
+            disable: true,
+          },
+          name: '资金中转对平',
+          planStartCalendar: '2025-01-03 16:00',
+          planFinishCalendar: '2025-01-03 19:00',
+          hierarchyState: 'expand',
+          keyNode: false,
+          timeConflict: false,
+          confirmed: false,
         },
         {
-          id: 10,
-          name: 'Sarah Miller',
-          start: '2024-11-17',
-          end: '2024-11-18',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/bear.jpg',
-        },
-        {
-          id: 11,
-          name: 'Matthew Wilson',
-          start: '2024-11-22',
-          end: '2024-11-25',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/wolf.jpg',
-        },
-        {
-          id: 12,
-          name: 'Grarah Poliller',
-          start: '2024-11-23',
-          end: '2024-11-24',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/bear.jpg',
-        },
-      ],
-    },
-    {
-      name: 'Execution',
-      start: '2024-11-22',
-      end: '2024-11-25',
-      children: [
-        {
-          id: 13,
-          name: 'Ashley Taylor',
-          start: '2024-11-22',
-          end: '2024-11-25',
-
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/rabbit.jpg',
-        },
-        {
-          id: 14,
-          name: 'Megan',
-          start: '2024-11-27',
-          end: '2024-11-30',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/cat.jpg',
-        },
-        {
-          id: 15,
-          name: 'David',
-          start: '2024-12-10',
-          end: '2024-12-18',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/flower.jpg',
-        },
-      ],
-    },
-    {
-      name: 'Monitoring',
-      start: '2024-12-02',
-      end: '2024-12-25',
-      children: [
-        {
-          id: 16,
-          name: 'Hannah',
-          start: '2024-11-20',
-          end: '2024-11-30',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/bear.jpg',
-        },
-        {
-          id: 17,
-          name: 'Andrew',
-          start: '2024-12-02',
-          end: '2024-12-18',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/wolf.jpg',
-        },
-      ],
-    },
-    {
-      name: 'Reporting',
-      start: '2024-12-22',
-      end: '2024-12-28',
-      children: [
-        {
-          id: 18,
-          name: 'Joshua Anderson',
-          start: '2024-12-22',
-          end: '2024-12-28',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/rabbit.jpg',
-        },
-      ],
-    },
-    {
-      name: 'Process review',
-      start: '2024-11-25',
-      end: '2024-11-30',
-      children: [
-        {
-          id: 19,
-          name: 'Christopher Moore',
-          start: '2024-11-25',
-          end: '2024-11-30',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/cat.jpg',
-        },
-        {
-          id: 20,
-          name: 'Emma',
-          start: '2024-12-01',
-          end: '2024-12-18',
-          avatar:
-            'https://lf9-dp-fe-cms-tos.byteorg.com/obj/bit-cloud/VTable/custom-render/flower.jpg',
+          key: '1,3',
+          check: {
+            checked: false,
+            disable: true,
+          },
+          name: '投资组完成境内流水认款',
+          planStartCalendar: '2025-01-03 10:00',
+          planFinishCalendar: '2025-01-03 19:00',
+          hierarchyState: 'expand',
+          keyNode: false,
+          timeConflict: false,
+          confirmed: false,
         },
       ],
     },
@@ -230,9 +115,36 @@ export const getGanttColumns = () => {
   let cols = [
     {
       field: 'name',
-      title: 'PROCESS',
-      width: 150,
+      title: '任务',
+      width: 220,
       tree: true,
+      icon: ({ table, col, row }) => {
+        const record = table.getCellOriginRecord(col, row)
+        if (record.keyNode) {
+          return 'flag'
+        }
+      },
+      style: ({ table, col, row }) => {
+        const record = table.getCellOriginRecord(col, row)
+        return {
+          // - 已确认-绿底；未确认-白底
+          bgColor: record?.timeConflict
+            ? '#f0943a'
+            : record.confirmed
+            ? '#63bb5c'
+            : undefined,
+        }
+      },
+    },
+    {
+      field: 'planStartCalendar',
+      title: '计划开始',
+      width: 'auto',
+    },
+    {
+      field: 'planFinishCalendar',
+      title: '计划完成',
+      width: 'auto',
     },
   ]
   return cols
@@ -242,6 +154,7 @@ export const getOptions = () => {
   let options: VTableGantt.GanttConstructorOptions = {
     groupBy: true,
     tasksShowMode: VTableGantt.TYPES.TasksShowMode.Sub_Tasks_Arrange,
+<<<<<<< HEAD
     frame: {//
       outerFrameStyle: {
         borderLineWidth: 1,
@@ -250,6 +163,8 @@ export const getOptions = () => {
       },
       verticalSplitLineMoveable: false,
     },
+=======
+>>>>>>> refs/remotes/origin/main
     grid: {
       horizontalLine: {
         lineWidth: 1,
@@ -262,31 +177,10 @@ export const getOptions = () => {
     },
     headerRowHeight: 60,
     rowHeight: 40,
-    taskBar: {
-      startDateField: 'start',
-      endDateField: 'end',
-      progressField: 'progress',
-      labelText: '{name}',
-      labelTextStyle: {
-        fontFamily: 'Arial',
-        fontSize: 14,
-        textAlign: 'center',
-        color: 'white',
-      },
-      barStyle: {
-        width: 22,
-        /** 任务条的颜色 */
-        barColor: 'rgb(68 99 244)',
-        /** 已完成部分任务条的颜色 */
-        completedBarColor: '#91e8e0',
-        /** 任务条的圆角 */
-        cornerRadius: 15,
-        borderColor: 'black',
-        borderLineWidth: 1,
-      },
-    },
+
     dependency: {
       linkCreatable: true,
+<<<<<<< HEAD
       links: []//
       // [
       //   {
@@ -354,6 +248,9 @@ export const getOptions = () => {
       width: 6,
       scrollSliderCornerRadius: 2,
       scrollSliderColor: '#5cb85c',
+=======
+      links: [], //
+>>>>>>> refs/remotes/origin/main
     },
   }
   return options

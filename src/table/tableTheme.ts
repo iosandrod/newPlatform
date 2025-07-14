@@ -1,6 +1,25 @@
 import { ITableThemeDefine } from '@visactor/vtable/es/ts-types'
+import { Table } from './table'
 
-export const createTheme = () => {
+export const createTheme = (table: Table) => {
+  let selectStyle = null
+  if (table?.config?.hiddenSelect) {
+    selectStyle = {
+      cellBgColor: 'rgba(0, 0, 255,0.0)',
+      cellBorderColor: 'rgba(0, 0, 255, 0)',
+      // cellBorderColor:'rgba(0, 0, 255, 0)',
+      cellBorderLineWidth: 2,
+      selectionFillMode: 'overlay',
+    } //
+  } else {
+    selectStyle = {
+      cellBgColor: 'rgba(0, 0, 255,0.0)',
+      cellBorderColor: 'rgba(69, 120, 169, 1)', //
+      // cellBorderColor:'rgba(0, 0, 255, 0)',
+      cellBorderLineWidth: 2,
+      selectionFillMode: 'overlay',
+    }
+  }
   let obj: ITableThemeDefine = {
     defaultStyle: {
       //
@@ -201,13 +220,7 @@ export const createTheme = () => {
         endColor: 'rgba(225, 228, 232, 0.6)',
       },
     },
-    selectionStyle: {
-      cellBgColor: 'rgba(0, 0, 255,0.0)',
-      cellBorderColor: '#0000ff',
-      // cellBorderColor:'rgba(0, 0, 255, 0)',
-      cellBorderLineWidth: 2,
-      selectionFillMode: 'overlay',
-    },
+    selectionStyle: selectStyle,
     axisStyle: null,
     checkboxStyle: {},
     radioStyle: null,
@@ -244,8 +257,8 @@ export const createTheme = () => {
   return obj
 }
 
-export const createFooterTheme = () => {
-  let _theme = createTheme()
+export const createFooterTheme = (table?: any) => {
+  let _theme = createTheme(table)
   _theme.scrollStyle.horizontalPadding = 0 //
   _theme.scrollStyle.visible = 'always'
   _theme.scrollStyle.verticalVisible = 'always' //

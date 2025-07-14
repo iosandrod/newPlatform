@@ -87,6 +87,7 @@ export class Form extends Base {
   dFormMap: any = shallowRef({})
   sFormMap: any = shallowRef({})
   curDForm: any = null //
+  curCForm: any = null
   currentFItemConfig: any
   curSForm: any = null //
   originalData = {}

@@ -10,22 +10,23 @@ export default defineComponent({
   },
   setup() {
     return () => {
-      let com = (
-        <div class="w-full h-full my-scope">
-          <lowcode
-            v-slots={{
-              default: (path) => {
-                let _com = (
-                  <KeepAlive>
-                    <designVue key={path}></designVue>
-                  </KeepAlive>
-                )
-                return _com
-              },
-            }}
-          ></lowcode>
-        </div>
-      )
+      // let com = (
+      //   <div class="w-full h-full my-scope">
+      //     <lowcode
+      //       v-slots={{
+      //         default: (path) => {
+      //           let _com = (
+      //             <KeepAlive>
+      //               <designVue key={path}></designVue>
+      //             </KeepAlive>
+      //           )
+      //           return _com
+      //         },
+      //       }}
+      //     ></lowcode>
+      //   </div>
+      // )
+      let com = <div>404</div>
       return com //
     }
   },

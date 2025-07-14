@@ -402,7 +402,6 @@ export default defineComponent({
       }
       let com = (
         <div class="h-full w-full overflow-hidden bg-white">
-          {loadingCom}
           <div class="flex h-full w-full bg-white overflow-hidden flex-row">
             {contextCom}
             {_fieldCom}

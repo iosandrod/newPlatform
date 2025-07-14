@@ -135,7 +135,7 @@ export default defineComponent({
         _class = [] ////
       } //
       let dCom = tabIns.tabitems.map((el, index) => {
-        let _class = ['hidden', 'h-full']
+        let _class = ['hidden', 'h-full','overflow-hidden']
         let _default = slots.default
         let _name = el.getTabName() //
         let com1 = null
@@ -156,7 +156,7 @@ export default defineComponent({
         return _com //
       })
       const tabCom = (
-        <div class="flex flex-col h-full" ref={register}>
+        <div class="flex flex-col h-full overflow-hidden" ref={register}>
           {context}
           <ElTabs
             style={{ height: `${tabIns.getTabHeight()}` }}
@@ -215,7 +215,7 @@ export default defineComponent({
                               // margin: '3px',
                               boxSizing: 'border-box',
                             }}
-                            class="cursor-pointer flex items-center h-30 px-3 bg-white text-blue-600 font-medium leading-none
+                            class="cursor-pointer flex items-center er-h-30 px-3 bg-white text-blue-600 font-medium leading-none
          box-border rounded-md shadow-sm border border-blue-300
          hover:bg-blue-50 transition"
                           >
@@ -300,7 +300,7 @@ export default defineComponent({
                       // if (_default != null) {
                       //   innerCom = _default(el) //
                       // } //
-                      return <div>{innerCom}</div>
+                      return <div class='hidden'>{innerCom}</div>
                     },
                   }
                   let com = null

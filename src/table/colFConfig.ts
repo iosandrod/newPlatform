@@ -402,6 +402,10 @@ export const getAllColTypes = () => {
       label: '代码',
       value: 'code', //
     },
+    {
+      label: '图片',
+      value: 'photo', //
+    },
   ]
 } //
 //

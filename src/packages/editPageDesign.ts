@@ -6,10 +6,49 @@ import { getFlatTreeData } from './utils'
 import { Form } from './form'
 
 export class editPageDesign extends PageDesign {
+  constructor(config) {
+    super(config) //
+    // debugger //
+    this.syncFieldTitle()
+  }
   isEdit = true
   setCurrentDesignState(state) {
     super.setCurrentDesignState(state) //
   }
+  syncFieldTitle() {
+    //@ts-ignore
+    let fields = this.config.fields
+    fields.forEach((field) => {
+      let type = field.type
+      if (type !== 'dform') {
+        return
+      }
+      let options = field.options
+      let tableName = options?.tableName
+      if (tableName != this.getTableName()) {
+        return
+      }
+      let layoutData = options.layoutData
+      let _fields = layoutData.fields
+      _fields.forEach((f) => {
+        // debugger //
+        let f1 = f.field
+        let title = f.label
+        // debugger //
+        if (f1 == title) {
+          //@ts-ignore
+          let columns = this.config.columns || []
+          let c = columns.find((c) => c.field == f1)
+          if (c) {
+            if (Boolean(c.title) && c.title != c.field) {
+              //
+              f.label = c.title //
+            }
+          }
+        }
+      })
+    })
+  } //
   async addMainTableRow(addConfig?: any): Promise<void> {
     let curRow = addConfig?.curRow || {}
     let row = addConfig?.row || {}
@@ -222,6 +261,7 @@ export class editPageDesign extends PageDesign {
     } //
   })
   async saveTableData(config = this.getSaveData()) {
+    
     if (this.tableState == 'scan') {
       return //
     }

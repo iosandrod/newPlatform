@@ -27,7 +27,8 @@ import InputCom from '@/input/inputCom'
 import { Table } from './table'
 import { VxeLoading } from 'vxe-pc-ui'
 import { GanttTable } from './ganttTable'
-
+import { onKeyStroke } from '@vueuse/core'
+import { useKeyboard } from '@ER/utils'
 // new ListTable()
 //核心表格组件
 export default defineComponent({
@@ -41,9 +42,16 @@ export default defineComponent({
     tableName: {
       type: String,
     },
+    onCellCommand: {
+      type: Function,
+    },
     showControllerButtons: {
       type: Boolean,
       default: false, //
+    },
+    controllerButtons: {
+      type: Array,
+      default: () => [],
     },
     ...tableV2Props,
     columns: {
@@ -52,6 +60,11 @@ export default defineComponent({
     },
     buttons: {
       type: Array,
+    },
+    hiddenSelect: {
+      type: Boolean,
+      default: false, //
+      // default: true, //
     },
     isGantt: {
       type: Boolean,
@@ -218,6 +231,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    showFooterTable: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup(props, { slots, attrs, emit, expose }) {
     let tableIns: Table = null as any
@@ -236,6 +253,19 @@ export default defineComponent({
     }
     expose({ _instance: tableIns })
     provide('tableIns', tableIns)
+    // onKeyStroke(
+    //   'ctrl+c',
+    //   (e) => {
+    //   },
+    //   { eventName: 'keyup' },
+    // )//
+    useKeyboard('ctrl+c', (e) => {
+      let root = tableIns.getRef('root')
+      let focusDiv = document.activeElement
+      if (root.contains(focusDiv)) {
+        tableIns.copyCurrentCell()
+      }
+    })
     onMounted(() => {
       //
       tableIns.onMounted() //
@@ -328,41 +358,41 @@ export default defineComponent({
       },
       ([rowStart, rowEnd], [oldRowStart, oldRowEnd]) => {
         //向上滚动
-        let _start = rowStart - 200
-        let _end = rowEnd + 200
-        if (_start < 0) {
-          _start = 0
-        }
-        let data = tableIns.templateProps.data
-        if (_end > data.length) {
-          _end = data.length
-        }
-        let _oldStart = oldRowStart - 200
-        if (_oldStart < 0) {
-          _oldStart = 0
-        }
-        let _oldEnd = oldRowEnd + 200
-        if (_oldEnd > data.length) {
-          _oldEnd = data.length
-        }
-        let records = tableIns.getInstance().records
-        //向下滚动
-        let contain = tableIns.currentIndexContain
-        if (_start > _oldStart) {
-          let _records = records.slice(_oldStart, _start)
-          _records.forEach((item) => {
-            let _index = item._index
-            delete contain[_index] //
-          })
-        }
-        //向上滚动
-        if (_end < _oldEnd) {
-          let _records = records.slice(_end, _oldEnd)
-          _records.forEach((item) => {
-            let _index = item._index
-            delete contain[_index] //
-          })
-        } //
+        // let _start = rowStart - 200
+        // let _end = rowEnd + 200
+        // if (_start < 0) {
+        //   _start = 0
+        // }
+        // let data = tableIns.templateProps.data
+        // if (_end > data.length) {
+        //   _end = data.length
+        // }
+        // let _oldStart = oldRowStart - 200
+        // if (_oldStart < 0) {
+        //   _oldStart = 0
+        // }
+        // let _oldEnd = oldRowEnd + 200
+        // if (_oldEnd > data.length) {
+        //   _oldEnd = data.length
+        // }
+        // let records = tableIns.getInstance().records
+        // //向下滚动
+        // let contain = tableIns.currentIndexContain
+        // if (_start > _oldStart) {
+        //   let _records = records.slice(_oldStart, _start)
+        //   _records.forEach((item) => {
+        //     let _index = item._index
+        //     delete contain[_index] //
+        //   })
+        // }
+        // //向上滚动
+        // if (_end < _oldEnd) {
+        //   let _records = records.slice(_end, _oldEnd)
+        //   _records.forEach((item) => {
+        //     let _index = item._index
+        //     delete contain[_index] //
+        //   })
+        // } //
       },
     )
     // watch(
@@ -560,6 +590,10 @@ export default defineComponent({
         ></div>,
         [[vShow, tableIns.getShowCalColumns()]],
       )
+      // if (props.showFooterTable == false) {
+      //   calCom = null
+      //   calDiv = null //
+      // }
       com = withDirectives(
         <div
           style={{

@@ -59,7 +59,7 @@ export default defineComponent({
           hasDrag
           data={props.data}
           parent={props.parent}
-          class={['flex']}
+          class={['flex','min-h-7']}
           style={_style} //
         >
           <tag
@@ -69,7 +69,7 @@ export default defineComponent({
               justify: props.data?.options?.justify, //
               align: props.data.options.align,
             }}
-            class={[ns.b(), 'flex', 'w-full']}
+            class={[ns.b(), 'flex', 'w-full','overflow-x-hidden']}
           >
             {props.data.columns.map((element, index) => {
               return (

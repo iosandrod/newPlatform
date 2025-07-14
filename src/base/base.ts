@@ -9,6 +9,7 @@ import { myHttp } from '@/service/client'
 import { Router } from 'vue-router'
 import { PageDesign } from '@ER/pageDesign'
 export class Base {
+  timeout = {} //
   entityEventManager: { [key: string]: Array<any> } = {}
   entityEventManagerArr = []
   pageLoading = false
@@ -98,12 +99,14 @@ export class Base {
       return
     }
   }
+  //
   onMounted() {}
   onUnmounted() {
     let keys = Object.keys(this.refPool)
     for (const key of keys) {
       this.unregisterRef(key) //
     }
+    
   }
   getRef(key: any) {
     // return this.refPool[this._refPool[key]]//
@@ -209,5 +212,9 @@ export class Base {
       _item = v
     } catch (error) {}
     return _item //
+  }
+  getEnvValue(key){
+    let _v=import.meta.env[key]
+    return _v
   }
 } //

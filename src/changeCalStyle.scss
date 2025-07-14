@@ -1,18 +1,46 @@
 @use "sass:list" as list;
 $props: (
-  w:  (width),
-  h:  (height),
-  pl: (padding-left),
-  pr: (padding-right),
-  pt: (padding-top),
-  pb: (padding-bottom),
-  px: (padding-left, padding-right),
-  py: (padding-top, padding-bottom),
-  ml: (margin-left),
-  mr: (margin-right),
-  mt: (margin-top),
-  mb: (margin-bottom),
-  p:  (padding)
+  w: (
+    width,
+  ),
+  h: (
+    height,
+  ),
+  pl: (
+    padding-left,
+  ),
+  pr: (
+    padding-right,
+  ),
+  pt: (
+    padding-top,
+  ),
+  pb: (
+    padding-bottom,
+  ),
+  px: (
+    padding-left,
+    padding-right,
+  ),
+  py: (
+    padding-top,
+    padding-bottom,
+  ),
+  ml: (
+    margin-left,
+  ),
+  mr: (
+    margin-right,
+  ),
+  mt: (
+    margin-top,
+  ),
+  mb: (
+    margin-bottom,
+  ),
+  p: (
+    padding,
+  ),
 );
 
 // 2. 哪些前缀要加 !important
@@ -32,5 +60,63 @@ $important-prefixes: h, pl, pr, pt, pb, px, py, ml, mr, mt, mb, p;
         }
       }
     }
-  } 
+  }
+}
+
+$props1: (
+  er-w: (
+    width,
+  ),
+  er-h: (
+    height,
+  ),
+  er-pl: (
+    padding-left,
+  ),
+  er-pr: (
+    padding-right,
+  ),
+  er-pt: (
+    padding-top,
+  ),
+  er-pb: (
+    padding-bottom,
+  ),
+  er-px: (
+    padding-left,
+    padding-right,
+  ),
+  er-py: (
+    padding-top,
+    padding-bottom,
+  ),
+  er-ml: (
+    margin-left,
+  ),
+  er-mr: (
+    margin-right,
+  ),
+  er-mt: (
+    margin-top,
+  ),
+  er-mb: (
+    margin-bottom,
+  ),
+  er-p: (
+    padding,
+  ),
+);
+
+@each $prefix, $prop-list in $props1 {
+  @for $i from 1 through 2000 {
+    .#{$prefix}-#{$i} {
+      @each $prop in $prop-list {
+        @if list.index($important-prefixes, $prefix) {
+          #{$prop}: #{$i}px !important;
+        } @else {
+          #{$prop}: #{$i}px;
+        }
+      }
+    }
+  }
 }

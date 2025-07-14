@@ -61,25 +61,27 @@ const dragGableWrap = defineComponent({
         let _slots = {
           ...obj,
           default: () => {
-            return attrs?.list?.map((e, i) => {
-              let style = {
-                width: '100%', //
-                display: 'flex',
-                flexDirection: 'column', //
-              }
-              if (i == attrs.list.length - 1) {
-                //@ts-ignore
-                style.flex = 1
-              }
-              let _com = (
-                <div style={style}>
-                  {item({
-                    element: e,
-                  })}
-                </div>
-              )
-              return _com
-            })
+            return attrs?.list
+              ?.filter((e) => e != null)
+              .map((e, i) => {
+                let style = {
+                  width: '100%', //
+                  display: 'flex',
+                  flexDirection: 'column', //
+                }
+                if (i == attrs.list.length - 1) {
+                  //@ts-ignore
+                  style.flex = 1
+                }
+                let _com = (
+                  <div style={style}>
+                    {item({
+                      element: e,
+                    })}
+                  </div>
+                )
+                return _com
+              })
           },
         }
         node = <_tag v-slots={_slots} {...attrs.componentData}></_tag>
@@ -171,6 +173,9 @@ export default defineComponent({
     const slots = {
       item: (_config) => {
         let element: any = _config.element
+        if (element == null) {
+          return null
+        } //
         let node = ''
         let allLayoutType = ['grid', 'table', 'tabs', 'collapse', 'inline']
         let _style: any = {}
@@ -241,6 +246,9 @@ export default defineComponent({
             break
           default:
             let formitem = formIns.items.find((item) => item.id === element.id)
+            if (formitem == null) {
+              return null //
+            }
             if (formitem.config != element) {
               formitem.config = element
             }
@@ -320,6 +328,7 @@ export default defineComponent({
                                   data={element}
                                   params={typeProps}
                                   isFormInput={true}
+                                  style={{}}
                                 ></TypeComponent>
                               )
                             },
@@ -345,6 +354,7 @@ export default defineComponent({
                                   class="flex flex-row"
                                   onContextmenu={(e: MouseEvent) => {
                                     if (mainPage) {
+                                      mainPage.curDForm
                                       //@ts-ignore
                                       mainPage.currentContextItem = {
                                         //@ts-ignore
@@ -360,6 +370,7 @@ export default defineComponent({
                                     formitem.openMainMenu(e, {
                                       config: {
                                         type: 'dform',
+                                        formIns: formIns,
                                       }, //
                                     })
                                   }}
@@ -439,7 +450,7 @@ export default defineComponent({
       }
       return (
         <dragGableWrap
-          list={props.data} //isArray
+          list={props.data.filter((v) => v != null)} //isArray
           handle=".ER-handle"
           class={[ns.b(), unref(isEditModel) && ns.e('edit'), ..._class]}
           tag={props.tag}

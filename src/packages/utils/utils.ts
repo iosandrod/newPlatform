@@ -1,9 +1,11 @@
+import * as keyboardJS from 'keyboardjs'
 export const isEmpty = (v) =>
   v === '' || v === null || v === undefined || (Array.isArray(v) && !v.length)
 import { globalConfig } from '@ER/formEditor/componentsConfig'
 import _ from 'lodash'
 import { nanoid } from 'nanoid'
 import * as equal from './equal' //
+import { onMounted, onUnmounted } from 'vue'
 export const generateOptions = (len) => {
   const result = []
   while (len--) {
@@ -151,3 +153,31 @@ export const getFlatTreeData = (_data) => {
       .flat()
 }
 
+
+
+export function useKeyboard(
+  keys: string | string[],
+  callback: (e: keyboardJS.Event) => void
+) {
+  // 统一成数组
+  const combos = Array.isArray(keys) ? keys : [keys]
+  // 存一下所有绑定的 handler 以便 unbind
+  const handlers: { combo: string; handler: (e: keyboardJS.Event) => void }[] = []
+
+  onMounted(() => {
+    combos.forEach(combo => {
+      const handler = (e: keyboardJS.Event) => {
+        e.preventDefault()
+        callback(e)
+      }
+      keyboardJS.bind(combo, handler)
+      handlers.push({ combo, handler })
+    })
+  })
+
+  onUnmounted(() => {
+    handlers.forEach(({ combo, handler }) => {
+      keyboardJS.unbind(combo, handler)
+    })
+  })
+}

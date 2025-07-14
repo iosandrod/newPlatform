@@ -136,6 +136,7 @@ export class InputEditor extends BaseEditor {
     }
     let column = this.column
     let value = column.cacheValue
+    // debugger//
     if (column.isChangeValue == true) {
       let oldValue = this.row[this.field] //////
       if (value != oldValue) {
@@ -170,9 +171,12 @@ export class InputEditor extends BaseEditor {
         }
         column.changeRowState(this.row) //
         if (this.isEditHeader) {
-          //
           column.table.onHeaderTitleChange({
             column: column.config,
+          })
+          nextTick(() => {
+            column.table.timeout['updateColumns']=null
+            column.table.loadColumns() //
           })
         }
       }

@@ -8,6 +8,7 @@ import { Column } from '@/table/column'
 import { system } from '@/system'
 import design from '@/pages/erp/design'
 import { stringToFunction } from '@ER/utils'
+import { Table } from '@/table/table'
 export default defineComponent({
   name: 'entityPc', //
   props: ['data', 'params', 'item'], //
@@ -40,6 +41,7 @@ export default defineComponent({
     let tableType = item?.getTableType()
     onMounted(() => {
       if (tableType == 'relate') {
+        // debugger //
         // registerTable(fitem)
         let treeConfig = item.config?.options?.treeConfig
         let autoColumnSize = treeConfig?.autoColumnSize
@@ -48,7 +50,12 @@ export default defineComponent({
           if (fieldOutCom) {
             let bound = fieldOutCom.getBoundingClientRect()
             let width = bound.width
-            let columns = item.getRef('fieldCom')?.getShowColumns()
+            let columns = item
+              .getRef('fieldCom')
+              ?.getShowColumns()
+              ?.map((col) => {
+                return col?.config || col
+              }) //
             let col0 = columns[0]
             // console.log(col0, 'testCol0') ////
             if (col0) {
@@ -60,6 +67,8 @@ export default defineComponent({
                 tCol.width = width
                 col0.width = width //
               } //
+              let _com: Table = item.getRef('fieldCom')
+              _com.loadColumns() //
             }
           }
         }
@@ -103,12 +112,38 @@ export default defineComponent({
       let com = (
         <div
           class="  w-full box-border "
-          style={{ minHeight: '200px', padding: '4px' }}
+          style={{
+            minHeight: '200px',
+            // padding: '4px'
+          }}
           ref={(ins) => {
             item.registerRef('fieldOutCom', ins)
           }}
         >
           <erTable
+            disableColumnResize={item.getDisabledColumnResize()} //
+            onDbCurRowChange={(config) => {
+              //
+              let tableName = item.getTableName()
+              let dTableName = _design.getRealTableName()
+              if (tableName == dTableName) {
+                let row = config.row
+                _design.editTableRows({
+                  row,
+                }) //
+              }
+            }}
+            onCellCommand={(config) => {
+              // debugger //
+              let _config1 = item?.config?.options || {}
+              let tableName = item.getTableName()
+              let _config = {
+                ...config,
+                tableConfig: _config1,
+                tableName, //
+              }
+              pageDesign.onTableCellCommand(_config)
+            }}
             onTableConfigChange={(config) => {
               item.onTableConfigChange(config)
             }}
@@ -166,7 +201,7 @@ export default defineComponent({
               } else {
                 Object.entries(config).forEach(([key, value]) => {
                   col[key] = value //
-                })
+                }) //
                 _design.updateTableDesign() //
               }
             }}
@@ -191,7 +226,7 @@ export default defineComponent({
             }}
             onColumnConfigChange={(config) => {
               item.onColumnConfigChange(config)
-            }}
+            }} //
             rowHeight={item.getTableRowHeight()} //
           ></erTable>
         </div>

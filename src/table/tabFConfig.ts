@@ -17,7 +17,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
     'keyCodeColumn', //
     'onCurRowChange', //
     'rowHeight', //
-    'viewTableName',
+    'dataSource',
     'mainRelateKey',
     'relateKey', //
     'dragConfig',
@@ -29,40 +29,18 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
     'initGetData',
     'listenChanged', //
   */
-  let tName = _this.getTableName()
-
+  let tName = _this.getTableName() //
   let mainDesign = _this.form //
+  // debugger //
   let mN = mainDesign?.getRealTableName() || null
   let fd = []
   if (mN != tName) {
-    fd = [
-      {
-        field: 'mainRelateKey',
-        label: '主单据关联字段',
-        type: 'string',
-        tabTitle: titles[0],
-        options: {
-          columnSelect: true,
-          tableName: mN, //
-        },
-      },
-      {
-        field: 'relateKey',
-        label: '当前关联字段',
-        type: 'string',
-        tabTitle: titles[0],
-        options: {
-          columnSelect: true,
-          tableName: tName,
-        },
-      },
-    ]
   }
   let _obj = _.pick(_config, fields)
   let _fConfig = {
     itemSpan: 12, //
     data: _obj, //
-    height: 500,
+    height: 700,
     width: 800, //
     isTabForm: true,
     items: [
@@ -74,10 +52,50 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
         disabled: true, //
       },
       {
-        field: 'viewTableName',
-        label: '视图表名',
+        field: 'dataSource',
+        label: '表格数据源', //
         tabTitle: titles[0],
-        type: 'string', //
+        type: 'sform', //
+        options: {
+          itemSpan: 12,
+          items: [
+            {
+              field: 'dataSourceType',
+              label: '数据类型', //
+              type: 'select', //
+              options: {
+                options: [
+                  {
+                    label: '普通类型',
+                    value: 'normal', //
+                  },
+                  {
+                    label: '函数类型',
+                    value: 'function',
+                  },
+                  {
+                    label: '接口类型',
+                    value: 'api', //
+                  }, //
+                  {
+                    label: '视图类型',
+                    value: 'view', //
+                  },
+                ],
+              },
+            },
+            {
+              field: 'dataSource',
+              label: '数据源',
+              type: 'code', //
+            },
+            {
+              field: 'viewTable',
+              label: '视图表',
+              type: 'select', //
+            },
+          ],
+        },
       },
       {
         field: 'realTableName',
@@ -96,7 +114,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
             {
               field: 'relateKey',
               label: '当前关联字段',
-              type: 'string',
+              type: 'select', //
               options: {
                 columnSelect: true,
                 tableName: tName,
@@ -105,7 +123,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
             {
               field: 'mainRelateKey',
               label: '主单据关联字段',
-              type: 'string', //
+              type: 'select', //
               options: {
                 columnSelect: true,
                 tableName: mN, //
@@ -170,14 +188,13 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
                   },
                 ],
               },
-            },{
+            },
+            {
               field: 'autoColumnSize',
               label: '列适应',
               type: 'boolean',
-              options: {
-                
-              },
-            }
+              options: {},
+            },
           ],
         },
       },
@@ -230,7 +247,13 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               label: '是否启用列拖拽',
               type: 'boolean',
               options: {},
-            }, //
+            },
+            {
+              field: 'enableResizeColumn',
+              label: '是否启用列宽调整',
+              type: 'boolean', //
+              options: {},
+            },
           ],
         },
       },
@@ -284,9 +307,9 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
       },
       {
         field: 'relateConfig',
-        label: '关联配置',
+        label: '类型表配置',
         type: 'sform',
-        tabTitle: titles[0],
+        tabTitle: titles[1],
         options: {
           itemSpan: 12,
           items: [
@@ -307,6 +330,26 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               label: '行更新获取数据',
               type: 'boolean', //
               tabTitle: titles[0],
+            },
+            {
+              field: 'relateKey',
+              label: '关联字段',
+              type: 'string',
+              tabTitle: titles[0],
+              options: {
+                columnSelect: true,
+                tableName: tName, //
+              },
+            },
+            {
+              field: 'mainRelateKey',
+              label: '主表关联字段',
+              type: 'string',
+              tabTitle: titles[0],
+              options: {
+                columnSelect: true,
+                tableName: mN, // //
+              },
             },
           ],
         },

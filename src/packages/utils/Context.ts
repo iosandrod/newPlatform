@@ -38,6 +38,7 @@ export class Context {
       enumerable: false,
       configurable: true,
     })
+    //
     let nodes = []
     if (node.type === 'subform') {
       nodes = node.list[0]
@@ -322,7 +323,8 @@ export class Context {
     arr.splice(index + 1, 0, newNode)
   }
   addContext(node, parent?: any, fn?: any) {
-    if (typeof node != 'object') {
+    if (typeof node != 'object' || node == null) {
+      //
       return
     }
     fn && fn(node)
@@ -357,6 +359,10 @@ export class Context {
                 }
               }
             }
+          }
+          //当前列只有自己一个
+          if (list.length == 0) {
+            pParent.context.delete() //
           }
         }
       }

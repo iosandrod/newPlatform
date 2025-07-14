@@ -1,4 +1,4 @@
-import { computed } from 'vue'
+import { computed, isProxy, nextTick } from 'vue'
 import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
 import { Column } from '@/table/column'
@@ -7,19 +7,128 @@ import { defaultButtons, defaultRelateButtons } from './defaultButtons'
 import { getBaseInfoEditConfig } from '@/table/colFConfig'
 export const getButtonGroupTableConfig = (_this?: PageDesign) => {
   let tableName = _this.getRealTableName()
+  // let type = _this.getTableType()
+  let type = null
+  if (_this && _this.getTableType) {
+    //
+    type = _this.getTableType() //
+  }
   let obj = {
-    showTable: true,
+    //
+    showTable: false,
+    title: '按钮组设计', //
     tableState: 'edit',
-    buttons: [
+    showControllerButtons: true,
+    controllerButtons: [
       {
         label: '添加子按钮',
         fn: (config) => {
-          let _t: Table = config.parent
-          let curRow = _t.getCurRow()
-          if (curRow == null) {
-            return
+          // debugger //
+          let data = config.data
+          let table: Table = config.table //
+          let _index = data._index
+          data = table.dataMap[_index] //
+          let isTree = table.getIsTree() //
+          let children = data._children
+          if (!Array.isArray(children)) {
+            children = []
+            data.children = children
           }
-          // console.log('添加子按钮') //
+          let obj = {}
+          table.addRow(obj, data) //
+          table.addAfterMethod({
+            methodName: 'updateCanvas',
+            fn: () => {
+              table.openTreeRow({ data: data, status: true })
+            },
+          })
+        },
+      },
+    ],
+    buttons: [
+      {
+        label: '选择按钮类型', //
+        fn: async (config) => {
+          let fConfig = {
+            itemSpan: 24, //
+            items: [
+              {
+                field: 'type',
+                type: 'select',
+                required: true,
+                options: {
+                  options: [
+                    {
+                      label: '主页面',
+                      value: 'main',
+                    },
+                    {
+                      label: '编辑页面',
+                      value: 'edit',
+                    },
+                    {
+                      label: '搜索页面',
+                      value: 'search',
+                    },
+                    {
+                      label: '类型页面',
+                      value: 'relate', //
+                    },
+                    {
+                      label: '明细页面',
+                      value: 'detail',
+                    }, //
+                  ],
+                },
+              },
+            ],
+            data: {
+              type: type,
+            }, //
+            height: 200,
+            width: 300, //
+          }
+          let _d = await _this.getSystem().confirmForm(fConfig)
+          let _type = _d.type //
+          let btnData = await _this.getSystem().getSelectButtons(_type) //
+          let tableConfig = {
+            showCheckboxColumn: true, //
+            columns: [
+              {
+                field: 'id',
+                title: '按钮ID',
+                tree: true,
+                defaultValue: (config) => {
+                  //
+                  let item = config.item
+                  let dValue = item?.uuid()
+                  return dValue
+                },
+              },
+              {
+                field: 'label',
+                title: '标题', ////
+                type: 'string',
+              },
+            ],
+            data: btnData,
+          }
+          let _data = await _this.getSystem().confirmTable(tableConfig)
+          // debugger //
+          let checkData = _data.filter((d) => {
+            return d.checkboxField == true
+          }) //
+          let parent: Table = config.parent
+          let oldData = parent.getFlatTreeData().map((d) => d.id)
+          checkData = checkData.filter((d) => {
+            return !oldData.includes(d.id)
+          }) //
+          checkData.forEach((d) => {
+            d['checkboxField'] = false //
+          })
+          parent.addRows({
+            rows: checkData,
+          }) //
         },
       },
       {
@@ -51,11 +160,60 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
           _t.config.data.push(..._defaultButtons) //
         },
       },
+      {
+        label: '选择系统按钮',
+        fn: async (config) => {
+          let btnData = await _this.getSystem().getSelectButtons(type) //
+          let tableConfig = {
+            showCheckboxColumn: true, //
+            columns: [
+              {
+                field: 'id',
+                title: '按钮ID',
+                tree: true,
+                defaultValue: (config) => {
+                  //
+                  let item = config.item
+                  let dValue = item?.uuid()
+                  return dValue
+                },
+              },
+              {
+                field: 'label',
+                title: '标题', ////
+                type: 'string',
+              },
+            ],
+            data: btnData,
+          }
+          let _data = await _this.getSystem().confirmTable(tableConfig)
+          // debugger //
+          let checkData = _data.filter((d) => {
+            return d.checkboxField == true
+          }) //
+          let parent: Table = config.parent
+          let oldData = parent.getFlatTreeData().map((d) => d.id)
+          checkData = checkData.filter((d) => {
+            return !oldData.includes(d.id)
+          }) //
+          checkData.forEach((d) => {
+            d['checkboxField'] = false //
+          })
+          parent.addRows({
+            rows: checkData,
+          }) //
+        },
+      },
     ],
+    treeConfig: {
+      id: 'id',
+      parentId: 'pid', //
+    },
     columns: [
       {
         field: 'id',
         title: '按钮ID',
+        tree: true,
         defaultValue: (config) => {
           //
           let item = config.item
@@ -147,7 +305,6 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         editType: 'code',
       },
       {
-        //
         field: 'disabledDefaultFn',
         title: '通用禁用脚本',
         type: 'select',
@@ -175,12 +332,20 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
           }, //
         ],
       },
+      {
+        field: 'hidden',
+        title: '是否隐藏',
+        type: 'boolean',
+        editType: 'boolean',
+      },
+      {
+        field: 'hiddenFn',
+        title: '显示脚本',
+        type: 'string',
+        editType: 'code', //
+      },
     ],
     showRowSeriesNumber: true,
-    treeConfig: {
-      id: 'id',
-      parentId: 'pid',
-    },
     enableDragRow: true,
     dragRowFn: (config) => {
       return true
@@ -205,11 +370,11 @@ export const getButtonGroupFConfig = (_this: PageDesign) => {
         },
       }, //
       {
-        title: '按钮',
+        title: '按钮设置', //
         field: 'items',
-        label: '',
+        label: '编辑按钮组', //
         type: 'stable', ////
-        hiddenTitle: true,
+        // hiddenTitle: true,
         options: getButtonGroupTableConfig(_this), //
       },
     ],
@@ -390,67 +555,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
           field: 'baseinfoConfig',
           type: 'sform',
           label: '参照表配置', //
-          // options: {
-          //   itemSpan: 12,
-          //   items: [
-          //     {
-          //       field: 'tableName',
-          //       label: '表名',
-          //       type: 'string', //
-          //     },
-          //     {
-          //       field: 'bindColumns', //
-          //       label: '绑定字段',
-          //       span: 24, //
-          //       type: 'stable',
-          //       options: {
-          //         openBefore: async (config) => {
-          //           let item: FormItem = config?.item //
-          //           let data = config.data //
-          //           let options = item.config.options
-          //           let columns = options.columns
-          //           let col1 = columns[1]
-          //           let col0 = columns[0]
-          //           if (data?.tableName == null) {
-          //             return '请先选择表名' //
-          //           }
-          //           col1.tableName = data.tableName
-          //           col0.tableName = tableName
-          //           return //
-          //         },
-          //         showTable: false, //
-          //         tableTitle: '绑定参照表',
-          //         tableState: 'edit',
-          //         columns: [
-          //           {
-          //             field: 'key',
-          //             title: '当前字段',
-          //             editType: 'select',
-          //             columnSelect: true,
-          //             tableName: tableName, //
-          //           },
-          //           {
-          //             field: 'targetKey',
-          //             title: '值',
-          //             editType: 'select',
-          //             columnSelect: true,
-          //             tableName: tableName,
-          //           },
-          //         ],
-          //       },
-          //     },
-          //     {
-          //       field: 'showColumns',
-          //       label: '显示字段',
-          //       type: 'select',
-          //       options: {
-          //         columnSelect: true,
-          //         multiple: true,
-          //         tableName: tableName, //
-          //       },
-          //     },
-          //   ],
-          // },
+
           options: getBaseInfoEditConfig(_this, tableName), //
         },
       ],
@@ -517,33 +622,33 @@ export const formitemTypeMap = (_this: PageDesign) => {
           type: 'stable', //
           options: {
             //
-            showTable: true,
+            showTable: false,
             showRowSeriesNumber: true, //
-            buttons: [
-              {
-                label: '新增',
-                key: 'add',
-                fn: () => {
-                  let select = _this.state.selected
-                  let context = select.context
-                  context.appendCol() //
-                },
-              },
-              {
-                label: '删除',
-                key: 'del',
-                fn: (config) => {
-                  let select = _this.state.selected
-                  let columns = select.columns
-                  let table: Table = config.parent
-                  let crow = table.getCurRow()
-                  let _index = columns.indexOf(crow)
-                  if (_index > -1) {
-                    columns.splice(_index, 1) //
-                  }
-                },
-              },
-            ],
+            // buttons: [
+            //   {
+            //     label: '新增',
+            //     key: 'add',
+            //     fn: () => {
+            //       let select = _this.state.selected
+            //       let context = select.context
+            //       context.appendCol() //
+            //     },
+            //   },
+            //   {
+            //     label: '删除',
+            //     key: 'del',
+            //     fn: (config) => {
+            //       let select = _this.state.selected
+            //       let columns = select.columns
+            //       let table: Table = config.parent
+            //       let crow = table.getCurRow()
+            //       let _index = columns.indexOf(crow)
+            //       if (_index > -1) {
+            //         columns.splice(_index, 1) //
+            //       }
+            //     },
+            //   },
+            // ],
             columns: [
               {
                 field: 'label', //
@@ -567,6 +672,56 @@ export const formitemTypeMap = (_this: PageDesign) => {
         }
         _d['_items_set'] = (v) => {} //
         return _d //
+      }),
+    },
+    select: {
+      itemSpan: 24,
+      items: [
+        {
+          field: 'placeholder',
+          label: '提示',
+          type: 'input', //
+        },
+        {
+          field: 'options',
+          label: '静态数据源',
+          type: 'stable',
+          options: {
+            columns: [
+              {
+                field: 'label',
+                title: '标题',
+                type: 'string',
+                editType: 'string',
+              },
+              {
+                field: 'value',
+                title: '值',
+                type: 'string',
+                editType: 'string',
+              },
+            ], //
+          },
+        },
+        {
+          field: 'optionsField',
+          label: '数据源',
+          type: 'baseinfo',
+          options: {
+            baseinfoConfig: {
+              tableName: 'DataDictionary', //
+              bindColumns: [
+                {
+                  key: 'optionsField',
+                  targetKey: 'DictionaryName', //
+                },
+              ],
+            },
+          },
+        },
+      ],
+      data: computed(() => {
+        return _this.state.selected?.options //
       }),
     },
   }

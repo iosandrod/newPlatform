@@ -253,8 +253,8 @@ export class PageDesign extends Form {
         tableName: getDataConfig,
       }
     }
-    if(this.isDesign==true){
-      return//
+    if (this.isDesign == true) {
+      return //
     }
     let tableName = getDataConfig.tableName //
     let http = this.getHttp()
@@ -294,7 +294,7 @@ export class PageDesign extends Form {
     query = { ...query, ..._query }
     // let viewTable = this.config.viewTableName
     let tableConfig = this.getTableConfig(tableName)
-    let viewTable = tableConfig.viewTableName //
+    let viewTable = tableConfig.viewTableName1 //
     let _t = tableName
     let config: any = {}
     if (typeof viewTable == 'string' && viewTable.length > 0) {
@@ -533,7 +533,7 @@ export class PageDesign extends Form {
     })
     return _items
   }
-  async editTableRows() {
+  async editTableRows(_config?: any) {
     console.log('编辑当前行') //
   }
   async addEditTableRow() {
@@ -618,6 +618,7 @@ export class PageDesign extends Form {
   }
   //添加类别
   async addRelateTableRow(tableName?: any, row?: any) {
+    // debugger //
     let _config = tableName
     if (typeof tableName == 'string') {
       _config = {
@@ -872,39 +873,6 @@ export class PageDesign extends Form {
       {
         label: '设计当前列',
         fn: async () => {
-          let currentDesignField = this.currentDField
-          let system = this.getSystem()
-          let currentContextItem = this.currentContextItem
-          let config = currentContextItem.config
-          let id = config.id
-          if (id == null) {
-            return
-          } //
-          let fCom: Table = currentContextItem.getRef('fieldCom')
-          // console.log(fCom, 'fCom') ////
-          let currentContextCol = fCom.curContextCol
-          let f = currentContextCol.getField()
-          let tName = currentContextCol.getTableName()
-          if (tName == this.getTableName()) {
-            await system.designTableColumns(tName, f) //批量修改//
-          } else {
-            let _config = _.cloneDeep(config) //
-            await system.designTargetColumn(_config) //
-          }
-        },
-        visible: computed(() => {
-          let currentItem = this.currentContextItem
-          let _type = currentItem?.config?.type
-          if (_type == 'entity') {
-            return true
-          }
-          return false //
-        }),
-        disabled: false,
-      },
-      {
-        label: '设计当前列',
-        fn: async () => {
           let cf = this.currentDField
           if (cf == null) {
             return
@@ -947,12 +915,22 @@ export class PageDesign extends Form {
           return false //
         }),
       },
-      // {
-      //   label: '设计其他',
-      //   fn: async () => {
-      //     console.log('设计其他') //
-      //   },
-      // },
+      {
+        label: '设计当前表单',
+        fn: async () => {
+          //
+          // console.log(this.curCForm, 'testDForm') //
+          let curContext = this.currentContextItem
+          // debugger //
+          //@ts-ignore
+          let formIns = curContext?.config?.formIns //
+          if (formIns != null) {
+            let sys = this.getSystem()
+            let config = formIns.config
+            await sys.confirmDesignForm(config) //
+          }
+        },
+      },
       {
         label: '设计按钮',
         fn: async () => {
@@ -962,7 +940,6 @@ export class PageDesign extends Form {
           let currentItem = this.currentContextItem
           let _type = currentItem?.config?.type
           if (_type == 'buttongroup') {
-            //
             return true
           }
           return false //
@@ -983,6 +960,13 @@ export class PageDesign extends Form {
     }
     items = _.cloneDeep(items)
     let tableConfig: any = getButtonGroupTableConfig(this) //
+    // items.forEach((e) => {
+    //   e.children = [
+    //     {
+    //       label: '111', //
+    //     },
+    //   ]
+    // })
     tableConfig.data = items
     tableConfig.height = 500
     tableConfig.width = 800
@@ -1059,6 +1043,7 @@ export class PageDesign extends Form {
     this.openDialog(dialogConfig)
   }
   async designSearchForm() {
+    // debugger //
     let searchDialog = this.config.searchDialog
     if (searchDialog == null) {
       searchDialog = {} //
@@ -1070,7 +1055,7 @@ export class PageDesign extends Form {
     _data = { ...searchDialog, ..._data } ////
     let _data1 = this.getLayoutData()
     _data1.searchDialog = _data //
-    this.saveTableDesign({ refresh: false }) //
+    this.saveTableDesign({ refresh: false, ..._data1 }) //
     // await this.getSystem().updateCurrentPageDesign(_data1) //
   }
   async selectExcelFile() {
@@ -1163,30 +1148,17 @@ export class PageDesign extends Form {
       return
     }
     let tableName = this.getTableName()
-    // let tConfig = this.getTableConfig(tableName)
-    // console.log(tConfig, 'test_config')//
     let cols = this.getTableColumns(tableName)
     let columns = cols.map((col) => {
       return col?.config || col //
     })
-    // let columns = tConfig.columns
-    let tCols = await this.getHttp().find('columns', { tableName })
-    let addCols = columns
-      .filter((c) => {
-        return (
-          tCols.findIndex((tc) => {
-            return tc.field == c.field
-          }) == -1
-        )
-      })
-      .map((row) => {
-        row.id = null
-        row.tableName = this.getRealTableName() //
-        return row
-      }) //
-    let _res = await this.getHttp().create('columns', addCols)
-    this.getSystem().confirmMessage('同步成功', 'success') //
-    this.getSystem().refreshPageDesign() //
+    let realTableName = this.getRealTableName()
+    await this.getSystem().syncRealColumns({
+      tableName,
+      columns,
+      realTableName,
+    }) //
+    this.getSystem().refreshPageDesign(tableName) //
   }
   getSearchWhere(data) {
     let columns = this.getTableColumns()
@@ -1646,38 +1618,6 @@ export class PageDesign extends Form {
   } //
   //进入打印
   async getRelateSearchWheres() {
-    /* 
-      async function fn(context, next) {
-    let row = this.getCustomerClssCurRow()
-    let _fn = (data) => {
-        let _data = data.map(row => {
-            let children = row.children
-            let d1 = [row]
-            if (Array.isArray(children) && children.length > 0) {
-                return [row, ..._fn(children)]
-            }
-            return [row]
-        })
-        return _data.flat()
-    }
-    if (row == null) {
-        //没有客户类别就是跳出
-        return
-    }
-    let rows = _fn([row])
-    let rowsArg = rows.map(row => {
-        return row['cClsNo']
-    })
-    console.log(rows, 'testRows')
-    let query = context.queryArr
-    // let cClsNo = row['cClsNo']
-    let obj = {
-        cClsNo: rowsArg
-    }
-    query.push(obj)
-    await next()
-}
-    */
     let allTable = this.getAllTable()
       .filter((item) => {
         let type = item.config?.options?.tableType //
@@ -1701,8 +1641,9 @@ export class PageDesign extends Form {
       let tableData = this.getTableRefData(name)
       let tableConfig = this.getTableConfig(name)
       let curRow = tableData.curRow //
-      let relateKey = tableConfig?.relateKey
-      let mainRelateKey = tableConfig?.mainRelateKey
+      let _config1 = tableConfig?.relateConfig || {} //
+      let relateKey = _config1?.relateKey
+      let mainRelateKey = _config1?.mainRelateKey //
       if (relateKey == null || mainRelateKey == null) {
         this.getSystem().confirmMessage(`${name}未设置关联字段`, 'warning') //
         continue
@@ -1895,4 +1836,34 @@ export class PageDesign extends Form {
     let forms = items.filter((e) => e.getType() == 'dform')
     return forms
   }
+  async onTableCellCommand(config) {
+    let tableName = config.tableName
+    let command = config.command
+    let tableConfig = this.getTableConfig(tableName)
+    let _tableConfig = config.tableConfig //
+    let tableType = tableConfig?.tableType
+    if (tableName == this.getTableName()) {
+      tableType = 'main'
+    }
+    if (command == 'edit') {
+      if (tableType == 'main') {
+        let ref: Table = this.getRef(tableName)
+        let contextRow = ref.curContextRow //
+        this.editTableRows({
+          row: contextRow, //
+        })
+      }
+    } //
+  }
+  getTableType() {
+    let tableName = this.getTableName()
+    let _nameArr = tableName.split('---')
+    let type = _nameArr[1]
+    if (['edit', 'search', 'import'].includes(type)) {
+      return type
+    } //
+    return 'main' //
+  }
+  async auditCurRow() {}
+  async unAuditCurRow() {}
 }

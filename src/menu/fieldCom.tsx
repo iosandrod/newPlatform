@@ -33,9 +33,21 @@ export default defineComponent({
     const { state, setSelection } = hooks.useTarget()
     let formIns: Form = inject('formIns')
     const addStore = (element) => {
+      // debugger //
       //在根部进行控制
       let _el = _.cloneDeep(element)
       let newElement = reactive(ER.wrapElement(_el, true, true, true, true))
+      let items = formIns.items //
+      let hasItem = items.find((item) => {
+        let f = item.getField()
+        if (f != null && f == element.field) {
+          return true
+        }
+      })
+      if (hasItem) {
+        formIns.getSystem().confirmErrorMessage('该字段已存在,请勿重复添加') //
+        return
+      }
       state.store.push(newElement) //
       utils.addContext({ node: newElement, parent: state.store, form: formIns })
     }

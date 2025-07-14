@@ -27,7 +27,6 @@ import {
 import fieldMenu from '@/menu/fieldCom'
 import CanvesPanel from '@ER/formEditor/components/Panels/Canves' //
 import ConfigPanel from '@ER/formEditor/components/Panels/Config/configPanel'
-import DeviceSwitch from '@ER/formEditor/components/DeviceSwitch.vue'
 import ErFormPreview from './preview'
 import Icon from '@ER/icon'
 import hooks from '@ER/hooks'

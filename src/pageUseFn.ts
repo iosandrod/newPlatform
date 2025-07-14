@@ -17,6 +17,7 @@ export const mainUse = {
         let initGetData = options?.initGetData
 
         if (tableType == 'relate') {
+          // debugger //
           if (Boolean(initGetData)) {
             await instance.getRelateTreeData(ta?.options?.tableName)
           }
@@ -83,11 +84,11 @@ export const mainUse = {
       for (let table of allRelateTables) {
         let options = table.config.options //
         //获取关联字段
-        // let relateConfig = options?.relateConfig //
-        let relateKey = options?.relateKey //
+        let _options = options?.relateConfig
+        let relateKey = _options?.relateKey //
         let treeConfig = options?.treeConfig || {} //
-        let mainRelateKey = options?.mainRelateKey //
-        let tableName = options?.tableName //
+        let mainRelateKey = _options?.mainRelateKey
+        let tableName = options?.tableName
         if (Boolean(relateKey) && Boolean(mainRelateKey)) {
           let _curRow = instance.getCurRow(tableName)
           let _value = _curRow?.[relateKey]

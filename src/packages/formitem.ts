@@ -174,7 +174,8 @@ export class FormItem extends Base {
       return //
     }
     let tableName = this.getTableName()
-
+    let f = this.getField()
+    console.log(f, 'f', tableName, 'tableName')
     this.getSystem().createColumnSelect(tableName)
   }
   initSTable() {
@@ -383,8 +384,6 @@ export class FormItem extends Base {
   }
   getRequired() {
     let required = this.config?.options?.required
-    // if (this.getTitle() == '销售日期') {
-    // }
     return required
   }
   getLabelWidth() {
@@ -459,16 +458,43 @@ export class FormItem extends Base {
     return label || '' //
   }
   getValidateRoles() {
+    let _rules: any = []
     let field = this.getField()
     let r: FormItemRule = {
       //@ts-ignore
       trigger: 'blur',
       required: true,
-      asyncValidator: async (rule, value, callback) => {
-        //
-      }, //
+      // asyncValidator: async (rule, value, callback) => {}, //
     }
-    let rules = { field: field, rules: [r] } //
+    if (this.getRequired()) {
+      _rules.push(r)
+    }
+    let validateFn = this.config.validateFn
+    if (typeof validateFn == 'string') {
+      let _fn = stringToFunction(validateFn)
+      validateFn = _fn
+    }
+    if (typeof validateFn == 'function') {
+      let _rule: any = {
+        validator: async (_config) => {
+          let itemValue = _config.itemValue
+          let value = itemValue
+          let config = {
+            form: this.form,
+            item: this,
+            data: this.form.getData(),
+            value: value,
+          }
+          let _value1 = await validateFn(config)
+          if (typeof _value1 == 'string') {
+            return Promise.reject(new Error(_value1))
+          }
+          return true
+        },
+      }
+      _rules.push(_rule) //
+    }
+    let rules = { field: field, rules: _rules } //
     return rules
   }
   getType() {
@@ -831,7 +857,6 @@ export class FormItem extends Base {
     } //
   } //
   async designForm() {
-    // debugger //
     let formConfig = this.getFormConfig() //
     let platform = this.form.getCurrentPlatform()
     let _config = _.cloneDeep(formConfig)
@@ -922,7 +947,7 @@ export class FormItem extends Base {
       showRowSeriesNumber: false,
       showCheckboxColumn: false,
       showFooter: false,
-      showCalculate: false,
+      // showCalculate: false,
       ...options,
     } ////
     return _config
@@ -1003,26 +1028,6 @@ export class FormItem extends Base {
       },
     }
     sys.openCodeDialog(config) //
-    // let createFn = () => {
-    //   return {
-    //     component: codeEditorCom,
-    //     props: {
-    //       ...codeConfig,
-    //       modelValue: value,
-    //       tableName: tableName,
-    //     },
-    //   }
-    // }
-    // sys.openDialog({
-    //   height: 600,
-    //   width: 1200,
-    //   createFn, //
-    //   confirmFn: (dialog: Dialog) => {
-    //     let com: CodeEditor = dialog.getRef('innerCom')
-    //     let bindValue = com.getBindValue() //
-    //     this.updateBindData({ value: bindValue }) ////
-    //   },
-    // })
   }
   openSFormDialog() {
     let options = { ...this.getOptions() } //
@@ -1106,7 +1111,7 @@ export class FormItem extends Base {
       rArr.push({
         validator: async (config) => {
           let { itemValue, rule, rules, data, field } = config //
-          let _value = await validate(config)
+          let _value = await validate({ ...config, value: itemValue }) //
           if (typeof _value == 'string') {
             return Promise.reject(new Error(_value)) //
           }
@@ -1121,7 +1126,6 @@ export class FormItem extends Base {
     return obj //
   }
   openMainMenu(e, item) {
-    //
     let f = this.getField()
     let tableName = this.getTableName() //
     let sys = this.getSystem()
@@ -1130,6 +1134,11 @@ export class FormItem extends Base {
       return
     }
     d.currentDField = f
+    let formIns = item?.formIns //
+    // if (formIns) {
+    //   //
+    //   d.curCForm = formIns //
+    // }
     d.openContextMenu(e, item) //
   }
   getIsShowSearchIcon() {
@@ -1327,4 +1336,9 @@ export class FormItem extends Base {
     //
   }
   getFormDisabled(config: any) {}
+  getImageBindValue() {
+    let _value = this.getBindValue()
+    if (Boolean(_value)) {
+    } //
+  }
 } //

@@ -1,6 +1,6 @@
 import { nextTick, reactive } from 'vue'
 import _ from 'lodash'
-import { Client, client as _client, http, myHttp } from './service/client'
+import { Client, myHttp } from './service/client'
 import { Base } from '@ER/base'
 import { cacheValue, useDelay, useOnce } from '@ER/utils/decoration'
 import { PageDesign } from '@ER/pageDesign'
@@ -22,14 +22,30 @@ import { SearchPageDesign } from '@ER/searchPageDesign'
 import codeEditorCom from './codeEditor/codeEditorCom'
 import CodeEditor from './codeEditor/codeEditor'
 import wangCom from './wangEditor/wangCom'
-import { changePassword, createColumnSelect, installApp } from './systemFn'
+import {
+  addTableField,
+  changePassword,
+  createColumnSelect,
+  installApp,
+  removeTableField,
+} from './systemFn'
 import { generateRoutes } from '@/router/register'
 import { Menu } from './menu/menu'
 import { BMenu } from './buttonGroup/bMenu'
 import { ChatClass } from './chat/chatClass'
 import { Contact } from './chat'
 import pageCom from '@ER/pageCom'
+import { staticCom } from './pages/erp/design/staticCom'
+import { ganttStaticCom } from './pages/gantt/admin/ganttStaticCom'
+import platfomrStaticCom from './pages/platform/admin/platfomrStaticCom'
+import { globalStaticCom } from './globalStaticCom'
+const staticComMap = {
+  erp: staticCom,
+  gantt: ganttStaticCom,
+  platform: platfomrStaticCom,
+}
 export class System extends Base {
+  _keyboardListeners: any[] = []
   pageLoading = false
   staticComArr: any[] = []
   hasInitRoutes = false
@@ -92,14 +108,14 @@ export class System extends Base {
   getCurrentShowPage() {}
   buildMenuTree(rows) {}
   getClient(): myHttp {
-    return http
+    return this.getHttp() //
   }
   getMenuProps() {}
   getMenuItems() {
     let _items = this.systemConfig.menuConfig.items || []
     return _items
   }
-  _getCacheValue(key) {}
+  _getCacheValue(key) {} //
   getTabModelValue() {
     let route = this.getRouter()
     let r = route.currentRoute
@@ -163,6 +179,7 @@ export class System extends Base {
       }
       this.openDialog({
         ...config,
+        title: config.title || '代码编辑器', //
         height: 600,
         width: 1200,
         createFn,
@@ -332,7 +349,10 @@ export class System extends Base {
     return _d //
   }
   setStaticComArr(arr) {
-    this.staticComArr = arr
+    if (!Array.isArray(arr)) {
+      return //
+    } //
+    this.staticComArr = [...arr, ...globalStaticCom] //
   }
   getStaticComArr() {
     return this.staticComArr || [] //
@@ -348,6 +368,9 @@ export class System extends Base {
     if (_design) {
       return _design
     } //
+    if (tableName == 'admin') {
+      return
+    }
     let layoutConfig = await this.getPageLayout(tableName) //
     if (layoutConfig == null) {
       let staticCom = this.getStaticComArr()
@@ -396,7 +419,7 @@ export class System extends Base {
     })
     // await pageDesign.getTableData() //
     this.tableMap[tableName] = pageDesign //
-    return pageDesign
+    return pageDesign //
   }
   async onMainTabChange(config) {
     // console.log(config, 'testConfig')//
@@ -558,12 +581,23 @@ export class System extends Base {
       }
       let _config = {
         createFn,
-        confirmFn: (dialog: Dialog) => {
+        confirmFn: async (dialog: Dialog) => {
           let _confirmFn = formConfig.confirmFn //
           if (typeof _confirmFn == 'function') {
             _confirmFn(dialog) //
           }
+          let fIns: Form = dialog.getRef('innerCom')
           let _d = dialog.getRef('innerCom').getData()
+          let requiredValidate = formConfig.requiredValidate
+          if (requiredValidate == true) {
+            try {
+              let msg = await fIns.validate()
+            } catch (error) {
+              this.confirmErrorMessage('表单校验失败')
+              reject(error?.message)
+              return false
+            } //
+          }
           resolve(_d) //
         },
         width: formConfig.width || 800,
@@ -580,7 +614,13 @@ export class System extends Base {
   } //
   async confirmTable(tableConfig: any): Promise<any[]> {
     return new Promise(async (resolve, reject) => {
-      let _table = new Table(tableConfig)
+      tableConfig.showCheckAll = true //
+      // if (tableConfig.showCheckAll == null) {
+      // }
+      if (tableConfig.showCheckboxColumn == null) {
+        tableConfig.showCheckboxColumn = true //
+      }
+      let _table = new Table(tableConfig) //
       let component = tableCom
       let createFn = () => {
         return {
@@ -595,6 +635,7 @@ export class System extends Base {
       let _config = {
         title: tableConfig?.title, //
         createFn,
+        showCheckAll: true, //
         width: _width || 600,
         height: _height || 400, //
         confirmFn: async (dialog: Dialog) => {
@@ -861,14 +902,19 @@ export class System extends Base {
     try {
       let http = this.getHttp()
       this.setSystemLoading(true)
-      await http.registerUser(data) //
+      await http.registerUser(data)
+      let { email } = data //
+      this.setLocalItem('loginEmail', email) //
+      this.routeTo('/login') //
+      this.setSystemLoading(false) //
+      this.confirmMessage('注册成功', 'success')
     } catch (error) {
       const message = error.message || ''
+      this.setSystemLoading(false) //
       this.confirmMessage(`注册失败,${message}`, 'error') //
     }
   }
   async loginUser(data) {
-    // debugger//
     let currentApp = await this.getCurrentApp()
     if (currentApp != 'platform') {
       let userid = data.userid
@@ -880,8 +926,8 @@ export class System extends Base {
         this.confirmMessage('请选择账套', 'error')
         return //
       }
-      let http = this.getHttp()
-      http.changeClient({
+      let http = this.getHttp() //
+      await http.changeClient({
         userid,
         appName: currentApp,
       })
@@ -897,19 +943,15 @@ export class System extends Base {
     let _res = await h.loginUser(data) //
     return _res //
   }
-  getAllApp() {
-    //使用mock数据//
-    let allApp = this.systemApp
-    if (allApp == null || !Array.isArray(allApp)) {
-      return []
-    }
-    return allApp
-  }
-  async initAllApp() {
+
+  @cacheValue()
+  async getAllApp(): Promise<any> {
     try {
       let http = this.getHttp()
-      let _data = await http.post('company', 'getAllApp') //
-      this.systemApp = _data //
+      let _data = await http.mainPost('company', 'getAllApp') //
+
+      this.systemApp = _data
+      return _data //
     } catch (error) {
       this.confirmErrorMessage('获取应用失败') //
     }
@@ -921,6 +963,7 @@ export class System extends Base {
   }
   async openApp(name, openConfig = {}) {
     try {
+      //
       let canOpen = await this.getHttp().post('users', 'canOpenApp', {
         appName: name,
       }) //
@@ -931,7 +974,6 @@ export class System extends Base {
       let config = await this.getHttp().post('company', 'getAppConfig', {
         appName: name,
       })
-      // console.log(config) //
       let url = config?.url //
       if (url) {
         url = `${url}?${query}` //
@@ -939,6 +981,7 @@ export class System extends Base {
         window.open(url)
       } //
     } catch (error) {
+      console.log(error) //
       this.confirmErrorMessage(`打开${name}失败,${error?.message}`) //
     }
   }
@@ -949,22 +992,18 @@ export class System extends Base {
     }
     this.confirmMessage(content, 'error')
   }
-  async getAllApps() {
-    if ((await this.getIsLogin()) == false) {
-      this.allApp = []
-      return //
-    }
-    let userInfo = this.getUserInfo()
-    let user = userInfo.user
-    let id = user.id
-    let allCompany = await this.getHttp().find('company', {
-      userid: id,
-    })
-    this.allApp = allCompany //
-    return allCompany //
+  async getEnterApp() {
+    let http = this.getHttp()
+    let _data = await http.post('company', 'getEnterApp') //
+    return _data //
+  }
+  async getInstallApp() {
+    let http = this.getHttp()
+    let _data = await http.post('company', 'getInstallApp') //
+    return _data //
   }
   getUserInfo() {
-    let loginInfo = this.loginInfo //
+    let loginInfo = this.loginInfo?.user
     return loginInfo
   }
   async designCurrentPageConfig() {
@@ -977,6 +1016,8 @@ export class System extends Base {
     let fConfig = {
       isTabForm: true,
       itemSpan: 12,
+      height: 0.8,
+      width: 0.8, //
       items: [
         {
           tabTitle: tabTitles[0], //
@@ -1100,8 +1141,8 @@ export class System extends Base {
           },
         },
         {
-          label: '关联视图',
-          field: 'viewTableName', //
+          label: '数据源',
+          field: 'dataSource', //
           type: 'string', //
           tabTitle: tabTitles[0],
           options: {},
@@ -1115,14 +1156,15 @@ export class System extends Base {
         },
         {
           field: 'hooks',
-          // label: '高级钩子函数编辑',
+          label: '高级钩子函数编辑',
           type: 'stable',
           tabTitle: tabTitles[0],
           span: 24,
-          hiddenTitle: true, //
+          // hiddenTitle: true, //
           options: {
             tableTitle: '高级钩子', //
             tableState: 'edit', //
+            showTable: false,
             columns: [
               {
                 field: 'name',
@@ -1175,7 +1217,7 @@ export class System extends Base {
                 editType: 'boolean', //
               },
             ],
-            showTable: true, //
+            // showTable: true, //
           },
         },
         {
@@ -1318,7 +1360,8 @@ export class System extends Base {
     return 'normal' //
   }
   async designSystemNavs() {
-    this.routeOpen('navs') //
+    //
+    this.routeTo('/admin/navs') //
   }
 
   async enterCurrentPageDesign() {
@@ -1337,12 +1380,12 @@ export class System extends Base {
     let tableName = item.tableName
     if (Boolean(tableName) == false) {
       return
-    }
-    let _d = await this.getHttp().hTable(tableName)
-    if (_d == false) {
-      return
-    }
-    this.routeOpen(tableName) //
+    } //
+    // let _d = await this.getHttp().hTable(tableName)
+    // if (_d == false) {
+    //   return
+    // }
+    this.routeTo(`/admin/${tableName}`)
   }
   getIsLogin() {
     let loginConfig = this.loginInfo
@@ -1402,8 +1445,8 @@ export class System extends Base {
       {
         label: '同步列',
         fn: async () => {
-          let pageDesign = this.getCurrentPageDesign()
-          await pageDesign.syncRealColumns()
+          // let pageDesign = this.getCurrentPageDesign()
+          // await pageDesign.syncRealColumns()
         },
       },
       {
@@ -1416,15 +1459,15 @@ export class System extends Base {
     return _items //
   }
   async confirmDesignForm(config = {}) {
-    //
+    let _config = _.cloneDeep(config)
     return new Promise(async (resolve, reject) => {
       let createFn = () => {
         return {
           component: formCom, //
           props: {
             layoutData: config,
+            ..._config, //
             isDesign: true,
-            ...config, //
           },
         }
       }
@@ -1450,7 +1493,7 @@ export class System extends Base {
     let allArgs = [...optionsField].flat().filter((item) => {
       return !allKeys.includes(item)
     }) //
-    console.log(allArgs, 'testAray') //
+    // console.log(allArgs, 'testAray') //
     let options = await this.getHttp().post(
       'columns',
       'getOptionsFieldSelect',
@@ -1462,6 +1505,7 @@ export class System extends Base {
   }
   @useDelay()
   async createColumnSelect(tableName) {
+    // debugger //
     await createColumnSelect(this, tableName) //
     //
   }
@@ -1568,7 +1612,6 @@ export class System extends Base {
   async getAllRegisterCompany() {
     let http = this.getHttp()
     let res = await http.runCustomMethod('company', 'getAllRegisterCompany', {}) //
-    // console.log(res, 'testRes') ////
     let _res = res
       .map((re) => {
         let user = re.user
@@ -1585,7 +1628,7 @@ export class System extends Base {
           userid,
           companyCnName,
         } //
-      }) //
+      })
     //加入平台
     _res.push({
       appName: 'platform',
@@ -1613,21 +1656,38 @@ export class System extends Base {
       let query = curRou.query
       // console.log(query, 'testQuery') //
       nextTick(() => {
+        // debugger //
         // console.log('sfkjslfjslkfsjlkfsd')//
         let _path1 = _path.split('?')[0]
+        // _path1=_path1.replace(/\/$/,'')
+        // debugger//
         if (_path1 == '/') {
           _path = '/home'
+          _path1 = '/home' //
+        }
+        // debugger//
+        let reg = /\/$/
+        _path = _path1 //
+        if (reg.test(_path)) {
+          _path = _path.replace(reg, '') //
         }
         router.push({
           path: _path,
+          query: query, //
         })
       }) //
-    } //
+    }
+    let _staticCom = staticComMap[app]
+    if (_staticCom) {
+      this.setStaticComArr(Object.values(_staticCom))
+    }
   }
   async getCurrentApp() {
     let envi = process.env.VITE_ENVIRONMENT || 'development'
-    let curUrl = window.location.host.split(':')[0]?.split('.')[0] //
-    let apparr = ['erp', 'platform']
+    let curUrl = window.location.host.split(':')[0]?.split('.')[0]
+    // let apparr = ['erp', 'platform']
+    let apparr = await this.getAllApp()
+    apparr = apparr.map((item) => item.appName) //
     let _appName = null
     if (apparr.includes(curUrl)) {
       _appName = curUrl
@@ -1637,6 +1697,12 @@ export class System extends Base {
       let port = window.location.port
       if (port == '3004') {
         _appName = 'erp'
+      }
+      if (port == '3005') {
+        _appName = 'gantt' //
+      }
+      if (port == '3006') {
+        _appName = 'print' //
       }
     }
     _appName = _appName || 'platform' //
@@ -1660,7 +1726,7 @@ export class System extends Base {
         },
       },
       {
-        label: '新增菜单子菜单',
+        label: '新增子菜单', //
         fn: () => {
           let menu: Menu = this.getRef('leftMenu')
           let curItem = menu.curContextMenu
@@ -1673,10 +1739,14 @@ export class System extends Base {
         fn: () => {
           let menu: Menu = this.getRef('leftMenu')
           let curItem = menu.curContextMenu
-          // this.designMenuItem(curItem) //
+          if (curItem == null) {
+            curItem = {
+              pid: 0,
+            }
+          } //
           this.designMenuItem({ pid: curItem.pid }, 'add')
         },
-      },
+      }, //
       {
         label: '删除当前菜单',
         fn: () => {
@@ -1750,7 +1820,7 @@ export class System extends Base {
         $like: `%${keyword}%`, //
       },
       id: {
-        $nin: [this.getUserInfo()?.user?.id], //
+        $nin: [this.getUserInfo()?.id], //
       },
     })
     return data //
@@ -1802,19 +1872,13 @@ export class System extends Base {
   }
   getUserId() {
     let userinfo = this.getUserInfo()
-    return userinfo?.user?.id
+    return userinfo?.id
   }
   getUserName() {
     let userinfo = this.getUserInfo()
-    return userinfo?.user?.username //
+    return userinfo?.username //
   }
-  async getAllAppCompany(config) {
-    //
-    let http = this.getHttp()
-    let res = await http.post('company', 'getAllAppCompany', config) //
-    let _res = res //
-    return _res
-  }
+
   getGlobalDropDown() {
     let system = this
     let items = [
@@ -1825,17 +1889,11 @@ export class System extends Base {
         },
       },
       {
-        label: '切换平台',
+        label: '实体建模', //
         fn: async () => {
-          let currentDesign = system.getCurrentPageDesign()
-          let plat = currentDesign.getCurrentPlatform() //
-          if (plat == 'pc') {
-            currentDesign.switchPlatform('mobile')
-          } else {
-            currentDesign.switchPlatform('pc')
-          }
+          await this.routeTo('/admin/erDesign') //
         },
-      },
+      }, //
       {
         label: '当前页面设计',
         fn: async () => {
@@ -1853,23 +1911,23 @@ export class System extends Base {
         label: '保存页面设计',
         fn: async () => {
           let currentPageDesign = system.getCurrentPageDesign()
-          await currentPageDesign.saveTableDesign()
+          await currentPageDesign.saveTableDesign() //
         },
       },
       {
-        label: '同步当前列',
+        label: '查看操作手册', //
+        fn: async () => {},
+      },
+      {
+        label: '备份当前数据库',
         fn: async () => {
-          let currentPageDesign = system.getCurrentPageDesign()
-          await currentPageDesign.syncErpTableColumns() //
+          system.backupDatabase()
         },
       },
       {
-        label: '打印页面',
+        label: '恢复数据库',
         fn: async () => {
-          let pageDesign = system.getCurrentPageDesign()
-          let layout = pageDesign.getLayoutData()
-          // console.log(layout) //
-          console.log(system, 'testSystem') //
+          await system.restoreDatabase() //
         },
       },
     ]
@@ -1879,9 +1937,21 @@ export class System extends Base {
     let _this = this
     let items = [
       {
-        label: '用户用心',
+        label: '用户中心',
         fn: async () => {
-          _this.routeOpen('userinfo') //
+          _this.routeTo('/admin/userinfo') //
+        },
+      },
+      {
+        label: '管理应用',
+        fn: async () => {
+          _this.routeTo('/admin') //
+        }, //
+      },
+      {
+        label: '回到首页',
+        fn: async () => {
+          _this.routeTo('/home') //
         },
       },
       {
@@ -1909,95 +1979,312 @@ export class System extends Base {
       _n = config.next
     }
     if (_n == null) {
+      //
       _n = {
-        name: 'home',
+        name: 'admin/home',
       }
     }
-    // if (pre) {
-    //   systemIns.routeOpen(pre.name) //
-    // } else if (config.next) {
-    //   systemIns.routeOpen(config.next.name) //
-    // }
     let _name = _n.name
-    systemIns.routeOpen(_name) //
+    // systemIns.routeOpen(_name) //
+    this.routeTo(_name) //
   }
   async designCurrentPage(name?: any) {
-    let pageDesign = null
+    let pageDesign: MainPageDesign = null
     if (name) {
-      pageDesign = this.getTargetDesign(name)
+      pageDesign = this.getTargetDesign(name) as any
     } else {
-      pageDesign = this.getCurrentPageDesign() //
+      pageDesign = this.getCurrentPageDesign() as any
     }
-    let config = pageDesign.config
-    let _config = _.cloneDeep(config)
-    let _p: any = pageDesign
-    let _construct = _p.__proto__.constructor
-    // console.log(_construct) //
-    let newD = new _construct(_config)
-    newD.setLayoutData(_config) //
-    newD.setCurrentDesign(true) //
-    let dialogConfig = {
-      title: '页面整体设计',
-      width: 1,
-      height: 1,
-      createFn: () => {
-        return {
-          component: pageCom,
-          props: {
-            formIns: newD,
-          },
-        }
-      },
-      confirmFn: () => {},
+    if (pageDesign == null) {
+      return
     }
-    await this.openDialog(dialogConfig) //
+    pageDesign.setCurrentDesign(true) //
   }
   setSystemLoading(status) {
     let bool = Boolean(status)
     this.pageLoading = bool //
   }
   async getAllAccountCompany(data) {
+    let getLabel = data.getLabel
+    let appName = data.appName || (await this.getCurrentApp())
+    if (appName == 'platform') {
+      return [] //
+    }
     let http = this.getHttp()
-    let res = await http.post('company', 'getAllAccountCompany', data)
-    // console.log(res, 'testRes123123')//
+    let res = await http.post('company', 'getAllAccountCompany', {
+      appName: appName,
+    })
     let _res = res
+    if (getLabel == true) {
+      let allCompany = _res
+      let appOptions = allCompany.map((item: any) => {
+        let v = item.userid
+        let label = item.cnName //
+        if (!label) {
+          //
+          label = `账套${v}`
+        }
+        return {
+          label: label, //
+          value: item.userid, //
+        }
+      })
+      _res = appOptions
+    }
     return _res
   }
   async changePassword() {
     await changePassword(this)
   } //
-  async getDefaultEditButtons() {
-    let http = this.getHttp()
-    let res = await http.post('entity', 'getDefaultButtons', {
-      type: 'edit',
-    })
-    console.log(res, 'testRes') //
-  }
-  async getDefaultMainButtons() {
-    let http = this.getHttp()
-    let res = await http.post('entity', 'getDefaultButtons', {
-      type: 'main',
-    })
-  }
+
   async checkIsAdmin() {
     //
   }
   getPlatformHomeHeader() {
     return [
       {
-        label: 'Home',
+        label: '首页',
         name: 'home',
       },
       {
-        label: 'About',
+        label: '关于应用',
         name: 'about',
       },
       {
-        label: 'Contact',
+        label: '联系开发', //
         name: 'contact', //
       },
     ]
   }
   getCardButtons() {}
-} //
+  async getRealTables() {
+    let http = this.getHttp() //
+    let res = await http.post('tableview', 'getAllTables')
+    console.log(res, 'allTables') //
+    return res
+  }
+  async addTableField(tableName, column) {
+    return await addTableField(this, tableName, column)
+  }
+  editTableField(tableName, column) {}
+  async removeTableField(tableName, column) {
+    return await removeTableField(this, tableName, column) //
+  }
+  /**
+   * 注册一个全局键盘事件监听
+   * @param {Object} config
+   * @param {string} config.key        — 监听的键名，如 'Enter'、'a'、'Escape' 等（区分大小写）
+   * @param {boolean} [config.ctrlKey] — 是否要求按下 Ctrl，默认 false
+   * @param {boolean} [config.shiftKey]— 是否要求按下 Shift，默认 false
+   * @param {boolean} [config.altKey]  — 是否要求按下 Alt，默认 false
+   * @param {Function} config.callback— 键匹配时触发的回调，接收原生事件作为参数
+   * @returns {Function} — 调用即可取消本次监听
+   */
+
+  async syncOldColumns(config) {
+    let tableName = config.tableName
+    let fConfig = {
+      title: '同步列',
+      height: 200,
+      width: 300,
+      itemSpan: 24, //
+      data: {
+        tableName: tableName,
+      },
+      items: [
+        {
+          label: '表名',
+          field: 'tableName',
+          disabled: false, //
+          visible: true,
+          required: true,
+        },
+      ],
+    }
+    let system = this
+    let data = await system.confirmForm(fConfig)
+    // console.log(data) //
+    let _tableName = data.tableName
+    let _columns = await system.getOldErpTableColumns(_tableName)
+    if (_columns.length == 0) {
+      return
+    }
+    let allCols = config.columns
+    if (!Array.isArray(allCols)) {
+      return
+    }
+    for (const col of _columns) {
+      let f = col.field
+      let c = allCols.find((c) => {
+        return c.field == f
+      })
+      let keys = [
+        {
+          key: 'title',
+          myKey: 'title',
+        },
+        {
+          key: 'width',
+          myKey: 'width',
+        },
+      ]
+      if (c) {
+        for (let key of keys) {
+          if (col[key.key] != null) {
+            c[key.myKey] = col[key.key]
+          }
+        } //
+      }
+    }
+  } //
+  @cacheValue((args) => {
+    return `${args}Buttons` //
+  })
+  async getSelectButtons(type = 'main') {
+    let http = this.getHttp()
+    let key = `${type}Buttons`
+    let res = await http.find('paramvalue', {
+      param_type: key,
+    })
+    let _res = res.map((item) => {
+      let param_code = item.param_code //编码
+      let param_value = item.param_value //具体的执行函数
+      let param_name = item.param_name //审核
+      item.label = param_name
+      // item.fn = param_value
+      item.id = param_code
+      item.checkboxField = false //
+      return item //
+    }) //
+    return _res //
+  }
+  async clearSelectButtons() {
+    this.clearCacheValue('getSelectButtons') //
+  }
+  async registerBaskEndEvent(tableName, event, fn) {
+    if (
+      tableName == null ||
+      event == null ||
+      fn == null ||
+      typeof fn !== 'function'
+    ) {
+      return
+    } //
+    let http = this.getHttp()
+    await http.registerTableEvent(tableName, event, fn)
+  }
+  //备份数据库
+  async backupDatabase() {
+    //
+    try {
+      let http = this.getHttp()
+      let res = await http.post('users', 'cacheDb')
+      this.getSystem().confirmMessage('数据库备份成功', 'success')
+    } catch (error) {
+      this.getSystem().confirmMessage('数据库备份失败', 'error') //
+    }
+  }
+  //恢复数据库
+  async restoreDatabase() {
+    //
+    try {
+      let http = this.getHttp()
+      let allDb = await http.post('users', 'getCacheDb')
+      // console.log(allDb) //
+      let tableConfig = {
+        title: '选择一个进行还原',
+        columns: [
+          {
+            field: 'date',
+            title: '备份日期',
+            width: 200,
+          },
+        ],
+        data: allDb,
+      } //
+      let d1 = await this.confirmTable(tableConfig)
+      let selectRow = d1.filter((d) => {
+        let check = d.checkboxField
+        return check == true
+      }) //
+      if (selectRow.length == 0 || selectRow.length > 1) {
+        this.getSystem().confirmMessage('请选择一个进行还原', 'warning')
+        return
+      }
+      let r0 = selectRow[0]
+      let res = await http.post('users', 'restoreDb', r0) //
+      this.getSystem().confirmMessage('数据库还原成功', 'success')
+    } catch (error) {
+      this.getSystem().confirmMessage('数据库还原失败', 'error') //
+    }
+  }
+  //
+  async loadImage(url) {
+    let http = this.getHttp()
+    let _image = await http.post(
+      'uploads',
+      'loadImages',
+      {
+        url,
+      },
+      true,
+    ) //
+    return _image //
+  }
+  showScreenPhoto(urlList) {
+    let _list = urlList
+    if (Boolean(urlList) == false) {
+      return
+    } //
+    if (typeof urlList == 'string') {
+      _list = [urlList]
+    }
+    if (!Array.isArray(_list)) {
+      return //
+    }
+    let _list1 = _list.map((item) => {
+      return {
+        url: item,
+      }
+    })
+    VxeUI.previewImage({
+      activeIndex: 1,
+      urlList: _list1,
+      downloadMethod: async (params) => {
+        debugger //
+        console.log(params, 'params')
+        return ''
+      },
+      showDownloadButton: true,
+
+      // urlList: [
+      //   { url: 'https://vxeui.com/resource/img/fj573.jpeg' },
+      //   { url: 'https://vxeui.com/resource/img/fj562.png' },
+      //   { url: 'https://vxeui.com/resource/img/fj187.jpg' },
+      // ],
+    })
+  }
+  async syncRealColumns(config) {
+    let tableName = config.tableName
+    let _res = await this.getHttp().post('columns', 'syncRealColumns', {
+      tableName,
+    })
+    this.confirmMessage('同步列成功') //
+    return _res //
+  }
+
+  formatImgSrc(src) {
+    // let curEnv = import.meta.env.VITE_ENVIRONMENT || 'development' //
+    let curEnv = this.getEnvValue('VITE_ENVIRONMENT')
+    if (curEnv == 'development') {
+      return src //
+    }
+    let baseUrl = this.getEnvValue('VITE_BASEURL')
+    // let port = this.getEnvValue('VITE_BASEURL_PORT') //
+    return `${baseUrl}${src}` //
+  }
+  async selectRolePermissions() {
+    //
+  }
+}
 export const system = reactive(new System())

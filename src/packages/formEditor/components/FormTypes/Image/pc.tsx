@@ -22,7 +22,7 @@ export default defineComponent({
     let _value = computed(() => {
       let _config = formitem?.getBindConfig()
       return _config
-    }) //
+    })
     let registerRef = (el) => {
       formitem.registerRef('fieldCom', el)
     }
@@ -34,6 +34,7 @@ export default defineComponent({
             onChange={(config) => {
               formitem.updateBindData(config)
             }}
+            
           ></UploadCom>
         </div>
       )

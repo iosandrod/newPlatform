@@ -64,8 +64,8 @@ export default defineComponent({
         //
         if (items !== oldItems) {
           group.setItems(items)
-          return
-        } //
+          return //
+        }
         let _items: any[] = items as any
         let _oldItems: any[] = group.items.map((row) => row.config) as any
         let addItems = _items.filter((item) => {
@@ -97,100 +97,101 @@ export default defineComponent({
       })
     }
     return () => {
+      const getBtnCom = (el: Button) => {
+        let btn = el?.config?.button || el //
+        let disabled = btn.getDisabled()
+        let _class = ['er-h-32', 'items-center', 'flex']
+        let _class1 = [
+          'h-full w-full er-pl-10 er-pr-10  rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition',
+        ]
+        let dIcon = null
+        if (btn?.buttons?.length > 0) {
+          dIcon = (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path fill="currentColor" d="m12 15l-5-5h10z" />
+            </svg>
+          )
+        }
+        let maskCom = null
+        if (disabled == true) {
+          // _class.push('is-disabled') //
+          _class.push('') //
+          _class1.push('is-disabled cursor-not-allowed')
+          maskCom = (
+            <div
+              class="absolute top-0 left-0 w-full h-full  cursor-not-allowed opacity-0"
+              onClick={(e) => {
+                e.stopPropagation()
+                e.preventDefault() //
+              }}
+            ></div> //
+          )
+        } else {
+          _class1.push('cursor-pointer')
+        }
+        let com = (
+          <div
+            class={[..._class, 'pl-1 pr-1 relative']}
+            style={{
+              display: `${btn.getDisplay()}`, //
+              minWidth: `${btn.getButtonWidth()}px`,
+              position: 'relative',
+              zIndex: 0,
+            }}
+            onClick={() => {
+              runBtnFn(btn)
+            }}
+          >
+            <div
+              class={[
+                ..._class1,
+                'flex justify-center items-center h-full w-full',
+              ]}
+            >
+              <button class={[]}>
+                <div class="flex">
+                  {btn?.getLabel()}
+                  {dIcon}
+                </div>
+              </button>
+            </div>
+            {maskCom}
+          </div>
+        )
+        return com
+      }
       let com = (
         <tabCom
           useDefaultClass={false}
-          class={`${ns.b()}`} //
+          class={[`${ns.b()}`, 'my-scope', 'er-mb-3', 'er-mt-3']} //
           isDesign={group.isDesign}
           {...group.getTabProps()}
-          height={40}
+          height={32}
           v-slots={{
             item: (el: Button) => {
-              let btn = el.config.button //
-              let disabled = btn.getDisabled()
-              let _class = [
-                // 'v-contextmenu',
-                'h-35',
-                'items-center',
-                'flex',
-              ]
-              let _class1 = [
-                'h-full w-full pl-10 pr-10  rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition',
-              ]
-              let maskCom = null
-              if (disabled == true) {
-                // _class.push('is-disabled') //
-                _class.push('') //
-                _class1.push('is-disabled cursor-not-allowed')
-                maskCom = (
-                  <div
-                    class="absolute top-0 left-0 w-full h-full  cursor-not-allowed opacity-0"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      e.preventDefault() //
-                    }}
-                  ></div>
-                )
-              } else {
-                _class1.push('cursor-pointer')
-              }
-              let com = (
-                <div
-                  class={[..._class, 'pt-2 pb-2 pl-1 pr-1 relative']}
-                  style={{
-                    minWidth: `${btn.getButtonWidth()}px`,
-                    position: 'relative',
-                    zIndex: 0,
-                  }}
-                  onClick={() => {
-                    runBtnFn(btn)
-                  }}
-                >
-                  {/* <ContextmenuItem>
-                    <div class="h-full flex items-center">
-                      {btn?.getLabel()}
-                    </div>
-                  </ContextmenuItem> */}
-                  <div
-                    class={[
-                      ..._class1,
-                      'flex justify-center items-center h-full w-full',
-                    ]}
-                  >
-                    <button class={[]}>{btn?.getLabel()}</button>
-                  </div>
-                  {maskCom}
-                </div>
-              )
+              let btn = el.config?.button //
+              let com = getBtnCom(el)
               let com1 = null
               if (btn?.buttons?.length > 0) {
                 com = (
                   <dropdownCom
+                    // dropMode="hover"
                     ref={(el) => btn.registerRef('dropdown', el)}
                     v-slots={{
                       default: (config) => {
-                        const dropdown = config.dropdown
-                        let _com1 = (
-                          <div
-                            onClick={() => {
-                              dropdown.showDropdown() //
-                            }}
-                            onMouseleave={() => {}}
-                            class="v-contextmenu flex items-center"
-                            style={{
-                              minWidth: `${btn.getButtonWidth()}px`,
-                              position: 'relative',
-                            }}
-                          >
-                            <ContextmenuItem>{btn?.getLabel()}</ContextmenuItem>
-                          </div>
-                        )
+                        let _com1 = getBtnCom(el)
                         return _com1
                       },
 
                       dropdown: () => {
                         let _items: Button = btn.getSubData()
-                        let menu = (
+                        let menu = <div class="er-h-100 er-w-100 bg-red"></div>
+                        menu = (
                           <ContextmenuCom
                             ref={(el) => btn.registerRef('contextmenu', el)}
                             isTeleport={false}
@@ -198,22 +199,17 @@ export default defineComponent({
                             alwaysShow={true}
                             v-slots={{
                               itemSlot: (item) => {
+                                // debugger //
                                 const btn = item.button
-                                let disabled = btn.getDisabled()
-                                return (
-                                  <div
-                                    class={[{ 'is-disabled': disabled }]}
-                                    style={{ width: '100%' }}
-                                    onClick={() => runBtnFn(btn)}
-                                  >
-                                    {btn.getLabel()}
-                                  </div>
-                                ) //
+                                let _com = getBtnCom(btn)
+                                let com1 = <div class="er-h-32">{_com}</div>
+                                return com1 //
                               },
                               subItemSlot: (item) => {
-                                //
                                 const btn = item.button
-                                return <div class={{}}>{btn.getLabel()}</div>
+                                // return <div class={{}}>{btn.getLabel()}</div>
+                                let _com = getBtnCom(btn)
+                                return _com //
                               },
                             }}
                           ></ContextmenuCom>

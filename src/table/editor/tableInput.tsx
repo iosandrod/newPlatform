@@ -4,6 +4,7 @@ import {
   isReactive,
   nextTick,
   onMounted,
+  reactive,
   ref,
 } from 'vue'
 import { Column } from '../column'
@@ -30,11 +31,13 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
-    //
-    const column: Column = props.column as any ////
-    const table = column.table
+    let column: Column = reactive(props.column) as any ////
+    let table = column.table
     let row = props.row
     let _f = column.getField()
+    let _column = table.columnsMap[_f]
+    // console.log(_column,'testCOlfff')//
+    // column = _column || column //
     if (props.row == column.config) {
       _f = 'title' //
     }
@@ -51,12 +54,17 @@ export default defineComponent({
       if (cacheValue != null) {
         _value = cacheValue
       }
+      if (column.isChangeValue == true) {
+        _value = column.cacheValue //
+      }
+      console.log('_selectModelValue', _value) //
       return _value
     })
     const updateValue = (config) => {
       column.canHiddenEditor = false //
       column.isChangeValue = true
       column.cacheValue = config.value //
+      // console.log(column.cacheValue,'testCacehValue')//
     }
     const insRef = (ins: any) => {
       column.registerRef('input', ins)

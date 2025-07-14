@@ -134,7 +134,7 @@ export class MenuItem extends Base {
     let config = menu.config
     let onContextmenu = config.onContextmenu //
     if (typeof onContextmenu == 'function') {
-      onContextmenu({ menu: menu, item: this, event: e }) ////
+      onContextmenu({ menu: menu, item: this, event: e }) 
     }
   }
 }

@@ -186,19 +186,19 @@ export default {
       if (!unref(isEditModel)) return false
       let hoverEl = elementRef.value.$el || elementRef.value
       let widthScaleEl = widthScaleElement.value
-      hoverEl.addEventListener('mouseover', (e) => {
-        if (isDrag) return
-        if (!state.widthScaleLock) {
-          isHover.value = true
-        }
-        e.stopPropagation()
-      })
-      hoverEl.addEventListener('mouseout', (e) => {
-        if (isDrag) return
-        if (isShowCell.value) return false
-        isHover.value = false
-        e.stopPropagation()
-      })
+      // hoverEl.addEventListener('mouseover', (e) => {
+      //   if (isDrag) return
+      //   if (!state.widthScaleLock) {
+      //     isHover.value = true
+      //   }
+      //   e.stopPropagation()
+      // })
+      // hoverEl.addEventListener('mouseout', (e) => {
+      //   if (isDrag) return
+      //   if (isShowCell.value) return false
+      //   isHover.value = false
+      //   e.stopPropagation()
+      // })
       //显示宽度更改按钮
       if (isShowWidthScale.value) {
         if (widthScaleEl == null) return
@@ -241,19 +241,19 @@ export default {
               }
             } else {
               const curNewWidth = oldWidth + e.clientX - oldX
-              let curWidth = Math.round(
-                (curNewWidth / hoverEl.parentNode.offsetWidth) * 100,
-              ) //百分比
-              if (curWidth <= 25) {
-                curWidth = 25
-              }
+              // let curWidth = Math.round(
+              //   (curNewWidth / hoverEl.parentNode.offsetWidth) * 100,
+              // ) //百分比
+              // if (curWidth <= 25) {
+              //   curWidth = 25
+              // }
               let inline = props?.data?.context?.parent
               let parent = inline?.context?.parent
               // debugger//
               if (parent?.type == 'col') {
                 //重新设定
-                let hoverEl = parent.context?.getHoverDiv()
-                hoverEl = hoverEl?.$el || hoverEl //
+                let hoverEl = parent.context?.getHoverDiv() //
+                hoverEl = hoverEl?.$el || hoverEl
                 let offsetParent = hoverEl.offsetParent
                 let offsetParentWidth = offsetParent.offsetWidth //
                 let columnWidth = offsetParentWidth / 24
@@ -280,6 +280,11 @@ export default {
                 let _allSpan = allSpan + offset
                 if (_allSpan > 24) {
                   return //
+                }
+                let oldSpan = parent.options.span
+                if (oldSpan == offset) {
+                  console.log('相同了') //
+                  return
                 }
                 parent.options.span = offset //
               }
@@ -365,8 +370,15 @@ export default {
           props.data.context.parent.columns.length < ER.props.inlineMax
         : props.hasCopy,
     )
+    const maskDbClick = (e) => {
+      if (props?.data?.type == 'dform') {
+        formIns.designForm(props) //
+      }
+    }
     return () => {
-      let maskNode = <div class={[ns.e('mask')]}></div>
+      let maskNode = (
+        <div ondblclick={(e) => maskDbClick(e)} class={[ns.e('mask')]}></div>
+      )
       let _attrs = useAttrs()
 
       let _slots = useSlots()
@@ -528,9 +540,9 @@ export default {
             !isField && ns.e('borderless'),
             unref(isEditModel) && ns.e('editor'),
             unref(isEditModel) && Selected.value,
-            unref(isEditModel) && isHover.value && ns.e('hover'),
-            unref(isEditModel) && isScale.value && ns.e('isScale'),
-            unref(isEditModel) && isWarning.value && ns.is('Warning'),
+            // unref(isEditModel) && isHover.value && ns.e('hover'),
+            // unref(isEditModel) && isScale.value && ns.e('isScale'),
+            // unref(isEditModel) && isWarning.value && ns.is('Warning'),
           ]}
           ref={registerRef}
           onClick={unref(isEditModel) && withModifiers(handleClick, ['stop'])}
