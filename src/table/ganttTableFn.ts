@@ -239,10 +239,10 @@ export const getGanttColumns = () => {
 }
 
 export const getOptions = () => {
-  let options = {
+  let options: VTableGantt.GanttConstructorOptions = {
     groupBy: true,
     tasksShowMode: VTableGantt.TYPES.TasksShowMode.Sub_Tasks_Arrange,
-    frame: {
+    frame: {//
       outerFrameStyle: {
         borderLineWidth: 1,
         borderColor: '#e1e4e8',
@@ -287,38 +287,39 @@ export const getOptions = () => {
     },
     dependency: {
       linkCreatable: true,
-      links: [
-        {
-          type: VTableGantt.TYPES.DependencyType.StartToStart,
-          linkedFromTaskKey: 1,
-          linkedToTaskKey: 2,
-        },
-        {
-          type: VTableGantt.TYPES.DependencyType.FinishToStart,
-          linkedFromTaskKey: 2,
-          linkedToTaskKey: 3,
-        },
-        {
-          type: VTableGantt.TYPES.DependencyType.StartToStart,
-          linkedFromTaskKey: 3,
-          linkedToTaskKey: 5,
-        },
-        {
-          type: VTableGantt.TYPES.DependencyType.FinishToFinish,
-          linkedFromTaskKey: 5,
-          linkedToTaskKey: 4,
-        },
-        {
-          type: VTableGantt.TYPES.DependencyType.StartToStart,
-          linkedFromTaskKey: 8,
-          linkedToTaskKey: 9,
-        },
-        {
-          type: VTableGantt.TYPES.DependencyType.FinishToStart,
-          linkedFromTaskKey: 9,
-          linkedToTaskKey: 10,
-        },
-      ],
+      links: []//
+      // [
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.StartToStart,
+      //     linkedFromTaskKey: 1,
+      //     linkedToTaskKey: 2,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.FinishToStart,
+      //     linkedFromTaskKey: 2,
+      //     linkedToTaskKey: 3,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.StartToStart,
+      //     linkedFromTaskKey: 3,
+      //     linkedToTaskKey: 5,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.FinishToFinish,
+      //     linkedFromTaskKey: 5,
+      //     linkedToTaskKey: 4,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.StartToStart,
+      //     linkedFromTaskKey: 8,
+      //     linkedToTaskKey: 9,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.FinishToStart,
+      //     linkedFromTaskKey: 9,
+      //     linkedToTaskKey: 10,
+      //   },
+      // ],
     },
     timelineHeader: {
       verticalLine: {

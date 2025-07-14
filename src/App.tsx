@@ -6,11 +6,7 @@ import { RouterView } from 'vue-router'
 import { system } from './system'
 import dialogCom from './dialog/dialogCom'
 import { comText } from './comTest'
-import {
-  getGanttColumns,
-  getGanttRecords,
-  getOptions,
-} from './table/ganttTableFn'
+import { getGanttColumns, getGanttRecords, getOptions } from './table/ganttTableFn'
 //@ts-ignore
 window.CONTAINER_ID = 'main_app'
 export default defineComponent({
@@ -57,7 +53,7 @@ export default defineComponent({
               isGantt={true}
               // {...getOptions()} //
               data={getGanttRecords()}
-              columns={getGanttColumns()}
+              columns={getGanttColumns()} //
             ></erTable>
           </div>
         </div>,
@@ -69,7 +65,7 @@ export default defineComponent({
               },
             },
           ],
-        ],
+        ]
       )
     }
   },

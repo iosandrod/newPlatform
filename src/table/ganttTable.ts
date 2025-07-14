@@ -18,7 +18,7 @@ export class GanttTable extends Table {
     this.ganttInstance = shaGt as any
     let tinstance = gtInstance.taskListTableInstance //
     let _ins = shallowRef(tinstance)
-    this.instance = _ins as any //
+    this.instance = _ins as any
     /*
      */
     const emitEventArr = [
@@ -46,6 +46,21 @@ export class GanttTable extends Table {
     })
     this.initEventListener() //
     this.loadColumns()
-    this.loadData() //
-  } //
+    this.loadData()
+  }
+  updateColumns() {
+    super.updateColumns()//
+    let gtIns = this.getGanttInstance()//
+    gtIns.taskListTableInstance//
+  }
+  getGanttInstance(): VTableGantt.Gantt {
+    let gtIns = this.ganttInstance
+    //@ts-ignore
+    let value = gtIns?.value
+    if (value != null) {
+    } else {
+      value = gtIns
+    }
+    return value//
+  }
 } //
