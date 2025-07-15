@@ -151,9 +151,20 @@ export const getGanttColumns = () => {
 }
 
 export const getOptions = () => {
-  let options = {
+  let options: VTableGantt.GanttConstructorOptions = {
     groupBy: true,
     tasksShowMode: VTableGantt.TYPES.TasksShowMode.Sub_Tasks_Arrange,
+<<<<<<< HEAD
+    frame: {//
+      outerFrameStyle: {
+        borderLineWidth: 1,
+        borderColor: '#e1e4e8',
+        cornerRadius: 8,
+      },
+      verticalSplitLineMoveable: false,
+    },
+=======
+>>>>>>> refs/remotes/origin/main
     grid: {
       horizontalLine: {
         lineWidth: 1,
@@ -169,7 +180,77 @@ export const getOptions = () => {
 
     dependency: {
       linkCreatable: true,
+<<<<<<< HEAD
+      links: []//
+      // [
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.StartToStart,
+      //     linkedFromTaskKey: 1,
+      //     linkedToTaskKey: 2,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.FinishToStart,
+      //     linkedFromTaskKey: 2,
+      //     linkedToTaskKey: 3,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.StartToStart,
+      //     linkedFromTaskKey: 3,
+      //     linkedToTaskKey: 5,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.FinishToFinish,
+      //     linkedFromTaskKey: 5,
+      //     linkedToTaskKey: 4,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.StartToStart,
+      //     linkedFromTaskKey: 8,
+      //     linkedToTaskKey: 9,
+      //   },
+      //   {
+      //     type: VTableGantt.TYPES.DependencyType.FinishToStart,
+      //     linkedFromTaskKey: 9,
+      //     linkedToTaskKey: 10,
+      //   },
+      // ],
+    },
+    timelineHeader: {
+      verticalLine: {
+        lineColor: '#e1e4e8',
+        lineWidth: 1,
+      },
+      horizontalLine: {
+        lineColor: '#e1e4e8',
+        lineWidth: 1,
+      },
+      backgroundColor: '#63a8ff',
+      scales: [
+        {
+          unit: 'day',
+          step: 1,
+          format(date) {
+            return date.dateIndex.toString()
+          },
+          style: {
+            fontSize: 20,
+            fontWeight: 'bold',
+            color: 'white',
+          },
+        },
+      ],
+    },
+    minDate: '2024-11-14',
+    maxDate: '2024-12-31',
+    scrollStyle: {
+      scrollRailColor: 'RGBA(246,246,246,0.5)',
+      visible: 'none',
+      width: 6,
+      scrollSliderCornerRadius: 2,
+      scrollSliderColor: '#5cb85c',
+=======
       links: [], //
+>>>>>>> refs/remotes/origin/main
     },
   }
   return options

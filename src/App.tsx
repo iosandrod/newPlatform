@@ -6,6 +6,9 @@ import { RouterView } from 'vue-router'
 import { system } from './system'
 import dialogCom from './dialog/dialogCom'
 import { comText } from './comTest'
+<<<<<<< HEAD
+import { getGanttColumns, getGanttRecords, getOptions } from './table/ganttTableFn'
+=======
 import {
   getGanttColumns,
   getGanttRecords,
@@ -14,6 +17,7 @@ import {
 import ERNodeVue from './ERNode'
 import flowCom from './logic/flowCom'
 import dialogArrCom from './dialog/dialogArrCom'
+>>>>>>> refs/remotes/origin/main
 //@ts-ignore
 window.CONTAINER_ID = 'main_app'
 export default defineComponent({
@@ -56,8 +60,21 @@ export default defineComponent({
             overflow: 'hidden', //
           }}
         >
+<<<<<<< HEAD
+          {/* {com}
+          {dArr} */}
+          <div style={{ height: '500px', width: '100%' }} class="">
+            <erTable
+              isGantt={true}
+              // {...getOptions()} //
+              data={getGanttRecords()}
+              columns={getGanttColumns()} //
+            ></erTable>
+          </div>
+=======
           {com}
           {dArr}
+>>>>>>> refs/remotes/origin/main
         </div>,
         [
           [
@@ -67,7 +84,7 @@ export default defineComponent({
               },
             },
           ],
-        ],
+        ]
       )
     }
   },
