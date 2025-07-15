@@ -389,7 +389,8 @@ export class PageDesign extends Form {
     return obj1
   }
   getTableColumns(tableName = this.getTableName(), isClass = false) {
-    let tableIns = this.getRef(tableName)
+    // let tableIns = this.getRef(tableName)
+    let tableIns = null //
     let columns = []
     if (tableIns != null) {
       columns = tableIns.getColumns().map((col) => {
@@ -1215,6 +1216,7 @@ export class PageDesign extends Form {
     let allTableName = this.getAllTableName()
     allTableName.forEach((tableName) => {
       let table = this.getRef(tableName)
+      // debugger //
       if (table == null) {
         return
       } //
@@ -1850,8 +1852,8 @@ export class PageDesign extends Form {
         let ref: Table = this.getRef(tableName)
         let contextRow = ref.curContextRow //
         this.editTableRows({
-          row: contextRow, //
-        })
+          row: contextRow,
+        }) //
       }
     } //
   }

@@ -120,7 +120,7 @@ export default defineComponent({
             item.registerRef('fieldOutCom', ins)
           }}
         >
-          <erXeTable
+          <erTable
             disableColumnResize={item.getDisabledColumnResize()} //
             onDbCurRowChange={(config) => {
               //
@@ -190,7 +190,7 @@ export default defineComponent({
             keyCodeColumn={item.getOptions()?.keyCodeColumn}
             keyColumn={item.getOptions()?.keyColumn}
             detailTableConfig={item.getOptions().detailTableConfig}
-            data={data.value}
+            data={data.value} //
             onHeaderContextmenu={openDesignHeader}
             columns={columns.value}
             onDesignColumn={(config, col, refresh) => {
@@ -227,7 +227,7 @@ export default defineComponent({
               item.onColumnConfigChange(config)
             }} //
             rowHeight={item.getTableRowHeight()} //
-          ></erXeTable>
+          ></erTable>
         </div>
       )
       return com

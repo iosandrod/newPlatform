@@ -175,7 +175,6 @@ export class FormItem extends Base {
     }
     let tableName = this.getTableName()
     let f = this.getField()
-    console.log(f, 'f', tableName, 'tableName')
     this.getSystem().createColumnSelect(tableName)
   }
   initSTable() {

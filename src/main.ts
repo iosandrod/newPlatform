@@ -44,7 +44,24 @@ import '@arco-design/web-vue/es/message/style/css'
 import '@arco-design/web-vue/es/modal/style/css'
 import '@arco-design/web-vue/es/notification/style/css'
 import Vue3Dragscroll from 'vue3-dragscroll'
+const originalRAF = window.requestAnimationFrame
 
+window.requestAnimationFrame = function (callback) {
+  return originalRAF(function (timestamp) {
+    const start = performance.now()
+
+    // 打印调用栈
+    callback(timestamp)
+    const duration = performance.now() - start
+    if (duration > 100) {
+      //
+      console.trace()
+      console.group(`[rAF callback] Start`)
+      console.warn('⚠️ 这个回调超过了1帧预算！')
+      console.groupEnd()
+    }
+  })
+}
 import Vuex from 'vuex'
 import printTemplateModule from '@/printTemplate/stores/modules/index.js'
 import './style.js'
@@ -60,6 +77,7 @@ import './style.scss' //
 import './assets/tailwind.css' //
 import './mainStyle.css'
 import './changeCalStyle.scss'
+import xeTableCom from './table/xeTableCom'
 export const http = new myHttp()
 //@ts-ignore
 self.MonacoEnvironment = {
@@ -126,7 +144,7 @@ app.component('erPage', pageCom) //
 app.component('erTable', tableCom)
 app.component('erDropdown', dropdownCom)
 app.component('erSelect', selectCom) //
-
+app.component('erXeTable', xeTableCom) //
 app.use(context) //
 app.use(VxeTable) //
 app.use(VxeUIAll)

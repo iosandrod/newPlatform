@@ -417,3 +417,8 @@ z-index: 200;
 .vxe-modal--body-default{
   /* padding:0 !important; */
 }
+.vxe-cell--wrapper{
+  height: 100%;
+  width: 100%;
+  display: flex;
+}

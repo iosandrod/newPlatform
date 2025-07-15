@@ -9,7 +9,7 @@ export default defineComponent({
     //
     lowcode,
     unLogin,
-    designVue,//
+    designVue, //
     KeepAlive,
   },
   setup() {
@@ -27,11 +27,12 @@ export default defineComponent({
           <lowcode
             v-slots={{
               default: (path) => {
-                let _com = (
-                  <KeepAlive>
-                    <designVue key={path}></designVue>
-                  </KeepAlive>
-                )
+                // let _com = (
+                //   <KeepAlive>
+                //     <designVue key={path}></designVue>
+                //   </KeepAlive>
+                // )
+                let _com = <designVue key={path}></designVue>
                 return _com
               },
             }}

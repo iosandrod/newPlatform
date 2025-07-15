@@ -14904,3 +14904,162 @@ export default defineComponent({
       if (formIns?.curSForm?.id == null) {
         lF1 = null //
       }
+
+       //向上滚动
+        // let _start = rowStart - 200
+        // let _end = rowEnd + 200
+        // if (_start < 0) {
+        //   _start = 0
+        // }
+        // let data = tableIns.templateProps.data
+        // if (_end > data.length) {
+        //   _end = data.length
+        // }
+        // let _oldStart = oldRowStart - 200
+        // if (_oldStart < 0) {
+        //   _oldStart = 0
+        // }
+        // let _oldEnd = oldRowEnd + 200
+        // if (_oldEnd > data.length) {
+        //   _oldEnd = data.length
+        // }
+        // let records = tableIns.getInstance().records
+        // //向下滚动
+        // let contain = tableIns.currentIndexContain
+        // if (_start > _oldStart) {
+        //   let _records = records.slice(_oldStart, _start)
+        //   _records.forEach((item) => {
+        //     let _index = item._index
+        //     delete contain[_index] //
+        //   })
+        // }
+        // //向上滚动
+        // if (_end < _oldEnd) {
+        //   let _records = records.slice(_end, _oldEnd)
+        //   _records.forEach((item) => {
+        //     let _index = item._index
+        //     delete contain[_index] //
+        //   })
+        // } //
+
+
+        watch(
+      () => {
+        let rowStart = tableIns.scrollConfig.rowStart
+        let rowEnd = tableIns.scrollConfig.rowEnd
+        return [rowStart, rowEnd]
+      },
+      ([rowStart, rowEnd], [oldRowStart, oldRowEnd]) => {
+       
+      },
+    )
+    // watch(
+    //   () => {
+    //     return tableIns.tableConfig
+    //   },
+    //   (e) => {
+    //     tableIns.updateOptions(e)
+    //   },
+    //   {
+    //     deep: true,
+    //   },
+    // )
+     watch(
+      () => {
+        return tableIns.templateProps.footerColumns
+      },
+      (e) => {
+        //
+        tableIns.updateFooterColumns()
+      },
+    ) //
+
+
+//添加行的
+          // let addRows = newData.filter((row) => {
+          //   return !oldData.includes(row)
+          // })
+          // //@ts-ignore
+          // tableIns.addRows({ rows: addRows, isProps: true })
+          // let removeRows = oldData.filter((row) => {
+          //   return !newData.includes(row) //
+          // })
+          // tableIns.delRows(removeRows)
+
+
+
+           //   if (1 == 1) {
+    //     return (
+    //       <div>
+    //         {arr1.map((e, i) => {
+    //           return <div>{i}</div>
+    //         })}
+    //       </div>
+    //     )
+    //   }
+
+    {arr1.map((row) => {
+            return <div></div>
+          })}
+
+
+           // if (1 == 1) {
+    //   return _col1 //
+    // }
+    //显示check
+
+
+     // if (!Array.isArray(e)) {
+        //   e = [] //
+        // }
+        // tableIns.setData(e)
+
+         draggable
+          onDragstart={(e: DragEvent) => {
+            e.dataTransfer!.effectAllowed = 'move' //
+            // root.style.opacity = '0'
+            const img = new Image()
+            img.src =
+              'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
+            e.dataTransfer?.setDragImage(img, 0, 0)
+          }}
+          onDragend={(e: DragEvent) => {
+            // root.style.opacity = '1' //
+          }}
+          onDragover={(e) => {
+            e.preventDefault()
+            e.dataTransfer!.dropEffect = 'none' //
+          }}
+
+           startX = e.clientX
+      startY = e.clientY //
+      dragging = false
+      addBorderToRoot() //
+      const onMouseMove = (moveEvent: MouseEvent) => {
+        const dx = moveEvent.clientX - startX
+        const dy = moveEvent.clientY - startY
+        const distance = Math.sqrt(dx * dx + dy * dy)
+
+        if (!dragging && distance > threshold) {
+          dragging = true
+          console.log('🔸开始拖拽')
+          // 触发拖拽开始逻辑
+        } //
+        if (dragging) {
+          // 拖拽中
+          console.log('🚚 正在拖动...')
+        }
+      } //
+      const onMouseUp = () => {
+        document.removeEventListener('mousemove', onMouseMove)
+        document.removeEventListener('mouseup', onMouseUp)
+        removeBorderFromRoot() //
+        if (dragging) {
+          console.log('✅ 拖拽结束')
+        } else {
+          console.log('🖱️ 点击事件')
+          // 触发点击逻辑
+        }
+      }
+      document.addEventListener('mousemove', onMouseMove)
+      document.addEventListener('mouseup', onMouseUp)

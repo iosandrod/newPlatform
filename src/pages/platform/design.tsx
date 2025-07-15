@@ -110,13 +110,13 @@ export default defineComponent({
           .getStaticComArr()
           .find((e) => e.name == tableName)
           ?.component() //
-        console.log(_com)
         pagin = null
       } //
+      // _com = <erXeTable key={tableName}></erXeTable> //
       return (
         <div class="h-full w-full flex flex-col  overflow-hidden">
           <div class="flex-1">
-            <_com></_com>
+            {/* <_com></_com> */} <_com></_com>
           </div>
           {pagin}
         </div>

@@ -346,7 +346,7 @@ function ControlInsertionPlugin(ER: Form) {
           let f = item.getField()
           let _field = oldEl.field
           return f != null && _field != null && f === _field
-        })
+        }) //
         if (tItem != null) {
           ER.getSystem().confirmMessage(
             '该字段已经存在,请不要重复添加',

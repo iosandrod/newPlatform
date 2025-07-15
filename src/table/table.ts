@@ -1235,7 +1235,7 @@ export class Table extends Base {
       let columns = this.getShowColumns()
       this.templateProps.columns = columns //
     } catch (error) {
-      console.log('加载列出错了')
+      console.log('加载列出错了') //
     } //
   }
 
@@ -1527,7 +1527,7 @@ export class Table extends Base {
     }
     let records = data || instance.records
     let id = this.uuid() //
-    console.time(id)
+    console.time(id) //
     // this.currentIndexContain = shallowRef({}) //
     instance.setRecords(records)
     let ganttInstance = this.getGanttInstance()

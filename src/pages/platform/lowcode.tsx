@@ -21,7 +21,7 @@ import pageCom from '@ER/pageCom'
 import TableCom from '@/table/tableCom'
 import { Table } from '@/table/table'
 import LeftMenu from './leftMenu' //
-import { useRoute } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import { Dropdown } from '@/menu/dropdown'
 import {
@@ -38,6 +38,7 @@ import {
   ElMain,
 } from 'element-plus'
 import LowcodeHeader from './lowcodeHeader'
+import Design from './design'
 
 export default defineComponent({
   components: {
@@ -106,9 +107,25 @@ export default defineComponent({
 
       const pageHeader = <LowcodeHeader></LowcodeHeader>
       let dCom = null
-      if (useSlots()?.default) {
-        dCom = useSlots()?.default(currentRoutePath.value)
-      }
+      // if (useSlots()?.default) {
+      //   dCom = useSlots()?.default(currentRoutePath.value)
+      // }
+      dCom = (
+        <RouterView
+          v-slots={{
+            default: (config) => {
+              let route = config.route
+              let fullPath = route.fullPath
+              let _com = (
+                <KeepAlive>
+                  <Design key={fullPath}></Design>
+                </KeepAlive>
+              )
+              return _com
+            },
+          }}
+        ></RouterView>
+      )
       let context = (
         <ContextmenuCom
           ref={(el) => systemIns.registerRef('contextmenu', el)}

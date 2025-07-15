@@ -152,7 +152,7 @@ export default {
     const registerRef = (el) => {
       elementRef.value = el
       if (props.data.context) {
-        props.data.context.getHoverDiv = () => el
+        props.data.context.getHoverDiv = () => el //
       }
     }
     onUnmounted(() => {

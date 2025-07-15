@@ -44,6 +44,7 @@ import { PageDesignItem } from '@ER/pageItem'
 import { getDesignTableConfig } from '@/table/tabFConfig'
 import { MainPageDesign } from '@ER/mainPageDesign'
 import * as VTableGantt from '@visactor/vtable-gantt' //
+import { xeTableColumns, xeTableData } from '@/table/tableData1'
 export default defineComponent({
   components: {
     pVue,
@@ -243,7 +244,11 @@ export default defineComponent({
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       }) ////
-      
+      com = (
+        <div class="er-h-400 er-w-600"> 
+          <erXeTable columns={xeTableColumns} data={xeTableData}></erXeTable>
+        </div>
+      )
       let _com = (
         <div
           class="h-full"

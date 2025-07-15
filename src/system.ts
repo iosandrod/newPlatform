@@ -1927,7 +1927,8 @@ export class System extends Base {
       {
         label: '恢复数据库',
         fn: async () => {
-          await system.restoreDatabase() //
+          // await system.restoreDatabase() //
+          console.log(this.tableMap) //
         },
       },
     ]

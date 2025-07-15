@@ -1,51 +1,30 @@
 import {
   defineComponent,
   inject,
+  nextTick,
   onMounted,
   onUnmounted,
   provide,
-  ref,
-  toRaw,
+  reactive,
   vShow,
   watch,
   watchEffect,
   withDirectives,
-  onDeactivated,
-  reactive,
 } from 'vue'
-import { ListTableConstructorOptions } from '@visactor/vtable'
-import { tableV2Props, ClickOutside } from 'element-plus'
-import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
-import { nextTick } from 'vue'
-import { generatePersons } from './tableData'
-import ContextmenuCom from '@/contextM/components/ContextmenuCom'
-import TableButtonCom from './tableButtonCom'
-import TableMenuCom from './tableMenuCom'
-import { useResizeObserver } from '@vueuse/core'
-import TableFitlerCom from './tableFilterCom'
-import InputCom from '@/input/inputCom'
-import { Table } from './table'
-import { VxeLoading } from 'vxe-pc-ui'
-import { GanttTable } from './ganttTable'
-import { onKeyStroke } from '@vueuse/core'
+import { VxeTableProps } from 'vxe-table'
+import tProps from 'vxe-table/es/table/src/props'
+import { XeTable } from './xetable'
 import { useKeyboard } from '@ER/utils'
-// new ListTable()
-//核心表格组件
-/* 
-Object.assign(Object.assign({}, tableComponentProps), { layouts: Array, columns: Array, pagerConfig: Object, proxyConfig: Object, toolbarConfig: Object, formConfig: Object, zoomConfig: Object, size: {
-            type: String,
-            default: () => getConfig().grid.size || getConfig().size
-        } }),
-*/
+import TableMenuCom from './tableMenuCom'
+import TableButtonCom from './tableButtonCom'
+import InputCom from '@/input/inputCom'
+import { ClickOutside } from 'element-plus'
+import { VxeLoading } from 'vxe-pc-ui'
+import XeTableSelectCom from './xeTableSelectCom'
 export default defineComponent({
-  name: 'TableEditor',
-  components: {
-    buttonGroupCom,
-    ContextmenuCom,
-    TableFitlerCom,
-  },
+  name: 'XeTableCom',
   props: {
-    
+    ...tProps, //
     tableName: {
       type: String,
     },
@@ -60,7 +39,6 @@ export default defineComponent({
       type: Array,
       default: () => [],
     },
-    ...tableV2Props,
     columns: {
       type: Array,
       // default: () => [],
@@ -243,16 +221,13 @@ export default defineComponent({
       default: true,
     },
   },
-  setup(props, { slots, attrs, emit, expose }) {
-    let tableIns: Table = null as any
+  setup(_props, { slots, attrs, emit, expose }) {
+    let props: any = _props
+    let tableIns: XeTable = null as any
     if (props.tableIns) {
       tableIns = props.tableIns as any
     } else {
-      if (props.isGantt == true) {
-        tableIns = new GanttTable(props)
-      } else {
-        tableIns = new Table(props) //
-      }
+      tableIns = new XeTable(props) //
     } //
     if (props.mainTableName != null) {
       //@ts-ignore
@@ -288,16 +263,12 @@ export default defineComponent({
     )
     const registerRootDiv = (el) => {
       tableIns.registerRef('root', el) //注册实例//
-    } //
-    onMounted(() => {
-      tableIns.render()
-      // nextTick(() => {
-      // })
-    }) //
+    }
     onUnmounted(() => {
       tableIns.onUnmounted()
     })
     watchEffect(() => {
+      console.log(props.columns, 'fsfs')
       tableIns.loadColumns()
     })
     watchEffect(() => {
@@ -315,30 +286,6 @@ export default defineComponent({
       //
       tableIns._getPageDesign = null
     })
-    watchEffect(() => {
-      if (tableIns.getShowCalColumns() == false) {
-        //
-        return //
-      }
-      tableIns.loadFooterColumn() //
-    })
-    watch(
-      () => {
-        return props.showRowSeriesNumber
-      },
-      (nv) => {
-        tableIns.updateSeriesColumnShow(nv) //
-      },
-    )
-    watchEffect(() => {
-      let s = tableIns.updateIndexArr.size
-      if (s == 0) {
-        return
-      }
-      nextTick(() => {
-        tableIns.updateRecords()
-      })
-    })
     watch(
       () => {
         //@ts-ignore
@@ -348,25 +295,16 @@ export default defineComponent({
         tableIns.updateColumns()
       },
     ) //
-    watch(
-      () => {
-        return tableIns.templateProps.footerColumns
-      },
-      (e) => {
-        //
-        tableIns.updateFooterColumns()
-      },
-    ) //
 
     watch(
       () => {
         return [props.data, props.data?.length]
       },
       (newValue, oldValue) => {
+        //
         let [newData, newLen] = newValue as any //
         let [oldData, oldLen] = oldValue as any
         if (newData != oldData) {
-          //
           tableIns.setData(newData)
           let treeConfig = props.treeConfig
           let expand = treeConfig?.expand
@@ -379,24 +317,10 @@ export default defineComponent({
             tableIns.expandTargetRows(newData) //
           }
         } else {
-          //添加行的
-          // let addRows = newData.filter((row) => {
-          //   return !oldData.includes(row)
-          // })
-          // //@ts-ignore
-          // tableIns.addRows({ rows: addRows, isProps: true })
-          // let removeRows = oldData.filter((row) => {
-          //   return !newData.includes(row) //
-          // })
-          // tableIns.delRows(removeRows)
           newData.forEach((row) => {
             tableIns.initDataRow(row) //
           })
         }
-        // if (!Array.isArray(e)) {
-        //   e = [] //
-        // }
-        // tableIns.setData(e)
       },
     )
     provide('tableIns', tableIns)
@@ -445,9 +369,9 @@ export default defineComponent({
     let registerBodyDiv = (el) => {
       tableIns.registerRef('bodyDiv', el)
     } //
+    let arr1 = new Array(10000).fill(null)
     return () => {
       let com = null
-
       let menuCom = <TableMenuCom></TableMenuCom>
       // if (props.showHeaderContext === false) {
       //   menuCom = null //
@@ -459,7 +383,7 @@ export default defineComponent({
       }
       let filterTCom = null
       if (props.showColumnFilterTable) {
-        filterTCom = <TableFitlerCom tableIns={tableIns}></TableFitlerCom>
+        // filterTCom = <TableFitlerCom tableIns={tableIns}></TableFitlerCom>
       }
       // const inputProps = tableIns.getGlobalSearchProps()
       let globalSearchInput = withDirectives(
@@ -519,28 +443,8 @@ export default defineComponent({
         </div>,
         [[vShow, tableIns.globalConfig.show]],
       )
-
-      let calCom = withDirectives(
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            height: `${tableIns.getDefaultHeaderRowHeight()}px`, //
-
-            boxSizing: 'border-box',
-            width: '100%',
-          }}
-          ref={registerFooterDiv}
-        ></div>,
-        [[vShow, tableIns.getShowCalColumns()]],
-      )
-      let calDiv = withDirectives(
-        <div
-          style={{
-            height: `${tableIns.getDefaultHeaderRowHeight()}px`,
-          }}
-        ></div>,
-        [[vShow, tableIns.getShowCalColumns()]],
+      let cellSelectCom = (
+        <XeTableSelectCom tableIns={tableIns}></XeTableSelectCom>
       )
       com = withDirectives(
         <div
@@ -548,9 +452,26 @@ export default defineComponent({
             width: '100%',
             height: '100%',
             minHeight: '200px',
+            position: 'relative',
           }}
           ref={registerRootDiv}
-        ></div>,
+        >
+          {/* {cellSelectCom} */}
+          <vxe-grid
+            checkboxConfig={tableIns.getCheckboxConfig()}
+            virtualXConfig={tableIns.getVirtualXConfig()}
+            headerCellConfig={tableIns.getHeaderCellConfig()}
+            virtualYConfig={tableIns.getVirtualYConfig()}
+            height={'auto'}
+            class="h-full w-full"
+            ref={(el) => {
+              tableIns.registerRef('xeGrid', el)
+            }} //
+            cellConfig={tableIns.getCellConfig()}
+            v-slots={{}}
+            cellClassName={'h-full w-full'}
+          ></vxe-grid>
+        </div>,
         [[{}]],
       ) //
       let tBodyCom = withDirectives(
@@ -586,8 +507,6 @@ export default defineComponent({
           >
             {com}
           </div>
-          {calDiv}
-          {calCom}
         </div>,
         [
           [
@@ -625,3 +544,6 @@ export default defineComponent({
     }
   },
 })
+//
+//
+//
