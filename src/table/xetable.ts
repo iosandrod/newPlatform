@@ -2,7 +2,12 @@ import { Base } from '@ER/base'
 import { Table } from './table'
 import { shallowRef, toRaw } from 'vue'
 import { XeColumn } from './xecolumn'
-import { VxeGridInstance } from 'vxe-table'
+import {
+  VxeComponentEvent,
+  VxeGridInstance,
+  VxeTableDefines,
+  VxeTableEvents,
+} from 'vxe-table'
 import { cacheValue, useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { XeCheckColumn } from './xeCheckColumn'
 import { combineAdjacentEqualElements } from '@ER/utils'
@@ -45,6 +50,10 @@ export class XeTable extends Base {
   currentEditCol?: any
   isContainerClick = false
   isFilterTable = false
+  editConfig = {
+    rowIndex: new Set(),
+    colIndex: new Set(), //
+  }
   isMergeCell = true
   seriesNumberColumn: any
   curContextRow: any = null
@@ -157,7 +166,8 @@ export class XeTable extends Base {
   initCurrentContextItems() {} //
   initTableState() {}
   getEditType() {
-    return 'cell'
+    let type = 'row' //
+    return type //
   }
   getCurRow() {
     return this.tableData.curRow
@@ -493,8 +503,29 @@ export class XeTable extends Base {
   jumpToSearchNext(bool) {} //
   expandAllTreeRow() {} //
   //开始编辑
-  clearEditCell() {}
-  startEditCell() {}
+  clearEditCell() {
+    let editConfig = this.editConfig
+    let rowIndex = editConfig.rowIndex //
+    let colIndex = editConfig.colIndex
+    rowIndex.clear() //
+    colIndex.clear() //
+  } //
+  startEditCell(config) {
+    let record = config.row //
+    let _index = record._index //
+    let editConfig = this.editConfig
+    let rowIndex = editConfig.rowIndex
+    if (rowIndex.has(_index)) {
+      return
+    } //
+    this.clearEditCell() //
+    let colIndex = editConfig.colIndex
+    rowIndex.add(_index) //
+    let column: XeColumn = config?.column?.params
+    let f = column.getField()
+    colIndex.add(f) //
+  }
+
   expandTargetRows(data) {}
   copyCurrentCell() {} //
   @cacheValue()
@@ -628,7 +659,7 @@ export class XeTable extends Base {
     let start = cellSelectConfig.start
     if (start == false) {
       return
-    } //
+    }
     let showColumns = this.getShowColumns()
     cellSelectConfig.templateColIndex = showColumns.reduce((res, item, i) => {})
     cellSelectConfig.startRowIndex = config.rowIndex //
@@ -649,9 +680,9 @@ export class XeTable extends Base {
     } //
     let currentRange: any = cellSelectConfig.currentRange //
     let row = config.row //进入的行
-    let _index = config._index //进入
-    let column = config.column
-    let field = column.getField() //
+    // let _index = config._index //进入
+    // let column = config.column
+    // let field = column.getField() //
     /* 
        startRowIndex: 2,
   startColIndex: 1,
@@ -681,5 +712,30 @@ export class XeTable extends Base {
   getDefaultWidth() {
     return 150 //
   }
-  
-} //
+  onCheckboxChange(config) {
+    let ins = this.getInstance()
+    ins.toggleCheckboxRow(config.row)
+  }
+  onCheckboxChangeAll(config) {
+    let ins = this.getInstance()
+    ins.toggleAllCheckboxRow()
+  }
+  getIsActiveEditCell(row, col) {
+    let editType = this.getEditType()
+    let editConfig = this.editConfig //
+    let indexSet = editConfig.rowIndex
+    let status = false
+    if (editType == 'row') {
+      let _index = row._index //
+      if (indexSet.has(_index)) {
+        status = true
+      }
+    } //
+    return status //
+  }
+  onCellClick(config: VxeTableDefines.CellClickEventParams) {
+    let row = config.row //
+    let _index = row?._index
+    this.startEditCell(config)
+  }
+}

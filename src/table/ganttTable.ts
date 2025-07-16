@@ -157,7 +157,6 @@ export class GanttTable extends Table {
       })
     })
     this.initEventListener() //
-<<<<<<< HEAD
     this.loadColumns()
     this.loadData()
   }
@@ -168,7 +167,7 @@ export class GanttTable extends Table {
   }
   getGanttInstance(): VTableGantt.Gantt {
     let gtIns = this.ganttInstance
-    //@ts-ignore
+    //@ts-ignore 
     let value = gtIns?.value
     if (value != null) {
     } else {
@@ -177,23 +176,3 @@ export class GanttTable extends Table {
     return value//
   }
 } //
-=======
-    this.loadColumns() //
-    this.loadData() //
-  } //
-  loadData() {
-    super.loadData() //
-    let ganttInstance = this.getGanttInstance()
-    if (!ganttInstance) return
-  }
-  getGanttInstance(): VTableGantt.Gantt {
-    let ins = this.ganttInstance //
-    //@ts-ignore
-    if (ins?.value) {
-      //@ts-ignore
-      return ins.value
-    }
-    return ins //
-  }
-}
->>>>>>> refs/remotes/origin/main

@@ -15063,3 +15063,124 @@ export default defineComponent({
       }
       document.addEventListener('mousemove', onMouseMove)
       document.addEventListener('mouseup', onMouseUp)
+
+      // console.log(config, 'testChangeConfig') //
+    // let checked = config.checked
+
+
+    /* 
+   return () => {
+      if (tele.value == null) {
+        return
+      }
+      let left = ( //
+        <div
+          style={{
+            position: 'absolute',
+            background: color,
+            left: '0px',
+            top: '0px',
+            width: `${borderWidth.value}px`,
+            height: `${data.height}px`,
+          }}
+          ref={(e) => (leftRef = e)}
+        ></div>
+      )
+      let top = (
+        <div
+          style={{
+            position: 'absolute',
+            background: color,
+            left: '0px',
+            top: '0px',
+            height: `${borderWidth.value}px`,
+            width: `${data.width}px`,
+          }}
+          ref={(e) => (topRef = e)}
+        ></div>
+      )
+      let right = (
+        <div
+          style={{
+            background: color,
+            left: `${data.width}px`,
+            top: '0px',
+            width: `${borderWidth.value}px`,
+            height: `${data.height + 1}px`,
+            position: 'absolute',
+          }}
+          ref={(e) => (rightRef = e)}
+        ></div>
+      )
+      let bottom = (
+        <div
+          style={{
+            background: color,
+            left: '0px',
+            top: `${data.height - 1}px`,
+            height: `${borderWidth.value}px`,
+            width: `${data.width}px`,
+            position: 'absolute', //
+          }}
+          ref={(e) => (bottomRef = e)}
+        ></div>
+      ) //
+      let teCom = (
+        <Teleport to={tele.value}>
+          <div
+            style={{
+              left: '0px',
+              top: '0px',
+              width: '0px',
+              height: '0px',
+              //   transform: 'translateX(1px)',
+            }}
+            ref={(e) => {
+              root = e
+            }}
+            class="absolute er-h-0 er-w-0 bg-red"
+          >
+            {left}
+            {top}
+            {right}
+            {bottom}
+          </div>
+        </Teleport>
+      )
+      return teCom
+    }
+*/
+
+
+let isCurrentEdit = computed(() => {
+      let currentEditCell = table.currentEditCell
+      let _index = currentEditCell?._index
+      let editType = table.getEditType()
+      let state = false
+      if (editType == 'cell') {
+        if (_index != record.value._index) {
+          return false
+        } //
+        let f = currentEditCell.field
+        if (f == null || f !== column.getField()) {
+          return false
+        }
+      }
+      return false
+    })
+
+    if (isCurrentEdit.value == true) {
+        return <div>编辑节点</div>
+      }
+
+
+      let isShowSearchIcon = item.getIsShowSearchIcon()
+  if (isShowSearchIcon) {
+    obj.type = 'search' //
+  }
+
+    if (obj.type == 'search') {
+    obj.onSearchClick = (e) => {
+      item.onSearchClick(e)
+    }
+  }

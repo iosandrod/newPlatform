@@ -1087,7 +1087,6 @@ export class Column extends Base {
     let cacheValue = this.cacheValue
     return cacheValue //
   }
-  updateBindData() {}
   getIsFrozen() {
     let frozen = this.config.frozen
     if (['left', 'right'].includes(frozen)) {

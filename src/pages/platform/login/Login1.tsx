@@ -258,7 +258,7 @@ export default defineComponent({
         >
           {com0}
           <div
-            class="h-full w-full "
+            class="h-full w-full flex justify-center"
             style={
               {
                 // padding: '100px',

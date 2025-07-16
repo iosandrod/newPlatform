@@ -46,7 +46,7 @@ export default defineComponent({
       if (column.isChangeValue == true) {
         _value = column.cacheValue
       } //
-      return _value ////
+      return _value
     })
     let selectModelValue = computed(() => {
       let _value = modelValue.value
@@ -57,7 +57,6 @@ export default defineComponent({
       if (column.isChangeValue == true) {
         _value = column.cacheValue //
       }
-      console.log('_selectModelValue', _value) //
       return _value
     })
     const updateValue = (config) => {
@@ -241,7 +240,7 @@ export default defineComponent({
               modelValue={modelValue.value}
               onChange={(v) => {
                 updateValue(v)
-              }}
+              }} //
               disabled={false}
             ></CheckboxCom>
           </div>

@@ -154,7 +154,6 @@ export const getOptions = () => {
   let options: VTableGantt.GanttConstructorOptions = {
     groupBy: true,
     tasksShowMode: VTableGantt.TYPES.TasksShowMode.Sub_Tasks_Arrange,
-<<<<<<< HEAD
     frame: {//
       outerFrameStyle: {
         borderLineWidth: 1,
@@ -163,8 +162,6 @@ export const getOptions = () => {
       },
       verticalSplitLineMoveable: false,
     },
-=======
->>>>>>> refs/remotes/origin/main
     grid: {
       horizontalLine: {
         lineWidth: 1,
@@ -180,7 +177,6 @@ export const getOptions = () => {
 
     dependency: {
       linkCreatable: true,
-<<<<<<< HEAD
       links: []//
       // [
       //   {
@@ -248,9 +244,6 @@ export const getOptions = () => {
       width: 6,
       scrollSliderCornerRadius: 2,
       scrollSliderColor: '#5cb85c',
-=======
-      links: [], //
->>>>>>> refs/remotes/origin/main
     },
   }
   return options

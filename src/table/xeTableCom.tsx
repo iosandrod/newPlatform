@@ -21,8 +21,12 @@ import InputCom from '@/input/inputCom'
 import { ClickOutside } from 'element-plus'
 import { VxeLoading } from 'vxe-pc-ui'
 import XeTableSelectCom from './xeTableSelectCom'
+import { VxeGrid as myVxeGrid } from '@/vxegrid'
 export default defineComponent({
   name: 'XeTableCom',
+  components: {
+    myVxeGrid,
+  },
   props: {
     ...tProps, //
     tableName: {
@@ -445,7 +449,7 @@ export default defineComponent({
       )
       let cellSelectCom = (
         <XeTableSelectCom tableIns={tableIns}></XeTableSelectCom>
-      )
+      ) //
       com = withDirectives(
         <div
           style={{
@@ -456,8 +460,8 @@ export default defineComponent({
           }}
           ref={registerRootDiv}
         >
-          {/* {cellSelectCom} */}
-          <vxe-grid
+          {cellSelectCom}
+          <myVxeGrid
             checkboxConfig={tableIns.getCheckboxConfig()}
             virtualXConfig={tableIns.getVirtualXConfig()}
             headerCellConfig={tableIns.getHeaderCellConfig()}
@@ -470,7 +474,23 @@ export default defineComponent({
             cellConfig={tableIns.getCellConfig()}
             v-slots={{}}
             cellClassName={'h-full w-full'}
-          ></vxe-grid>
+            onCellClick={(e) => {
+              tableIns.onCellClick(e)
+            }}
+          ></myVxeGrid>
+          {/* <vxe-grid
+            checkboxConfig={tableIns.getCheckboxConfig()}
+            virtualXConfig={tableIns.getVirtualXConfig()}
+            headerCellConfig={tableIns.getHeaderCellConfig()}
+            virtualYConfig={tableIns.getVirtualYConfig()}
+            height={'auto'}
+            class="h-full w-full"
+            ref={(el) => {
+              tableIns.registerRef('xeGrid', el)
+            }} //
+            cellConfig={tableIns.getCellConfig()}
+            cellClassName={'h-full w-full'}
+          ></vxe-grid> */}
         </div>,
         [[{}]],
       ) //
