@@ -340,7 +340,7 @@ export const xeTableData1 = [
         status: null,
         type: null,
         appId: null,
-        appCode: null, 
+        appCode: null,
         enable: null,
         children: [],
       },
@@ -673,13 +673,22 @@ export const xeTableColumns = [
     width: 183,
     frozen: null,
     hidden: 0,
+    editType: 'select',
+    options: [
+      {
+        label: 'test',
+        value: 'test',
+      },
+      {
+        label: 'test2',
+        value: 'test2', //
+      },
+    ],
     unique: null,
     bgColor: null,
     comment: null,
     default: null,
-    options: null,
     primary: null,
-    editType: null,
     formatFn: null,
     nullable: 1,
     required: null,

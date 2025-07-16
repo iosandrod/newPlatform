@@ -1,5 +1,7 @@
 import { defineComponent } from 'vue'
 import { XeColumn } from './xecolumn'
+import { table } from 'console'
+import { XeTable } from './xetable'
 
 export default defineComponent({
   name: 'XeColHeaderCom', //
@@ -18,6 +20,7 @@ export default defineComponent({
       type = 'checkbox'
     } //
     let column: XeColumn = config.column.params
+    let table: XeTable = column.getTable()
     return () => {
       let com = null //
       if (type == 'checkbox') {
@@ -36,7 +39,15 @@ export default defineComponent({
       }
       if (type == 'default') {
         com = (
-          <div class="h-full w-full flex items-center justify-center">
+          <div
+            onContextmenu={(e) => {
+              table.onHeaderCellContext({
+                ...config,
+                event: e,
+              })
+            }}
+            class="h-full w-full flex items-center justify-center"
+          >
             {column.getTitle()}
           </div>
         )

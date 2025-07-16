@@ -6,8 +6,13 @@ import { RouterView } from 'vue-router'
 import { system } from './system'
 import dialogCom from './dialog/dialogCom'
 import { comText } from './comTest'
-import { getGanttColumns, getGanttRecords, getOptions } from './table/ganttTableFn'
+import {
+  getGanttColumns,
+  getGanttRecords,
+  getOptions,
+} from './table/ganttTableFn'
 import dialogArrCom from './dialog/dialogArrCom'
+import { useKeyboard } from '@ER/utils'
 //@ts-ignore
 window.CONTAINER_ID = 'main_app'
 export default defineComponent({
@@ -16,16 +21,17 @@ export default defineComponent({
     // flowCom,
     // ERNodeVue, //
     // dialogArrCom, //
-    dialogArrCom
+    dialogArrCom,
   },
   setup() {
+    
     provide('globalConfig', globalConfig)
     provide('systemIns', system) //
     let diaArr = computed(() => {
       let arr = system.getAllDialog()
       return arr
     })
-    onMounted(() => { 
+    onMounted(() => {
       system.createSystemRoutes() //
     })
     document.addEventListener('mousemove', (e) => {
@@ -37,11 +43,7 @@ export default defineComponent({
     return () => {
       let dArr = <dialogArrCom dialogArr={diaArr.value}></dialogArrCom>
       // let com = <RouterView></RouterView> ////
-      let com = (
-        <RouterView
-          
-        ></RouterView>
-      )
+      let com = <RouterView></RouterView>
       return withDirectives(
         <div
           id="main_app" //
@@ -70,7 +72,7 @@ export default defineComponent({
               },
             },
           ],
-        ]
+        ],
       )
     }
   },

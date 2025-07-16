@@ -1,9 +1,21 @@
-import { computed, defineComponent, onMounted, onUnmounted } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  ref,
+  withDirectives,
+} from 'vue'
 import { XeColumn } from './xecolumn'
 import { XeTable } from './xetable'
 import InputCom from '@/input/inputCom'
 import SelectCom from '@/select/selectCom'
-import { columnTypeMap } from '@ER/columnTypeMap'
+import { columnTypeKeys, columnTypeMap } from '@ER/columnTypeMap'
+import CheckboxCom from '@/checkbox/checkboxCom'
+import { ClickOutside } from 'element-plus'
+import TableInput from './editor/tableInput'
+import XeTableInput from './editor/xeTableInput'
 
 export default defineComponent({
   name: 'XeColCom',
@@ -81,6 +93,22 @@ export default defineComponent({
       }
       return {}
     })
+    let inputRef = ref(null)
+    const registerEditRef = (el) => {
+      inputRef.value = el //
+      if (el != null) {
+        let _ins = el?._instance || el
+        if (_ins != null) {
+          nextTick(() => {
+            table.onEditCellMounted({
+              instance: _ins,
+              column: column,
+              row: record.value,
+            }) //
+          })
+        }
+      }
+    }
     return () => {
       let com = null
       if (type == 'checkbox') {
@@ -109,26 +137,29 @@ export default defineComponent({
             onMouseenter={(e: MouseEvent) => {
               onMouseenter(e) //
             }}
+            onContextmenu={(e: MouseEvent) => {
+              table.onBodyCellContext({ ...config, event: e })
+            }}
           >
             {showValue.value}
           </div>
         )
+        let com0 = com //
         if (isEditCell.value == true) {
-          if (editType.value == 'select') {
-            com = <SelectCom {...inputBind.value}></SelectCom> //
-          }
-          if (editType.value == 'bool') {
-            com = (
-              <div class="h-full w-full overflow-hidden">
-                <vxe-checkbox
-                  {...inputBind.value}
-                  modelValue={modelValue.value}
-                ></vxe-checkbox>
-              </div>
+          let editCom = null
+          if (columnTypeKeys.includes(editType.value)) {
+            editCom = (
+              <XeTableInput row={record.value} column={column}></XeTableInput>
             )
-          }
-          if (['string', 'input'].includes(editType.value)) {
-            com = <InputCom {...inputBind.value}></InputCom> //
+          } //
+          if (editCom != null) {
+            com = withDirectives(<div class="h-full w-full">{editCom}</div>, [
+              [
+                {
+                  unmounted: () => {},
+                },
+              ],
+            ])
           }
         } //
       }

@@ -12,12 +12,16 @@ import { cacheValue, useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { XeCheckColumn } from './xeCheckColumn'
 import { combineAdjacentEqualElements } from '@ER/utils'
 import { nextTick } from 'vue'
+import { BMenu } from '@/buttonGroup/bMenu'
+import { initXeContextItems } from './xetableFn'
 
 export class XeTable extends Base {
   config: any //
+  canClearEditCell = true
   currentClickButton: any
   currentEditCell: any = {}
   useCache = false
+  mergeConfig: any = {} //
   cellSelectConfig = {
     templateColIndex: {},
     startRowIndex: null,
@@ -51,6 +55,8 @@ export class XeTable extends Base {
   isContainerClick = false
   isFilterTable = false
   editConfig = {
+    currentEditField: null,
+    currentEditIndex: null,
     rowIndex: new Set(),
     colIndex: new Set(), //
   }
@@ -163,10 +169,12 @@ export class XeTable extends Base {
   initControllerColumn() {}
   initSeriesNumberColumn() {}
   initGlobalSearch() {}
-  initCurrentContextItems() {} //
+  initCurrentContextItems() {
+    initXeContextItems(this) //
+  } //
   initTableState() {}
   getEditType() {
-    let type = 'row' //
+    let type = 'cell' //
     return type //
   }
   getCurRow() {
@@ -248,7 +256,7 @@ export class XeTable extends Base {
     this.columnsMap[field] = col
     this.columns.push(col) //
   } //
-  getColumns() {
+  getColumns(): XeColumn[] {
     return this.columns
   }
   getShowControllerColumn() {
@@ -257,7 +265,6 @@ export class XeTable extends Base {
     return showControllerButtons
   }
   getShowColumns() {
-    // debugger//
     let columns = this.getColumns()
     //是否显示
     let _cols = columns.filter((col) => {
@@ -271,11 +278,12 @@ export class XeTable extends Base {
     let _show = this.config.showCheckboxColumn
     let _show1 = this.getShowControllerColumn()
     let rfsCols = _col1.filter((c) => {
-      let isFrozen = c.isFrozen
+      let isFrozen = ['right'].includes(c.fixed)
       return isFrozen == true //右边的
     })
     let lfsCols = _col1.filter((c) => {
-      let isLeftFrozen = c.isLeftFrozen
+      // let isLeftFrozen = c.isLeftFrozen
+      let isLeftFrozen = ['left'].includes(c.fixed)
       return isLeftFrozen == true //左边的
     })
     let sCols = _col1.filter((c) => {
@@ -293,19 +301,6 @@ export class XeTable extends Base {
       let cCol = this.checkboxColumn
       _col1.unshift(cCol.getColumnProps())
     } //
-    let countCols = _col1.filter((col) => col.isFrozen) //这个右侧冻结的//
-    let _countCols = _col1.filter((col) => col.isLeftFrozen) //这个左侧冻结的//
-    let leftEndF = _countCols.slice(-1).pop()?.field
-    this.leftFrozen = leftEndF //
-    let count = countCols.length
-    let _count = _countCols.length
-    if (_show1 == true) {
-      let cCol = this.controllerColumn
-      _col1.push(cCol.getColumnProps())
-      count += 1 //
-    } //
-    this.frozenColCount = _count
-    this.rightFrozenColCount = count //
     return _col1 ////
   } //
   loadColumns() {
@@ -369,7 +364,6 @@ export class XeTable extends Base {
     }
     let isTree = this.getIsTree()
     if (isTree) {
-      // debugger //
       let _data3 = this.filterTreeInPlace(_data1, (node) => {
         let status = true
         let globalValue = this.globalConfig.value
@@ -478,7 +472,6 @@ export class XeTable extends Base {
   getGlobalSearchProps() {
     return {} //
   } //
-  outClick(e, isIn?: any) {}
   showGlobalSearch(bool) {}
   @useRunAfter()
   @useTimeout({ number: 300, key: 'updateTimeout' })
@@ -502,11 +495,26 @@ export class XeTable extends Base {
   }
   jumpToSearchNext(bool) {} //
   expandAllTreeRow() {} //
+  getCanClearEditCell(config?: any) {
+    let editType = this.getEditType()
+    if (editType == 'all') {
+      return true //
+    }
+    if (editType == 'cell') {
+      return this.canClearEditCell
+    }
+    if (editType == 'row') {
+      return this.canClearEditCell //
+    }
+  }
   //开始编辑
   clearEditCell() {
     let editConfig = this.editConfig
     let rowIndex = editConfig.rowIndex //
     let colIndex = editConfig.colIndex
+    let canClearEditCell = this.getCanClearEditCell()
+    editConfig.currentEditField = null //
+    editConfig.currentEditIndex = null //
     rowIndex.clear() //
     colIndex.clear() //
   } //
@@ -515,14 +523,17 @@ export class XeTable extends Base {
     let _index = record._index //
     let editConfig = this.editConfig
     let rowIndex = editConfig.rowIndex
-    if (rowIndex.has(_index)) {
+    let editType = this.getEditType()
+    if (rowIndex.has(_index) && editType == 'row') {
       return
     } //
     this.clearEditCell() //
     let colIndex = editConfig.colIndex
-    rowIndex.add(_index) //
     let column: XeColumn = config?.column?.params
     let f = column.getField()
+    editConfig.currentEditField = f //
+    editConfig.currentEditIndex = _index //
+    rowIndex.add(_index) //
     colIndex.add(f) //
   }
 
@@ -607,7 +618,10 @@ export class XeTable extends Base {
     } //
   }
   getContextItems() {
-    return [] //
+    let contextItems = this.contextItems.map((item) => {
+      return item
+    })
+    return contextItems //
   } //
   startDragArea() {}
   onCellVisible(config) {} //
@@ -731,11 +745,102 @@ export class XeTable extends Base {
         status = true
       }
     } //
+    if (editType == 'cell') {
+      let _index = row._index //
+      if (indexSet.has(_index)) {
+        let colIndexSet = editConfig.colIndex
+        let f = col.getField()
+        if (colIndexSet.has(f)) {
+          status = true
+        } //
+      }
+    }
+    if (editType == 'all') {
+      status = true //
+    }
     return status //
   }
   onCellClick(config: VxeTableDefines.CellClickEventParams) {
     let row = config.row //
     let _index = row?._index
     this.startEditCell(config)
+  }
+  onEditCellMounted(config) {
+    let instance = config.instance
+    // console.log(instance, 'testInstance') //
+    let editConfig = this.editConfig //
+    let currentEditField = editConfig.currentEditField //
+    let column = config.column
+    let f = column.getField()
+    let editType = this.getEditType()
+    let row = config.row
+    let _index = row._index
+    if (['row', 'cell'].includes(editType)) {
+      if (currentEditField == f) {
+        if (
+          typeof instance.focus == 'function' &&
+          _index == editConfig.currentEditIndex
+        ) {
+          instance.focus() //
+        }
+      }
+    }
+  } //
+  onHeaderCellContext(config) {
+    let event: MouseEvent = config.event
+    let column: XeColumn = config.column.params //
+    this.curContextCol = column //
+    let contextmenu: BMenu = this.getRef('contextmenu')
+    if (contextmenu == null) {
+      return
+    }
+    contextmenu.open(event) //
+  }
+  openContextMenu(config) {}
+  hiddenColumn(field) {}
+  getTableName() {
+    let tableName = this.config.tableName
+    return tableName //
+  }
+  onColumnsDesign(config) {}
+  getFlatColumns() {
+    let columns = this.getColumns()
+      .map((col) => {
+        return col.getFlatColumns()
+      })
+      .flat()
+    return columns
+  }
+  onEditCellOutsizeClick(config) {
+    let tCol = config.column.params
+    let row = config.row
+    let _index = row._index
+    let editType = this.getEditType()
+    let editConfig = this.editConfig //
+    if (editType == 'row') {
+      //
+    }
+    let currentEditF = this.editConfig.currentEditField
+    let col = this.getFlatColumns().find((col) => {
+      return col.getField() == currentEditF
+    })
+  }
+  outClick(event, isIn = false) {
+    this.clearEditCell()
+  }
+  onBodyClick(event) {
+    //
+  }
+  async onBodyCellContext(config) {
+    let event: MouseEvent = config.event
+    let column: XeColumn = config.column.params //
+    this.curContextCol = column
+    this.curContextRow = config.row //
+    this.curContextCol = column //
+    let contextmenu: BMenu = this.getRef('contextmenu')
+    if (contextmenu == null) {
+      return
+    }
+    contextmenu.open(event) //
   }
 }

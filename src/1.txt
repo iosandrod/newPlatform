@@ -15184,3 +15184,133 @@ let isCurrentEdit = computed(() => {
       item.onSearchClick(e)
     }
   }
+
+   let countCols = _col1.filter((col) => col.isFrozen) //这个右侧冻结的//
+    let _countCols = _col1.filter((col) => col.isLeftFrozen) //这个左侧冻结的//
+    let leftEndF = _countCols.slice(-1).pop()?.field
+    this.leftFrozen = leftEndF //
+    let count = countCols.length
+    let _count = _countCols.length
+    if (_show1 == true) {
+      let cCol = this.controllerColumn
+      _col1.push(cCol.getColumnProps())
+      count += 1 //
+    } //
+    this.frozenColCount = _count
+    this.rightFrozenColCount = count //
+
+
+     if (editType.value == 'select') {
+            editCom = (
+              <SelectCom
+                ref={(el) => {
+                  registerEditRef(el)
+                }}
+                {...inputBind.value}
+              ></SelectCom>
+            ) //
+          }
+          if (editType.value == 'bool') {
+            editCom = (
+              <div class="w-full h-full overflow-hidden">
+                <CheckboxCom
+                  ref={(el) => {
+                    registerEditRef(el)
+                  }}
+                  {...inputBind.value}
+                  modelValue={modelValue.value}
+                ></CheckboxCom>
+              </div>
+            )
+          }
+          if (['string', 'input'].includes(editType.value)) {
+            editCom = (
+              <InputCom
+                ref={(el) => registerEditRef(el)}
+                {...inputBind.value}
+              ></InputCom>
+            ) //
+          } //
+
+          // setTimeout(() => {
+        //   let table = column.table
+        //   table.getInstance().clearSelected()//
+        // }, 300);
+
+
+        let column: XeColumn = reactive(props.column) as any ////
+    let table: XeTable = column.table as any
+    let row = props.row
+    let _f = column.getField()
+    let _column = table.columnsMap[_f] //
+    if (props.row == column.config) {
+      _f = 'title' //
+    }
+    let modelValue = computed(() => {
+      let _value = props.row[_f] //
+      if (column.isChangeValue == true) {
+        _value = column.cacheValue
+      } //
+      return _value
+    })
+    let selectModelValue = computed(() => {
+      let _value = modelValue.value
+      let cacheValue = column.cacheValue
+      if (cacheValue != null) {
+        _value = cacheValue
+      }
+      if (column.isChangeValue == true) {
+        _value = column.cacheValue //
+      } //
+      return _value //
+    })
+    const updateValue = (config) => {
+      column.canHiddenEditor = false //
+      column.isChangeValue = true
+      column.cacheValue = config.value //
+      let editType = table.getEditType()
+      if (editType != 'cell') {
+        column.updateBindValue({
+          value: config.value,
+          row: props.row,
+          field: _f,
+        }) //
+      } //
+      // console.log(column.cacheValue,'testCacehValue')//
+    }
+    let _index = row._index
+    let inputIns = ref(null)
+    const insRef = (ins: any) => {
+      inputIns.value = ins?._instance || ins
+      // column.registerRef('input', ins)
+    } //
+
+    onChange={(v) => {
+                updateValue(v)
+              }}
+              onInput={(v) => {
+                updateValue(v) //
+              }}
+              {...column.getBindConfig()} //
+              modelValue={modelValue.value}
+
+              onChange={(v) => {
+                  updateValue(v)
+                }} //
+                clearable
+                options={column.getSelectOptions()} //
+                transfer
+                type={type} //
+                modelValue={selectModelValue.value} //
+                 onChange={(v) => {
+                updateValue(v)
+              }}
+              {...column.getBindConfig()} //
+              modelValue={modelValue.value}
+
+              // onKeyStroke(
+    //   'ctrl+c',
+    //   (e) => {
+    //   },
+    //   { eventName: 'keyup' },
+    // )//

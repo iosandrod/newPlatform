@@ -22,10 +22,16 @@ import { ClickOutside } from 'element-plus'
 import { VxeLoading } from 'vxe-pc-ui'
 import XeTableSelectCom from './xeTableSelectCom'
 import { VxeGrid as myVxeGrid } from '@/vxegrid'
+import ContextmenuCom from '@/contextM/components/ContextmenuCom'
+import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
+import tableMenuCom from './tableMenuCom'
 export default defineComponent({
   name: 'XeTableCom',
   components: {
     myVxeGrid,
+    ContextmenuCom,
+    buttonGroupCom,
+    tableMenuCom, //
   },
   props: {
     ...tProps, //
@@ -373,13 +379,9 @@ export default defineComponent({
     let registerBodyDiv = (el) => {
       tableIns.registerRef('bodyDiv', el)
     } //
-    let arr1 = new Array(10000).fill(null)
     return () => {
-      let com = null
+      let com = null //
       let menuCom = <TableMenuCom></TableMenuCom>
-      // if (props.showHeaderContext === false) {
-      //   menuCom = null //
-      // }
       let btnCom = <TableButtonCom></TableButtonCom>
       if (tableIns.config.showHeaderButtons == false) {
         //
@@ -501,9 +503,9 @@ export default defineComponent({
             if (isCClick == true) {
               return
             }
-            tableIns.outClick(e, true) //
+            tableIns.onBodyClick(e) //
           }}
-          ref={registerBodyDiv}
+          ref={registerBodyDiv} //
           style={{
             flex: 1,
             width: '100%', //

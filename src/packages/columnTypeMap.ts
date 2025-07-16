@@ -5,6 +5,7 @@ export const defaultType = (item: XeColumn, row): any => {
     placeholder: item.getPlaceholder(),
     modelValue: item.getBindValue({ row }), //
     onInput: (val) => {
+      //   debugger //
       let _val = val.value
       item.updateBindValue({ value: _val, row })
     },
@@ -23,7 +24,7 @@ export const inputType = (item: XeColumn, row) => {
   let password = item.getOptions()?.password
   if (password) {
     obj.type = 'password' //
-  }
+  } //
   return obj //
 }
 export const selectType = (item: XeColumn, row) => {
@@ -40,24 +41,24 @@ export const selectType = (item: XeColumn, row) => {
       })
       value = _value //
     }
-    item.updateBindData({ value })
+    item.updateBindValue({ value, row })
   }
   return obj //
 }
 
-export const stableType = (item: FormItem) => {
-  let obj = defaultType(item) //
+export const stableType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
   obj.onChange = (config) => {}
   obj.onInput = (config) => {
     console.log(config, 'testConfig') //
   } //
   obj.readonly = true //
   obj.clearable = false //
-  obj.modelValue = item.getBindShowValue()
+  obj.modelValue = item.getBindShowValue({ row })
   return obj
 }
-export const codeType = (item: FormItem) => {
-  let obj = defaultType(item) //
+export const codeType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
   obj.onChange = (config) => {}
   obj.onInput = (config) => {} //
   obj.readonly = true //
@@ -65,14 +66,14 @@ export const codeType = (item: FormItem) => {
   // obj.modelValue = item.getBindShowValue()
   return obj
 }
-export const booleanType = (item: FormItem) => {
-  let obj = defaultType(item) //
+export const booleanType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
   obj.onChange = (config) => {
     let value = config.value
-    item.updateBindData({ value }) //
+    item.updateBindValue({ value, row }) //
   }
   obj.onInput = (config) => {} //
-  obj.modelValue = item.getCheckBindValue()
+  obj.modelValue = item.getCheckBindValue({ row })
   obj.readonly = true //
   obj.clearable = false
   obj.disabled = item.getDisabled() //
@@ -116,7 +117,7 @@ export const imageType = (item: XeColumn, row) => {
     item.updateBindValue({ value, row }) //
   }
   obj.clearable = true
-//   obj.modelValue = item.getImageBindValue()
+  //   obj.modelValue = item.getImageBindValue()
   obj.onInput = (config) => {} //
   return obj
 }
@@ -133,3 +134,4 @@ export const columnTypeMap = {
   color: colorType,
   images: imageType,
 }
+export const columnTypeKeys = Object.keys(columnTypeMap)

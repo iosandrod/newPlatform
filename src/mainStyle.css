@@ -429,3 +429,14 @@ z-index: 200;
   justify-content: center;
   align-items: center;
 }
+.vxe-select{
+  height: 100%;
+  max-height: 32px;
+}
+.vxe-cell--title{
+  height: 100%;
+  width: 100%;
+  >span{
+    width: 100%;
+  }
+}

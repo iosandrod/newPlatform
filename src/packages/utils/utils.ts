@@ -142,30 +142,31 @@ export const columnToEdit = (col: any) => {
 
 export const getFlatTreeData = (_data) => {
   let data = _data
-    return data
-      .map((row) => {
-        let children = row.children
-        if (children && children?.length > 0) {
-          return [row, ...getFlatTreeData(children)]
-        }
-        return [row]
-      })
-      .flat()
+  return data
+    .map((row) => {
+      let children = row.children
+      if (children && children?.length > 0) {
+        return [row, ...getFlatTreeData(children)]
+      }
+      return [row]
+    })
+    .flat()
 }
-
-
 
 export function useKeyboard(
   keys: string | string[],
-  callback: (e: keyboardJS.Event) => void
+  callback: (e: keyboardJS.Event) => void,
 ) {
   // 统一成数组
   const combos = Array.isArray(keys) ? keys : [keys]
   // 存一下所有绑定的 handler 以便 unbind
-  const handlers: { combo: string; handler: (e: keyboardJS.Event) => void }[] = []
+  const handlers: {
+    combo: string
+    handler: (e: keyboardJS.Event) => void
+  }[] = []
 
   onMounted(() => {
-    combos.forEach(combo => {
+    combos.forEach((combo) => {
       const handler = (e: keyboardJS.Event) => {
         e.preventDefault()
         callback(e)

@@ -140,10 +140,7 @@ export class InputEditor extends BaseEditor {
     if (column.isChangeValue == true) {
       let oldValue = this.row[this.field] //////
       if (value != oldValue) {
-        // setTimeout(() => {
-        //   let table = column.table
-        //   table.getInstance().clearSelected()//
-        // }, 300);
+        
         let updateConfig = {
           value: value,
           row: this.row,

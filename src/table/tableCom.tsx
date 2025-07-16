@@ -260,12 +260,7 @@ export default defineComponent({
     }
     expose({ _instance: tableIns })
     provide('tableIns', tableIns)
-    // onKeyStroke(
-    //   'ctrl+c',
-    //   (e) => {
-    //   },
-    //   { eventName: 'keyup' },
-    // )//
+    
     useKeyboard('ctrl+c', (e) => {
       let root = tableIns.getRef('root')
       let focusDiv = document.activeElement

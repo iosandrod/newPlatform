@@ -15,6 +15,8 @@ import InputCom from '@/input/inputCom'
 import CheckboxCom from '@/checkbox/checkboxCom'
 import { XeColumn } from '../xecolumn'
 import { XeTable } from '../xetable'
+import { columnTypeMap } from '@ER/columnTypeMap'
+import { useKeyboard } from '@ER/utils'
 // import { VxeSelect } from 'vxe-pc-ui'
 export default defineComponent({
   name: 'tableInput',
@@ -35,53 +37,15 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     let column: XeColumn = reactive(props.column) as any ////
-    let table: XeTable = column.table as any
-    let row = props.row
-    let _f = column.getField()
-    let _column = table.columnsMap[_f] //
-    if (props.row == column.config) {
-      _f = 'title' //
-    }
-    let modelValue = computed(() => {
-      let _value = props.row[_f] //
-      if (column.isChangeValue == true) {
-        _value = column.cacheValue
-      } //
-      return _value
-    })
-    let selectModelValue = computed(() => {
-      let _value = modelValue.value
-      let cacheValue = column.cacheValue
-      if (cacheValue != null) {
-        _value = cacheValue
-      }
-      if (column.isChangeValue == true) {
-        _value = column.cacheValue //
-      } //
-      return _value //
-    })
-    const updateValue = (config) => {
-      column.canHiddenEditor = false //
-      column.isChangeValue = true
-      column.cacheValue = config.value //
-      let editType = table.getEditType()
-      if (editType != 'cell') {
-        column.updateBindValue({
-          value: config.value,
-          row: props.row,
-          field: _f,
-        }) //
-      } //
-      // console.log(column.cacheValue,'testCacehValue')//
-    }
-    let _index = row._index
+    let table: XeTable = column.getTable() as any
     let inputIns = ref(null)
-    const insRef = (ins: any) => {
+    let insRef = (ins: any) => {
       inputIns.value = ins?._instance || ins
-      // column.registerRef('input', ins)
-    } //
+    }
+    useKeyboard('enter', () => {
+      table.clearEditCell() //
+    }) //
     onMounted(() => {
-      // debugger//
       if (table.getEditType() == 'cell') {
         if (typeof inputIns.value?.focus == 'function') {
           inputIns.value.focus() //
@@ -94,7 +58,7 @@ export default defineComponent({
             inputIns.value.focus() //
           }
         }
-      }
+      } //
     })
     onUnmounted(() => {
       if (table.getEditType() == 'cell') {
@@ -107,6 +71,14 @@ export default defineComponent({
     if (props.row == props.column.config) {
       type = 'string' //
     }
+    let bindConfig = computed(() => {
+      let type = column.getEditType()
+      let bindFn = columnTypeMap[type]
+      if (typeof bindFn == 'function') {
+        return bindFn(column, props.row)
+      }
+      return {}
+    }) //
     return () => {
       let com = null
       if (type == 'string' || type == 'input') {
@@ -116,17 +88,10 @@ export default defineComponent({
             <InputCom
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
-              onChange={(v) => {
-                updateValue(v)
-              }}
-              onInput={(v) => {
-                updateValue(v) //
-              }}
-              {...column.getBindConfig()} //
-              modelValue={modelValue.value}
+              {...bindConfig.value} //
             ></InputCom>
           </div>
-        )
+        ) //
         let columnSelect = column.config.columnSelect
         if (columnSelect == true) {
           com = (
@@ -134,14 +99,7 @@ export default defineComponent({
               <SelectCom
                 style={{ width: '100%', height: '100%' }} //
                 ref={insRef}
-                onChange={(v) => {
-                  updateValue(v)
-                }} //
-                clearable
-                options={column.getSelectOptions()} //
-                transfer
-                type={type} //
-                modelValue={selectModelValue.value} //
+                {...bindConfig.value} //
               ></SelectCom>
             </div>
           )
@@ -154,11 +112,7 @@ export default defineComponent({
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
               type="number" //
-              onChange={(v) => {
-                updateValue(v)
-              }}
-              {...column.getBindConfig()} //
-              modelValue={modelValue.value}
+              {...bindConfig.value} //
             ></InputCom>
           </div>
         )
@@ -169,12 +123,7 @@ export default defineComponent({
             <InputCom
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
-              onChange={(v) => {
-                updateValue(v)
-              }}
-              transfer
-              type={type} //
-              modelValue={modelValue.value}
+              {...bindConfig.value} //
             ></InputCom>
           </div>
         )
@@ -185,14 +134,7 @@ export default defineComponent({
             <SelectCom
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
-              onChange={(v) => {
-                updateValue(v)
-              }} //
-              clearable
-              options={column.getSelectOptions()} //
-              transfer
-              type={type} //
-              modelValue={selectModelValue.value} //
+              {...bindConfig.value} //
             ></SelectCom>
           </div>
         ) //
@@ -203,28 +145,29 @@ export default defineComponent({
             <InputCom
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
-              onChange={(v) => {
-                updateValue(v)
-              }}
-              transfer
-              type={type} //
-              modelValue={modelValue.value}
-              isBaseinfo
-              onVisibleChange={(v) => {
-                let visible = v.visible //
-                column.disableHideCell = visible
-                nextTick(() => {
-                  column.table.clearEditCell() //
-                })
-              }}
-              onFocus={(config) => {
-                column.openBaseInfoTable() //
-              }}
-              onConfirmTinyTable={(config) => {
-                ///
-                column.confirmTinyTableRow(config.row)
-              }}
-              baseinfoConfig={column._getBaseinfoConfig()}
+              {...bindConfig.value} //
+              //   onChange={(v) => {
+              //     updateValue(v)
+              //   }}
+              //   transfer
+              //   type={type} //
+              //   modelValue={modelValue.value}
+              //   isBaseinfo
+              //   onVisibleChange={(v) => {
+              //     let visible = v.visible //
+              //     column.disableHideCell = visible
+              //     nextTick(() => {
+              //       column.table.clearEditCell() //
+              //     })
+              //   }}
+              //   onFocus={(config) => {
+              //     column.openBaseInfoTable() //
+              //   }}
+              //   onConfirmTinyTable={(config) => {
+              //     ///
+              //     column.confirmTinyTableRow(config.row)
+              //   }}
+              //   baseinfoConfig={column._getBaseinfoConfig()}
             ></InputCom>
           </div>
         )
@@ -289,4 +232,4 @@ export default defineComponent({
       )
     }
   },
-})
+}) //

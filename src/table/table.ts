@@ -3466,4 +3466,5 @@ export class Table extends Base {
   showScreenPhoto(imageData) {
     this.getSystem().showScreenPhoto(imageData) //
   }
+  
 }

@@ -337,7 +337,7 @@ export class Column extends Base {
     let table = this.getTable()
     let columns = this.columns
     let column = new Column(col, table)
-    columns.push(column)// 
+    columns.push(column) //
   }
   onUnmounted() {
     this.unmountedAllWatch()
@@ -1280,5 +1280,5 @@ export class Column extends Base {
   }
   getFontSize() {
     return 16
-  }
+  } //
 }
