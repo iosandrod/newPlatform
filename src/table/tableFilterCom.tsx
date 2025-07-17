@@ -1,4 +1,4 @@
-import { computed, defineComponent, Teleport } from 'vue'
+import { computed, defineComponent, resolveComponent, Teleport } from 'vue'
 import TableCom from './tableCom'
 import dropdownCom from '@/menu/dropdownCom'
 import { Table } from './table'
@@ -9,6 +9,10 @@ import buttonCom from '@/buttonGroup/buttonCom'
 export default defineComponent({
   props: {
     tableIns: {},
+    isVxeTable: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
     dropdownCom,
@@ -71,11 +75,15 @@ export default defineComponent({
               return com
             },
             dropdown: () => {
+              let comp = resolveComponent('erTable')
+              if (props.isVxeTable == true) {
+                comp = resolveComponent('erXeTable')
+              }
               let com = (
                 <div style={_dStyle.value}>
                   <div style={{ flex: 1, overflow: 'hidden' }}>
-                    <erTable
-                      tableState="scan"//
+                    <comp
+                      tableState="scan" //
                       isFilterTable={true} //
                       showCheckAll={false}
                       ref={registerTable}
@@ -91,8 +99,8 @@ export default defineComponent({
                           console.log(_table, 'testTable') //
                         }, 100)
                       }} //
-                    ></erTable>
-                  </div>
+                    ></comp>
+                  </div> 
                   <div class="flex justify-between">
                     <buttonCom
                       fn={() => {

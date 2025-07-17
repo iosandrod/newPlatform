@@ -1,6 +1,6 @@
 import { Base } from '@ER/base'
 import { Table } from './table'
-import { shallowRef, toRaw } from 'vue'
+import { reactive, shallowRef, toRaw } from 'vue'
 import { XeColumn } from './xecolumn'
 import {
   VxeComponentEvent,
@@ -8,13 +8,19 @@ import {
   VxeTableDefines,
   VxeTableEvents,
 } from 'vxe-table'
-import { cacheValue, useRunAfter, useTimeout } from '@ER/utils/decoration'
+import {
+  cacheValue,
+  useDelay,
+  useRunAfter,
+  useTimeout,
+} from '@ER/utils/decoration'
 import { XeCheckColumn } from './xeCheckColumn'
 import { combineAdjacentEqualElements } from '@ER/utils'
 import { nextTick } from 'vue'
 import { BMenu } from '@/buttonGroup/bMenu'
 import { initXeContextItems } from './xetableFn'
-
+import { Dropdown } from '@/menu/dropdown'
+import _ from 'lodash' //
 export class XeTable extends Base {
   config: any //
   canClearEditCell = true
@@ -174,7 +180,7 @@ export class XeTable extends Base {
   } //
   initTableState() {}
   getEditType() {
-    let type = 'cell' //
+    let type = 'row' //
     return type //
   }
   getCurRow() {
@@ -264,6 +270,11 @@ export class XeTable extends Base {
     let showControllerButtons = config.showControllerButtons
     return showControllerButtons
   }
+  getShowSeriesNumber() {
+    let config = this.config
+    let showRowSeriesNumber = config.showRowSeriesNumber
+    return showRowSeriesNumber //
+  }
   getShowColumns() {
     let columns = this.getColumns()
     //是否显示
@@ -301,6 +312,7 @@ export class XeTable extends Base {
       let cCol = this.checkboxColumn
       _col1.unshift(cCol.getColumnProps())
     } //
+
     return _col1 ////
   } //
   loadColumns() {
@@ -322,7 +334,8 @@ export class XeTable extends Base {
     return data //
   }
   getIsTree() {
-    let treeConfig = this.treeConfig
+    //
+    let treeConfig = this.config.treeConfig
     let id = treeConfig?.id
     let parentId = treeConfig?.parentId
     if (id != null || parentId != null) {
@@ -461,10 +474,14 @@ export class XeTable extends Base {
     console.log(_columns, 'testColumns') //
     instance.loadColumn(_columns) //
   }
+  getHeaderHeight() {
+    return 35 //
+  }
   @cacheValue()
   getHeaderCellConfig() {
+    let headerHeight = this.getHeaderHeight()
     return {
-      height: 30,
+      height: headerHeight,
       padding: false, //
     }
   }
@@ -472,7 +489,15 @@ export class XeTable extends Base {
   getGlobalSearchProps() {
     return {} //
   } //
-  showGlobalSearch(bool) {}
+  showGlobalSearch(status) {
+    //
+    if (status) {
+      this.globalConfig.show = true //
+    } else {
+      this.globalConfig.value = '' //
+      this.globalConfig.show = false
+    }
+  }
   @useRunAfter()
   @useTimeout({ number: 300, key: 'updateTimeout' })
   updateCanvas() {
@@ -480,8 +505,8 @@ export class XeTable extends Base {
     let instance = this.getInstance() //
     if (instance == null) {
       return
-    }
-    instance.loadData(data)
+    } //
+    instance.loadData(data) //
   }
   onMounted() {
     this.loadData() //
@@ -509,16 +534,23 @@ export class XeTable extends Base {
   }
   //开始编辑
   clearEditCell() {
+    //
     let editConfig = this.editConfig
     let rowIndex = editConfig.rowIndex //
     let colIndex = editConfig.colIndex
+    let editType = this.getEditType()
     let canClearEditCell = this.getCanClearEditCell()
     editConfig.currentEditField = null //
     editConfig.currentEditIndex = null //
     rowIndex.clear() //
     colIndex.clear() //
   } //
+  @useTimeout({ number: 0 }) //
   startEditCell(config) {
+    let tableState = this.getTableState()
+    if (tableState == 'scan') {
+      return //
+    }
     let record = config.row //
     let _index = record._index //
     let editConfig = this.editConfig
@@ -715,9 +747,14 @@ export class XeTable extends Base {
   }
   @cacheValue()
   getCheckboxConfig() {
+    let isTree = this.getIsTree()
+    let range = true
+    if (isTree) {
+      range = false
+    }
     return {
       checkField: 'checkboxField',
-      range: true,
+      range: range, //
     } //
   }
   getIsFilterTable() {
@@ -725,7 +762,8 @@ export class XeTable extends Base {
   } //
   getDefaultWidth() {
     return 150 //
-  }
+  } //
+  @useTimeout({ number: 0 })
   onCheckboxChange(config) {
     let ins = this.getInstance()
     ins.toggleCheckboxRow(config.row)
@@ -764,6 +802,22 @@ export class XeTable extends Base {
     let row = config.row //
     let _index = row?._index
     this.startEditCell(config)
+    let record = config.row //
+    this.setCurRow(record)//
+  }
+  @useTimeout({ number: 10, key: 'setCurRow' }) //
+  setCurRow(row, isProps = false) {
+    let oldCurRow = this.tableData.curRow || {}
+    if (toRaw(row) == toRaw(this.tableData.curRow)) return //
+    this.tableData.curRow = row //
+    let oldIndex = oldCurRow._index || '' //
+    let newIndex = row._index || ''
+    this.timeout['updateRecords__now'] = true
+    let tableName = this.getTableName() //
+    let onCurRowChange = this.config.onCurRowChange
+    if (typeof onCurRowChange == 'function') {
+      onCurRowChange({ row: row, oldRow: oldCurRow }) //
+    }
   }
   onEditCellMounted(config) {
     let instance = config.instance
@@ -828,8 +882,40 @@ export class XeTable extends Base {
   outClick(event, isIn = false) {
     this.clearEditCell()
   }
-  onBodyClick(event) {
-    //
+  getAllParentDivs(el: HTMLElement): HTMLElement[] {
+    const parents: HTMLElement[] = []
+    let current = el.parentElement
+
+    while (current) {
+      parents.push(current)
+      // if (current.tagName.toLowerCase() === 'div') {
+      // }
+      current = current.parentElement
+    }
+    return parents
+  }
+  getallChildrenDivs(el: HTMLElement): any[] {
+    //@ts-ignore
+    let children: any[] = el?.children || []
+    children = [...children] //
+    return [
+      el,
+      ...children
+        .map((el) => {
+          return [...this.getallChildrenDivs(el)]
+        })
+        .flat(),
+    ]
+  }
+  onBodyClick(config) {
+    const event = config.event //
+    let target: HTMLDivElement = event.target //
+    let _targets = this.getAllParentDivs(target)
+    _targets = [..._targets] //
+    if (_targets.some((el) => el.classList.contains('vxe-body--row'))) {
+      return
+    }
+    this.clearEditCell() //
   }
   async onBodyCellContext(config) {
     let event: MouseEvent = config.event
@@ -842,5 +928,115 @@ export class XeTable extends Base {
       return
     }
     contextmenu.open(event) //
+  }
+  getTreeConfig() {
+    let config = this.config //
+    let treeConfig = config.treeConfig //
+    let id = treeConfig?.id
+    let parentId = treeConfig?.parentId
+    if (id == null || parentId == null) {
+      return null
+    }
+    let obj = {
+      //
+      rowField: id,
+      parentField: parentId,
+    }
+    return obj
+  }
+  onSortClick(config) {
+    console.log(config, 'testSortConfig') //
+  }
+  onFilterIconClick(config) {
+    // console.log(config, 'testConfig') //
+    let column = config.column.params
+    this.curContextCol = column
+    this.openColumnFilter(config)
+  }
+  openColumnFilter(config) {
+    let _this = reactive(this)
+    let ins = _this.getInstance()
+    let curContextCol = _this.curContextCol
+    let field = curContextCol.getField()
+    let tColumn = curContextCol
+    let width = tColumn.getColumnWidth()
+    _this.columnFilterConfig.width = width + 64 //
+    if (_this.columnFilterConfig.width < 300) {
+      _this.columnFilterConfig.width = 300 //
+    }
+    // let event = config.event
+    let client: MouseEvent = config.event
+    let x = client.clientX
+    let y = client.clientY //
+    let oldColumnFilter = _this.currentFilterColumn
+    _this.currentFilterColumn = tColumn //
+    _this.columnFilterConfig.x = x
+    _this.columnFilterConfig.y = y //
+    const pulldownMenu: Dropdown = _this.getRef('columnDropdown')
+    if (pulldownMenu == null) {
+      return
+    }
+    _this.permission.canCloseColumnFilter = false
+    if (_this.timeout['closeColumnFilter']) {
+      clearTimeout(this.timeout['closeColumnFilter'])
+      _this.timeout['closeColumnFilter'] = null
+    } //
+    _this.timeout['closeColumnFilter'] = setTimeout(() => {
+      _this.permission.canCloseColumnFilter = true
+    }, 200)
+    nextTick(() => {
+      pulldownMenu.showDropdown() //
+      nextTick(() => {
+        const filterTable: Table = _this.getRef('columnFilterTable')
+        let _config = [tColumn].map((col) => {
+          return col.config
+        })
+        let _data = this.getInstance().getData()
+        let _d = _this.getFlatTreeData(_data) //
+        _data = _d //
+        if (oldColumnFilter != null && oldColumnFilter === tColumn) {
+          return //
+        }
+        let _data1 = [
+          //
+          ..._data.map((row) => {
+            let obj = {
+              ...row, //
+              //@ts-ignore
+              [field]: row[field], //
+              //@ts-ignore
+              _value: row[field],
+            }
+            return obj //
+          }),
+        ]
+        let _data2 = _data1.filter((item, i) => {
+          let _value = item._value
+          return _data1.findIndex((item1) => item1._value == _value) == i
+        })
+        _config = _.cloneDeep(_config) //
+        let col0 = _config[0]
+        if (width < 240) {
+          col0.width = 240 //
+        }
+        if (filterTable == null) {
+          return //
+        }
+        if (!filterTable.setColumns) {
+          return //
+        }
+        filterTable.setColumns(_config) ////
+        filterTable.setData(_data2) //
+      })
+    })
+  } //
+  getShowFilterTable() {
+    let config = this.config
+    let showFilterTable = config.showColumnFilterTable
+    return showFilterTable
+  }
+  getTableState() {
+    let tableState = this.tableState //
+    return tableState //
   }
 }

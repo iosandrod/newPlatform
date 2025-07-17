@@ -5,6 +5,8 @@ import {
   onMounted,
   onUnmounted,
   ref,
+  watch,
+  watchEffect,
   withDirectives,
 } from 'vue'
 import { XeColumn } from './xecolumn'
@@ -59,7 +61,7 @@ export default defineComponent({
     onMounted(() => {}) //
     onUnmounted(() => {}) //
     let mousedownFn = (e: MouseEvent) => {}
-    let root = null
+    let root = ref(null)
     let startX = 0
     let startY = 0
     let dragging = false
@@ -85,36 +87,71 @@ export default defineComponent({
       let value = record.value[f]
       return value
     }) //
-    const inputBind = computed(() => {
-      let _editType = editType.value
-      let bind = columnTypeMap[_editType]
-      if (typeof bind == 'function') {
-        return bind(column, record.value)
+
+    const isCurrentRow = computed(() => {
+      const tableData = table.tableData
+      let curRow = tableData.curRow
+      if (curRow?.['_index'] == record.value['_index']) {
+        return true
       }
-      return {}
+      return false //
     })
-    let inputRef = ref(null)
-    const registerEditRef = (el) => {
-      inputRef.value = el //
-      if (el != null) {
-        let _ins = el?._instance || el
-        if (_ins != null) {
-          nextTick(() => {
-            table.onEditCellMounted({
-              instance: _ins,
-              column: column,
-              row: record.value,
-            }) //
-          })
+    const registerRoot = (el) => {
+      root.value = el
+      if (root.value == null) {
+        return
+      } //
+      addCurRowClass(isCurrentRow.value)
+    }
+    const addCurRowClass = (bool) => {
+      //
+      if (root.value == null) {
+        return
+      }
+      if (bool) {
+        root.value.classList.add('xe-table-current-row')
+      } else {
+        root.value.classList.remove('xe-table-current-row')
+      }
+      if (column.getIsTree()) {
+        let treeNode = table
+          .getAllParentDivs(root.value)
+          .find((el) => el.classList.contains('vxe-cell--tree-node'))
+        if (treeNode) {
+          if (bool) {
+            treeNode.classList.add('xe-table-current-row')
+          } else {
+            treeNode.classList.remove('xe-table-current-row')
+          } //
         }
       }
-    }
+    } //
+    onMounted(() => {
+      addCurRowClass(isCurrentRow.value) //
+    })
+    watch(
+      () => isCurrentRow.value,
+      (newVal) => {
+        addCurRowClass(newVal) //
+      },
+    )
     return () => {
       let com = null
       if (type == 'checkbox') {
         //
         com = (
-          <div class="w-full flex h-full justify-center items-center">
+          <div
+            onClick={(e) => {
+              e.stopPropagation()
+              column
+                .getTable()
+                .onCheckboxChange({ ...config, checked: !props.checked })
+            }}
+            ref={(el) => {
+              registerRoot(el)
+            }} //
+            class="w-full flex h-full justify-center items-center cursor-pointer"
+          >
             <vxe-checkbox
               onChange={(e) => {
                 let checked = e.checked //
@@ -125,11 +162,13 @@ export default defineComponent({
           </div>
         )
       } else if (type == 'default') {
+        let style = column.getCellStyle({ row: record.value })
         com = (
           <div
-            class="h-full w-full flex items-center justify-center"
+            class=""
+            style={style} //
             ref={(el) => {
-              root = el
+              registerRoot(el)
             }} //
             onMousedown={(e: MouseEvent) => {
               onMouseDown(e) //
@@ -153,13 +192,24 @@ export default defineComponent({
             )
           } //
           if (editCom != null) {
-            com = withDirectives(<div class="h-full w-full">{editCom}</div>, [
+            //
+            com = withDirectives(
+              <div
+                ref={(el) => {
+                  registerRoot(el)
+                }}
+                class="h-full w-full my-class"
+              >
+                {editCom}
+              </div>,
               [
-                {
-                  unmounted: () => {},
-                },
+                [
+                  {
+                    unmounted: () => {},
+                  },
+                ],
               ],
-            ])
+            )
           }
         } //
       }

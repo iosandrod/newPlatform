@@ -236,7 +236,7 @@ export default defineComponent({
             }}
             // treeConfig={null}
             // showControllerButtons={true}
-            tableState="edit"
+            tableState="scan"
           ></tableCom>
         </div>
       ) //
@@ -245,8 +245,17 @@ export default defineComponent({
         editType: 'date',
       }) ////
       com = (
-        <div class="er-h-400 er-w-600"> 
-          <erXeTable columns={xeTableColumns} data={xeTableData}></erXeTable>
+        <div class="er-h-400 er-w-600">
+          <erXeTable
+            treeConfig={{
+              id: 'id',
+              parentId: 'pid', //
+              root: '0',
+            }} //
+            columns={xeTableColumns}
+            data={xeTableData}
+            tableState="scan"
+          ></erXeTable>
         </div>
       )
       let _com = (

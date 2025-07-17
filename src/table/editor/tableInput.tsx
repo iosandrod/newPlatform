@@ -78,30 +78,30 @@ export default defineComponent({
     let inputIns = ref(null)
     const insRef = (ins: any) => {
       inputIns.value = ins?._instance || ins
-      // column.registerRef('input', ins)
+      column.registerRef('input', ins)
     } //
     onMounted(() => {
       // debugger//
-      if (table.getEditType() == 'cell') {
-        if (typeof inputIns.value?.focus == 'function') {
-          inputIns.value.focus() //
-        }
-      }
-      if (table.getEditType() == 'row') {
-        if (typeof inputIns.value?.focus == 'function') {
-          let editConfig = table.editConfig
-          if (editConfig.currentEditField == column.getField()) {
-            inputIns.value.focus() //
-          }
-        }
-      }
+      // if (table.getEditType() == 'cell') {
+      //   if (typeof inputIns.value?.focus == 'function') {
+      //     inputIns.value.focus() //
+      //   }
+      // }
+      // if (table.getEditType() == 'row') {
+      //   if (typeof inputIns.value?.focus == 'function') {
+      //     let editConfig = table.editConfig
+      //     if (editConfig.currentEditField == column.getField()) {
+      //       inputIns.value.focus() //
+      //     }
+      //   }
+      // }
     })
     onUnmounted(() => {
-      if (table.getEditType() == 'cell') {
-        //
-        column.cacheValue = null
-        column.isChangeValue = false
-      }
+      // if (table.getEditType() == 'cell') {
+      //   //
+      //   column.cacheValue = null
+      //   column.isChangeValue = false
+      // }
     })
     let type = column.getEditType()
     if (props.row == props.column.config) {

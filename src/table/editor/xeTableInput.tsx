@@ -201,17 +201,14 @@ export default defineComponent({
           </div>
         )
       }
-      if (type == 'boolean') {
+      if (type == 'boolean' || type == 'bool') {
         com = (
           <div
             style={{ width: '100%', height: '100%' }}
             class="flex flex-row justify-center items-center"
           >
             <CheckboxCom
-              modelValue={modelValue.value}
-              onChange={(v) => {
-                updateValue(v)
-              }} //
+              {...bindConfig.value} //
               disabled={false}
             ></CheckboxCom>
           </div>

@@ -440,3 +440,15 @@ z-index: 200;
     width: 100%;
   }
 }
+.vxe-cell--tree-node{
+  width: 100%;
+}
+.vxe-tree-cell{
+  height:100%;
+  width: 100%;
+}
+
+
+.xe-table-current-row{
+  background-color: RGB(248, 248, 249) !important;
+}

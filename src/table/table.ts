@@ -46,7 +46,7 @@ import { combineAdjacentEqualElements } from '@ER/utils'
 import { VxeInputEvents, VxeInputProps } from 'vxe-table'
 import { VxeInputEventProps } from 'vxe-pc-ui'
 import { Dropdown } from '@/menu/dropdown'
-import { useRunAfter, useTimeout } from '@ER/utils/decoration'
+import { cacheValue, useRunAfter, useTimeout } from '@ER/utils/decoration'
 import { createFooterTheme, createTheme } from './tableTheme' //
 import tableCom from './tableCom'
 import { createGroup, createText, Text } from '@visactor/vtable/es/vrender'
@@ -331,6 +331,21 @@ export class Table extends Base {
       dOrder = null
     }
     return dOrder
+  }
+  @cacheValue()
+  getTreeConfig() {
+    let config = this.config //
+    let treeConfig = config.treeConfig //
+    let id = treeConfig?.id
+    let parentId = treeConfig?.parentId
+    if (id == null || parentId == null) {
+      return null
+    }
+    let obj = {
+      rowField: id,
+      parentField: parentId,
+    }
+    return obj //
   }
   getDragFn() {
     let fn = (start, end) => {
@@ -3466,5 +3481,4 @@ export class Table extends Base {
   showScreenPhoto(imageData) {
     this.getSystem().showScreenPhoto(imageData) //
   }
-  
 }

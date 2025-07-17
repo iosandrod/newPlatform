@@ -704,7 +704,7 @@ export class Column extends Base {
     if (this.getIsBaseInfo()) {
       this.openBaseInfoTable()
     }
-  }
+  } //
   getIsBaseInfo() {
     let type = this.getEditType() //
     return type == 'baseinfo'

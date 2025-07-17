@@ -45,6 +45,8 @@ export class XeColumn extends Column {
   getColumnProps() {
     let config = this.config
     const slots = this.getSlots()
+    let isTree = this.getIsTree()
+
     let obj: VxeColumnProps & { order: number } = {
       ...config,
       width: this.getColumnWidth(),
@@ -52,6 +54,7 @@ export class XeColumn extends Column {
       params: this,
       order: this.getOrder(),
       align: 'center',
+      treeNode: isTree, //
     } //
     return obj
   }
@@ -131,5 +134,35 @@ export class XeColumn extends Column {
       return 1
     }
     return 0 //
+  }
+  getAlign() {
+    let a = this.config.align
+    if (['left', 'center', 'right'].includes(a)) {
+      return a
+    }
+    return 'center' //
+  }
+  getCellStyle(config) {
+    let isTree = this.getIsTree()
+    let style: any = {
+      height: '100%',
+      display: 'flex',
+      width: '100%',
+      alignItems: 'center',
+      position: 'relative',
+    }
+    if (isTree == true) {
+      style.justifyContent = 'flex-start'
+    } else {
+      let align = this.getAlign()
+      if (align == 'left') {
+        style.justifyContent = 'flex-start'
+      } else if (align == 'center') {
+        style.justifyContent = 'center'
+      } else if (align == 'right') {
+        style.justifyContent = 'flex-end'
+      }
+    } //
+    return style
   }
 }

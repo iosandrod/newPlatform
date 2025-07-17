@@ -25,6 +25,7 @@ import { VxeGrid as myVxeGrid } from '@/vxegrid'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 import tableMenuCom from './tableMenuCom'
+import TableFilterCom from './tableFilterCom'
 export default defineComponent({
   name: 'XeTableCom',
   components: {
@@ -104,8 +105,7 @@ export default defineComponent({
     showGlobalSearch: {
       type: Boolean,
       default: false, //
-    },
-
+    }, //
     showRowSeriesNumber: {
       type: Boolean,
       default: true,
@@ -262,6 +262,9 @@ export default defineComponent({
       //
       tableIns.onMounted() //
     })
+    watchEffect(() => {
+      tableIns.tableState = props.tableState //
+    })
     watch(
       () => props.columns,
       (newV) => {
@@ -389,7 +392,12 @@ export default defineComponent({
       }
       let filterTCom = null
       if (props.showColumnFilterTable) {
-        // filterTCom = <TableFitlerCom tableIns={tableIns}></TableFitlerCom>
+        filterTCom = (
+          <TableFilterCom
+            isVxeTable={true}
+            tableIns={tableIns}
+          ></TableFilterCom>
+        )
       }
       // const inputProps = tableIns.getGlobalSearchProps()
       let globalSearchInput = withDirectives(
@@ -479,6 +487,7 @@ export default defineComponent({
             onCellClick={(e) => {
               tableIns.onCellClick(e)
             }}
+            treeConfig={tableIns.getTreeConfig()}
           ></myVxeGrid>
           {/* <vxe-grid
             checkboxConfig={tableIns.getCheckboxConfig()}
@@ -503,13 +512,13 @@ export default defineComponent({
             if (isCClick == true) {
               return
             }
-            tableIns.onBodyClick(e) //
+            tableIns.onBodyClick({ event: e }) //
           }}
           ref={registerBodyDiv} //
           style={{
-            flex: 1,
+            flex: 1, //
             width: '100%', //
-            overflow: 'hidden',
+            overflow: 'hidden', //
             position: 'relative',
             display: 'flex',
             flexDirection: 'column', //
