@@ -25,6 +25,7 @@ import { SearchPageDesign } from './searchPageDesign'
 import { useTimeout } from './utils/decoration'
 import { platform } from 'os'
 import { VxeFormDefines, VxeFormItem, VxeFormItemProps } from 'vxe-pc-ui'
+import xeTableCom from '@/table/xeTableCom'
 
 export type FormOptions = {
   items: Field[]
@@ -979,15 +980,17 @@ export class FormItem extends Base {
     if (!Array.isArray(value)) {
       value = [] //
     }
-    let table = new Table(tableConfig) //
-    table.setTableState('edit') //
-    table.setData(value) //
+    // let table = new Table(tableConfig) //
+    // table.setTableState('edit') //
+    // table.setData(value) //
     let createFn = () => {
       //
       return {
-        component: tableCom,
+        component: xeTableCom,
         props: {
-          tableIns: table, //
+          ...tableConfig,
+          tableState: 'edit',
+          data: value, //
         },
       }
     } //
@@ -996,7 +999,8 @@ export class FormItem extends Base {
       width: 1200,
       createFn, //
       confirmFn: (dialog: Dialog) => {
-        let data = table.getData()
+        // let data = table.getData()
+        let data = dialog.getRef('innerCom').getData() //
         this.updateBindData({ value: data }) //
       },
     })

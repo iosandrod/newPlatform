@@ -146,6 +146,9 @@ export function useRunAfter(config?: any) {
     if (isAsyncFunction(oldFn)) {
       descriptor.value = async function (...args) {
         let result = await oldFn.apply(this, args)
+        // if (key == 'updateCanvas') {
+        //   debugger //
+        // }
         await this.runAfter({
           methodName: key, //
         })

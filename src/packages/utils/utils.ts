@@ -168,7 +168,6 @@ export function useKeyboard(
   onMounted(() => {
     combos.forEach((combo) => {
       const handler = (e: keyboardJS.Event) => {
-        e.preventDefault()
         callback(e)
       }
       keyboardJS.bind(combo, handler)

@@ -38,12 +38,17 @@ export default defineComponent({
   }, //
   setup(props) {
     let config = props.config //
+    let _type = config.column.type
     let column: XeColumn = config.column.params //
     let table: XeTable = column.getTable() as any //
     let record = computed(() => {
       return props.row //
     })
     let showValue = computed(() => {
+      let _v = ''
+      if (_type == 'seq') {
+        return config.seq //
+      }
       let format = column.getFormat() //
       if (typeof format == 'function') {
         let v = format({
@@ -53,9 +58,9 @@ export default defineComponent({
           column: column, //
         })
         // console.log(v, 'testV') //
-        return v //
+        _v = v //
       } //
-      return '' //
+      return _v //
     }) //
 
     onMounted(() => {}) //
@@ -165,7 +170,7 @@ export default defineComponent({
         let style = column.getCellStyle({ row: record.value })
         com = (
           <div
-            class=""
+            class="whitespace-nowrap"
             style={style} //
             ref={(el) => {
               registerRoot(el)

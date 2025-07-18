@@ -39,6 +39,8 @@ import { staticCom } from './pages/erp/design/staticCom'
 import { ganttStaticCom } from './pages/gantt/admin/ganttStaticCom'
 import platfomrStaticCom from './pages/platform/admin/platfomrStaticCom'
 import { globalStaticCom } from './globalStaticCom'
+import xeTableCom from './table/xeTableCom'
+import { XeTable } from './table/xetable'
 const staticComMap = {
   erp: staticCom,
   gantt: ganttStaticCom,
@@ -317,7 +319,7 @@ export class System extends Base {
         fn, //
       })
     }
-    router.push(`/${tableName}`) //
+    router.push(`/admin/${tableName}`) //
   }
   async createPageSearchDesign(
     config?: { tableName: string } | string,
@@ -620,13 +622,15 @@ export class System extends Base {
       if (tableConfig.showCheckboxColumn == null) {
         tableConfig.showCheckboxColumn = true //
       }
-      let _table = new Table(tableConfig) //
-      let component = tableCom
+      // let _table = new Table(tableConfig) //
+      // let component = tableCom
       let createFn = () => {
+        //
         return {
-          component: component,
+          component: xeTableCom,
           props: {
-            tableIns: _table,
+            showHeaderButtons: true, //
+            ...tableConfig,
           },
         }
       } //
@@ -639,6 +643,7 @@ export class System extends Base {
         width: _width || 600,
         height: _height || 400, //
         confirmFn: async (dialog: Dialog) => {
+          let _table: XeTable = dialog.getRef('innerCom') //
           let _data = _table.getData()
           let _confirmFn = tableConfig.confirmFn //
           let requiredValidate = tableConfig.requiredValidate

@@ -1,7 +1,9 @@
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, withDirectives } from 'vue'
 import { XeColumn } from './xecolumn'
 import { table } from 'console'
 import { XeTable } from './xetable'
+import InputCom from '@/input/inputCom'
+import { ClickOutside } from 'element-plus'
 
 export default defineComponent({
   name: 'XeColHeaderCom', //
@@ -19,6 +21,7 @@ export default defineComponent({
     if (typeof config.checked == 'boolean') {
       type = 'checkbox'
     } //
+    let _type = config.column.type
     let column: XeColumn = config.column.params
     let table: XeTable = column.getTable()
     const sortIconArr = ref(null)
@@ -30,6 +33,7 @@ export default defineComponent({
       if (hiddenTimeout) {
         clearTimeout(hiddenTimeout) //
       }
+      column.setShowDragIcon(true)
       if (sortIconArr.value) {
         sortIconArr.value.classList.remove('hidden')
         sortIconArr.value.classList.add('flex')
@@ -44,6 +48,7 @@ export default defineComponent({
     const mouseoutFn = () => {
       hiddenTimeout = setTimeout(() => {
         hiddenTimeout = null //
+        column.setShowDragIcon(false) //
         if (sortIconArr.value) {
           sortIconArr.value.classList.remove('flex')
           sortIconArr.value.classList.remove('flex-col')
@@ -123,8 +128,47 @@ export default defineComponent({
             {filterIcon}
           </div>
         )
+        if (_type == 'seq') {
+          iconArr = null //
+        }
+        let showCom = <div>{column.getTitle()}</div>
+        if (column.isEditTitle == true) {
+          let v = column.getTitle()
+          showCom = withDirectives(
+            <div class="er-h-30">
+              <InputCom
+                onChange={(value) => {
+                  column.setTemplateTitle(value) //
+                }}
+                autoFocus={true} //
+                onBlur={() => {
+                  column.setTitle(column.templateTitle) //
+                  column.isEditTitle = false //
+                  column.templateTitle = '' //
+                }}
+                modelValue={v}
+              ></InputCom>
+            </div>,
+            [
+              //
+              [
+                {
+                  mounted: (el) => {
+                    column.templateTitle = column.getTitle()
+                  },
+                  unmounted: (el) => {
+                    column.setTitle(column.templateTitle) //
+                  },
+                },
+              ],
+            ],
+          )
+        }
         com = (
           <div
+            onDblclick={(e) => {
+              table.startEditColumnTitle({ ...config, event: e })
+            }}
             onContextmenu={(e) => {
               table.onHeaderCellContext({
                 ...config,
@@ -139,7 +183,7 @@ export default defineComponent({
             }}
             class="h-full w-full flex items-center justify-center"
           >
-            <div>{column.getTitle()}</div>
+            {showCom}
             {iconArr}
           </div>
         )

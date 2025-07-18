@@ -48,8 +48,10 @@ import {
 } from './columnFn'
 import { SearchPageDesign } from '@ER/searchPageDesign'
 import { Input } from '@/input/inputClass'
+import { useTimeout } from '@ER/utils/decoration'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox'] //
 export class Column extends Base {
+  showDragIcon = false
   templateTableConfig = {
     columns: [],
     data: [],
@@ -651,6 +653,9 @@ export class Column extends Base {
       width = 200
     }
     return width
+  }
+  getShowDragIcon() {
+    let showDragIcon = this.showDragIcon
   }
   async updateBindValue(config) {
     let value = config.value //值
@@ -1277,6 +1282,42 @@ export class Column extends Base {
     } else {
       return reactive(table) //
     }
+  }
+  @useTimeout({ number: 500, key: 'getTinyTableSearchData' }) //
+  async getTinyTableSearchData(config) {
+    let value = config.value //
+    let _options = this._getBaseinfoConfig()
+    let searchEn = await this.getSearchEn() //
+    // let searchColumns = _options?.searchColumns || [] //
+    // let query: any = {}
+    // if (
+    //   Array.isArray(searchColumns) &&
+    //   searchColumns.length > 0 &&
+    //   value?.length > 0
+    // ) {
+    //   let obj = {}
+    //   for (const field of searchColumns) {
+    //     obj[field] = {
+    //       $like: `%${value}%`, //
+    //     }
+    //   }
+    //   let _arr = Object.entries(obj).map(([key, value]) => {
+    //     return {
+    //       [key]: value,
+    //     }
+    //   })
+    //   query = { $or: _arr }
+    // } //
+    // // console.log(query, 'query') //
+    // let _data = await searchEn.getTinyTableData({ query }) //
+    // // console.log(_data, 'getTinyTableSearchData')//
+    // this.templateTableConfig.data = _data //
+  }
+  async getSearchEn(tableName?: string) {
+    let sys = this.getSystem()
+    tableName = tableName || this._getBaseinfoConfig().tableName //
+    let searchEn: SearchPageDesign = await sys.createPageSearchDesign(tableName)
+    return searchEn
   }
   getFontSize() {
     return 16

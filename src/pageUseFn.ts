@@ -53,7 +53,12 @@ export const mainUse = {
       }
       queryArr.push(...searchWhere) //
       //处理左侧树的查询条件
-      let relateArr = await instance.getRelateSearchWheres()
+      let relateArr = []
+      try {
+        relateArr = await instance.getRelateSearchWheres()
+      } catch (error) {
+        return //
+      }
       // console.log(relateArr, 'relateArr') ////
       if (relateArr.length > 0) {
         queryArr.push(...relateArr) //

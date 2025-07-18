@@ -113,9 +113,12 @@ export class MainPageDesign extends PageDesign {
     let tableName = this.getTableName()
     let pageEditType = config.pageEditType
     if (pageEditType == 'page') {
-      system.routeOpen(`${tableName}---edit`, async (d: editPageDesign) => {
-        await d.addMainTableRow(addConfig) //
-      })
+      system.routeOpen(
+        `${tableName}---edit`,
+        async (d: editPageDesign) => {
+          await d.addMainTableRow(addConfig) //
+        },
+      )
     }
     if (pageEditType == 'default') {
       await this.addTableRows(addConfig) //

@@ -1,4 +1,4 @@
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, onMounted, PropType } from 'vue'
 import VxeInput from 'vxe-pc-ui/packages/input'
 import { Input } from './inputClass'
 import { VxeInputPropTypes, getConfig } from 'vxe-table'
@@ -216,12 +216,18 @@ export default defineComponent({
     let registerDropdown = (el) => {
       _input.registerRef('dropdown', el) //
     }
+    onMounted(() => {
+      if (props.autoFocus == true) {
+        _input.focus() //
+      }
+    })
     expose({ _instance: _input })
     return () => {
       let com = (
         <div class="h-full w-full flex">
           <VxeInput
             ref={register}
+            autoFocus={props.autoFocus}
             style={{
               //
               flex: 1,

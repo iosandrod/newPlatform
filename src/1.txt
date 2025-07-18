@@ -15318,3 +15318,66 @@ let isCurrentEdit = computed(() => {
     // if (isTree == true) {
     //   debugger //
     // }
+
+    // tableIns.expandTargetRows(newData) //
+                // setTimeout(() => {
+                // }, 300)
+                  // let d = tableIns.getInstance().getData() //
+                  // console.log(d, 'testData') //
+
+                  // tableIns.addAfterMethod({
+            //   methodName: 'updateCanvas',
+            //   key: 'firstExpand',
+            //   fn: () => {
+            //     console.log(tableIns.tableData.data == newData, 'fjsfslf') //
+            //     tableIns.expandTargetRows(newData)
+            //   }, //
+            // })
+
+             {/* <button
+              onClick={() => {
+                console.log(_reg2.value, 'testReg2') //
+              }}
+            >
+              测试1
+            </button> */}
+
+             com = (
+        <div style={{ height: `${_data.height}px`, width: `100%` }}>
+          <tableCom
+            // {...tableConfig}
+            {...menuTConfig}
+            contextItems={[
+              {
+                label: '添加菜单',
+                fn: async (config) => {
+                  // console.log('添加菜单') //
+                  // console.log(config, 'testConfig') //
+                  let p: Table = config.parent //
+                  let curContextRow = p.curContextRow
+                  let pid = curContextRow?.pid
+                  if (pid == null) {
+                    return
+                  }
+                },
+              },
+              {
+                label: '添加子菜单', //
+                fn: async () => {
+                  console.log('添加子菜单') //
+                },
+              },
+            ]} //
+            showGlobalSearch={true}
+            enableDragColumn={true} //
+            showHeaderButtons={true}
+            enableDragRow={true} //
+            dragRowFn={(config) => {
+              return true //
+            }}
+            // treeConfig={null}
+            // showControllerButtons={true}
+            tableState="scan"
+          ></tableCom>
+        </div>
+      ) //

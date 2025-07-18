@@ -26,6 +26,8 @@ import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import buttonGroupCom from '@/buttonGroup/buttonGroupCom'
 import tableMenuCom from './tableMenuCom'
 import TableFilterCom from './tableFilterCom'
+import { XeColumn } from './xecolumn'
+import { overflow } from 'html2canvas/dist/types/css/property-descriptors/overflow'
 export default defineComponent({
   name: 'XeTableCom',
   components: {
@@ -33,6 +35,7 @@ export default defineComponent({
     ContextmenuCom,
     buttonGroupCom,
     tableMenuCom, //
+    TableButtonCom, //
   },
   props: {
     ...tProps, //
@@ -251,6 +254,9 @@ export default defineComponent({
     //   },
     //   { eventName: 'keyup' },
     // )//
+    useKeyboard('enter', (e) => {
+      tableIns.clearEditCell() //
+    })
     useKeyboard('ctrl+c', (e) => {
       let root = tableIns.getRef('root')
       let focusDiv = document.activeElement
@@ -281,7 +287,6 @@ export default defineComponent({
       tableIns.onUnmounted()
     })
     watchEffect(() => {
-      console.log(props.columns, 'fsfs')
       tableIns.loadColumns()
     })
     watchEffect(() => {
@@ -308,7 +313,41 @@ export default defineComponent({
         tableIns.updateColumns()
       },
     ) //
-
+    let state = true
+    watch(
+      () => {
+        return tableIns.templateProps.data //
+      },
+      (newValue, oldValue) => {
+        tableIns.updateCanvas()
+        if (state) {
+          state = false //
+          let treeConfig = props.treeConfig
+          let expand = treeConfig?.expand
+          if (tableIns.getIsTree()) {
+            if (expand == 'all' || props.expandAll == true) {
+              tableIns.updateCanvas().then((res) => {
+                tableIns
+                  .getInstance()
+                  .loadData(tableIns.templateProps.data)
+                  .then(() => {
+                    tableIns.expandAllTreeRow() //
+                  })
+              })
+            } else if (expand == 'first') {
+              tableIns.updateCanvas().then((res) => {
+                tableIns
+                  .getInstance()
+                  .loadData(tableIns.templateProps.data)
+                  .then(() => {
+                    tableIns.expandTargetRows(tableIns.templateProps.data) //
+                  })
+              })
+            }
+          }
+        }
+      }, //
+    )
     watch(
       () => {
         return [props.data, props.data?.length]
@@ -321,13 +360,30 @@ export default defineComponent({
           tableIns.setData(newData)
           let treeConfig = props.treeConfig
           let expand = treeConfig?.expand
-          if (expand == 'all') {
-            nextTick(() => {
-              tableIns.expandAllTreeRow()
-            })
-          }
-          if (expand == 'first') {
-            tableIns.expandTargetRows(newData) //
+          if (tableIns.getIsTree()) {
+            if (expand == 'all' || props.expandAll == true) {
+              tableIns.updateCanvas().then((res) => {
+                if (tableIns.tableData.data == newData) {
+                  tableIns
+                    .getInstance()
+                    .loadData(tableIns.templateProps.data)
+                    .then(() => {
+                      tableIns.expandAllTreeRow() //
+                    })
+                }
+              })
+            } else if (expand == 'first') {
+              tableIns.updateCanvas().then((res) => {
+                if (tableIns.tableData.data == newData) {
+                  tableIns
+                    .getInstance()
+                    .loadData(tableIns.templateProps.data)
+                    .then(() => {
+                      tableIns.expandTargetRows(newData) //
+                    })
+                }
+              })
+            }
           }
         } else {
           newData.forEach((row) => {
@@ -350,7 +406,6 @@ export default defineComponent({
     let bodyStyle: any = reactive({
       minHeight: '200px', //
     })
-    // vShow, tableIns.globalConfig.show
     watch(
       () => tableIns.globalConfig.show,
       (e) => {
@@ -364,10 +419,9 @@ export default defineComponent({
             let bound = sRef.getBoundingClientRect()
             if (e == true) {
               let _height = Math.round(bound.height)
-              let _height1 = _height - 40
+              let _height1 = _height - 34
               bodyStyle.flex = ''
               bodyStyle.height = `${_height1}px !important`
-              // bodyStyle.display = 'none' //
             } else {
               bodyStyle.flex = 1 //
               bodyStyle.height = '100%' //
@@ -467,22 +521,49 @@ export default defineComponent({
             height: '100%',
             minHeight: '200px',
             position: 'relative',
+            overflow: 'hidden', //
           }}
           ref={registerRootDiv}
         >
           {cellSelectCom}
           <myVxeGrid
+            editRules={tableIns.getEditRules()} //
+            onCellDblclick={(e) => {
+              tableIns.onCellDblclick(e) //
+            }}
+            mouseConfig={tableIns.getMouseConfig()}
+            onResizableChange={(e) => {
+              tableIns.onColumnResize(e)
+            }}
+            onColumnDragend={(e) => {
+              tableIns.onColumnDragEnd(e)
+            }}
+            columnDragConfig={tableIns.getColumnDragConfig()}
+            columnConfig={tableIns.getColumnConfig()} //
             checkboxConfig={tableIns.getCheckboxConfig()}
             virtualXConfig={tableIns.getVirtualXConfig()}
             headerCellConfig={tableIns.getHeaderCellConfig()}
             virtualYConfig={tableIns.getVirtualYConfig()}
-            height={'auto'}
-            class="h-full w-full"
+            height={tableIns.getTableHeight()}
+            class="h-full w-full overflow-hidden"
             ref={(el) => {
               tableIns.registerRef('xeGrid', el)
             }} //
             cellConfig={tableIns.getCellConfig()}
-            v-slots={{}}
+            v-slots={{
+              columnDragIcon: (config) => {
+                let _column: XeColumn = config.column.params
+                let showDragIcon = _column.getShowDragIcon()
+                let style = {
+                  display: showDragIcon ? 'block' : 'none',
+                }
+                return (
+                  <div class="absolute left-0" style={style}>
+                    <i class="vxe-table-icon-drag-handle"></i>
+                  </div>
+                )
+              },
+            }}
             cellClassName={'h-full w-full'}
             onCellClick={(e) => {
               tableIns.onCellClick(e)
@@ -561,6 +642,7 @@ export default defineComponent({
             flexDirection: 'column',
             position: 'relative',
             boxSizing: 'border-box',
+            overflow: 'hidden', //
           }}
         >
           {loadingCom}

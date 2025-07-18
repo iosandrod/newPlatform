@@ -106,7 +106,6 @@ export class Base {
     for (const key of keys) {
       this.unregisterRef(key) //
     }
-    
   }
   getRef(key: any) {
     // return this.refPool[this._refPool[key]]//
@@ -132,19 +131,87 @@ export class Base {
     let after = method.after || []
     return after
   }
-  runAfter(config?: any) {
+  addMethod(config) {
+    // debugger //
+    if (config == null) {
+      return //
+    }
+    let cacheMethod = this.cacheMethod
+    let methodName = config.methodName
+    let type = config.type
+    let obj = cacheMethod[methodName]
+    let fn = config.fn
+    let key = config.key
+    if (['before', 'after'].indexOf(type) == -1) {
+      return
+    }
+    let _arr = null
+    if (obj == null) {
+      obj = {
+        before: [],
+        after: [],
+      }
+      let arr = obj[type] //
+      cacheMethod[methodName] = obj
+      _arr = arr
+      // arr.push(config) //
+      return
+    } else {
+      let arr = obj[type]
+      // arr.push(config) //
+      _arr = arr
+    }
+    if (key != null && typeof key === 'string') {
+      let _config = _arr.find((item) => item.key === key)
+      if (_config) {
+        let nextFn = _config.nextFn
+        if (!Array.isArray(nextFn)) {
+          nextFn = []
+          _config.nextFn = nextFn
+        }
+        nextFn.push(fn) //
+      } else {
+        _arr.push(config) //
+      }
+    } else {
+      _arr.push(config) //
+    }
+  }
+  async runAfter(config?: any) {
     if (config == null) {
       return
     }
-    let methodName = config.methodName //
+
+    let methodName = config.methodName
+    if (methodName == 'updateCanvas') {
+    }
     let after = this.getAfterMethod(methodName)
+    let _arr1 = []
     for (const fn of after) {
-      fn(config) //
+      if (typeof fn == 'function') {
+        await fn(config) //
+      }
+      if (typeof fn == 'object' && !Array.isArray(fn)) {
+        let _fn = fn.fn
+        if (typeof _fn == 'function') {
+          await _fn(config) //
+        }
+        let nextFn = fn.nextFn
+        if (Array.isArray(nextFn)) {
+          _arr1.push(...nextFn) //
+        }
+      }
+      if (Array.isArray(fn)) {
+        _arr1.push(...fn) //
+      }
     }
     this.clearAfter(methodName) //
+    _arr1.forEach((fn) => {
+      this.addMethod(fn) //
+    })
     let staticAfter = this.getAfterMethod(methodName, true)
     for (const fn of staticAfter) {
-      fn(config)
+      await fn(config)
     } //
   }
   clearAfter(name: string) {
@@ -213,8 +280,8 @@ export class Base {
     } catch (error) {}
     return _item //
   }
-  getEnvValue(key){
-    let _v=import.meta.env[key]
+  getEnvValue(key) {
+    let _v = import.meta.env[key]
     return _v
   }
 } //

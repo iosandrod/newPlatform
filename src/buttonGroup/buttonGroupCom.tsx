@@ -102,7 +102,7 @@ export default defineComponent({
         let disabled = btn.getDisabled()
         let _class = ['er-h-32', 'items-center', 'flex']
         let _class1 = [
-          'h-full w-full er-pl-10 er-pr-10  rounded-md bg-blue-100 text-blue-700 text-sm hover:bg-blue-200 transition',
+          'h-full w-full er-pl-10 er-pr-10  rounded-md custom-button',
         ]
         let dIcon = null
         if (btn?.buttons?.length > 0) {

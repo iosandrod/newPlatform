@@ -79,21 +79,21 @@ export const booleanType = (item: XeColumn, row) => {
   obj.disabled = item.getDisabled() //
   return obj
 }
-export const sformType = (item: FormItem) => {
-  let obj = defaultType(item) //
+export const sformType = (item: XeColumn,row) => {
+  let obj = defaultType(item,row) //
   obj.onChange = (config) => {}
   obj.readonly = true //
   obj.clearable = false //
   obj.modelValue = 'object'
   return obj
 }
-export const baseinfoType = (item: FormItem) => {
-  let obj = defaultType(item) //
+export const baseinfoType = (item: XeColumn,row) => {
+  let obj = defaultType(item,row) //
   obj.onChange = (config) => {}
   obj.clearable = true
   obj.onInput = (config) => {
     let value = config.value
-    item.updateBindData({ value }) //
+    item.updateBindValue({ value, row }) //
     item.getTinyTableSearchData({
       value: value,
     })

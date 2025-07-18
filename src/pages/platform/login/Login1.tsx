@@ -191,6 +191,16 @@ export default defineComponent({
     // console.log(_item, 'testItem')
     let _config123 = getDesignTableConfig(_item1)
     console.log(_config123)
+    let tConfig = {
+      columns: xeTableColumns,
+      data: xeTableData,
+      tableState: 'edit',
+      treeConfig: {
+        id: 'id',
+        parentId: 'pid', //
+        root: '0',
+      },
+    }
     return () => {
       if (show.value == false) {
         return null
@@ -198,65 +208,28 @@ export default defineComponent({
       let com0 = null //
       let com = null //
       com = <pageCom></pageCom> //
-      // let com2 = <buttonCom fn={fn1}></buttonCom> //
-      let com2 = <button onClick={fn1}>123123</button>
-      // com = <pageCom ref={_reg3} isDesign={true}></pageCom> //
-      com = (
-        <div style={{ height: `${_data.height}px`, width: `100%` }}>
-          <tableCom
-            // {...tableConfig}
-            {...menuTConfig}
-            contextItems={[
-              {
-                label: '添加菜单',
-                fn: async (config) => {
-                  // console.log('添加菜单') //
-                  // console.log(config, 'testConfig') //
-                  let p: Table = config.parent //
-                  let curContextRow = p.curContextRow
-                  let pid = curContextRow?.pid
-                  if (pid == null) {
-                    return
-                  }
-                },
-              },
-              {
-                label: '添加子菜单', //
-                fn: async () => {
-                  console.log('添加子菜单') //
-                },
-              },
-            ]} //
-            showGlobalSearch={true}
-            enableDragColumn={true} //
-            showHeaderButtons={true}
-            enableDragRow={true} //
-            dragRowFn={(config) => {
-              return true //
-            }}
-            // treeConfig={null}
-            // showControllerButtons={true}
-            tableState="scan"
-          ></tableCom>
-        </div>
-      ) //
-      // com = null
       let _fConfig = getDFConfig(reactive({}), {
         editType: 'date',
       }) ////
+
+      // com = (
+      //   <div class="er-h-400 er-w-600">
+      //     <erXeTable
+      //       treeConfig={{
+      //         id: 'id',
+      //         parentId: 'pid', //
+      //         root: '0',
+      //       }} //
+      //       columns={xeTableColumns}
+      //       data={xeTableData}
+      //       tableState="edit"
+      //     ></erXeTable>
+      //   </div>
+      // )
       com = (
-        <div class="er-h-400 er-w-600">
-          <erXeTable
-            treeConfig={{
-              id: 'id',
-              parentId: 'pid', //
-              root: '0',
-            }} //
-            columns={xeTableColumns}
-            data={xeTableData}
-            tableState="scan"
-          ></erXeTable>
-        </div>
+          <div class='er-h-400 er-w-600'> 
+            <erXeTable {...tConfig}></erXeTable>
+          </div>
       )
       let _com = (
         <div
@@ -274,13 +247,6 @@ export default defineComponent({
               }
             }
           >
-            {/* <button
-              onClick={() => {
-                console.log(_reg2.value, 'testReg2') //
-              }}
-            >
-              测试1
-            </button> */}
             {com}
           </div>
         </div>

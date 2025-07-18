@@ -1643,6 +1643,9 @@ export class PageDesign extends Form {
       let tableData = this.getTableRefData(name)
       let tableConfig = this.getTableConfig(name)
       let curRow = tableData.curRow //
+      if (curRow == null) {
+        return Promise.reject('当前行数据为空') //
+      }
       let _config1 = tableConfig?.relateConfig || {} //
       let relateKey = _config1?.relateKey
       let mainRelateKey = _config1?.mainRelateKey //

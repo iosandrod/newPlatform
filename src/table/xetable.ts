@@ -3,10 +3,12 @@ import { Table } from './table'
 import { reactive, shallowRef, toRaw } from 'vue'
 import { XeColumn } from './xecolumn'
 import {
+  VxeColumnDefines,
   VxeComponentEvent,
   VxeGridInstance,
   VxeTableDefines,
   VxeTableEvents,
+  VxeTablePropTypes,
 } from 'vxe-table'
 import {
   cacheValue,
@@ -21,9 +23,19 @@ import { BMenu } from '@/buttonGroup/bMenu'
 import { initXeContextItems } from './xetableFn'
 import { Dropdown } from '@/menu/dropdown'
 import _ from 'lodash' //
+import { XeSeriesNumberColumn } from './xeSeriesNumberColumn'
+import {
+  VxeColPropTypes,
+  VxeTabsDefines,
+  VxeTabsProps,
+  VxeTagPropTypes,
+} from 'vxe-pc-ui'
+import { ColumnInfo } from '@/vxegrid/table/src/columnInfo'
 export class XeTable extends Base {
+  currentCheckField: string | null = null
   config: any //
   canClearEditCell = true
+  oldRangeRows: any[] = [] //
   currentClickButton: any
   currentEditCell: any = {}
   useCache = false
@@ -67,7 +79,7 @@ export class XeTable extends Base {
     colIndex: new Set(), //
   }
   isMergeCell = true
-  seriesNumberColumn: any
+  seriesNumberColumn: XeColumn
   curContextRow: any = null
   isHeaderContext: boolean = false //
   contextItems: any[] = []
@@ -173,7 +185,10 @@ export class XeTable extends Base {
     this.checkboxColumn = _col
   }
   initControllerColumn() {}
-  initSeriesNumberColumn() {}
+  initSeriesNumberColumn() {
+    let _col = new XeSeriesNumberColumn({ field: 'seriesNumber' }, this) //
+    this.seriesNumberColumn = _col
+  }
   initGlobalSearch() {}
   initCurrentContextItems() {
     initXeContextItems(this) //
@@ -235,6 +250,10 @@ export class XeTable extends Base {
     if (_row1 == null) {
       this.tableData.curRow = null
     } //
+    if (this.tableData.curRow == null) {
+      this.setCurRow(data[0]) //
+    }
+    //
   } //
   setColumns(columns: any) {
     this.columns.splice(0)
@@ -288,6 +307,7 @@ export class XeTable extends Base {
 
     let _show = this.config.showCheckboxColumn
     let _show1 = this.getShowControllerColumn()
+    let _show2 = this.getShowSeriesNumber()
     let rfsCols = _col1.filter((c) => {
       let isFrozen = ['right'].includes(c.fixed)
       return isFrozen == true //右边的
@@ -312,7 +332,10 @@ export class XeTable extends Base {
       let cCol = this.checkboxColumn
       _col1.unshift(cCol.getColumnProps())
     } //
-
+    if (_show2) {
+      let sCol = this.seriesNumberColumn
+      _col1.unshift(sCol.getColumnProps()) //
+    }
     return _col1 ////
   } //
   loadColumns() {
@@ -365,6 +388,7 @@ export class XeTable extends Base {
   }
   loadData(loadConfig?: any) {
     let data = this.getShowData() //
+    // console.log('加载数据展示', data) //
     let _data = data
     let _data1 = toRaw(_data)
     let sortState = this.sortCache
@@ -456,7 +480,7 @@ export class XeTable extends Base {
       } //
       this.templateProps.data = _data3
       nextTick(() => {
-        this.updateCanvas() //
+        // this.updateCanvas() //
       })
     } //
     //@ts-ignore
@@ -471,7 +495,6 @@ export class XeTable extends Base {
     if (instance == null) {
       return //
     }
-    console.log(_columns, 'testColumns') //
     instance.loadColumn(_columns) //
   }
   getHeaderHeight() {
@@ -500,46 +523,73 @@ export class XeTable extends Base {
   }
   @useRunAfter()
   @useTimeout({ number: 300, key: 'updateTimeout' })
-  updateCanvas() {
-    let data = this.templateProps.data //
-    let instance = this.getInstance() //
-    if (instance == null) {
-      return
-    } //
-    instance.loadData(data) //
+  async updateCanvas(config?: any) {
+    return new Promise(async (resolve) => {
+      let data = config?.data || this.templateProps.data //
+      let instance = this.getInstance() //
+      if (instance == null) {
+        return
+      }
+      instance.loadData(data).then(() => {
+        resolve(true) //
+      })
+    }) //
   }
+  addAfterMethod(config) {
+    config.type = 'after' //
+    this.addMethod(config)
+  }
+
   onMounted() {
+    this.addAfterMethod({
+      methodName: 'updateCanvas',
+      fn: async () => {
+        // console.log('更新画布', this)
+        // let ins = this.getInstance()
+        // let d = ins.getData()
+        // console.log('更新画布', d) //
+      },
+    })
     this.loadData() //
     this.updateColumns()
-    this.updateCanvas() //
-    // this.update
   }
   getInstance(): VxeGridInstance {
     let grid = this.getRef('xeGrid') //
     return grid
   }
   jumpToSearchNext(bool) {} //
-  expandAllTreeRow() {} //
+  expandAllTreeRow() {
+    let instance = this.getInstance()
+    instance.setTreeExpand(this.getFlatTreeData(), true)
+  } //
   getCanClearEditCell(config?: any) {
+    let status = true
     let editType = this.getEditType()
     if (editType == 'all') {
       return true //
     }
     if (editType == 'cell') {
-      return this.canClearEditCell
+      status = this.canClearEditCell
     }
     if (editType == 'row') {
-      return this.canClearEditCell //
+      status = this.canClearEditCell //
     }
+    let currentEditCol = this.currentEditCol
+    if (currentEditCol?.disableHideCell == true) {
+      status = false //
+    }
+    return status
   }
   //开始编辑
   clearEditCell() {
-    //
     let editConfig = this.editConfig
     let rowIndex = editConfig.rowIndex //
     let colIndex = editConfig.colIndex
     let editType = this.getEditType()
     let canClearEditCell = this.getCanClearEditCell()
+    if (canClearEditCell == false) {
+      return false
+    } //
     editConfig.currentEditField = null //
     editConfig.currentEditIndex = null //
     rowIndex.clear() //
@@ -559,7 +609,10 @@ export class XeTable extends Base {
     if (rowIndex.has(_index) && editType == 'row') {
       return
     } //
-    this.clearEditCell() //
+    let s = this.clearEditCell() //
+    if (s == false) {
+      return //
+    }
     let colIndex = editConfig.colIndex
     let column: XeColumn = config?.column?.params
     let f = column.getField()
@@ -569,7 +622,11 @@ export class XeTable extends Base {
     colIndex.add(f) //
   }
 
-  expandTargetRows(data) {}
+  expandTargetRows(data) {
+    let instance = this.getInstance()
+    // let _d = instance.getData()
+    instance.setTreeExpand(data, true) //
+  }
   copyCurrentCell() {} //
   @cacheValue()
   getCellConfig() {
@@ -774,6 +831,10 @@ export class XeTable extends Base {
   }
   getIsActiveEditCell(row, col) {
     let editType = this.getEditType()
+    let canEdit = this.getIsEdit()
+    if (canEdit == false) {
+      return false //
+    } //
     let editConfig = this.editConfig //
     let indexSet = editConfig.rowIndex
     let status = false
@@ -796,6 +857,10 @@ export class XeTable extends Base {
     if (editType == 'all') {
       status = true //
     }
+    let _editType = col.getEditType()
+    if (['boolean', 'bool'].includes(_editType)) {
+      status = true //
+    }
     return status //
   }
   onCellClick(config: VxeTableDefines.CellClickEventParams) {
@@ -803,7 +868,7 @@ export class XeTable extends Base {
     let _index = row?._index
     this.startEditCell(config)
     let record = config.row //
-    this.setCurRow(record)//
+    this.setCurRow(record) //
   }
   @useTimeout({ number: 10, key: 'setCurRow' }) //
   setCurRow(row, isProps = false) {
@@ -1038,5 +1103,336 @@ export class XeTable extends Base {
   getTableState() {
     let tableState = this.tableState //
     return tableState //
+  }
+  getColumnConfig() {
+    let config = this.config //
+    let disableColumnResize = config.disableColumnResize
+    let columnConfig: VxeTablePropTypes.ColumnConfig = {
+      ...config.columnConfig,
+    }
+    if (disableColumnResize) {
+      columnConfig.resizable = false
+    } else {
+      columnConfig.resizable = true
+    }
+    columnConfig.drag = true //
+    // console.log(columnConfig, 'testColumnConfig') //
+    return columnConfig //
+  }
+  onColumnResize(config) {
+    // console.log(config, 'testConfig') //
+    let column: ColumnInfo = config.column
+    let width = column.width
+    let _column: XeColumn = column.params
+    _column.config.width = width
+    let onDesignColumn = this.config.onDesignColumn
+    if (typeof onDesignColumn == 'function') {
+      onDesignColumn(_column, _column, false) //
+    }
+  }
+  onColumnDragEnd(config: any) {
+    setTimeout(() => {
+      let ins = this.getInstance()
+      let columns = ins.getColumns() //
+      let orderFieldArr = columns.map((col, i) => {
+        return {
+          field: col.field,
+          order: Number(i) + 1,
+        }
+      }) //
+      this.changeSortOrder(orderFieldArr)
+    }, 0)
+  } //
+  changeSortOrder(
+    orderFieldArr: Array<{
+      field: string
+      order: number
+    }>,
+  ) {
+    let old1 = orderFieldArr.map((f) => f.field)
+    old1.forEach((f, i) => {
+      let columns = this.getFlatColumns()
+      let _col = columns.find((col) => col.getField() == f) //
+      if (_col) {
+        _col.setOrder(i) // _col.setOrder(i) //
+      }
+    }) //
+    let config = this.config
+    let dragColumnAfterFn = config.dragColumnAfterFn
+    let columns = this.getFlatColumns()
+    if (typeof dragColumnAfterFn == 'function') {
+      dragColumnAfterFn(
+        columns.map((col) => {
+          return col.config //
+        }), //
+      ) //
+    }
+    let onColumnConfigChange = config.onColumnConfigChange
+    if (typeof onColumnConfigChange == 'function') {
+      onColumnConfigChange({
+        columns: columns.map((col) => {
+          return col.config //
+        }), //
+        tableName: this.getTableName(),
+        field: 'order',
+      })
+    }
+  }
+  @cacheValue()
+  getColumnDragConfig() {
+    let config = this.config //
+    let dConfig: VxeTablePropTypes.ColumnDragConfig = {
+      ...config.columnDragConfig,
+    }
+    dConfig.dragEndMethod = async (
+      params: VxeTableDefines.ColumnDragendEventParams,
+    ) => {
+      // console.log(params, 'testColumnDragConfig') //
+      let colInfos = this.getInstance().getColumns()
+      let column = params.dragColumn //
+      let allCol = params
+      return true
+    }
+    return dConfig //
+  }
+  getIsEdit() {
+    let tableState = this.getTableState() //
+    return tableState == 'edit' //
+  }
+  @cacheValue()
+  getMouseConfig() {
+    return {
+      selected: true,
+    }
+  } //
+  onCellDblclick(config: VxeTableDefines.CellDblclickEventParams) {
+    let row = config.row //
+    let column: XeColumn = config.column.params //
+    this.tableData.dbCurRow = row //
+    let _config = this.config //
+    let onDbCurRowChange = _config.onDbCurRowChange //
+    if (typeof onDbCurRowChange == 'function') {
+      onDbCurRowChange({
+        row: row,
+        field: column.getField(),
+        value: row[column.getField()],
+      }) //
+    }
+  }
+  scrollToRow(config) {
+    //
+  }
+  async validate() {
+    return new Promise((resolve) => {
+      let instance = this.getInstance()
+      if (instance == null) {
+        resolve(false)
+        return
+      }
+      instance.validate().then((valid) => {
+        if (valid) {
+          resolve(true) //
+        } else {
+          resolve(false) //
+        }
+      })
+    }) //
+  }
+  @cacheValue() //
+  getEditRules() {
+    let columns = this.getColumns()
+    let rules = columns
+      .map((col) => {
+        let rules = col.getValidator()
+        return {
+          f: col.getField(),
+          rules: rules,
+        }
+      })
+      .reduce((res, item) => {
+        res[item.f] = item.rules //
+        return res
+      }, {})
+    // console.log(rules, 'testGetEditRules')
+    return rules
+  }
+  getHeaderButtons() {
+    let config = this.config //
+    let buttons = config.buttons || []
+    return buttons
+  }
+  async getDefaultValue(tableName: string = '') {
+    //
+    let columns = this.getColumns()
+    let obj1 = {}
+    for (const col of columns) {
+      let defaultValue = await col.getDefaultValue()
+      if (defaultValue) {
+        obj1 = { ...obj1, ...defaultValue } //
+      }
+    } //
+    return obj1
+  }
+  addRow(row: any, parentRow?: any) {
+    // debugger//
+    // debugger //
+    let _index = row['_index']
+    if (_index == null) {
+      let _level = parentRow?.['_level']
+      if (isNaN(_level)) {
+        _level = 0
+      } else {
+        _level += 1
+      }
+      this.initDataRow(row, _level) //
+    }
+    if (parentRow != null) {
+      let children = parentRow._children
+      if (!Array.isArray(children)) {
+        children = []
+        parentRow.children = children
+      }
+      children.push(row) //
+      // this.updateIndexArr.add(parentRow['_index']) //
+    } else {
+      let data = this.getData()
+      data.push(row) //
+    }
+  }
+  async addRows(rowsConfig?: { rows?: Array<any>; isProps?: any } | number) {
+    if (typeof rowsConfig === 'number') {
+      let _rows = Array(rowsConfig).fill(null)
+      let _row1 = []
+      for (const i of _rows) {
+        let dValue = await this.getDefaultValue()
+        _row1.push(dValue) //
+      } //
+      rowsConfig = { rows: _row1 }
+    }
+    let rows = rowsConfig.rows || []
+    if (rows == null) {
+      return
+    }
+    let _arr = rows
+    if (!Array.isArray(rows)) {
+      _arr = [rows]
+    } else {
+      if (rows.length == 0) {
+        return
+      }
+    }
+    // _arr = _arr.filter((item) => {
+    //   return Boolean(item) != false
+    // }) //
+    _arr.forEach((item) => {
+      if (item?._rowState == null) {
+        Object.defineProperties(item, {
+          _rowState: { value: 'add', enumerable: false, writable: true },
+        })
+      } //
+      this.initDataRow(item)
+    })
+    if (rowsConfig?.isProps !== true) {
+      for (const row of _arr) {
+        this.addRow(row)
+      } //
+      let data = this.getData()
+      let lastD = data[data.length - 1]
+      // this.setCurRow(lastD)
+      this.addAfterMethod({
+        methodName: 'updateCanvas', //
+        fn: async () => {
+          this.scrollToRow({
+            row: lastD,
+          }) ////
+        },
+      })
+    }
+  }
+  startEditColumnTitle(config) {
+    let column: XeColumn = config.column.params //
+    column.isEditTitle = true
+  }
+  delCurRow() {
+    // debugger //
+    let curRow = this.tableData.curRow
+
+    let showData = this.getData()
+    // let s = showData == this.config.data
+    let _r = null
+    let pData = showData
+    let nextRow = null
+    if (this.getIsTree()) {
+      showData = this.getFlatTreeData(showData)
+      let pRow = showData.find((row) => {
+        let _children = row._children || []
+        if (_children.includes(curRow)) {
+          return true
+        }
+      })
+      if (pRow == null) {
+        showData = pData
+        if (showData.includes(curRow)) {
+          pRow = {
+            _children: showData,
+          }
+        }
+      }
+      if (pRow) {
+        let _children = pRow._children || []
+        let index = _children.indexOf(curRow)
+        if (index == -1) {
+          return
+        }
+        _r = _children.splice(_children.indexOf(curRow), 1)
+        nextRow = _children[index - 1]
+        nextRow = nextRow || _children[0] || pRow
+        if (nextRow['_index'] == null) {
+          nextRow = null
+        } //
+      } //
+    } else {
+      let index = showData.indexOf(curRow)
+      if (index == -1) {
+        return
+      }
+      _r = showData.splice(index, 1) //
+      nextRow = showData[index - 1]
+      nextRow = nextRow || showData[0] //
+    }
+    if (_r == null) {
+      return
+    }
+    this.changeRowState(_r[0], 'delete')
+    this.deleteArr.push(_r[0]) //
+    nextTick(() => {
+      if (nextRow != null) {
+        this.setCurRow(nextRow) //
+      }
+    }) //
+  }
+  getTableHeight() {
+    let config = this.config
+    let height = config.height
+    if (isNaN(height) || typeof height == 'string') {
+      height = 'auto'
+    } //
+    return height
+  }
+  onHeaderTitleChange(config: { column: any }) {
+    let column = config.column
+    if (column == null) {
+      return
+    }
+    // console.log(column, 'testColumn') //
+    let tableName = column.tableName
+    let onColumnConfigChange = this.config.onColumnConfigChange
+    if (typeof onColumnConfigChange == 'function') {
+      onColumnConfigChange({
+        columns: [column], //
+        tableName: column.tableName,
+        field: 'title',
+      })
+    } //
   }
 }

@@ -153,7 +153,7 @@ export default defineComponent({
             v-slots={{
               default: (item) => {
                 let tableConfig = item.config.tableConfig //
-                return <erTable {...tableConfig}></erTable>
+                return <erXeTable {...tableConfig}></erXeTable>
               },
             }}
             {...tabConfig}

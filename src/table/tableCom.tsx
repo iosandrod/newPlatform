@@ -45,7 +45,6 @@ export default defineComponent({
     TableFitlerCom,
   },
   props: {
-    
     tableName: {
       type: String,
     },
@@ -260,7 +259,7 @@ export default defineComponent({
     }
     expose({ _instance: tableIns })
     provide('tableIns', tableIns)
-    
+
     useKeyboard('ctrl+c', (e) => {
       let root = tableIns.getRef('root')
       let focusDiv = document.activeElement

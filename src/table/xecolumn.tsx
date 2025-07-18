@@ -5,8 +5,13 @@ import { VxeColumnProps } from 'vxe-table'
 import XeColHeaderCom from './xeColHeaderCom'
 import { XeTable } from './xetable'
 import { h } from 'vue'
+import { stringToFunction } from '@ER/utils'
+import CodeEditor from '@/codeEditor/codeEditor'
+import { Dialog } from '@/dialog/dialog'
 
 export class XeColumn extends Column {
+  templateTitle = '' //模板标题
+  isEditTitle = false //是否可以编辑标题
   //@ts-ignore
   columns: XeColumn[]
   constructor(config: any, table) {
@@ -98,8 +103,40 @@ export class XeColumn extends Column {
   //@ts-ignore
   getBindValue(config) {
     let f = this.getField()
-    let row = config.row
+    let row = config?.row
+    if (row == null) {
+      throw new Error('row is null') //
+    }
     return row[f] //
+  }
+  openCodeDialog(config) {
+    this.getTable().currentEditCol = this //
+    let tableName = this.getTableName()
+    this.disableHideCell = true
+    let codeConfig = this.getCodeConfig() //
+    let sys = this.getSystem() //
+    // debugger//
+    let value = this.getBindValue(config)
+    let _config = {
+      ...config,
+      tableName,
+      modelValue: value,
+      confirmFn: (dialog: Dialog) => {
+        let com: CodeEditor = dialog.getRef('innerCom')
+        let bindValue = com.getBindValue() //
+        let updateFn = config?.updateFn
+        this.disableHideCell = false
+        if (typeof updateFn == 'function') {
+          // this.updateBindData({ value: bindValue }) ////
+          updateFn({ value: bindValue })
+        }
+      },
+      closeFn: () => {
+        this.disableHideCell = false //
+      },
+    }
+    this.disableHideCell = true
+    sys.openCodeDialog(_config) //
   }
   onBlur(config) {}
   getClearable() {
@@ -164,5 +201,56 @@ export class XeColumn extends Column {
       }
     } //
     return style
+  }
+  setShowDragIcon(show: boolean) {
+    this.showDragIcon = show //
+  }
+  getFormat() {
+    let config = this.config
+    let fieldFormat = config.fieldFormat
+    if (typeof fieldFormat !== 'function') {
+      if (typeof fieldFormat == 'string') {
+        fieldFormat = stringToFunction(fieldFormat + '')
+      }
+      if (typeof fieldFormat !== 'function') {
+        fieldFormat = (config) => {
+          let _this = config.column || config.col //
+          if (_this == null) {
+          }
+          let type = _this.getEditType()
+          let row = config.row
+          if (row == null) {
+            return '' //
+          }
+          let field = config.field
+          let value = row[field] //
+          let label = null
+          if (type == 'select') {
+            let options = _this.getSelectOptions()
+            let value = config.row[field]
+            let _label = options.find((item) => item.value == value)?.label
+            label = _label
+          }
+          return label || value //
+        }
+      }
+    }
+    return fieldFormat
+  }
+  getShowDragIcon() {
+    return this.showDragIcon
+  }
+  setTemplateTitle(config) {
+    let v = config.value
+    this.templateTitle = v
+  }
+  setTitle(title: string) {
+    if (title == '') {
+      return
+    } //
+    let config = this.config
+    config.title = title //
+    let t = this.getTable() //
+    t.onHeaderTitleChange({ column: this.config }) //
   }
 }

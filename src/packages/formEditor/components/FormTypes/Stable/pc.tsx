@@ -69,11 +69,11 @@ export default defineComponent({
               minHeight: '200px',
             }}
           >
-            <tableCom
+            <erXeTable
               {...tableConfig}
               showHeaderButtons={true}
               data={formitem.getBindValue()}
-            ></tableCom>
+            ></erXeTable>
           </div>
         )
         // com = null //

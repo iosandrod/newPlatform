@@ -42,9 +42,9 @@ export default defineComponent({
     let insRef = (ins: any) => {
       inputIns.value = ins?._instance || ins
     }
-    useKeyboard('enter', () => {
-      table.clearEditCell() //
-    }) //
+    // useKeyboard('enter', () => {
+    //   table.clearEditCell() //
+    // })
     onMounted(() => {
       if (table.getEditType() == 'cell') {
         if (typeof inputIns.value?.focus == 'function') {
@@ -186,7 +186,15 @@ export default defineComponent({
                     <div
                       onClick={() => {
                         column.openCodeDialog({
-                          updateFn: updateValue,
+                          updateFn: (config) => {
+                            let value = config.value
+                            column.updateBindValue({
+                              value,
+                              row: props.row,
+                              field: column.getField(),
+                            }) //
+                          },
+                          row: props.row, //
                         }) //
                       }}
                       class="h-full pointer"
