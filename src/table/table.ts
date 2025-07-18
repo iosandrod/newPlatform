@@ -2151,8 +2151,13 @@ export class Table extends Base {
     }
   }
   clearEditCell() {
+    // debugger//
     let currentEditCol = this.currentEditCol
     let disableHideCell = currentEditCol?.disableHideCell
+    let currentDropdownIndex = currentEditCol?.currentDropdownIndex
+    if (Boolean(currentDropdownIndex)) {
+      return //
+    }
     if (disableHideCell == true) {
       return //
     }

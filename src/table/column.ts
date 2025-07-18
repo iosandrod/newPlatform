@@ -51,6 +51,8 @@ import { Input } from '@/input/inputClass'
 import { useTimeout } from '@ER/utils/decoration'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox'] //
 export class Column extends Base {
+  currentDropdownIndex = null
+  currentEditIndex = null //
   showDragIcon = false
   templateTableConfig = {
     columns: [],
@@ -1192,7 +1194,7 @@ export class Column extends Base {
     let tableName = baseinfoConfig?.tableName
     return tableName
   }
-  async openBaseInfoTable() {
+  async openBaseInfoTable(_config?: any) {
     let sys = this.getSystem() //
     let tableName = this.getBaseInfoTableName() //
     if (tableName == null) {
@@ -1215,24 +1217,32 @@ export class Column extends Base {
     this.templateTableConfig.columns = columns
     this.templateTableConfig.data = _data //
     nextTick(() => {
-      this.showDropdown() //
+      this.showDropdown(_config) //
     })
   }
-  showDropdown() {
+  showDropdown(config?: any) {
+    if (config == null) {
+      return
+    } //
+    let row = config?.row
+    let _index = row?._index
+    this.currentDropdownIndex = _index
     let input: Input = this.getRef('input')
     if (input == null) {
       return
-    }
+    } //
     input.showDropdown({})
   }
-  onFocus(config) {}
-
+  onFocus(config) {
+    let row = config.row //
+    let _index = row?._index
+    this.currentEditIndex = _index //
+    this.getTable().currentEditCol = this //
+  }
   confirmTinyTableRow(row) {
-    //
     let bConfig = this.getBaseInfoConfig() //
     let bindColumns = bConfig?.bindColumns || []
     if (Array.isArray(bindColumns) && bindColumns.length > 0) {
-      // debugger //
       if (bindColumns.length == 1) {
         bindColumns = bindColumns[0]
         let field = bindColumns.targetKey
@@ -1287,7 +1297,7 @@ export class Column extends Base {
   async getTinyTableSearchData(config) {
     let value = config.value //
     let _options = this._getBaseinfoConfig()
-    let searchEn = await this.getSearchEn() //
+    let searchEn = await this.getSearchEn()
     // let searchColumns = _options?.searchColumns || [] //
     // let query: any = {}
     // if (

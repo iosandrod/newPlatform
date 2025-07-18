@@ -13,7 +13,7 @@ export const defaultType = (item: XeColumn, row): any => {
       item.onBlur({ value: item.getBindValue({ row: row }), row: row })
     },
     onFocus: (config) => {
-      item.onFocus(config)
+      item.onFocus({ ...config, row })
     },
     disabled: item.getDisabled(), //
     clearable: item.getClearable(), //
@@ -79,16 +79,16 @@ export const booleanType = (item: XeColumn, row) => {
   obj.disabled = item.getDisabled() //
   return obj
 }
-export const sformType = (item: XeColumn,row) => {
-  let obj = defaultType(item,row) //
+export const sformType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
   obj.onChange = (config) => {}
   obj.readonly = true //
   obj.clearable = false //
   obj.modelValue = 'object'
   return obj
 }
-export const baseinfoType = (item: XeColumn,row) => {
-  let obj = defaultType(item,row) //
+export const baseinfoType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
   obj.onChange = (config) => {}
   obj.clearable = true
   obj.onInput = (config) => {
@@ -98,13 +98,29 @@ export const baseinfoType = (item: XeColumn,row) => {
       value: value,
     })
   }
+  obj.isBaseinfo = true
+  obj.onVisibleChange = (config) => {
+    let visible = config.visible
+    item.disableHideCell = visible //
+    if (visible == false) {
+      item.currentDropdownIndex = null
+    } //
+  }
+  obj.onFocus = (config) => {
+    item.onFocus({ ...config, row }) //
+    item.openBaseInfoTable({ ...config, row }) //
+  }
+  obj.onConfirmTinyTable = (config) => {
+    item.confirmTinyTableRow(config.row)
+  }
+  obj.baseinfoConfig = item._getBaseinfoConfig() //
   return obj
 }
-export const colorType = (item: FormItem) => {
-  let obj = defaultType(item) //
+export const colorType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
   obj.onChange = (config) => {
     let value = config.value
-    item.updateBindData({ value }) //
+    item.updateBindValue({ value, row }) //
   }
   obj.clearable = true
   obj.onInput = (config) => {} //

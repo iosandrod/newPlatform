@@ -1435,4 +1435,7 @@ export class XeTable extends Base {
       })
     } //
   }
+  async clearData() {
+    //
+  }
 }

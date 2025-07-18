@@ -29,6 +29,7 @@ import { columnToEdit, stringToFunction } from './utils'
 import { VxeUI } from 'vxe-pc-ui'
 import * as XLSX from 'xlsx' //
 import { Column } from '@/table/column'
+import { XeTable } from '@/table/xetable'
 interface Filter {
   /** 字段名 */
   field: string
@@ -572,6 +573,7 @@ export class PageDesign extends Form {
         tableDataMap[tableName] = {
           curRow: null,
           data: [],
+          deleteData: [], //
         }
       }
     }
@@ -729,6 +731,24 @@ export class PageDesign extends Form {
       await http.delete(tableName, curRow) //
       this.getSystem().confirmMessage('删除数据成功') //
     }
+  }
+  async clearDetailTableData(tableName) {
+    //
+    let tableRefData = this.getTableRefData(tableName)
+    if (tableRefData == null) {
+      return
+    }
+    let tRef: XeTable = this.getRef(tableName)
+    if(tRef){
+      tRef.clearData()
+    }
+  }
+  async deleteDetailTableRow(tableName) {
+    let tableRefData = this.getTableRefData(tableName)
+    let tRef: XeTable = this.getRef(tableName)
+    if (tRef) {
+      tRef.delCurRow() //
+    } //
   }
   async addDetailTableRow(tableName?: string, row?: any) {
     //

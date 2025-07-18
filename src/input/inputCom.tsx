@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, PropType } from 'vue'
+import { defineComponent, onMounted, PropType, watch } from 'vue'
 import VxeInput from 'vxe-pc-ui/packages/input'
 import { Input } from './inputClass'
 import { VxeInputPropTypes, getConfig } from 'vxe-table'
@@ -203,6 +203,10 @@ export default defineComponent({
     onVisibleChange: {
       type: Function, //
     },
+    dropdownModelValue: {
+      type: Boolean,
+      default: false, //
+    },
   },
   components: {
     dropdownCom,
@@ -221,6 +225,18 @@ export default defineComponent({
         _input.focus() //
       }
     })
+    watch(
+      () => {
+        return props.dropdownModelValue
+      },
+      (value) => {
+        if (value == true) {
+          _input.showDropdown(value)
+        } else {
+          _input.hiddenDropdown() //
+        }
+      },
+    )
     expose({ _instance: _input })
     return () => {
       let com = (
@@ -253,6 +269,7 @@ export default defineComponent({
       let type: any = props.type
       let isBaseinfo = props.isBaseinfo
       if (isBaseinfo) {
+        //
         _com = (
           <dropdownCom
             class="h-full"
@@ -272,18 +289,19 @@ export default defineComponent({
                 let baseinfoConfig = props.baseinfoConfig
                 let com = (
                   <div class="h-300 w-full" style={{ minWidth: '300px' }}>
-                    <tableCom
+                    <erXeTable
                       {...baseinfoConfig}
                       tableState="scan" //
                       showRowSeriesNumber={false} //
                       showCheckboxColumn={false} ////
                       onDbCurRowChange={(config) => {
+                        // debugger//
                         let onConfirmTinyTable = props.onConfirmTinyTable
                         if (typeof onConfirmTinyTable == 'function') {
-                          onConfirmTinyTable(config) //
+                          onConfirmTinyTable(config)
                         }
                       }}
-                    ></tableCom>
+                    ></erXeTable>
                   </div>
                 )
                 return com //

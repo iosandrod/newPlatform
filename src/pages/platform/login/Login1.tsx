@@ -44,7 +44,11 @@ import { PageDesignItem } from '@ER/pageItem'
 import { getDesignTableConfig } from '@/table/tabFConfig'
 import { MainPageDesign } from '@ER/mainPageDesign'
 import * as VTableGantt from '@visactor/vtable-gantt' //
-import { xeTableColumns, xeTableData } from '@/table/tableData1'
+import {
+  permissionTConfig,
+  xeTableColumns,
+  xeTableData,
+} from '@/table/tableData1'
 export default defineComponent({
   components: {
     pVue,
@@ -227,9 +231,9 @@ export default defineComponent({
       //   </div>
       // )
       com = (
-          <div class='er-h-400 er-w-600'> 
-            <erXeTable {...tConfig}></erXeTable>
-          </div>
+        <div class="er-h-400 er-w-600">
+          <erXeTable {...permissionTConfig}></erXeTable>
+        </div>
       )
       let _com = (
         <div

@@ -221,7 +221,6 @@ export default defineComponent({
                 column.openBaseInfoTable() //
               }}
               onConfirmTinyTable={(config) => {
-                ///
                 column.confirmTinyTableRow(config.row)
               }}
               baseinfoConfig={column._getBaseinfoConfig()}

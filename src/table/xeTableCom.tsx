@@ -236,6 +236,7 @@ export default defineComponent({
   },
   setup(_props, { slots, attrs, emit, expose }) {
     let props: any = _props
+    // console.log(JSON.parse(JSON.stringify(props)), 'props123') //
     let tableIns: XeTable = null as any
     if (props.tableIns) {
       tableIns = props.tableIns as any

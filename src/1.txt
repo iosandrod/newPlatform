@@ -15381,3 +15381,10 @@ let isCurrentEdit = computed(() => {
           ></tableCom>
         </div>
       ) //
+
+       // showControllerButtons={true} //
+                // controllerButtons={flow.getTableControllerButtons()}
+
+
+                // showCheckBoxColumn={item.getShowCheckboxColumn()}
+          // showRowNumberColumn={item.getShowRowSeriesNumber()} //

@@ -46,19 +46,25 @@ export default defineComponent({
     //   table.clearEditCell() //
     // })
     onMounted(() => {
+      let state = false
       if (table.getEditType() == 'cell') {
         if (typeof inputIns.value?.focus == 'function') {
-          inputIns.value.focus() //
+          state = true
+          // inputIns.value.focus()
         }
       }
       if (table.getEditType() == 'row') {
         if (typeof inputIns.value?.focus == 'function') {
           let editConfig = table.editConfig
           if (editConfig.currentEditField == column.getField()) {
-            inputIns.value.focus() //
+            // inputIns.value.focus() //
+            state = true
           }
         }
       } //
+      if (state == true) {
+        inputIns.value.focus()
+      }
     })
     onUnmounted(() => {
       if (table.getEditType() == 'cell') {
@@ -145,7 +151,8 @@ export default defineComponent({
             <InputCom
               style={{ width: '100%', height: '100%' }} //
               ref={insRef}
-              {...bindConfig.value} //
+              {...bindConfig.value}
+              dropdownModelValue={column.getDropdownModelValue(props.row)}
               //   onChange={(v) => {
               //     updateValue(v)
               //   }}

@@ -115,7 +115,6 @@ export class XeColumn extends Column {
     this.disableHideCell = true
     let codeConfig = this.getCodeConfig() //
     let sys = this.getSystem() //
-    // debugger//
     let value = this.getBindValue(config)
     let _config = {
       ...config,
@@ -252,5 +251,66 @@ export class XeColumn extends Column {
     config.title = title //
     let t = this.getTable() //
     t.onHeaderTitleChange({ column: this.config }) //
+  }
+  getDropdownModelValue(row) {
+    let _index = row._index
+    let curEditIndex = this.currentDropdownIndex //
+    if (_index == curEditIndex) {
+      return true
+    } //
+    return false
+  } //
+  getCurrentEditRow() {
+    let currentEditIndex = this.currentEditIndex
+    let table = this.getTable()
+    let tableMap = table.dataMap
+    let row = tableMap[currentEditIndex]
+    return row
+  }
+  confirmTinyTableRow(row) {
+    let bConfig = this.getBaseInfoConfig() //
+    let bindColumns = bConfig?.bindColumns || []
+    if (Array.isArray(bindColumns) && bindColumns.length > 0) {
+      if (bindColumns.length == 1) {
+        bindColumns = bindColumns[0]
+        let field = bindColumns.targetKey
+        let value = row[field]
+        let myF = this.getField()
+        this.cacheValueObj = {
+          //
+          [myF]: value,
+        }
+        this.cacheValue = value //
+      } else {
+        let _obj = {}
+        for (const col of bindColumns) {
+          let field = col.targetKey
+          let myField = col.key //
+          let value = row[field]
+          _obj[myField] = value
+        }
+        this.cacheValueObj = _obj
+        let f = this.getField()
+        let _v = _obj[f]
+        this.cacheValue = _v //
+      }
+      this.isChangeValue = true //
+    }
+    let curEditRow = this.getCurrentEditRow()
+    Object.entries(this.cacheValueObj).forEach(([key, value]) => {
+      let _row = curEditRow
+      if (key == this.getField()) {
+        this.updateBindValue({
+          value: value, //
+          row: curEditRow, //
+        })
+      } else {
+        _row[key] = value //
+      }
+    })
+    this.closeBaseInfoTable() //
+  }
+  closeBaseInfoTable() {
+    this.currentDropdownIndex = null //
   }
 }

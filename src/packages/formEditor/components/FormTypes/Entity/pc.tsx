@@ -186,8 +186,6 @@ export default defineComponent({
           showHeaderContext={false}
           tableName={tableName}
           mainTableName={mainTableName}
-          // showCheckBoxColumn={item.getShowCheckboxColumn()}
-          // showRowNumberColumn={item.getShowRowSeriesNumber()} //
           showCheckboxColumn={item.getShowCheckboxColumn()}
           showRowSeriesNumber={item.getShowRowSeriesNumber()} //
           showHeaderButtons={item.getShowHeaderButtons()}

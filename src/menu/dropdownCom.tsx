@@ -108,6 +108,11 @@ export default defineComponent({
               return com1 //
             },
           }} //
+          // onHidePanel={() =>
+          //   drop.onVisibleChange({
+          //     visible: false,
+          //   })
+          // }
           onVisibleChange={(v) => drop.onVisibleChange(v)} //
         ></Pulldown>
       )

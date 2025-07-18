@@ -83,7 +83,7 @@ export default defineComponent({
       if (props.isERDiagram) {
         let columnTable = (
           <div class="h-full w-full">
-            <erTable
+            <erXeTable
               ref={(el) => flow.registerRef('columnTable', el)} //
               data={flow.getColumnConfigData()}
               columns={flow.getColumnConfigColumns()}
@@ -93,12 +93,12 @@ export default defineComponent({
               showRowSeriesNumber={false}
               showCheckboxColumn={false} //
               showFooterTable={false} //
-            ></erTable>
+            ></erXeTable>
           </div>
         )
         let foreignKeyTable = (
           <div class="h-full w-full">
-            <erTable
+            <erXeTable
               ref={(el) => flow.registerRef('foreignKeyTable', el)} //
               data={flow.getForeignKeyConfigData()}
               columns={flow.getForeignKeyConfigColumns()}
@@ -108,7 +108,7 @@ export default defineComponent({
               showRowSeriesNumber={false}
               showCheckboxColumn={false} //
               showFooterTable={false} //
-            ></erTable>
+            ></erXeTable>
           </div>
         ) //
         let tabsLayout = (
@@ -137,12 +137,12 @@ export default defineComponent({
                 }
               },
             }}
-          ></tabCom>
+          ></tabCom> 
         )
         leftTable = (
           <div class="w-1/4 h-full overflow-hidden flex flex-col">
             <div class="flex-1">
-              <erTable
+              <erXeTable
                 ref={(el) => flow.registerRef('tableTable', el)}
                 onCurRowChange={(row) => {
                   flow.onCurRowChange(row)
@@ -150,13 +150,11 @@ export default defineComponent({
                 showHeaderButtons={true}
                 showHeaderDefaultButtons={false}
                 buttons={flow.getTableHeaderButtons()}
-                // showControllerButtons={true} //
-                // controllerButtons={flow.getTableControllerButtons()}
                 showRowSeriesNumber={false}
                 showFooterTable={false} //
                 columns={flow.getTableConfigColumns()}
                 data={flow.getTables()}
-              ></erTable>
+              ></erXeTable>
             </div>
             <div class="flex-1 overflow-hidden">
               {
