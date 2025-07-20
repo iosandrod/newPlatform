@@ -69,7 +69,7 @@ export default defineComponent({
               justify: props.data?.options?.justify, //
               align: props.data.options.align,
             }}
-            class={[ns.b(), 'flex', 'w-full','overflow-x-hidden']}
+            class={[ns.b(), 'flex', 'w-full','overflow-x-hidden',]}
           >
             {props.data.columns.map((element, index) => {
               return (
@@ -82,7 +82,7 @@ export default defineComponent({
                   // hasAddContainer
                   data-layout-type={'grid-col'}
                   tag={'el-col'}
-                  class={[ns.e('area')]} //
+                  class={[ns.e('area'),'']} //
                   span={element.options.span}
                   offset={element.options.offset}
                   pull={element.options.pull}

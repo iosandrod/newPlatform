@@ -3,7 +3,7 @@ import { Base } from '@/base/base'
 import { Form } from './form'
 import { Field, TableCell, TableRow } from './layoutType'
 import { FormItemRule, InputProps } from 'element-plus'
-import { computed, isProxy, isRef, nextTick } from 'vue'
+import { computed, isProxy, isRef, nextTick, reactive } from 'vue'
 import { FormProps } from './hooks/use-props'
 import dayjs from 'dayjs'
 import { showToast } from 'vant'
@@ -175,7 +175,18 @@ export class FormItem extends Base {
       return //
     }
     let tableName = this.getTableName()
-    let f = this.getField()
+    if (typeof tableName == 'function') {
+      let config = {
+        data: this.form.getData(),
+        form: this.form,
+        field: this.getField(),
+      }
+      tableName = tableName(config)
+      if (typeof tableName != 'string') {
+        return //
+      }
+    }
+    let f = this.getField() //
     this.getSystem().createColumnSelect(tableName)
   }
   initSTable() {
@@ -1070,7 +1081,7 @@ export class FormItem extends Base {
     let b = d[f]
     if (b == null || Array.isArray(b) || typeof b !== 'object') {
       //
-      b = {}
+      b = reactive({})
       d[f] = b
     } //
     //@ts-ignore
@@ -1234,6 +1245,19 @@ export class FormItem extends Base {
   }
   getColumnSelectOptions() {
     let tableName = this.getTableName()
+    if (typeof tableName == 'function') {
+      let config = {
+        form: this.form,
+        data: this.form.getData(),
+        field: this.getField(),
+      }
+      let _name = tableName(config)
+      if (typeof _name == 'string') {
+        tableName = _name //
+      } else {
+        tableName = null
+      }
+    }
     let sys = this.getSystem() //
     let selectop = sys.columnSelectOptions
     let arr = selectop[tableName] || []

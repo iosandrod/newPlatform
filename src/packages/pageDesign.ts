@@ -249,72 +249,83 @@ export class PageDesign extends Form {
       queryArr: [],
     },
   ) {
-    if (typeof getDataConfig == 'string') {
-      getDataConfig = {
-        tableName: getDataConfig,
-      }
-    }
-    if (this.isDesign == true) {
-      return //
-    }
-    let tableName = getDataConfig.tableName //
-    let http = this.getHttp()
-    let query = getDataConfig.query
-    let queryArr = getDataConfig?.queryArr || []
-    let _arr = queryArr
-      .map((row) => {
-        let field = row.field
-        let value = row.value
-        let operator = row.operator
-        if (field == null || value == null || operator == null) {
-          if (typeof row == 'object') {
-            //
-            let _arr = Object.entries(row).map(([key, value]) => {
-              let operator = '$eq'
-              let field = key
-              if (Array.isArray(value)) {
-                operator = '$in'
-              }
-              let obj = {
-                field,
-                operator,
-                value,
-              }
-              return obj
-            }) //
-            return _arr
-          }
-        } else {
-          return row
+    try {
+      if (typeof getDataConfig == 'string') {
+        getDataConfig = {
+          tableName: getDataConfig,
         }
-      })
-      .flat()
-      .filter((d) => d != null)
+      }
+      if (this.isDesign == true) {
+        return //
+      }
+      let tableName = getDataConfig.tableName //
+     
+      let _tableConfig = this.getTableConfig(tableName) //
+      let http = this.getHttp()
+      let query = getDataConfig.query
+      let queryArr = getDataConfig?.queryArr || []
+      let _arr = queryArr
+        .map((row) => {
+          let field = row.field
+          let value = row.value
+          let operator = row.operator
+          if (field == null || value == null || operator == null) {
+            if (typeof row == 'object') {
+              //
+              let _arr = Object.entries(row).map(([key, value]) => {
+                let operator = '$eq'
+                let field = key
+                if (Array.isArray(value)) {
+                  operator = '$in'
+                }
+                let obj = {
+                  field,
+                  operator,
+                  value,
+                }
+                return obj
+              }) //
+              return _arr
+            }
+          } else {
+            return row
+          }
+        })
+        .flat()
+        .filter((d) => d != null)
 
-    let _query = this.buildQuery(_arr)
-    query = { ...query, ..._query }
-    // let viewTable = this.config.viewTableName
-    let tableConfig = this.getTableConfig(tableName)
-    let viewTable = tableConfig.viewTableName1 //
-    let _t = tableName
-    let config: any = {}
-    if (typeof viewTable == 'string' && viewTable.length > 0) {
-      config.viewTable = viewTable
+      let _query = this.buildQuery(_arr)
+      query = { ...query, ..._query }
+      // let viewTable = this.config.viewTableName
+      let tableConfig = this.getTableConfig(tableName)
+      let viewTable = tableConfig.viewTableName
+      let dataSource = tableConfig.dataSource || {} //
+      let _t = tableName
+      let config: any = {}
+      config.dataSource = dataSource //
+      if (typeof viewTable == 'string' && viewTable.length > 0) {
+        // config.viewTable = viewTable
+      }
+      // console.log(config, 'testConfig')
+      let res = await http.find(_t, query, config) //
+      let dataMap = this.getTableRefData(tableName)
+      dataMap['data'] = res
+      if (res.length == 0 && tableName == this.getTableName()) {
+        this.setCurRow(null) //
+      }
+      let evName = `${tableName}_getTableData` //
+      let _config = {
+        event: evName,
+        data: res,
+      }
+      await this.publishEvent(_config) //
+      return res
+    } catch (error) {
+      let tableName = getDataConfig.tableName
+      this.getSystem().confirmErrorMessage(
+        `表${tableName}数据获取失败，${error?.message}`,
+      ) //
     }
-    // console.log(config, 'testConfig')
-    let res = await http.find(_t, query, config) //
-    let dataMap = this.getTableRefData(tableName)
-    dataMap['data'] = res
-    if (res.length == 0 && tableName == this.getTableName()) {
-      this.setCurRow(null) //
-    }
-    let evName = `${tableName}_getTableData` //
-    let _config = {
-      event: evName,
-      data: res,
-    }
-    await this.publishEvent(_config) //
-    return res
   }
   //
   async setCurRow(row, tableName = this.getTableName()) {
@@ -751,6 +762,7 @@ export class PageDesign extends Form {
   }
   async addDetailTableRow(tableName?: string, row?: any) {
     //
+    // debugger//
     let tTable: Table = this.getRef(tableName)
     if (row == null) {
       row = 1
@@ -1893,5 +1905,8 @@ export class PageDesign extends Form {
   async onDeleteRow(config) {
     let row = config.row
     let tableName = config.tableName //
+    let tRefData = this.getTableRefData(tableName)
+    let deleteData = tRefData.deleteData
+    deleteData.push(row)
   }
 }

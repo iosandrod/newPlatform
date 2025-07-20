@@ -46,7 +46,6 @@ export default defineComponent({
       pageDesign.registerRef(`${tableType}__${tableName}`, ins) //
       fitem.registerRef('fieldCom', ins) ////
       if (ins != null) {
-        //
         if (tableType == 'relate') {
           let treeConfig = item.config?.options?.treeConfig
           let autoColumnSize = treeConfig?.autoColumnSize
@@ -117,9 +116,11 @@ export default defineComponent({
     let height = ref(0)
     onMounted(() => {
       let fOutCom = item.getRef('fieldOutCom')
+      if (fOutCom == null) {
+        return //
+      }
       let bound = fOutCom.getBoundingClientRect()
-      // console.log(bound, 'testBound') //
-      height.value = bound.height
+      height.value = bound.height - 2 //
       _show.value = true
     }) //
     return () => {
@@ -145,7 +146,6 @@ export default defineComponent({
           }}
           height={height.value} //
           onCellCommand={(config) => {
-            // debugger //
             let _config1 = item?.config?.options || {}
             let tableName = item.getTableName()
             let _config = {
@@ -240,7 +240,7 @@ export default defineComponent({
       )
       if (_show.value == false) {
         tCom = null
-      }
+      } //
       let com = (
         <div
           class="  w-full box-border "
@@ -250,6 +250,8 @@ export default defineComponent({
           }}
           ref={(ins) => {
             item.registerRef('fieldOutCom', ins)
+            if (ins != null) {
+            }
           }}
         >
           {tCom}

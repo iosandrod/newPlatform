@@ -1296,8 +1296,6 @@ export class XeTable extends Base {
     return obj1
   }
   addRow(row: any, parentRow?: any) {
-    // debugger//
-    // debugger //
     let _index = row['_index']
     if (_index == null) {
       let _level = parentRow?.['_level']
@@ -1376,7 +1374,6 @@ export class XeTable extends Base {
     column.isEditTitle = true
   }
   delCurRow() {
-    // debugger //
     let curRow = this.tableData.curRow
 
     let showData = this.getData()
@@ -1425,16 +1422,17 @@ export class XeTable extends Base {
     if (_r == null) {
       return
     }
-    this.changeRowState(_r[0], 'delete')
+    // this.changeRowState(_r[0], 'delete')
+    _r[0]['_rowState'] = 'delete' //
     let onDeleteRow = this.config.onDeleteRow
     if (typeof onDeleteRow == 'function') {
-      onDeleteRow({ row: _r[0] }) //
+      onDeleteRow({ row: _r[0], rows: _r })
     }
     this.deleteArr.push(_r[0]) //
     nextTick(() => {
       if (nextRow != null) {
-        this.setCurRow(nextRow) //
-      }
+        this.setCurRow(nextRow)
+      } //
     }) //
   }
   getTableHeight() {

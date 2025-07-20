@@ -977,6 +977,13 @@
     local-pkg "^1.0.0"
     mlly "^1.7.4"
 
+"@infectoone/vue-ganttastic@^2.3.2":
+  version "2.3.2"
+  resolved "https://registry.npmmirror.com/@infectoone/vue-ganttastic/-/vue-ganttastic-2.3.2.tgz#34d0f6581fe3b5ddfe968de7ace63052f452d53f"
+  integrity sha512-krxHdlZvo4cdS4axQ99qb756RzwieI7LcyY2vAIehJ5Sxd/jz5Pu/vTplTC0Rxqj8T4v1knYPK9uvTMkQYWYng==
+  dependencies:
+    "@vueuse/core" "^9.1.1"
+
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
   resolved "https://registry.npmmirror.com/@isaacs/cliui/-/cliui-8.0.2.tgz#b37667b7bc181c168782259bab42474fbf52b550"
@@ -2631,7 +2638,7 @@
     "@vueuse/shared" "10.11.1"
     vue-demi ">=0.14.8"
 
-"@vueuse/core@^9.1.0":
+"@vueuse/core@^9.1.0", "@vueuse/core@^9.1.1":
   version "9.13.0"
   resolved "https://registry.npmmirror.com/@vueuse/core/-/core-9.13.0.tgz#2f69e66d1905c1e4eebc249a01759cf88ea00cf4"
   integrity sha512-pujnclbeHWxxPRqXWmdkKV5OX4Wk4YeK7wusHqRwU0Q7EFusHoqNA/aPhB6KCh9hEqJkLAJo7bb0Lh9b+OIVzw==

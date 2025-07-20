@@ -224,7 +224,11 @@ export class PageDesignItem extends FormItem {
         })
         obj = { ...obj, ..._dValue } //
       }
-      Object.defineProperty(obj, '_rowState', { value: 'add' })
+      Object.defineProperty(obj, '_rowState', {
+        value: 'add',
+        enumerable: false,
+        writable: true,
+      })//
       _arr.push(obj)
     } //
     // debugger //

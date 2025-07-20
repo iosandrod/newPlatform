@@ -66,7 +66,7 @@ export const createColumnSelect = async (sys: System, tableName) => {
     columnSelect[tableName] = _cols1 //
     columnSelect[_key] = true //
   }
-  console.log(columnSelect, 'testSelect') //
+  // console.log(columnSelect, 'testSelect') //
 }
 
 export const changePassword = async (_this: System) => {

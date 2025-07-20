@@ -44,8 +44,8 @@ import '@arco-design/web-vue/es/message/style/css'
 import '@arco-design/web-vue/es/modal/style/css'
 import '@arco-design/web-vue/es/notification/style/css'
 import Vue3Dragscroll from 'vue3-dragscroll'
-import './layui.js'
-import './layui.css'
+// import './layui.js'
+// import './layui.css'
 // import 'tw-elements'
 const originalRAF = window.requestAnimationFrame
 

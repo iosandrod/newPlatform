@@ -87,7 +87,40 @@ export class editPageDesign extends PageDesign {
     // let rTableName = this.getRealTableName()
     let rTableName = tableName //
     let http = this.getHttp()
+    let getDataConfig = config
     let query = config.query || {}
+    let queryArr = getDataConfig?.queryArr || []
+    let _arr = queryArr
+      .map((row) => {
+        let field = row.field
+        let value = row.value
+        let operator = row.operator
+        if (field == null || value == null || operator == null) {
+          if (typeof row == 'object') {
+            //
+            let _arr = Object.entries(row).map(([key, value]) => {
+              let operator = '$eq'
+              let field = key
+              if (Array.isArray(value)) {
+                operator = '$in'
+              }
+              let obj = {
+                field,
+                operator,
+                value,
+              }
+              return obj
+            }) //
+            return _arr
+          }
+        } else {
+          return row
+        }
+      })
+      .flat()
+      .filter((d) => d != null)
+    let _query = this.buildQuery(_arr)
+    query = { ...query, ..._query }
     let tableState = this.tableState //
     if (tableState == 'add' && Object.keys(query).length == 0) {
       //
@@ -108,8 +141,13 @@ export class editPageDesign extends PageDesign {
     if (Object.keys(query).length == 0) {
       this.getSystem().confirmMessage('未设置查询条件', 'error')
       return //
-    }
-    let res = await http.get(rTableName, 'find', query) //
+    } //
+    let tableConfig = this.getTableConfig(tableName)
+    let dataSource = tableConfig.dataSource || {} //
+    let _t = tableName
+    let config1: any = {}
+    config1.dataSource = dataSource //
+    let res = await http.find(rTableName, query, config1) //
     let dataMap = this.getTableRefData(config.tableName || this.getTableName()) //
     let row = res[0] || {} //
     dataMap['data'] = res //
@@ -198,15 +236,26 @@ export class editPageDesign extends PageDesign {
         let data = dataRef.data
         let _d = getFlatTreeData(data)
         let deleteData = dataRef.deleteData || [] //
-        let changeD = _d.filter((row) => {
-          let rowState = row['_rowState']
-          return rowState == 'add' || rowState == 'change'
-        })
-        _d = _d.map((row) => {
+        deleteData = deleteData.map((row) => {
           let rowState = row['_rowState']
           let obj = { ...row, _rowState: rowState }
           return obj
         }) //
+        // let changeD = _d.filter((row) => {
+        //   let rowState = row['_rowState']
+        //   return rowState == 'add' || rowState == 'change'
+        // })
+        _d = _d
+          .map((row) => {
+            let rowState = row['_rowState']
+            let obj = { ...row, _rowState: rowState }
+            return obj
+          })
+          .filter((row) => {
+            let rowState = row['_rowState']
+            return rowState == 'add' || rowState == 'change' //
+          })
+        _d = [..._d, ...deleteData] //
         let obj = {
           tableName: tableName,
           data: _d, //
@@ -250,8 +299,10 @@ export class editPageDesign extends PageDesign {
   setColumnSelect() {}
   async saveTableDesign(_config?: any) {
     let isD = this.isDialog
-    let _config1 = { ..._config, refresh: !isD }
-    super.saveTableDesign(_config1)
+    let _config1 = { ..._config, refresh: !isD } //
+    await super.saveTableDesign(_config1)
+    let layoutData = this.getLayoutData()
+    this.setLayoutData(layoutData) //
   }
 
   @useHooks((config) => {

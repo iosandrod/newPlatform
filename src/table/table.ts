@@ -1454,8 +1454,13 @@ export class Table extends Base {
     // }) //
     _arr.forEach((item) => {
       if (item?._rowState == null) {
-        Object.defineProperties(item, {
-          _rowState: { value: 'add', enumerable: false, writable: true },
+        // Object.defineProperties(item, {
+        //   _rowState: { value: 'add', enumerable: false, writable: true },
+        // })
+        Object.defineProperty(item, '_rowState', {
+          value: 'add',
+          enumerable: false,
+          writable: true, //
         })
       } //
       this.initDataRow(item)
@@ -2740,7 +2745,7 @@ export class Table extends Base {
     let config = {
       addCols: addCols,
       updateCols: updateCols,
-     
+
       allCols: cols,
       tableName: this.getTableName(),
     }

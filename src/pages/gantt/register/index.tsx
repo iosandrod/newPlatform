@@ -1,10 +1,14 @@
 import { defineComponent } from 'vue'
-
+import globalRegister from '@/pages/platform/globalRegister' //
 export default defineComponent({
-  name: 'GanttRegister', //
+  name: 'platformRegister',
+  components: {
+    globalRegister, //
+  },
   setup() {
     return () => {
-      return <div>gantt</div>
+      let com = <globalRegister></globalRegister>
+      return com
     }
   },
 })

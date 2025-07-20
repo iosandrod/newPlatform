@@ -16,6 +16,7 @@ export class XeColumn extends Column {
   columns: XeColumn[]
   constructor(config: any, table) {
     super(config, table)
+    this.initColumnSelect()
   }
   addColumn(config: any) {
     let table = this.getTable()
@@ -213,7 +214,7 @@ export class XeColumn extends Column {
       }
       if (typeof fieldFormat !== 'function') {
         fieldFormat = (config) => {
-          let _this = config.column || config.col //
+          let _this: XeColumn = config.column || config.col //
           if (_this == null) {
           }
           let type = _this.getEditType()

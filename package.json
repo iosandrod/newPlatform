@@ -25,6 +25,7 @@
     "@iconify-json/mdi": "^1.1.53",
     "@iconify-json/ri": "^1.1.10",
     "@iconify/tailwind": "^1.2.0",
+    "@infectoone/vue-ganttastic": "^2.3.2",
     "@logicflow/core": "^2.0.16",
     "@logicflow/extension": "^2.0.21",
     "@types/lodash": "^4.17.12",

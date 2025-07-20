@@ -117,6 +117,9 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    onDeleteRow: {
+      type: Function, //
+    },
     tableState: {
       type: String,
     },

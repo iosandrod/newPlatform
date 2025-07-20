@@ -24,6 +24,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
     'realTableName', //
     'platform',
     'relateConfig',
+    'dataSource', //
   ] //
   /* 
     'initGetData',
@@ -80,6 +81,10 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
                   {
                     label: '视图类型',
                     value: 'view', //
+                  },
+                  {
+                    label: 'SQL类型',
+                    value: 'sql', //
                   },
                 ],
               },

@@ -49,8 +49,10 @@ import {
 import { SearchPageDesign } from '@ER/searchPageDesign'
 import { Input } from '@/input/inputClass'
 import { useTimeout } from '@ER/utils/decoration'
+import { XeColumn } from './xecolumn'
 let cellType = ['text', 'link', 'image', 'video', 'checkbox'] //
 export class Column extends Base {
+  hasInitColumnSelect = false
   currentDropdownIndex = null
   currentEditIndex = null //
   showDragIcon = false
@@ -366,7 +368,7 @@ export class Column extends Base {
       }
       if (typeof fieldFormat !== 'function') {
         fieldFormat = (config) => {
-          let _this = config.column || config.col //
+          let _this: XeColumn = config.column || config.col //
           if (_this == null) {
           }
           let type = _this.getEditType()
@@ -1172,15 +1174,19 @@ export class Column extends Base {
     return color
   }
   initColumnSelect() {
+    if (this.hasInitColumnSelect) {
+      return //
+    }
     let columnSelect = this.config.columnSelect
     if (columnSelect !== true) {
       return //
-    }
+    } //
     let sys = this.getSystem()
     let tableName = this.getTableName()
     if (tableName == null) {
       return //
     }
+    this.hasInitColumnSelect = true
     sys.createColumnSelect(tableName)
   }
   _getBaseinfoConfig() {

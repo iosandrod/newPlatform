@@ -44,6 +44,7 @@ export const getBaseInfoEditConfig = (_this, tableName) => {
           showTable: false, //
           tableTitle: '绑定参照表',
           tableState: 'edit',
+          showHeaderButtons: true, //
           columns: [
             {
               field: 'key',
@@ -69,7 +70,10 @@ export const getBaseInfoEditConfig = (_this, tableName) => {
         options: {
           columnSelect: true,
           multiple: true,
-          tableName: tableName, //
+          tableName: (config) => {
+            let data = config.data //
+            return data.tableName //
+          }, //
         },
       },
     ],
