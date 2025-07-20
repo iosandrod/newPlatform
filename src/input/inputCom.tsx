@@ -257,6 +257,9 @@ export default defineComponent({
             modelValue={_input.getModelValue()}
             v-slots={{
               suffix: () => {
+                if (slots?.suffix) {
+                  return slots.suffix() //
+                }
                 let buttons = slots?.buttons?.()
                 return buttons //
               },

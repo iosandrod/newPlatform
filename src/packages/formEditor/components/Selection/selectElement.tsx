@@ -132,7 +132,7 @@ export default {
       tableInsertCol: () => {
         formIns.tableInsertCol(props)
       },
-    }
+    }//
     const handleAction = (type) => {
       const iconActionMap = {
         1: 'delete', // 删除
@@ -449,7 +449,7 @@ export default {
               )
               iconArr.push(delIcon)
             }
-            if (props.data.type == 'Sform') {
+            if (props.data.type == 'sform') {
               let _icon = (
                 <Icon
                   class={[ns.e('copy')]}

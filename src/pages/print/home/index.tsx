@@ -1,16 +1,21 @@
-import { defineComponent } from 'vue'
+import { System } from '@/system'
+import { defineComponent, inject } from 'vue'
 
 export default defineComponent({
   //
   setup() {
+    let system: System = inject('systemIns')
     return () => (
       <div class="min-h-screen bg-gray-100 p-6">
         <header class="mb-8 flex items-center justify-between">
           <h1 class="text-2xl font-bold">Web 打印系统</h1>
-          <button class="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-            <span
-              class="inline-block w-4 h-4 bg-no-repeat bg-center bg-contain"
-            ></span>
+          <button
+            onClick={() => {
+              system.routeTo('/admin') //
+            }}
+            class="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            <span class="inline-block w-4 h-4 bg-no-repeat bg-center bg-contain"></span>
             进入打印后台
           </button>
         </header>
@@ -22,9 +27,7 @@ export default defineComponent({
                 class="rounded-2xl bg-white p-4 flex flex-col items-center justify-center shadow hover:shadow-lg transition"
                 key={index}
               >
-                <span
-                  class="inline-block w-12 h-12 mb-4 bg-no-repeat bg-center bg-contain"
-                ></span>
+                <span class="inline-block w-12 h-12 mb-4 bg-no-repeat bg-center bg-contain"></span>
                 <h2 class="text-lg font-semibold mb-2">{title}</h2>
                 <p class="text-gray-500 text-sm mb-4 text-center">
                   {index === 0 &&

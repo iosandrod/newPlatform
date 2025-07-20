@@ -15388,3 +15388,349 @@ let isCurrentEdit = computed(() => {
 
                 // showCheckBoxColumn={item.getShowCheckboxColumn()}
           // showRowNumberColumn={item.getShowRowSeriesNumber()} //
+
+           // otherCols: cols.filter((col) => {
+      //   return !addCols.includes(col) && !updateCols.includes(col)
+      // }), //
+
+       // let formIns = this
+    // let id = props.data.id
+    // let subForm = formIns.getSubForm(id)
+    // if (subForm != null) {
+    //   formIns.nextForm = subForm //
+    // }
+
+     let _f = new Form(_config) //
+    _f.tableName = tName
+    //@ts-ignore
+    let dTableName = this.form.dTableName || this.form.tableName
+    _f.dTableName = dTableName //
+    let oldLayoutData = this.getRef('fieldCom').getLayoutData()
+    _f.setLayoutData(oldLayoutData) //
+    _f.setCurrentDesign(true) //
+
+    let fieldCom: Form = this.getRef('fieldCom')
+        fieldCom.setLayoutData(layoutData) //
+
+        ns.b(),
+
+
+
+
+          <div
+          class={[ 'flex-col']}
+          style={{ display: 'flex', width: '100vw', height: '100vh' }}
+        >
+          {context}
+          {pageHeader}
+
+          <div class="flex h-full overflow-hidden">
+            {/* 左侧菜单区 */}
+            <aside class="h-full overflow-hidden border-r border-gray-200 er-w-200 bg-gray-50 ">
+              {leftM}
+            </aside>
+
+            {/* 右侧主体区 */}
+            <div class="flex flex-col flex-1 overflow-hidden">
+              {/* 顶部标签栏 卡片化 */}
+              <div class="px-1 bg-white border-b border-gray-200 shadow-sm">
+                <div class="max-w-full ">
+                  <div class="bg-white rounded-lg shadow-inner">{tableTab}</div>
+                </div>
+              </div>
+
+              {/* 主内容区 卡片化 + 渐变背景 */}
+              <main class="flex-1 p-1 overflow-auto bg-gradient-to-b">
+                <div class="w-full h-full max-w-full p-1 overflow-hidden bg-white rounded-lg shadow-lg">
+                  {dCom}
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+
+
+          let leftM = (
+        <div class="h-full overflow-auto w-200">
+          <LeftMenu></LeftMenu>
+        </div>
+      )
+      let tableTab = (
+        <tabCom
+          height={32}
+          onCloseClick={(config) => {
+            system.onTableTabClose(config) //
+          }}
+          onTabChange={(config) => {
+            system.onMainTabChange(config)
+          }}
+          showCloseIcon={true} //
+          items={systemIns.getTabItems()}
+          modelValue={systemIns.getTabModelValue()}
+          showContextMenu={true}
+          contextItems={systemIns.getTabContextItems()}
+          v-slots={{
+            item: (item) => {
+              //
+              let com = (
+                <div class="flex items-center justify-center h-full px-3 text-gray-700 border-t border-gray-300 border-x rounded-t-md hover:bg-gray-100">
+                  <div class="flex items-center justify-center w-full h-full">
+                    <div>{item.getLabel()}</div>
+                  </div>
+                </div>
+              )
+              return com
+            },
+          }}
+        ></tabCom>
+      )
+
+
+
+
+
+
+
+
+
+
+
+
+       if (_parent == ER.state.store && inserColIndex !== '') {
+        let {
+          el: {
+            __draggable_component__: { list },
+          }, //
+          el, //
+          constructor: { utils: sortableUtils }, //
+        } = prevSortable
+        if (list.length == 1 && list[0].type == 'grid') {
+          //
+          let oldCol: any = null
+          let gColumns: any = null
+          let _parent2 = list[0]
+          let _span: any = null
+          if (_parent2?.type == 'grid') {
+            let _parent1 = null
+            if (inserColIndex == 1) {
+              let columns = _parent2.columns
+              let lastChild = columns[columns.length - 1]
+              _parent1 = lastChild
+            } else {
+              _parent1 = _parent2.columns[0]
+            }
+            gColumns = _parent2.columns // is Array
+            let _span = _parent1.options.span
+            let _span1: number = Number(_span / 2).toFixed(0) as any //
+            let totalSpan = gColumns
+              .map((col) => {
+                let span = col?.options?.span
+                return span
+              })
+              .reduce((pre, cur) => {
+                return pre + cur
+              }, 0)
+            if (totalSpan < 24) {
+              _span1 = 24 - totalSpan
+              if (_span1 > 6) {
+                _span1 = 6
+              }
+            } //
+            oldCol = _parent1 //
+            let newIndex = gColumns.findIndex((col) => col.id == oldCol.id)
+            if (totalSpan == 24) {
+              //
+              _parent1.options.span = _span - _span1 ////
+            }
+            //@ts-ignore
+            if (inserColIndex == 1) {
+              newIndex += 1
+            } //
+            let _node = _parent2.context.appendCol(newIndex) //
+            _node.options.span = _span1
+            resetStates()
+            if (_node == null) {
+              return
+            }
+            let newElement = ER.wrapElement(
+              _.cloneDeep(oldEl),
+              inserRowIndex !== '',
+              true,
+              isBlock,
+              // isInRootDiv,
+            )
+            newElement = {
+              ...ER.createNodeIdKey('inline'),
+              // type: 'inline',
+              columns: [newElement],
+            }
+            // let list = _node.list
+            _node.context.appendBlockNode(newElement) ////
+            if (!isBlock) {
+              //
+              if (oldEl.context) {
+                let _context = oldEl.context
+                if (_context.parent?.type == 'inline') {
+                  oldEl = _context.parent?.context?.parent
+                  _context = oldEl.context //
+                } //
+                let flatNode = _context.getFlattenNodes()
+                let ids = flatNode.map((node) => node.id)
+                let next = Array.isArray(prevSortable?.options?.parent)
+                  ? prevSortable?.options?.parent //
+                  : [prevSortable?.options?.parent]
+                next = next.filter((node) => node != null) //
+                let _ids = next.map((node) => node.id)
+                if (_ids.some((id) => ids.includes(id))) {
+                  resetStates()
+                  return
+                }
+                oldEl.context.delete()
+              }
+            }
+            return
+          }
+          resetStates() //
+          return //
+        }
+      } //
+
+       if (oldEl.type == 'grid') {
+        // isInRootDiv = false
+      } //
+
+       {/* <_com></_com> */} 
+
+        {/* <button
+                        type="button"
+                        class="px-5 py-2 font-medium text-white transition-all duration-200 bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg"
+                        onClick={() => systemIns.openApp(app.appName)}
+                      >
+                        进入
+                      </button>
+                      <button
+                        type="button"
+                        class="px-5 py-2 font-medium text-white transition-all duration-200 bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg"
+                        onClick={() => systemIns.installApp(app.appName)}
+                      >
+                        安装
+                      </button> */}
+
+                      <ElMenu class="w-full" default-active={activeSidebar.value}>
+              <ElMenuItem index="1" class="flex items-center px-4">
+                <i class="mr-2 el-icon-menu"></i>
+                应用列表
+              </ElMenuItem>
+            </ElMenu>
+
+              let left = (
+        <div class="flex-1 hidden h-full text-black w-52 md:block">
+          <aside class="bg-gray-100 lg:w-56 ">
+            
+          </aside>
+        </div>
+      )
+
+
+
+       let leftMenu = (
+        <ElMenu
+          mode="horizontal"
+          default-active={activeHeader.value}
+          background-color="transparent"
+          text-color="#ffffff"
+          active-text-color="#ffe58f"
+          class="flex-1 mx-10"
+        >
+          {_items}
+        </ElMenu>
+      )
+
+       <ElMenuItem
+            onClick={() => {
+              let name = item.name
+              if (name) {
+                systemIns.routeTo(`/home/${name}`) //
+              }
+            }}
+            index={item.label}
+            class="pl-10 pr-10"
+          >
+            {item.label}
+          </ElMenuItem>
+              let header = (
+        <div class="shadow-sm navbar bg-base-100">
+          <div class="navbar-start">
+            <div class="dropdown">
+              <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  {' '}
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 6h16M4 12h8m-8 6h16"
+                  />{' '}
+                </svg>
+              </div>
+              <ul
+                tabindex="0"
+                class="p-2 mt-3 shadow menu menu-sm dropdown-content bg-base-100 rounded-box z-1 w-52"
+              >
+                <li>
+                  <a>Item 1</a>
+                </li>
+                <li>
+                  <a>Parent</a>
+                  <ul class="p-2">
+                    <li>
+                      <a>Submenu 1</a>
+                    </li>
+                    <li>
+                      <a>Submenu 2</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a>Item 3</a>
+                </li>
+              </ul>
+            </div>
+            <a class="text-xl btn btn-ghost">低代码应用中心</a>
+          </div>
+          <div class="hidden navbar-center lg:flex">
+            <ul class="px-1 menu menu-horizontal">
+              <li>
+                <a>Item 1</a>
+              </li>
+              <li>
+                <details>
+                  <summary>Parent</summary>
+                  <ul class="p-2">
+                    <li>
+                      <a>Submenu 1</a>
+                    </li>
+                    <li>
+                      <a>Submenu 2</a>
+                    </li>
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <a>Item 3</a>
+              </li>
+            </ul>
+          </div>
+          <div class="navbar-end">
+            <a class="btn">Button</a>
+          </div>
+        </div>
+      )
+
+      return <div>{header}</div>

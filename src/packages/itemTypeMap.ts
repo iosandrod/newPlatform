@@ -51,6 +51,7 @@ export const selectType = (item: FormItem) => {
     }
     item.updateBindData({ value })
   }
+  obj.allowCreate = item.getAllowCreate()//
   return obj //
 }
 

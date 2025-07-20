@@ -7,7 +7,7 @@ export default defineComponent({
       let _com = (
         <main className="flex flex-col items-center justify-center flex-grow px-6 py-16">
           <h1 className="mb-4 text-4xl font-bold text-gray-800">
-            关于低代码应用中心
+            关于开发平台应用中心
           </h1>
           <p className="max-w-3xl mb-10 text-lg text-center text-gray-600">
             我们致力于通过可视化配置和组件复用，显著提升开发效率，帮助企业快速响应业务变化，实现数字化转型。

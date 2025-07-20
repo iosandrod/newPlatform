@@ -37,7 +37,7 @@
       </div>
     </roy-header>
 
-    <roy-container style="height: calc(100% - 40px);">
+    <roy-container class="flex flex-row" style="height: calc(100% - 40px);">
       <roy-aside class="roy-designer-aside" width="auto">
         <DesignerAside v-model:showRight="defaultExpendAside" />
       </roy-aside>

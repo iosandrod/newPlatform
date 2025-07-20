@@ -31,7 +31,7 @@ export default defineComponent({
     const data = computed(() => {
       let _data = formitem.getdBindData()
       return _data
-    })
+    }) //
     let _value = computed(() => {
       //
       // debugger //

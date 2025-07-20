@@ -339,7 +339,6 @@ export class PageDesign extends Form {
       let tName = item.getTableName()
       return tName
     })
-    console.log(tableName, this.getRealTableName()) //
     if (
       tableName == this.getTableName() ||
       tableName == this.getRealTableName()
@@ -739,7 +738,7 @@ export class PageDesign extends Form {
       return
     }
     let tRef: XeTable = this.getRef(tableName)
-    if(tRef){
+    if (tRef) {
       tRef.clearData()
     }
   }
@@ -1891,4 +1890,8 @@ export class PageDesign extends Form {
   }
   async auditCurRow() {}
   async unAuditCurRow() {}
+  async onDeleteRow(config) {
+    let row = config.row
+    let tableName = config.tableName //
+  }
 }

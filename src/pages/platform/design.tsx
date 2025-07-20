@@ -93,7 +93,7 @@ export default defineComponent({
         return <div></div> //
       }
       let _com = (
-        <PageCom isMainPage isDesign={false} formIns={en.value}></PageCom>
+        <PageCom platform={system.currentPlatform} isMainPage isDesign={false} formIns={en.value}></PageCom>
       )
       let pagin = null
       if (isStatic == false) {
@@ -115,9 +115,7 @@ export default defineComponent({
       // _com = <erXeTable key={tableName}></erXeTable> //
       return (
         <div class="h-full w-full flex flex-col  overflow-hidden">
-          <div class="flex-1">
-            {/* <_com></_com> */} <_com></_com>
-          </div>
+          <div class="flex-1">{_com}</div>
           {pagin}
         </div>
       )

@@ -168,12 +168,8 @@ li {
 .ER-element{
 }
 
-.relative{
-  position: relative;
-}
-.absolute{
-  position: absolute;
-}
+
+
 .fixed{
   position: fixed;
 }
@@ -473,4 +469,18 @@ z-index: 200;
   background-color: #e6f7ff;
   border-color: #91d5ff;
   color: #1890ff;
+}
+.vxe-pager{
+  display: flex;
+  flex-wrap: nowrap;
+  height: 100%;
+  overflow: hidden;
+}
+.vxe-pager--wrapper{
+  display: flex;
+  height: 100%;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  z-index: 100;
 }

@@ -12,25 +12,25 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const systemIns: System = inject('systemIns')
-    const apps = computed(() => props.lists)//
+    const apps = computed(() => props.lists) //
     return () => {
       let _lists = (
         <main class="flex-1 p-5 overflow-auto  min-w-60 bg-gray-50">
-          <div class="flex flex-wrap">
+          <div class="flex flex-wrap overflow-auto">
             {apps.value.map((app: any) => {
               let btns = null
               if (slots?.buttons) {
                 btns = slots.buttons(app)
               }
-              let url=systemIns.formatImgSrc(app.photo)
+              let url = systemIns.formatImgSrc(app.photo)
               let com = (
                 <ElCard
                   key={app.id}
                   class="relative p-6 m-4 bg-white rounded-2xl shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-1"
                 >
-                  <div class="relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-row items-start gap-6">
+                  <div class="relative  bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col md:flex-row items-start gap-6">
                     {/* 左侧图片 */}
-                    <div class="flex-none w-32 h-32 rounded-xl overflow-hidden">
+                    <div class="flex-none w-32 md:h-32 rounded-xl overflow-hidden">
                       <img
                         src={url} //
                         alt={app.cnName}
@@ -39,7 +39,7 @@ export default defineComponent({
                     </div>
 
                     {/* 中间文字 */}
-                    <div class="flex-1">
+                    <div class="flex-1 flex-col">
                       {/* 标题 */}
                       <div class="flex items-center mb-2">
                         <i class={`${app.icon} text-2xl text-blue-600 mr-2`} />
@@ -55,20 +55,6 @@ export default defineComponent({
 
                     {/* 右下角按钮组 */}
                     <div class="absolute bottom-4 right-4 flex space-x-3">
-                      {/* <button
-                        type="button"
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-                        onClick={() => systemIns.openApp(app.appName)}
-                      >
-                        进入
-                      </button>
-                      <button
-                        type="button"
-                        class="bg-green-500 hover:bg-green-600 text-white font-medium px-5 py-2 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
-                        onClick={() => systemIns.installApp(app.appName)}
-                      >
-                        安装
-                      </button> */}
                       {btns}
                     </div>
                   </div>

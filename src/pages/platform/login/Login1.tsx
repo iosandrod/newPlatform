@@ -194,7 +194,6 @@ export default defineComponent({
     let _item1 = _item.items[0]
     // console.log(_item, 'testItem')
     let _config123 = getDesignTableConfig(_item1)
-    console.log(_config123)
     let tConfig = {
       columns: xeTableColumns,
       data: xeTableData,
@@ -234,6 +233,12 @@ export default defineComponent({
         <div class="er-h-400 er-w-600">
           <erXeTable {...permissionTConfig}></erXeTable>
         </div>
+      )
+      com = (
+        <selectCom
+          options={[{ label: '123', value: '123' }]}
+          allowCreate={true}
+        ></selectCom>
       )
       let _com = (
         <div

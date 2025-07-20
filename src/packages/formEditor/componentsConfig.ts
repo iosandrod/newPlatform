@@ -59,7 +59,6 @@ export const createFieldConfig = (f: Form) => {
     }
   } //
   if (allFields.length == 0) {
-    debugger //
   }
   // console.log(allFields.map((f) => f.field)) //
   const fieldsConfig = [

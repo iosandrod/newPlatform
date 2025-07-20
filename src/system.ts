@@ -47,6 +47,7 @@ const staticComMap = {
   platform: platfomrStaticCom,
 }
 export class System extends Base {
+  currentPlatform = 'pc' //
   _keyboardListeners: any[] = []
   pageLoading = false
   staticComArr: any[] = []
@@ -1760,6 +1761,17 @@ export class System extends Base {
           this.deleteMenuItem(curItem)
         },
       },
+      {
+        label: '隐藏当前菜单',
+        fn: async () => {
+          let menu: Menu = this.getRef('leftMenu')
+          let curItem = menu.curContextMenu
+          let enable = curItem.status
+          let _config = { ...curItem, status: 0 }
+          await this.getHttp().patch('navs', _config)
+          this.confirmMessage('隐藏成功') //
+        },
+      },
     ]
     return _items
   }
@@ -1932,8 +1944,8 @@ export class System extends Base {
       {
         label: '恢复数据库',
         fn: async () => {
-          // await system.restoreDatabase() //
-          console.log(this.tableMap) //
+          await system.restoreDatabase() //
+          // console.log(this.tableMap) //
         },
       },
     ]
@@ -2057,11 +2069,11 @@ export class System extends Base {
         name: 'about',
       },
       {
-        label: '联系开发', //
+        label: '我们', //
         name: 'contact', //
       },
     ]
-  }
+  } //
   getCardButtons() {}
   async getRealTables() {
     let http = this.getHttp() //
@@ -2291,6 +2303,25 @@ export class System extends Base {
   }
   async selectRolePermissions() {
     //
+  }
+  closeLeftMenu() {
+    // console.log('click outsize') //
+    let platform = this.getPlatform()
+    if (platform == 'mobile') {
+      let leftDiv = this.getRef('leftMenuDiv')
+      leftDiv.style.display = 'none' //
+    } //
+  }
+  getPlatform() {
+    let p = this.currentPlatform
+    return p
+  }
+  getCurrentPlatform() {
+    let p = this.currentPlatform
+    if (['mobile', 'pc'].indexOf(p) == -1) {
+      p = 'pc'
+    } //
+    return p //
   }
 }
 export const system = reactive(new System())

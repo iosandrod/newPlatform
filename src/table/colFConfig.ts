@@ -406,6 +406,10 @@ export const getAllColTypes = () => {
       label: '图片',
       value: 'photo', //
     },
+    {
+      label: '子表单', //
+      value: 'sform',
+    },
   ]
 } //
 //

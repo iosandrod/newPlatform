@@ -8,7 +8,7 @@ import Vant, { Locale } from 'vant'
 import enUS from 'vant/es/locale/lang/en-US'
 import 'element-plus/dist/index.css'
 import 'vant/lib/index.css'
-
+import './changePlatform' //
 import './homeStyle.css'
 import 'vxe-table/lib/style.css'
 import 'vxe-pc-ui/styles/all.scss'
@@ -44,6 +44,9 @@ import '@arco-design/web-vue/es/message/style/css'
 import '@arco-design/web-vue/es/modal/style/css'
 import '@arco-design/web-vue/es/notification/style/css'
 import Vue3Dragscroll from 'vue3-dragscroll'
+import './layui.js'
+import './layui.css'
+// import 'tw-elements'
 const originalRAF = window.requestAnimationFrame
 
 window.requestAnimationFrame = function (callback) {
@@ -128,8 +131,6 @@ app.use(store) //
 // app.use(pinia) //
 registerEdit()
 Locale.use('en-US', enUS)
-// registerAntdComp(app)
-// registerIconsComp(app)
 app.use(Vant)
 app.component('wangEditor', wangCom)
 app.use(Vue3Dragscroll)

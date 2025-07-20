@@ -17,9 +17,10 @@ export const selectTypeMap = (_this: PageDesign) => {
       {
         field: 'field',
         title: '绑定字段',
-        type: 'string',
+        type: 'select', //
         label: '绑定字段',
         options: {
+          allowCreate: true, //
           columnSelect: true,
           tableName: rTableName,
         },

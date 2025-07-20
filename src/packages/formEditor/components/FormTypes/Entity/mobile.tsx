@@ -78,7 +78,7 @@ export default defineComponent({
           class="h-full  w-full box-border "
           style={{ minHeight: '200px', padding: '4px' }}
         >
-          <erTable
+          <erXeTable
             onTableConfigChange={(config) => {
               item.onTableConfigChange(config)
             }}
@@ -162,7 +162,7 @@ export default defineComponent({
               item.onColumnConfigChange(config)
             }}
             rowHeight={item.getTableRowHeight()} //
-          ></erTable>
+          ></erXeTable>
         </div>
       )
       return com

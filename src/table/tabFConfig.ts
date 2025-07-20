@@ -93,6 +93,9 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               field: 'viewTable',
               label: '视图表',
               type: 'select', //
+              options: {
+                optionsField: 'sysViewTable', //
+              },
             },
           ],
         },

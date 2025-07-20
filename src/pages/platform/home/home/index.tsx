@@ -9,7 +9,7 @@ import {
   ElCollapseItem,
   ElPagination,
 } from 'element-plus'
-import { defineComponent, inject, onMounted, ref } from 'vue'
+import { defineComponent, inject, onMounted, ref, watch } from 'vue'
 import AppList from './appList'
 
 export default defineComponent({
@@ -35,19 +35,27 @@ export default defineComponent({
     const uninstalledTotal = ref(0)
     const uninstalledApps = ref<any[]>([])
     const getInsList =async  () => {
-     await  systemIns.getEnterApp().then((res: any) => {
-        installedApps.value = res
-        installedTotal.value = res.length
-        if(res.length==0){
-          activeNames.value=['2']//
-        }
-      })
+        
+        await  systemIns.getEnterApp().then((res: any) => {
+          installedApps.value = res
+          installedTotal.value = res.length
+          if(res.length==0){
+            activeNames.value=['2']//
+          }
+        }).catch(err=>{
+
+        })
+      
     }
     const getUninsList = async () => {//
-      await systemIns.getInstallApp().then((res: any) => {
-        uninstalledApps.value = res
-        uninstalledTotal.value = res.length
-      })
+    
+        
+        await systemIns.getInstallApp().then((res: any) => {
+          uninstalledApps.value = res
+          uninstalledTotal.value = res.length
+        }).catch(err=>{
+
+        })
     }
     const loadList=async ()=>{
       await getInsList()
@@ -60,10 +68,24 @@ export default defineComponent({
         activeNames.value=['1']//
 } catch (error) {
   
-}
+}//
     }
+    watch(()=>{
+      return systemIns.getIsLogin()
+    },async (newVal,oldVal)=>{
+      if(newVal){
+        await loadList()//
+        activeNames.value=['1']//
+      }
+    })//
     onMounted(async () => {
-      await loadList()
+      let isLogin = systemIns.getIsLogin()
+      if(isLogin){
+        await loadList()
+      }else{//
+        await getUninsList()//
+         activeNames.value=['2']//
+      }
     })
     const activeSidebar = ref('1')
     const activeNames = ref<string[]>(['1'])
@@ -73,22 +95,11 @@ export default defineComponent({
 
     // 已安装应用数据
     return () => {
-      let left = (
-        <div class="flex flex-1 h-full w-full text-black">
-          <aside class="bg-gray-100 lg:w-56">
-            <ElMenu class="w-full" default-active={activeSidebar.value}>
-              <ElMenuItem index="1" class="flex items-center  px-4">
-                <i class="mr-2 el-icon-menu"></i>
-                应用列表
-              </ElMenuItem>
-            </ElMenu>
-          </aside>
-        </div>
-      )
+    
       let com = (
         <div class="h-full w-full flex">
-          <div class='w-52'>{left}</div>
-          <div class='flex-1 h-full'>
+          {/* <div class='w-52'>{left}</div> */}
+          <div class='flex-1 h-full w-full'>
              <ElCollapse
           accordion
           modelValue={activeNames.value}

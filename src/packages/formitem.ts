@@ -856,6 +856,35 @@ export class FormItem extends Base {
       _onBlur(_config) //
     } //
   } //
+  async designSForm() {
+    let formConfig = this.getFormConfig() //
+    let platform = this.form.getCurrentPlatform()
+    let _config = _.cloneDeep(formConfig)
+    _config.platform = platform //
+    let system = this.getSystem() //
+    let tName = this.form.tableName
+    //
+    let createFn = () => {
+      return {
+        component: formCom,
+        props: {
+          ..._config,
+          isDesign: true, //
+        },
+      } //
+    }
+    system.openDialog({
+      height: 600,
+      width: 1200,
+      createFn,
+      confirmFn: (dialog: Dialog) => {
+        let inCom: Form = dialog.getRef('innerCom')
+        let layoutData = inCom.getLayoutData()
+        let options = this.getOptions()
+        options['layoutData'] = layoutData //
+      },
+    })
+  }
   async designForm() {
     let formConfig = this.getFormConfig() //
     let platform = this.form.getCurrentPlatform()
@@ -922,6 +951,7 @@ export class FormItem extends Base {
     }
   }
   getOptions(): any {
+    //
     let config = this.config
     let options = config?.options || {}
     return options
@@ -1033,6 +1063,7 @@ export class FormItem extends Base {
     sys.openCodeDialog(config) //
   }
   openSFormDialog() {
+    // debugger //
     let options = { ...this.getOptions() } //
     let f = this.getField() //
     let d = this.form.getData()
@@ -1045,7 +1076,7 @@ export class FormItem extends Base {
     //@ts-ignore
     options['data'] = b //
     // console.log(optinos)//
-    let _f = new Form(options) //
+    // let _f = new Form(options) //
     let dialogConfig = {
       height: 600,
       width: 1200,
@@ -1053,7 +1084,7 @@ export class FormItem extends Base {
         return {
           component: formCom,
           props: {
-            formIns: _f,
+            ...options,
           },
         }
       },
@@ -1343,5 +1374,10 @@ export class FormItem extends Base {
     let _value = this.getBindValue()
     if (Boolean(_value)) {
     } //
+  }
+  getAllowCreate() {
+    let options = this.getOptions()
+    let allowCreate = options.allowCreate
+    return allowCreate
   }
 } //

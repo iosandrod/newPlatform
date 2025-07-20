@@ -194,9 +194,10 @@ export class editPageDesign extends PageDesign {
         let detailTableConfig = configRef?.detailTableConfig
         if (detailTableConfig == null || typeof detailTableConfig != 'object') {
           return null
-        } //
+        }
         let data = dataRef.data
         let _d = getFlatTreeData(data)
+        let deleteData = dataRef.deleteData || [] //
         let changeD = _d.filter((row) => {
           let rowState = row['_rowState']
           return rowState == 'add' || rowState == 'change'
@@ -261,17 +262,21 @@ export class editPageDesign extends PageDesign {
     } //
   })
   async saveTableData(config = this.getSaveData()) {
-    
     if (this.tableState == 'scan') {
       return //
     }
     this.setCurrentLoading(true) //
     let tableState = this.tableState
     let _res = null
-    if (tableState == 'add') {
-      _res = await this.addMainRow(config)
-    } else {
-      _res = await this.updateMainRow(config) //
+    try {
+      if (tableState == 'add') {
+        _res = await this.addMainRow(config)
+      } else {
+        _res = await this.updateMainRow(config) //
+      }
+    } catch (error) {
+      this.getSystem().confirmErrorMessage(error?.message) //
+      return Promise.reject('error') //
     }
     let row0 = _res[0]
     this.setCurRow(row0)
@@ -287,7 +292,7 @@ export class editPageDesign extends PageDesign {
   async updateMainRow(config) {
     let http = this.getHttp()
     let realTableName = this.getRealTableName()
-    let _res = await http.patch(realTableName, config) //
+    let _res = await http.patch(realTableName, config)
     this.getSystem().confirmMessage('数据更新成功', 'success') //
     return _res
   }

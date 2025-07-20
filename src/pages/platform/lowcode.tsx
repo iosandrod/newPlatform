@@ -6,6 +6,7 @@ import {
   provide,
   ref,
   useSlots,
+  withDirectives,
 } from 'vue'
 import erForm from '@ER/formCom'
 import erFormEditor from '@ER/formEditor/formEditor'
@@ -36,6 +37,7 @@ import {
   ElTabs,
   ElTabPane,
   ElMain,
+  ClickOutside,
 } from 'element-plus'
 import LowcodeHeader from './lowcodeHeader'
 import Design from './design'
@@ -68,12 +70,26 @@ export default defineComponent({
     let currentRoutePath = computed(() => {
       let path = router.fullPath
       return path
-    }) //
+    })
+    onMounted(() => {})
     return () => {
-      let leftM = (
-        <div class="w-200 h-full overflow-auto">
+      let leftM = withDirectives(
+        <div
+          ref={(el) => {
+            systemIns.registerRef('leftMenuDiv', el) //
+          }}
+          class="hidden md:border z-50 md:block absolute md:relative  w-[200px] h-full overflow-auto"
+        >
           <LeftMenu></LeftMenu>
-        </div>
+        </div>,
+        [
+          [
+            ClickOutside,
+            () => {
+              systemIns.closeLeftMenu()
+            },
+          ],
+        ],
       )
       let tableTab = (
         <tabCom
@@ -133,31 +149,21 @@ export default defineComponent({
         ></ContextmenuCom>
       )
       return (
-        <div
-          class={[ns.b(), 'flex-col']}
-          style={{ display: 'flex', width: '100vw', height: '100vh' }}
-        >
+        <div class="flex flex-col w-screen h-screen">
           {context}
           {pageHeader}
 
-          <div class="flex h-full overflow-hidden">
-            {/* 左侧菜单区 */}
-            <aside class="er-w-200 h-full overflow-hidden bg-gray-50 border-r border-gray-200   ">
-              {leftM}
-            </aside>
-
-            {/* 右侧主体区 */}
-            <div class="flex-1 flex flex-col overflow-hidden">
-              {/* 顶部标签栏 卡片化 */}
-              <div class="px-1  bg-white shadow-sm border-b border-gray-200">
-                <div class="max-w-full ">
+          <div class="flex flex-1 overflow-hidden">
+            {leftM}
+            <div class="flex flex-1 flex-col overflow-hidden">
+              <div class="px-2 bg-white shadow-sm border-b border-gray-200">
+                <div class="max-w-full">
                   <div class="bg-white rounded-lg shadow-inner">{tableTab}</div>
                 </div>
               </div>
 
-              {/* 主内容区 卡片化 + 渐变背景 */}
-              <main class="flex-1 overflow-auto bg-gradient-to-b   p-1">
-                <div class="max-w-full h-full overflow-hidden  bg-white rounded-lg shadow-lg p-1 w-full">
+              <main class="flex-1 overflow-auto bg-gradient-to-b from-gray-50 to-gray-100">
+                <div class="w-full h-full bg-white rounded-lg shadow  overflow-hidden">
                   {dCom}
                 </div>
               </main>
@@ -168,3 +174,7 @@ export default defineComponent({
     }
   },
 })
+/* 
+
+
+*/

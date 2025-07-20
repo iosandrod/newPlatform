@@ -143,6 +143,8 @@ export default defineComponent({
     if (props.isDesign == true) {
       formIns.setCurrentDesign(true) //
     }
+    const platform = props.platform
+    formIns.switchPlatform(platform) //
     let system = formIns.getSystem()
     watch(
       () => {
@@ -152,7 +154,6 @@ export default defineComponent({
       },
       ([commandArr, length]) => {
         let tableName = formIns.getTableName()
-        // debugger//
         if (tableName == null) {
           return
         } //
@@ -208,7 +209,6 @@ export default defineComponent({
       })
       formIns.setState(state)
     } //
-
     //@ts-ignore
     state.validator = (target, fn) => {} //
     const { t, lang } = hooks.useI18n(props)

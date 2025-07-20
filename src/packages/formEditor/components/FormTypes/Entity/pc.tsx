@@ -138,6 +138,11 @@ export default defineComponent({
               }) //
             }
           }}
+          onDeleteRow={(config) => {
+            if (_design) {
+              _design.onDeleteRow({ ...config, tableName: item.getTableName() })
+            }
+          }}
           height={height.value} //
           onCellCommand={(config) => {
             // debugger //

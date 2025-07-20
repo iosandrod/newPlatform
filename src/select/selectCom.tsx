@@ -70,6 +70,7 @@ import type {
   VxeTablePrivateMethods,
 } from 'vxe-pc-ui/types/components/table'
 import Select from './select'
+import InputCom from '@/input/inputCom'
 export default defineComponent({
   name: 'SelectCom',
   //   emits: [
@@ -187,13 +188,14 @@ export default defineComponent({
       let _com = (
         <div class="h-full w-full overflow-hidden">
           <Select
-            style={{ width: '100%',maxHeight: '36px' }} //
+            style={{ width: '100%', maxHeight: '36px' }} //
             ref={registerRef}
             {...props}
             modelValue={_select.getModelValue()}
             options={_select.getOptions()}
             onChange={_onChange} //
             onInput={_onInput}
+            allowCreate={_select.getAllowCreate()}
             onVisibleChange={_onVisibleChange}
             v-slots={{
               ...slots,
@@ -212,6 +214,34 @@ export default defineComponent({
                   </div>
                 )
                 return com //
+              },
+              footer: (config) => {
+                let allowCreate = _select.getAllowCreate()
+                let com = null
+                if (allowCreate) {
+                  com = (
+                    <InputCom
+                      modelValue={_select.templateValue}
+                      onInput={(value) => {
+                        let _value = value.value
+                        _select.templateValue = _value //
+                      }}
+                      v-slots={{
+                        suffix: () => {
+                          return (
+                            <div
+                              onClick={() => _select.addTemplateOption()}
+                              class="cursor-pointer h-full text-blue-600"
+                            >
+                              +
+                            </div>
+                          )
+                        },
+                      }}
+                    ></InputCom>
+                  )
+                } //
+                return com
               },
             }} //
             transfer

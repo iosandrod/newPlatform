@@ -151,7 +151,7 @@ export const installApp = async (_this: System, app) => {
     return res
   } catch (error) {
     _this.setSystemLoading(false) //
-    _this.confirmErrorMessage(`安装失败${error?.message}`)
+    _this.confirmErrorMessage(`安装失败`)
     return Promise.reject(error) //
   }
 }

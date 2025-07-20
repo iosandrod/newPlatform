@@ -68,45 +68,20 @@ export default defineComponent({
       return path
     })
     return () => {
-      let leftM = (
-        <div class="w-200 h-full overflow-auto">
-          <LeftMenu></LeftMenu>
-        </div>
-      )
-      let tableTab = (
-        <tabCom
-          height={32}
-          onCloseClick={(config) => {
-            system.onTableTabClose(config) //
-          }}
-          onTabChange={(config) => {
-            system.onMainTabChange(config)
-          }}
-          showCloseIcon={true} //
-          items={systemIns.getTabItems()}
-          modelValue={systemIns.getTabModelValue()}
-          showContextMenu={true}
-          contextItems={systemIns.getTabContextItems()}
-          v-slots={{
-            item: (item) => {
-              //
-              let com = (
-                <div class="h-full px-3 border-x border-t border-gray-300 rounded-t-md text-gray-700 hover:bg-gray-100 flex justify-center items-center">
-                  <div class="h-full w-full flex justify-center items-center">
-                    <div>{item.getLabel()}</div>
-                  </div>
-                </div>
-              )
-              return com
-            },
-          }}
-        ></tabCom>
-      )
-
       const pageHeader = (
-        <header class="w-full bg-white shadow flex items-center justify-between px-1 py-2">
+        <header class="w-full bg-white shadow  items-center justify-between px-1 py-2 flex">
+          <div class="md:hidden z-1">
+            <i
+              onClick={() => {
+                let leftDiv = systemIns.getRef('leftMenuDiv')
+                leftDiv.style.display =
+                  leftDiv.style.display === 'none' ? 'block' : 'none'
+              }}
+              class="vxe-icon-menu"
+            ></i>
+          </div>
           {/* 左侧：功能下拉 */}
-          <div class="w-24">
+          <div class="w-24 hidden md:block">
             <er-dropdown
               dropMode="hover"
               v-slots={{

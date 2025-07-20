@@ -63,6 +63,8 @@
     "enquire.js": "^2.1.6",
     "events": "^3.3.0",
     "everright-filter": "^1.1.1",
+    "flowbite": "^3.1.2",
+    "flowbite-vue": "^0.2.1",
     "gsap": "^3.12.2",
     "howler": "^2.2.3",
     "html2canvas": "^1.4.1",

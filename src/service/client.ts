@@ -363,7 +363,10 @@ export class myHttp {
         })
         return res
       } catch (error) {
-        console.error(error.code)
+        // debugger //
+        if(error?.name=='NotAuthenticated'){
+          system.confirmMessage('请先登录', 'error') //
+        }
         return Promise.reject(error) //
       }
     }

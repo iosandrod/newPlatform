@@ -921,7 +921,29 @@ export class XeTable extends Base {
     let tableName = this.config.tableName
     return tableName //
   }
-  onColumnsDesign(config) {}
+  onColumnsDesign(cols: any[]) {
+    let updateCols = cols.filter((col) => {
+      //
+      let rowState = col['_rowState']
+      return rowState == 'change'
+    })
+    let addCols = cols.filter((col) => {
+      let rowState = col['_rowState']
+      return rowState == 'add'
+    }) //
+    let config = {
+      addCols: addCols,
+      updateCols: updateCols,
+
+      allCols: cols,
+      tableName: this.getTableName(),
+    }
+    let ccnfig = this.config
+    let onColumnsDesign = ccnfig.onColumnsDesign
+    if (typeof onColumnsDesign == 'function') {
+      onColumnsDesign(config) //
+    }
+  } //
   getFlatColumns() {
     let columns = this.getColumns()
       .map((col) => {
@@ -1404,6 +1426,10 @@ export class XeTable extends Base {
       return
     }
     this.changeRowState(_r[0], 'delete')
+    let onDeleteRow = this.config.onDeleteRow
+    if (typeof onDeleteRow == 'function') {
+      onDeleteRow({ row: _r[0] }) //
+    }
     this.deleteArr.push(_r[0]) //
     nextTick(() => {
       if (nextRow != null) {

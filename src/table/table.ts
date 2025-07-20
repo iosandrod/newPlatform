@@ -2740,9 +2740,7 @@ export class Table extends Base {
     let config = {
       addCols: addCols,
       updateCols: updateCols,
-      // otherCols: cols.filter((col) => {
-      //   return !addCols.includes(col) && !updateCols.includes(col)
-      // }), //
+     
       allCols: cols,
       tableName: this.getTableName(),
     }

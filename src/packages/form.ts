@@ -895,6 +895,7 @@ export class Form extends Base {
   }
   setEditData(data) {}
   switchPlatform(platform) {
+    //
     let props = this.config
     let state = this.state
     if (state.platform === platform) {
@@ -1691,15 +1692,15 @@ export class Form extends Base {
     this.setSelection(Array.isArray(parent) ? 'root' : parent)
   }
   enterForm(props) {
-    // let formIns = this
-    // let id = props.data.id
-    // let subForm = formIns.getSubForm(id)
-    // if (subForm != null) {
-    //   formIns.nextForm = subForm //
-    // }
+    let data = props.data
+    let id = data.id
+    let items = this.items
+    let item = items.find((item) => item.id === id)
+    if (item) {
+      item.designSForm() //
+    }
   }
   resetContext() {
-    // let platform = this.state.platform
     let state = this.state
     state.store.forEach((e) => {
       utils.addContext({ node: e, parent: state.store, form: this }) //

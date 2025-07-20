@@ -3,6 +3,8 @@ import { nextTick } from 'vue'
 import { VxeSelectInstance } from 'vxe-pc-ui'
 
 export class Select extends Base {
+  templateValue = ''
+  templateOptions = []
   panelVisible: boolean = false //
   searchValue: string = ''
   showSearchValue: boolean = false
@@ -80,7 +82,11 @@ export class Select extends Base {
   getOptions() {
     let config = this.config
     let options = config.options
+    if (!Array.isArray(options)) {
+      options = [] //
+    } //
     let searchValue = this.searchValue
+    options = [...options, ...this.templateOptions] //
     if (searchValue != null && searchValue.length > 0) {
       options = options.filter((option) => {
         let reg = new RegExp(searchValue, 'g')
@@ -89,5 +95,20 @@ export class Select extends Base {
       })
     }
     return options //
+  }
+  getAllowCreate() {
+    let config = this.config
+    let allowCreate = config.allowCreate
+    return allowCreate //
+  }
+  addTemplateOption() {
+    let templateValue = this.templateValue
+    if (templateValue == '') {
+      return
+    }
+    let templateOptions = this.templateOptions
+    templateOptions.unshift({ label: templateValue, value: templateValue }) //
+    this.onChange({ value: templateValue }) //
+    this.templateValue = ''
   }
 }
