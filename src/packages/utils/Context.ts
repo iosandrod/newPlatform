@@ -370,8 +370,16 @@ export class Context {
     if (node.type === 'inline') {
       arr.splice(arr.indexOf(node), 1)
     } else {
+      //
       arr.splice(arr.indexOf(node), 1)
-    }
+      if (
+        node.type == 'col' &&
+        parent.type == 'grid' &&
+        parent.columns.length == 0
+      ) {
+        parent.context.delete()
+      }
+    } //
   } //
   appendCol(index?: number) {
     const parent = this.parent
@@ -783,12 +791,10 @@ export class Context {
   }
   appendBlockNode(newElement, inserRowIndex = 0) {
     // let store = []
-    // debugger //
     let store = this.state.columns || this.state.list
     // if(Array.isArray(store)){
     // store = store
     // }
-    // debugger//
     // 在指定的索引位置插入新元素
     store.splice(inserRowIndex, 0, newElement)
     // 关联新元素的上下文信息

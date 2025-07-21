@@ -15837,3 +15837,250 @@ let isCurrentEdit = computed(() => {
         //     })
         //   },
         // },
+
+          // let _d = await this.getHttp().hTable(tableName)
+    // if (_d == false) {
+    //   return
+    // }
+
+    // let status = await this.confirmMessageBox(
+      //   '当前页面未关联表名,是否创建页面',
+      //   'warning',
+      // )
+
+       // items.forEach((e) => {
+    //   e.children = [
+    //     {
+    //       label: '111', //
+    //     },
+    //   ]
+    // })
+
+     let com = (
+        <div
+          class="flex items-center w-full h-full"
+          style={{ minHeight: '36px', height: '36px' }} //
+        >
+          <inputCom ref={registerRef} {..._value.value}></inputCom>
+        </div>
+      ) //
+      let _com = null
+      if (isColumnSelect.value == true) {
+        //
+        _com = (
+          <SelectCom
+            {..._value.value}
+            options={formitem.getColumnSelectOptions()}
+            onChange={(config) => {
+              let value = config.value
+              formitem.updateBindData({ value }) //
+            }}
+          ></SelectCom>
+        )
+      } else {
+        _com = com
+      }
+      return _com //
+
+      // let v=dayjs('2025-01-01', 'YYYY-MM-DD', false)
+  // console.log(v,'fsdfjsdlfjsdl')//
+  /**
+   * Computed property for the chart start date as a dayjs object
+   */
+
+    {
+    id: 'group2',
+    label: 'Backend Development',
+    children: [
+      {
+        id: 'task3',
+        label: 'API Design',
+        bars: [
+          {
+            start: `${year}-${month}-21`,
+            end: `${year}-${month}-28`,
+            ganttBarConfig: {
+              id: 'bar3',
+              label: 'API Planning',
+              style: { background: '#ff7e67' },
+              hasHandles: true,
+              progress: 60,
+              connections: [
+                {
+                  targetId: 'bar4',
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        id: 'task4',
+        label: 'Database Setup',
+        bars: [
+          {
+            start: `${year}-${month + 1}-01`,
+            end: `${year}-${month + 1}-10`,
+            ganttBarConfig: {
+              id: 'bar4',
+              label: 'DB Implementation',
+              style: { background: '#4dc9ff' },
+              hasHandles: true,
+              progress: 30,
+              connections: [
+                {
+                  targetId: 'bar7',
+                  type: 'squared',
+                },
+              ],
+            },
+          },
+          {
+            start: `${year}-${month + 1}-11`,
+            end: `${year}-${month + 1}-20`,
+            ganttBarConfig: {
+              id: 'bar5',
+              label: 'DB Optimization',
+              style: { background: '#34495e' },
+              progress: 0,
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'group3',
+    label: 'Progress Examples',
+    children: [
+      {
+        id: 'progress1',
+        label: 'Progress States',
+        bars: [
+          {
+            start: `${year}-${month + 1}-21`,
+            end: `${year}-${month + 1}-25`,
+            ganttBarConfig: {
+              id: 'bar7',
+              label: 'In Progress',
+              style: { background: '#e67e22' },
+              progress: 50,
+              progressResizable: true,
+              connections: [
+                {
+                  targetId: 'bar9',
+                  type: 'bezier',
+                },
+              ],
+            },
+          },
+          {
+            start: `${year}-${month + 1}-26`,
+            end: `${year}-${month + 1}-30`,
+            ganttBarConfig: {
+              id: 'bar8',
+              label: 'Completed',
+              style: { background: '#27ae60' },
+              progress: 100,
+              progressResizable: true,
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'group4',
+    label: 'Bundle Example',
+    children: [
+      {
+        id: 'bundle1',
+        label: 'Connected Tasks',
+        bars: [
+          {
+            start: `${year}-${month + 2}-01`,
+            end: `${year}-${month + 2}-10`,
+            ganttBarConfig: {
+              id: 'bar9',
+              label: 'Task A',
+              style: { background: '#8e44ad' },
+              bundle: 'bundle1',
+              progress: 45,
+              connections: [
+                {
+                  targetId: 'milestone1',
+                  pattern: 'dot',
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        id: 'bundle2',
+        label: 'Parallel Tasks',
+        bars: [
+          {
+            start: `${year}-${month + 2}-01`,
+            end: `${year}-${month + 2}-10`,
+            ganttBarConfig: {
+              id: 'bar10',
+              label: 'Task B',
+              milestoneId: 'milestone1',
+              style: { background: '#8e44ad' },
+              bundle: 'bundle1',
+              progress: 45,
+              connections: [
+                {
+                  targetId: 'milestone1',
+                  pattern: 'dashdot',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'group5',
+    label: 'Final Milestone',
+    children: [
+      {
+        id: 'milestone',
+        label: 'Project Completion',
+        bars: [
+          {
+            start: `${year}-${month + 2}-15`,
+            end: `${year}-${month + 2}-15 01:00`,
+            ganttBarConfig: {
+              id: 'milestone1',
+              label: 'Release v1.0',
+
+              style: {
+                background: '#2ecc71',
+                borderRadius: '50%',
+                width: '24px',
+                height: '24px',
+              },
+            },
+          },
+          {
+            start: `${year}-${month + 2}-16`,
+            end: `${year}-${month + 2}-16 01:00`,
+            ganttBarConfig: {
+              id: 'milestone1',
+              label: 'Release v1.0',
+
+              style: {
+                background: '#2ecc71',
+                borderRadius: '50%',
+                width: '24px',
+                height: '24px',
+              },
+            },
+          },
+        ],
+      },
+    ],
+  },

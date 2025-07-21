@@ -1,5 +1,62 @@
 import { PageDesignItem } from '@ER/pageItem'
 import _ from 'lodash'
+export const getDataSourceConfig = (item: PageDesignItem, _config = {}) => {
+  let _item = {
+    ..._config,
+    field: 'dataSource',
+    label: '表格数据源', //
+    // tabTitle: titles[0],
+    type: 'sform', //
+    options: {
+      itemSpan: 12,
+      items: [
+        {
+          field: 'dataSourceType',
+          label: '数据类型', //
+          type: 'select', //
+          options: {
+            options: [
+              {
+                label: '普通类型',
+                value: 'normal', //
+              },
+              {
+                label: '函数类型',
+                value: 'function',
+              },
+              {
+                label: '接口类型',
+                value: 'api', //
+              }, //
+              {
+                label: '视图类型',
+                value: 'view', //
+              },
+              {
+                label: 'SQL类型',
+                value: 'sql', //
+              },
+            ],
+          },
+        },
+        {
+          field: 'dataSource',
+          label: '数据源',
+          type: 'code', //
+        },
+        {
+          field: 'viewTable',
+          label: '视图表',
+          type: 'select', //
+          options: {
+            optionsField: 'sysViewTable', //
+          },
+        },
+      ],
+    },
+  }
+  return [_item] //
+}
 export const getDesignTableConfig = (item: PageDesignItem) => {
   let _this = item
   let _config = _this.getOptions()
@@ -52,59 +109,60 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
         type: 'string',
         disabled: true, //
       },
-      {
-        field: 'dataSource',
-        label: '表格数据源', //
-        tabTitle: titles[0],
-        type: 'sform', //
-        options: {
-          itemSpan: 12,
-          items: [
-            {
-              field: 'dataSourceType',
-              label: '数据类型', //
-              type: 'select', //
-              options: {
-                options: [
-                  {
-                    label: '普通类型',
-                    value: 'normal', //
-                  },
-                  {
-                    label: '函数类型',
-                    value: 'function',
-                  },
-                  {
-                    label: '接口类型',
-                    value: 'api', //
-                  }, //
-                  {
-                    label: '视图类型',
-                    value: 'view', //
-                  },
-                  {
-                    label: 'SQL类型',
-                    value: 'sql', //
-                  },
-                ],
-              },
-            },
-            {
-              field: 'dataSource',
-              label: '数据源',
-              type: 'code', //
-            },
-            {
-              field: 'viewTable',
-              label: '视图表',
-              type: 'select', //
-              options: {
-                optionsField: 'sysViewTable', //
-              },
-            },
-          ],
-        },
-      },
+      // {
+      //   field: 'dataSource',
+      //   label: '表格数据源', //
+      //   tabTitle: titles[0],
+      //   type: 'sform', //
+      //   options: {
+      //     itemSpan: 12,
+      //     items: [
+      //       {
+      //         field: 'dataSourceType',
+      //         label: '数据类型', //
+      //         type: 'select', //
+      //         options: {
+      //           options: [
+      //             {
+      //               label: '普通类型',
+      //               value: 'normal', //
+      //             },
+      //             {
+      //               label: '函数类型',
+      //               value: 'function',
+      //             },
+      //             {
+      //               label: '接口类型',
+      //               value: 'api', //
+      //             }, //
+      //             {
+      //               label: '视图类型',
+      //               value: 'view', //
+      //             },
+      //             {
+      //               label: 'SQL类型',
+      //               value: 'sql', //
+      //             },
+      //           ],
+      //         },
+      //       },
+      //       {
+      //         field: 'dataSource',
+      //         label: '数据源',
+      //         type: 'code', //
+      //       },
+      //       {
+      //         field: 'viewTable',
+      //         label: '视图表',
+      //         type: 'select', //
+      //         options: {
+      //           optionsField: 'sysViewTable', //
+      //         },
+      //       },
+      //     ],
+      //   },
+      // },
+      ...getDataSourceConfig(item, { tabTitle: titles[0] }),
       {
         field: 'realTableName',
         label: '实际表名',

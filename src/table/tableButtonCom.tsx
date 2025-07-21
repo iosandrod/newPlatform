@@ -13,7 +13,6 @@ export default defineComponent({
   setup() {
     const tableIns: Table = inject('tableIns')
     const buttons = computed(() => {
-      // debugger//
       let dbuttons = [
         {
           label: '新增',
@@ -39,8 +38,6 @@ export default defineComponent({
             //添加行
           },
         },
-
-        
       ] //
       let config = tableIns.config
       let showHeaderDefaultButtons = config.showHeaderDefaultButtons
@@ -66,12 +63,11 @@ export default defineComponent({
     return () => {
       return (
         <div>
-          {
-            <buttonGroupCom
-              parent={tableIns}
-              items={buttons.value}
-            ></buttonGroupCom>
-          }
+          <buttonGroupCom
+            parent={tableIns}
+            items={buttons.value}
+          ></buttonGroupCom>
+          {/* <div class='er-h-100 er-w-100 bg-red'></div> */}
         </div>
       )
     }

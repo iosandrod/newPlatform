@@ -8,7 +8,7 @@ import { menuTConfig, menuTConfig1, tableConfig } from '@/table/tableData' //
 import dropdownCom from '@/menu/dropdownCom'
 import fieldCom from '@/menu/fieldCom'
 import menuCom from '@/menu/menuCom'
-import { ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
+import { dayjs, ElMenu, ElMenuItem, ElSubMenu } from 'element-plus'
 import { ContextmenuItem } from '@/contextM'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import formCom from '@ER/formCom'
@@ -49,6 +49,7 @@ import {
   xeTableColumns,
   xeTableData,
 } from '@/table/tableData1'
+import ganttCom from '@/gantt/ganttCom'
 export default defineComponent({
   components: {
     pVue,
@@ -74,8 +75,12 @@ export default defineComponent({
     VxeCheckbox,
     checkboxCom,
     wangCom,
+    ganttCom,
   },
   setup(props) {
+    let str=`2025-01-01 00:00`
+    let d=dayjs(str,'YYYY-MM-DD HH:mm',false)//
+    console.log(d,'fjslkfjsdlkf')//
     const formConfig = {
       itemSpan: 12,
       items: [
@@ -240,6 +245,8 @@ export default defineComponent({
           allowCreate={true}
         ></selectCom>
       )
+
+      com = <ganttCom></ganttCom>
       let _com = (
         <div
           class="h-full"

@@ -1,6 +1,5 @@
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 import { Form } from '@ER/form'
-import formCom from '@ER/formCom'
 import { computed, defineComponent, inject } from 'vue'
 const fConfigItemMap = {
   input: {
@@ -38,7 +37,6 @@ const fConfigItemMap = {
 export default defineComponent({
   props: {},
   components: {
-    formCom,
   },
   setup(props, { slots, emit, attrs, expose }) {
     const fIns: Form = inject('formIns')
@@ -77,7 +75,7 @@ export default defineComponent({
               },
             ]}
           ></ButtonGroupCom> */}
-          {<formCom data={selected.value} itemSpan={24} items={items.value}></formCom>}
+          {<erForm data={selected.value} itemSpan={24} items={items.value}></erForm>}
         </div>
       )
     }

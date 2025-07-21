@@ -1,5 +1,4 @@
 import inputCom from '@/input/inputCom'
-import FormCom from '@ER/formCom'
 import { FormItem } from '@ER/formitem'
 import { PageDesign } from '@ER/pageDesign'
 import { PageDesignItem } from '@ER/pageItem'
@@ -12,7 +11,6 @@ export default defineComponent({
   customOptions: {},
   components: {
     inputCom,
-    FormCom,
   }, //
   props: {
     data: Object,

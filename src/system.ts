@@ -41,6 +41,7 @@ import platfomrStaticCom from './pages/platform/admin/platfomrStaticCom'
 import { globalStaticCom } from './globalStaticCom'
 import xeTableCom from './table/xeTableCom'
 import { XeTable } from './table/xetable'
+import { getDataSourceConfig } from './table/tabFConfig'
 const staticComMap = {
   erp: staticCom,
   gantt: ganttStaticCom,
@@ -572,13 +573,14 @@ export class System extends Base {
   async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      let _form = new Form(formConfig) //
-      let component = formCom
+      // let _form = new Form(formConfig) //
+      // let component = formCom
       let createFn = () => {
         return {
-          component: component, //
+          component: formCom, //
           props: {
-            formIns: _form,
+            // formIns: _form,
+            ...formConfig, //
           },
         }
       }
@@ -622,16 +624,13 @@ export class System extends Base {
       // }
       if (tableConfig.showCheckboxColumn == null) {
         tableConfig.showCheckboxColumn = true //
-      }
-      // let _table = new Table(tableConfig) //
-      // let component = tableCom
+      } //
       let createFn = () => {
-        //
         return {
           component: xeTableCom,
           props: {
-            showHeaderButtons: true, //
             ...tableConfig,
+            showHeaderButtons: true, //
           },
         }
       } //
@@ -1146,13 +1145,14 @@ export class System extends Base {
             ], //
           },
         },
-        {
-          label: '数据源',
-          field: 'dataSource', //
-          type: 'string', //
-          tabTitle: tabTitles[0],
-          options: {},
-        },
+        // {
+        //   label: '数据源',
+        //   field: 'dataSource', //
+        //   type: 'string', //
+        //   tabTitle: tabTitles[0],
+        //   options: {},
+        // },//
+        ...getDataSourceConfig(curPage as any, { tabTitle: tabTitles[0] }),
         {
           label: '真实表名', //
           field: 'realTableName',
@@ -1385,12 +1385,36 @@ export class System extends Base {
     // console.log('左侧菜单点击', item)//
     let tableName = item.tableName
     if (Boolean(tableName) == false) {
+      let status = true //
+      if (status == true) {
+        let f = await this.confirmForm({
+          itemSpan: 24,
+          height: 200,
+          width: 300, //
+          requiredValidate: true, //
+          items: [
+            {
+              field: 'tableName',
+              label: '页面编号',
+              editType: 'string',
+              required: true,
+            }, //
+            {
+              field: 'tableCnName',
+              label: '页面名称',
+              editType: 'string',
+              required: true,
+            }, //
+          ],
+        })
+        let _f = await this.getHttp().create('entity', f)
+        let _item = { ...item, tableName: f.tableName }
+        await this.getHttp().patch('navs', _item) //
+        this.confirmMessage('创建成功页面成功') //
+        // console.log('f', f) //
+      }
       return
-    } //
-    // let _d = await this.getHttp().hTable(tableName)
-    // if (_d == false) {
-    //   return
-    // }
+    }
     this.routeTo(`/admin/${tableName}`)
   }
   getIsLogin() {
@@ -1421,6 +1445,9 @@ export class System extends Base {
       {
         label: '设计功能',
         items: [
+          {
+            label: '编辑数据源', //
+          },
           {
             label: '页面参数配置', //
             fn: async () => {

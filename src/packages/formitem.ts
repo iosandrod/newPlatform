@@ -26,6 +26,7 @@ import { useTimeout } from './utils/decoration'
 import { platform } from 'os'
 import { VxeFormDefines, VxeFormItem, VxeFormItemProps } from 'vxe-pc-ui'
 import xeTableCom from '@/table/xeTableCom'
+import { getButtonGroupTableConfig } from './designNodeOptions'
 
 export type FormOptions = {
   items: Field[]
@@ -1031,7 +1032,8 @@ export class FormItem extends Base {
         props: {
           ...tableConfig,
           tableState: 'edit',
-          data: value, //
+          data: value,
+          showHeaderButtons: true, //
         },
       }
     } //
@@ -1403,5 +1405,14 @@ export class FormItem extends Base {
     let options = this.getOptions()
     let allowCreate = options.allowCreate
     return allowCreate
+  }
+  async designButtons() {
+    let tableConfig: any = getButtonGroupTableConfig(this.form as any)
+    tableConfig.data = this.getOptions().items
+    tableConfig.height = 500
+    tableConfig.width = 800
+    let sys = this.getSystem()
+    let _data = await sys.confirmTable(tableConfig)
+    this.getOptions().items = _data //
   }
 } //

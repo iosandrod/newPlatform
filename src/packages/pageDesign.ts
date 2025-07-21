@@ -259,7 +259,7 @@ export class PageDesign extends Form {
         return //
       }
       let tableName = getDataConfig.tableName //
-     
+
       let _tableConfig = this.getTableConfig(tableName) //
       let http = this.getHttp()
       let query = getDataConfig.query
@@ -992,20 +992,13 @@ export class PageDesign extends Form {
     }
     items = _.cloneDeep(items)
     let tableConfig: any = getButtonGroupTableConfig(this) //
-    // items.forEach((e) => {
-    //   e.children = [
-    //     {
-    //       label: '111', //
-    //     },
-    //   ]
-    // })
+   
     tableConfig.data = items
     tableConfig.height = 500
     tableConfig.width = 800
     let sys = this.getSystem()
     let _data = await sys.confirmTable(tableConfig) //
     options.items = _data
-    // await this.getSystem().updateCurrentPageDesign()
     await this.saveTableDesign({
       refresh: false, //
     }) //

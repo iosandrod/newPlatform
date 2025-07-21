@@ -1941,6 +1941,15 @@ export class Form extends Base {
     dFormMap[type] = _f1
     this.curDForm = _f1
   }
+  designButtons(props){
+let data = props.data
+    let id = data.id
+    let items = this.items
+    let item = items.find((item) => item.id === id)
+    if (item) {
+      item.designButtons() //
+    }
+  }
 }
 //使用默认布局
 

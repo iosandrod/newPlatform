@@ -439,10 +439,11 @@ export default defineComponent({
     )
     let registerBodyDiv = (el) => {
       tableIns.registerRef('bodyDiv', el)
-    } //
+    } 
     return () => {
       let com = null //
       let menuCom = <TableMenuCom></TableMenuCom>
+      // debugger//
       let btnCom = <TableButtonCom></TableButtonCom>
       if (tableIns.config.showHeaderButtons == false) {
         //

@@ -33,31 +33,8 @@ export default defineComponent({
       return s
     }) //
     return () => {
-      let com = (
-        <div
-          class="h-full w-full flex items-center"
-          style={{ minHeight: '36px', height: '36px' }} //
-        >
-          <inputCom ref={registerRef} {..._value.value}></inputCom>
-        </div>
-      ) //
-      let _com = null
-      if (isColumnSelect.value == true) {
-        //
-        _com = (
-          <SelectCom
-            {..._value.value}
-            options={formitem.getColumnSelectOptions()}
-            onChange={(config) => {
-              let value = config.value
-              formitem.updateBindData({ value }) //
-            }}
-          ></SelectCom>
-        )
-      } else {
-        _com = com
-      }
-      return _com //
+      let com = <div>甘特图</div>
+      return com //
     }
   },
-})//
+}) //

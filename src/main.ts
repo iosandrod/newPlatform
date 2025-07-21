@@ -81,6 +81,7 @@ import './assets/tailwind.css' //
 import './mainStyle.css'
 import './changeCalStyle.scss'
 import xeTableCom from './table/xeTableCom'
+import hyvuegantt from './gantt/hy-vue-gantt'
 export const http = new myHttp()
 //@ts-ignore
 self.MonacoEnvironment = {
@@ -127,6 +128,7 @@ app.use(ArcoVue)
 app.use(PrintDesign, {
   store,
 }) //
+app.use(hyvuegantt) //
 app.use(store) //
 // app.use(pinia) //
 registerEdit()

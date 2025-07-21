@@ -498,7 +498,12 @@ export class XeTable extends Base {
     instance.loadColumn(_columns) //
   }
   getHeaderHeight() {
-    return 35 //
+    let _config = this.config
+    let headerHeight = _config.headerHeight
+    if (isNaN(headerHeight)) {
+      headerHeight = 35
+    }
+    return headerHeight //
   }
   @cacheValue()
   getHeaderCellConfig() {
@@ -628,10 +633,19 @@ export class XeTable extends Base {
     instance.setTreeExpand(data, true) //
   }
   copyCurrentCell() {} //
+  getCellHeight() {
+    let config = this.config
+    let rowHeight = config.rowHeight
+    if (isNaN(rowHeight)) {
+      rowHeight = 30
+    }
+    return rowHeight
+  }
   @cacheValue()
   getCellConfig() {
+    let rowHeight = this.getCellHeight()
     return {
-      height: 30,
+      height: rowHeight, //
       padding: false, //
     } //
   }

@@ -364,92 +364,92 @@ function ControlInsertionPlugin(ER: Form) {
       let gColumns = null
       let oldCol = null
       let _nIndex = null //
-      // if (inserColIndex !== '') {
-      //   //
-      //   if (Array.isArray(_parent)) {
-      //     let inLineNode = _parent[0]
-      //     if (inLineNode?.type == 'inline') {
-      //       let _parent1 = inLineNode?.context?.parent
-      //       let _type = _parent1?.type
-      //       if (_type == 'col') {
-      //         let _parent2 = _parent1?.context?.parent
-      //         let _span = _parent1.options.span
-      //         let _span1: number = Number(_span / 2).toFixed(0) as any //
-      //         _span1 = Number(_span1) as any //
-      //         if (_parent2?.type == 'grid') {
-      //           gColumns = _parent2.columns // is Array
-      //           let totalSpan = gColumns
-      //             .map((col) => {
-      //               let span = col?.options?.span
-      //               return span
-      //             })
-      //             .reduce((pre, cur) => {
-      //               return pre + cur
-      //             }, 0)
-      //           if (totalSpan < 24) {
-      //             _span1 = 24 - totalSpan
-      //             if (_span1 > 6) {
-      //               _span1 = 6
-      //             }
-      //           } //
-      //           oldCol = _parent1 //
-      //           let newIndex = gColumns.findIndex((col) => col.id == oldCol.id)
-      //           if (totalSpan == 24) {
-      //             //
-      //             _parent1.options.span = _span - _span1 ////
-      //           }
-      //           //@ts-ignore
-      //           if (inserColIndex == 1) {
-      //             newIndex += 1
-      //           }
-      //           let _node = _parent2.context.appendCol(newIndex) //
-      //           _node.options.span = _span1
-      //           resetStates()
-      //           if (_node == null) {
-      //             return
-      //           }
-      //           let newElement = ER.wrapElement(
-      //             _.cloneDeep(oldEl),
-      //             inserRowIndex !== '',
-      //             true,
-      //             isBlock,
-      //             // isInRootDiv,
-      //           )
-      //           newElement = {
-      //             ...ER.createNodeIdKey('inline'),
-      //             // type: 'inline',
-      //             columns: [newElement], //
-      //           }
-      //           // let list = _node.list
-      //           _node.context.appendBlockNode(newElement) ////
-      //           if (!isBlock) {
-      //             //
-      //             if (oldEl.context) {
-      //               let _context = oldEl.context
-      //               if (_context.parent?.type == 'inline') {
-      //                 oldEl = _context.parent?.context?.parent
-      //                 _context = oldEl.context //
-      //               } //
-      //               let flatNode = _context.getFlattenNodes()
-      //               let ids = flatNode.map((node) => node.id)
-      //               let next = Array.isArray(prevSortable?.options?.parent)
-      //                 ? prevSortable?.options?.parent //
-      //                 : [prevSortable?.options?.parent]
-      //               next = next.filter((node) => node != null) //
-      //               let _ids = next.map((node) => node.id)
-      //               if (_ids.some((id) => ids.includes(id))) {
-      //                 resetStates()
-      //                 return
-      //               }
-      //               oldEl.context.delete()
-      //             }
-      //           }
-      //           return
-      //         }
-      //       }
-      //     }
-      //   }
-      // } //
+      if (inserColIndex !== '') {
+        //
+        if (Array.isArray(_parent)) {
+          let inLineNode = _parent[0]
+          if (inLineNode?.type == 'inline') {
+            let _parent1 = inLineNode?.context?.parent
+            let _type = _parent1?.type
+            if (_type == 'col') {
+              let _parent2 = _parent1?.context?.parent
+              let _span = _parent1.options.span
+              let _span1: number = Number(_span / 2).toFixed(0) as any //
+              _span1 = Number(_span1) as any //
+              if (_parent2?.type == 'grid') {
+                gColumns = _parent2.columns // is Array
+                let totalSpan = gColumns
+                  .map((col) => {
+                    let span = col?.options?.span
+                    return span
+                  })
+                  .reduce((pre, cur) => {
+                    return pre + cur
+                  }, 0)
+                if (totalSpan < 24) {
+                  _span1 = 24 - totalSpan
+                  if (_span1 > 6) {
+                    _span1 = 6
+                  }
+                } //
+                oldCol = _parent1 //
+                let newIndex = gColumns.findIndex((col) => col.id == oldCol.id)
+                if (totalSpan == 24) {
+                  //
+                  _parent1.options.span = _span - _span1 ////
+                }
+                //@ts-ignore
+                if (inserColIndex == 1) {
+                  newIndex += 1
+                }
+                let _node = _parent2.context.appendCol(newIndex) //
+                _node.options.span = _span1
+                resetStates()
+                if (_node == null) {
+                  return
+                }
+                let newElement = ER.wrapElement(
+                  _.cloneDeep(oldEl),
+                  inserRowIndex !== '',
+                  true,
+                  isBlock,
+                  // isInRootDiv,
+                )
+                newElement = {
+                  ...ER.createNodeIdKey('inline'),
+                  // type: 'inline',
+                  columns: [newElement], //
+                }
+                // let list = _node.list
+                _node.context.appendBlockNode(newElement) ////
+                if (!isBlock) {
+                  //
+                  if (oldEl.context) {
+                    let _context = oldEl.context
+                    if (_context.parent?.type == 'inline') {
+                      oldEl = _context.parent?.context?.parent
+                      _context = oldEl.context //
+                    } //
+                    let flatNode = _context.getFlattenNodes()
+                    let ids = flatNode.map((node) => node.id)
+                    let next = Array.isArray(prevSortable?.options?.parent)
+                      ? prevSortable?.options?.parent //
+                      : [prevSortable?.options?.parent]
+                    next = next.filter((node) => node != null) //
+                    let _ids = next.map((node) => node.id)
+                    if (_ids.some((id) => ids.includes(id))) {
+                      resetStates()
+                      return
+                    }
+                    oldEl.context.delete()
+                  }
+                }
+                return
+              }
+            }
+          }
+        }
+      } //
       let newElement = ER.wrapElement(
         _.cloneDeep(oldEl),
         inserRowIndex !== '',
