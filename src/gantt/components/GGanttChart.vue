@@ -957,12 +957,24 @@ defineExpose({
           :style="labelSectionStyle"
         >
           <!-- Label Column -->
-          <g-gantt-label-column ref="labelColumn" @scroll="handleLabelScroll" @row-drop="dropRow">
-            <template v-for="(_, name) in $slots" :key="name" #[name]="slotData">
-              <slot :name="name" v-bind="slotData" />
-            </template>
-          </g-gantt-label-column>
-          <div></div>
+          <template v-if="$slots.leftTable">
+            <slot name="leftTable"  />
+          </template>
+          <template v-else>
+            <g-gantt-label-column
+              ref="labelColumn"
+              @scroll="handleLabelScroll"
+              @row-drop="dropRow"
+            >
+              <template
+                v-for="(_, name) in $slots"
+                :key="name"
+                #[name]="slotData"
+              >
+                <slot :name="name" v-bind="slotData" />
+              </template>
+            </g-gantt-label-column>
+          </template>
           <div
             class="g-gantt-section-resizer"
             @mousedown="(e) => handleResizeStart(e, labelSectionWidth)"

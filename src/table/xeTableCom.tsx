@@ -164,6 +164,9 @@ export default defineComponent({
       type: Boolean,
       default: true,
     },
+    headerHeight: {
+      type: Number, //
+    },
     showHeaderContext: {
       type: Boolean,
       default: true,
@@ -439,7 +442,7 @@ export default defineComponent({
     )
     let registerBodyDiv = (el) => {
       tableIns.registerRef('bodyDiv', el)
-    } 
+    }
     return () => {
       let com = null //
       let menuCom = <TableMenuCom></TableMenuCom>

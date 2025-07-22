@@ -163,3 +163,52 @@ export interface GGanttChartEmits {
   // 框选事件（时间范围选择）
   (e: "range-selection", value: RangeSelectionEvent): void
 }
+
+export interface GGanttChartEventsProps {
+  // 任务条的鼠标事件
+  onClickBar?: (value: GanttBarEvent) => void
+  onMousedownBar?: (value: GanttBarEvent) => void
+  onMouseupBar?: (value: GanttBarEvent) => void
+  onDblclickBar?: (value: GanttBarEvent) => void
+  onMouseenterBar?: (value: BarMouseEvent) => void
+  onMouseleaveBar?: (value: BarMouseEvent) => void
+  onDragstartBar?: (value: BarMouseEvent) => void
+  onDragBar?: (value: BarMouseEvent) => void
+  onDragendBar?: (value: GanttBarDragEvent) => void
+  onContextmenuBar?: (value: GanttBarEvent) => void
+
+  // 排序事件
+  onSort?: (value: SortEvent) => void
+
+  // 分组展开/收起事件
+  onGroupExpansion?: (value: { rowId: string | number }) => void
+
+  // 拖动行排序事件
+  onRowDrop?: (value: RowDragEvent) => void
+
+  // 进度条调整事件
+  onProgressChange?: (value: BarMouseEvent) => void
+  onProgressDragStart?: (value: BarMouseEvent) => void
+  onProgressDragEnd?: (value: BarMouseEvent) => void
+
+  // 任务条之间连接相关事件
+  onConnectionStart?: (value: ConnectionStartEvent) => void
+  onConnectionDrag?: (value: ConnectionDragEvent) => void
+  onConnectionComplete?: (value: ConnectionCompleteEvent) => void
+  onConnectionCancel?: (value: ConnectionStartEvent) => void
+  onConnectionDelete?: (value: ConnectionDeleteEvent) => void
+
+  // 标签修改事件
+  onLabelEdit?: (value: LabelEditEvent) => void
+
+  // 导出相关事件
+  onExportStart?: (format: string) => void
+  onExportSuccess?: (result: ExportResult) => void
+  onExportError?: (error: string) => void
+
+  // 导入事件
+  onImportData?: (value: ImportResult) => void
+
+  // 框选事件（时间范围选择）
+  onRangeSelection?: (value: RangeSelectionEvent) => void
+}

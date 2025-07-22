@@ -79,9 +79,10 @@ export class FormItem extends Base {
     }
     if (value == true) {
       value = 1
-    } else {
+    }
+    if (value == false) {
       value = 0 //
-    } //
+    }
     return value
   }
   updateBindData(updateConfig: { value: any; [key: string]: any }) {

@@ -350,7 +350,7 @@ export default defineComponent({
                 } //
                 let outCom = (
                   <div
-                    class="w-full h-full"
+                    class="w-full h-full "
                     onClick={(e) => {
                       // e.stopPropagation()
                       // e.preventDefault()

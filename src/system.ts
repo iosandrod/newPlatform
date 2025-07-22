@@ -1027,7 +1027,7 @@ export class System extends Base {
         {
           tabTitle: tabTitles[0], //
           field: 'tableName',
-          label: '表名',
+          label: '页面名称', //
           type: 'input', //
           disabled: true, //
           itemChange: (config) => {},
@@ -1385,7 +1385,11 @@ export class System extends Base {
     // console.log('左侧菜单点击', item)//
     let tableName = item.tableName
     if (Boolean(tableName) == false) {
-      let status = true //
+      //
+      let status = await this.confirmMessageBox(
+        `当前页面无数据源，是否配置数据源`,
+        'warning', //
+      ) //
       if (status == true) {
         let f = await this.confirmForm({
           itemSpan: 24,
@@ -1393,6 +1397,7 @@ export class System extends Base {
           width: 300, //
           requiredValidate: true, //
           items: [
+            ...getDataSourceConfig(item), //
             {
               field: 'tableName',
               label: '页面编号',
@@ -1412,6 +1417,7 @@ export class System extends Base {
         await this.getHttp().patch('navs', _item) //
         this.confirmMessage('创建成功页面成功') //
         // console.log('f', f) //
+        this.routeTo(`/admin/${f.tableName}`) //
       }
       return
     }

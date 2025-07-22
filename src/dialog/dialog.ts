@@ -73,7 +73,7 @@ export class Dialog extends Base {
     return 400 //
   }
   getMinHeight() {
-    return 300 //
+    return 200 //
   }
   getInnerInstance() {
     let _createFn = this.config.createFn

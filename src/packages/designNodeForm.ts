@@ -4,6 +4,7 @@ import { Table } from '@/table/table'
 import { Column } from '@/table/column'
 import { FormItem } from './formitem'
 import { getAllColTypes } from '@/table/colFConfig'
+import { datetime } from './utils/equal'
 export * from './designNodeOptions' //
 
 //编辑options
@@ -149,6 +150,13 @@ export const selectTypeMap = (_this: PageDesign) => {
       data: computed(() => {
         return _this.state.selected || {} //
       }),
+    },
+    datetime: {
+      itemSpan: 24,
+      items: [...createDSelect('datetime')],
+      data: computed(() => {
+        return _this.state.selected || {} //
+      }), //
     },
     grid: {
       itemSpan: 24,

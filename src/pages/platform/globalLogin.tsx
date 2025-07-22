@@ -94,7 +94,7 @@ export default defineComponent({
           </div>
 
           <div class="w-full lg:w-1/2 p-10 flex flex-col justify-center">
-            <h2 class="text-4xl font-bold text-gray-800 mb-6 flex justify-center">
+            <h2 class=" items-center text-4xl font-bold text-gray-800 mb-6 flex justify-center">
               账户登录
             </h2>
 
@@ -128,7 +128,7 @@ export default defineComponent({
 
             <button
               onClick={loginFn}
-              class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-200"
+              class="w-full flex justify-center items-center py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-200"
             >
               登录
             </button>

@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { getDCConfig, getDFConfig } from './colFConfig'
 import { XeTable } from './xetable'
+import { reactive } from 'vue'
 
 export const initXeContextItems = (table: XeTable) => {
   let items = [
@@ -164,7 +165,7 @@ export const initXeContextItems = (table: XeTable) => {
       fn: async () => {
         let curContextCol = table.curContextCol
         let _config = curContextCol.config
-        _config = _.cloneDeep(_config) //
+        _config = reactive(_.cloneDeep(_config)) //
         let sys = table.getSystem()
         let mainD = table.getMainPageDesign() //
         let fConfig = getDFConfig(mainD, _config)

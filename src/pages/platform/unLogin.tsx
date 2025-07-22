@@ -16,7 +16,7 @@ export default defineComponent({
             onClick={() => {
               toLogin() //
             }}
-            class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition"
+            class="w-full py-3 rounded-xl flex justify-center items-center bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md transition"
           >
             登录账号
           </button>

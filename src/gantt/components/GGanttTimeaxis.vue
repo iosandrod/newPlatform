@@ -247,7 +247,6 @@ const shouldShowEventsAxis = computed(() => {
 const eventPositions = computed(() => {
   if (!timeaxisUnits.value.result.events.length) return []
   let _helper = useDayjsHelper()
-  console.log(_helper, 'testsfsdfsdfsd') //
   const { chartStartDayjs, chartEndDayjs } = useDayjsHelper()
   const totalMinutes = chartEndDayjs.value.diff(
     chartStartDayjs.value,

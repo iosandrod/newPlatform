@@ -13,6 +13,7 @@ import { Form } from './form'
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 import defaultProps from './formEditor/defaultProps'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
+import { forIn } from 'lodash'
 const getDefaultFormEditProps = () => {
   return {
     isTabForm: {
@@ -135,8 +136,9 @@ export default defineComponent({
       //
       fIns = new Form(props)
       if (props.layoutData != null) {
-        fIns.setLayoutData(props.layoutData) //
+        fIns.setLayoutData(props.layoutData, true)
       }
+      fIns.isShow=true
     }
     // debugger //
     fIns.setCurrentDesign(false)

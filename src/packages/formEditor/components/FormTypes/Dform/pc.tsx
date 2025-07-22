@@ -4,7 +4,7 @@ import { FormItem } from '@ER/formitem'
 import { PageDesign } from '@ER/pageDesign'
 import { PageDesignItem } from '@ER/pageItem'
 import { ElInput } from 'element-plus'
-import { computed, defineComponent, inject } from 'vue'
+import { computed, defineComponent, inject, onMounted } from 'vue'
 
 export default defineComponent({
   name: 'DFormPc',
@@ -37,9 +37,22 @@ export default defineComponent({
       tableName = mainPage.getTableName() //
     }
     let itemTName = formitem.getOptions().tableName
+    onMounted(() => {
+      let outCom :HTMLDivElement= formitem.getRef('fieldOutCom')
+      if(outCom == null) return
+      console.log(outCom, 'outCom')
+      let bound = outCom.getBoundingClientRect()
+      console.log(bound, 'bound')//
+    })
     return () => {
       let _com = (
-        <div class="h-full w-full" style={{ minHeight: '36px' }}>
+        <div
+          class="h-full w-full"
+          ref={(el) => {
+            formitem.registerRef('fieldOutCom', el)
+          }}
+          style={{ minHeight: '36px' }}
+        >
           <FormCom
             ref={registerRef}
             {...fConfig.value}

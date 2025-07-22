@@ -14,8 +14,7 @@ import type {
   ExportOptions,
   ImportResult,
 } from './hy-vue-gantt'
-import { downloadSampleCSV } from './CSVGenerator'
-import { downloadSampleJIRA } from './JIRAGEnerator'
+
 import dayjs from 'dayjs' //
 
 const sections = ref<{ [key: string]: boolean }>({
@@ -157,17 +156,79 @@ const availableColorSchemes = [
   'slumber',
 ]
 
+// 时间精度可选项，用于决定时间轴显示的粒度
 const availablePrecisions = ['hour', 'day', 'week', 'month']
+// 'hour'：按小时显示
+// 'day'：按天显示
+// 'week'：按周显示
+// 'month'：按月显示
+
+// 支持的本地化语言代码（用于日期、本地化 UI 文本等）
 const availableLocales = ['en', 'it', 'fr', 'de', 'es']
+// 'en'：英文
+// 'it'：意大利语
+// 'fr'：法语
+// 'de'：德语
+// 'es'：西班牙语
+
+// 连线类型，用于任务依赖连接的视觉表现
 const availableConnectionTypes = ['bezier', 'straight', 'squared']
+// 'bezier'：贝塞尔曲线（柔和的曲线）
+// 'straight'：直线连接
+// 'squared'：折线连接（直角线）
+
+// 连线样式，用于控制任务依赖线的样式
 const availableConnectionPatterns = ['solid', 'dash', 'dot', 'dashdot']
+// 'solid'：实线
+// 'dash'：虚线
+// 'dot'：点状线
+// 'dashdot'：点划线
+
+// 连线动画速度（如果支持动画或动态高亮）
 const availableConnectionSpeeds = ['slow', 'normal', 'fast']
+// 'slow'：慢速
+// 'normal'：常速
+// 'fast'：快速
+
+// 箭头类型，用于连线末尾的指示箭头
 const availableMarkerTypes = ['none', 'forward', 'bidirectional']
+// 'none'：无箭头
+// 'forward'：单向箭头（指向目标）
+// 'bidirectional'：双向箭头（起点与终点都带箭头）
+
+// 日期显示方式，用于时间轴或日期标签
 const availableDayOptions = ['day', 'name', 'doy', 'number']
+// 'day'：显示日期，如 21
+// 'name'：显示星期名，如 Monday
+// 'doy'：Day of Year，年份中的第几天
+// 'number'：某种编号（视实现而定）
+
+// 导出格式选项
 const availableExportFormats = ['pdf', 'png', 'svg', 'excel']
+// 'pdf'：导出为 PDF 文档
+// 'png'：导出为 PNG 图片
+// 'svg'：导出为矢量 SVG 图像
+// 'excel'：导出为 Excel 表格
+
+// 纸张大小选项（用于导出、打印）
 const availablePaperSizes = ['a4', 'a3', 'letter', 'legal']
+// 'a4'：标准 A4 纸
+// 'a3'：标准 A3 纸（比 A4 大）
+// 'letter'：北美信纸大小
+// 'legal'：法律文件大小（比 letter 更长）
+
+// 页面方向选项（用于打印或导出）
 const availableOrientations = ['portrait', 'landscape']
+// 'portrait'：纵向
+// 'landscape'：横向
+
+// 任务之间的依赖关系类型（常用于甘特图）
 const availableConnectionRelations = ['FS', 'SS', 'FF', 'SF']
+// 'FS'（Finish to Start）：前任务完成 → 后任务开始（最常见）
+// 'SS'（Start to Start）：前任务开始 → 后任务开始
+// 'FF'（Finish to Finish）：前任务完成 → 后任务完成
+// 'SF'（Start to Finish）：前任务开始 → 后任务完成（较少见）
+
 
 const availableFontWeights = [
   { value: 'normal', label: 'Normal' },
@@ -262,18 +323,6 @@ const handleImport = (result: ImportResult) => {
   if (result.success && result.data) {
     showImporter.value = false
 
-    /*if (result.data.chartStart) {
-      chartStart.value = result.data.chartStart instanceof Date 
-        ? result.data.chartStart.toISOString().split('T')[0] 
-        : result.data.chartStart.split('T')[0]7
-    }
-    
-    if (result.data.chartEnd) {
-      chartEnd.value = result.data.chartEnd instanceof Date 
-        ? result.data.chartEnd.toISOString().split('T')[0] 
-        : result.data.chartEnd.split('T')[0]
-    }*/
-
     addEventLog('Import', {
       success: true,
       rowsCount: result.data.rows.length,
@@ -308,65 +357,7 @@ export type ChartRowWithOptionalBars = Omit<ChartRow, 'bars'> & {
 
 // Sample Data
 const sampleData = ref<ChartRowWithOptionalBars[]>([
-  //   {
-  //     id: 'group1',
-  //     label: 'Frontend Development',
-  //     children: [
-  //       {
-  //         id: 'task1',
-  //         label: 'Setup Project',
-  //         bars: [
-  //           {
-  //             start: `${year}-${month}-02`,
-  //             end: `${year}-${month}-10`,
-  //             ganttBarConfig: {
-  //               id: 'bar1',
-  //               label: 'Initial Setup',
-  //               style: { background: '#42b883' },
-  //               progress: 100,
-  //               connections: [
-  //                 {
-  //                   targetId: 'bar2',
-  //                   relation: 'FS',
-  //                   label: 'Critical Req',
-  //                   labelAlwaysVisible: true,
-  //                   labelStyle: {
-  //                     fill: '#ffff00',
-  //                     fontWeight: 'bold',
-  //                     fontSize: '16px',
-  //                     textTransform: 'uppercase',
-  //                   },
-  //                 },
-  //               ],
-  //             },
-  //           },
-
-  //         ],
-  //       },
-  //       {
-  //         id: 'task2',
-  //         label: 'Core Features',
-  //         bars: [
-  //           {
-  //             start: `${year}-${month}-11`,
-  //             end: `${year}-${month}-20`,
-  //             ganttBarConfig: {
-  //               id: 'bar2',
-  //               label: 'Development',
-  //               style: { background: '#35495e' },
-  //               progress: 75,
-  //               connections: [
-  //                 {
-  //                   targetId: 'bar3',
-  //                   pattern: 'dash',
-  //                 },
-  //               ],
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
+  
   //@ts-ignore
   ...[
     {
@@ -470,747 +461,6 @@ const formattedEventLog = computed(() => {
 
 <template>
   <div class="complete-demo">
-    <!-- Settings Panel -->
-    <div class="settings-container">
-      <div class="settings-column">
-        <div class="settings-group">
-          <h4 @click="toggleSection('timeConfig')" class="toggle-header">
-            Time Settings
-            <span
-              :class="{
-                'arrow-down': sections.timeConfig,
-                'arrow-up': !sections.timeConfig,
-              }"
-            >
-              ▼
-            </span>
-          </h4>
-          <div v-if="sections.timeConfig" class="settings-grid">
-            <div class="setting-item">
-              <label>
-                Precision:
-                <select v-model="precision">
-                  <option
-                    v-for="option in availablePrecisions"
-                    :key="option"
-                    :value="option"
-                  >
-                    {{ option }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Day Label:
-                <select v-model="dayOptionLabel" multiple>
-                  <option
-                    v-for="option in availableDayOptions"
-                    :key="option"
-                    :value="option"
-                  >
-                    {{ option }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Language:
-                <select v-model="locale">
-                  <option
-                    v-for="option in availableLocales"
-                    :key="option"
-                    :value="option"
-                  >
-                    {{ option }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Holidays:
-                <select v-model="holidayHighlight">
-                  <option value="">None</option>
-                  <option value="US">United States</option>
-                  <option value="GB">United Kingdom</option>
-                  <option value="IT">Italy</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Highlighted Hours:
-                <input
-                  type="text"
-                  :value="highlightedHours.join(',')"
-                  @input="e => highlightedHours = (e.target as HTMLInputElement).value.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n))"
-                  placeholder="9,13,17"
-                />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Highlighted Days:
-                <input
-                  type="text"
-                  :value="highlightedDaysInWeek.join(',')"
-                  @input="e => highlightedDaysInWeek = (e.target as HTMLInputElement).value.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n))"
-                  placeholder="0,6"
-                />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                UTC Current time:
-                <input type="checkbox" v-model="utc" />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <h4 @click="toggleSection('connectionConfig')" class="toggle-header">
-            Connection Settings
-            <span
-              :class="{
-                'arrow-down': sections.connectionConfig,
-                'arrow-up': !sections.connectionConfig,
-              }"
-            >
-              ▼
-            </span>
-          </h4>
-          <div v-if="sections.connectionConfig" class="settings-grid">
-            <div class="setting-item">
-              <label>
-                Animated:
-                <input type="checkbox" v-model="defaultConnectionAnimated" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Connection Type:
-                <select v-model="defaultConnectionType">
-                  <option
-                    v-for="type in availableConnectionTypes"
-                    :key="type"
-                    :value="type"
-                  >
-                    {{ type }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Pattern:
-                <select v-model="defaultConnectionPattern">
-                  <option
-                    v-for="pattern in availableConnectionPatterns"
-                    :key="pattern"
-                    :value="pattern"
-                  >
-                    {{ pattern }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Animation Speed:
-                <select v-model="defaultConnectionAnimationSpeed">
-                  <option
-                    v-for="speed in availableConnectionSpeeds"
-                    :key="speed"
-                    :value="speed"
-                  >
-                    {{ speed }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Connection Color:
-                <input type="color" v-model="defaultConnectionColor" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Marker Type:
-                <select v-model="markerConnection">
-                  <option
-                    v-for="marker in availableMarkerTypes"
-                    :key="marker"
-                    :value="marker"
-                  >
-                    {{ marker }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Connection Relation:
-                <select v-model="defaultConnectionRelation">
-                  <option
-                    v-for="relation in availableConnectionRelations"
-                    :key="relation"
-                    :value="relation"
-                  >
-                    {{ relation }}
-                  </option>
-                </select>
-              </label>
-            </div>
-
-            <div class="setting-item">
-              <label>
-                Connection Label:
-                <input
-                  type="text"
-                  v-model="defaultConnectionLabel"
-                  placeholder="Enter label"
-                />
-              </label>
-            </div>
-
-            <div class="setting-item">
-              <label>
-                Label Always Visible:
-                <input
-                  type="checkbox"
-                  v-model="defaultConnectionLabelAlwaysVisible"
-                />
-              </label>
-            </div>
-
-            <div class="setting-item">
-              <label>
-                Label Font Size:
-                <input
-                  type="text"
-                  v-model="defaultConnectionLabelStyle.fontSize"
-                  placeholder="24px"
-                />
-              </label>
-            </div>
-
-            <div class="setting-item">
-              <label>
-                Label Font Weight:
-                <select v-model="defaultConnectionLabelStyle.fontWeight">
-                  <option
-                    v-for="weight in availableFontWeights"
-                    :key="weight.value"
-                    :value="weight.value"
-                  >
-                    {{ weight.label }}
-                  </option>
-                </select>
-              </label>
-            </div>
-
-            <div class="setting-item">
-              <label>
-                Label Color:
-                <input
-                  type="color"
-                  v-model="defaultConnectionLabelStyle.fill"
-                />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <h4 @click="toggleSection('exportConfig')" class="toggle-header">
-            Export Settings
-            <span
-              :class="{
-                'arrow-down': sections.exportConfig,
-                'arrow-up': !sections.exportConfig,
-              }"
-            >
-              ▼
-            </span>
-          </h4>
-          <div v-if="sections.exportConfig" class="settings-grid">
-            <div class="setting-item">
-              <label>
-                Enable Export:
-                <input type="checkbox" v-model="exportEnabled" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Enable Column Label:
-                <input type="checkbox" v-model="exportColumnLabel" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Format:
-                <select v-model="exportFormat">
-                  <option
-                    v-for="format in availableExportFormats"
-                    :key="format"
-                    :value="format"
-                  >
-                    {{ format }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Paper Size:
-                <select v-model="exportPaperSize">
-                  <option
-                    v-for="size in availablePaperSizes"
-                    :key="size"
-                    :value="size"
-                  >
-                    {{ size }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Orientation:
-                <select v-model="exportOrientation">
-                  <option
-                    v-for="orient in availableOrientations"
-                    :key="orient"
-                    :value="orient"
-                  >
-                    {{ orient }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Quality (0-1):
-                <input
-                  type="number"
-                  v-model="exportQuality"
-                  min="0.1"
-                  max="1"
-                  step="0.05"
-                />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Scale (0.5-3):
-                <input
-                  type="number"
-                  v-model="exportScale"
-                  min="0.5"
-                  max="3"
-                  step="0.1"
-                />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Margin (px):
-                <input type="number" v-model="exportMargin" min="0" max="50" />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <h4 @click="toggleSection('importConfig')" class="toggle-header">
-            Import Data
-            <span
-              :class="{
-                'arrow-down': sections.importConfig,
-                'arrow-up': !sections.importConfig,
-              }"
-            >
-              ▼
-            </span>
-          </h4>
-          <div v-if="sections.importConfig" class="settings-grid">
-            <div class="setting-item">
-              <button
-                class="import-button"
-                @click="showImporter = true"
-                style="
-                  width: 100%;
-                  padding: 8px;
-                  background: #42b883;
-                  color: white;
-                  border: none;
-                  border-radius: 4px;
-                  cursor: pointer;
-                "
-              >
-                Open Importer
-              </button>
-            </div>
-            <div class="setting-item">
-              <button
-                class="download-csv-button"
-                @click="downloadSampleCSV"
-                style="
-                  width: 100%;
-                  padding: 8px;
-                  background: #42b883;
-                  color: white;
-                  border: none;
-                  border-radius: 4px;
-                  cursor: pointer;
-                "
-              >
-                Download Example CSV
-              </button>
-            </div>
-            <div class="setting-item">
-              <button
-                class="download-csv-button"
-                @click="downloadSampleJIRA"
-                style="
-                  width: 100%;
-                  padding: 8px;
-                  background: #42b883;
-                  color: white;
-                  border: none;
-                  border-radius: 4px;
-                  cursor: pointer;
-                "
-              >
-                Download Example JIRA
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="settings-column">
-        <div class="settings-group">
-          <h4 @click="toggleSection('displayConfig')" class="toggle-header">
-            Display Settings
-            <span
-              :class="{
-                'arrow-down': sections.displayConfig,
-                'arrow-up': !sections.displayConfig,
-              }"
-            >
-              ▼
-            </span>
-          </h4>
-          <div v-if="sections.displayConfig" class="settings-grid">
-            <div class="setting-item">
-              <label>
-                Color Scheme:
-                <select v-model="colorScheme">
-                  <option
-                    v-for="option in availableColorSchemes"
-                    :key="option"
-                    :value="option"
-                  >
-                    {{ option }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Label Columns:
-                <select v-model="columnsSelected" multiple>
-                  <option
-                    v-for="option in multiColumnOptions"
-                    :key="option"
-                    :value="option"
-                  >
-                    {{ option }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Show Bar Label:
-                <input type="checkbox" v-model="showLabel" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Edit Bar Label:
-                <input type="checkbox" v-model="barLabelEditable" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Show Progress:
-                <input type="checkbox" v-model="showProgress" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Show Event Axis:
-                <input type="checkbox" v-model="showEventsAxis" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Hide Timeline:
-                <input type="checkbox" v-model="hideTimeaxis" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Show Grid:
-                <input type="checkbox" v-model="grid" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Row Height:
-                <input type="number" v-model="rowHeight" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Event Axis Height:
-                <input type="number" v-model="eventsAxisHeight" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Max Rows:
-                <input type="number" v-model="maxRows" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Selection Tick:
-                <input type="number" v-model="tick" min="0" step="1" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Commands:
-                <input type="checkbox" v-model="commands" />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <h4 @click="toggleSection('behaviorConfig')" class="toggle-header">
-            Behavior Settings
-            <span
-              :class="{
-                'arrow-down': sections.behaviorConfig,
-                'arrow-up': !sections.behaviorConfig,
-              }"
-            >
-              ▼
-            </span>
-          </h4>
-          <div v-if="sections.behaviorConfig" class="settings-grid">
-            <div class="setting-item">
-              <label>
-                Enable Minutes:
-                <input type="checkbox" v-model="enableMinutes" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Show Current Time:
-                <input type="checkbox" v-model="currentTime" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Show Pointer Marker:
-                <input type="checkbox" v-model="pointerMarker" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Push on Overlap:
-                <input type="checkbox" v-model="pushOnOverlap" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Push on Connect:
-                <input type="checkbox" v-model="pushOnConnect" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Prevent Overlap:
-                <input type="checkbox" v-model="noOverlap" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Enable Connections:
-                <input type="checkbox" v-model="enableConnections" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Sortable:
-                <input type="checkbox" v-model="sortable" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Label Resizable:
-                <input type="checkbox" v-model="labelResizable" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Enable Row Drag & Drop:
-                <input type="checkbox" v-model="enableRowDragAndDrop" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Progress resizable:
-                <input type="checkbox" v-model="defaultProgressResizable" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Enable connection creation:
-                <input type="checkbox" v-model="enableConnectionCreation" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Enable connection deletion:
-                <input type="checkbox" v-model="enableConnectionDeletion" />
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <h4 @click="toggleSection('slotConfig')" class="toggle-header">
-            Slot Customization
-            <span
-              :class="{
-                'arrow-down': sections.slotConfig,
-                'arrow-up': !sections.slotConfig,
-              }"
-            >
-              ▼
-            </span>
-          </h4>
-          <div v-if="sections.slotConfig" class="settings-grid">
-            <div class="setting-item">
-              <label>
-                Custom Commands:
-                <input type="checkbox" v-model="customSlots.commands" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Custom Bar Label:
-                <input type="checkbox" v-model="customSlots.barLabel" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Custom Bar Tooltip:
-                <input type="checkbox" v-model="customSlots.barTooltip" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Custom Current Time Label:
-                <input type="checkbox" v-model="customSlots.currentTimeLabel" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Custom Pointer Marker Tooltips:
-                <input
-                  type="checkbox"
-                  v-model="customSlots.pointerMarkerTooltips"
-                />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Custom Time Upper Unit:
-                <input type="checkbox" v-model="customSlots.upperTimeunit" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Custom Time Lower Unit:
-                <input type="checkbox" v-model="customSlots.timeunit" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Holiday Tooltip:
-                <input type="checkbox" v-model="customSlots.holidayTooltip" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Event Tooltip:
-                <input type="checkbox" v-model="customSlots.eventTooltip" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Range Selection Tooltip:
-                <input type="checkbox" v-model="customSlots.selectionTooltip" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Timeaxis Event:
-                <input type="checkbox" v-model="customSlots.timeaxisEvent" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Group Bar:
-                <input type="checkbox" v-model="customSlots.groupBar" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Generic Milestone:
-                <input type="checkbox" v-model="customSlots.milestone" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Specific Column Title (Label):
-                <input type="checkbox" v-model="customSlots.labelColumnTitle" />
-              </label>
-            </div>
-            <div class="setting-item">
-              <label>
-                Specific Column (Label):
-                <input type="checkbox" v-model="customSlots.labelColumnField" />
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Gantt Container -->
     <div class="gantt-container">
       <g-gantt-chart

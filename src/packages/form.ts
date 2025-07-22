@@ -198,7 +198,7 @@ export class Form extends Base {
         fields,
         layout,
         list: [], //
-      } //
+      }
       this.setLayoutData(obj)
     }
   }
@@ -550,8 +550,8 @@ export class Form extends Base {
     let _data = config.data //
     if (_data) {
       this.setData(_data) //
-    }
-    this.setItems(items, true) ////
+    } //
+    this.setItems(items, true)
   } //
   setState(state) {
     this.state = state //
@@ -980,7 +980,7 @@ export class Form extends Base {
     }
     this.flatNodes(list, excludes, fn)
   }
-  setLayoutData(data) {
+  setLayoutData(data, bool = false) {
     const state = this.state
     if (data == null) {
       return
@@ -995,7 +995,9 @@ export class Form extends Base {
     }
     layout.pc = newData.layout.pc
     layout.mobile = newData.layout.mobile
-    this.isShow = false
+    if (bool == false) {
+      this.isShow = false
+    }
     state.store = newData.list
     state.fields = newData.fields
     let curLayout = _.cloneDeep(newData.layout[state.platform])
@@ -1941,8 +1943,8 @@ export class Form extends Base {
     dFormMap[type] = _f1
     this.curDForm = _f1
   }
-  designButtons(props){
-let data = props.data
+  designButtons(props) {
+    let data = props.data
     let id = data.id
     let items = this.items
     let item = items.find((item) => item.id === id)

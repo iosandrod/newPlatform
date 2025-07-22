@@ -362,16 +362,19 @@ export default defineComponent({
           </div>
         )
       } //
+      let _com = withDirectives(<CanvesPanel data={state.store} />, [
+        [vClickOutside, onClickOutside],
+      ])
+      if (isShow.value == false) {
+        _com = null
+      }
       let com = (
         <div class="h-full w-full overflow-x-hidden overflow-y-auto bg-white">
           <div class="flex h-full w-full bg-white overflow-x-hidden overflow-y-auto flex-row">
             <div class="h-full overflow-hidden">{_fieldCom}</div>
             <div class="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
               {btnCom}
-              {isShow.value &&
-                withDirectives(<CanvesPanel data={state.store} />, [
-                  [vClickOutside, onClickOutside],
-                ])}
+              {_com}
             </div>
             {_ConfigCom}
           </div>

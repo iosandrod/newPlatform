@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { Table } from './table'
 import { getDCConfig, getDFConfig } from './colFConfig' //
 import { VxeText, VxeUI } from 'vxe-pc-ui'
+import { reactive } from 'vue'
 export const initContextMenu = (table: Table) => {
   let items = [
     {
@@ -164,7 +165,7 @@ export const initContextMenu = (table: Table) => {
       fn: async () => {
         let curContextCol = table.curContextCol
         let _config = curContextCol.config
-        _config = _.cloneDeep(_config) //
+        _config = reactive(_.cloneDeep(_config)) //
         let sys = table.getSystem()
         let mainD = table.getMainPageDesign() //
         let fConfig = getDFConfig(mainD, _config)
@@ -225,7 +226,6 @@ export const initContextMenu = (table: Table) => {
           tableName: table.getTableName(),
           columns: table.getFlatColumns().map((col) => col?.config || col), ////
         })
-        
       }, //
     },
   ]

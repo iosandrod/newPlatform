@@ -636,6 +636,7 @@ export class XeTable extends Base {
   getCellHeight() {
     let config = this.config
     let rowHeight = config.rowHeight
+    console.log(rowHeight,'dskfsjflsdfsd')//
     if (isNaN(rowHeight)) {
       rowHeight = 30
     }

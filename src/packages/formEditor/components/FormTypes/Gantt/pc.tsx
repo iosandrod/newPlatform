@@ -1,3 +1,5 @@
+import ganttCom from '@/gantt/ganttCom'
+import GanttCom from '@/gantt/ganttCom'
 import inputCom from '@/input/inputCom'
 import selectCom from '@/select/selectCom'
 import SelectCom from '@/select/selectCom'
@@ -12,6 +14,7 @@ export default defineComponent({
   components: {
     inputCom,
     selectCom,
+    ganttCom,
   },
   props: {
     data: Object,
@@ -33,7 +36,11 @@ export default defineComponent({
       return s
     }) //
     return () => {
-      let com = <div>甘特图</div>
+      let com = (
+        <div class="h-full w-full">
+          <GanttCom></GanttCom>
+        </div>
+      )
       return com //
     }
   },

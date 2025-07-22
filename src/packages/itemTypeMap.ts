@@ -51,7 +51,7 @@ export const selectType = (item: FormItem) => {
     }
     item.updateBindData({ value })
   }
-  obj.allowCreate = item.getAllowCreate()//
+  obj.allowCreate = item.getAllowCreate() //
   return obj //
 }
 
@@ -79,6 +79,12 @@ export const booleanType = (item: FormItem) => {
   let obj = defaultType(item) //
   obj.onChange = (config) => {
     let value = config.value
+    if (value == true) {
+      value = 1
+    }
+    if (value == false) {
+      value = 0
+    } //
     item.updateBindData({ value }) //
   }
   obj.onInput = (config) => {} //
@@ -126,7 +132,7 @@ export const imageType = (item: FormItem) => {
     item.updateBindData({ value }) //
   }
   obj.clearable = true
-  obj.modelValue=item.getImageBindValue()
+  obj.modelValue = item.getImageBindValue()
   obj.onInput = (config) => {} //
   return obj
 }

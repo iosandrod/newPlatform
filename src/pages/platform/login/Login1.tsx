@@ -78,9 +78,9 @@ export default defineComponent({
     ganttCom,
   },
   setup(props) {
-    let str=`2025-01-01 00:00`
-    let d=dayjs(str,'YYYY-MM-DD HH:mm',false)//
-    console.log(d,'fjslkfjsdlkf')//
+    let str = `2025-01-01 00:00`
+    let d = dayjs(str, 'YYYY-MM-DD HH:mm', false) //
+    console.log(d, 'fjslkfjsdlkf') //
     const formConfig = {
       itemSpan: 12,
       items: [
@@ -246,7 +246,11 @@ export default defineComponent({
         ></selectCom>
       )
 
-      com = <ganttCom></ganttCom>
+      com = (
+        <div class="er-w-500">
+          <ganttCom></ganttCom>
+        </div>
+      )
       let _com = (
         <div
           class="h-full"
