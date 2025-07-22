@@ -7,6 +7,7 @@ import {
   VxeComponentEvent,
   VxeGridInstance,
   VxeTableDefines,
+  VxeTableEventProps,
   VxeTableEvents,
   VxeTablePropTypes,
 } from 'vxe-table'
@@ -432,7 +433,10 @@ export class XeTable extends Base {
         }
         return status //
       }) //
-      this.templateProps.data = _data3 //
+      nextTick(() => {
+        let _data4 = this.getFlatTreeData(_data3)
+        this.templateProps.data = _data4 //
+      })
     } else {
       if (globalValue.length > 0) {
         _data1 = _data1.filter((v) => {
@@ -636,7 +640,7 @@ export class XeTable extends Base {
   getCellHeight() {
     let config = this.config
     let rowHeight = config.rowHeight
-    console.log(rowHeight,'dskfsjflsdfsd')//
+    console.log(rowHeight, 'dskfsjflsdfsd') //
     if (isNaN(rowHeight)) {
       rowHeight = 30
     }
@@ -899,6 +903,15 @@ export class XeTable extends Base {
       onCurRowChange({ row: row, oldRow: oldCurRow }) //
     }
   }
+  @cacheValue()
+  getRowConfig() {
+    let drag = this.config.enableDragRow
+    let config: any = {} //
+    if (drag) {
+      config.drag = true
+    }
+    return config
+  }
   onEditCellMounted(config) {
     let instance = config.instance
     // console.log(instance, 'testInstance') //
@@ -1043,6 +1056,7 @@ export class XeTable extends Base {
       //
       rowField: id,
       parentField: parentId,
+      transform: true,
     }
     return obj
   }
@@ -1476,5 +1490,11 @@ export class XeTable extends Base {
   }
   async clearData() {
     //
+  }
+  @cacheValue()
+  async getRowDragConfig() {
+    let config: VxeTablePropTypes.RowDragConfig = {
+    }
+    return config //
   }
 }

@@ -11,10 +11,15 @@ export class XeSeriesNumberColumn extends XeColumn {
   getTitle() {
     return '#' //
   }
+
   getColumnProps() {
+    let isDrag = this.getDragSort()
     let config = super.getColumnProps()
     config.fixed = 'left' //
     config.type = 'seq'
-    return config
+    if (isDrag == true) {
+      config.dragSort = true
+    }
+    return config //
   } //
 }

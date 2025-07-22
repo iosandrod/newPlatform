@@ -47,12 +47,24 @@ export class XeColumn extends Column {
       },
     }
   }
-
+  getDragSort() {
+    let config = this.config //
+    let table = this.table
+    let enableDragRow = table.config.enableDragRow
+    if (enableDragRow) {
+      return true
+    }
+    return false //
+  }
   getColumnProps() {
     let config = this.config
     const slots = this.getSlots()
     let isTree = this.getIsTree()
-
+    let isDrag = this.getDragSort()
+    let d = false
+    if (isDrag == true && isTree == true) {
+      d = true
+    }
     let obj: VxeColumnProps & { order: number } = {
       ...config,
       width: this.getColumnWidth(),

@@ -11,7 +11,7 @@ import {
   watchEffect,
   withDirectives,
 } from 'vue'
-import { VxeTableProps } from 'vxe-table'
+import { VxeTableProps, VxeTablePropTypes } from 'vxe-table'
 import tProps from 'vxe-table/es/table/src/props'
 import { XeTable } from './xetable'
 import { useKeyboard } from '@ER/utils'
@@ -19,7 +19,7 @@ import TableMenuCom from './tableMenuCom'
 import TableButtonCom from './tableButtonCom'
 import InputCom from '@/input/inputCom'
 import { ClickOutside } from 'element-plus'
-import { VxeLoading } from 'vxe-pc-ui'
+import { VxeLoading, VxeTagPropTypes } from 'vxe-pc-ui'
 import XeTableSelectCom from './xeTableSelectCom'
 import { VxeGrid as myVxeGrid } from '@/vxegrid'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
@@ -332,25 +332,25 @@ export default defineComponent({
           let treeConfig = props.treeConfig
           let expand = treeConfig?.expand
           if (tableIns.getIsTree()) {
-            if (expand == 'all' || props.expandAll == true) {
-              tableIns.updateCanvas().then((res) => {
-                tableIns
-                  .getInstance()
-                  .loadData(tableIns.templateProps.data)
-                  .then(() => {
-                    tableIns.expandAllTreeRow() //
-                  })
-              })
-            } else if (expand == 'first') {
-              tableIns.updateCanvas().then((res) => {
-                tableIns
-                  .getInstance()
-                  .loadData(tableIns.templateProps.data)
-                  .then(() => {
-                    tableIns.expandTargetRows(tableIns.templateProps.data) //
-                  })
-              })
-            }
+            // if (expand == 'all' || props.expandAll == true) {
+            //   tableIns.updateCanvas().then((res) => {
+            //     tableIns
+            //       .getInstance()
+            //       .loadData(tableIns.templateProps.data)
+            //       .then(() => {
+            //         tableIns.expandAllTreeRow() //
+            //       })
+            //   })
+            // } else if (expand == 'first') {
+            //   tableIns.updateCanvas().then((res) => {
+            //     tableIns
+            //       .getInstance()
+            //       .loadData(tableIns.templateProps.data)
+            //       .then(() => {
+            //         tableIns.expandTargetRows(tableIns.templateProps.data) //
+            //       })
+            //   })
+            // }
           }
         }
       }, //
@@ -442,6 +442,12 @@ export default defineComponent({
     )
     let registerBodyDiv = (el) => {
       tableIns.registerRef('bodyDiv', el)
+    }
+    const rowDConfig: VxeTablePropTypes.RowDragConfig = {
+      isCrossDrag: true,
+      dragEndMethod: async () => {
+        return false
+      },
     }
     return () => {
       let com = null //
@@ -553,6 +559,8 @@ export default defineComponent({
             headerCellConfig={tableIns.getHeaderCellConfig()}
             virtualYConfig={tableIns.getVirtualYConfig()}
             height={tableIns.getTableHeight()}
+            rowConfig={tableIns.getRowConfig()}
+            rowDragConfig={{ ...rowDConfig }} //
             class="h-full w-full overflow-hidden"
             ref={(el) => {
               tableIns.registerRef('xeGrid', el)
