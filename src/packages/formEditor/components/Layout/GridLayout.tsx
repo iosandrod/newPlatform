@@ -13,9 +13,7 @@ export default defineComponent({
   name: 'GridLayout',
   inheritAttrs: false,
   customOptions: {},
-  // components: {
-  //   DragGable
-  // },
+ 
   components: {
     Selection,
   },
@@ -26,14 +24,7 @@ export default defineComponent({
   setup(props) {
     const ns = hooks.useNamespace('GridLayout')
     const { state, isPc, isEditModel } = hooks.useTarget()
-    const handleMove = (evt, originalEvent) => {
-      const {
-        relatedContext: {
-          element: { type },
-        },
-      } = evt
-      return type === 'col'
-    }
+   
     // const tag = resolveComponent(unref(isPc) ? 'el-row' : 'van-cell-group')
     let formIns: any = inject('formIns')
     let pluginName = formIns.getPluginName()

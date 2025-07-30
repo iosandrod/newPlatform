@@ -56,7 +56,7 @@ export default defineComponent({
     const loadCaptcha = async () => {
       const res = await system.createCaptcha('authentication_create')
       code.value = res.data
-      cdata.value = res.text
+      cdata.value = res.text //
     }
     const getCompanyFn = async () => {
       const allCompany = await system.getAllAccountCompany({ getLabel: true })
@@ -71,6 +71,7 @@ export default defineComponent({
       } else {
         await system.loginUser(data.value) //
       }
+      loadCaptcha()
     }
 
     onMounted(async () => {

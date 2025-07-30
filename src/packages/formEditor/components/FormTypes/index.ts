@@ -43,6 +43,8 @@ import colorPc from './Color/pc'
 import colorMobile from './Color/mobile'
 import ganttPc from './Gantt/pc'
 import ganttMobile from './Gantt/mobile' //
+import flowPc from './Flow/pc'
+import flowMobile from './Flow/mobile' //
 export const typeMap = {
   image: {
     pc: imagePc,
@@ -127,6 +129,10 @@ export const typeMap = {
   gantt: {
     pc: ganttPc,
     mobile: ganttMobile, //
+  },
+  flow: {
+    pc: flowPc,
+    mobile: flowMobile,
   },
 }
 export default {}

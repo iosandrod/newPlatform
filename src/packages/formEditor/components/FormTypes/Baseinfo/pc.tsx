@@ -35,7 +35,6 @@ export default defineComponent({
       let d = sys.getTargetSearchEntity(tableName)
       return d
     }) //
-    console.log(tableName, 'testTableName') //
     return () => {
       let com = ( //
         <div

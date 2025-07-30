@@ -944,7 +944,33 @@ export class XeTable extends Base {
     contextmenu.open(event) //
   }
   openContextMenu(config) {}
-  hiddenColumn(field) {}
+  hiddenColumn(field) {
+    let columns = this.getFlatColumns()
+    let _col = columns.find((col) => {
+      return col.getField() == field
+    })
+    if (field == 'checkboxField') {
+      return //
+    } ////
+    if (_col == null) {
+      //
+      return //
+    } //
+    _col.setHidden(true) //
+    let ccnfig = this.config //
+
+    let onColumnConfigChange = ccnfig.onColumnConfigChange
+    if (typeof onColumnConfigChange == 'function') {
+      onColumnConfigChange({
+        column: _col, //
+        columns: _col, //
+        table: this, //
+        originColumn: _col.config, //
+        tableName: this.getTableName(),
+        field: 'hidden', //
+      }) //
+    }
+  }
   getTableName() {
     let tableName = this.config.tableName
     return tableName //
@@ -1493,8 +1519,7 @@ export class XeTable extends Base {
   }
   @cacheValue()
   async getRowDragConfig() {
-    let config: VxeTablePropTypes.RowDragConfig = {
-    }
+    let config: VxeTablePropTypes.RowDragConfig = {}
     return config //
   }
 }

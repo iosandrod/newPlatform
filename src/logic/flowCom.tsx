@@ -167,9 +167,7 @@ export default defineComponent({
       let com = (
         <div class="h-full w-full flex flex-col">
           {context}
-          {/* <div class="er-h-32 overflow-hidden" style={{}}>
-            <erButtonGroup items={flow.getControllButtons()}></erButtonGroup>
-          </div> */}
+          
           <div
             ref={(el) => flow.registerRef('container', el)}
             class="flex-1 overflow-hidden w-full flex"
@@ -256,7 +254,7 @@ export default defineComponent({
       )
       // return com //
       let com1 = (
-        <div class="h-full flex flex-col er-pt-32">
+        <div class="h-full flex flex-col w-full er-pt-32">
           <div class="absolute er-h-32"></div>
           <div class="flex-1">{com}</div>
         </div>

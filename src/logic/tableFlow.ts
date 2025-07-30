@@ -15,10 +15,7 @@ export class TableFlow extends Flow {
   constructor(config) {
     super(config) //
   }
-  templateProps: any = {
-    nodes: [],
-    edges: [],
-  } //
+ 
   remoteTables: any = []
   refreshNodes(_config?: any) {
     let tables: any[] = this.getTables()
@@ -437,8 +434,7 @@ export class TableFlow extends Flow {
     context.open(event) //
   }
   onNodeDrag(config) {
-    // console.log(this.templateProps.nodes, 'testNodes') ////
-    // console.log(config, 'testConfig') //
+   
     let node = config.node //
     let id = node.id
     let myNode = this.getNodeById(id)

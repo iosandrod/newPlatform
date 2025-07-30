@@ -631,7 +631,6 @@ export class PageDesign extends Form {
   }
   //添加类别
   async addRelateTableRow(tableName?: any, row?: any) {
-    // debugger //
     let _config = tableName
     if (typeof tableName == 'string') {
       _config = {
@@ -762,7 +761,6 @@ export class PageDesign extends Form {
   }
   async addDetailTableRow(tableName?: string, row?: any) {
     //
-    // debugger//
     let tTable: Table = this.getRef(tableName)
     if (row == null) {
       row = 1
@@ -905,11 +903,14 @@ export class PageDesign extends Form {
       {
         label: '设计当前列',
         fn: async () => {
+          //
           let cf = this.currentDField
           if (cf == null) {
             return
           }
-          let column = this.getTableColumns().find((col) => {
+          let _cols = this.getTableColumns() //
+          // console.log(_cols.map((col) => col.field)) //
+          let column = _cols.find((col) => {
             return col.field == cf
           })
           // console.log(column, 'testColumn') //
@@ -953,7 +954,6 @@ export class PageDesign extends Form {
           //
           // console.log(this.curCForm, 'testDForm') //
           let curContext = this.currentContextItem
-          // debugger //
           //@ts-ignore
           let formIns = curContext?.config?.formIns //
           if (formIns != null) {
@@ -992,7 +992,7 @@ export class PageDesign extends Form {
     }
     items = _.cloneDeep(items)
     let tableConfig: any = getButtonGroupTableConfig(this) //
-   
+
     tableConfig.data = items
     tableConfig.height = 500
     tableConfig.width = 800
@@ -1068,7 +1068,6 @@ export class PageDesign extends Form {
     this.openDialog(dialogConfig)
   }
   async designSearchForm() {
-    // debugger //
     let searchDialog = this.config.searchDialog
     if (searchDialog == null) {
       searchDialog = {} //
@@ -1240,7 +1239,6 @@ export class PageDesign extends Form {
     let allTableName = this.getAllTableName()
     allTableName.forEach((tableName) => {
       let table = this.getRef(tableName)
-      // debugger //
       if (table == null) {
         return
       } //
@@ -1343,7 +1341,84 @@ export class PageDesign extends Form {
     //
   }
   async openImportDialog() {}
-  async importTableRows() {} //
+  async importTableData(_config) {
+    if (typeof _config == 'string') {
+      _config = {
+        tableName: _config,
+      }
+    }
+    if (_config == null) {
+      _config = {
+        tableName: this.getRealTableName(),
+      } //
+    }
+    let tableName = _config.tableName //
+    if (tableName == null) {
+      return
+    } //
+    let data = {
+      fileType: 'json',
+      importType: 'cover',
+    }
+    let fConfig = {
+      itemSpan: 24, //
+      height: 200,
+      data,
+      width: 300, //
+      items: [
+        {
+          type: 'select',
+          field: 'fileType',
+          label: '文件类型',
+          options: {
+            options: [
+              {
+                label: 'EXCEL导入',
+                value: 'file',
+              },
+              {
+                label: 'JSON数据导入',
+                value: 'data',
+              },
+            ],
+          },
+        },
+        {
+          type: 'select',
+          field: 'importType',
+          label: '导入类型',
+          options: {
+            options: [
+              {
+                label: '覆盖',
+                value: 'cover',
+              },
+              {
+                label: '追加',
+                value: 'append',
+              },
+            ],
+          },
+        }, //
+      ],
+    }
+    let _d1 = null
+    let _d = await this.getSystem().confirmForm(fConfig)
+    if (_d.fileType == 'json') {
+      let _d: any = await this.getSystem().openCodeDialog({})
+      try {
+        _d1 = JSON.parse(_d) //
+      } catch (error) {}
+      if (!Array.isArray(_d1)) {
+        this.getSystem().confirmMessage('导入数据格式不正确', 'warning') //
+        return
+      }
+    }
+    // console.log(_d1)
+    await this.saveTableData({
+      addData: _d1, //
+    }) //
+  } //
   onColumnConfigChange(config) {
     //
     let tableName = config.tableName //
@@ -1673,21 +1748,29 @@ export class PageDesign extends Form {
       let _config1 = tableConfig?.relateConfig || {} //
       let relateKey = _config1?.relateKey
       let mainRelateKey = _config1?.mainRelateKey //
+      let rootId = tableConfig?.treeConfig?.rootId ////
       if (relateKey == null || mainRelateKey == null) {
         this.getSystem().confirmMessage(`${name}未设置关联字段`, 'warning') //
         continue
       }
+      if (curRow[relateKey] == rootId) {
+        curRow = null
+      } //
       if (curRow == null) {
         continue
       }
       let rows = _fn([curRow])
-      let rowsArg = rows.map((row) => {
-        return row[relateKey]
-      })
+      let rowsArg = rows
+        .map((row) => {
+          return row[relateKey]
+        })
+        .filter((row) => row != rootId) //
       let _queryArr = _arr
-      _queryArr.push({
-        [mainRelateKey]: rowsArg,
-      }) //
+      if (rowsArg.length > 0) {
+        _queryArr.push({
+          [mainRelateKey]: rowsArg,
+        }) //
+      }
     }
     return _arr //
   }
@@ -1781,7 +1864,6 @@ export class PageDesign extends Form {
     let fn = (data) => {
       let _data = data.map((row) => {
         // if (row.id == null) {
-        //   debugger //
         // }
         let _row = { ...row }
         let children = row.columns || []

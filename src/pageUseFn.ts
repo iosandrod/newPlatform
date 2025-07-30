@@ -77,7 +77,7 @@ export const mainUse = {
   addTableRows: [
     async (context, next) => {
       await next()
-      let instance: PageDesign = context.instance
+      let instance: PageDesign = context.instance //
       instance.setCurrentEdit()
     },
   ],

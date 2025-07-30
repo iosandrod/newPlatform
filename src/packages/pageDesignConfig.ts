@@ -99,6 +99,13 @@ export const pageDesignFieldConfig = [
           width: '100%',
           minHeight: '50px',
         },
+      },{
+        type: 'flow',
+        label: '模型图',//
+        icon: 'input',
+        key: '',
+        id: '',
+        options: {}, //
       },
     ],
   },

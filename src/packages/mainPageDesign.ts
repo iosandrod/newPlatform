@@ -113,12 +113,9 @@ export class MainPageDesign extends PageDesign {
     let tableName = this.getTableName()
     let pageEditType = config.pageEditType
     if (pageEditType == 'page') {
-      system.routeOpen(
-        `${tableName}---edit`,
-        async (d: editPageDesign) => {
-          await d.addMainTableRow(addConfig) //
-        },
-      )
+      system.routeOpen(`${tableName}---edit`, async (d: editPageDesign) => {
+        await d.addMainTableRow(addConfig) //
+      })
     }
     if (pageEditType == 'default') {
       await this.addTableRows(addConfig) //
@@ -215,7 +212,6 @@ export class MainPageDesign extends PageDesign {
             com.saveTableDesign() //
           },
         },
-       
       ],
       createFn: () => {
         return {
@@ -260,13 +256,15 @@ export class MainPageDesign extends PageDesign {
     await this.getSystem().confirmEditEntity(config, this)
   } //
   @useHooks((config) => {
+    // debugger//
     let ctx: PageDesign = config.instance //
     let args = config.args
-    if ((args.length = 0)) {
+    if ((args.length == 0)) {
       args[0] = ctx.getSaveData()
     } //
   })
   async saveTableData(config = this.getSaveData()) {
+    // debugger //
     let tName = this.getRealTableName()
     let http = this.getHttp() //
     // await http.runCustomMethod(tName, 'batchUpdate', config) //批量更新

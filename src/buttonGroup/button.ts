@@ -184,7 +184,7 @@ export class Button extends Base {
         _btn = selectBtn.find((item) => item.id == id)
       }
       if (_btn != null) {
-        let param_value = _btn.param_value
+        let param_value = _btn.cValue //
         if (Boolean(param_value) && typeof param_value == 'string') {
           let _fn1 = stringToFunction(param_value)
           _fn = _fn1

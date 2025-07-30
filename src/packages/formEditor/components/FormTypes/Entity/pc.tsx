@@ -238,9 +238,9 @@ export default defineComponent({
           rowHeight={item.getTableRowHeight()} //
         ></erXeTable>
       )
-      if (_show.value == false) {
-        tCom = null
-      } //
+      // if (_show.value == false) {
+      //   tCom = null
+      // } //
       let com = (
         <div
           class="  w-full box-border "

@@ -9,9 +9,9 @@ import {
   ref,
   inject,
   reactive,
+  computed,
 } from 'vue'
 import { isHTMLTag } from '@vue/shared'
-// import DragGable from 'vuedraggable'
 import DragGable from '@ER/vueDraggable/vuedraggable'
 import utils from '@ER/utils'
 import hooks from '@ER/hooks'
@@ -39,17 +39,16 @@ const dragGableWrap = defineComponent({
   },
   setup(props) {
     const { isEditModel } = hooks.useTarget()
-
     return () => {
       const attrs: any = useAttrs()
       let node = ''
       if (unref(isEditModel)) {
         node = (
-          <dragGable
+          <DragGable
             {...attrs} //
           >
             {useSlots()}
-          </dragGable>
+          </DragGable>
         )
       } else {
         const _tag = isHTMLTag(attrs.tag)
@@ -87,7 +86,7 @@ const dragGableWrap = defineComponent({
         node = <_tag v-slots={_slots} {...attrs.componentData}></_tag>
       }
       return node
-    }
+    } 
   },
 })
 export { dragGableWrap }
@@ -143,15 +142,14 @@ export default defineComponent({
     }
     try {
     } catch (error) {}
+    let componentMap = {}
+    watch(
+      () => state.platform,
+      () => {
+        componentMap = {}
+      },
+    )
     const loadComponent = () => {
-      //
-      let componentMap = {}
-      watch(
-        () => state.platform,
-        () => {
-          componentMap = {}
-        },
-      )
       return {
         findComponent(type, element) {
           let info = componentMap[type + element]
@@ -170,287 +168,300 @@ export default defineComponent({
     }
     const load = loadComponent()
     let oldSlots = useSlots()
-    const slots = {
-      item: (_config) => {
-        let element: any = _config.element
-        if (element == null) {
-          return null
-        } //
-        let node = ''
-        let allLayoutType = ['grid', 'table', 'tabs', 'collapse', 'inline']
-        let _style: any = {}
-        if (allLayoutType.includes(element.type)) {
-          let context = element.context
-          let parent = context.parent
-          if (!Array.isArray(parent)) {
-            parent = [parent]
-          }
-          if (parent.includes(element)) {
-            let index = parent.indexOf(element)
-            if (index == parent.length - 1) {
-              _style.flex = 1
-            }
-          }
-        }
-        switch (element.type) {
-          //这些都是布局控件
-          case 'grid':
-            node = (
-              <LayoutGridLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutGridLayout>
-            )
-            break
-          case 'table':
-            node = (
-              <LayoutTableLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTableLayout>
-            )
-            break
-          case 'tabs':
-            node = (
-              <LayoutTabsLayout
-                style={_style}
-                key={element.id}
-                data={element}
-                parent={props.data}
-              ></LayoutTabsLayout>
-            )
-            break
-          case 'collapse':
-            node = (
-              <LayoutCollapseLayout
-                key={element.id}
-                style={_style}
-                data={element}
-                parent={props.data}
-              ></LayoutCollapseLayout>
-            )
-            break
-          case 'inline':
-            node = (
-              <LayoutInlineLayout
-                key={element.id}
-                style={_style}
-                data={element}
-                parent={props.data}
-              ></LayoutInlineLayout>
-            )
-            break
-          default:
-            let formitem = formIns.items.find((item) => item.id === element.id)
-            if (formitem == null) {
-              return null //
-            }
-            if (formitem.config != element) {
-              formitem.config = element
-            }
-            if (formitem == null) {
-              return null
-            }
-            //@ts-ignore
-            formitem.tableName = tName
-            let typeProps = {} //
-            try {
-              typeProps = formitem?.getFormItemProps(element) || {} //
-            } catch (error) {
-              setTimeout(() => {
-                console.error('没有找到formitem', formIns) //////
-              }, 100)
-            }
-            let TypeComponent = ''
-            if (
-              unref(isEditModel) ||
-              _.get(
-                state.fieldsLogicState.get(element),
-                'visible',
-                undefined,
-              ) !== 0
-            ) {
-              // if(element.type=='buttongroup'){
-              // }
-              TypeComponent = load.findComponent('FormTypes', element.type)
 
-              const params = {
-                data: element,
-                parent: props.data,
-                key: element.id,
+    let _list = computed(() => {
+      let data = props.data
+      if (!Array.isArray(data)) {
+        console.log(data, 'testData') //
+        return []
+      }
+      return data.filter((v) => v != null)
+    }) //
+    return () => {
+      //
+      const slots = {
+        item: (_config) => {
+          let element: any = _config.element
+          if (element == null) {
+            return null
+          } //
+          let node = ''
+          let allLayoutType = ['grid', 'table', 'tabs', 'collapse', 'inline']
+          let _style: any = {}
+          if (allLayoutType.includes(element.type)) {
+            let context = element.context
+            let parent = context.parent
+            if (!Array.isArray(parent)) {
+              parent = [parent]
+            }
+            if (parent.includes(element)) {
+              let index = parent.indexOf(element)
+              if (index == parent.length - 1) {
+                _style.flex = 1
               }
-              if (unref(isPc)) {
-                //@ts-ignore
-                const formitem: FormItem = typeProps?.formitem //
-                const prop = formitem?.getField()
-                let innerCom = null //
-                //@ts-ignore
-                if (formIns.pageType == 'pageDesign') {
-                  let tCom = (
-                    <div class="pl-10 h-30 flex align-center">
-                      {formitem.getTitle()}
-                    </div>
-                  )
-                  if (formitem.isShowTitle() == false) {
-                    tCom = null //
-                  }
-                  innerCom = (
-                    <div class="flex flex-row h-full ">
-                      {/* {tCom} */}
-                      <TypeComponent
-                        item={formitem}
-                        key={`${element.id}__${element.type}`}
-                        data={element}
-                        params={typeProps}
-                      ></TypeComponent>
-                    </div>
-                  )
-                } else {
-                  let style = formitem.getStyle()
-                  innerCom = (
-                    <div style={style} class="flex flex-row h-full">
-                      <div class="flex-1 pl-5">
-                        <vxe-form-item
-                          field={formitem.getField()}
-                          style={{
-                            height: '100%', //
-                          }}
-                          v-slots={{
-                            default: () => {
-                              return (
-                                <TypeComponent
-                                  item={formitem}
-                                  key={`${element.id}__${element.type}`}
-                                  data={element}
-                                  params={typeProps}
-                                  isFormInput={true}
-                                  style={{}}
-                                ></TypeComponent>
-                              )
-                            },
-                            title: () => {
-                              let ht = formitem.isHiddenTitle()
-                              if (ht == true) {
-                                return null //
-                              }
-                              let tCom = (
-                                <div class="flex align-center">
-                                  {element?.['label']}
-                                </div>
-                              )
-                              let requireDiv = null
-                              let required = element.required
-                              if (required == true) {
-                                requireDiv = <div class="color-red">*</div>
-                              }
-                              let label = formitem.getLabelWidth()
-                              return (
-                                <div
-                                  style={{ minWidth: label }} //
-                                  class="flex flex-row"
-                                  onContextmenu={(e: MouseEvent) => {
-                                    if (mainPage) {
-                                      mainPage.curDForm
-                                      //@ts-ignore
-                                      mainPage.currentContextItem = {
+            }
+          }
+          switch (element.type) {
+            //这些都是布局控件
+            case 'grid':
+              node = (
+                <LayoutGridLayout
+                  style={_style}
+                  key={element.id}
+                  data={element}
+                  parent={props.data}
+                ></LayoutGridLayout>
+              )
+              break
+            case 'table':
+              node = (
+                <LayoutTableLayout
+                  style={_style}
+                  key={element.id}
+                  data={element}
+                  parent={props.data}
+                ></LayoutTableLayout>
+              )
+              break
+            case 'tabs':
+              node = (
+                <LayoutTabsLayout
+                  style={_style}
+                  key={element.id}
+                  data={element}
+                  parent={props.data}
+                ></LayoutTabsLayout>
+              )
+              break
+            case 'collapse':
+              node = (
+                <LayoutCollapseLayout
+                  key={element.id}
+                  style={_style}
+                  data={element}
+                  parent={props.data}
+                ></LayoutCollapseLayout>
+              )
+              break
+            case 'inline':
+              node = (
+                <LayoutInlineLayout
+                  key={element.id}
+                  style={_style}
+                  data={element}
+                  parent={props.data}
+                ></LayoutInlineLayout>
+              )
+              break
+            default:
+             
+              let formitem = formIns.items.find(
+                (item) => item.id === element.id,
+              )
+              if (formitem == null) {
+                return null //
+              }
+              if (formitem.config != element) {
+                formitem.config = element
+              }
+              if (formitem == null) {
+                return null
+              }
+              //@ts-ignore
+              formitem.tableName = tName
+              let typeProps = {} //
+              try {
+                typeProps = formitem?.getFormItemProps(element) || {} //
+              } catch (error) {
+                setTimeout(() => {
+                  console.error('没有找到formitem', formIns) //////
+                }, 100)
+              }
+              let TypeComponent = ''
+              if (
+                unref(isEditModel) ||
+                _.get(
+                  state.fieldsLogicState.get(element),
+                  'visible',
+                  undefined,
+                ) !== 0
+              ) {
+                // if(element.type=='buttongroup'){
+                // }
+                TypeComponent = load.findComponent('FormTypes', element.type)
+
+                const params = {
+                  data: element,
+                  parent: props.data,
+                  key: element.id,
+                }
+                if (unref(isPc)) {
+                  //@ts-ignore
+                  const formitem: FormItem = typeProps?.formitem //
+                  const prop = formitem?.getField()
+                  let innerCom = null //
+                  //@ts-ignore
+                  if (formIns.pageType == 'pageDesign') {
+                    let tCom = (
+                      <div class="pl-10 h-30 flex align-center">
+                        {formitem.getTitle()}
+                      </div>
+                    )
+                    if (formitem.isShowTitle() == false) {
+                      tCom = null //
+                    }
+                    innerCom = (
+                      <div class="flex flex-row h-full ">
+                        {/* {tCom} */}
+                        <TypeComponent
+                          item={formitem}
+                          key={`${element.id}__${element.type}`}
+                          data={element}
+                          params={typeProps}
+                        ></TypeComponent>
+                      </div>
+                    )
+                  } else {
+                    let style = formitem.getStyle()
+                    innerCom = (
+                      <div style={style} class="flex flex-row h-full">
+                        <div class="flex-1 pl-5">
+                          <vxe-form-item
+                            field={formitem.getField()}
+                            style={{
+                              height: '100%', //
+                            }}
+                            v-slots={{
+                              default: () => {
+                                return (
+                                  <TypeComponent
+                                    item={formitem}
+                                    key={`${element.id}__${element.type}`}
+                                    data={element}
+                                    params={typeProps}
+                                    isFormInput={true}
+                                    style={{}}
+                                  ></TypeComponent>
+                                )
+                              },
+                              title: () => {
+                                let ht = formitem.isHiddenTitle()
+                                if (ht == true) {
+                                  return null //
+                                }
+                                let tCom = (
+                                  <div class="flex align-center">
+                                    {element?.['label']}
+                                  </div>
+                                )
+                                let requireDiv = null
+                                let required = element.required
+                                if (required == true) {
+                                  requireDiv = <div class="color-red">*</div>
+                                }
+                                let label = formitem.getLabelWidth()
+                                return (
+                                  <div
+                                    style={{ minWidth: label }} //
+                                    class="flex flex-row"
+                                    onContextmenu={(e: MouseEvent) => {
+                                      if (mainPage) {
+                                        mainPage.curDForm
                                         //@ts-ignore
+                                        mainPage.currentContextItem = {
+                                          //@ts-ignore
+                                          config: {
+                                            type: 'dform',
+                                          },
+                                        }
+                                        let _config = formitem.config
+                                        mainPage.currentFItemConfig = _config
+                                        //@ts-ignore
+                                      }
+                                      e.preventDefault()
+                                      formitem.openMainMenu(e, {
                                         config: {
                                           type: 'dform',
-                                        },
-                                      }
-                                      let _config = formitem.config
-                                      mainPage.currentFItemConfig = _config
-                                      //@ts-ignore
-                                    }
-                                    e.preventDefault()
-                                    formitem.openMainMenu(e, {
-                                      config: {
-                                        type: 'dform',
-                                        formIns: formIns,
-                                      }, //
-                                    })
-                                  }}
-                                >
-                                  {requireDiv}
-                                  {tCom}
-                                </div>
-                              )
-                            },
-                          }}
-                        ></vxe-form-item>
+                                          formIns: formIns,
+                                        }, //
+                                      })
+                                    }}
+                                  >
+                                    {requireDiv}
+                                    {tCom}
+                                  </div>
+                                )
+                              },
+                            }}
+                          ></vxe-form-item>
+                        </div>
                       </div>
-                    </div>
+                    )
+                  }
+                  node = (
+                    //@ts-ignore
+                    <Selection
+                      hasWidthScale
+                      hasCopy
+                      hasDel
+                      hasDrag
+                      hasMask
+                      {...params}
+                    >
+                      {element.type !== 'divider' ? (
+                        innerCom
+                      ) : (
+                        <TypeComponent
+                          key={element.id}
+                          data={element}
+                          params={typeProps}
+                        ></TypeComponent>
+                      )}
+                    </Selection>
                   )
-                }
-                node = (
-                  //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    {element.type !== 'divider' ? (
-                      innerCom
-                    ) : (
+                } else {
+                  node = (
+                    //@ts-ignore
+                    <Selection
+                      hasWidthScale
+                      hasCopy
+                      hasDel
+                      hasDrag
+                      hasMask
+                      {...params}
+                    >
                       <TypeComponent
+                        item={formitem}
                         key={element.id}
                         data={element}
                         params={typeProps}
                       ></TypeComponent>
-                    )}
-                  </Selection>
-                )
-              } else {
-                node = (
-                  //@ts-ignore
-                  <Selection
-                    hasWidthScale
-                    hasCopy
-                    hasDel
-                    hasDrag
-                    hasMask
-                    {...params}
-                  >
-                    <TypeComponent
-                      item={formitem}
-                      key={element.id}
-                      data={element}
-                      params={typeProps}
-                    ></TypeComponent>
-                  </Selection>
-                )
+                    </Selection>
+                  )
+                }
               }
-            }
-            break
-        }
-        return node
-      },
-      footer() {
-        let node = ''
-        if (_.isEmpty(props.data)) {
-          if (!props.isRoot) {
-            node = <div class={ns.e('dropHere')}>drop here</div>
+              break
           }
-        }
-        return node
-      },
-      ...oldSlots,
-    }
-    return () => {
+          return node
+        },
+        footer() {
+          let node = ''
+          if (_.isEmpty(props.data)) {
+            if (!props.isRoot) {
+              node = <div class={ns.e('dropHere')}>drop here</div>
+            }
+          }
+          return node
+        },
+        ...oldSlots,
+      }
       let _class = []
       if (!unref(isEditModel)) {
         _class.push('flex flex-col')
       }
       return (
         <dragGableWrap
-          list={props.data.filter((v) => v != null)} //isArray
+          list={_list.value} //isArray
           handle=".ER-handle"
           class={[ns.b(), unref(isEditModel) && ns.e('edit'), ..._class]}
           tag={props.tag}

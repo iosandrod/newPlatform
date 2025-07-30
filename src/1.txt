@@ -17094,3 +17094,118 @@ let isCurrentEdit = computed(() => {
       //     ],
       //   },
       // },
+
+      
+      // com = (
+      //   <div class="er-h-400 er-w-600">
+      //     <erXeTable
+      //       treeConfig={{
+      //         id: 'id',
+      //         parentId: 'pid', //
+      //         root: '0',
+      //       }} //
+      //       columns={xeTableColumns}
+      //       data={xeTableData}
+      //       tableState="edit"
+      //     ></erXeTable>
+      //   </div>
+      // )
+
+        {/* {arr1.map((item, index) => {
+                      //
+                      return <div>111</div>
+                    })} */}
+
+
+
+
+
+
+
+                     <input
+            modelValue={globalValue.value}
+            {...inputProps}
+            v-slots={{
+              buttons: () => {
+                let com = (
+                  <div class="flex items-center p-2 space-x-2 bg-gray-100 border-b rounded-t-md">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        tableIns.jumpToSearchNext(true) //
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-gray-700 transition bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200"
+                      title="上一页"
+                    >
+                      &laquo;
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        tableIns.jumpToSearchNext(false)
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-gray-700 transition bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-200"
+                      title="下一页"
+                    >
+                      &raquo;
+                    </button>
+                    <button
+                      onClick={() => {
+                        tableIns.showGlobalSearch(false)
+                      }}
+                      class="px-3 py-1 text-sm font-medium text-white transition bg-red-500 border border-red-600 rounded-md shadow-sm hover:bg-red-600"
+                      title="关闭"
+                    >
+                      X
+                    </button>
+                  </div>
+                )
+                return com //
+              },
+            }}
+          ></input>
+           let globalSearchInput = withDirectives(
+        <div
+          style={{
+            width: '100%', //
+            display: _s ? 'flex' : 'none',
+            overflow: 'hidden',
+            alignItems: 'center',
+          }}
+        >
+         <vxe-input></vxe-input>
+        </div>,
+        [
+          [
+            {},
+            // vShow, tableIns.globalConfig.show
+          ],
+        ],
+      )
+
+       // components: {
+  //   DragGable
+  // },
+   const handleMove = (evt, originalEvent) => {
+      const {
+        relatedContext: {
+          element: { type },
+        },
+      } = evt
+      return type === 'col'
+    }
+
+     // if (1 == 1) {
+              //   let _arr = new Array(1000).fill(0).map((v, i) => {
+              //     return <div class="">1</div>
+              //   }) //
+              //   return <div class="overflow-hidden er-h-1 er-w-1">{_arr}</div> //
+              // }
+
+               // console.log(this.templateProps.nodes, 'testNodes') ////
+    // console.log(config, 'testConfig') //
+    {/* <div class="er-h-32 overflow-hidden" style={{}}>
+            <erButtonGroup items={flow.getControllButtons()}></erButtonGroup>
+          </div> */}

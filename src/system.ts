@@ -1,4 +1,4 @@
-import { nextTick, reactive } from 'vue'
+import { isProxy, nextTick, reactive } from 'vue'
 import _ from 'lodash'
 import { Client, myHttp } from './service/client'
 import { Base } from '@ER/base'
@@ -395,7 +395,15 @@ export class System extends Base {
         this.tableMap[tableName] = pageDesign //
         return pageDesign
       }
-      this.confirmErrorMessage('找不到模块') //
+      if (this.checkIsAdmin()) {
+        await this.confirmMessageBox('找不到模块,是否新建模块', 'warning') //
+        let _res = await this.getHttp().create('entity', {
+          tableName: tableName,
+        })
+        console.log(_res, 'testRes') //
+      } else {
+        this.confirmErrorMessage('找不到模块') //
+      }
       return Promise.reject('找不到模块') //
     }
     let obj = layoutConfig
@@ -572,6 +580,10 @@ export class System extends Base {
   async confirm(config: any) {}
   async confirmEntity(entityConfig: any) {} //
   async confirmForm(formConfig: any): Promise<any> {
+    if (!isProxy(formConfig.data) && formConfig.data) {
+      //
+      formConfig.data = reactive(formConfig.data)
+    }
     return new Promise(async (resolve, reject) => {
       // let _form = new Form(formConfig) //
       // let component = formCom
@@ -631,6 +643,7 @@ export class System extends Base {
           props: {
             ...tableConfig,
             showHeaderButtons: true, //
+            height: 'auto', //
           },
         }
       } //
@@ -900,7 +913,7 @@ export class System extends Base {
     let http = await this.getHttp()
     let code = await http.create('captcha', { api: k }) //
     let _system = this
-    _system.confirmMessage('获取验证码成功', 'success') //
+    // _system.confirmMessage('获取验证码成功', 'success') //
     return code //
   }
   async registerUser(data) {
@@ -1016,7 +1029,7 @@ export class System extends Base {
     // let _config = _.cloneDeep(curPage.config) //
     let tableName = curPage.getTableName() //
     let _config = await this.getPageLayout(tableName)
-    let data = _config //
+    let data = reactive(_config) //
     let tabTitles = ['基本配置', '重载方法', '事件配置'] //
     let fConfig = {
       isTabForm: true,
@@ -1724,12 +1737,19 @@ export class System extends Base {
   async getCurrentApp() {
     let envi = process.env.VITE_ENVIRONMENT || 'development'
     let curUrl = window.location.host.split(':')[0]?.split('.')[0]
-    // let apparr = ['erp', 'platform']
     let apparr = await this.getAllApp()
     apparr = apparr.map((item) => item.appName) //
     let _appName = null
+    let _curUrl = curUrl.split('_')
+    if (_curUrl.length > 1) {
+      curUrl = _curUrl[0] //
+    } //
     if (apparr.includes(curUrl)) {
       _appName = curUrl
+      let id1 = _curUrl[1]
+      if (!isNaN(Number(id1))) {
+        this.setLocalItem('userid', id1)
+      } //
     }
     if (envi == 'development') {
       let host = window.location.host
@@ -2088,8 +2108,11 @@ export class System extends Base {
     await changePassword(this)
   } //
 
-  async checkIsAdmin() {
-    //
+  checkIsAdmin() {
+    let id = this.getUserId()
+    if (id == 1) {
+      return true
+    }
   }
   getPlatformHomeHeader() {
     return [
@@ -2194,19 +2217,19 @@ export class System extends Base {
   async getSelectButtons(type = 'main') {
     let http = this.getHttp()
     let key = `${type}Buttons`
-    let res = await http.find('paramvalue', {
-      param_type: key,
+    let res = await http.find('t_ParamValue', {
+      cParamType: key, //
     })
     let _res = res.map((item) => {
-      let param_code = item.param_code //编码
-      let param_value = item.param_value //具体的执行函数
-      let param_name = item.param_name //审核
-      item.label = param_name
-      // item.fn = param_value
+      let param_code = item.cParamNo //编码
+      let param_value = item.cValue //具体的执行函数
+      let param_name = item.cParamName //审核
+      item.label = param_name //
       item.id = param_code
       item.checkboxField = false //
       return item //
     }) //
+    console.log(_res, 'sfjlksfjsldkf') //
     return _res //
   }
   async clearSelectButtons() {

@@ -40,9 +40,9 @@ export default defineComponent({
     onMounted(() => {
       let outCom :HTMLDivElement= formitem.getRef('fieldOutCom')
       if(outCom == null) return
-      console.log(outCom, 'outCom')
-      let bound = outCom.getBoundingClientRect()
-      console.log(bound, 'bound')//
+      // console.log(outCom, 'outCom')
+      // let bound = outCom.getBoundingClientRect()
+      // console.log(bound, 'bound')//
     })
     return () => {
       let _com = (

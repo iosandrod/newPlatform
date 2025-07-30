@@ -39,10 +39,14 @@ import {
   getEventTargetNode,
 } from 'vxe-pc-ui/packages/ui/src/dom'
 // import { toStringTimeDate, getDateQuarter } from '../../date-picker/src/util'
+// import {
+//   toStringTimeDate,
+//   getDateQuarter,
+// } from 'vxe-pc-ui/packages/date-picker/src/util'
 import {
   toStringTimeDate,
   getDateQuarter,
-} from 'vxe-pc-ui/packages/date-picker/src/util'
+} from 'vxe-pc-ui/packages/date-panel/src/util'
 // import { handleNumber, toFloatValueFixed } from '../../number-input/src/util'
 import {
   handleNumber,
@@ -240,7 +244,7 @@ export default defineComponent({
     'date-next',
   ] as VxeInputEmits,
   setup(props, context) {
-    const { slots, emit } = context
+    const { slots, emit, expose } = context
 
     const $xeSelect = inject<(VxeSelectConstructor & VxeSelectMethods) | null>(
       '$xeSelect',
@@ -3554,13 +3558,12 @@ export default defineComponent({
     })
 
     initValue()
-
-    $xeInput.renderVN = renderVN
-
-    return $xeInput
+    //
+    expose($xeInput)
+    return () => {
+      return renderVN()
+    }
+    // return $xeInput
   },
-  render() {
-    return this.renderVN()
-  },
-  
 })
+//

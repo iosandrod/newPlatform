@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env SASS_WARN_LEGACY=false VITE_ENVIRONMENT=development vite",
     "dev:erp": "cross-env SASS_WARN_LEGACY=false VITE_ENVIRONMENT=development VITE_PORT=3004 vite",
-    "dev:gantt": "cross-env SASS_WARN_LEGACY=false VITE_ENVIRONMENT=development VITE_PORT=3005 vite",
+    "dev:gantt": "cross-env  NODE_OPTIONS=\"--expose-gc\"  SASS_WARN_LEGACY=false VITE_ENVIRONMENT=development VITE_PORT=3005 vite",
     "dev:print": "cross-env SASS_WARN_LEGACY=false VITE_ENVIRONMENT=development VITE_PORT=3006 vite",
     "dev:pro": "cross-env VITE_ENVIRONMENT=production vite",
     "build": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js build",

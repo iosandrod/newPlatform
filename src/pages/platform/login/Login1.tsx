@@ -50,6 +50,7 @@ import {
   xeTableData,
 } from '@/table/tableData1'
 import ganttCom from '@/gantt/ganttCom'
+import FlowCom from '@/logic/flowCom'
 export default defineComponent({
   components: {
     pVue,
@@ -80,7 +81,6 @@ export default defineComponent({
   setup(props) {
     let str = `2025-01-01 00:00`
     let d = dayjs(str, 'YYYY-MM-DD HH:mm', false) //
-    console.log(d, 'fjslkfjsdlkf') //
     const formConfig = {
       itemSpan: 12,
       items: [
@@ -208,7 +208,8 @@ export default defineComponent({
         parentId: 'pid', //
         root: '0',
       },
-    }
+    } //
+    console.log(window.gc, 'tConfig') //
     return () => {
       if (show.value == false) {
         return null
@@ -220,20 +221,6 @@ export default defineComponent({
         editType: 'date',
       }) ////
 
-      // com = (
-      //   <div class="er-h-400 er-w-600">
-      //     <erXeTable
-      //       treeConfig={{
-      //         id: 'id',
-      //         parentId: 'pid', //
-      //         root: '0',
-      //       }} //
-      //       columns={xeTableColumns}
-      //       data={xeTableData}
-      //       tableState="edit"
-      //     ></erXeTable>
-      //   </div>
-      // )
       com = (
         <div class="er-h-400 er-w-600">
           <erXeTable {...permissionTConfig}></erXeTable>
@@ -251,6 +238,8 @@ export default defineComponent({
           <ganttCom></ganttCom>
         </div>
       )
+      com = <FlowCom></FlowCom>
+      com = <inputCom></inputCom>
       let _com = (
         <div
           class="h-full"

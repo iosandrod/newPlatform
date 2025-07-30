@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, PropType, watch } from 'vue'
-import VxeInput from 'vxe-pc-ui/packages/input'
+import VxeInput from './input' //
 import { Input } from './inputClass'
 import { VxeInputPropTypes, getConfig } from 'vxe-table'
 import dropdownCom from '@/menu/dropdownCom'
@@ -216,6 +216,9 @@ export default defineComponent({
     let _input = new Input(props) //
     let register = (el) => {
       _input.registerRef('input', el) //
+      // if (el == null) {
+      //   debugger //
+      // }
     } //
     let registerDropdown = (el) => {
       _input.registerRef('dropdown', el) //
@@ -237,7 +240,7 @@ export default defineComponent({
         }
       },
     )
-    expose({ _instance: _input })
+    expose({ _instance: _input }) //
     return () => {
       let com = (
         <div class="h-full w-full flex">
@@ -272,11 +275,10 @@ export default defineComponent({
       let type: any = props.type
       let isBaseinfo = props.isBaseinfo
       if (isBaseinfo) {
-        //
         _com = (
           <dropdownCom
             class="h-full"
-            ref={registerDropdown}
+            ref={registerDropdown} //
             onVisibleChange={(visible) => {
               let onVisibleChange = props.onVisibleChange
               if (typeof onVisibleChange == 'function') {
@@ -288,17 +290,16 @@ export default defineComponent({
                 return com //
               }, //
               dropdown: () => {
-                let tableCom = _input.getSysComponents()['tableCom']
-                let baseinfoConfig = props.baseinfoConfig
+                let baseinfoConfig = props.baseinfoConfig //
                 let com = (
-                  <div class="h-300 w-full" style={{ minWidth: '300px' }}>
+                  <div class="er-h-300 er-w-400" style={{ minWidth: '300px' }}>
                     <erXeTable
                       {...baseinfoConfig}
                       tableState="scan" //
                       showRowSeriesNumber={false} //
                       showCheckboxColumn={false} ////
                       onDbCurRowChange={(config) => {
-                        // debugger//
+                        //
                         let onConfirmTinyTable = props.onConfirmTinyTable
                         if (typeof onConfirmTinyTable == 'function') {
                           onConfirmTinyTable(config)

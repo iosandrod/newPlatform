@@ -221,11 +221,12 @@ export const initContextMenu = (table: Table) => {
       visible: true,
       fn: async (config) => {
         let sys = table.getSystem()
-        await sys.syncRealColumns({
-          //
-          tableName: table.getTableName(),
-          columns: table.getFlatColumns().map((col) => col?.config || col), ////
-        })
+        let mainEn = table.getMainPageDesign()
+        debugger //
+        // await sys.syncRealColumns({
+        //   tableName: table.getTableName(),
+        //   columns: table.getFlatColumns().map((col) => col?.config || col), ////
+        // })
       }, //
     },
   ]

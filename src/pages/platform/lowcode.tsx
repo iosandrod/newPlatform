@@ -132,7 +132,7 @@ export default defineComponent({
             default: (config) => {
               let route = config.route
               let fullPath = route.fullPath
-              let _com = (
+              let _com = ( //
                 <KeepAlive>
                   <Design key={fullPath}></Design>
                 </KeepAlive>

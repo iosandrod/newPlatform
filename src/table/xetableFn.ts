@@ -221,6 +221,33 @@ export const initXeContextItems = (table: XeTable) => {
       visible: true,
       fn: async (config) => {
         let sys = table.getSystem()
+        let mainEn = table.getMainPageDesign()
+        let tableName = mainEn.getRealTableName()
+        let _tableName = table.getTableName()
+        if (tableName != _tableName) {
+          let _columns = await table.getHttp().find('columns', {
+            tableName: _tableName,
+          })
+          let _columns1 = table.getFlatColumns().map((col) => col.config)
+          _columns1.forEach((col) => {
+            let f = col.field
+            let _col = _columns.find((c) => c.field == f)
+            if (_col) {
+              col.title = _col.title
+            }
+          })
+          let addCols = _columns.filter((col) => {
+            return _columns1.find((c) => c.field == col.field) == null
+          }) //
+          if (addCols.length > 0) {
+            let _config = mainEn.getTableConfig(_tableName)
+            // console.log(_config,'testConfig')//
+            let columns = _config?.columns || []
+            columns.push(...addCols) //
+          }
+          mainEn.saveTableDesign() //
+          return
+        }
         await sys.syncRealColumns({
           //
           tableName: table.getTableName(),
@@ -235,3 +262,14 @@ export const initXeContextItems = (table: XeTable) => {
   }
   table.contextItems = items
 }
+
+/* 
+ t_BomEntry;
+ t_Bom;
+ t_BomHead;
+ t_ProductBom;
+ t_ProductModel;
+t_ProductModelEntry;
+ t_ProductModelBom;
+
+*/

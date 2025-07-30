@@ -1,4 +1,5 @@
 import {
+  computed,
   defineComponent,
   inject,
   nextTick,
@@ -332,25 +333,6 @@ export default defineComponent({
           let treeConfig = props.treeConfig
           let expand = treeConfig?.expand
           if (tableIns.getIsTree()) {
-            // if (expand == 'all' || props.expandAll == true) {
-            //   tableIns.updateCanvas().then((res) => {
-            //     tableIns
-            //       .getInstance()
-            //       .loadData(tableIns.templateProps.data)
-            //       .then(() => {
-            //         tableIns.expandAllTreeRow() //
-            //       })
-            //   })
-            // } else if (expand == 'first') {
-            //   tableIns.updateCanvas().then((res) => {
-            //     tableIns
-            //       .getInstance()
-            //       .loadData(tableIns.templateProps.data)
-            //       .then(() => {
-            //         tableIns.expandTargetRows(tableIns.templateProps.data) //
-            //       })
-            //   })
-            // }
           }
         }
       }, //
@@ -449,6 +431,38 @@ export default defineComponent({
         return false
       },
     }
+    let showGlobalSearch = computed(() => {
+      return tableIns.globalConfig.show
+    })
+    let _s = showGlobalSearch.value
+    // watch(
+    //   () => showGlobalSearch.value,
+    //   (e) => {
+    //     let searchDiv = tableIns.getRef('searchDiv')
+    //     if (searchDiv == null) {
+    //       return
+    //     }
+    //     if (e == true) {
+    //       searchDiv.style.display = 'flex'
+    //     } else {
+    //       searchDiv.style.display = 'none' //
+    //     }
+    //   }, //
+    // )
+    // onMounted(() => {
+    //   let searchDiv = tableIns.getRef('searchDiv')
+    //   if (searchDiv == null) {
+    //     return
+    //   }
+    //   if (showGlobalSearch.value) {
+    //     searchDiv.style.height = 'auto'
+    //   } else {
+    //     searchDiv.style.height = '0px' //
+    //   }
+    // })
+    const globalValue = computed(() => {
+      return tableIns.globalConfig.value
+    })
     return () => {
       let com = null //
       let menuCom = <TableMenuCom></TableMenuCom>
@@ -468,18 +482,17 @@ export default defineComponent({
         )
       }
       // const inputProps = tableIns.getGlobalSearchProps()
-      let globalSearchInput = withDirectives(
+      let globalSearchInput = (
         <div
           ref={registerSearchDiv}
           style={{
-            width: '100%',
-            display: 'flex',
-            overflow: 'hidden',
+            width: '100%', //
+            overflow: 'hidden', //
             alignItems: 'center',
           }}
         >
           <InputCom
-            modelValue={tableIns.globalConfig.value}
+            modelValue={globalValue.value}
             {...inputProps}
             v-slots={{
               buttons: () => {
@@ -522,9 +535,11 @@ export default defineComponent({
               },
             }}
           ></InputCom>
-        </div>,
-        [[vShow, tableIns.globalConfig.show]],
+        </div>
       )
+      if (showGlobalSearch.value == false) {
+        globalSearchInput = null //
+      } //
       let cellSelectCom = (
         <XeTableSelectCom tableIns={tableIns}></XeTableSelectCom>
       ) //

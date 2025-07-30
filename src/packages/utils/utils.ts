@@ -63,7 +63,6 @@ export const combineAdjacentEqualElements = (
     }
     return value //
   }) as any
-  // debugger//
   // 使用快速排序
   const result: any[][] = []
   let equFn = equal[type as keyof typeof equal] //
@@ -131,11 +130,16 @@ export const columnToEdit = (col: any) => {
   let options = col.options
   let optionsField = col.optionsField
   let defaultValue = col.defaultValue
-  let ojb = {
+  let ojb: any = {
+    //
     defaultValue: defaultValue, //
     type: editType,
     options: options,
     optionsField: optionsField,
+    baseinfoConfig: col.baseinfoConfig, //
+  } //
+  if (col.validate) {
+    ojb.validate = col.validate
   }
   return ojb //
 }

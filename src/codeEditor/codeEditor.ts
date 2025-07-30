@@ -16,7 +16,8 @@ export default class CodeEditor extends Base {
   }
   getModelValue() {
     let config = this.config
-    let modelValue = config.modelValue || '' //
+    let modelValue = config.modelValue || ''
+    modelValue = modelValue || this.templateValue //
     return modelValue
   }
   //
@@ -27,6 +28,7 @@ export default class CodeEditor extends Base {
     if (onChange) {
       onChange(value)
     } //
+    this.templateValue = value //
   }
   unmounted() {}
   getInstance() {

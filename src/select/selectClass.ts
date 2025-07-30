@@ -89,7 +89,7 @@ export class Select extends Base {
     options = [...options, ...this.templateOptions] //
     if (searchValue != null && searchValue.length > 0) {
       options = options.filter((option) => {
-        let reg = new RegExp(searchValue, 'g')
+        let reg = new RegExp(searchValue, 'gi') //
         let _value = `${option.value}^^^${option.label}`
         return reg.test(_value)
       })

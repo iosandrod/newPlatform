@@ -29,7 +29,6 @@ export default defineComponent({
       await getCompanyFn()
     })
     async function loginFn(data) {
-      //
       await system.loginUser(data)
     }
     return () => {

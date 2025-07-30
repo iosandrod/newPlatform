@@ -1289,7 +1289,9 @@ export class FormItem extends Base {
     return v
   }
   _getBaseinfoConfig() {
-    return this.getOptions().baseinfoConfig || {}
+    let opt = this.getOptions()
+    let config = this.getOptions().baseinfoConfig || {}
+    return config
   }
   async getSearchEn(tableName?: string) {
     let sys = this.getSystem()
@@ -1304,6 +1306,9 @@ export class FormItem extends Base {
     } //
     let sys = this.getSystem()
     let searchEn: SearchPageDesign = await this.getSearchEn()
+    if (searchEn == null) {
+      return //
+    }
     let columns = searchEn.getTableColumns()
     let _data = await searchEn.getTinyTableData({})
     this.templateTableConfig.columns = columns
