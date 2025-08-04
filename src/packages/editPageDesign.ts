@@ -4,11 +4,12 @@ import { useHooks } from './utils/decoration'
 import { Table } from '@/table/table'
 import { getFlatTreeData } from './utils'
 import { Form } from './form'
+import { nextTick } from 'vue'
+import { Dialog } from '@/dialog/dialog'
 
 export class editPageDesign extends PageDesign {
   constructor(config) {
     super(config) //
-    // debugger //
     this.syncFieldTitle()
   }
   isEdit = true
@@ -31,10 +32,8 @@ export class editPageDesign extends PageDesign {
       let layoutData = options.layoutData
       let _fields = layoutData.fields
       _fields.forEach((f) => {
-        // debugger //
-        let f1 = f.field
+        let f1 = f.field //
         let title = f.label
-        // debugger //
         if (f1 == title) {
           //@ts-ignore
           let columns = this.config.columns || []
@@ -241,10 +240,7 @@ export class editPageDesign extends PageDesign {
           let obj = { ...row, _rowState: rowState }
           return obj
         }) //
-        // let changeD = _d.filter((row) => {
-        //   let rowState = row['_rowState']
-        //   return rowState == 'add' || rowState == 'change'
-        // })
+
         _d = _d
           .map((row) => {
             let rowState = row['_rowState']
@@ -255,7 +251,34 @@ export class editPageDesign extends PageDesign {
             let rowState = row['_rowState']
             return rowState == 'add' || rowState == 'change' //
           })
+
+        let keyCodeColumn = configRef.keyCodeColumn
+        if (keyCodeColumn) {
+          _d = _d.filter((row) => {
+            let _v = row[keyCodeColumn] //
+            if (_v == null) {
+              return false
+            }
+            return true //
+          })
+        } else {
+          this.getSystem().confirmMessage(
+            `子表${tableName}请设置必填字段`,
+            'warning',
+          ) //
+          throw new Error(`子表${tableName}请设置必填字段`) //
+        }
+        if (this.tableState == 'add') {
+          if (_d.length == 0) {
+            this.getSystem().confirmMessage(
+              `子表${tableName}请添加数据`,
+              'warning',
+            )
+            throw new Error(`子表${tableName}请添加数据`) //
+          }
+        }
         _d = [..._d, ...deleteData] //
+
         let obj = {
           tableName: tableName,
           data: _d, //
@@ -353,5 +376,103 @@ export class editPageDesign extends PageDesign {
       return
     } //
     await this.setCurrentDesignState('edit')
+  }
+  async syncErpCols() {
+    let oldTableColumn = await this.getSystem().getOldErpTableColumns(
+      this.getRealTableName(),
+    ) //
+    let _columns = oldTableColumn.filter((col) => {
+      return Boolean(col.editType) == true
+    })
+
+    let _f = _columns.reduce((res, col) => {
+      //
+      let tabName = col.tabName
+      let _arr = res[tabName]
+      if (!_arr) {
+        _arr = []
+        res[tabName] = _arr
+      } //
+      _arr.push(col)
+      return res
+    }, {})
+    let obj1 = Object.values(_f).map((items: any[]) => {
+      let arr = []
+      for (let item of items) {
+        //
+        let field: any = {
+          options: {},
+          field: item.field, //
+        }
+        let editType = item.editType
+        //类型
+        field.type = editType.toLowerCase() //
+        if (field.type == 'bool') {
+          field.type = 'boolean' //
+        }
+        if (
+          ![
+            'image',
+            'buttongroup',
+            'string',
+            'input',
+            'entity',
+            'stable',
+            'number',
+            'sform',
+            'radio',
+            'select',
+            'divider',
+            'dform',
+            'code',
+            'time',
+            'date',
+            'datetime',
+            'checkbox',
+            'boolean',
+            'baseinfo',
+            'color',
+            'gantt',
+          ].includes(field.type)
+        ) {
+          field.type = 'string' ////
+        }
+        if (['int', 'float', 'number'].includes(field.type)) {
+          field.type = 'number' //
+        }
+
+        let options = item.options
+        field.label = item.editTitle //
+        let optionsField = item.optionsField //
+        options.optionsField = optionsField //
+        options.options = options //
+        options.required = item.required //
+        arr.push(field)
+      }
+      return arr //
+    })
+    let f = obj1[0] //
+
+    let com: editPageDesign = this
+    let items = com.items
+    let allF = items
+      .filter((item) => {
+        return item.config.type == 'dform'
+      })
+      .map((f) => {
+        // return f.getRef('fieldCom')
+        return f
+      })
+    allF.forEach((f1, i) => {
+      //
+      let f = f1.getRef('fieldCom')
+      let _f: Form = f
+      _f.setItems(obj1[i]) //
+      nextTick(() => {
+        let layout = _f.getLayoutData() //
+        let options = f1.getOptions()
+        options.layoutData = layout //
+      })
+    })
   }
 }

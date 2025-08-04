@@ -209,7 +209,6 @@ export default defineComponent({
         root: '0',
       },
     } //
-    console.log(window.gc, 'tConfig') //
     return () => {
       if (show.value == false) {
         return null
@@ -240,6 +239,13 @@ export default defineComponent({
       )
       com = <FlowCom></FlowCom>
       com = <inputCom></inputCom>
+      com = (
+        <erXeTable
+          showGlobalSearch={true}
+          {...tConfig}
+          treeConfig={null}
+        ></erXeTable>
+      ) //
       let _com = (
         <div
           class="h-full"

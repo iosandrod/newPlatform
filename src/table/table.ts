@@ -1856,6 +1856,7 @@ export class Table extends Base {
     })
   }
   updateFilterConfig(config) {
+    debugger //
     let oldFilterConfig = this.columnFilterConfig.filterConfig
     let currentFilterColumn = this.currentFilterColumn
     if (currentFilterColumn == null) {

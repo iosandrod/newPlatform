@@ -127,6 +127,9 @@ export default defineComponent({
     checkboxChange: {
       type: Function,
     },
+    onCheckboxChange: {
+      type: Function,
+    },
     eventMap: {
       type: Object,
       default: () => {},
@@ -253,6 +256,9 @@ export default defineComponent({
     if (props.mainTableName != null) {
       //@ts-ignore
       tableIns.tableName = props.mainTableName
+    }
+    if (props.showGlobalSearch) {
+      tableIns.showGlobalSearch(true) //
     }
     expose({ _instance: tableIns })
     provide('tableIns', tableIns)
@@ -494,6 +500,9 @@ export default defineComponent({
           <InputCom
             modelValue={globalValue.value}
             {...inputProps}
+            onChange={(v) => {
+              tableIns.updateGlobalSearch(v.value) //
+            }}
             v-slots={{
               buttons: () => {
                 let com = (
@@ -567,6 +576,8 @@ export default defineComponent({
             onColumnDragend={(e) => {
               tableIns.onColumnDragEnd(e)
             }}
+            // onCheckboxRangeChange={(e) => tableIns.onCheckboxRangeChange(e)} // checkbox-ange-change
+            onCheckboxRangeEnd={(e) => tableIns.onCheckboxRangeEnd(e)} // checkbox-ange-end
             columnDragConfig={tableIns.getColumnDragConfig()}
             columnConfig={tableIns.getColumnConfig()} //
             checkboxConfig={tableIns.getCheckboxConfig()}

@@ -484,3 +484,6 @@ z-index: 200;
   overflow-x: auto;
   z-index: 100;
 }
+.keyword-highlight{
+  color: red;
+}

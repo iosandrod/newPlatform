@@ -207,6 +207,12 @@ export default defineComponent({
       type: Boolean,
       default: false, //
     },
+    onOpenPanel: {
+      type: Function,
+    },
+    onHiddenPanel: {
+      type: Function, //
+    },
   },
   components: {
     dropdownCom,
@@ -258,6 +264,7 @@ export default defineComponent({
             {...props} //
             onFocus={(config) => {}}
             modelValue={_input.getModelValue()}
+            type={_input.getType()}
             v-slots={{
               suffix: () => {
                 if (slots?.suffix) {
@@ -271,8 +278,7 @@ export default defineComponent({
           {/* {slots?.buttons?.()} */}
         </div>
       ) //
-      let _com = null
-      let type: any = props.type
+      let _com = null //
       let isBaseinfo = props.isBaseinfo
       if (isBaseinfo) {
         _com = (

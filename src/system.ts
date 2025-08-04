@@ -1855,27 +1855,20 @@ export class System extends Base {
     menu.open(e)
   }
   async getOldErpTableColumns(tableName) {
-    let erpTable = await this.getHttp().find('sys_ErpTable', {
-      tableName: tableName,
+    let cols = await this.getHttp().post('columns', 'getOldErpTableColumns', {
+      tableName,
     })
-    let row = erpTable[0]
-    let _obj: any = {}
-    Object.entries(row).forEach(([key, value]) => {
-      try {
-        let _v = JSON.parse(value as any)
-        if (typeof _v == 'object' || Array.isArray(_v)) {
-          //
-          value = _v //
-        }
-      } catch (error) {}
-      _obj[key] = value //
-    })
-
-    let _columns = _obj.columns || []
-    return _columns
+    let _cols = cols?.columns
+    if (_cols == null || _cols?.length == 0) {
+      return
+    }
+    if (!Array.isArray(_cols)) {
+      return null
+    }
+    return _cols //
+   
   } //
   async addFriend(friendid) {
-    // let userinfo = this.getUserInfo()
     let http = this.getHttp() //
     let res = await http.post('users', 'addFriend', { friendid })
     this.confirmMessage('发送好友请求成功')
@@ -2379,5 +2372,6 @@ export class System extends Base {
     } //
     return p //
   }
+  async syncOldCols() {}
 }
 export const system = reactive(new System())

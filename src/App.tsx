@@ -55,14 +55,7 @@ export default defineComponent({
         >
           {com}
           {dArr}
-          {/* <div style={{ height: '500px', width: '100%' }} class="">
-            <erTable
-              isGantt={true}
-              // {...getOptions()} //
-              data={getGanttRecords()}
-              columns={getGanttColumns()} //
-            ></erTable>
-          </div> */}
+         
         </div>,
         [
           [

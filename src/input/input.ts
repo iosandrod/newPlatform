@@ -87,6 +87,7 @@ import type {
 export default defineComponent({
   name: 'VxeInput',
   props: {
+    onHiddenPanel: Function,
     modelValue: [String, Number, Date] as PropType<
       VxeInputPropTypes.ModelValue
     >,
@@ -216,6 +217,9 @@ export default defineComponent({
       type: Boolean as PropType<VxeInputPropTypes.Transfer>,
       default: null,
     },
+    onOpenPanel: {
+      type: Function as PropType<any>,
+    },
 
     // 已废弃
     maxlength: [String, Number] as PropType<VxeInputPropTypes.Maxlength>,
@@ -242,7 +246,7 @@ export default defineComponent({
     'date-prev',
     'date-today',
     'date-next',
-  ] as VxeInputEmits,
+  ] as VxeInputEmits, //
   setup(props, context) {
     const { slots, emit, expose } = context
 
@@ -1088,6 +1092,9 @@ export default defineComponent({
     const hidePanel = (): Promise<void> => {
       return new Promise((resolve) => {
         reactData.visiblePanel = false
+        //@ts-ignore
+        if (typeof props.onHiddenPanel === 'function') props.onHiddenPanel()
+        //@ts-ignore
         internalData.hpTimeout = setTimeout(() => {
           reactData.isAniVisible = false
           resolve()
@@ -2038,6 +2045,10 @@ export default defineComponent({
       const { type } = props
       const isDateTimeType = computeIsDateTimeType.value
       const dateValue = computeDateValue.value
+      if (typeof props['onOpenPanel'] == 'function') {
+        // debugger //
+        props['onOpenPanel']() //
+      }
       if (['year', 'quarter', 'month', 'week'].indexOf(type) > -1) {
         reactData.datePanelType = type as 'year' | 'quarter' | 'month' | 'week'
       } else {

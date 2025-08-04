@@ -14,6 +14,10 @@ export class Input extends Base {
       return input.reactData.isAniVisible //
     }
   }
+  async getIsShowPanel() {
+    let input: VxeInputInstance = this.getRef('input')
+    console.log(input, 'testInput') //
+  } //
   getModelValue() {
     let config = this.config
     let modelValue = config.modelValue
@@ -23,7 +27,17 @@ export class Input extends Base {
     let input: VxeInputInstance = this.getRef('input')
     if (input) {
       input.focus() //
+      this.onFocus()
     } //
+  }
+  getType() {
+    let config = this.config
+    let type = config.type
+    if (['datetime', 'date', 'time'].includes(type)) {
+      console.log(type,'fkjklsdfjslfjslfsd')//
+      return 'date' //
+    }
+    return type
   }
   blur() {
     let input: VxeInputInstance = this.getRef('input')
@@ -52,10 +66,12 @@ export class Input extends Base {
     }
     return false //
   }
-  onFocus(config) {
+  onFocus(config?: any) {
     if (this.getIsFormInput()) {
       return
-    }
+    } //
+    // const input = this.getRef('input')
+    // console.log(input, 'testInput')
   }
   getSelectPanelVisible() {
     let dropdown: VxePulldownInstance = this.getRef('dropdown')

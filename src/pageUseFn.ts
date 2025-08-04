@@ -57,6 +57,7 @@ export const mainUse = {
       try {
         relateArr = await instance.getRelateSearchWheres()
       } catch (error) {
+        console.error(error)
         return //
       }
       // console.log(relateArr, 'relateArr') ////

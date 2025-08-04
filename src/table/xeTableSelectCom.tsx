@@ -193,7 +193,6 @@ hooks.add('customKeyNav', {
         const selectRecords = $xeTable.getCheckboxRecords()
         let lastRangeRows: any[] = []
         const marginSize = 1
-        console.log(evnt.target, 'evnt.target', bodyWrapperElem) //
         const offsetRest = getTargetOffset(evnt.target, bodyWrapperElem)
         const startTop = offsetRest.offsetTop + evnt.offsetY
         const startLeft = offsetRest.offsetLeft + evnt.offsetX
@@ -229,8 +228,7 @@ hooks.add('customKeyNav', {
           let rangeHeight = Math.abs(offsetTop)
           let rangeWidth = Math.abs(offsetLeft)
           let rangeTop = startTop
-          let rangeLeft = startLeft
-          console.log(rangeLeft, 'sdfjslkfjslLeft') //
+          let rangeLeft = startLeft 
           let scrollLeft = bodyWrapperElem.scrollLeft
 
           if (offsetTop < marginSize) {
@@ -261,8 +259,6 @@ hooks.add('customKeyNav', {
               bodyWrapperElem.clientWidth + scrollLeft - startLeft - marginSize,
             )
           }
-          console.log(rangeLeft, '1111') //
-          // rangeLeft = rangeLeft + 100
           checkboxRangeElem.style.height = `${rangeHeight}px`
           checkboxRangeElem.style.width = `${rangeWidth}px`
           checkboxRangeElem.style.left = `${rangeLeft}px`

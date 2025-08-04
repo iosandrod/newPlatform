@@ -433,7 +433,7 @@ export class myHttp {
     // return _data
     let _data = await this.runCustomMethod(tableName, 'getTableData', {
       query,
-      ...config,
+      ...config,  
     })
     return _data //
   }

@@ -85,7 +85,7 @@ export class FormItem extends Base {
     }
     return value
   }
-  updateBindData(updateConfig: { value: any; [key: string]: any }) {
+  async updateBindData(updateConfig: { value: any; [key: string]: any }) {
     try {
       let value = updateConfig.value //
       let field = this.getField()
@@ -105,14 +105,17 @@ export class FormItem extends Base {
       } else {
         data[field] = value //
       }
+      // console.log(this.form.getMainPageDesign())//
+      let mainP = this.form.getMainPageDesign()
       let itemChange = this.getItemChange()
       if (typeof itemChange == 'function') {
+        itemChange = itemChange.bind(mainP)
         itemChange({
           value: value,
           form: this.form,
           item: this,
           data: data, //
-        }) //
+        })
       }
     } catch (error) {
       console.log('更新数据报错了') //

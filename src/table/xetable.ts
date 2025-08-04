@@ -434,7 +434,7 @@ export class XeTable extends Base {
         return status //
       }) //
       nextTick(() => {
-        let _data4 = this.getFlatTreeData(_data3)
+        let _data4 = [...new Set(this.getFlatTreeData(_data3))] //
         this.templateProps.data = _data4 //
       })
     } else {
@@ -521,6 +521,13 @@ export class XeTable extends Base {
   getGlobalSearchProps() {
     return {} //
   } //
+  @useTimeout({ number: 300 })
+  updateGlobalSearch(value: any) {
+    if (value == this.globalConfig.value) {
+      return
+    }
+    this.globalConfig.value = value
+  }
   showGlobalSearch(status) {
     //
     if (status) {
@@ -839,14 +846,25 @@ export class XeTable extends Base {
   getDefaultWidth() {
     return 150 //
   } //
-  @useTimeout({ number: 0 })
+  @useTimeout({ number: 1 }) //
   onCheckboxChange(config) {
+    let onCheckboxChange = this.config.onCheckboxChange
+    let checkRows = this.getInstance().getCheckboxRecords()
+    let record = config.row
+    if (typeof onCheckboxChange == 'function') {
+      onCheckboxChange({ ...config, records: checkRows, record }) //
+    }
+  } //
+  @useTimeout({ number: 0 })
+  toggleAllCheckboxRow(config) {
     let ins = this.getInstance()
     ins.toggleCheckboxRow(config.row)
+    this.onCheckboxChange(config)
   }
   onCheckboxChangeAll(config) {
     let ins = this.getInstance()
     ins.toggleAllCheckboxRow()
+    this.onCheckboxChange(config)
   }
   getIsActiveEditCell(row, col) {
     let editType = this.getEditType()
@@ -1134,8 +1152,10 @@ export class XeTable extends Base {
           return col.config
         })
         let _data = this.getInstance().getData()
-        let _d = _this.getFlatTreeData(_data) //
-        _data = _d //
+        if (this.getIsTree()) {
+          let _d = _this.getFlatTreeData(_data) //
+          _data = _d //
+        }
         if (oldColumnFilter != null && oldColumnFilter === tColumn) {
           return //
         }
@@ -1521,5 +1541,37 @@ export class XeTable extends Base {
   async getRowDragConfig() {
     let config: VxeTablePropTypes.RowDragConfig = {}
     return config //
+  }
+
+  onCheckboxRangeEnd(config) {
+    this.onCheckboxChange(config) //
+  }
+  updateFilterConfig(config) {
+    //
+    let oldFilterConfig = this.columnFilterConfig.filterConfig
+    let currentFilterColumn = this.currentFilterColumn
+    if (currentFilterColumn == null) {
+      return
+    }
+    let field = currentFilterColumn.getField()
+    let _config = oldFilterConfig.find((item) => item.field == field)
+    if (_config == null) {
+      let _obj = {
+        field: field,
+        indexArr: [],
+      }
+      oldFilterConfig.push(_obj)
+      _config = _obj
+    }
+    _config.indexArr = [] //
+    // let allCheck = config.allRows //
+    let allCheck = config.records //
+    allCheck.forEach((item) => {
+      _config.indexArr.push(item._value) //
+    })
+    _config.indexArr = _config.indexArr.filter((item, index) => {
+      return _config.indexArr.indexOf(item) === index //
+    }) //去重
+    this.columnFilterConfig.filterConfig = [...oldFilterConfig] //
   }
 }

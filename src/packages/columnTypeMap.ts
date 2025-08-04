@@ -17,6 +17,13 @@ export const defaultType = (item: XeColumn, row): any => {
     },
     disabled: item.getDisabled(), //
     clearable: item.getClearable(), //
+    onOpenPanel: () => {
+      // item.disableHideCell = true
+      item.disableHideCell = true //
+    },
+    onHiddenPanel: () => {
+      item.disableHideCell = false //
+    },
   }
 } //
 export const inputType = (item: XeColumn, row) => {
@@ -137,6 +144,39 @@ export const imageType = (item: XeColumn, row) => {
   obj.onInput = (config) => {} //
   return obj
 }
+export const datetimeType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
+  obj.onChange = (config) => {
+    let value = config.value
+    item.updateBindValue({ value, row }) //
+  }
+
+  obj.type = 'datetime' //
+  obj.clearable = true
+  return obj
+}
+export const timeType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
+  obj.onChange = (config) => {
+    let value = config.value
+    item.updateBindValue({ value, row }) //
+  }
+  obj.clearable = true 
+  obj.type = 'time'
+  obj.onInput = (config) => {} //
+  return obj
+}
+export const dateType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
+  obj.onChange = (config) => {
+    let value = config.value
+    item.updateBindValue({ value, row }) //
+  }
+  obj.clearable = true
+  obj.onInput = (config) => {} //
+  obj.type = 'date'
+  return obj
+} //
 export const columnTypeMap = {
   input: inputType,
   string: inputType,
@@ -149,5 +189,8 @@ export const columnTypeMap = {
   baseinfo: baseinfoType,
   color: colorType,
   images: imageType,
+  datetime: datetimeType,
+  date: dateType,
+  time: timeType,
 }
 export const columnTypeKeys = Object.keys(columnTypeMap)

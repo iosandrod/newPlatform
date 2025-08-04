@@ -22,7 +22,12 @@ export default defineComponent({
   },
   setup(props) {
     const ns = hooks.useNamespace('TabsLayout') //
-    if (!props.data.options.defaultValue) {
+    // if (!props.data.options.defaultValue) {
+    //   //默认值
+    //   props.data.options.defaultValue = props.data.columns[0].id
+    // }
+    if (1 == 1) {
+      //
       //默认值
       props.data.options.defaultValue = props.data.columns[0].id
     }
@@ -44,8 +49,6 @@ export default defineComponent({
             _value.style.display = 'none' //
           }
         }
-        // nextTick(() => {
-        // })
       })
     }
     onMounted(() => {

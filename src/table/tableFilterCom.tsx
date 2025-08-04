@@ -75,7 +75,7 @@ export default defineComponent({
               return com
             },
             dropdown: () => {
-              let comp = resolveComponent('erTable')
+              let comp = null //
               if (props.isVxeTable == true) {
                 comp = resolveComponent('erXeTable')
               }
@@ -92,15 +92,18 @@ export default defineComponent({
                       showGlobalSearch={true}
                       showColumnFilterTable={false}
                       showRowSeriesNumber={false} //
-                      checkboxChange={(config) => {
-                        tableIns.updateFilterConfig(config) ////
-                        let _table = config.table
-                        setTimeout(() => {
-                          console.log(_table, 'testTable') //
-                        }, 100)
-                      }} //
+                      // checkboxChange={(config) => {
+                      //   tableIns.updateFilterConfig(config) ////
+                      //   let _table = config.table
+                      //   setTimeout(() => {
+                      //     console.log(_table, 'testTable') //
+                      //   }, 100)
+                      // }} //
+                      onCheckboxChange={(config) => {
+                        tableIns.updateFilterConfig(config) //
+                      }}
                     ></comp>
-                  </div> 
+                  </div>
                   <div class="flex justify-between">
                     <buttonCom
                       fn={() => {

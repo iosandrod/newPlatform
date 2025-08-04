@@ -304,9 +304,7 @@ export class PageDesign extends Form {
       let config: any = {}
       config.dataSource = dataSource //
       if (typeof viewTable == 'string' && viewTable.length > 0) {
-        // config.viewTable = viewTable
-      }
-      // console.log(config, 'testConfig')
+      }//
       let res = await http.find(_t, query, config) //
       let dataMap = this.getTableRefData(tableName)
       dataMap['data'] = res
@@ -1317,13 +1315,20 @@ export class PageDesign extends Form {
     let allCols = Object.values(allTableConfig).map((t: any) => {
       let columns = t.columns
       let _cols = _.cloneDeep(columns)
-      //
+      _cols.forEach((col) => {
+        col.pid = t.tableName
+      })
       let _obj = {
         title: t.tableName,
-        children: _cols, //
+        children: _cols,
+        id: t.tableName,
+        pid: 0, //
       } //
       return _obj
     })
+    allCols = allCols.filter((item, i) => {
+      return allCols.findIndex((item1) => item1.title == item.title) == i
+    }) //
     return allCols //
   }
   getMergeMethodsSelect() {
@@ -1743,7 +1748,8 @@ export class PageDesign extends Form {
       let tableConfig = this.getTableConfig(name)
       let curRow = tableData.curRow //
       if (curRow == null) {
-        return Promise.reject('当前行数据为空') //
+        // return Promise.reject('当前行数据为空') //
+        continue//
       }
       let _config1 = tableConfig?.relateConfig || {} //
       let relateKey = _config1?.relateKey
@@ -1984,4 +1990,5 @@ export class PageDesign extends Form {
     let deleteData = tRefData.deleteData
     deleteData.push(row)
   }
+  
 }

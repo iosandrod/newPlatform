@@ -45,23 +45,51 @@ export default defineComponent({
       return props.row //
     })
     let showValue = computed(() => {
+      // 初始化返回值
       let _v = ''
-      if (_type == 'seq') {
-        return config.seq //
+
+      // 如果是序号列，直接返回序号
+      if (_type === 'seq') {
+        return config.seq
       }
-      let format = column.getFormat() //
-      if (typeof format == 'function') {
-        let v = format({
-          row: record.value, //
+
+      // 获取列配置中的格式化函数
+      const format = column.getFormat()
+      if (typeof format === 'function') {
+        const v = format({
+          row: record.value,
           field: column.getField(),
           table,
-          column: column, //
+          column,
         })
-        // console.log(v, 'testV') //
-        _v = v //
-      } //
-      return _v //
-    }) //
+        _v = v != null ? String(v) : ''
+      } else {
+        // 如果没有格式化函数，直接取值
+        const rawVal = record.value?.[column.getField()]
+        _v = rawVal != null ? String(rawVal) : ''
+      }
+
+      // 处理全局搜索高亮（可选）
+      const globalValue = table.globalConfig.value
+      if (
+        globalValue &&
+        typeof globalValue === 'string' &&
+        globalValue.length > 0
+      ) {
+        try {
+          const reg = new RegExp(globalValue, 'gi')
+          _v = _v.replace(
+            reg,
+            (match) => `<span class="keyword-highlight">${match}</span>`,
+          )
+        } catch (e) {
+          // 正则构造失败时直接跳过高亮//
+          console.warn('Invalid global search keyword', e)
+        }
+      }
+      // 用 div 包一层以支持渲染 HTML
+      return `<div class="cell-content">${_v}</div>`
+    })
 
     onMounted(() => {}) //
     onUnmounted(() => {}) //
@@ -150,7 +178,7 @@ export default defineComponent({
               e.stopPropagation()
               column
                 .getTable()
-                .onCheckboxChange({ ...config, checked: !props.checked })
+                .toggleAllCheckboxRow({ ...config, checked: !props.checked })
             }}
             ref={(el) => {
               registerRoot(el)
@@ -160,7 +188,7 @@ export default defineComponent({
             <vxe-checkbox
               onChange={(e) => {
                 let checked = e.checked //
-                column.getTable().onCheckboxChange({ ...config, checked })
+                column.getTable().toggleAllCheckboxRow({ ...config, checked })
               }}
               modelValue={props.checked}
             ></vxe-checkbox>
@@ -185,7 +213,8 @@ export default defineComponent({
               table.onBodyCellContext({ ...config, event: e })
             }}
           >
-            {showValue.value}
+            {/* {showValue.value} */}
+            <div vHtml={showValue.value}></div>
           </div>
         )
         let com0 = com //

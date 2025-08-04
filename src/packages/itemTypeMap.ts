@@ -11,7 +11,9 @@ export const defaultType = (item: FormItem): any => {
       item.onBlur(item.getBindValue())
     },
     onFocus: (config) => {
+      //
       item.onFocus(config)
+      
     },
     disabled: item.getDisabled(), //
     clearable: item.getClearable(), //

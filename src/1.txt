@@ -17206,6 +17206,31 @@ let isCurrentEdit = computed(() => {
 
                // console.log(this.templateProps.nodes, 'testNodes') ////
     // console.log(config, 'testConfig') //
-    {/* <div class="er-h-32 overflow-hidden" style={{}}>
+    {/* <div class="overflow-hidden er-h-32" style={{}}>
             <erButtonGroup items={flow.getControllButtons()}></erButtonGroup>
           </div> */}
+           // let erpTable = await this.getHttp().find('sys_ErpTable', {
+    //   tableName: tableName,
+    // })
+    // let row = erpTable[0]
+    // let _obj: any = {}
+    // Object.entries(row).forEach(([key, value]) => {
+    //   try {
+    //     let _v = JSON.parse(value as any)
+    //     if (typeof _v == 'object' || Array.isArray(_v)) {
+    //       //
+    //       value = _v //
+    //     }
+    //   } catch (error) {}
+    //   _obj[key] = value //
+    // })
+
+    // let _columns = _obj.columns || []
+    // return _columns
+
+
+
+      // let changeD = _d.filter((row) => {
+        //   let rowState = row['_rowState']
+        //   return rowState == 'add' || rowState == 'change'
+        // })

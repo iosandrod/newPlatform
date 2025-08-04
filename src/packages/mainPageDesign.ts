@@ -212,6 +212,14 @@ export class MainPageDesign extends PageDesign {
             com.saveTableDesign() //
           },
         },
+        {
+          label: '同步旧数据',
+          fn: async (config) => {
+            let p: Dialog = config.parent
+            let com: editPageDesign = p.getRef('innerCom') //
+            com.syncErpCols() //
+          },
+        },
       ],
       createFn: () => {
         return {
@@ -259,7 +267,7 @@ export class MainPageDesign extends PageDesign {
     // debugger//
     let ctx: PageDesign = config.instance //
     let args = config.args
-    if ((args.length == 0)) {
+    if (args.length == 0) {
       args[0] = ctx.getSaveData()
     } //
   })
