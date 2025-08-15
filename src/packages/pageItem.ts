@@ -53,6 +53,11 @@ export class PageDesignItem extends FormItem {
   getTableData() {
     return []
   }
+  getDetailTableConfig() {
+    let config = this.config
+    let detailTableConfig = config?.options?.detailTableConfig
+    return detailTableConfig
+  }
   getTableName() {
     //
     let config = this.config
@@ -101,9 +106,14 @@ export class PageDesignItem extends FormItem {
     return entityType //
   }
   getdBindData() {
-    let design: PageDesign = this.form as any //
+    let design: PageDesign = this.form as any
     let curRow = design.getCurRow()
-    return curRow
+    let formName = this.getOptions().formName
+    if (typeof formName == 'string' && formName.length > 0) {
+      let _config = this.form.formConfigMap[formName]?.data || {} //
+      curRow = _config //
+    }
+    return curRow //
   }
   getTableCnName() {
     let tConfig = this.getTableConfig()
@@ -228,7 +238,7 @@ export class PageDesignItem extends FormItem {
         value: 'add',
         enumerable: false,
         writable: true,
-      })//
+      }) //
       _arr.push(obj)
     } //
     // debugger //

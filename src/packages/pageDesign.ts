@@ -192,22 +192,29 @@ export class PageDesign extends Form {
     return tableName //
   }
   async getDetailTableData(dTableName: any) {
+   
     if (typeof dTableName == 'string') {
       dTableName = {
         tableName: dTableName,
       }
+    } //
+    let _config = this.getTableConfig(dTableName.tableName)
+    let detailTableConfig = _config?.detailTableConfig
+    let _tableName = detailTableConfig?.tableName//关联主表
+    if (typeof _tableName == 'string' && _tableName != '') {
+      // dTableName['tableName'] = _tableName //
     }
     let curRow = dTableName['curRow']
     if (curRow == null) {
       //主表当前行
-      curRow = this.getCurRow()
-    }
+      curRow = this.getCurRow(_tableName) //
+    } //
     let targetItem = this.items.find(
       (item) => item.getTableName() == dTableName.tableName,
     )
     if (targetItem == null) {
       return
-    }
+    } //
     let relateKey = targetItem.getRelateKey()
     let mainRelateKey = targetItem.getMainRelateKey()
     if (relateKey == null || mainRelateKey == null) {
@@ -218,6 +225,7 @@ export class PageDesign extends Form {
       ) //
       return
     }
+
     if (curRow == null) {
       let refData = this.getTableRefData(dTableName.tableName)
       if (refData) {
@@ -255,6 +263,7 @@ export class PageDesign extends Form {
           tableName: getDataConfig,
         }
       }
+
       if (this.isDesign == true) {
         return //
       }
@@ -304,8 +313,21 @@ export class PageDesign extends Form {
       let config: any = {}
       config.dataSource = dataSource //
       if (typeof viewTable == 'string' && viewTable.length > 0) {
-      }//
-      let res = await http.find(_t, query, config) //
+      } //
+      let res = []
+      if (dataSource?.dataSourceType == 'function') {
+        let _datasource = dataSource.dataSource
+        let _fn = stringToFunction(_datasource)
+        if (typeof _fn == 'function') {
+          let _res = await _fn.call(this, query)
+          if (Array.isArray(_res)) {
+            res = _res
+          }
+          // res = _res //
+        } //
+      } else {
+        res = await http.find(_t, query, config) //
+      }
       let dataMap = this.getTableRefData(tableName)
       dataMap['data'] = res
       if (res.length == 0 && tableName == this.getTableName()) {
@@ -327,6 +349,7 @@ export class PageDesign extends Form {
   }
   //
   async setCurRow(row, tableName = this.getTableName()) {
+    // console.log('setCurRow', row, tableName)//
     let dataMap = this.getTableRefData(tableName)
     dataMap['curRow'] = row
     let evName = `${tableName}_setCurRow`
@@ -344,15 +367,57 @@ export class PageDesign extends Form {
       }
     }
     await this.publishEvent(_config)
-    let allDetailTable: string[] = this.getAllDetailTable().map((item) => {
-      let tName = item.getTableName()
-      return tName
-    })
+    let _allT = this.getAllTable()
+      .filter((t) => {
+        let s = false
+        let tConfig = t.getDetailTableConfig() || {}
+        // if (tableName == 'pd_rmb') {
+        //   debugger //
+        // }//
+        let type = t.getEntityType()
+        let _tableName = t.getTableName()
+        let dTableName = tConfig.tableName //主表表名
+        if (type == 'detail') {
+          if (!Boolean(dTableName)) {
+            if (tableName == this.getTableName()) {
+              //
+              s = true
+            }
+          }
+        }
+        if (Boolean(dTableName)) {
+          if (dTableName === tableName && dTableName != _tableName) {
+            s = true
+          }
+        }
+        return s //
+      })
+      .map((t) => {
+        return t.getTableName() //
+      })
+    // let allDetailTable: string[] = this.getAllDetailTable().map((item) => {
+    //   let detailTableConfig = item.getDetailTableConfig()
+    //   let tableName = detailTableConfig?.tableName
+    //   let tName = item.getTableName()
+    //   if (typeof tableName == 'string' && tableName.length > 0) {
+    //     if (
+    //       tableName != this.getTableName() ||
+    //       tableName != this.getRealTableName()
+    //     ) {
+    //       return tName
+    //     }
+    //   }
+    //   return tName
+    // })
+    let allDetailTable = _allT
+    // console.log(allDetailTable, 'allDetailTable') //
     if (
-      tableName == this.getTableName() ||
-      tableName == this.getRealTableName()
+      // tableName == this.getTableName() ||
+      // tableName == this.getRealTableName()
+      1
     ) {
       //
+
       for (let dTable of allDetailTable) {
         this.getDetailTableData(dTable) //
       } //
@@ -570,6 +635,25 @@ export class PageDesign extends Form {
       }
       return false
     })
+    let allDFFields = allFields.filter((f) => {
+      let type = f.type
+      if (type == 'dform') {
+        return true
+      }
+      return false
+    })
+    for (const df of allDFFields) {
+      let options = df.options
+      let formName = options?.formName
+      if (formName != null && typeof formName == 'string') {
+        let formConfigMap = this.formConfigMap
+        if (formConfigMap[formName] == null) {
+          formConfigMap[formName] = {
+            data: {},
+          } //
+        }
+      }
+    }
     for (const en of allEnFields) {
       let tableName = en.tableName || en.options?.tableName //
       if (tableName != null) {
@@ -783,6 +867,19 @@ export class PageDesign extends Form {
     let config = this.getTableConfig()
     let tableCnName = config.tableCnName || this.getTableName() //
     return tableCnName //
+  }
+  getAllEntityNames() {
+    let items = this.items
+    let enitems = items.filter((item) => {
+      return item.config.type == 'entity'
+    })
+    let names = enitems.map((item) => item?.config?.options?.tableName)
+    return names.map((n) => {
+      return {
+        label: n,
+        value: n,
+      }
+    })
   }
   getAllTableName() {
     let tableName = this.getRealTableName()
@@ -1077,8 +1174,7 @@ export class PageDesign extends Form {
     _data = { ...searchDialog, ..._data } ////
     let _data1 = this.getLayoutData()
     _data1.searchDialog = _data //
-    this.saveTableDesign({ refresh: false, ..._data1 }) //
-    // await this.getSystem().updateCurrentPageDesign(_data1) //
+    this.saveTableDesign({ refresh: false, ..._data1 })
   }
   async selectExcelFile() {
     let sd = new Promise(async (resolve, reject) => {
@@ -1279,11 +1375,15 @@ export class PageDesign extends Form {
   }
 
   async updateTableColumn(config, refresh = true) {
+    // debugger//
     let tableName = this.getRealTableName()
     if (Array.isArray(config)) {
     } else {
       config = [config]
     }
+    config = config.map((c) => {
+      return c?.config || c
+    }) //
     config = config.filter((c) => {
       return c.id != null
     })
@@ -1418,11 +1518,16 @@ export class PageDesign extends Form {
         this.getSystem().confirmMessage('导入数据格式不正确', 'warning') //
         return
       }
-    }
-    // console.log(_d1)
-    await this.saveTableData({
-      addData: _d1, //
+    } //
+    let http = this.getHttp()
+    let realTableName = this.getRealTableName()
+    await http.post(realTableName, 'importData', {
+      importType: _d.importType,
+      data: _d1,
     }) //
+    // await this.saveTableData({
+    //   addData: _d1, //
+    // }) //
   } //
   onColumnConfigChange(config) {
     //
@@ -1749,7 +1854,7 @@ export class PageDesign extends Form {
       let curRow = tableData.curRow //
       if (curRow == null) {
         // return Promise.reject('当前行数据为空') //
-        continue//
+        continue //
       }
       let _config1 = tableConfig?.relateConfig || {} //
       let relateKey = _config1?.relateKey
@@ -1765,17 +1870,28 @@ export class PageDesign extends Form {
       if (curRow == null) {
         continue
       }
-      let rows = _fn([curRow])
+      let relateOneRow = _config1.relateOneRow
+      let rows = null
+      if (Boolean(relateOneRow)) {
+        rows = [curRow] //
+      } else {
+        rows = _fn([curRow])
+      }
       let rowsArg = rows
         .map((row) => {
           return row[relateKey]
         })
         .filter((row) => row != rootId) //
       let _queryArr = _arr
+      let mainRelateSearchKey = _config1?.mainRelateSearchKey
       if (rowsArg.length > 0) {
-        _queryArr.push({
-          [mainRelateKey]: rowsArg,
-        }) //
+        let obj: any = {}
+        if (mainRelateSearchKey?.length > 0) {
+          obj[mainRelateSearchKey] = rowsArg
+        } else {
+          obj[mainRelateKey] = rowsArg
+        }
+        _queryArr.push(obj) // //
       }
     }
     return _arr //
@@ -1990,5 +2106,20 @@ export class PageDesign extends Form {
     let deleteData = tRefData.deleteData
     deleteData.push(row)
   }
-  
+  getFormBindData(formName) {
+    //
+    let form = this.getRef(formName)
+    let formConfigMap = this.formConfigMap
+    if (formName == null) {
+      return null
+    }
+    let data = formConfigMap[formName]?.data
+    if (data != null) {
+      return data
+    }
+    if (form == null) {
+      return null
+    }
+    return form.getBindData() //
+  }
 }

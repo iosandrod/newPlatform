@@ -205,10 +205,10 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
         },
       },
     ],
-    treeConfig: {
-      id: 'id',
-      parentId: 'pid', //
-    },
+    // treeConfig: {
+    //   id: 'id',
+    //   parentId: 'pid', //
+    // },
     columns: [
       {
         field: 'id',
@@ -606,6 +606,12 @@ export const formitemTypeMap = (_this: PageDesign) => {
           filed: 'bindData',
           label: '绑定变量',
           type: 'code', //
+        },
+        {
+          field: 'formName',
+          label: '表单名称',
+          type: 'input',
+          
         },
       ],
       data: computed(() => {

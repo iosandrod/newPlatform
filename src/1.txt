@@ -17234,3 +17234,40 @@ let isCurrentEdit = computed(() => {
         //   let rowState = row['_rowState']
         //   return rowState == 'add' || rowState == 'change'
         // })
+
+        // watch(
+    //   () => showGlobalSearch.value,
+    //   (e) => {
+    //     let searchDiv = tableIns.getRef('searchDiv')
+    //     if (searchDiv == null) {
+    //       return
+    //     }
+    //     if (e == true) {
+    //       searchDiv.style.display = 'flex'
+    //     } else {
+    //       searchDiv.style.display = 'none' //
+    //     }
+    //   }, //
+    // )
+    // onMounted(() => {
+    //   let searchDiv = tableIns.getRef('searchDiv')
+    //   if (searchDiv == null) {
+    //     return
+    //   }
+    //   if (showGlobalSearch.value) {
+    //     searchDiv.style.height = 'auto'
+    //   } else {
+    //     searchDiv.style.height = '0px' //
+    //   }
+    // })
+
+
+    // setTimeout(() => {
+    //   // let data = this.getInstance().getData()
+    //   // console.log(data) //
+    //   console.log(config, 'testConfig') //
+    // }, 199)
+
+     if (dTableName == 'pd_rmb_eag') {
+      debugger //
+    }

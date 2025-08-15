@@ -15,7 +15,7 @@ export class TableFlow extends Flow {
   constructor(config) {
     super(config) //
   }
- 
+
   remoteTables: any = []
   refreshNodes(_config?: any) {
     let tables: any[] = this.getTables()
@@ -40,23 +40,21 @@ export class TableFlow extends Flow {
         data: table, //
       } as any
     }) //
-    nextTick(() => {
-      let oldNodes = this.templateProps.nodes || []
-      let _arr = []
-      nodes.forEach((n) => {
-        let id = n.id
-        let oldNode = oldNodes.find((n) => n.id === id)
-        if (oldNode) {
-          _arr.unshift(n)
-          n.position = { ...oldNode.position }
-          n.isInPanel = true
-        } else {
-          n.isInPanel = false
-          _arr.push(n)
-        }
-      })
-      this.templateProps._nodes = _arr //
+    let oldNodes = this.templateProps.nodes || []
+    let _arr = []
+    nodes.forEach((n) => {
+      let id = n.id
+      let oldNode = oldNodes.find((n) => n.id === id)
+      if (oldNode) {
+        _arr.unshift(n)
+        n.position = { ...oldNode.position }
+        n.isInPanel = true
+      } else {
+        n.isInPanel = false
+        _arr.push(n)
+      }
     })
+    this.templateProps._nodes = _arr //
   }
 
   refreshEdges(_config?: any) {
@@ -81,11 +79,9 @@ export class TableFlow extends Flow {
         label: `${fromField} → ${toField}`,
       }) //
     }
-
-    nextTick(() => {
-      this.templateProps._edges = edges
-    })
+    this.templateProps._edges = edges
   }
+
   getNodes(template = false) {
     if (template) return this.templateProps._nodes
     return this.templateProps.nodes
@@ -104,7 +100,7 @@ export class TableFlow extends Flow {
   getInstanceZoom() {
     let viewport = this.getInstanceViewPort()
     return viewport?.zoom || 1
-  } // //
+  } //
   @useTimeout({ number: 200 })
   autoFitView() {
     const rawNodes: any[] = this.getNodes(true)
@@ -434,7 +430,6 @@ export class TableFlow extends Flow {
     context.open(event) //
   }
   onNodeDrag(config) {
-   
     let node = config.node //
     let id = node.id
     let myNode = this.getNodeById(id)

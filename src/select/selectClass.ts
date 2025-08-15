@@ -84,7 +84,7 @@ export class Select extends Base {
     let options = config.options
     if (!Array.isArray(options)) {
       options = [] //
-    } //
+    } 
     let searchValue = this.searchValue
     options = [...options, ...this.templateOptions] //
     if (searchValue != null && searchValue.length > 0) {
@@ -96,6 +96,7 @@ export class Select extends Base {
     }
     return options //
   }
+  
   getAllowCreate() {
     let config = this.config
     let allowCreate = config.allowCreate

@@ -196,6 +196,26 @@ export const initXeContextItems = (table: XeTable) => {
         let _config = getDCConfig(this, {
           data: originColumns,
           tableName: tableName,
+          onRowDragEnd: (config) => {
+            // debugger //
+            let _table = config.table
+            // console.log(config, 'testConfig') //
+            let newRow = config.newRow
+            let oldRow = config.oldRow //
+            let _index = newRow._index
+            let _index2 = oldRow._index
+            let _data = _table.getData()
+            let index1 = _data.findIndex((e) => e._index == _index)
+            let index2 = _data.findIndex((e) => e._index == _index2)
+            let data4 = _data.splice(index1, 1)
+            _data.splice(index2, 0, data4[0]) //
+            _data.forEach((e, i) => {
+              e.order = Number(i) + 1 //
+              e.rowState = 'change' //
+            })
+            // let fieldArr = _data.map((e) => e.field) //
+            // console.log('fieldArr', fieldArr) //
+          },
         })
         let _d: any = await system.confirmTable(_config) //
         table.onColumnsDesign(_d) //
@@ -213,6 +233,12 @@ export const initXeContextItems = (table: XeTable) => {
           await onTableDesign(config)
         }
       },
+    },{
+      label:"打印数据",
+      fn:async (config)=>{
+        const data=table.getData()
+        console.log(data,'testData')//
+      }
     },
     {
       label: '同步列',

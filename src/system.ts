@@ -1763,6 +1763,9 @@ export class System extends Base {
       if (port == '3006') {
         _appName = 'print' //
       }
+      if (port == '3007') {
+        _appName = 'axdb' //
+      }
     }
     _appName = _appName || 'platform' //
     return _appName //
@@ -1866,7 +1869,6 @@ export class System extends Base {
       return null
     }
     return _cols //
-   
   } //
   async addFriend(friendid) {
     let http = this.getHttp() //
@@ -2251,6 +2253,12 @@ export class System extends Base {
       this.getSystem().confirmMessage('数据库备份失败', 'error') //
     }
   }
+  @cacheValue()
+  async getAllTables() {
+    let http = this.getHttp()
+    let res = await http.post('entity', 'getAllTables')
+    return res //
+  }
   //恢复数据库
   async restoreDatabase() {
     //
@@ -2278,7 +2286,39 @@ export class System extends Base {
         this.getSystem().confirmMessage('请选择一个进行还原', 'warning')
         return
       }
-      let r0 = selectRow[0]
+      const allTables = await this.getAllTables()
+      // console.log(allTables, 'allTables')
+      const resTabls = await this.confirmTable({
+        title: '选择一个进行还原',
+        height: 500,
+        width: 300,
+        buttons: [
+          {
+            label: '主要模块',
+            fn: async (dialog) => {
+              allTables.forEach((item) => {
+                item.checkboxField = false
+                if (['navs', 'columns', 'entity'].includes(item.tableName)) {
+                  item.checkboxField = true //
+                }
+              }) //
+            },
+          },
+        ],
+        columns: [
+          {
+            field: 'tableName',
+            title: '表名',
+            width: 200,
+          },
+        ],
+        data: allTables,
+      })
+      const cTables = resTabls.filter((item) => {
+        return item.checkboxField
+      }) 
+      let r0 = selectRow[0]//
+      r0.tableNames = cTables //
       let res = await http.post('users', 'restoreDb', r0) //
       this.getSystem().confirmMessage('数据库还原成功', 'success')
     } catch (error) {

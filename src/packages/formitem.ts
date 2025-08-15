@@ -226,6 +226,17 @@ export class FormItem extends Base {
   getSelectOptions() {
     let _options = this.getOptions()
     let options = _options?.options || []
+    if (typeof options == 'function') {
+      // debugger //
+      let design = this.form.getMainPageDesign()
+      try {
+        options = options({
+          page: design,
+        })
+      } catch (error) {
+        options = [] //
+      }
+    }
     if (Array.isArray(options) && options.length > 0) {
       options = options //
     } else {
@@ -1080,7 +1091,6 @@ export class FormItem extends Base {
     sys.openCodeDialog(config) //
   }
   openSFormDialog() {
-    // debugger //
     let options = { ...this.getOptions() } //
     let f = this.getField() //
     let d = this.form.getData()
@@ -1088,12 +1098,10 @@ export class FormItem extends Base {
     if (b == null || Array.isArray(b) || typeof b !== 'object') {
       //
       b = reactive({})
-      d[f] = b
+      d[f] = b //
     } //
     //@ts-ignore
     options['data'] = b //
-    // console.log(optinos)//
-    // let _f = new Form(options) //
     let dialogConfig = {
       height: 600,
       width: 1200,
@@ -1102,8 +1110,9 @@ export class FormItem extends Base {
           component: formCom,
           props: {
             ...options,
+            tableName: options.tableName || this.form.tableName, //
           },
-        }
+        } //
       },
       confirmFn: (dialog: Dialog) => {
         //

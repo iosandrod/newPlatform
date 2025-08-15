@@ -422,6 +422,7 @@ export const getDCConfig = (_this: any, config) => {
   let data = config.data
   let tableName = config.tableName
   let dConfig = {
+    ...config, //
     title: '设计表格列',
     height: 600,
     width: 1000, //
@@ -485,6 +486,12 @@ export const getDCConfig = (_this: any, config) => {
           },
         ],
       }, //
+      {
+        field: 'order',
+        title: '排序', //
+        type: 'number',
+        editType: 'number', //
+      },
       {
         field: 'hidden',
         title: '是否隐藏',

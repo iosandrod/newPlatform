@@ -324,10 +324,20 @@ export class XeTable extends Base {
       return !s1 && !s2
     })
     sCols.sort((c1, c2) => {
-      let o1 = c1.order
-      let o2 = c2.order
-      return o1 - o2 //
+      const n1 = Number(c1.order)
+      const n2 = Number(c2.order)
+
+      const isNum1 = !isNaN(n1)
+      const isNum2 = !isNaN(n2)
+
+      if (isNum1 && isNum2) {
+        return n1 - n2 // 都是数字或可转为数字，按数值排序
+      }
+      if (isNum1) return -1 // c1 是有效数字，排前
+      if (isNum2) return 1 // c2 是有效数字，排前
+      return 0 // 都不是数字，保持原顺序
     })
+
     _col1 = [...lfsCols, ...sCols, ...rfsCols]
     if (_show) {
       let cCol = this.checkboxColumn
@@ -503,7 +513,7 @@ export class XeTable extends Base {
   }
   getHeaderHeight() {
     let _config = this.config
-    let headerHeight = _config.headerHeight
+    let headerHeight = _config.headerHeight //
     if (isNaN(headerHeight)) {
       headerHeight = 35
     }
@@ -1218,9 +1228,10 @@ export class XeTable extends Base {
   }
   onColumnResize(config) {
     // console.log(config, 'testConfig') //
+    //
     let column: ColumnInfo = config.column
-    let width = column.width
-    let _column: XeColumn = column.params
+    let width = column.renderWidth
+    let _column: XeColumn = column.params //
     _column.config.width = width
     let onDesignColumn = this.config.onDesignColumn
     if (typeof onDesignColumn == 'function') {
@@ -1284,7 +1295,6 @@ export class XeTable extends Base {
     dConfig.dragEndMethod = async (
       params: VxeTableDefines.ColumnDragendEventParams,
     ) => {
-      // console.log(params, 'testColumnDragConfig') //
       let colInfos = this.getInstance().getColumns()
       let column = params.dragColumn //
       let allCol = params
@@ -1573,5 +1583,11 @@ export class XeTable extends Base {
       return _config.indexArr.indexOf(item) === index //
     }) //去重
     this.columnFilterConfig.filterConfig = [...oldFilterConfig] //
+  }
+  onRowDragEnd(config) {
+    let onRowDragEnd = this.config.onRowDragEnd
+    if (typeof onRowDragEnd == 'function') {
+      onRowDragEnd({ ...config, table: this }) //
+    }
   }
 }

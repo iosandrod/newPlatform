@@ -61,7 +61,8 @@ export default defineComponent({
         }
         showStatus = false //
       }, 1000)
-    }
+    } //
+    // let headerHeight = column.table.getDefaultHeaderRowHeight()
     return () => {
       let com = null //
       if (type == 'checkbox') {
@@ -131,7 +132,7 @@ export default defineComponent({
         if (_type == 'seq') {
           iconArr = null //
         }
-        let showCom = <div>{column.getTitle()}</div>
+        let showCom = <div class='h-full er-h-30 overflow-hidden'>{column.getTitle()}</div>
         if (column.isEditTitle == true) {
           let v = column.getTitle()
           showCom = withDirectives(

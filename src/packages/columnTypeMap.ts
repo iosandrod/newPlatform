@@ -1,5 +1,6 @@
 import { XeColumn } from '@/table/xecolumn'
 import { FormItem } from './formitem'
+import { number } from './utils/equal'
 export const defaultType = (item: XeColumn, row): any => {
   return {
     placeholder: item.getPlaceholder(),
@@ -161,7 +162,7 @@ export const timeType = (item: XeColumn, row) => {
     let value = config.value
     item.updateBindValue({ value, row }) //
   }
-  obj.clearable = true 
+  obj.clearable = true
   obj.type = 'time'
   obj.onInput = (config) => {} //
   return obj
@@ -177,11 +178,22 @@ export const dateType = (item: XeColumn, row) => {
   obj.type = 'date'
   return obj
 } //
+export const numberType = (item: XeColumn, row) => {
+  let obj = defaultType(item, row) //
+  obj.onChange = (config) => {
+    let value = config.value
+    item.updateBindValue({ value, row }) //
+  }
+  obj.clearable = true
+  obj.onInput = (config) => {} //
+  return obj //
+}
 export const columnTypeMap = {
   input: inputType,
   string: inputType,
   default: defaultType,
   select: selectType,
+  number: numberType,
   stable: stableType,
   code: codeType,
   boolean: booleanType, //

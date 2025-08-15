@@ -72,6 +72,7 @@ const excludes = [
 ]
 const pName = [] //
 export class Form extends Base {
+  formConfigMap: any = {} //
   tableState = 'scan' //
   dialogArr = []
   eventManager: {
@@ -174,6 +175,9 @@ export class Form extends Base {
     let platform = config.platform
     if (platform == 'mobile') {
       this.switchPlatform('mobile') //
+    }
+    if (config.tableName != null && config.tableName != '') {
+      this.tableName = config.tableName //
     }
   } //
   getButtons() {
@@ -553,6 +557,7 @@ export class Form extends Base {
     } //
     this.setItems(items, true)
   } //
+
   setState(state) {
     this.state = state //
   }
@@ -1917,13 +1922,13 @@ export class Form extends Base {
           this.switchPlatform('pc')
         },
       },
-      {
-        label: '打印JSON',
-        fn: async () => {
-          let _layout = this.getLayoutData()
-          console.log(_layout, 'testLayout') //
-        },
-      },
+      // {
+      //   label: '打印JSON',
+      //   fn: async () => {
+      //     let _layout = this.getLayoutData()
+      //     console.log(_layout, 'testLayout') //
+      //   },
+      // },
     ]
     return btns
   }
@@ -1950,6 +1955,12 @@ export class Form extends Base {
     let item = items.find((item) => item.id === id)
     if (item) {
       item.designButtons() //
+    }
+  }
+  async initColumnSelect() {
+    let items = this.items
+    for (const item of items) {
+      await item.initColumnSelect() //
     }
   }
 }

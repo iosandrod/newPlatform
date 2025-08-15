@@ -194,4 +194,8 @@ export class Flow extends Base {
     let flowTransform = config.flowTransform
     this.templateProps.flowTransform = flowTransform //
   } ////
+  getForeignKeys() {
+    let ks = this.templateProps.foreignKeys || []
+    return ks.map((v) => v) //
+  }
 }

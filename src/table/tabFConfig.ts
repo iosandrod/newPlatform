@@ -102,6 +102,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
     height: 700,
     width: 800, //
     isTabForm: true,
+    tableName: _this.form.getTableName(), //
     items: [
       {
         field: 'tableName',
@@ -126,6 +127,29 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
           itemSpan: 12,
           items: [
             {
+              field: 'tableName',
+              label: '表名',
+              type: 'select',
+              itemChange: (config) => {
+                // debugger //
+                let form = config.form
+                if (form) {
+                  form.initColumnSelect() //
+                }
+              },
+              options: {
+                options: (config) => {
+                  // return []
+                  let page = config?.page
+                  if (page == null) {
+                    return []
+                  }
+                  let allNames = page.getAllEntityNames()
+                  return allNames //
+                }, //
+              }, //
+            },
+            {
               field: 'relateKey',
               label: '当前关联字段',
               type: 'select', //
@@ -140,7 +164,13 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               type: 'select', //
               options: {
                 columnSelect: true,
-                tableName: mN, //
+                tableName: (config) => {
+                  // debugger //
+                  // debugger //
+                  let data = config.data
+                  let tableName = data?.tableName || tName //
+                  return tableName //
+                }, //
               }, //
             },
           ],
@@ -346,6 +376,12 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               tabTitle: titles[0],
             },
             {
+              field: 'relateOneRow',
+              label: '关联一行',
+              type: 'boolean',
+              tabTitle: titles[0], //
+            },
+            {
               field: 'relateKey',
               label: '关联字段',
               type: 'string',
@@ -363,6 +399,16 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
               options: {
                 columnSelect: true,
                 tableName: mN, // //
+                allowCreate: true,
+              },
+            },
+            {
+              field: 'mainRelateSearchKey',
+              label: '主表关联搜索字段',
+              type: 'string',
+              tabTitle: titles[0],
+              options: {
+                //
               },
             },
           ],

@@ -148,6 +148,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    onRowDragEnd: {
+      type: Function, //
+    },
     dragRowFn: {
       type: Function, //
     },
@@ -434,38 +437,15 @@ export default defineComponent({
     const rowDConfig: VxeTablePropTypes.RowDragConfig = {
       isCrossDrag: true,
       dragEndMethod: async () => {
-        return false
+        //
+        return true
       },
     }
     let showGlobalSearch = computed(() => {
       return tableIns.globalConfig.show
     })
     let _s = showGlobalSearch.value
-    // watch(
-    //   () => showGlobalSearch.value,
-    //   (e) => {
-    //     let searchDiv = tableIns.getRef('searchDiv')
-    //     if (searchDiv == null) {
-    //       return
-    //     }
-    //     if (e == true) {
-    //       searchDiv.style.display = 'flex'
-    //     } else {
-    //       searchDiv.style.display = 'none' //
-    //     }
-    //   }, //
-    // )
-    // onMounted(() => {
-    //   let searchDiv = tableIns.getRef('searchDiv')
-    //   if (searchDiv == null) {
-    //     return
-    //   }
-    //   if (showGlobalSearch.value) {
-    //     searchDiv.style.height = 'auto'
-    //   } else {
-    //     searchDiv.style.height = '0px' //
-    //   }
-    // })
+
     const globalValue = computed(() => {
       return tableIns.globalConfig.value
     })
@@ -565,6 +545,7 @@ export default defineComponent({
         >
           {cellSelectCom}
           <myVxeGrid
+            onRowDragend={(e) => tableIns.onRowDragEnd(e)} // row-dragend
             editRules={tableIns.getEditRules()} //
             onCellDblclick={(e) => {
               tableIns.onCellDblclick(e) //

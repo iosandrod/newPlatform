@@ -19,7 +19,7 @@ export default defineComponent({
     const formitem: PageDesignItem = params.formitem
     let fConfig = computed(() => {
       // debugger //
-      let _config = formitem.getFormConfig() //
+      let _config = formitem.getFormConfig()
       return _config
     })
     //@ts-ignore
@@ -27,6 +27,12 @@ export default defineComponent({
     let mainPage: PageDesign = inject('mainPageDesign', null) //
     const registerRef = (el) => {
       formitem.registerRef('fieldCom', el) //
+      if (mainPage != null) {
+        let formName = formitem.getOptions().formName
+        if (formName != null && typeof formName == 'string') {
+          mainPage.registerRef(formName, el) //
+        }
+      }
     }
     const data = computed(() => {
       let _data = formitem.getdBindData()
@@ -38,8 +44,8 @@ export default defineComponent({
     }
     let itemTName = formitem.getOptions().tableName
     onMounted(() => {
-      let outCom :HTMLDivElement= formitem.getRef('fieldOutCom')
-      if(outCom == null) return
+      let outCom: HTMLDivElement = formitem.getRef('fieldOutCom')
+      if (outCom == null) return
       // console.log(outCom, 'outCom')
       // let bound = outCom.getBoundingClientRect()
       // console.log(bound, 'bound')//

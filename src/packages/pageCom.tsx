@@ -396,7 +396,7 @@ export default defineComponent({
             <ButtonGroupCom
               items={formIns.getControllerButtons()}
             ></ButtonGroupCom>
-            <div>{formIns.state.platform}</div>
+            {/* <div>{formIns.state.platform}</div> */}
           </div>
         )
       }

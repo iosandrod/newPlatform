@@ -238,14 +238,15 @@ export default defineComponent({
         </div>
       )
       com = <FlowCom></FlowCom>
-      com = <inputCom></inputCom>
-      com = (
-        <erXeTable
-          showGlobalSearch={true}
-          {...tConfig}
-          treeConfig={null}
-        ></erXeTable>
-      ) //
+      // com = <inputCom></inputCom>
+      // com = (
+      //   <erXeTable
+      //     showGlobalSearch={true}
+      //     {...tConfig}
+      //     enableDragRow={true}
+      //     treeConfig={null}
+      //   ></erXeTable>
+      // ) //
       let _com = (
         <div
           class="h-full"

@@ -3,13 +3,14 @@ import { VueFlow, FlowProps } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { flowProps } from './loginComProps'
 import { Flow } from './flow'
-import ERNodeVue from '@/ERNode'
+import ERNodeVue from './ERNode'
 import { TableFlow } from './tableFlow'
 import { Contextmenu } from '@/contextM'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom'
 import { MiniMap, MiniMapNode } from '@vue-flow/minimap'
 import { Controls } from '@vue-flow/controls'
 import tabCom from '@/buttonGroup/tabCom'
+import DENode from './DENode'
 export default defineComponent({
   //
   name: 'LoginCom',
@@ -27,8 +28,7 @@ export default defineComponent({
     isERDiagram: {
       type: Boolean,
       default: false, // 是否是ER图
-    },
-
+    }, //
     tables: {
       type: Array,
       default: () => [],
@@ -50,13 +50,51 @@ export default defineComponent({
       flow = new TableFlow(props)
     }
     provide('flowIns', flow)
-    watchEffect(() => {
-      flow.refreshNodes()
-      flow.refreshEdges()
-      setTimeout(() => {
+    // watchEffect(() => {
+    //   flow.refreshNodes()
+    //   flow.refreshEdges()
+    //   setTimeout(() => {
+    //     flow.autoFitView()
+    //   }, 100) //
+    // })
+    watch(
+      () => {
+        // let length = 0
+        if (props.isERDiagram) {
+          let _this = flow
+          let tables: any[] = _this.getTables()
+          // ✅ 筛选出 checkboxField = true 的表格
+          let selectedTables = tables.filter(
+            (t: any) => t.checkboxField === true,
+          )
+          return selectedTables
+        } else {
+          let nodes = flow.config.nodes || []
+          nodes = nodes.map((n) => n)
+          return nodes
+        }
+      },
+      (config: any) => {
+        flow.refreshNodes() //
         flow.autoFitView()
-      }, 100) //
-    })
+      },
+    ) //
+    watch(
+      () => {
+        if (props.isERDiagram) {
+          let foreignKeys: any[] = flow.getForeignKeys()
+          return foreignKeys
+        } else {
+          let edges = flow.config.edges || []
+          edges = edges.map((n) => n)
+          return edges //
+        }
+      },
+      (config: any) => {
+        flow.refreshNodes()
+        flow.autoFitView()
+      },
+    )
     watch(
       () => props.tables,
       (value) => {
@@ -137,7 +175,7 @@ export default defineComponent({
                 }
               },
             }}
-          ></tabCom> 
+          ></tabCom>
         )
         leftTable = (
           <div class="w-1/4 h-full overflow-hidden flex flex-col">
@@ -167,7 +205,7 @@ export default defineComponent({
       let com = (
         <div class="h-full w-full flex flex-col">
           {context}
-          
+
           <div
             ref={(el) => flow.registerRef('container', el)}
             class="flex-1 overflow-hidden w-full flex"
@@ -180,7 +218,7 @@ export default defineComponent({
                   flow.registerRef('flow', instance) //
                 }}
                 {...props}
-                nodeTypes={{ erTable: ERNodeVue }}
+                nodeTypes={{ erTable: ERNodeVue, erNode: DENode }} //
                 nodes={flow.templateProps.nodes}
                 edges={flow.templateProps.edges}
                 onNodeClick={(e) => {
