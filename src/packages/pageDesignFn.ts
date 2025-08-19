@@ -219,3 +219,78 @@ export const createDefaultTemplate = (design: PageDesign, config) => {
   }
   return obj
 }
+
+
+
+type AnyNode = Record<string, any>;
+
+interface TreeNode extends AnyNode {
+  id: string;
+  pid?: string | null;        // 指向父级 id
+  children?: TreeNode[];      // 子节点集合
+}
+
+/**
+ * 将布局数组转换为带 pid/children 的树结构
+ * 规则：
+ * - 子节点通过 pid 关联父级 id
+ * - 父级节点通过 children 存子节点
+ * - 同时兼容 item.columns 与 item.list 两类子节点容器
+ * - 字符串子项会生成占位叶子：{ id: <string>, type:'ref' }
+ */
+export function buildPidTree(input: AnyNode[]): TreeNode[] {
+  const flat: TreeNode[] = [];
+  const visit = (item: any, parentId: string | null) => {
+    if (typeof item === 'string') {
+      // 字符串引用（占位叶子）
+      flat.push({ id: item, type: 'ref', pid: parentId });
+      return;
+    }
+    const { columns, list, ...rest } = item || {};
+    const node: TreeNode = { ...rest, pid: parentId };
+    flat.push(node);
+
+    const children: any[] = [];
+    if (Array.isArray(columns)) children.push(...columns);
+    if (Array.isArray(list)) children.push(...list);
+    for (const child of children) visit(child, node.id);
+  };
+
+  for (const top of input) visit(top, null);
+
+  // 链接 children
+  const map = new Map<string, TreeNode>();
+  for (const n of flat) {
+    n.children = [];
+    map.set(n.id, n);
+  }
+  for (const n of flat) {
+    if (n.pid != null) {
+      const p = map.get(n.pid);
+      if (p) p.children!.push(n);
+    }
+  }
+  // 根：pid 为 null
+  return flat.filter(n => n.pid == null);
+}
+
+// ===== 示例调用 =====
+const data = /* 贴你的数组 */ [];
+const tree = buildPidTree(data);
+
+// tree 即为：根数组（每个根有 children，所有子节点也带 pid）
+console.log(tree);
+
+// 如果你也需要“纯平铺 + pid”：
+const flattenWithPid = (rootTree: TreeNode[]) => {
+  const out: TreeNode[] = [];
+  const dfs = (nodes: TreeNode[]) => {
+    for (const n of nodes) {
+      const { children, ...rest } = n;
+      out.push(rest as TreeNode);
+      if (children?.length) dfs(children);
+    }
+  };
+  dfs(rootTree);
+  return out;
+};

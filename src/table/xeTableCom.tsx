@@ -439,7 +439,7 @@ export default defineComponent({
       dragEndMethod: async () => {
         //
         return true
-      },
+      },//
     }
     let showGlobalSearch = computed(() => {
       return tableIns.globalConfig.show

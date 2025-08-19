@@ -215,9 +215,9 @@ export class editPageDesign extends PageDesign {
     let _col1 = await _col.getDefaultValue() //
     return _col1 //
   }
-  getCurRow() {
-    let tableName = this.getTableName()
-    let curRow = super.getCurRow(tableName) //
+  getCurRow(tableName?: any) {
+    let _tableName = tableName || this.getTableName()
+    let curRow = super.getCurRow(_tableName)
     return curRow //
   }
   getSaveData(): any {
@@ -269,13 +269,18 @@ export class editPageDesign extends PageDesign {
           throw new Error(`子表${tableName}请设置必填字段`) //
         }
         if (this.tableState == 'add') {
-          if (_d.length == 0) {
-            this.getSystem().confirmMessage(
-              `子表${tableName}请添加数据`,
-              'warning',
-            )
-            throw new Error(`子表${tableName}请添加数据`) //
-          }
+          // debugger//
+          let enableEmpty = detailTableConfig?.enableEmpty
+          if (Boolean(enableEmpty)) {
+          } else {
+            if (_d.length == 0) {
+              this.getSystem().confirmMessage(
+                `子表${tableName}请添加数据`,
+                'warning',
+              )
+              throw new Error(`子表${tableName}请添加数据`) //
+            }
+          }//
         }
         _d = [..._d, ...deleteData] //
 

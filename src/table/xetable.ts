@@ -1585,9 +1585,27 @@ export class XeTable extends Base {
     this.columnFilterConfig.filterConfig = [...oldFilterConfig] //
   }
   onRowDragEnd(config) {
-    let onRowDragEnd = this.config.onRowDragEnd
+    let onRowDragEnd = this.config.onRowDragEnd //
     if (typeof onRowDragEnd == 'function') {
       onRowDragEnd({ ...config, table: this }) //
     }
+  } //
+  swapTwoRows(row1: any, row2: any) {
+    if (typeof row1 == 'string' && typeof row2 == 'string') {
+      row1 = this.dataMap[row1] //
+      row2 = this.dataMap[row2] //
+      if (row1 == null || row2 == null) {
+        return false //
+      }
+    } //
+    let data = this.getData()
+    let index1 = data.indexOf(row1)
+    let index2 = data.indexOf(row2)
+    if (index1 == -1 || index2 == -1) {
+      return false //
+    }
+    data[index1] = row2 //
+    data[index2] = row1 //
+    return
   }
 }

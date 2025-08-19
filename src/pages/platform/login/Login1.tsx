@@ -51,6 +51,7 @@ import {
 } from '@/table/tableData1'
 import ganttCom from '@/gantt/ganttCom'
 import FlowCom from '@/logic/flowCom'
+import { nodeData } from './nData'
 export default defineComponent({
   components: {
     pVue,
@@ -237,7 +238,14 @@ export default defineComponent({
           <ganttCom></ganttCom>
         </div>
       )
-      com = <FlowCom></FlowCom>
+      com = <FlowCom nodes={nodeData.nodes} edges={nodeData.edges}></FlowCom>
+      // com = (
+      //   <div class="h-full w-full flex justify-center items-center">
+      //     <div class="er-h-40 overflow-hidden">
+      //       <erPager></erPager>
+      //     </div>
+      //   </div>
+      // )
       // com = <inputCom></inputCom>
       // com = (
       //   <erXeTable

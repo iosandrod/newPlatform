@@ -1,5 +1,6 @@
 import { Table } from '@/table/table'
 import { Base } from '@ER/base'
+import { useTimeout } from '@ER/utils/decoration'
 import type { Node, Edge, FlowExportObject, VueFlowStore } from '@vue-flow/core'
 import { VueFlow } from '@vue-flow/core'
 import { nanoid } from 'nanoid'
@@ -24,57 +25,33 @@ export class Flow extends Base {
     let _r = this.getRef('flow')
     return _r //
   }
-  refreshNodes() {
-    nextTick(() => {
-      this.templateProps.nodes = [
-        {
-          id: '1',
-          type: 'input', // 起点
-          label: '原料准备',
-          position: { x: 50, y: 50 },
-          data: { techNo: 'T01', wcNo: 'WC-01', duration: '2h' },
-          style: {
-            padding: '8px 12px',
-            border: '1px solid #999',
-            borderRadius: '6px',
-          },
-        },
-        {
-          id: '2',
-          label: '切割',
-          position: { x: 250, y: 50 },
-          data: { techNo: 'T02', wcNo: 'WC-02', duration: '3h' },
-        },
-        {
-          id: '3',
-          label: '焊接',
-          position: { x: 450, y: 50 },
-          data: { techNo: 'T03', wcNo: 'WC-03', duration: '4h' },
-        },
-        {
-          id: '4',
-          label: '打磨',
-          position: { x: 650, y: 50 },
-          data: { techNo: 'T04', wcNo: 'WC-02', duration: '1.5h' },
-        },
-        {
-          id: '5',
-          label: '喷漆',
-          position: { x: 850, y: 50 },
-          data: { techNo: 'T05', wcNo: 'WC-04', duration: '2h' },
-        },
-        {
-          id: '6',
-          type: 'output', // 终点
-          label: '入库',
-          position: { x: 1050, y: 50 },
-          data: { techNo: 'T06', wcNo: 'WC-05', duration: '1h' },
-        },
-      ] //
-    })
+  refreshNodes(_nodes?: any) {
+    this.templateProps._nodes = _nodes || this.config.nodes //
+    this.autoFitView()
   }
-  refreshEdges() {}
-  autoFitView() {}
+  refreshEdges(_edges?: any) {
+    
+    this.templateProps._edges = _edges || this.config.edges //\
+    this.autoFitView() //
+  }
+  @useTimeout({
+    number: 200,
+  })
+  autoFitView() {
+    let _nodes = this.getNodes(true)
+    let _edges = this.getEdges(true) //
+    this.setNodes(_nodes)
+    this.setEdges(_edges)
+    console.log('重新渲染了') //
+  }
+  setNodes(nodes: Node[]) {
+    this.templateProps.nodes = nodes //
+    // console.log('newNodes', nodes)
+  }
+  setEdges(edges: Edge[]) {
+    this.templateProps.edges = edges //
+    // console.log('newEdges', edges) //
+  }
   getContextItems() {}
   /**
    * 添加一个表节点
@@ -148,17 +125,25 @@ export class Flow extends Base {
   logNodes() {
     let ins = this.getInstance() //
   }
-  getNodes() {
-    let config = this.config //
-    if (config.nodes) {
-      return config.nodes //
-    }
+  getInstanceViewPort() {
+    let ins = this.getInstance()
+    if (ins == null) {
+      return
+    } //
+    return this.getInstance().getViewport()
   }
-  getEdges() {
-    let config = this.config //
-    if (config.edges) {
-      return config.edges //
-    }
+  getInstanceZoom() {
+    let viewport = this.getInstanceViewPort()
+    return viewport?.zoom || 1
+  }
+  getNodes(template = false) {
+    //
+    if (template) return this.templateProps._nodes || []
+    return this.templateProps.nodes || []
+  }
+  getEdges(template = false) {
+    if (template) return this.templateProps._edges || []
+    return this.templateProps.edges || [] //
   }
   onNodeClick(event: any) {
     let config = this.config //

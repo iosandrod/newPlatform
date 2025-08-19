@@ -487,3 +487,30 @@ z-index: 200;
 .keyword-highlight{
   color: red;
 }
+.vxe-select--panel{
+  z-index: 99999!important;
+}
+
+
+/* 覆盖节点默认黑色边框 */
+.vue-flow__node {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 覆盖连接桩默认黑色边框 */
+.vue-flow__handle {
+  border: 1px solid #ccc !important; /* 改成灰色 */
+  background: white !important;
+}
+
+:root {
+  --vf-node-border-radius: 0.75rem;
+  --vf-handle-background-color: white;
+  --vf-handle-border-radius: 9999px;
+  --vf-handle-border-color: #d1d5db; /* 灰色 */
+}
+.vue-flow__node {
+  min-width: unset !important; /* 去掉150px的限制 */
+  width: auto !important;      /* 或者你可以指定固定宽度 */
+}

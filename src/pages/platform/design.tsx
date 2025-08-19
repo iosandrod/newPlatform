@@ -101,7 +101,7 @@ export default defineComponent({
         // console.log(pObj, 'testPObj') //
         pagin = (
           <div class="er-h-40 overflow-hidden">
-            <VxePager {...pObj}></VxePager>
+            <erPager {...pObj}></erPager>
           </div>
         ) //
       }

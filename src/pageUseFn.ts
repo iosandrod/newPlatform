@@ -22,6 +22,14 @@ export const mainUse = {
             await instance.getRelateTreeData(ta?.options?.tableName)
           }
         } //
+        if (tableType == 'info') {
+          if (Boolean(initGetData)) {
+            let tableName = ta?.options?.tableName
+            if (tableName) {
+              await instance.getTableData(ta?.options?.tableName)
+            }
+          }
+        }
       }
       instance.setCurrentLoading(true) //
       setTimeout(() => {

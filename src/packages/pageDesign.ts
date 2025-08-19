@@ -30,6 +30,7 @@ import { VxeUI } from 'vxe-pc-ui'
 import * as XLSX from 'xlsx' //
 import { Column } from '@/table/column'
 import { XeTable } from '@/table/xetable'
+import { buildPidTree } from './pageDesignFn'
 interface Filter {
   /** 字段名 */
   field: string
@@ -65,13 +66,24 @@ export class PageDesign extends Form {
     super(config)
     let methods = config?.methods
     let msg = [] ///
+    let hookMethods = []
     if (Array.isArray(methods) && methods.length > 0) {
+      // debugger//
       for (let method of methods) {
         let name = method.name //
         let code = method.code
+        let type = method.type
+        if (type == 'extend') {
+          let _fn = stringToFunction(code) //
+          if (typeof _fn == 'function') {
+            this.use(name, _fn) //
+          } //
+          continue //
+        }
         let oldFn = this[name]
         if (oldFn != null) {
           msg.push(`${name}已存在`) //
+
           continue
         }
         try {
@@ -192,15 +204,17 @@ export class PageDesign extends Form {
     return tableName //
   }
   async getDetailTableData(dTableName: any) {
-   
     if (typeof dTableName == 'string') {
       dTableName = {
         tableName: dTableName,
       }
     } //
+    // if(dTableName.tableName=='pd_rmb_tg'){
+    //   debugger//
+    // }
     let _config = this.getTableConfig(dTableName.tableName)
     let detailTableConfig = _config?.detailTableConfig
-    let _tableName = detailTableConfig?.tableName//关联主表
+    let _tableName = detailTableConfig?.tableName //关联主表
     if (typeof _tableName == 'string' && _tableName != '') {
       // dTableName['tableName'] = _tableName //
     }
@@ -233,9 +247,12 @@ export class PageDesign extends Form {
       }
       return
     }
-    let _value = curRow[mainRelateKey]
+    let _value = curRow?.[mainRelateKey]
     if (_value === '' || _value == null) {
-      this.getSystem().confirmMessage(`主单据没有关联值`, 'warning') //
+      this.getSystem().confirmMessage(
+        `${dTableName.tableName}主单据没有关联值`,
+        'warning',
+      ) //
       return //
     }
     let query = {
@@ -263,6 +280,9 @@ export class PageDesign extends Form {
           tableName: getDataConfig,
         }
       }
+      // if (getDataConfig?.tableName == 'pd_rmh---search') {
+      //   debugger //
+      // }
 
       if (this.isDesign == true) {
         return //
@@ -530,10 +550,10 @@ export class PageDesign extends Form {
     let config = { ...this.config, ..._config } //
     let id = config.id
     if (id == null) {
-      await this.createTableDesign()
+      await this.createTableDesign() //
     } else {
       //
-      await this.updateTableDesign()
+      await this.updateTableDesign(_config) //
     }
     nextTick(() => {
       this.setCurrentDesign(false)
@@ -1167,14 +1187,23 @@ export class PageDesign extends Form {
     if (searchDialog == null) {
       searchDialog = {} //
     }
+    // if (1 == 1) {
+    //   searchDialog = {} //
+    // }
     searchDialog.tableName = this.getRealTableName()
     let sys = this.getSystem()
     let _data: any = await sys.confirmDesignForm(searchDialog) //
     _data = _data || {}
     _data = { ...searchDialog, ..._data } ////
-    let _data1 = this.getLayoutData()
-    _data1.searchDialog = _data //
-    this.saveTableDesign({ refresh: false, ..._data1 })
+    let _data1 = _data
+    // return _data1//
+    // _data1.searchDialog = _data //
+    let data2 = {
+      searchDialog: _data1,
+    }
+    await this.saveTableDesign({ refresh: false, ...data2 }) //
+    this.config.searchDialog = _data1 //
+    return _data1 //
   }
   async selectExcelFile() {
     let sd = new Promise(async (resolve, reject) => {
@@ -2121,5 +2150,54 @@ export class PageDesign extends Form {
       return null
     }
     return form.getBindData() //
+  }
+  getNodeInstance(id: string) {
+    let items = this.items
+    let targetItem = items.find((item) => item.id === id)
+    if (targetItem == null) {
+      return null
+    }
+    let fieldCom = targetItem.getRef('fieldCom')
+    return fieldCom //
+  }
+  getFormData(id) {
+    let tIns = this.getNodeInstance(id)
+    if (tIns == null) {
+      return null
+    } //
+    let data = tIns.getData() //
+    return data
+  }
+  buildNodeTree() {
+    let layoutData = this.getLayoutData()
+    let layout = layoutData.layout //
+    let pc = layout.pc
+    let nodes = buildPidTree(pc)
+    let flatFn = (nodes: any[]) => {
+      let result: any[] = []
+      for (const node of nodes) {
+        result.push(node)
+        const children = node.children || []
+        const childResults = flatFn(children)
+        result = result.concat(childResults)
+      }
+      return result
+    }
+    let _nodes = flatFn(nodes)
+    // console.log(_nodes, 'testNodes') //
+    let fields = layoutData.fields
+    _nodes.forEach((no) => {
+      let type = no.type
+      if (type == 'ref') {
+        let id = no.id
+        let tF = fields.find((f) => f.id === id)
+        if (tF) {
+          Object.entries(tF).forEach(([key, value]) => {
+            no[key] = value //
+          })
+        }
+      }
+    })
+    return nodes //
   }
 }

@@ -1,4 +1,11 @@
-import { defineComponent, nextTick, provide, watch, watchEffect } from 'vue'
+import {
+  defineComponent,
+  nextTick,
+  onMounted,
+  provide,
+  watch,
+  watchEffect,
+} from 'vue'
 import { VueFlow, FlowProps } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { flowProps } from './loginComProps'
@@ -42,13 +49,14 @@ export default defineComponent({
       default: false, // 是否从远程获取表格数据
     },
   },
-  setup(props) {
+  setup(props, { emit, expose }) {
     let flow: TableFlow = null as any
     if (props.isERDiagram == false) {
       flow = new Flow(props) as any
     } else {
       flow = new TableFlow(props)
     }
+    expose({ _instance: flow })//
     provide('flowIns', flow)
     // watchEffect(() => {
     //   flow.refreshNodes()
@@ -79,6 +87,10 @@ export default defineComponent({
         flow.autoFitView()
       },
     ) //
+    onMounted(() => {
+      flow.refreshNodes()
+      flow.refreshEdges() //
+    })
     watch(
       () => {
         if (props.isERDiagram) {
@@ -218,7 +230,11 @@ export default defineComponent({
                   flow.registerRef('flow', instance) //
                 }}
                 {...props}
-                nodeTypes={{ erTable: ERNodeVue, erNode: DENode }} //
+                nodeTypes={{
+                  erTable: ERNodeVue,
+                  erNode: DENode,
+                  default: DENode,
+                }} //
                 nodes={flow.templateProps.nodes}
                 edges={flow.templateProps.edges}
                 onNodeClick={(e) => {
@@ -292,7 +308,7 @@ export default defineComponent({
       )
       // return com //
       let com1 = (
-        <div class="h-full flex flex-col w-full er-pt-32">
+        <div class="h-full flex flex-col w-full ">
           <div class="absolute er-h-32"></div>
           <div class="flex-1">{com}</div>
         </div>

@@ -48,6 +48,7 @@ const staticComMap = {
   platform: platfomrStaticCom,
 }
 export class System extends Base {
+  isError = false
   currentPlatform = 'pc' //
   _keyboardListeners: any[] = []
   pageLoading = false
@@ -964,6 +965,9 @@ export class System extends Base {
 
   @cacheValue()
   async getAllApp(): Promise<any> {
+    // if (1 == 1) {
+    //   return Promise.reject('出错了') //
+    // }
     try {
       let http = this.getHttp()
       let _data = await http.mainPost('company', 'getAllApp') //
@@ -1030,7 +1034,7 @@ export class System extends Base {
     let tableName = curPage.getTableName() //
     let _config = await this.getPageLayout(tableName)
     let data = reactive(_config) //
-    let tabTitles = ['基本配置', '重载方法', '事件配置'] //
+    let tabTitles = ['基本配置', '页面方法', '事件配置'] //
     let fConfig = {
       isTabForm: true,
       itemSpan: 12,
@@ -1256,6 +1260,21 @@ export class System extends Base {
                 title: '方法名称',
                 editType: 'string',
               },
+              {
+                field: 'type',
+                title: '方法类型',
+                editType: 'select', //
+                options: [
+                  {
+                    label: '重载',
+                    value: 'override',
+                  },
+                  {
+                    label: '扩展',
+                    value: 'extend',
+                  },
+                ],
+              }, //
               {
                 field: 'desc',
                 title: '方法描述',
@@ -1735,40 +1754,51 @@ export class System extends Base {
     }
   }
   async getCurrentApp() {
-    let envi = process.env.VITE_ENVIRONMENT || 'development'
-    let curUrl = window.location.host.split(':')[0]?.split('.')[0]
-    let apparr = await this.getAllApp()
-    apparr = apparr.map((item) => item.appName) //
-    let _appName = null
-    let _curUrl = curUrl.split('_')
-    if (_curUrl.length > 1) {
-      curUrl = _curUrl[0] //
-    } //
-    if (apparr.includes(curUrl)) {
-      _appName = curUrl
-      let id1 = _curUrl[1]
-      if (!isNaN(Number(id1))) {
-        this.setLocalItem('userid', id1)
+    try {
+      let envi = process.env.VITE_ENVIRONMENT || 'development'
+      let curUrl = window.location.host.split(':')[0]?.split('.')[0]
+      let apparr = await this.getAllApp()
+      apparr = apparr.map((item) => item.appName) //
+      let _appName = null
+      let _curUrl = curUrl.split('_')
+      if (_curUrl.length > 1) {
+        curUrl = _curUrl[0] //
       } //
+      if (apparr.includes(curUrl)) {
+        _appName = curUrl
+        let id1 = _curUrl[1]
+        if (!isNaN(Number(id1))) {
+          this.setLocalItem('userid', id1)
+        } //
+      }
+      if (envi == 'development') {
+        let host = window.location.host
+        let port = window.location.port
+        if (port == '3004') {
+          _appName = 'erp'
+        }
+        if (port == '3005') {
+          _appName = 'gantt' //
+        }
+        if (port == '3006') {
+          _appName = 'print' //
+        }
+        if (port == '3007') {
+          _appName = 'axdb' //
+        }
+      }
+      _appName = _appName || 'platform' //
+      return _appName //
+    } catch (error) {
+      this.setSystemError() //
+      let currentRoute = this.getRouter().currentRoute //
+      console.error('获取当前应用失败', currentRoute) //
+      // this.routeTo('errorPage') //
+      return Promise.reject('获取当前应用失败')
     }
-    if (envi == 'development') {
-      let host = window.location.host
-      let port = window.location.port
-      if (port == '3004') {
-        _appName = 'erp'
-      }
-      if (port == '3005') {
-        _appName = 'gantt' //
-      }
-      if (port == '3006') {
-        _appName = 'print' //
-      }
-      if (port == '3007') {
-        _appName = 'axdb' //
-      }
-    }
-    _appName = _appName || 'platform' //
-    return _appName //
+  }
+  setSystemError(state = true) {
+    this.isError = state //
   }
   getGlobRoute() {
     let vueF = generateRoutes()
@@ -2316,8 +2346,8 @@ export class System extends Base {
       })
       const cTables = resTabls.filter((item) => {
         return item.checkboxField
-      }) 
-      let r0 = selectRow[0]//
+      })
+      let r0 = selectRow[0] //
       r0.tableNames = cTables //
       let res = await http.post('users', 'restoreDb', r0) //
       this.getSystem().confirmMessage('数据库还原成功', 'success')
@@ -2413,5 +2443,12 @@ export class System extends Base {
     return p //
   }
   async syncOldCols() {}
+  async getTableColumns(tableName) {
+    let http = this.getHttp()
+    let res = await http.post('columns', 'getTableData', {
+      query: { tableName },
+    }) //
+    return res //
+  }
 }
 export const system = reactive(new System())

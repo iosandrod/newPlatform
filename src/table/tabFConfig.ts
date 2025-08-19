@@ -129,7 +129,9 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
             {
               field: 'tableName',
               label: '表名',
+
               type: 'select',
+
               itemChange: (config) => {
                 // debugger //
                 let form = config.form
@@ -147,6 +149,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
                   let allNames = page.getAllEntityNames()
                   return allNames //
                 }, //
+                // optionsField: 'ss_table_name', //
               }, //
             },
             {
@@ -172,6 +175,11 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
                   return tableName //
                 }, //
               }, //
+            },
+            {
+              field: 'enableEmpty',
+              label: '允许为空',
+              type: 'boolean', 
             },
           ],
         },
@@ -323,7 +331,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
       },
       {
         field: 'keyCodeColumn',
-        label: '单据字段',
+        label: '必录字段',//
         tabTitle: titles[0],
         type: 'string',
         options: {
@@ -414,18 +422,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
           ],
         },
       },
-      // {
-      //   field: 'initGetData',
-      //   label: '首次加载数据',
-      //   type: 'boolean',
-      //   tabTitle: titles[0], //
-      // },
-      // {
-      //   field: 'listenChanged', //监听
-      //   label: '监听表格更新',
-      //   type: 'boolean',
-      //   tabTitle: titles[0], //
-      // },
+
       {
         field: 'onCurRowChange',
         label: '当前行变化事件',

@@ -661,6 +661,9 @@ export default defineComponent({
     }
 
     const hideOptionPanel = () => {
+      // if (1 == 1) {
+      //   return
+      // }
       reactData.searchValue = ''
       reactData.searchLoading = false
       reactData.visiblePanel = false
@@ -1819,5 +1822,4 @@ export default defineComponent({
   render() {
     return this.renderVN()
   },
-  
 })

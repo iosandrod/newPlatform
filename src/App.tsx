@@ -13,18 +13,21 @@ import {
 } from './table/ganttTableFn'
 import dialogArrCom from './dialog/dialogArrCom'
 import { useKeyboard } from '@ER/utils'
+import errorPage from './errorPage'
+import errorPage1 from './errorPage1.vue'
 //@ts-ignore
 window.CONTAINER_ID = 'main_app'
 export default defineComponent({
   components: {
     dialogCom, //
+    errorPage,
+    errorPage1,
     // flowCom,
     // ERNodeVue, //
     // dialogArrCom, //
     dialogArrCom,
   },
   setup() {
-    
     provide('globalConfig', globalConfig)
     provide('systemIns', system) //
     let diaArr = computed(() => {
@@ -42,8 +45,10 @@ export default defineComponent({
     })
     return () => {
       let dArr = <dialogArrCom dialogArr={diaArr.value}></dialogArrCom>
-      // let com = <RouterView></RouterView> ////
-      let com = <RouterView></RouterView>
+      let com = <RouterView></RouterView> //
+      if (system.isError == true) {
+        com = <errorPage1></errorPage1>
+      }
       return withDirectives(
         <div
           id="main_app" //
@@ -55,7 +60,6 @@ export default defineComponent({
         >
           {com}
           {dArr}
-         
         </div>,
         [
           [

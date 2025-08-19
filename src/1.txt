@@ -17271,3 +17271,131 @@ let isCurrentEdit = computed(() => {
      if (dTableName == 'pd_rmb_eag') {
       debugger //
     }
+     // {
+      //   field: 'initGetData',
+      //   label: '首次加载数据',
+      //   type: 'boolean',
+      //   tabTitle: titles[0], //
+      // },
+      // {
+      //   field: 'listenChanged', //监听
+      //   label: '监听表格更新',
+      //   type: 'boolean',
+      //   tabTitle: titles[0], //
+      // },
+
+
+
+        {!collapsed.value && (
+            <div class="px-3 py-2 text-sm text-gray-700">
+              {subTitle.value && (
+                <div class="mb-1 truncate">
+                  <span class="text-gray-500 mr-1">工序ID:</span>
+                  <span class="font-mono">{subTitle.value}</span>
+                </div>
+              )}
+
+              <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-1">
+                {okRate.value && (
+                  <div class="flex items-center gap-1">
+                    <span class="text-gray-500">合格率</span>
+                    <span class="font-medium">{okRate.value}</span>
+                  </div>
+                )}
+                {efficiency.value && (
+                  <div class="flex items-center gap-1">
+                    <span class="text-gray-500">效率</span>
+                    <span class="font-medium">{efficiency.value}</span>
+                  </div>
+                )}
+              </div>
+
+              <div class="mt-2 flex items-center gap-2">
+                <button
+                  class="text-xs px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onToggleCollapse()
+                  }}
+                  title={collapsed.value ? '展开' : '折叠'}
+                >
+                  {collapsed.value ? '展开' : '折叠'}
+                </button>
+                <button
+                  class="text-xs px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    nodeBus.emit('node:inspect', {
+                      id: props.id,
+                      data: props.data,
+                    })
+                  }}
+                >
+                  详情
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Footer（显示基础信息或折叠提示） */}
+          {collapsed.value && (
+            <div class="px-3 py-2 text-xs text-gray-500 border-t bg-gray-50 rounded-b-2xl">
+              已折叠（双击或点击「展开」查看）
+            </div>
+          )}
+
+
+           const rawNodes: any[] = this.getNodes(true)
+    const edges: Edge[] = this.getEdges(true)
+    const zoom = this.getInstanceZoom()
+    // 分组
+    const oldNodes = rawNodes.filter((n) => n.isInPanel)
+    let newNodes = rawNodes.filter((n) => !n.isInPanel)
+
+    // 布局参数
+    let NODE_WIDTH = 240
+    let HEADER_HEIGHT = 60
+    let ROW_HEIGHT = 28
+    let V_SPACING = 20 // 列内垂直间距
+    let H_SPACING = 50 // 列间水平间距
+
+    // 画布高度
+    const container = this.getRef('container')
+    if (container == null) {
+      return //
+    }
+    let { height: viewportHeight } = container.getBoundingClientRect()
+    viewportHeight = viewportHeight / zoom //
+    // 计算旧节点最右边界，作为新列起点
+    const maxOldX = oldNodes.length
+      ? Math.max(...oldNodes.map((n) => n.position.x + NODE_WIDTH))
+      : 0
+    let columnX = maxOldX + H_SPACING
+    let cursorY = 0 //
+    // 瀑布布局 newNodes
+    newNodes = newNodes.map((node) => {
+      const cols = node.data?.data?.columns ?? []
+      const nodeHeight = HEADER_HEIGHT + (cols.length + 1) * ROW_HEIGHT
+
+      // 如果当前列剩余空间不足，换列
+      if (cursorY + nodeHeight > viewportHeight) {
+        columnX += NODE_WIDTH + H_SPACING
+        cursorY = 0
+      }
+
+      // 放置位置
+      const placed: Node = {
+        ...node,
+        position: {
+          x: columnX,
+          y: cursorY,
+        },
+      }
+
+      // 下一个节点 Y 游标向下移动
+      cursorY += nodeHeight + V_SPACING
+      return placed
+    })
+
+    // 合并并应用
+    const layouted = [...oldNodes, ...newNodes]

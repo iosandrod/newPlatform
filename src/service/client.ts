@@ -237,10 +237,10 @@ export class myHttp {
     this.init()
   } //
   async initClient() {
-    this.mainAxios = await createAxios({ isMain: true }) //
+    this.mainAxios = await createAxios({ isMain: true }) 
+    this.mainClient = await createClient({ isMain: true }) 
     this.axios = await createAxios({})
     this.client = await createClient({})
-    this.mainClient = await createClient({ isMain: true }) //
   }
   async changeClient(config) {
     let appName = config.appName

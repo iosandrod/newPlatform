@@ -15,7 +15,7 @@ interface DENodeData {
   hasIn?: boolean
   hasOut?: boolean
 }
-//
+
 export default defineComponent({
   name: 'DENode',
   props: {
@@ -101,7 +101,7 @@ export default defineComponent({
         data: props.data,
       })
     }
-    console.log('DENode render', props.id, props.data)
+
     return () => {
       const borderBase = isPhantom.value
         ? 'border-dashed border-gray-400'
@@ -113,7 +113,7 @@ export default defineComponent({
         <div
           class={`
             group
-            rounded-2xl shadow-sm border bg-white min-w-[70px] max-w-[100px] max-h-10 overflow-hidden
+            rounded-2xl shadow-sm border bg-white min-w-[220px] max-w-[320px]
             ${borderBase} ${ring} ${dragging}
           `}
           onDblclick={onNodeDblClick}
@@ -126,7 +126,7 @@ export default defineComponent({
             style={{ background: headerColor.value, color: '#fff' }}
           >
             <div class="truncate font-medium">
-              {props.data?.raw?.wkp_name ?? props.id}
+              {props.data.label ?? props.id}
             </div>
             <div class="ml-2 text-xs px-2 py-0.5 rounded-full bg-black/20">
               L{layerText.value}
@@ -134,7 +134,64 @@ export default defineComponent({
           </div>
 
           {/* Body */}
-          <div></div>
+          {!collapsed.value && (
+            <div class="px-3 py-2 text-sm text-gray-700">
+              {subTitle.value && (
+                <div class="mb-1 truncate">
+                  <span class="text-gray-500 mr-1">工序ID:</span>
+                  <span class="font-mono">{subTitle.value}</span>
+                </div>
+              )}
+
+              <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-1">
+                {okRate.value && (
+                  <div class="flex items-center gap-1">
+                    <span class="text-gray-500">合格率</span>
+                    <span class="font-medium">{okRate.value}</span>
+                  </div>
+                )}
+                {efficiency.value && (
+                  <div class="flex items-center gap-1">
+                    <span class="text-gray-500">效率</span>
+                    <span class="font-medium">{efficiency.value}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* 快速操作 */}
+              <div class="mt-2 flex items-center gap-2">
+                <button
+                  class="text-xs px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onToggleCollapse()
+                  }}
+                  title={collapsed.value ? '展开' : '折叠'}
+                >
+                  {collapsed.value ? '展开' : '折叠'}
+                </button>
+                <button
+                  class="text-xs px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    nodeBus.emit('node:inspect', {
+                      id: props.id,
+                      data: props.data,
+                    })
+                  }}
+                >
+                  详情
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Footer（显示基础信息或折叠提示） */}
+          {collapsed.value && (
+            <div class="px-3 py-2 text-xs text-gray-500 border-t bg-gray-50 rounded-b-2xl">
+              已折叠（双击或点击「展开」查看）
+            </div>
+          )}
 
           {/* Handles */}
           {hasIn.value && (

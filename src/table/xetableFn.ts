@@ -193,7 +193,7 @@ export const initXeContextItems = (table: XeTable) => {
           let o2 = c2.order
           return o1 - o2
         })
-        let _config = getDCConfig(this, {
+        let _config = getDCConfig(table, {
           data: originColumns,
           tableName: tableName,
           onRowDragEnd: (config) => {
@@ -299,3 +299,40 @@ t_ProductModelEntry;
  t_ProductModelBom;
 
 */
+
+
+/* 
+SELECT *FROM "columns" WHERE "tableName"='ss_table_column';
+COMMENT ON COLUMN ss_table_column.column_id IS '列ID';
+COMMENT ON COLUMN ss_table_column.is_primary_key IS '是否主键';
+COMMENT ON COLUMN ss_table_column.table_id IS '所属表ID';
+COMMENT ON COLUMN ss_table_column.data_type IS '数据类型';
+COMMENT ON COLUMN ss_table_column.is_unique IS '是否唯一';
+COMMENT ON COLUMN ss_table_column.data_precision IS '数据精度';
+COMMENT ON COLUMN ss_table_column.data_length IS '数据长度';
+COMMENT ON COLUMN ss_table_column.table_column_rmk4 IS '备注4';
+COMMENT ON COLUMN ss_table_column.crt_user IS '创建人';
+COMMENT ON COLUMN ss_table_column.upd_time IS '更新时间';
+COMMENT ON COLUMN ss_table_column.upd_user IS '更新人';
+COMMENT ON COLUMN ss_table_column.upd_user_no IS '更新人编号';
+COMMENT ON COLUMN ss_table_column.upd_user_name IS '更新人姓名';
+COMMENT ON COLUMN ss_table_column.crt_host IS '创建主机';
+COMMENT ON COLUMN ss_table_column.ref_field_name IS '引用字段名称';
+COMMENT ON COLUMN ss_table_column.upd_host IS '更新主机';
+COMMENT ON COLUMN ss_table_column.column_seq IS '列顺序';
+COMMENT ON COLUMN ss_table_column.crt_user_no IS '创建人编号';
+COMMENT ON COLUMN ss_table_column.is_not_copy IS '是否不可复制';
+COMMENT ON COLUMN ss_table_column.table_column_rmk3 IS '备注3';
+COMMENT ON COLUMN ss_table_column.ref_field IS '引用字段';
+COMMENT ON COLUMN ss_table_column.table_column_rmk1 IS '备注1';
+COMMENT ON COLUMN ss_table_column.value_in IS '输入值范围';
+COMMENT ON COLUMN ss_table_column.value_default IS '默认值';
+COMMENT ON COLUMN ss_table_column.not_null IS '是否非空';
+COMMENT ON COLUMN ss_table_column.value_min IS '最小值';
+COMMENT ON COLUMN ss_table_column.value_max IS '最大值';
+COMMENT ON COLUMN ss_table_column.crt_time IS '创建时间';
+COMMENT ON COLUMN ss_table_column.ref_table IS '引用表';
+COMMENT ON COLUMN ss_table_column.table_column_rmk2 IS '备注2';
+COMMENT ON COLUMN ss_table_column.crt_user_name IS '创建人姓名';
+
+ */

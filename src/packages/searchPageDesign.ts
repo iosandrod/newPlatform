@@ -34,9 +34,9 @@ export class SearchPageDesign extends PageDesign {
     }
     return config
   }) //
-  async getTableData(config?: any) {
-    return //
-  } //
+  // async getTableData(config?: any) {
+    // return //
+  // } //
   onColumnResize(config) {
     //
   }

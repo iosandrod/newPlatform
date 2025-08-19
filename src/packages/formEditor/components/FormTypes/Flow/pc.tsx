@@ -39,7 +39,7 @@ export default defineComponent({
     return () => {
       let com = (
         <div class="h-full w-full">
-          <flowCom></flowCom>
+          <flowCom ref={registerRef}></flowCom>
         </div>
       )
       return com //

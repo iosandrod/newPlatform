@@ -82,6 +82,7 @@ import './mainStyle.css'
 import './changeCalStyle.scss'
 import xeTableCom from './table/xeTableCom'
 import hyvuegantt from './gantt/hy-vue-gantt'
+import pager from './pager/pager'
 export const http = new myHttp()
 //@ts-ignore
 self.MonacoEnvironment = {
@@ -137,6 +138,7 @@ app.use(Vant)
 app.component('wangEditor', wangCom)
 app.use(Vue3Dragscroll)
 app.component('erButton', buttonCom)
+app.component('erPager', pager) //
 app.component('erButtonGroup', buttonGroupCom)
 // app.component('erForm', formEditor) //
 app.component('erForm', formCom)
@@ -146,8 +148,8 @@ app.component('erPage', pageCom) //
 // app.component('SvgIcon', SvgIcon)
 app.component('erTable', tableCom)
 app.component('erDropdown', dropdownCom)
-app.component('erSelect', selectCom) //
-app.component('erXeTable', xeTableCom) //
+app.component('erSelect', selectCom)// 
+app.component('erXeTable', xeTableCom)
 app.use(context) //
 app.use(VxeTable) //
 app.use(VxeUIAll)

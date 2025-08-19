@@ -5,6 +5,7 @@ import { Column } from '@/table/column'
 import { FormItem } from './formitem'
 import { defaultButtons, defaultRelateButtons } from './defaultButtons'
 import { getBaseInfoEditConfig } from '@/table/colFConfig'
+import { XeTable } from '@/table/xetable'
 export const getButtonGroupTableConfig = (_this?: PageDesign) => {
   let tableName = _this.getRealTableName()
   // let type = _this.getTableType()
@@ -432,6 +433,10 @@ export const formitemTypeMap = (_this: PageDesign) => {
                 label: '关联表',
                 value: 'relate', //
               },
+              {
+                label: '普通',
+                value: 'info', //
+              },
             ],
           },
         },
@@ -611,7 +616,6 @@ export const formitemTypeMap = (_this: PageDesign) => {
           field: 'formName',
           label: '表单名称',
           type: 'input',
-          
         },
       ],
       data: computed(() => {
@@ -630,6 +634,12 @@ export const formitemTypeMap = (_this: PageDesign) => {
             showTable: false,
             showHeaderDefaultButtons: false, //
             showRowSeriesNumber: true, //
+            enableDragRow: true,
+            onRowDragEnd: (config) => {
+              // debugger//
+              let table: XeTable = config.table //
+              table.swapTwoRows(config.dragRow, config.newRow)
+            },
             buttons: [
               {
                 label: '新增',

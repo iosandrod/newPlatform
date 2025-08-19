@@ -62,7 +62,7 @@ export default defineComponent({
           t1 = fieldTitle //
         }
         let _com = (
-          <li class={[]} onClick={() => addStore(element)}>
+          <li class={['w-full']} style={{ display: 'flex', alignItems: 'center',width: '100%' }} onClick={() => addStore(element)}>
             <Icon class={[ns.e('icon')]} icon={element.icon}></Icon>
             <span>{t1}</span>
           </li>

@@ -245,7 +245,7 @@ export function useHooks(config?: Function): any {
         index = i
         const fn = middlewares[i]
         if (fn) {
-          ////
+          //
           return fn.call(ctx.instance, ctx, () => dispatch(i + 1))
         }
         // 所有中间件执行完，调用原方法

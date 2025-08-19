@@ -355,6 +355,9 @@ export class MainPageDesign extends PageDesign {
     dataRef['data'] = _data2 //
     // this.getSystem().confirmMessage('加载树数据成功123') //
   }
+  async getInfoTableData(){
+    
+  }
   async editRelateTreeData(tableName) {
     if (typeof tableName == 'string') {
       tableName = {

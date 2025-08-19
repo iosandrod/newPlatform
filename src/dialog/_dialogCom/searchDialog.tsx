@@ -1,10 +1,11 @@
 import ButtonGroupCom from '@/buttonGroup/buttonGroupCom'
 import TabCom from '@/buttonGroup/tabCom'
 import { system } from '@/system'
+import { Form } from '@ER/form'
 import FormCom from '@ER/formCom'
 import { PageDesign } from '@ER/pageDesign'
 import _ from 'lodash'
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'SearchDialog',
@@ -16,6 +17,11 @@ export default defineComponent({
   setup(props) {
     let pageDesign: PageDesign = props.pageDesign as any
     let dialogConfig = pageDesign?.config?.searchDialog || {}
+    // console.log(dialogConfig, 'dialogConfig')//
+    // let f = new Form(dialogConfig) //
+    // f.setLayoutData(dialogConfig)
+    // console.log(f,'testForm')//
+    console.log(dialogConfig) //
     let d = pageDesign?.getSearchBindData() || {}
     let sPlan = dialogConfig.searchPlan
     if (sPlan == null) {
@@ -36,6 +42,14 @@ export default defineComponent({
       }) //
       return _s
     }) //
+    let fIns = ref(null)
+    let registerFn = (el) => {
+      if (el?._instance) {
+        fIns.value = el._instance
+      } else {
+        fIns.value = null //
+      }
+    }
     return () => (
       <div class="h-full w-full ">
         <div class="w-full flex flex-col justify-between">
@@ -81,7 +95,12 @@ export default defineComponent({
                 {
                   label: '设计表单',
                   fn: async () => {
-                    await pageDesign.designSearchForm() //
+                    let d1 = await pageDesign.designSearchForm() //
+                    if (fIns.value) {
+                      //
+                      fIns.value.setLayoutData(d1)
+                    }
+                    // console.log(d1, 'testD1') //
                   },
                 },
               ]}
@@ -95,8 +114,10 @@ export default defineComponent({
         </div>
         <div class="flex-1">
           <FormCom
+            ref={registerFn}
             tableName={pageDesign.getRealTableName()}
             layoutData={dialogConfig}
+            // items={[]}
             data={d}
           ></FormCom>
         </div>

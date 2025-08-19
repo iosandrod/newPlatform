@@ -1,3 +1,4 @@
+import { System } from '@/system'
 import { Form } from '@ER/form'
 import { FormItem } from '@ER/formitem'
 const enableTypes = [
@@ -19,7 +20,11 @@ export const getBaseInfoEditConfig = (_this, tableName) => {
       {
         field: 'tableName',
         label: '表名',
-        type: 'string', //
+        type: 'select', //
+        options: {
+          allowCreate: true, //
+          optionsField: 'ss_table_name', //
+        },
       },
       {
         field: 'bindColumns', //
@@ -420,6 +425,7 @@ export const getAllColTypes = () => {
 
 export const getDCConfig = (_this: any, config) => {
   let data = config.data
+  let _data1 = data
   let tableName = config.tableName
   let dConfig = {
     ...config, //
@@ -427,6 +433,77 @@ export const getDCConfig = (_this: any, config) => {
     height: 600,
     width: 1000, //
     enableDragRow: true,
+    buttons: [
+      {
+        label: '关联列',
+        fn: async (config) => {
+          // debugger //
+          let sys: System = _this.getSystem()
+          let allTables = await sys.getAllTables()
+          const fConfig = {
+            itemSpan: 24,
+            items: [
+              {
+                field: 'tableName',
+                label: '表名',
+                type: 'select',
+                options: {
+                  options: allTables.map((item) => {
+                    return {
+                      label: item.tableName,
+                      value: item.tableName,
+                    }
+                  }),
+                },
+              },
+            ],
+            height: 300,
+            width: 300,
+          }
+          let data = await sys.confirmForm(fConfig)
+          let columns = await sys.getTableColumns(data.tableName)
+          // console.log(columns, 'testColumns') ////
+          columns.forEach((col) => {
+            delete col.id
+            col.tableName = config.tableName
+          })
+          let _data1F = _data1.map((item) => {
+            return item.field
+          })
+          columns = columns.filter((col) => {
+            let field = col.field
+            return !_data1F.includes(field) && col.field != null
+          })
+          let tConfig = {
+            columns: [
+              {
+                field: 'field',
+                title: '字段名称',
+                type: 'string',
+              },
+              {
+                field: 'title',
+                title: '标题',
+                type: 'string',
+              },
+            ],
+            data: columns,
+          }
+          let _cols = await sys.confirmTable(tConfig)
+          let checkCols = _cols.filter((col) => {
+            return col.checkboxField
+          })
+          if (checkCols.length == 0) {
+            return '请至少选择一个字段' //
+          } //
+          checkCols.forEach((col) => {
+            col._rowState = 'add' //
+          })
+
+          _data1.push(...checkCols) //
+        },
+      },
+    ],
     dragRowFn: (config) => {
       return true //
     },

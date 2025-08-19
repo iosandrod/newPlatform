@@ -128,6 +128,7 @@ export default defineComponent({
         },
       ],
     }
+    let nodeData = mainDesign.buildNodeTree()
     let tabConfig = {
       items: [
         {
@@ -137,6 +138,31 @@ export default defineComponent({
         {
           label: '方法参照',
           tableConfig: methodConfig, //
+        },
+        {
+          label: '节点参照',
+          tableConfig: {
+            treeConfig: {
+              id: 'id',
+              parentId: 'pid', //
+              rootId: null, //
+            }, //
+            isTree: true, //
+            columns: [
+              {
+                field: 'id',
+                title: '节点ID',
+                tree: true, //
+                type: 'string',
+              },
+              {
+                type: 'string',
+                title: '节点类型',
+                field: 'type',
+              },//
+            ],
+            data: nodeData, //
+          }, //
         },
       ],
     }
