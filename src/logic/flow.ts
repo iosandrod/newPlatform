@@ -1,5 +1,7 @@
+import { BMenu } from '@/buttonGroup/bMenu'
 import { Table } from '@/table/table'
 import { Base } from '@ER/base'
+import { Context } from '@ER/utils/Context'
 import { useTimeout } from '@ER/utils/decoration'
 import type { Node, Edge, FlowExportObject, VueFlowStore } from '@vue-flow/core'
 import { VueFlow } from '@vue-flow/core'
@@ -30,7 +32,6 @@ export class Flow extends Base {
     this.autoFitView()
   }
   refreshEdges(_edges?: any) {
-    
     this.templateProps._edges = _edges || this.config.edges //\
     this.autoFitView() //
   }
@@ -52,7 +53,25 @@ export class Flow extends Base {
     this.templateProps.edges = edges //
     // console.log('newEdges', edges) //
   }
-  getContextItems() {}
+  openContextMenu(event) {
+    let context: BMenu = this.getRef('contextMenu')
+    if (event == null) {
+      return //
+    }
+    if (context) {
+      context.open(event) //
+    }
+  }
+  getContextItems() {
+    return [
+      {
+        label: '设计当前节点',
+        fn: async () => {
+          console.log('设计当前节点') //
+        },
+      },
+    ]
+  }
   /**
    * 添加一个表节点
    */
@@ -150,7 +169,7 @@ export class Flow extends Base {
     let node = event.node //
     let data = node.data
     this.setSelection(data) //
-    if (config.onNodeClick) config.onNodeClick(event) //
+    if (config.onNodeClick) config.onNodeClick({ event, row: data }) //
   } //
   onCurRowChange(config: any) {
     let row = config.row //
@@ -182,5 +201,8 @@ export class Flow extends Base {
   getForeignKeys() {
     let ks = this.templateProps.foreignKeys || []
     return ks.map((v) => v) //
+  }
+  onNodeDrop(config) {
+    //
   }
 }

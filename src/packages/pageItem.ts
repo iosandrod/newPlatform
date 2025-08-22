@@ -211,11 +211,24 @@ export class PageDesignItem extends FormItem {
     await design.onCurRowChange(_config) //
   }
   async addRows(config) {
+    // debugger//
     if (typeof config == 'number') {
       config = {
         num: config,
       }
     }
+    let _config = this.config
+    let detailTableConfig = _config?.options?.detailTableConfig || {}
+    let defaultAdd = detailTableConfig.defaultAdd
+    let _num = Number(defaultAdd)
+    if (isNaN(_num)) {
+      _num = 10
+    }
+    // debugger //
+    if (_num <= 0) {
+      return //
+    }
+    config.num = _num//
     let design: PageDesign = this.form as any //
     let fCom = this.getRef('fieldCom')
     let tName = this.getTableName()

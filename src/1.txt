@@ -17290,12 +17290,12 @@ let isCurrentEdit = computed(() => {
             <div class="px-3 py-2 text-sm text-gray-700">
               {subTitle.value && (
                 <div class="mb-1 truncate">
-                  <span class="text-gray-500 mr-1">工序ID:</span>
+                  <span class="mr-1 text-gray-500">工序ID:</span>
                   <span class="font-mono">{subTitle.value}</span>
                 </div>
               )}
 
-              <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-1">
+              <div class="grid grid-cols-2 mt-1 gap-x-2 gap-y-1">
                 {okRate.value && (
                   <div class="flex items-center gap-1">
                     <span class="text-gray-500">合格率</span>
@@ -17310,9 +17310,9 @@ let isCurrentEdit = computed(() => {
                 )}
               </div>
 
-              <div class="mt-2 flex items-center gap-2">
+              <div class="flex items-center gap-2 mt-2">
                 <button
-                  class="text-xs px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+                  class="px-2 py-1 text-xs border border-gray-200 rounded hover:bg-gray-50"
                   onClick={(e) => {
                     e.stopPropagation()
                     onToggleCollapse()
@@ -17322,7 +17322,7 @@ let isCurrentEdit = computed(() => {
                   {collapsed.value ? '展开' : '折叠'}
                 </button>
                 <button
-                  class="text-xs px-2 py-1 rounded border border-gray-200 hover:bg-gray-50"
+                  class="px-2 py-1 text-xs border border-gray-200 rounded hover:bg-gray-50"
                   onClick={(e) => {
                     e.stopPropagation()
                     nodeBus.emit('node:inspect', {
@@ -17399,3 +17399,71 @@ let isCurrentEdit = computed(() => {
 
     // 合并并应用
     const layouted = [...oldNodes, ...newNodes]
+    // watchEffect(() => {
+    //   flow.refreshNodes()
+    //   flow.refreshEdges()
+    //   setTimeout(() => {
+    //     flow.autoFitView()
+    //   }, 100) //
+    // })
+
+        console.log(_data) //
+    // let _item = {
+    //   edit_form_id: 'av_ss_dept',
+    //   column_id: 'dept_status',
+    //   column_sequence: 1010,
+    //   column_is_visible: true,
+    //   column_is_readonly: false,
+    //   title_width: 0,
+    //   title_lang_str: null,
+    //   control_width: null,
+    //   control_tip_lang_str: null,
+    //   control_height: 1,
+    //   title_height: null,
+    //   control_newline: null,
+    //   control_align: null,
+    //   self_edit_control: 'Andafa.Eaf.Forms\\ComboBox',
+    //   self_edit_control_para: '0,1',
+    //   group_lang_str: null,
+    //   column_retain_value: null,
+    //   column_auth: null,
+    //   column_need_check_add: true,
+    //   column_need_check_edit: true,
+    //   edit_form_b_rmk01: null,
+    //   edit_form_b_rmk02: null,
+    //   crt_user: '5AD7311F0BB0000000FC',
+    //   crt_user_no: 'yangyong',
+    //   crt_user_name: '杨勇',
+    //   crt_host: 'MATRIX',
+    //   crt_time: '2019-02-13 05:56:43',
+    //   upd_user: '5AD7311F0BB0000000FC',
+    //   upd_user_no: 'yangyong',
+    //   upd_user_name: '杨勇',
+    //   upd_host: 'MATRIX',
+    //   upd_time: '2019-03-12 07:51:09',
+    //   data_default: null,
+    //   font_color: null,
+    //   background_color: null,
+    //   font_size: 9,
+    //   column_is_transmit: true,
+    //   table_id: 'av_ss_dept',
+    //   is_primary_key: false,
+    //   is_unique: false,
+    //   data_type: 'text',
+    //   data_length: null,
+    //   data_precision: null,
+    //   not_null: false,
+    //   value_default: null,
+    //   value_min: null,
+    //   value_max: null,
+    //   value_in: null,
+    //   ref_table: 'av_ss_status_100',
+    //   ref_field: 'status_no',
+    //   is_not_copy: false,
+    //   table_column_rmk1: null,
+    //   table_column_rmk2: null,
+    //   table_column_rmk3: null,
+    //   table_column_rmk4: null,
+    //   ref_field_name: 'status_name',
+    //   column_seq: 200,
+    // }

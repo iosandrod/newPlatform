@@ -35,11 +35,15 @@ export default defineComponent({
     let isColumnSelect = computed(() => {
       let s = formitem.getIsColumnSelect()
       return s
-    }) //
+    })//
+    const onNodeClick = (config) => {
+      // 处理节点点击事件
+      debugger//
+    }
     return () => {
       let com = (
         <div class="h-full w-full">
-          <flowCom ref={registerRef}></flowCom>
+          <flowCom  onNodeClick={onNodeClick} ref={registerRef}></flowCom>
         </div>
       )
       return com //

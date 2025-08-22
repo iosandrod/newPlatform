@@ -1963,6 +1963,14 @@ export class Form extends Base {
       await item.initColumnSelect() //
     }
   }
+  deleteOnlyGrid() {
+    //
+    let state = this.state
+    let store = state.store
+    let onlyStore=store.filter(e=>{
+      let columns=e.columns
+    })
+  }
 }
 //使用默认布局
 

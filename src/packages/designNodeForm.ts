@@ -1,4 +1,3 @@
-
 import { computed } from 'vue'
 import { PageDesign } from './pageDesign'
 import { Table } from '@/table/table'
@@ -108,7 +107,7 @@ export const selectTypeMap = (_this: PageDesign) => {
       })
     } ////
     return items
-  } //
+  }//
   let obj = {
     buttongroup: {
       itemSpan: 24,

@@ -34,7 +34,10 @@ export default defineComponent({
       let arr = system.getAllDialog()
       return arr
     })
-    onMounted(() => {
+    onMounted(async () => {
+      try {
+        // await system.initSystemParams() //
+      } catch (error) {}
       system.createSystemRoutes() //
     })
     document.addEventListener('mousemove', (e) => {

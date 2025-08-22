@@ -64,7 +64,7 @@ export class XeColumn extends Column {
     let d = false
     if (isDrag == true && isTree == true) {
       d = true
-    }
+    }//
     let obj: VxeColumnProps & { order: number } = {
       ...config,
       width: this.getColumnWidth(),
@@ -325,5 +325,15 @@ export class XeColumn extends Column {
   }
   closeBaseInfoTable() {
     this.currentDropdownIndex = null //
+  }
+  getDragConfig() {
+    let config = this.config
+    let dragConfig = config?.extendConfig?.dragConfig
+    return dragConfig
+  }
+  getComType(){
+    let config=this.config
+    let comType=config?.extendConfig?.comType
+    return comType
   }
 }

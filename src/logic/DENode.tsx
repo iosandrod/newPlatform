@@ -1,5 +1,7 @@
 import { defineComponent, computed, inject } from 'vue'
 import { Handle, Position, useVueFlow } from '@vue-flow/core'
+import { PageDesign } from '@ER/pageDesign'
+import { Flow } from './flow'
 
 type NodeBus = {
   emit: (evt: string, payload?: any) => void
@@ -91,7 +93,7 @@ export default defineComponent({
       e.stopPropagation()
       onToggleCollapse()
     }
-
+    let flowIns: Flow = inject('flowIns')
     const onContextMenu = (e: MouseEvent) => {
       e.preventDefault()
       nodeBus.emit('node:context', {
@@ -108,12 +110,33 @@ export default defineComponent({
         : 'border-solid border-gray-300'
       const ring = props.selected ? 'ring-2 ring-blue-500 ring-offset-1' : ''
       const dragging = props.dragging ? 'opacity-80' : ''
-
+      let mainPage: PageDesign = inject('mainPageDesign', null) as any
+      let onDrop = (e: any) => {
+        if (mainPage) {
+          let dragRow = mainPage.getCurrentDragRow() //
+          console.log(dragRow, 'testDragRow') //
+        }
+      } //
+      let onNodeClick = (e: MouseEvent) => {
+        nodeBus.emit('node:click', { id: props.id, event: e, data: props.data }) //
+      }
+      let onDragStart = (config: any) => {
+        let e = config.event //
+        let raw = props.data.raw
+        e.stopPropagation()
+        if (mainPage) {
+          mainPage.setCurrentDragRow({
+            row: raw,
+            from: props,
+          })
+        } //
+      }
+      let onDragEnd = (config: any) => {} //
       return (
         <div
           class={`
             group
-            rounded-2xl shadow-sm border bg-white min-w-[70px] max-w-[100px] max-h-10 overflow-hidden
+            rounded-2xl shadow-sm border bg-white min-w-[70px] max-w-[200px] max-h-10 overflow-hidden
             ${borderBase} ${ring} ${dragging}
           `}
           onDblclick={onNodeDblClick}
@@ -125,11 +148,53 @@ export default defineComponent({
             class="flex items-center justify-between px-3 py-2 rounded-t-2xl"
             style={{ background: headerColor.value, color: '#fff' }}
           >
+            <div
+              class="nodrag cursor-move"
+              draggable="true"
+              onDrop={(config) => {
+                onDrop(config)
+              }}
+              onDragstart={(e) => {
+                onDragStart({
+                  event: e,
+                  direction: 'left',
+                })
+              }}
+              onDragend={(e) => {
+                onDragEnd({
+                  event: e,
+                  direction: 'left',
+                })
+              }}
+            >
+              <span class="vxe-icon-drag-handle"></span>
+            </div>
             <div class="truncate font-medium">
               {props.data?.raw?.wkp_name ?? props.id}
             </div>
             <div class="ml-2 text-xs px-2 py-0.5 rounded-full bg-black/20">
               L{layerText.value}
+            </div>
+            <div
+              class="nodrag cursor-move"
+              draggable="true"
+              onDrop={(config) => {
+                onDrop(config) //
+              }}
+              onDragstart={(e) => {
+                onDragStart({
+                  event: e,
+                  direction: 'right', //
+                }) //
+              }}
+              onDragend={(e) => {
+                onDragEnd({
+                  event: e,
+                  direction: 'right',
+                })
+              }}
+            >
+              <span class="vxe-icon-drag-handle"></span>
             </div>
           </div>
 

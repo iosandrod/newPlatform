@@ -123,6 +123,39 @@ export const mainUse = {
 }
 
 export const editUse = {
+  pageInit: [
+    async (context, next) => {
+      await next() //
+      let instance: PageDesign = context.instance
+      let allTable = instance.getAllTable().map((t) => {
+        return t.config
+      })
+      if (instance.isDesign == true) {
+        return //
+      }
+      for (let ta of allTable) {
+        let tableType = ta.options?.tableType
+        let options = ta.options?.relateConfig //
+        let initGetData = options?.initGetData
+
+        if (tableType == 'relate') {
+          // debugger //
+          if (Boolean(initGetData)) {
+            await instance.getRelateTreeData(ta?.options?.tableName)
+          }
+        }//
+        if (tableType == 'info') {
+          if (Boolean(initGetData)) {
+            let tableName = ta?.options?.tableName
+            if (tableName) {
+              await instance.getTableData(ta?.options?.tableName)
+            }
+          }
+        }
+      }
+      // instance.setCurrentLoading(true) //
+    },
+  ],
   saveTableData: [
     async (context, next) => {
       let instance: PageDesign = context.instance

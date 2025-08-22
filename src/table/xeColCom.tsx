@@ -120,7 +120,14 @@ export default defineComponent({
       let value = record.value[f]
       return value
     }) //
-
+    let dragConfig = null
+    let comType = column.getComType() //
+    if (comType == 'dragCom') {
+      //
+      dragConfig = column.getDragConfig()
+      // console.log(dragConfig)
+    }
+    // console.log(dragConfig,'test_config')//
     const isCurrentRow = computed(() => {
       const tableData = table.tableData
       let curRow = tableData.curRow
@@ -170,6 +177,40 @@ export default defineComponent({
     )
     return () => {
       let com = null
+      let dragCom = null
+      if (dragConfig != null) {
+        dragCom = (
+          <div
+            class="cursor-move"
+            onDrop={(e: DragEvent) => {}}
+            onDragstart={(e: DragEvent) => {
+              table.onColComDragStart({
+                event: e,
+                row: record.value,
+                column,
+              })
+            }}
+            onClick={(e) => {
+              // console.log('node click') //
+              table.onColumnDragClick({
+                event: e,
+                row: record.value,
+                column, //
+              })
+            }}
+            onDragend={(e: DragEvent) => {
+              table.onColComDragEnd({
+                event: e,
+                row: record.value,
+                column,
+              })
+            }} //
+            draggable="true"
+          >
+            拖动
+          </div>
+        ) //
+      }
       if (type == 'checkbox') {
         //
         com = (
@@ -203,18 +244,19 @@ export default defineComponent({
             ref={(el) => {
               registerRoot(el)
             }} //
-            onMousedown={(e: MouseEvent) => {
-              onMouseDown(e) //
-            }}
-            onMouseenter={(e: MouseEvent) => {
-              onMouseenter(e) //
-            }}
+            // onMousedown={(e: MouseEvent) => {
+            //   onMouseDown(e) //
+            // }}
+            // onMouseenter={(e: MouseEvent) => {
+            //   onMouseenter(e) //
+            // }}
             onContextmenu={(e: MouseEvent) => {
               table.onBodyCellContext({ ...config, event: e })
             }}
           >
             {/* {showValue.value} */}
             <div vHtml={showValue.value}></div>
+            {dragCom}
           </div>
         )
         let com0 = com //

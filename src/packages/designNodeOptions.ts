@@ -546,7 +546,7 @@ export const formitemTypeMap = (_this: PageDesign) => {
       ],
       data: computed(() => {
         return _this.state.selected?.options //
-      }),
+      }), //
     }, //
     baseinfo: {
       itemSpan: 24,

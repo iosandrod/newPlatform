@@ -1,5 +1,6 @@
 import { Base } from '@/base/base'
 import { Dropdown } from '@/menu/dropdown'
+import { System } from '@/system'
 import { Table } from '@/table/table'
 import { runObj, stateObj } from '@ER/diabledFn'
 import { MainPageDesign } from '@ER/mainPageDesign'
@@ -7,6 +8,8 @@ import { PageDesign } from '@ER/pageDesign'
 import { stringToFunction } from '@ER/utils'
 
 export class Button extends Base {
+  systemRunFn: any
+  systemDisableFn: any
   config: any
   group: any
   parent: Button
@@ -24,6 +27,31 @@ export class Button extends Base {
     let buttons = config.items || config.children || [] //
     if (buttons.length > 0) {
       this.setSubButtons(buttons) //
+    }
+    let id = config.id
+    let sys: System = this.getSystem() //
+    let paramData = sys.paramData
+    let allBtns = paramData.filter((d) => {
+      return d.cParamNo == id
+    })
+    if (allBtns?.length > 0) {
+      let _btn = allBtns.slice(0, 1).pop()
+      let cValue = _btn.cValue //
+      let _fn = stringToFunction(cValue) //
+      let _obj: any = {}
+      if (typeof _fn == 'function') {
+        try {
+          _obj = _fn()
+        } catch (error) {}
+      }
+      let run = _obj['run']
+      if (typeof run == 'function') {
+        this.systemRunFn = run //
+      }
+      let disabled = _obj['disabled']
+      if (typeof disabled == 'function') {
+        this.systemDisableFn = disabled //
+      }
     }
   }
   setSubButtons(buttons: any[]) {
@@ -205,10 +233,17 @@ export class Button extends Base {
       this.showDropdown() //
       let config = this.config
       let fn = config.fn //
+      let systemRunFn = this.systemRunFn
+      if (typeof systemRunFn == 'function') {
+        if (typeof fn != 'function') {
+          fn = systemRunFn
+        }
+      }
       if (typeof fn == 'function') {
         fn = fn.bind(page)
-        fn(_config)
-      }
+        await fn(_config)
+        return
+      } //
       if (typeof fn == 'string' && Boolean(fn)) {
         let _fn = stringToFunction(fn) //
         if (typeof _fn == 'function') {
@@ -222,9 +257,7 @@ export class Button extends Base {
         if (typeof _fn == 'function') {
           let _fn1 = _fn.bind(page)
           await _fn1(_config) ////
-        }
-        // if (typeof defaultFn == 'string') {
-        // }
+        } //
       }
       if (this.parent != null) {
         this.hiddenDropdown() //

@@ -69,7 +69,7 @@ export default defineComponent({
     })
     return () => {
       const pageHeader = (
-        <header class="w-full bg-white shadow  items-center justify-between px-1 py-2 flex">
+        <header class="w-full bg-blue-400 shadow  items-center justify-between px-1 py-2 flex">
           <div class="md:hidden z-1">
             <i
               onClick={() => {
@@ -121,7 +121,7 @@ export default defineComponent({
 
           {/* 中间：全局搜索 */}
           <div class="flex-1 mx-6">
-            <er-dropdown
+            {/* <er-dropdown
               ref={(el) => systemIns.registerRef('gSearch', el)}
               v-slots={{
                 default: () => (
@@ -149,11 +149,10 @@ export default defineComponent({
                 ),
                 dropdown: () => (
                   <div class="mt-1 w-full bg-white border border-gray-200 rounded shadow-lg">
-                    {/* 下拉内容 */}
                   </div>
                 ),
               }}
-            />
+            /> */}
           </div>
 
           {/* 右侧：头像 + 用户下拉 */}

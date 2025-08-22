@@ -169,6 +169,10 @@ export const initXeContextItems = (table: XeTable) => {
         let sys = table.getSystem()
         let mainD = table.getMainPageDesign() //
         let fConfig = getDFConfig(mainD, _config)
+        let field = curContextCol.getField()
+        //当前编辑字段
+        mainD.currentDField = field
+        mainD.currentDTableName = table.getTableName()//
         let data1 = await sys.confirmForm(fConfig)
         let _dFn = table.config.onDesignColumn
         if (typeof _dFn == 'function') {
@@ -233,12 +237,25 @@ export const initXeContextItems = (table: XeTable) => {
           await onTableDesign(config)
         }
       },
-    },{
-      label:"打印数据",
-      fn:async (config)=>{
-        const data=table.getData()
-        console.log(data,'testData')//
-      }
+    },
+    {
+      label: '打印数据',
+      fn: async (config) => {
+        const data = table.getData()
+        // console.log(data, 'testData') //
+        let data1 //
+        let tableName = table.getTableName()
+        let sql = `SELECT * FROM ss_grid_bs INNER JOIN ss_grid_bh ON ss_grid_bs.grid_id =ss_grid_bh.grid_id WHERE ss_grid_bs.grid_id LIKE 'av_${tableName}'` //
+        let _d = await table.getHttp().runSql(sql) //
+        console.log(_d, 'testData1') //
+      },
+    },
+    {
+      label: '同步编辑',
+      fn: async () => {
+        let tableName = table.getTableName()
+        let editItems = [] //
+      }, //
     },
     {
       label: '同步列',
@@ -260,6 +277,7 @@ export const initXeContextItems = (table: XeTable) => {
             let _col = _columns.find((c) => c.field == f)
             if (_col) {
               col.title = _col.title
+              col.hidden = _col.hidden //
             }
           })
           let addCols = _columns.filter((col) => {
@@ -299,7 +317,6 @@ t_ProductModelEntry;
  t_ProductModelBom;
 
 */
-
 
 /* 
 SELECT *FROM "columns" WHERE "tableName"='ss_table_column';

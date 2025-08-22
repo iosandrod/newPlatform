@@ -1,5 +1,6 @@
 import {
   defineComponent,
+  inject,
   nextTick,
   onMounted,
   provide,
@@ -40,6 +41,10 @@ export default defineComponent({
       type: Array,
       default: () => [],
     }, // 表格数据
+    onNodeClick: {
+      type: Function,
+      default: () => {},
+    }, //
     foreignKeys: {
       type: Array,
       default: () => [],
@@ -56,15 +61,11 @@ export default defineComponent({
     } else {
       flow = new TableFlow(props)
     }
-    expose({ _instance: flow })//
+    const mainPage = inject('mainPageDesign', null)
+    // console.log(mainPage, 'testMainPageDesign') //
+    expose({ _instance: flow }) //
     provide('flowIns', flow)
-    // watchEffect(() => {
-    //   flow.refreshNodes()
-    //   flow.refreshEdges()
-    //   setTimeout(() => {
-    //     flow.autoFitView()
-    //   }, 100) //
-    // })
+
     watch(
       () => {
         // let length = 0
@@ -225,6 +226,7 @@ export default defineComponent({
             {leftTable}
             <div class="h-full flex-1 relative">
               <VueFlow
+                noDragClassName="nodrag" //
                 key={flow.id}
                 ref={(instance) => {
                   flow.registerRef('flow', instance) //
@@ -308,7 +310,7 @@ export default defineComponent({
       )
       // return com //
       let com1 = (
-        <div class="h-full flex flex-col w-full ">
+        <div class="h-full flex flex-col w-full">
           <div class="absolute er-h-32"></div>
           <div class="flex-1">{com}</div>
         </div>

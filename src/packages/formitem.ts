@@ -227,7 +227,6 @@ export class FormItem extends Base {
     let _options = this.getOptions()
     let options = _options?.options || []
     if (typeof options == 'function') {
-      // debugger //
       let design = this.form.getMainPageDesign()
       try {
         options = options({
@@ -1321,7 +1320,8 @@ export class FormItem extends Base {
     if (searchEn == null) {
       return //
     }
-    let columns = searchEn.getTableColumns()
+    let showColumns=this.config?.options?.baseinfoConfig?.showColumns||[]
+    let columns = searchEn.getTinyTableColumns(showColumns)//
     let _data = await searchEn.getTinyTableData({})
     this.templateTableConfig.columns = columns
     this.templateTableConfig.data = _data //

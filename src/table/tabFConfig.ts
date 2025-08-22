@@ -149,7 +149,6 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
                   let allNames = page.getAllEntityNames()
                   return allNames //
                 }, //
-                // optionsField: 'ss_table_name', //
               }, //
             },
             {
@@ -179,7 +178,13 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
             {
               field: 'enableEmpty',
               label: '允许为空',
-              type: 'boolean', 
+              type: 'boolean',
+            },
+            {
+              field: 'defaultAdd',
+              label: '默认添加新增函数', //
+              type: 'number',
+              options: {},
             },
           ],
         },
@@ -331,7 +336,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
       },
       {
         field: 'keyCodeColumn',
-        label: '必录字段',//
+        label: '必录字段', //
         tabTitle: titles[0],
         type: 'string',
         options: {

@@ -24,8 +24,7 @@ export default defineComponent({
       flow.addField({
         tableName: props.data.tableName, //
       })
-    }
-
+    }//
     return () => (
       <div class="bg-white border border-gray-300 rounded-md shadow-md w-60">
         {/* 表头 */}

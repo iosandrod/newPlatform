@@ -1,6 +1,8 @@
-import { System } from '@/system'
+import { system, System } from '@/system'
 import { Form } from '@ER/form'
 import { FormItem } from '@ER/formitem'
+import { XeTable } from './xetable'
+import { editPageDesign } from '@ER/editPageDesign'
 const enableTypes = [
   'string',
   'number',
@@ -13,7 +15,43 @@ const enableTypes = [
   'cascader',
   'region',
 ]
+export const getExtendConfig = (_this, tableName) => {
+  return {
+    itemSpan: 12,
+    items: [
+      {
+        field: 'comType',
+        type: 'select',
+        label: '组件类型',
+        options: {
+          options: [
+            {
+              label: '拖拽组件',
+              value: 'dragCom', //
+            },
+          ],
+        },
+      },
+      {
+        field: 'dragConfig', //
+        type: 'sform',
+        label: '拖拽配置', //
+        options: {
+          itemSpan: 12,
+          items: [
+            {
+              field: 'dragFn',
+              type: 'code',
+              label: '拖拽函数', //
+            },
+          ],
+        }, //
+      }, //
+    ],
+  }
+}
 export const getBaseInfoEditConfig = (_this, tableName) => {
+  let name1 = ''
   return {
     itemSpan: 12,
     items: [
@@ -44,8 +82,53 @@ export const getBaseInfoEditConfig = (_this, tableName) => {
             }
             col1.tableName = data.tableName
             col0.tableName = tableName
+            name1 = tableName
             return //
           },
+          buttons: [
+            {
+              label: '自动关联',
+              fn: async (config) => {
+                // debugger//
+                let _this1: System = _this
+                let currentDesignName = _this1.currentDesignName
+                let design: any = _this1 //
+                if (_this1.getDesignByTableName) {
+                  design = _this1.getDesignByTableName(currentDesignName) as any //
+                }
+                let currentField = design.currentDField
+                // let realTableName = design.getRealTableName()
+                let sql = `SELECT * FROM ss_table_column WHERE ss_table_column.table_id LIKE 'av_${name1}' AND column_id LIKE '${currentField}'` //
+                let _data1 = await _this1.getHttp().runSql(sql) //
+                console.log(sql)
+                if (_data1?.length > 0) {
+                  let row = _data1[0]
+                  let ref_field_name = row['ref_field_name']
+                  if (!Boolean(ref_field_name)) {
+                    return
+                  }
+                  let _names = ref_field_name.split(',') //
+                  let _arr = _names.map((row) => {
+                    return {
+                      key: row,
+                      targetKey: row,
+                    }
+                  })
+                  let table = config.parent
+                  let data = table.getData()
+                  if (Array.isArray(data)) {
+                    _arr = _arr.filter((row) => {
+                      if (data.find((item) => item.key == row.key)) {
+                        return false
+                      }
+                      return true
+                    })
+                    data.push(..._arr) //
+                  }
+                }
+              },
+            },
+          ],
           showTable: false, //
           tableTitle: '绑定参照表',
           tableState: 'edit',
@@ -193,6 +276,26 @@ export const getDFConfig = (_this, data, tableName1?: any) => {
         },
       },
       {
+        field: 'fixed',
+        label: '是否冻结', //
+        tabTitle: titles[0],
+        type: 'select',
+        options: {
+          options: [
+            {
+              label: '左侧',
+              value: 'left',
+            },
+            {
+              label: '右侧',
+              value: 'right',
+            },
+          ],
+        },
+      }, //
+      // {
+      // },
+      {
         field: 'tree',
         label: '是否树形',
         tabTitle: titles[0],
@@ -321,6 +424,13 @@ export const getDFConfig = (_this, data, tableName1?: any) => {
         options: getBaseInfoEditConfig(_this, tableName), //
       },
       {
+        field: 'extendConfig',
+        type: 'sform',
+        label: '扩展配置',
+        tabTitle: titles[0],
+        options: getExtendConfig(_this, tableName),
+      },
+      {
         field: 'optionsField',
         label: '下拉字段配置', //
         tabTitle: titles[1],
@@ -438,6 +548,8 @@ export const getDCConfig = (_this: any, config) => {
         label: '关联列',
         fn: async (config) => {
           // debugger //
+          let _table = config.table
+          // let _tableName = _table.getTableName()
           let sys: System = _this.getSystem()
           let allTables = await sys.getAllTables()
           const fConfig = {
@@ -498,6 +610,7 @@ export const getDCConfig = (_this: any, config) => {
           } //
           checkCols.forEach((col) => {
             col._rowState = 'add' //
+            col.tableName = data.tableName
           })
 
           _data1.push(...checkCols) //
@@ -602,3 +715,15 @@ export const getDCConfig = (_this: any, config) => {
   }
   return dConfig
 }
+/* 
+'crt_time',
+'crt_user',
+'crt_user_no',
+'crt_user_name',
+'crt_host',
+'upd_time',
+'upd_user',
+'upd_user_no',
+'upd_user_name',
+'upd_host',
+*/

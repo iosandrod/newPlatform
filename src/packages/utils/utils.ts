@@ -98,6 +98,9 @@ export function stringToFunction<T extends (...args: any[]) => any>(
   str: string,
   params: string[] = [],
 ): T | null {
+  if (!Boolean(str)) {
+    return
+  }
   try {
     if (!str.trim()) {
       return null

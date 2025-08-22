@@ -52,7 +52,6 @@ export class editPageDesign extends PageDesign {
     let curRow = addConfig?.curRow || {}
     let row = addConfig?.row || {}
     curRow = { ...curRow, ...row }
-    console.log('添加主表以及子表')
     let defaultV = await this.getDefaultValue(this.getTableName()) //
     defaultV = { ...defaultV, ...curRow } //
     let tableConfig = this.getTableRefData(this.getTableName()) //
@@ -61,7 +60,7 @@ export class editPageDesign extends PageDesign {
     let allDetailTable = this.getAllDetailTable()
     let tref = allDetailTable //
     for (const ta of tref) {
-      await ta.addRows({ num: 10, reset: true })
+      await ta.addRows({  reset: true })
     }
   }
   @useHooks((config) => {
@@ -82,8 +81,7 @@ export class editPageDesign extends PageDesign {
     return config
   })
   async getTableData(config?: any) {
-    let tableName = config.tableName || this.getRealTableName() //
-    // let rTableName = this.getRealTableName()
+    let tableName = config.tableName || this.getRealTableName()
     let rTableName = tableName //
     let http = this.getHttp()
     let getDataConfig = config
@@ -122,8 +120,6 @@ export class editPageDesign extends PageDesign {
     query = { ...query, ..._query }
     let tableState = this.tableState //
     if (tableState == 'add' && Object.keys(query).length == 0) {
-      //
-      //
       this.getSystem().confirmMessage('当前单据是新增', 'warning') //
       return
     }
@@ -136,12 +132,14 @@ export class editPageDesign extends PageDesign {
           [keyColumn]: _keyValue,
         }
       }
-    } //
-    if (Object.keys(query).length == 0) {
+    }
+    let tableConfig = this.getTableConfig(tableName)
+    let tableType = tableConfig.tableType
+    if (Object.keys(query).length == 0 && tableType != 'info') {
+      //
       this.getSystem().confirmMessage('未设置查询条件', 'error')
       return //
     } //
-    let tableConfig = this.getTableConfig(tableName)
     let dataSource = tableConfig.dataSource || {} //
     let _t = tableName
     let config1: any = {}
@@ -280,7 +278,7 @@ export class editPageDesign extends PageDesign {
               )
               throw new Error(`子表${tableName}请添加数据`) //
             }
-          }//
+          } //
         }
         _d = [..._d, ...deleteData] //
 
@@ -383,6 +381,13 @@ export class editPageDesign extends PageDesign {
     await this.setCurrentDesignState('edit')
   }
   async syncErpCols() {
+    if (1 == 1) {
+      //
+      let sql1 = `SELECT ss_edit_form_b.*,ss_table_column.* FROM ss_edit_form_b INNER JOIN ss_table_column ON ss_edit_form_b.column_id=ss_table_column.column_id AND ss_edit_form_b.edit_form_id = ss_table_column.table_id WHERE 1=1 AND ss_edit_form_b.edit_form_id LIKE 'av_${this.getRealTableName()}';`
+      let _data1 = await this.getHttp().runSql(sql1)
+      console.log(_data1) //
+      return
+    }
     let oldTableColumn = await this.getSystem().getOldErpTableColumns(
       this.getRealTableName(),
     ) //
@@ -479,5 +484,53 @@ export class editPageDesign extends PageDesign {
         options.layoutData = layout //
       })
     })
+  }
+  async syncGridItems() {
+    let realTableName = this.getRealTableName()
+    let sql1 = `SELECT ss_edit_form_b.*,ss_table_column.* FROM ss_edit_form_b INNER JOIN ss_table_column ON ss_edit_form_b.column_id=ss_table_column.column_id AND ss_edit_form_b.edit_form_id = ss_table_column.table_id WHERE 1=1 AND ss_edit_form_b.edit_form_id LIKE 'av_${this.getRealTableName()}';`
+    let http = this.getHttp() //
+    let _data = await http.runSql(sql1) //
+    let toFormItem = (item) => {
+      let data_type = item.data_type
+      if (data_type == 'text') {
+        data_type = 'string' //
+      }
+      if (data_type == 'timestamp without time zone') {
+        data_type = 'datetime' //
+      }
+      let obj: any = {
+        label: item.column_id, //
+        type: data_type,
+        field: item.column_id,
+        options: {}, //
+      }
+      if (item.ref_table != null && item.ref_table?.length > 0) {
+        obj.type = 'select'
+        obj.options.optionsField = item.ref_table //
+      } //
+      return obj //
+      // return obj
+    }
+    let items = _data.map((item) => toFormItem(item)) //
+    let currentF = this.curFormItem
+    let select = this.state.selected
+    let id = select.id
+    let _item = this.items.find((item) => item.id == id)
+    // console.log(_item, 'test_item') //
+    if (_item == null) {
+      return
+    }
+    let type = _item.getType()
+    if (type != 'dform') {
+      return
+    }
+    let formIn = _item.getRef('fieldCom')
+    // console.log(formIn, 'testIn') //
+    if (formIn == null) {
+      return
+    }
+    formIn.setItems(items) //
+    /*
+     */
   }
 }

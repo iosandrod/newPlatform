@@ -49,6 +49,8 @@ interface Filter {
   value: any
 }
 export class PageDesign extends Form {
+  pageDragConfig: any = {} //
+  currentDTableName: any
   isEdit = false
   timeout: any = {}
   isConfirm = false //
@@ -67,6 +69,35 @@ export class PageDesign extends Form {
     let methods = config?.methods
     let msg = [] ///
     let hookMethods = []
+    let system = this.getSystem()
+    let paramData = system.paramData || []
+    // console.log(paramData, 'test_data') //
+    let systemMethod = paramData.filter((f) => {
+      return f.cParamType == 'globalFunction'
+    })
+    /* 
+    {
+    "cParamNo": "toVueFlow",
+    "cParamName": "模型图转换函数",
+    "cValue": "function toVueFlow(rows, opts = {}) {\r\n    const { idKey = 'unode', nextKey = 'unode_next', layerKey = 'wkn_layer', labelKey = 'wkn', origin = { x: 0, y: 0 }, spacing = { x: 240, y: 160 }, createPhantoms = true } = opts;\r\n    // 建索引\r\n    const byId = new Map();\r\n    for (const r of rows) {\r\n        const id = String(r[idKey]);\r\n        if (!id || id === '-1')\r\n            continue;\r\n        byId.set(id, r);\r\n    }\r\n    // 计算层：优先用显式层；没有则回退\r\n    const explicitLayer = new Map();\r\n    let hasAnyLayer = false;\r\n    for (const r of rows) {\r\n        const id = String(r[idKey]);\r\n        if (!id || id === '-1')\r\n            continue;\r\n        const lv = Number(r[layerKey]);\r\n        if (!Number.isNaN(lv)) {\r\n            hasAnyLayer = true;\r\n            explicitLayer.set(id, lv);\r\n        }\r\n    }\r\n    // 如果没有显式层，做个简单推断：被更多前驱指向的层更深\r\n    const indeg = new Map();\r\n    for (const r of rows) {\r\n        const src = String(r[idKey]);\r\n        const tgt = r[nextKey] != null ? String(r[nextKey]) : '-1';\r\n        if (!src || src === '-1')\r\n            continue;\r\n        if (tgt && tgt !== '-1') {\r\n            indeg.set(tgt, (indeg.get(tgt) ?? 0) + 1);\r\n            if (!indeg.has(src))\r\n                indeg.set(src, indeg.get(src) ?? 0);\r\n        }\r\n    }\r\n    // 初始化层：入度为0的先当作第1层\r\n    if (!hasAnyLayer) {\r\n        const layer = new Map();\r\n        const queue = [];\r\n        for (const id of byId.keys()) {\r\n            if ((indeg.get(id) ?? 0) === 0)\r\n                queue.push(id);\r\n        }\r\n        for (const id of byId.keys()) {\r\n            if (!indeg.has(id))\r\n                queue.push(id);\r\n        }\r\n        for (const id of queue)\r\n            layer.set(id, 1);\r\n        // 传递：source 层已知，则 target 层 = max(target 层, source 层 + 1)\r\n        const visited = new Set();\r\n        const nextsBySrc = new Map();\r\n        for (const r of rows) {\r\n            const s = String(r[idKey]);\r\n            const t = r[nextKey] != null ? String(r[nextKey]) : '-1';\r\n            if (!s || s === '-1' || !t || t === '-1')\r\n                continue;\r\n            const arr = nextsBySrc.get(s) ?? [];\r\n            arr.push(t);\r\n            nextsBySrc.set(s, arr);\r\n        }\r\n        const dfs = (u) => {\r\n            if (visited.has(u))\r\n                return;\r\n            visited.add(u);\r\n            const nu = nextsBySrc.get(u) ?? [];\r\n            for (const v of nu) {\r\n                const lvU = layer.get(u) ?? 1;\r\n                const old = layer.get(v) ?? 1;\r\n                if (lvU + 1 > old)\r\n                    layer.set(v, lvU + 1);\r\n                dfs(v);\r\n            }\r\n        };\r\n        for (const id of queue)\r\n            dfs(id);\r\n        for (const [id, lv] of layer) {\r\n            explicitLayer.set(id, lv);\r\n        }\r\n        hasAnyLayer = true;\r\n    }\r\n    // 收集所有涉及到的 id（包括只出现在 next 的）\r\n    const allIds = new Set(byId.keys());\r\n    for (const r of rows) {\r\n        const tgt = r[nextKey] != null ? String(r[nextKey]) : '-1';\r\n        if (tgt && tgt !== '-1')\r\n            allIds.add(tgt);\r\n    }\r\n    // 若 target 缺失且需要占位\r\n    if (createPhantoms) {\r\n        for (const id of allIds) {\r\n            if (id === '-1')\r\n                continue;\r\n            if (!byId.has(id)) {\r\n                byId.set(id, { [idKey]: id, [labelKey]: id, __phantom: true });\r\n                // 层也给一个：若有前驱则 = max(前驱层)+1，否则 = 1\r\n                let maxPred = 0;\r\n                for (const r of rows) {\r\n                    const s = String(r[idKey]);\r\n                    const t = r[nextKey] != null ? String(r[nextKey]) : '-1';\r\n                    if (t === id && explicitLayer.has(s)) {\r\n                        maxPred = Math.max(maxPred, explicitLayer.get(s));\r\n                    }\r\n                }\r\n                explicitLayer.set(id, (maxPred || 0) + 1);\r\n            }\r\n        }\r\n    }\r\n    // 分层并排序（同层按 labelKey/wkn 排）\r\n    const minLayer = Math.min(...Array.from(explicitLayer.values()));\r\n    const layers = new Map(); // layer -> ids\r\n    for (const id of byId.keys()) {\r\n        const lv = explicitLayer.get(id) ?? minLayer;\r\n        const bucket = layers.get(lv) ?? [];\r\n        bucket.push(id);\r\n        layers.set(lv, bucket);\r\n    }\r\n    for (const [lv, ids] of layers) {\r\n        ids.sort((a, b) => {\r\n            const ra = byId.get(a), rb = byId.get(b);\r\n            const la = String(ra[labelKey] ?? a);\r\n            const lb = String(rb[labelKey] ?? b);\r\n            // 数字优先按数字，比不过再按字符串\r\n            const na = Number(la), nb = Number(lb);\r\n            if (!Number.isNaN(na) && !Number.isNaN(nb))\r\n                return na - nb;\r\n            return la.localeCompare(lb, 'zh-Hans');\r\n        });\r\n        layers.set(lv, ids);\r\n    }\r\n    // 生成 nodes（位置：x 按同层序号、y 按层）\r\n    const nodes = [];\r\n    for (const [lv, ids] of Array.from(layers.entries()).sort((a, b) => a[0] - b[0])) {\r\n        ids.forEach((id, idx) => {\r\n            const r = byId.get(id);\r\n            const label = r[labelKey] ?? id;\r\n            const isPhantom = !!r.__phantom;\r\n            nodes.push({\r\n                id,\r\n                type: 'default',\r\n                position: {\r\n                    x: origin.x + idx * spacing.x,\r\n                    y: origin.y + (lv - minLayer) * spacing.y\r\n                },\r\n                data: { label: String(label), raw: r },\r\n                draggable: true,\r\n                style: isPhantom\r\n                    ? { opacity: 0.6, border: '1px dashed #999', background: '#fafafa' }\r\n                    : undefined\r\n            });\r\n        });\r\n    }\r\n    // 生成 edges（去重）\r\n    const edgeSet = new Set();\r\n    const edges = [];\r\n    for (const r of rows) {\r\n        const s = String(r[idKey]);\r\n        const t = r[nextKey] != null ? String(r[nextKey]) : '-1';\r\n        if (!s || s === '-1' || !t || t === '-1')\r\n            continue;\r\n        const id = `${s}→${t}`;\r\n        if (edgeSet.has(id))\r\n            continue;\r\n        edgeSet.add(id);\r\n        edges.push({\r\n            id,\r\n            source: s,\r\n            target: t,\r\n            type: 'smoothstep',\r\n            animated: false,\r\n            label: r.wkn_next ?? '',\r\n            markerEnd: { type: 'arrowclosed' }\r\n        });\r\n    }\r\n    return { nodes, edges };\r\n}",
+    "Remark": null,
+    "cModule": null,
+    "cParamType": "globalFunction",
+    "iInterID": 3667,
+    "cDefaultValue": null
+}
+    */
+    if (Array.isArray(systemMethod) && systemMethod.length > 0) {
+      for (const row of systemMethod) {
+        //
+        let name = row.cParamNo //
+        let code = row.cValue //
+        let _fn = stringToFunction(code) //
+        if (typeof _fn == 'function') {
+          this[name] = _fn.bind(this) //
+        }
+      }
+    }
     if (Array.isArray(methods) && methods.length > 0) {
       // debugger//
       for (let method of methods) {
@@ -94,7 +125,7 @@ export class PageDesign extends Form {
         } catch (error) {}
       }
     }
-  }
+  } //
   init(): void {
     let _props = getDefaultPageProps() //
     let config = this.config
@@ -481,6 +512,32 @@ export class PageDesign extends Form {
       }
     } //
     return obj1
+  }
+  getTinyTableColumns(cols) {
+    //
+    let tableIns = null //
+    let columns = []
+    if (tableIns != null) {
+      columns = tableIns.getColumns().map((col) => {
+        let config = col.config
+        return config
+      }) //
+    } else {
+      columns = this.getTableConfig().columns
+    }
+    if (Array.isArray(columns)) {
+      if (Array.isArray(cols) && cols?.length > 0) {
+        //
+        columns = columns.filter((col) => {
+          let field = col.field
+          return cols.includes(field)
+        })
+        return columns
+      } else {
+        return columns
+      }
+    } //
+    return []
   }
   getTableColumns(tableName = this.getTableName(), isClass = false) {
     // let tableIns = this.getRef(tableName)
@@ -1023,12 +1080,12 @@ export class PageDesign extends Form {
           if (cf == null) {
             return
           }
+          let _tableName = this.getTableName()
+          this.getSystem().currentDesignName = _tableName
           let _cols = this.getTableColumns() //
-          // console.log(_cols.map((col) => col.field)) //
           let column = _cols.find((col) => {
             return col.field == cf
           })
-          // console.log(column, 'testColumn') //
           if (column == null) {
             return
           } //
@@ -1404,7 +1461,6 @@ export class PageDesign extends Form {
   }
 
   async updateTableColumn(config, refresh = true) {
-    // debugger//
     let tableName = this.getRealTableName()
     if (Array.isArray(config)) {
     } else {
@@ -2199,5 +2255,21 @@ export class PageDesign extends Form {
       }
     })
     return nodes //
+  }
+  getCurrentDragRow() {
+    let pageDragConfig = this.pageDragConfig
+    let row = pageDragConfig.row
+    return row //
+  }
+  setCurrentDragRow(config) {
+    let row = config.row
+    let options = config.from //
+    this.pageDragConfig.row = row //
+    this.pageDragConfig.from = options //
+  }
+  onFlowNodeClick(config) {
+    let event = config.event //
+    let row = config.row //
+    this.pageDragConfig.nodeData = row //
   }
 }

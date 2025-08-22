@@ -1608,4 +1608,26 @@ export class XeTable extends Base {
     data[index2] = row1 //
     return
   }
+  onColComDragStart(config: any) {
+    let design = this.getMainPageDesign()
+    // console.log('开始拖拽',design)//
+    let row = config.row //
+    let _row = JSON.parse(JSON.stringify(row)) //
+    let _config = this.config
+    if (design) {
+      //
+      design.setCurrentDragRow({
+        row: _row,
+        from: _config,
+      })
+    } //
+  }
+  onColComDragEnd(config: any) {}
+  onColumnDragClick(config) {
+    //
+    let onColumnDragClick = this.config.onColumnDragClick
+    if (typeof onColumnDragClick == 'function') {
+      onColumnDragClick(config) //
+    }
+  }
 }

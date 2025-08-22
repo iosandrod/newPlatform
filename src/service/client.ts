@@ -14,7 +14,7 @@ import {
 } from '@feathersjs/authentication'
 import { nextTick } from 'vue'
 import axios, { AxiosInstance } from 'axios'
-import { reject } from 'lodash'
+import _, { reject } from 'lodash'
 export const defaultStorage: any = getDefaultStorage()
 const defaults: AuthenticationClientOptions = {
   header: 'Authorization',
@@ -37,6 +37,10 @@ if (userid != null) {
     system.setLocalItem('userid', userid)
   })
 }
+// let _host1 = '192.168.137.9'
+let _host1='localhost'//
+let _port1 = '3031'
+//
 export const createAxios = async (config) => {
   let _appName = localStorage.getItem('appName')
   let _userid = localStorage.getItem('userid') //
@@ -63,7 +67,7 @@ export const createAxios = async (config) => {
   if (appName != null && userid != 'undefined' && userid != null) {
     _key = `/${appName}_${userid}`
   }
-  let baseUrl = `http://${'localhost:3031'}` //
+  let baseUrl = `http://${_host1}:${_port1}` // //
   let _base = import.meta.env.VITE_BASEURL
   let isProd = import.meta.env.VITE_ENVIRONMENT
   if (isProd == 'production') {
@@ -182,7 +186,7 @@ export const createClient = async (config) => {
   if (appName != null && userid != 'undefined' && userid != null) {
     _key = `/${appName}_${userid}`
   }
-  let baseUrl = `http://${'localhost:3031'}` //
+  let baseUrl = `http://${_host1}:${_port1}` //
   let _base = import.meta.env.VITE_BASEURL
   let isProd = import.meta.env.VITE_ENVIRONMENT
   if (isProd == 'production') {
@@ -237,10 +241,15 @@ export class myHttp {
     this.init()
   } //
   async initClient() {
-    this.mainAxios = await createAxios({ isMain: true }) 
-    this.mainClient = await createClient({ isMain: true }) 
+    this.mainAxios = await createAxios({ isMain: true })
+    this.mainClient = await createClient({ isMain: true })
     this.axios = await createAxios({})
     this.client = await createClient({})
+    nextTick(async () => {
+      try {
+        await system.initSystemParams()
+      } catch (error) {}
+    })
   }
   async changeClient(config) {
     let appName = config.appName
@@ -364,7 +373,7 @@ export class myHttp {
         return res
       } catch (error) {
         // debugger //
-        if(error?.name=='NotAuthenticated'){
+        if (error?.name == 'NotAuthenticated') {
           system.confirmMessage('请先登录', 'error') //
         }
         return Promise.reject(error) //
@@ -433,7 +442,7 @@ export class myHttp {
     // return _data
     let _data = await this.runCustomMethod(tableName, 'getTableData', {
       query,
-      ...config,  
+      ...config,
     })
     return _data //
   }
@@ -585,6 +594,12 @@ export class myHttp {
     let baseUrl = client.get('baseUrl')
     return baseUrl
   } //
+  async runSql(sql) {
+    let _res = await this.post('users', 'runSql', {
+      sql,
+    }) //
+    return _res //
+  }
 }
 
 // export const http = new myHttp()

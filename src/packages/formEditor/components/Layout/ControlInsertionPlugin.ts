@@ -336,8 +336,9 @@ function ControlInsertionPlugin(ER: Form) {
       const { dragEl, target } = e //
       // 获取拖拽元素的真实DOM结构
       let oldEl = getDragElement(dragEl)
-      // 判断当前拖拽的元素是否是 'block' 类型
-      // console.log(oldEl,'testOld')//
+      setTimeout(() => {
+        ER.deleteOnlyGrid()
+      }, 200);
       let isBlock =
         _.get(e, 'activeSortable.options.dataSource', false) === 'block'
       if (isBlock) {

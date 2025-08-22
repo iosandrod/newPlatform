@@ -197,6 +197,9 @@ export default defineComponent({
     onDesignColumn: {
       type: Function,
     }, //
+    onColumnDragClick:{
+      type: Function,
+    },//
     onBeforeEditCell: {
       type: Function,
     },

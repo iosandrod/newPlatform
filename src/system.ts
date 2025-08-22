@@ -48,6 +48,11 @@ const staticComMap = {
   platform: platfomrStaticCom,
 }
 export class System extends Base {
+  constructor() {
+    super()
+  }
+  currentDesignName:any
+  paramData: any
   isError = false
   currentPlatform = 'pc' //
   _keyboardListeners: any[] = []
@@ -107,11 +112,21 @@ export class System extends Base {
     this.clearCacheValue('getMenuData')
     await this.getMenuData()
   }
-  init() {
-    super.init() //
+  async init() {
+    super.init()
+    // await this.initSystemParams()
   }
   getCurrentShowPage() {}
   buildMenuTree(rows) {}
+  async initSystemParams() {
+    try {
+      let http = this.getHttp()
+      let params = await http.find('t_ParamValue') //
+      this.paramData = params
+    } catch (error) {
+      console.error(error) //
+    }
+  }
   getClient(): myHttp {
     return this.getHttp() //
   }
@@ -946,7 +961,11 @@ export class System extends Base {
         return //
       }
       let http = this.getHttp() //
-      await http.changeClient({
+      // await http.changeClient({
+      //   userid,
+      //   appName: currentApp,
+      // })
+      this.changeHttpClient({
         userid,
         appName: currentApp,
       })
@@ -959,7 +978,7 @@ export class System extends Base {
     }
     let h = this.getHttp()
 
-    let _res = await h.loginUser(data) //
+    let _res = await h.loginUser(data)
     return _res //
   }
 
@@ -1253,9 +1272,18 @@ export class System extends Base {
             showRowSeriesNumber: true, //
             tableTitle: '方法',
             tableState: 'edit',
+            buttons: [
+              {
+                label: '系统方法',
+                fn: async () => {},
+              },
+              {
+                label: '删除',
+                fn: () => {},
+              },
+            ],
             columns: [
               {
-                //
                 field: 'name',
                 title: '方法名称',
                 editType: 'string',
@@ -1285,7 +1313,7 @@ export class System extends Base {
                 title: '方法代码',
                 editType: 'code',
                 tableName: tableName, //
-              },
+              }, //
             ],
             showTable: true,
           }, //
@@ -1526,6 +1554,14 @@ export class System extends Base {
           this.refreshPageDesign() //
         },
       },
+      {
+        label: '同步就编辑页数据',
+        fn: async () => {
+          let pageDesign = this.getCurrentPageDesign()
+          //@ts-ignore
+          await pageDesign.syncGridItems() //
+        },
+      },
     ]
     return _items //
   }
@@ -1679,6 +1715,7 @@ export class System extends Base {
     }
     let http = this.getHttp()
     http.changeClient(config) //
+    this.initSystemParams()
   }
   async getAllRegisterCompany() {
     let http = this.getHttp()
