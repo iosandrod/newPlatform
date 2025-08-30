@@ -83,6 +83,7 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
     'platform',
     'relateConfig',
     'dataSource', //
+    'pagination', //
   ] //
   /* 
     'initGetData',
@@ -182,10 +183,15 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
             },
             {
               field: 'defaultAdd',
-              label: '默认添加新增函数', //
+              label: '新增默认数', //
               type: 'number',
               options: {},
-            },
+            },{
+              field:"relateSearchField",//
+              label:"关联查询字段",
+              type:"string",
+              options:{}//
+            }
           ],
         },
       },
@@ -361,6 +367,63 @@ export const getDesignTableConfig = (item: PageDesignItem) => {
           ],
         },
         tabTitle: titles[0], //
+      },
+      {
+        field: 'pagination',
+        label: '扩展配置',
+        type: 'sform',
+        tabTitle: titles[0],//
+        options: {
+          items: [
+            {
+              field: 'pageSize',
+              label: '分页大小',
+              type: 'select',
+              options: {
+                options: [
+                  {
+                    label: '10条',
+                    value: 10,
+                  },
+                  {
+                    label: '100条',
+                    value: 100,
+                  },
+                  {
+                    label: '1000条',
+                    value: 1000,
+                  },
+                  {
+                    label: '5000条',
+                    value: 5000,
+                  },
+                  {
+                    label: '10000条',
+                    value: 10000,
+                  },
+                  {
+                    label: '100000条',
+                    value: 100000, //
+                  },
+                  {
+                    label: '无限制',
+                    value: 0, //
+                  },
+                ],
+              },
+            },
+            {
+              field: 'show',
+              label: '是否显示',
+              type: 'boolean',
+            },
+            {
+              field: 'showGlobalSearch',
+              label: '全局搜索',
+              type: 'boolean', //
+            },
+          ], //
+        },
       },
       {
         field: 'relateConfig',

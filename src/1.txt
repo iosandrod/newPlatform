@@ -17467,3 +17467,60 @@ let isCurrentEdit = computed(() => {
     //   ref_field_name: 'status_name',
     //   column_seq: 200,
     // }
+
+     // let modelValue = this.getModelValue()
+      // if (modelValue != null) {
+      //   this.searchValue = modelValue
+      // } else {
+      //   this.searchValue = '' //
+      // }
+
+       // com = (
+      //   <div class="er-w-500">
+      //     <ganttCom></ganttCom>
+      //   </div>
+      // )
+      // com = <FlowCom nodes={nodeData.nodes} edges={nodeData.edges}></FlowCom>
+      // com = (
+      //   <div class="flex items-center justify-center w-full h-full">
+      //     <div class="overflow-hidden er-h-40">
+      //       <erPager></erPager>
+      //     </div>
+      //   </div>
+      // )
+      // com = <inputCom></inputCom>
+      // com = (
+      //   <erXeTable
+      //     showGlobalSearch={true}
+      //     {...tConfig}
+      //     enableDragRow={true}
+      //     treeConfig={null}
+      //   ></erXeTable>
+      // ) //
+
+
+      前缀说明 / 注释
+af_ss_* 系统支撑 (System Support)：表单、表格、界面、编号规则、用户/权限、语言、动态 SQL、消息通知、表结构管理。 
+af_me_* 制造执行 (MES)：完工反馈 (fb)、SN/批次/打包、领料/退料、在制品 (WIP) 移动、人员绩效、手持 PDA 校验、窗口查询。 
+af_mo_* 生产订单 (MO)：导入、确认/反确认、锁定/解锁排程、树结构重建、RMB（工单物料）处理、触发器、校验、排程对接。 
+af_wm_* 仓储库存 (WMS)：入库/出库、移库、盘点、包装规则/绑定、SN 校验、生产投料与完工入库、数量查询。 
+af_sr_* 采购/供应 (SRM)：采购到货、暂收、不良退货、供应商 SN 校验与提交、采购单/供应商导入、抛转到发运。 
+af_cr_* 客户/销售 (CRM)：客户资料、销售订单、发运、SN 校验与保存、年周预测、只读用户同步、项目任务生成、对接 K3Cloud。 
+af_pd_* 产品主数据 (PDM/BOM/工艺)：物料、工艺、BOM 导入与校验，工序/工位规则，治具校验，BOM 树重建。 
+af_ps_* 计划/排程 (APS/MPS/MRP)：生产日历、能力、MRP、排程任务、工单抛转、排程检查，前后置触发器。 
+af_qm_* 质量 (QMS)：批次初始化、抽样检验、不良原因库、质量单保存/汇总、SN 校验。 
+af_da_* 数据采集 (DA = Data Acquisition)：采集动作 (act)、采集栈管理、刀具寿命、换线/换工具、采集数据回写。 
+af_ea_* 设备活动/异常 (EA = Equipment Activity)：任务清理、异常导入、批次导入、原因库。 
+af_collect_* 采集辅助：采集动作栈操作、工序前后关系、班次、是否存在关闭动作。 
+af_tool_* 工具/治具：治具台账、寿命周期、销售/使用预测、导入/触发器。 
+af_form_* 前端表单/界面：MES/WM/QA 窗口的数据查询函数（如质量原因、工单列表）。 
+af_win_* 窗口 (Win)：常见于查询窗口（MO 列表、原因码、库存）。 
+p_* 过程 (Procedure 类函数)：大量 Excel 导入、IO 导入、BOM 导入、批处理更新（p_import_bom、p_excel_import_、p_update_）。 
+ap_* 应用过程 (Application Process)：APS/MES/WMS 的自动流程/测试过程，带接口/测试用。 
+before_ / after_* 流程钩子 (Trigger-like)：排程、APS/APM 执行、MES 完工入库等前后置检查或回写。 
+uuid_* UUID 扩展：生成 UUID v1/v4/v5 等。 
+dblink_* 跨库访问：dblink 扩展函数，远程查询、连接管理。 
+crosstab* 交叉表 (Pivot)：来自 tablefunc 扩展。 
+gin_trgm* / gtrgm* pg_trgm 扩展：三元组索引，相似度计算。 
+pldbg* PL/pgSQL 调试：断点、调试监听。 
+postgres_fdw* FDW 外部数据封装：Postgres 外部表连接管理。 

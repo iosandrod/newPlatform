@@ -35,7 +35,7 @@ export class Select extends Base {
     let oldS = this.searchValue
     if (oldS.length > 0 && value.length == 0) {
       this.showSearchValue = true //
-    }
+    } //
     let config = this.config
     let onChange = config.onChange
     if (typeof onChange == 'function') {
@@ -55,7 +55,12 @@ export class Select extends Base {
     return isShow //
   }
   onChange(value) {
-    //
+    // debugger //
+    let config = this.config
+    let onChange = config.onChange
+    if (typeof onChange == 'function') {
+      onChange(value)//
+    } //
   }
   getCurrentPanelShow() {
     let reg: VxeSelectInstance = this.getRef('select')
@@ -65,26 +70,16 @@ export class Select extends Base {
   onVisibleChange(visible) {
     this.panelVisible = visible
     if (visible == false) {
-      // let modelValue = this.getModelValue()
-      // if (modelValue != null) {
-      //   this.searchValue = modelValue
-      // } else {
-      //   this.searchValue = '' //
-      // }
       this.searchValue = '' //
       this.showSearchValue = false
-    }
-    // nextTick(() => {
-    //   //什么时候把modelValue改了呢
-    //   console.log(this, this.getModelValue()) //
-    // })
+    } //
   }
   getOptions() {
     let config = this.config
     let options = config.options
     if (!Array.isArray(options)) {
       options = [] //
-    } 
+    }
     let searchValue = this.searchValue
     options = [...options, ...this.templateOptions] //
     if (searchValue != null && searchValue.length > 0) {
@@ -96,7 +91,7 @@ export class Select extends Base {
     }
     return options //
   }
-  
+
   getAllowCreate() {
     let config = this.config
     let allowCreate = config.allowCreate
@@ -108,7 +103,7 @@ export class Select extends Base {
       return
     }
     let templateOptions = this.templateOptions
-    templateOptions.unshift({ label: templateValue, value: templateValue }) //
+    templateOptions.unshift({ label: templateValue, value: templateValue })
     this.onChange({ value: templateValue }) //
     this.templateValue = ''
   }

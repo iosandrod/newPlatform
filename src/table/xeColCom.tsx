@@ -18,6 +18,7 @@ import CheckboxCom from '@/checkbox/checkboxCom'
 import { ClickOutside } from 'element-plus'
 import TableInput from './editor/tableInput'
 import XeTableInput from './editor/xeTableInput'
+import { position } from 'html2canvas/dist/types/css/property-descriptors/position'
 
 export default defineComponent({
   name: 'XeColCom',
@@ -104,6 +105,49 @@ export default defineComponent({
     function onMouseDown(e: MouseEvent) {
       table.onCellMousedown({ ...config, event: e })
     }
+    const setMergeStyle = () => {
+      let mergeConfig = table.mergeConfig //
+      let _index = record.value._index
+      let field = column.getField()
+      let _config = mergeConfig[`${_index}_${field}`] //
+      if (_config == null) {
+        return
+      } //
+      if (root.value == null) {
+        return //
+      }
+      let _style = {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: '100%',
+        zIndex: 1,
+      }
+      let { rowSpan, colSpan } = _config
+      if (rowSpan > 1) {
+        let height = table.getCellHeight()
+        let _height = height * rowSpan
+        _style['height'] = _height + 'px!important'
+      }
+      let _r1: HTMLDivElement = root.value
+      let parent = _r1.parentElement
+      let pparent = parent.parentElement
+      /* 
+      height: 30px;height: 60px;position: absolute;left: 0;top: 0;width: 100%;z-index: 1;
+      */
+      // if (pparent == null) {
+      //   return //
+      // }
+      // let ppparent = pparent.parentElement
+      // if (ppparent == null) {
+      //   return //
+      // }
+      // Object.entries(_style).forEach(([key, value]) => {
+      //   if (pparent) {
+      //     pparent.style[key] = value
+      //   } //
+      // }) //
+    }
     function onMouseenter(e: MouseEvent) {
       table.onCellMouseEnter({ ...config, event: e }) //
     }
@@ -129,22 +173,26 @@ export default defineComponent({
     }
     // console.log(dragConfig,'test_config')//
     const isCurrentRow = computed(() => {
+      // if (table.getTableName() == 'pd_rmb_eag') {
+      //   // 处理特定表格的逻辑
+      //   debugger//
+      // }//
       const tableData = table.tableData
       let curRow = tableData.curRow
-      if (curRow?.['_index'] == record.value['_index']) {
+      if (curRow?.['_index'] == record.value?.['_index']) {
         return true
-      }
+      } //
       return false //
     })
     const registerRoot = (el) => {
       root.value = el
       if (root.value == null) {
         return
-      } //
+      }
+      setMergeStyle() //
       addCurRowClass(isCurrentRow.value)
     }
     const addCurRowClass = (bool) => {
-      //
       if (root.value == null) {
         return
       }
@@ -243,13 +291,7 @@ export default defineComponent({
             style={style} //
             ref={(el) => {
               registerRoot(el)
-            }} //
-            // onMousedown={(e: MouseEvent) => {
-            //   onMouseDown(e) //
-            // }}
-            // onMouseenter={(e: MouseEvent) => {
-            //   onMouseenter(e) //
-            // }}
+            }}
             onContextmenu={(e: MouseEvent) => {
               table.onBodyCellContext({ ...config, event: e })
             }}

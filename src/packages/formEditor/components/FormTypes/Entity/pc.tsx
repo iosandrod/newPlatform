@@ -114,6 +114,11 @@ export default defineComponent({
     })
     let _show = ref(false)
     let height = ref(0)
+    let showGlobalSearch = Boolean(item.config.options?.pagination?.showGlobalSearch) //
+    // console.log(item.config.options?.pagination)
+    // if (showGlobalSearch) {
+    //   debugger //
+    // }
     onMounted(() => {
       let fOutCom = item.getRef('fieldOutCom')
       if (fOutCom == null) {
@@ -179,8 +184,9 @@ export default defineComponent({
               ...config,
               tableName,
               item: item,
-            }) //
+            }) // 
           }}
+          showGlobalSearch={showGlobalSearch}//
           curRow={item.getPageCurRow()}
           contextItems={item.getContextItems()}
           treeConfig={item.getTreeConfig()}
@@ -202,6 +208,9 @@ export default defineComponent({
           data={data.value}
           onHeaderContextmenu={openDesignHeader}
           columns={columns.value}
+          onColumnDragClick={(config) => {
+            item.onColumnDragClick(config)
+          }}
           onDesignColumn={(config, col, refresh) => {
             let itemName = item.getTableName()
             let mainTableName = _design.getRealTableName()

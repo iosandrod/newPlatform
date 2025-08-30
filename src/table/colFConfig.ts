@@ -44,6 +44,11 @@ export const getExtendConfig = (_this, tableName) => {
               type: 'code',
               label: '拖拽函数', //
             },
+            {
+              field: 'dragClick',
+              type: 'code',
+              label: '点击函数', //
+            },
           ],
         }, //
       }, //
@@ -608,9 +613,10 @@ export const getDCConfig = (_this: any, config) => {
           if (checkCols.length == 0) {
             return '请至少选择一个字段' //
           } //
+          let tableName = _this.getTableName()
           checkCols.forEach((col) => {
             col._rowState = 'add' //
-            col.tableName = data.tableName
+            col.tableName = tableName
           })
 
           _data1.push(...checkCols) //

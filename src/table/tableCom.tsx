@@ -149,6 +149,12 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    refreshDataBefore: {
+      type: Function,
+    },
+    refreshDataAfter: {
+      type: Function,
+    }, //
     dragRowFn: {
       type: Function, //
     },

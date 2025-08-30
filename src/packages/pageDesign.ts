@@ -278,6 +278,7 @@ export class PageDesign extends Form {
       }
       return
     }
+    // debugger //
     let _value = curRow?.[mainRelateKey]
     if (_value === '' || _value == null) {
       this.getSystem().confirmMessage(
@@ -286,8 +287,14 @@ export class PageDesign extends Form {
       ) //
       return //
     }
+    let relateSearchField = detailTableConfig?.relateSearchField //
     let query = {
       [relateKey]: curRow[mainRelateKey],
+    }
+    if (Boolean(relateSearchField)) {
+      query = {
+        [relateSearchField]: curRow[mainRelateKey],
+      }
     }
     let tableName = dTableName.tableName ////
     let res = await this.getTableData({
@@ -2271,5 +2278,18 @@ export class PageDesign extends Form {
     let event = config.event //
     let row = config.row //
     this.pageDragConfig.nodeData = row //
+  }
+  async addExtendMethod() {
+    //
+    let fConfig = {
+      items: [
+        {
+          field: 'name',
+          type: 'string',
+          label: '方法名称',
+        },
+      ],
+      itemSpan: 12,
+    }
   }
 }

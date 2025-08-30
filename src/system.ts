@@ -42,6 +42,7 @@ import { globalStaticCom } from './globalStaticCom'
 import xeTableCom from './table/xeTableCom'
 import { XeTable } from './table/xetable'
 import { getDataSourceConfig } from './table/tabFConfig'
+import { color } from './color'
 const staticComMap = {
   erp: staticCom,
   gantt: ganttStaticCom,
@@ -50,8 +51,9 @@ const staticComMap = {
 export class System extends Base {
   constructor() {
     super()
+    this.init()
   }
-  currentDesignName:any
+  currentDesignName: any
   paramData: any
   isError = false
   currentPlatform = 'pc' //
@@ -115,6 +117,9 @@ export class System extends Base {
   async init() {
     super.init()
     // await this.initSystemParams()
+  }
+  changeSystemColor() {
+    color.changeSystemColor() //
   }
   getCurrentShowPage() {}
   buildMenuTree(rows) {}
@@ -464,6 +469,7 @@ export class System extends Base {
       | string,
   ) {
     //
+    // debugger//
     if (typeof config == 'string') {
       config = {
         tableName: config,
@@ -1129,7 +1135,7 @@ export class System extends Base {
           },
         },
         {
-          label: '分页配置',
+          label: '页面配置', //
           field: 'pagination',
           tabTitle: tabTitles[0],
           type: 'sform',
@@ -1177,6 +1183,11 @@ export class System extends Base {
                 field: 'show',
                 label: '是否显示',
                 type: 'boolean',
+              },
+              {
+                field: 'showGlobalSearch',
+                label: '全局搜索',
+                type: 'boolean', //
               },
             ], //
           },
@@ -1531,6 +1542,49 @@ export class System extends Base {
             label: '页面整体设计',
             fn: async () => {
               await this.designCurrentPage() //
+            },
+          },
+          {
+            label: '复制页面元素',
+            fn: async () => {
+              //
+              let pageDesign = this.getCurrentPageDesign()
+              let sql1 = `select "tableName" from entity`
+              let data1 = await this.getHttp().runSql(sql1)
+              let fConfig = {
+                itemSpan: 24,
+                items: [
+                  {
+                    field: 'tableName',
+                    label: '页面',
+                    type: 'select',
+                    options: {
+                      options: data1.map((d) => {
+                        return {
+                          label: d.tableName,
+                          value: d.tableName,
+                        }
+                      }),
+                    },
+                  },
+                ], //
+              }
+              let d = await this.confirmForm(fConfig) //
+              let tName = d.tableName //
+              if (tName == null) {
+                return
+              }
+              let _en = await this.getHttp().find('entity', {
+                tableName: tName,
+              })
+              let row = _en[0]
+              let _config = pageDesign.config
+              Object.entries(row).forEach(([key, value]) => {
+                if (!['tableName', 'id'].includes(key)) {
+                  _config[key] = value
+                }
+              }) //
+              await pageDesign.updateTableDesign(_config) //
             },
           },
         ],

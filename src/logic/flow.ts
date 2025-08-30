@@ -47,14 +47,13 @@ export class Flow extends Base {
   }
   setNodes(nodes: Node[]) {
     this.templateProps.nodes = nodes //
-    // console.log('newNodes', nodes)
   }
   setEdges(edges: Edge[]) {
     this.templateProps.edges = edges //
     // console.log('newEdges', edges) //
   }
-  openContextMenu(event) {
-    let context: BMenu = this.getRef('contextMenu')
+  openContextMenu(event) {//
+    let context: BMenu = this.getRef('contextmenu') //
     if (event == null) {
       return //
     }
@@ -67,7 +66,16 @@ export class Flow extends Base {
       {
         label: '设计当前节点',
         fn: async () => {
-          console.log('设计当前节点') //
+          console.log('设计当前节点')// 
+        },
+      },
+      {
+        label: '设计当前组件',
+        fn: async () => {
+          let pageitem=this.config.pageitem
+          if(pageitem!=null){
+            pageitem.designCurrentNode()
+          }
         },
       },
     ]
@@ -174,6 +182,11 @@ export class Flow extends Base {
   onCurRowChange(config: any) {
     let row = config.row //
     this.setSelection(row) //
+  }
+  onContextMenu(event: any) {
+    event.preventDefault()
+    // this.openContextMenu(event)
+    this.openContextMenu(event) //
   }
   setSelection(selection: any) {
     let leftTable: Table = this.getRef('tableTable') //

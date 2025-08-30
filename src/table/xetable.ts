@@ -18,7 +18,7 @@ import {
   useTimeout,
 } from '@ER/utils/decoration'
 import { XeCheckColumn } from './xeCheckColumn'
-import { combineAdjacentEqualElements } from '@ER/utils'
+import { combineAdjacentEqualElements, stringToFunction } from '@ER/utils'
 import { nextTick } from 'vue'
 import { BMenu } from '@/buttonGroup/bMenu'
 import { initXeContextItems } from './xetableFn'
@@ -32,6 +32,7 @@ import {
   VxeTagPropTypes,
 } from 'vxe-pc-ui'
 import { ColumnInfo } from '@/vxegrid/table/src/columnInfo'
+import { PageDesign } from '@ER/pageDesign'
 export class XeTable extends Base {
   currentCheckField: string | null = null
   config: any //
@@ -443,9 +444,13 @@ export class XeTable extends Base {
         }
         return status //
       }) //
-      nextTick(() => {
-        let _data4 = [...new Set(this.getFlatTreeData(_data3))] //
-        this.templateProps.data = _data4 //
+      nextTick(async () => {
+        let _data4 = [...new Set(this.getFlatTreeData(_data3))]
+        await this.runRefreshDataBefore(_data4)
+        this.templateProps.data = _data4
+        nextTick(async () => {
+          await this.runRefreshDataAfter(_data4) //
+        })
       })
     } else {
       if (globalValue.length > 0) {
@@ -491,10 +496,13 @@ export class XeTable extends Base {
             _data3 = _data3.filter((item) => indexSet.has(item[field]))
           }
         }
-      } //
-      this.templateProps.data = _data3
-      nextTick(() => {
-        // this.updateCanvas() //
+      }
+      nextTick(async () => {
+        await this.runRefreshDataBefore(_data3)
+        this.templateProps.data = _data3
+        nextTick(() => {
+          this.runRefreshDataAfter(_data3) //
+        })
       })
     } //
     //@ts-ignore
@@ -917,7 +925,7 @@ export class XeTable extends Base {
     let record = config.row //
     this.setCurRow(record) //
   }
-  @useTimeout({ number: 10, key: 'setCurRow' }) //
+  // @useTimeout({ number: 10, key: 'setCurRow' }) //
   setCurRow(row, isProps = false) {
     let oldCurRow = this.tableData.curRow || {}
     if (toRaw(row) == toRaw(this.tableData.curRow)) return //
@@ -1525,7 +1533,9 @@ export class XeTable extends Base {
     let height = config.height
     if (isNaN(height) || typeof height == 'string') {
       height = 'auto'
-    } //
+    } else {
+      //
+    }
     return height
   }
   onHeaderTitleChange(config: { column: any }) {
@@ -1625,9 +1635,97 @@ export class XeTable extends Base {
   onColComDragEnd(config: any) {}
   onColumnDragClick(config) {
     //
-    let onColumnDragClick = this.config.onColumnDragClick
-    if (typeof onColumnDragClick == 'function') {
-      onColumnDragClick(config) //
+    // let onColumnDragClick = this.config.onColumnDragClick
+    // if (typeof onColumnDragClick == 'function') {
+    //   onColumnDragClick(config) //
+    // }
+    let column: XeColumn = config.column
+    let row = config.row
+    let event = config.event //
+    let colConfig = column.config //
+    let extendConfig = colConfig.extendConfig //
+    let design: PageDesign = this.getPageDesignIns()
+    design.pageDragConfig.curDragRow = row //
+    design.pageDragConfig.curDragTable = this.getTableName() //
+    design.pageDragConfig.curDragColumn = column.getField() //
+    let dragClick = extendConfig?.dragConfig?.dragClick
+    if (typeof dragClick == 'string') {
+      let _fn = stringToFunction(dragClick)
+      if (typeof _fn == 'function') {
+        _fn.call(design, {
+          row: row,
+          event: event,
+          tableName: this.getTableName(), //
+          column: column, //
+        })
+      } //
     }
   }
+  setMergeConfig(config?: any) {
+    //
+    let templateProps = this.templateProps
+    let data = templateProps.data || []
+    let mergeConfig = {} //
+    let row0 = data[0]
+    let _index = row0?._index
+    let field = 'id'
+    mergeConfig[`${_index}_${field}`] = {
+      rowSpan: 2,
+      colSpan: 2, //
+    }//
+    this.mergeConfig = mergeConfig 
+  }
+  async runRefreshDataBefore(data) {
+    if (Array.isArray(data)) {
+      data.forEach((row, i) => {
+        let preRow = data[i - 1]
+        if (preRow) {
+          Object.defineProperty(row, '_preIndex', {
+            value: preRow._index,
+            enumerable: false,
+            writable: true,
+          })
+        } else {
+          Object.defineProperty(row, '_preIndex', {
+            value: null,
+            enumerable: false,
+            writable: true,
+          }) //
+        }
+        let nextRow = data[i + 1]
+        if (nextRow) {
+          Object.defineProperty(row, '_nextIndex', {
+            value: nextRow._index,
+            enumerable: false,
+            writable: true,
+          })
+        } else {
+          Object.defineProperty(row, '_nextIndex', {
+            value: null,
+            enumerable: false,
+            writable: true,
+          })
+        }
+      }) //
+      let refreshDataBefore = this.config.refreshDataBefore
+      if (typeof refreshDataBefore == 'function') {
+        await refreshDataBefore({
+          data,
+          oldData: this.templateProps.data, //
+          table: this,
+        })
+      }
+    }
+  }
+  async runRefreshDataAfter(data) {
+    //
+    let refreshDataAfter = this.config.refreshDataAfter
+    if (typeof refreshDataAfter == 'function') {
+      await refreshDataAfter({
+        data,
+        oldData: this.templateProps.data, //
+        table: this,
+      })
+    }
+  } //
 }

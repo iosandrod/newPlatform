@@ -346,24 +346,28 @@ export class Context {
         //只有自己一个
         let pParent = parent.context.parent
         if (pParent.type == 'col') {
-          let ppParent = pParent.context.parent
-          let list = ppParent.list || []
-          if (list.length == 1) {
-            if (ppParent.type == 'grid') {
-              let columns = ppParent.columns
-              if (columns.length == 1) {
-                let pppParent = ppParent.context.parent
-                if (pppParent.type == 'inline') {
-                  let pppContext = pppParent.context
-                  pppContext.delete() //
+          if (pParent.list?.length > 1) {
+            parent.context.delete()
+          } else {
+            let ppParent = pParent.context.parent
+            let list = ppParent.list || []
+            if (list.length == 1) {
+              if (ppParent.type == 'grid') {
+                let columns = ppParent.columns
+                if (columns.length == 1) {
+                  let pppParent = ppParent.context.parent
+                  if (pppParent.type == 'inline') {
+                    let pppContext = pppParent.context
+                    pppContext.delete() //
+                  }
                 }
               }
             }
-          }
-          //当前列只有自己一个
-          if (list.length == 0) {
-            pParent.context.delete() //
-          }
+            //当前列只有自己一个
+            if (list.length == 0) {
+              pParent.context.delete() //
+            }
+          }//
         }
       }
     }

@@ -478,13 +478,7 @@ export const xeTableData1 = [
     _X_ROW_KEY1: 'row_33',
   },
 ]
-// export const xeTableData = new Array(30)
-//   .fill(null)
-//   .map((row) => {
-//     let row1 = JSON.parse(JSON.stringify(xeTableData1))
-//     return row1
-//   })
-//   .flat() //
+
 export const xeTableData = xeTableData1 //
 export const xeTableColumns = [
   {

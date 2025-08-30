@@ -1,0 +1,449 @@
+
+:root{
+    --table-currow-color: rgba(24, 144, 255, 0.5);
+    --system-head-color: rgba(24, 144, 255, 0.7);
+    --table-footer-color: rgba(24, 144, 255, 0.4);
+    --button-group-background: rgba(24, 144, 255, 0.3);
+    --button-background: rgba(24, 144, 255, 0);
+    --button-disabled-background: rgba(24, 144, 255, 0);
+    --button-hover-background:  rgba(24, 144, 255, 1);
+    --button-hover-disabled-background: rgba(24, 144, 255, 0);
+    --menu-hover-background: rgba(24, 144, 255, 0.5);
+    --vxe-font-disabled-color: rgba(96, 98, 102, 0.82)!important;/*覆盖禁用字体色*/
+}
+/* table */
+.curRowClass{ 
+    background: var(--table-currow-color) !important;
+}
+.table-footer-row{
+    height: 30px !important;
+    background: var(--table-footer-color) !important;
+}
+/* system */
+.ant-layout-header{
+    background-color: var(--system-head-color) !important;
+}
+.ant-menu-submenu-title:hover{
+    background: var(--menu-hover-background) !important
+}
+.ant-menu-item:hover{
+    background: var(--menu-hover-background) !important
+}
+/* button */
+.global-where-search-button{
+    background: var(--button-group-background);
+}
+.global-where-search-button:hover{
+    background: var(--button-hover-background);
+    color: #fff;
+}
+.ant-tabs-tab {
+    background-color: transparent !important;
+}
+.xe-button {
+    color: black !important;
+    border: none !important;
+    background: var(--button-background)!important;
+} 
+.xe-button :hover {
+    color: white !important;
+    background-color: var(--button-hover-background)!important;
+}
+.vxe-button--dropdown .vxe-button{ 
+    color: black !important;
+    border: none !important; 
+    background: var(--button-background)!important;
+}
+.xe-button .disabled{
+    color:RGB(152, 182, 210)!important;
+}
+.btn-disabled {
+    color:RGB(152, 182, 210)!important;
+    background:var(--button-disabled-background)!important;
+}
+.btn-disabled :hover{
+    background:var(--button-hover-disabled-background)!important;
+    cursor: not-allowed!important;
+    color:RGB(152, 182, 210)!important ;
+}
+
+/* form */
+.ant-select-disabled .ant-select-selector span{
+    color:var(--vxe-font-disabled-color) !important;/*覆盖禁用字体色*/
+}
+   
+body{
+    --vxe-table-column-padding-default: 0px 0 ;
+    --vxe-table-cell-padding-left: 0px;
+    --vxe-table-cell-padding-right: 0px;
+    --vxe-table-row-height-default:none;
+    --vxe-input-height-default:30px; 
+    --vxe-ui-input-height-default:30px;
+    --vxe-form-item-min-height-default:30px;
+}
+
+  /* 滚动条粗细 */
+/* ::-webkit-scrollbar {
+    width: 12px !important; 
+    height: 12px !important;
+} */
+  /* 滚动条轨道 */
+::-webkit-scrollbar-track {
+    background: #f0f0f0 !important; 
+}
+  
+  /* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    background: #999 !important;
+    border-radius: 12px !important; 
+}
+  
+  /* 滚动条滑块悬停效果 */
+::-webkit-scrollbar-thumb:hover {
+    background: #666 !important; 
+}
+
+
+.vxe-grid-hidden-border{
+   
+}
+
+.vxe-grid-hidden-border td{
+    background-image: none !important  ;
+}
+
+.notCurRowClass{
+   
+    /* background: blue; */
+}
+.columnSelect{
+    background:RGB(139, 199, 255) ;
+}
+.rowSelect .vxe-cell{
+    /* background:RGB(139, 199, 200);
+    bord */
+    /* border:solid 2px red; */
+    /* box-sizing:boder-box !important; */
+}
+.vxe-modal--wrapper .vxe-modal--content {
+    flex-grow: 1;
+    padding: 0;
+    padding-top: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    white-space: pre-line;
+}
+.vxe-modal--content {
+    flex-grow: 1;
+    padding: 0 !important;
+    padding-top: 0 !important;
+    padding-right: 0 !important; 
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+    white-space: pre-line;
+}
+
+
+
+.vxe-input{
+    height: 100%;
+}
+.vxe-form--item-content{
+    padding: 0!important;
+}
+.vxe-form--item{
+    padding: 0 !important;
+}
+.ant-tabs-content {
+    height: 100%;
+}
+
+
+
+
+
+.c--ellipsis{
+    height:inherit !important
+}
+
+.ant-tabs-nav{
+    /* margin:0 0 0 0 !important */
+}
+.animat--leave{
+    transform:none !important;
+}
+.tabNoneMargin{
+    
+}
+.tabNoneMargin .ant-tabs-tab{
+    /* background:red !important */
+    padding:0 !important;
+    border:none !important;
+}
+.ant-select-selector{
+    /* height:95% !important */
+}
+
+.vue-resizable-handle{
+    z-index:1000
+}
+
+.vxe-input{
+    /* height:100% !important */
+}
+
+.global-where-color{
+    background:yellow
+}
+
+.vue-grid-item.vue-grid-placeholder {
+    /* background: none !important;  */
+}
+
+.vxe-form--item{
+    width:100% !important 
+}
+.vxe-form--item-content{
+    height:100% !important
+}
+
+
+.ant-tabs-tab-remove{
+    margin:0px !important;
+    margin-left:2px !important;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.margin-view-overlays{
+    /* margin-left:0px !important */
+}
+
+.ant-select-clear {
+    /* display:flex!important;
+    flex-direction:row!important;
+    justify-content:center!important;
+    align-items:center!important; */
+}
+.vue-grid-item{
+    transition:none !important
+}
+.vue-resizable-handle{
+    padding:0 !important
+}
+.vxe-form--item-inner{
+    width:100%;
+    height: 100%;
+}
+.vxe-form--item-content{
+    width:100%;
+}
+
+.no-select{
+    /* overflow: hidden; */
+    /* -webkit-user-select: none;  Safari */
+    /* -moz-user-select: none;     Firefox */
+    /* -ms-user-select: none;      IE/Edge */
+    /* user-select: none;          标准语法 */
+}
+
+
+
+.vxe-form{
+    padding-right: 2px;
+    height:100%;
+    width:100%;
+}
+.vxe-form--wrapper{
+    height:100%; width:100%;
+}
+
+
+.vxe-form--item-valid{
+    position:fixed !important;
+}
+
+.vxe-form--item-valid{
+    margin-top:-10px!important;
+}
+
+
+.is--error .ant-select-selector{
+}
+
+.ant-tab-hidden .ant-tabs-tab{
+    background:rgba(0,0,0,0) !important;
+}
+.ant-tab-hidden  .vxe-button{
+    background:rgba(0,0,0,0) !important;
+    border:none !important;
+}
+.vxe-button{
+    padding: 0 !important;
+}
+.vxe-button--content{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+.ant-tab-hidden .ant-tabs-nav::before{
+    content:'';
+    display:none;
+}
+/*下拉选择*/
+.ant-select-dropdown{
+    z-index:999999 !important;
+    animation: none !important;
+    min-width: 300px !important;
+}
+/*下拉按钮*/
+.ant-tabs-dropdown{
+    z-index: 999999 !important;
+}
+.vxe-form--item{
+    height:100% !important
+}
+ 
+
+
+.btn-tab .ant-tabs-tab-active{
+    background: none !important;
+}
+
+.startWithEnd .ant-tabs-nav-wrap{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.en-loading{  
+    background-color: red;
+}
+
+.vxe-cell--tree-node{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.vxe-cell{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.ant-select-selector{
+    height: 95%!important;
+}
+
+.ant-select-selection-overflow{
+    flex-wrap:nowrap !important;
+    /* overflow-y: hidden; */
+}
+.vxe-icon-error-circle-fill{
+    z-index: 9999;
+}
+.ant-menu-sub{
+    z-index: 99999;
+}
+
+.vxe-checkbox{
+    width: 30px !important;
+}
+
+.type--date{
+    /* min-width: 400px!important; */
+}
+
+.ant-select-selection-item{
+    height: 30px;
+}
+
+.unselectable {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+  }
+
+
+
+
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    z-index: 9999;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #ddd;
+}
+
+
+.hiddenExtraItem .ant-tabs-nav-operations{
+    display: none!important;
+}
+
+.my-horizontal,
+.my-vertical {
+  position: absolute !important;
+  z-index: 999999;
+}
+.my-horizontal {
+  /* left: 30px !important; */
+  left: 30px !important;
+  top: 0;
+  width: calc(100% - 30px);
+  /* width: 100%; */
+  height: 30px !important;
+  position: absolute !important;
+  /* margin-left: 30px; */
+}
+.my-vertical {
+  top: 30px;
+  left: 0px;
+  height: calc(100% - 60px);
+  width: 30px !important;/* width: 100%; */
+}
+
+.widget-wrap {
+    width: 328px;
+    transition: all .3s;
+    background-color: 'white';
+    flex: 1;
+    height: 100%;
+  }
+
+.vxe-button--dropdown-panel{
+    transform: translate(50%,0) !important;
+}
+
+.ant-message {  
+    z-index: 999999 !important; 
+}
+.hidden-bar{
+    -ms-overflow-style: none; /* 隐藏 IE 和 Edge 的滚动条 */
+    scrollbar-width: none; /* 隐藏 Firefox 的滚动条 */
+}
+
+.vxe-table--body-wrapper{
+    background-color: white;
+}
+.vxe-body--row{
+}
+@media print {
+    .page {
+      page-break-after: always;
+      /* break-after: page; 新属性*/
+    }
+  }
+
+  .page1{
+  }
+
+  .vxe-modal--body-default{
+    padding: 0 !important;
+  }

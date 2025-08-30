@@ -145,6 +145,7 @@ export default defineComponent({
     },
     // 已废弃，被 option-config.useKey 替换
     optionKey: Boolean as PropType<VxeSelectPropTypes.OptionKey>,
+    isSearch: Boolean as PropType<any>,
   },
   emits: [
     'input',
@@ -675,8 +676,10 @@ export default defineComponent({
     }
 
     const changeEvent = (evnt: Event, selectValue: any) => {
+      //
       emitModel(selectValue)
-      if (selectValue !== props.modelValue) {
+      if (selectValue !== props.modelValue || props.isSearch) {
+        //
         dispatchEvent('change', { value: selectValue }, evnt)
         // 自动更新校验状态
         if ($xeForm && formItemInfo) {
@@ -1631,7 +1634,8 @@ export default defineComponent({
               modelValue: selectLabel,
               onClear: clearEvent,
               onClick: clickEvent,
-              onChange: inputChangeEvent,
+              // onChange: inputChangeEvent,
+              onInput: inputChangeEvent,
               onFocus: focusEvent,
               onBlur: blurEvent,
               onSuffixClick: suffixClickEvent,

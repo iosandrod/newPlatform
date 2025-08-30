@@ -1337,5 +1337,5 @@ export class Column extends Base {
   }
   getFontSize() {
     return 16
-  } //
+  } 
 }

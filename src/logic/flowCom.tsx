@@ -222,10 +222,12 @@ export default defineComponent({
           <div
             ref={(el) => flow.registerRef('container', el)}
             class="flex-1 overflow-hidden w-full flex"
+            // onContextmenu={(e) => flow.onContextMenu(e)}
           >
             {leftTable}
             <div class="h-full flex-1 relative">
               <VueFlow
+                onPaneContextMenu={(event) => flow.onContextMenu(event)}
                 noDragClassName="nodrag" //
                 key={flow.id}
                 ref={(instance) => {

@@ -102,6 +102,12 @@ export default defineComponent({
     height: {
       type: Number,
     },
+     refreshDataBefore: {
+      type: Function,
+    },
+    refreshDataAfter: {
+      type: Function,
+    }, 
     showColumnFilterTable: {
       type: Boolean,
       default: true,
@@ -415,8 +421,7 @@ export default defineComponent({
             let sRef = tableIns.getRef('bodyDiv') //
             if (sRef == null) {
               return
-            }
-            // debugger //
+            }//
             let bound = sRef.getBoundingClientRect()
             if (e == true) {
               let _height = Math.round(bound.height)
@@ -455,7 +460,6 @@ export default defineComponent({
     return () => {
       let com = null //
       let menuCom = <TableMenuCom></TableMenuCom>
-      // debugger//
       let btnCom = <TableButtonCom></TableButtonCom>
       if (tableIns.config.showHeaderButtons == false) {
         //
@@ -539,7 +543,7 @@ export default defineComponent({
         <div
           style={{
             width: '100%',
-            height: '100%',
+            flex:1,//
             minHeight: '200px',
             position: 'relative',
             overflow: 'hidden', //
@@ -559,8 +563,7 @@ export default defineComponent({
             }}
             onColumnDragend={(e) => {
               tableIns.onColumnDragEnd(e)
-            }}
-            // onCheckboxRangeChange={(e) => tableIns.onCheckboxRangeChange(e)} // checkbox-ange-change
+            }}//
             onCheckboxRangeEnd={(e) => tableIns.onCheckboxRangeEnd(e)} // checkbox-ange-end
             columnDragConfig={tableIns.getColumnDragConfig()}
             columnConfig={tableIns.getColumnConfig()} //
@@ -571,7 +574,7 @@ export default defineComponent({
             height={tableIns.getTableHeight()}
             rowConfig={tableIns.getRowConfig()}
             rowDragConfig={{ ...rowDConfig }} //
-            class="h-full w-full overflow-hidden"
+            class="w-full overflow-hidden"
             ref={(el) => {
               tableIns.registerRef('xeGrid', el)
             }} //
@@ -590,7 +593,7 @@ export default defineComponent({
                 )
               },
             }}
-            cellClassName={'h-full w-full'}
+            cellClassName={''}
             onCellClick={(e) => {
               tableIns.onCellClick(e)
             }}
@@ -676,7 +679,8 @@ export default defineComponent({
           {menuCom}
           {btnCom}
           {globalSearchInput}
-          {tBodyCom}
+          {/* {tBodyCom} */}
+          {com}
         </div>
       )
       return outCom //

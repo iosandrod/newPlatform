@@ -37,9 +37,9 @@ if (userid != null) {
     system.setLocalItem('userid', userid)
   })
 }
-// let _host1 = '192.168.137.9'
-let _host1='localhost'//
-let _port1 = '3031'
+let _host1 = '192.168.137.9'
+// let _host1='localhost'//
+let _port1 = '3031'//
 //
 export const createAxios = async (config) => {
   let _appName = localStorage.getItem('appName')

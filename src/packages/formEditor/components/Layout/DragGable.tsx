@@ -289,7 +289,6 @@ export default defineComponent({
                 // if(element.type=='buttongroup'){
                 // }
                 TypeComponent = load.findComponent('FormTypes', element.type)
-
                 const params = {
                   data: element,
                   parent: props.data,
@@ -301,7 +300,7 @@ export default defineComponent({
                   const prop = formitem?.getField()
                   let innerCom = null //
                   //@ts-ignore
-                  if (formIns.pageType == 'pageDesign') {
+                  if (formIns.pageType == 'pageDesign') {//
                     let tCom = (
                       <div class="pl-10 h-30 flex align-center">
                         {formitem.getTitle()}

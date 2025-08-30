@@ -92,7 +92,9 @@ export class Form extends Base {
   currentFItemConfig: any
   curSForm: any = null //
   originalData = {}
-  tableDataMap: any = {}
+  tableDataMap: any = {
+   
+  }
   tableConfigMap = {}
   pageType = 'form' //
   cachePlugin: any
@@ -512,7 +514,7 @@ export class Form extends Base {
   }
   setCurrentDesign(status: boolean = true) {
     let _state = Boolean(status)
-    this.isDesign = _state //
+    this.isDesign = _state 
   }
   getIsDesign() {
     return this.isDesign

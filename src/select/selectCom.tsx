@@ -178,11 +178,17 @@ export default defineComponent({
       let $event = value.$event
       let _value = $event.value
       _select.searchChange(_value)
-    }
+    } //
     let _onVisibleChange = (value) => {
       let visible = value.visible
       _select.onVisibleChange(visible) //
     }
+    let isSearch = computed(() => {
+      return (
+        _select.searchValue?.length > 0 &&
+        _select.config.modelValue != _select.searchValue
+      )
+    })
     return () => {
       //
       let _com = (
@@ -192,6 +198,7 @@ export default defineComponent({
             ref={registerRef}
             {...props}
             modelValue={_select.getModelValue()}
+            isSearch={isSearch.value} //
             options={_select.getOptions()}
             onChange={_onChange} //
             onInput={_onInput}
@@ -248,7 +255,7 @@ export default defineComponent({
           ></Select>
         </div>
       ) //
-      return _com //
+      return _com
     }
   },
 })

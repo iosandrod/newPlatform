@@ -45,6 +45,11 @@ export default defineComponent({
         _filterIcon.value.classList.add('flex-col')
       }
     }
+/*************  ✨ Windsurf Command ⭐  *************/
+    /**
+     * When the mouse is moved out of the column header, set a one-second delay
+
+/*******  f6913880-5d97-4e01-ba22-f569b8ecf001  *******/
     const mouseoutFn = () => {
       hiddenTimeout = setTimeout(() => {
         hiddenTimeout = null //

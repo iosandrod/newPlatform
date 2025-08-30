@@ -30,6 +30,7 @@ import SearchDialog from '@/dialog/_dialogCom/searchDialog'
 import inputCom from '@/input/inputCom'
 import selectCom from '@/select/selectCom'
 import pVue from '@/printTemplate/print.vue'
+import demoVue from './demo1.vue'
 // import auditVue from '@/audit/App.vue' //
 import WangToolbar from '@/printTemplate/components/PageComponents/WangEditorVue/WangToolbar.vue'
 import WangEditor from '@/printTemplate/components/PageComponents/WangEditorVue/WangEditor.vue'
@@ -78,6 +79,7 @@ export default defineComponent({
     checkboxCom,
     wangCom,
     ganttCom,
+    demoVue,
   },
   setup(props) {
     let str = `2025-01-01 00:00`
@@ -168,6 +170,7 @@ export default defineComponent({
     let tIns = ref()
     let testObj = { ins: null }
     let btn = new Button({})
+    let selectValue = ref('')
     let _reg3 = (el) => {
       btn.registerRef('page', el)
     }
@@ -223,38 +226,37 @@ export default defineComponent({
 
       com = (
         <div class="er-h-400 er-w-600">
-          <erXeTable {...permissionTConfig}></erXeTable>
+          <erXeTable
+            refreshDataBefore={(config) => {
+              let table = config.table
+            }}
+            refreshDataAfter={(config) => {
+              let table = config.table
+              table.setMergeConfig({
+                //
+              })
+            }}
+            refreshData
+            {...tableConfig}
+          ></erXeTable>
         </div>
       )
       com = (
-        <selectCom
-          options={[{ label: '123', value: '123' }]}
-          allowCreate={true}
-        ></selectCom>
-      )
-
-      com = (
-        <div class="er-w-500">
-          <ganttCom></ganttCom>
+        <div class="er-w-600 er-h-400">
+          <demoVue></demoVue>
         </div>
       )
-      com = <FlowCom nodes={nodeData.nodes} edges={nodeData.edges}></FlowCom>
       // com = (
-      //   <div class="h-full w-full flex justify-center items-center">
-      //     <div class="er-h-40 overflow-hidden">
-      //       <erPager></erPager>
-      //     </div>
-      //   </div>
+      //   <selectCom
+      //     options={[{ label: '123', value: '123' }]}
+      //     allowCreate={true}
+      //     modelValue={selectValue.value} //
+      //     onChange={(value) => {
+      //       selectValue.value = value.value //
+      //     }}
+      //   ></selectCom>
       // )
-      // com = <inputCom></inputCom>
-      // com = (
-      //   <erXeTable
-      //     showGlobalSearch={true}
-      //     {...tConfig}
-      //     enableDragRow={true}
-      //     treeConfig={null}
-      //   ></erXeTable>
-      // ) //
+
       let _com = (
         <div
           class="h-full"

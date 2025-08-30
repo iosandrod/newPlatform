@@ -79,6 +79,7 @@ import NaiveChatP from './chat' //
 import './style.scss' //
 import './assets/tailwind.css' //
 import './mainStyle.css'
+import './mainStyle1.css'//
 import './changeCalStyle.scss'
 import xeTableCom from './table/xeTableCom'
 import hyvuegantt from './gantt/hy-vue-gantt'
@@ -160,4 +161,5 @@ nextTick(() => {
   //
   app.mount('#app')
 })
+
 //

@@ -228,7 +228,7 @@ export class PageDesignItem extends FormItem {
     if (_num <= 0) {
       return //
     }
-    config.num = _num//
+    config.num = _num //
     let design: PageDesign = this.form as any //
     let fCom = this.getRef('fieldCom')
     let tName = this.getTableName()
@@ -303,5 +303,40 @@ export class PageDesignItem extends FormItem {
       return true
     } //
     return !enableResizeColumn //
+  }
+  onColumnDragClick(config) {
+    //
+    let design: PageDesign = this.form as any //
+    let _config = design.config //
+    console.log(config, 'test_config') //
+  }
+  async designCurrentNode() {
+    let nodeType = this.getType()
+    let sys = this.getSystem() //
+    let mainD = sys.getCurrentPageDesign() //
+    let type = this.getType()
+    let fConfig = null
+    if (type == 'flow') {
+      //
+      fConfig = {
+        itemSpan: 12,
+        items: [
+          {
+            field: 'nodeDbClick',
+            label: '节点双击事件',
+            type: 'code', //
+          },
+          {
+            field: 'nodeRightClick',
+            label: '节点右键事件',
+            type: 'code', //
+          }, //
+        ],
+      }
+      let options = this.config //
+    }//
+    if (fConfig == null) {
+      return //
+    }
   }
 }

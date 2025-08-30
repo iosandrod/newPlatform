@@ -172,7 +172,7 @@ export const initXeContextItems = (table: XeTable) => {
         let field = curContextCol.getField()
         //当前编辑字段
         mainD.currentDField = field
-        mainD.currentDTableName = table.getTableName()//
+        mainD.currentDTableName = table.getTableName() //
         let data1 = await sys.confirmForm(fConfig)
         let _dFn = table.config.onDesignColumn
         if (typeof _dFn == 'function') {

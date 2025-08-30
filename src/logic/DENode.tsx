@@ -103,7 +103,7 @@ export default defineComponent({
         data: props.data,
       })
     }
-    console.log('DENode render', props.id, props.data)
+    // console.log('DENode render', props.id, props.data)
     return () => {
       const borderBase = isPhantom.value
         ? 'border-dashed border-gray-400'
@@ -118,7 +118,12 @@ export default defineComponent({
         }
       } //
       let onNodeClick = (e: MouseEvent) => {
-        nodeBus.emit('node:click', { id: props.id, event: e, data: props.data }) //
+        nodeBus.emit('node:click', { id: props.id, event: e, data: props.data })
+        flowIns.onNodeClick({
+          id: props.id,
+          data: props.data,
+          event: e,
+        })
       }
       let onDragStart = (config: any) => {
         let e = config.event //

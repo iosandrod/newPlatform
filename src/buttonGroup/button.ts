@@ -30,7 +30,7 @@ export class Button extends Base {
     }
     let id = config.id
     let sys: System = this.getSystem() //
-    let paramData = sys.paramData
+    let paramData = sys.paramData || [] //
     let allBtns = paramData.filter((d) => {
       return d.cParamNo == id
     })
@@ -307,4 +307,5 @@ export class Button extends Base {
     }
     return ''
   } //
+  getIcon() {} //
 }

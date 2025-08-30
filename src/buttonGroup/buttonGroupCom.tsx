@@ -15,6 +15,7 @@ import { VxeTable } from 'vxe-table'
 import { Contextmenu, ContextmenuItem } from '@/contextM'
 import ContextmenuCom from '@/contextM/components/ContextmenuCom' //
 import { PageDesign } from '@ER/pageDesign'
+import buttonCom from './buttonCom'
 export default defineComponent({
   name: 'buttonGroupCom',
   components: {
@@ -23,6 +24,7 @@ export default defineComponent({
     MenuCom,
     ContextmenuItem,
     ContextmenuCom,
+    buttonCom,//
   },
   directives: {
     ClickOutside,
@@ -98,79 +100,92 @@ export default defineComponent({
     }
     return () => {
       const getBtnCom = (el: Button) => {
-        let btn = el?.config?.button || el //
-        let disabled = btn.getDisabled()
-        let _class = ['er-h-32', 'items-center', 'flex']
-        let _class1 = [
-          'h-full w-full er-pl-10 er-pr-10  rounded-md custom-button',
-        ]
-        let dIcon = null
-        if (btn?.buttons?.length > 0) {
-          dIcon = (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path fill="currentColor" d="m12 15l-5-5h10z" />
-            </svg>
-          )
-        }
-        let maskCom = null
-        if (disabled == true) {
-          // _class.push('is-disabled') //
-          _class.push('') //
-          _class1.push('is-disabled cursor-not-allowed')
-          maskCom = (
-            <div
-              class="absolute top-0 left-0 w-full h-full  cursor-not-allowed opacity-0"
-              onClick={(e) => {
-                e.stopPropagation()
-                e.preventDefault() //
-              }}
-            ></div> //
-          )
-        } else {
-          _class1.push('cursor-pointer')
-        }
-        let com = (
-          <div
-            class={[..._class, 'pl-1 pr-1 relative']}
-            style={{
-              display: `${btn.getDisplay()}`, //
-              minWidth: `${btn.getButtonWidth()}px`,
-              position: 'relative',
-              zIndex: 0,
-            }}
-            onClick={() => {
-              runBtnFn(btn)
-            }}
-          >
-            <div
-              class={[
-                ..._class1,
-                'flex justify-center items-center h-full w-full',
-              ]}
-            >
-              <button class={[]}>
-                <div class="flex">
-                  {btn?.getLabel()}
-                  {dIcon}
-                </div>
-              </button>
-            </div>
-            {maskCom}
-          </div>
-        )
-        return com
+        let _btn = el?.config.button || el
+        let _com = <buttonCom btnIns={_btn}></buttonCom>
+        return _com//
+        // let btn = el?.config?.button || el //
+        // let disabled = btn.getDisabled()
+        // let _class = ['er-h-32', 'items-center', 'flex']
+        // let _class1 = [
+        //   'h-full w-full er-pl-10 er-pr-10  rounded-md custom-button',
+        // ]
+        // let dIcon = null
+        // if (btn?.buttons?.length > 0) {
+        //   dIcon = (
+        //     <svg
+        //       xmlns="http://www.w3.org/2000/svg"
+        //       width="24"
+        //       height="24"
+        //       viewBox="0 0 24 24"
+        //     >
+        //       <path fill="currentColor" d="m12 15l-5-5h10z" />
+        //     </svg>
+        //   )
+        // }
+        // let maskCom = null
+        // if (disabled == true) {
+        //   // _class.push('is-disabled') //
+        //   _class.push('') //
+        //   _class1.push('is-disabled cursor-not-allowed')
+        //   maskCom = (
+        //     <div
+        //       class="absolute top-0 left-0 w-full h-full  cursor-not-allowed opacity-0"
+        //       onClick={(e) => {
+        //         e.stopPropagation()
+        //         e.preventDefault() //
+        //       }}
+        //     ></div> //
+        //   )
+        // } else {
+        //   _class1.push('cursor-pointer')
+        // }
+        // let com = (
+        //   <div
+        //     class={[..._class, 'pl-1 pr-1 relative']}
+        //     style={{
+        //       display: `${btn.getDisplay()}`, //
+        //       minWidth: `${btn.getButtonWidth()}px`,
+        //       position: 'relative',
+        //       zIndex: 0,
+        //     }}
+        //     onClick={() => {
+        //       runBtnFn(btn)
+        //     }}
+        //   >
+        //     <div
+        //       class={[
+        //         ..._class1,
+        //         'flex justify-center items-center h-full w-full',
+        //       ]}
+        //     >
+        //       <button class={[]}>
+        //         <div class="flex">
+        //           {btn?.getLabel()}
+        //           {dIcon}
+        //         </div>
+        //       </button>
+        //     </div>
+        //     {maskCom}
+        //   </div>
+        // )
+        // return com
       }
-      let com = (
+      let com = <div
+        class='w-full er-h-32'//
+        style={
+          {
+            background: 'var(--button-group-background)'
+          }
+        }>
+
         <tabCom
           useDefaultClass={false}
-          class={[`${ns.b()}`, 'my-scope', 'er-mb-3', 'er-mt-3']} //
+          class={[`${ns.b()}`, 'my-scope', 
+            // 'er-mb-3', 'er-mt-3'
+          ]} //
           isDesign={group.isDesign}
           {...group.getTabProps()}
+          style={``}
           height={32}
           v-slots={{
             item: (el: Button) => {
@@ -223,14 +238,14 @@ export default defineComponent({
               return (
                 <div>
                   {com}
-                  {/* {com1} */}
+
                 </div>
               )
             },
           }}
         ></tabCom>
-      )
+      </div>
       return com
     }
   },
-})
+})//

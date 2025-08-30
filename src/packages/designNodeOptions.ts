@@ -132,6 +132,7 @@ export const getButtonGroupTableConfig = (_this?: PageDesign) => {
           }) //
         },
       },
+
       {
         label: '添加主页默认按钮', //
         fn: (config) => {
@@ -388,6 +389,10 @@ export const formitemTypeMap = (_this: PageDesign) => {
   let allTableOptions = _this.getAllTableNameOptions()
   let tableName = _this?.getRealTableName() || ''
   let obj = {
+    flow: {
+      itemSpan: 12,
+      items: [],//  
+    },
     entity: {
       //
       itemSpan: 24, //
@@ -616,6 +621,19 @@ export const formitemTypeMap = (_this: PageDesign) => {
           field: 'formName',
           label: '表单名称',
           type: 'input',
+        },
+        {
+          field: 'formType',
+          label: '表单类型',
+          type: 'select',
+          options: {
+            options: [
+              {
+                value: 'search',
+                label: '查询表单', //
+              },
+            ], //
+          },
         },
       ],
       data: computed(() => {
